@@ -60,7 +60,7 @@ class AmbiLAGEConfig:
     temperature: float = 0.04
 
     # 目标函数与正则化权重
-    joint_weight: float = 0.5
+    joint_weight: float = 1.0          # 唯一图文联合检索效用的整体权重
     compensated_weight: float = 0.5
     fg_l2_weight: float = 0.0001        # 主体微光影 L2 惩罚
     fg_tv_weight: float = 0.0004        # 主体空间全变分 (TV) 惩罚
@@ -106,7 +106,6 @@ class AmbiLAGEConfig:
     eot_enabled: bool = True
     diffusion_weight: float = 0.25
     purifier_steps: int = 10
-    text_weight: float = 0.5
 
     def validate(self) -> None:
         """严格校验配置参数有效性，杜绝越界或无效数值。"""
@@ -187,8 +186,8 @@ class AmbiLAGEConfig:
             raise ValueError("潜空间工作尺寸必须至少六十四且为八的倍数")
         if not self.eot_enabled or self.diffusion_weight <= 0 or self.purifier_steps != 10:
             raise ValueError("正式方法须开启期望变换和正权重十步扩散净化")
-        if self.joint_weight <= 0 or self.text_weight <= 0:
-            raise ValueError("图文与纯文字双目标权重必须为正")
+        if self.joint_weight <= 0:
+            raise ValueError("图文联合目标权重必须为正")
 
         # 检查有限实数
         for key, val in asdict(self).items():

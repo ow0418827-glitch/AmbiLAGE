@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-11-14T02:34:31.622396+00:00",
+  "requested_change": "Use only the public joint image-text training target; remove the independent text-only objective",
+  "training_objective_kind": "four_proxy_sequential_public_joint_goal_v1",
+  "training_query_modes": [
+    "multimodal_equal_weight"
+  ],
+  "target_image_text_weights": [
+    0.5,
+    0.5
+  ],
+  "source_key_image_text_weights": [
+    0.5,
+    0.5
+  ],
+  "joint_utility_weight": 1.0,
+  "independent_text_only_target_removed": true,
+  "removed_config_fields": [
+    "text_weight"
+  ],
+  "old_dual_objective_completion_rejected": true,
+  "text_only_evaluation_interface_preserved": true,
+  "four_proxy_eot_and_full_gradient_purification_preserved": true,
+  "source_public_text_and_frozen_lucid_baselines_unchanged": true,
+  "tests": {
+    "tests": "234",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "64.984"
+  },
+  "code": {
+    "python_files_parsed": 128,
+    "model_manifest_entries": 15,
+    "private_resources_read": false
+  },
+  "evaluation_resources": {
+    "entries": 189,
+    "groups": 9,
+    "queries": 180,
+    "shared_image_files": 198,
+    "path_and_hash_checks": 247,
+    "model_encoding_performed": false,
+    "selection_exceptions": [
+      "04_curtain",
+      "08_speaker"
+    ]
+  },
+  "implementation_hashes": {
+    "src/visual/training_objectives.py": "9a8ca2890b190a36575b381d7684c39f1d0f59d7e69f9cf08b6bf71a173b60f8",
+    "src/visual/_ambilage/config.py": "78ec76330587bf04d192d92494d2958dc53ccfa99c627efd3e09f309a8c5ca71",
+    "src/visual/_ambilage/evidence.py": "9444db8fa499c1a86713a93b609f5c725411494784aa15f63cb5fbcda91ea5f7"
+  },
+  "real_large_models_loaded": false,
+  "formal_ranking_executed": false,
+  "shopping_or_external_model_calls": 0,
+  "generated_production_images": 0,
+  "remote_model_execution_verified": false,
+  "publication_intent": "Commit and push after actual synchronization candidate inspection",
+  "test_log": "output/local_validation/pytest.log"
+}

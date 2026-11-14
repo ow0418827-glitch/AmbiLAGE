@@ -35,6 +35,8 @@ def test_ambilage_config_validation():
     assert cfg.background_levels == 28
     assert cfg.auxiliary_levels == 0
     assert cfg.pixel_optimization is False
+    assert cfg.joint_weight == 1.0
+    assert 'text_weight' not in cfg.to_dict()
 
     # 试图启用像素优化或像素残差 -> 抛出异常
     with pytest.raises(ValueError, match="严格禁止像素残差与像素优化"):
@@ -50,6 +52,18 @@ def test_ambilage_config_validation():
     # 边界模式无效
     with pytest.raises(ValueError, match="未知的边界过渡模式"):
         AmbiLAGEConfig(edge_feather_mode="invalid_mode").validate()
+
+
+@pytest.mark.parametrize('weight', [0., .5, 1.])
+def test_removed_text_training_weight_cannot_be_reenabled(weight):
+    with pytest.raises(ValueError, match='未知方法配置字段: text_weight'):
+        AmbiLAGEConfig.from_dict({'text_weight': weight})
+
+
+@pytest.mark.parametrize('weight', [0., -1., float('inf'), float('nan')])
+def test_joint_training_weight_must_be_finite_and_positive(weight):
+    with pytest.raises(ValueError):
+        AmbiLAGEConfig.from_dict({'joint_weight': weight})
 
 
 def test_spatial_envelopes():

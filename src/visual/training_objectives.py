@@ -1,4 +1,4 @@
-"""Public-only dual-modal training and sequential four-surrogate gradients.
+"""Public-only joint image/text training and sequential four-surrogate gradients.
 
 No memory pool, formal queries or evaluation rank is accepted by this module.
 All surrogate image graphs (including the DDIM path) are released one at a time.
@@ -8,6 +8,7 @@ from __future__ import annotations
 from dataclasses import replace
 import hashlib
 import json
+import math
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
@@ -22,6 +23,7 @@ from src.visual.robust_objectives import softmin, transformed_batch
 
 TRAINING_FAMILIES = ('ViT-B-16', 'ViT-L-14', 'ViT-SO400M-14-SigLIP-384', 'ViT-H-14')
 HELD_OUT_MODELS = ('ViT-g-14', 'Alibaba-NLP/gme-Qwen2-VL-2B-Instruct')
+TRAINING_OBJECTIVE_KIND = 'four_proxy_sequential_public_joint_goal_v1'
 
 
 def validate_training_specs(specs):
@@ -50,7 +52,7 @@ def load_training_surrogates(device='cuda', config_path=None):
 
 
 class PublicFullKeyObjective:
-    """Match the source's own public key to joint and text-only public targets."""
+    """Match the source's public image/text key to one joint public target."""
     def __init__(self, surrogate, target_feature, source_public_key, training_text, config):
         for label, value in (('公开商品键', source_public_key), ('目标特点', training_text)):
             if not isinstance(value, str) or not value.strip():
@@ -66,31 +68,28 @@ class PublicFullKeyObjective:
         text = encoder.encode_text(training_text)
         text_audit = dict(encoder.last_encoding_audit)
         self.own = torch.as_tensor(own, dtype=torch.float32, device=surrogate.device).reshape(1, -1)
-        self.text = torch.as_tensor(text, dtype=torch.float32, device=surrogate.device).reshape(1, -1)
+        target_text = torch.as_tensor(text, dtype=torch.float32, device=surrogate.device).reshape(1, -1)
         self.target = F.normalize(target_feature.detach().float(), dim=-1)
-        self.joint_target = F.normalize(self.target + self.text, dim=-1)
+        self.joint_target = F.normalize(self.target + target_text, dim=-1)
         self.audit = {'source_public_key_sha256': hashlib.sha256(source_public_key.encode('utf-8')).hexdigest(),
             'training_text_sha256': hashlib.sha256(training_text.encode('utf-8')).hexdigest(),
             'source_text_encoding': own_audit, 'target_text_encoding': text_audit,
-            'query_modes': ['multimodal_equal_weight', 'text_only'],
+            'query_modes': ['multimodal_equal_weight'],
+            'query_image_weight': 0.5, 'query_text_weight': 0.5,
             'memory_key_image_weight': 0.5, 'victim_memory_used': False,
             'formal_queries_used': False, 'formal_ranking_used': False}
 
     def scores(self, features):
         key = F.normalize(F.normalize(features.float(), dim=-1) + self.own, dim=-1)
-        return torch.cat((key @ self.joint_target.T, key @ self.text.T), dim=1)
+        return key @ self.joint_target.T
 
     def value(self, features):
         scores = self.scores(features)
-        joint_weight = float(getattr(self.config, 'joint_weight', 0.5))
-        text_weight = float(getattr(self.config, 'text_weight', 0.5))
-        denominator = joint_weight + text_weight
-        if min(joint_weight, text_weight) <= 0 or denominator <= 0:
-            raise ValueError('图文和纯文字目标权重必须均为正数')
+        joint_weight = float(getattr(self.config, 'joint_weight', 1.0))
+        if not math.isfinite(joint_weight) or joint_weight <= 0:
+            raise ValueError('图文联合目标权重必须为有限正数')
         temperature = float(self.config.temperature)
-        values = [0.5 * scores[:, i].mean() + 0.5 * softmin(scores[:, i], temperature)
-                  for i in range(2)]
-        return (joint_weight * values[0] + text_weight * values[1]) / denominator
+        return joint_weight * (0.5 * scores.mean() + 0.5 * softmin(scores, temperature))
 
 
 class SequentialEnsembleObjective:
@@ -129,7 +128,7 @@ class SequentialEnsembleObjective:
             with torch.no_grad():
                 target = surrogate.encode_image(target_tensor.to(surrogate.device)).global_embedding
             self.objectives.append(PublicFullKeyObjective(surrogate, target, source_public_key, training_text, config))
-        self.audit = {'kind': 'four_proxy_sequential_public_dual_goal_v1',
+        self.audit = {'kind': TRAINING_OBJECTIVE_KIND,
             'surrogates': [s.snapshot() for s in self.surrogates],
             'public_objectives': [o.audit for o in self.objectives],
             'held_out_models': list(HELD_OUT_MODELS),

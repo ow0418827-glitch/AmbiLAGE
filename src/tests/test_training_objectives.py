@@ -1,5 +1,6 @@
 """Tiny offline checks: no downloaded weights or full-library evaluation."""
 from dataclasses import dataclass
+import math
 from types import SimpleNamespace
 import sys
 
@@ -10,7 +11,9 @@ import torch.nn.functional as F
 
 from src.visual.encoders.backbone import pretrained_settings, load_local_clip_model, BackboneConfig
 from src.visual.encoders.joint import ChunkedClipEncoder
-from src.visual.training_objectives import PublicFullKeyObjective, SequentialEnsembleObjective, validate_training_specs
+from src.visual.training_objectives import (
+    PublicFullKeyObjective, SequentialEnsembleObjective, validate_training_specs, TRAINING_OBJECTIVE_KIND,
+)
 from src.visual.robust_objectives import transformed_batch
 from src.visual.diffusion_purification import LatentDiffusionPurifier, PurificationConfig
 
@@ -63,7 +66,7 @@ class TinyPurifier:
 
 
 def config(**kw):
-    defaults = dict(joint_weight=.5, text_weight=.5, temperature=.04, eot_enabled=False,
+    defaults = dict(joint_weight=1., temperature=.04, eot_enabled=False,
                     diffusion_weight=.25, seed=42)
     return SimpleNamespace(**(defaults | kw))
 
@@ -111,23 +114,50 @@ def test_siglip_eos_only_native_padding_and_full_coverage():
     assert encoder.snapshot['text_policy']['special_tokens_per_chunk'] == 1
 
 
-def test_pure_text_is_an_actual_second_retrieval_target():
+def test_joint_is_the_only_retrieval_target_and_matches_its_reference_gradient(monkeypatch):
+    from src.visual import training_objectives
+    texts = {'source public features': np.array([0., 1., 0.], dtype=np.float32),
+             'target public features': np.array([0., 0., 1.], dtype=np.float32)}
+    class ControlledTextEncoder:
+        def __init__(self, base):
+            self.last_encoding_audit = {'truncated': False}
+        def encode_text(self, text):
+            return texts[text]
+    monkeypatch.setattr(training_objectives, 'ChunkedClipEncoder', ControlledTextEncoder)
     source = TinySurrogate()
     obj = PublicFullKeyObjective(source, torch.tensor([[1., 0., 0.]]),
                                  'source public features', 'target public features', config())
-    f = F.normalize(torch.tensor([[.3, .7, .2]], requires_grad=True), dim=-1)
+    f = torch.tensor([[.3, .7, .2], [.8, .1, .6]], requires_grad=True)
     scores = obj.scores(f)
-    assert scores.shape == (1, 2)
-    assert not torch.allclose(scores[:, 0], scores[:, 1])
+    query = F.normalize(torch.tensor([[1., 0., 1.]]), dim=-1)
+    keys = F.normalize(F.normalize(f, dim=-1) + torch.tensor([[0., 1., 0.]]), dim=-1)
+    expected_scores = keys @ query.T
+    expected = .5 * expected_scores.mean() - .5 * .04 * (
+        torch.logsumexp(-expected_scores.flatten() / .04, dim=0) - math.log(len(f)))
+    actual = obj.value(f)
+    assert scores.shape == (2, 1)
+    torch.testing.assert_close(scores, expected_scores)
+    torch.testing.assert_close(actual, expected)
+    gradient = torch.autograd.grad(actual, f, retain_graph=True)[0]
+    expected_gradient = torch.autograd.grad(expected, f, retain_graph=True)[0]
+    torch.testing.assert_close(gradient, expected_gradient)
+    # A separate text target would contribute a different, unwanted gradient.
+    text_score = keys @ torch.tensor([[0., 0., 1.]]).T
+    text_gradient = torch.autograd.grad(text_score.mean(), f)[0]
+    assert not torch.allclose(gradient, .5 * (expected_gradient + text_gradient))
+    assert obj.audit['query_modes'] == ['multimodal_equal_weight']
+    assert obj.audit['query_image_weight'] == obj.audit['query_text_weight'] == .5
     assert obj.audit['formal_queries_used'] is False
     assert obj.audit['source_text_encoding']['truncated'] is False
 
 
-def test_sequential_proxy_gradient_matches_fixed_weight_autograd():
+@pytest.mark.parametrize('eot_enabled', [False, True])
+def test_sequential_proxy_gradient_matches_fixed_weight_autograd(eot_enabled):
     models, purifier = [TinySurrogate(i) for i in range(4)], TinyPurifier()
     image = torch.rand(1, 3, 16, 16) * .6 + .2
     target = torch.rand_like(image)
-    ensemble = SequentialEnsembleObjective(models, target, 'own public key', 'target public features', config(), purifier)
+    ensemble = SequentialEnsembleObjective(models, target, 'own public key', 'target public features',
+                                           config(eot_enabled=eot_enabled), purifier)
     utility, scores, gradient, metrics = ensemble.image_gradient(image, 3)
     leaf = image.clone().requires_grad_(True)
     weights = torch.tensor(metrics['model_weights'])
@@ -135,7 +165,9 @@ def test_sequential_proxy_gradient_matches_fixed_weight_autograd():
     expected = torch.autograd.grad((values * weights).sum(), leaf)[0]
     torch.testing.assert_close(gradient, expected, atol=1e-7, rtol=1e-5)
     assert gradient.abs().sum() > 0
-    assert scores.shape == (4, 2) and torch.isfinite(utility)
+    assert scores.shape == (4, 1) and torch.isfinite(utility)
+    assert ensemble.audit['kind'] == TRAINING_OBJECTIVE_KIND
+    assert all(row['query_modes'] == ['multimodal_equal_weight'] for row in ensemble.audit['public_objectives'])
     assert {mode for _, mode in purifier.calls} == {'none', 'full'}
     assert all(seed == 45 for seed, _ in purifier.calls)
     with pytest.raises(ValueError):

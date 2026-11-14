@@ -149,3 +149,23 @@ def test_forging_top_level_production_flags_does_not_hide_tiny_models(tmp_path):
         (root/name).write_text(json.dumps(document),encoding='utf-8')
     with pytest.raises(ValueError,match='四个指定真实训练代理'):
         validate_ready(root)
+
+
+@pytest.mark.parametrize('mutation', ['dual_kind', 'text_target', 'old_config'])
+def test_old_dual_target_evidence_cannot_be_reused_as_joint_only(tmp_path, mutation):
+    source, target = images(tmp_path)
+    root = tmp_path / 'out'
+    _, ready = AmbiLAGEPipeline(AmbiLAGEConfig(steps=1, smoke_test=True), device='cpu').execute(
+        source, target, root, target_text='公开特点')
+    assert ready['training_objective']['public_objectives'][0]['query_modes'] == ['multimodal_equal_weight']
+    for name in ('ready.json', 'metadata.json'):
+        document = json.loads((root / name).read_text(encoding='utf-8'))
+        if mutation == 'dual_kind':
+            document['training_objective']['kind'] = 'four_proxy_sequential_public_dual_goal_v1'
+        elif mutation == 'text_target':
+            document['training_objective']['public_objectives'][0]['query_modes'].append('text_only')
+        else:
+            document['config']['text_weight'] = .5
+        (root / name).write_text(json.dumps(document), encoding='utf-8')
+    with pytest.raises(ValueError, match='仅图文联合训练目标'):
+        validate_ready(root, require_production=False)

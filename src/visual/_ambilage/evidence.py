@@ -43,9 +43,15 @@ def validate_ready(root,require_production=True):
     if ready.get('config',{}).get('steps')!=ready['steps_completed'] or \
        ready.get('refinement',{}).get('steps_completed')!=ready['steps_completed']:
         raise ValueError('配置或细化过程步数不一致')
+    from src.visual.training_objectives import TRAINING_FAMILIES, TRAINING_OBJECTIVE_KIND
+    training=ready.get('training_objective',{})
+    public_objectives=training.get('public_objectives',[])
+    if (training.get('kind')!=TRAINING_OBJECTIVE_KIND or len(public_objectives)!=4 or any(
+        p.get('query_modes')!=['multimodal_equal_weight'] or
+        p.get('query_image_weight')!=0.5 or p.get('query_text_weight')!=0.5
+        for p in public_objectives) or 'text_weight' in ready.get('config',{})):
+        raise ValueError('仅图文联合训练目标证据不完整；旧双目标产物不能作为当前成图复用')
     if require_production:
-        from src.visual.training_objectives import TRAINING_FAMILIES
-        training=ready.get('training_objective',{})
         proxies=training.get('surrogates',[])
         if tuple(p.get('name') for p in proxies)!=TRAINING_FAMILIES or any(p.get('test_fixture') for p in proxies):
             raise ValueError('缺少四个指定真实训练代理的审计证据')
@@ -53,9 +59,6 @@ def validate_ready(root,require_production=True):
             training.get('diffusion_gradient')!='full' or
             training.get('purifier',{}).get('config',{}).get('reverse_steps')!=10):
             raise ValueError('期望变换或全梯度十步净化证据不完整')
-        if len(training.get('public_objectives',[]))!=4 or any(
-            p.get('query_modes')!=['multimodal_equal_weight','text_only'] for p in training['public_objectives']):
-            raise ValueError('公开特点双目标证据不完整')
         vae=ready.get('refinement',{}).get('vae',{})
         if vae.get('kind')!='flux_16_channel_vae' or vae.get('latent_channels')!=16:
             raise ValueError('缺少十六通道生成载体证据')

@@ -58,7 +58,7 @@
       "products": 1181430,
       "raw_bytes": 8676866828,
       "stored_bytes": 2901882988,
-      "chunks": 127,
+      "chunks": 202,
       "materialized": true,
       "status": "ready",
       "large_file_hashes_checked": false,
@@ -67,5 +67,6 @@
       "shopping_model_calls": 0,
       "old_sibling_directories_required": false
     }
-  }
+  },
+  "catalog_transport_repack_audit": "output/deployment/CATALOG_TRANSPORT_REPACK.json"
 }

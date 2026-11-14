@@ -143,5 +143,52 @@ def test_guard_allows_public_group_but_blocks_shared_pool():
     public = EVALUATION_BASE / 'groups/07_shampoo/source.jpg'
     with catalog_training_guard(allowed_output_roots=[public.parent]):
         assert public.open('rb').read(2)
-        with pytest.raises(PermissionError):
-            SHARED_MEMORY.read_text(encoding='utf-8')
+        for blocked in (
+            SHARED_MEMORY,
+            EVALUATION_BASE / 'query_images/07_shampoo/query.png',
+            EVALUATION_BASE / 'evaluation_inputs_joint/07_shampoo/queries.json',
+            EVALUATION_BASE / 'evaluation_inputs_vague_joint/07_shampoo/queries.json',
+        ):
+            with pytest.raises(PermissionError):
+                blocked.open('rb').read(2)
+
+
+def test_frozen_nine_groups_query_modes_and_vague_images():
+    import re
+    from src.paths import EVALUATION_BASE
+    from src.experiments.formal_queries import VAGUE_INSTRUCTIONS
+    from src.experiments.query_contract import load_formal_queries, verify_query_input
+
+    manifest = read_json(EVALUATION_BASE / 'manifest.json')
+    frozen_index = read_json(EVALUATION_BASE / 'query_images/QUERY_IMAGES_FROZEN.json')
+    by_group = {item['group']: item for item in frozen_index['groups']}
+    assert len(by_group) == 9
+
+    for group, spec in manifest['groups'].items():
+        target = {'id': spec['target_id'], 'image_sha256': spec['target_sha256']}
+        text_path = EVALUATION_BASE / spec['query_manifest']
+        joint_path = EVALUATION_BASE / 'evaluation_inputs_joint' / group / 'queries.json'
+        vague_joint_path = EVALUATION_BASE / 'evaluation_inputs_vague_joint' / group / 'queries.json'
+
+        for p in (joint_path, vague_joint_path):
+            raw = read_json(p)
+            assert isinstance(raw.get('image'), str) and not re.match(r'^[A-Za-z]:[\\/]', raw['image']) and not Path(raw['image']).is_absolute()
+
+        q_text = load_formal_queries(text_path, target, query_mode='text')
+        q_joint = load_formal_queries(joint_path, target, query_mode='joint')
+        q_vague = load_formal_queries(vague_joint_path, target, query_mode='joint')
+
+        assert len(q_text) == len(q_joint) == len(q_vague) == 20
+        assert [q['task_id'] for q in q_joint] == [f'feature_{i:02d}' for i in range(1, 21)]
+        assert [q['task_id'] for q in q_vague] == [f'vague_{i:02d}' for i in range(1, 21)]
+        assert [q['instruction'] for q in q_joint] == [q['instruction'] for q in q_text]
+        assert [q['instruction'] for q in q_vague] == list(VAGUE_INSTRUCTIONS)
+
+        expected_sha = by_group[group]['image_sha256']
+        resolved_img = (EVALUATION_BASE / 'query_images' / by_group[group]['image']).resolve()
+        assert resolved_img.is_file() and sha256_file(resolved_img) == expected_sha
+        for item in q_joint + q_vague:
+            verify_query_input(item)
+            assert Path(item['query_image']).resolve() == resolved_img
+            assert item['query_image_sha256'] == expected_sha
+            assert item['query_image_sha256'] != spec['target_sha256']

@@ -96,7 +96,9 @@ def generate_group(base, group, method, output, *, device='cuda', steps=None,
             image_sha256=frozen['image_sha256'], provenance=frozen.get('historical_reuse')))
         freeze_json(frozen_path, frozen)
         return frozen
-    protected = [base / 'shared_memory', base / 'evaluation_inputs', base / 'evaluation_encoder.json']
+    protected = [base / 'shared_memory', base / 'evaluation_inputs',
+                 base / 'evaluation_inputs_joint', base / 'evaluation_inputs_vague_joint',
+                 base / 'query_images', base / 'evaluation_encoder.json']
     with catalog_training_guard(allowed_output_roots=[root, base / 'groups'], private_paths=protected):
         inputs = public_group(base, group)
         from src.visual._ambilage.config import AmbiLAGEConfig

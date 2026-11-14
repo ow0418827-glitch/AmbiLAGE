@@ -11,6 +11,9 @@ def catalog_training_guard(*, allowed_output_roots, private_paths=()):
     allowed = tuple(Path(p).resolve() for p in allowed_output_roots)
     private = (PRIVATE.resolve(), SHARED_MEMORY.parent.resolve(),
                (PROJECT / 'resources/evaluation_base/evaluation_inputs').resolve(),
+               (PROJECT / 'resources/evaluation_base/evaluation_inputs_joint').resolve(),
+               (PROJECT / 'resources/evaluation_base/evaluation_inputs_vague_joint').resolve(),
+               (PROJECT / 'resources/evaluation_base/query_images').resolve(),
                (PROJECT / 'src/experiments/formal_queries.py').resolve()) + tuple(Path(p).resolve() for p in private_paths)
     forbidden_names = {'queries.json', 'evaluation.json', 'results.json', 'test_results.json'}
     state = {'active': True, 'checked_accesses': 0, 'blocked_accesses': []}

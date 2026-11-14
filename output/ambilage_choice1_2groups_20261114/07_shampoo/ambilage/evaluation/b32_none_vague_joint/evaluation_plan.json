@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "scope": "shared",
+  "pool_path": "/content/AmbiLAGE/resources/evaluation_base/shared_memory/shared_memory.json",
+  "pool_sha256": "bfd8964a4477b694796787ffe2fc746c5eb19a389c23c904ebccc81975cd77a8",
+  "pool_count": 189,
+  "source_memory_id": "groups9_reference_07_shampoo_B09B63YYCW",
+  "frozen_image_sha256": "b8310207681ee1698191b0911f9d4a61d7202cb8408dec7210935da1fec94f28",
+  "method": "ambilage",
+  "queries": [
+    {
+      "task_id": "vague_01",
+      "instruction": "请购买与图片中商品相似的商品。",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/query_images/07_shampoo/query.png",
+      "query_image_sha256": "42b379adb64e7639078c7f343b31a861cc1d718828e355a8a8446a9b2ca80f58"
+    },
+    {
+      "task_id": "vague_02",
+      "instruction": "请帮我找一件图中这样的商品。",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/query_images/07_shampoo/query.png",
+      "query_image_sha256": "42b379adb64e7639078c7f343b31a861cc1d718828e355a8a8446a9b2ca80f58"
+    },
+    {
+      "task_id": "vague_03",
+      "instruction": "请按这张参考图挑选类似商品。",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/query_images/07_shampoo/query.png",
+      "query_image_sha256": "42b379adb64e7639078c7f343b31a861cc1d718828e355a8a8446a9b2ca80f58"
+    },
+    {
+      "task_id": "vague_04",
+      "instruction": "我想买图片里这种样式的商品。",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/query_images/07_shampoo/query.png",
+      "query_image_sha256": "42b379adb64e7639078c7f343b31a861cc1d718828e355a8a8446a9b2ca80f58"
+    },
+    {
+      "task_id": "vague_05",
+      "instruction": "请参考图片选购相近的商品。",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/query_images/07_shampoo/query.png",
+      "query_image_sha256": "42b379adb64e7639078c7f343b31a861cc1d718828e355a8a8446a9b2ca80f58"
+    },
+    {
+      "task_id": "vague_06",
+      "instruction": "帮我购买一件外观与图中相近的商品。",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/query_images/07_shampoo/query.png",
+      "query_image_sha256": "42b379adb64e7639078c7f343b31a861cc1d718828e355a8a8446a9b2ca80f58"
+    },
+    {
+      "task_id": "vague_07",
+      "instruction": "请找一件与这张图大致相似的商品。",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/query_images/07_shampoo/query.png",
+      "query_image_sha256": "42b379adb64e7639078c7f343b31a861cc1d718828e355a8a8446a9b2ca80f58"
+    },
+    {
+      "task_id": "vague_08",
+      "instruction": "我需要图片所示类型的商品，请帮我选购。",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/query_images/07_shampoo/query.png",
+      "query_image_sha256": "42b379adb64e7639078c7f343b31a861cc1d718828e355a8a8446a9b2ca80f58"
+    },
+    {
+      "task_id": "vague_09",
+      "instruction": "请依照图中样式购买类似的商品。",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/query_images/07_shampoo/query.png",
+      "query_image_sha256": "42b379adb64e7639078c7f343b31a861cc1d718828e355a8a8446a9b2ca80f58"
+    },
+    {
+      "task_id": "vague_10",
+      "instruction": "帮我找找与图片中物品相仿的商品。",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/query_images/07_shampoo/query.png",
+      "query_image_sha256": "42b379adb64e7639078c7f343b31a861cc1d718828e355a8a8446a9b2ca80f58"
+    },
+    {
+      "task_id": "vague_11",
+      "instruction": "请根据参考图片帮我选购一件商品。",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/query_images/07_shampoo/query.png",
+      "query_image_sha256": "42b379adb64e7639078c7f343b31a861cc1d718828e355a8a8446a9b2ca80f58"
+    },
+    {
+      "task_id": "vague_12",
+      "instruction": "我想购买一件与这张图类似的商品。",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/query_images/07_shampoo/query.png",
+      "query_image_sha256": "42b379adb64e7639078c7f343b31a861cc1d718828e355a8a8446a9b2ca80f58"
+    },
+    {
+      "task_id": "vague_13",
+      "instruction": "请挑选和图片中物品整体相近的商品。",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/query_images/07_shampoo/query.png",
+      "query_image_sha256": "42b379adb64e7639078c7f343b31a861cc1d718828e355a8a8446a9b2ca80f58"
+    },
+    {
+      "task_id": "vague_14",
+      "instruction": "照着这张图帮我购买类似款式。",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/query_images/07_shampoo/query.png",
+      "query_image_sha256": "42b379adb64e7639078c7f343b31a861cc1d718828e355a8a8446a9b2ca80f58"
+    },
+    {
+      "task_id": "vague_15",
+      "instruction": "请帮我选购图中这种外观的商品。",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/query_images/07_shampoo/query.png",
+      "query_image_sha256": "42b379adb64e7639078c7f343b31a861cc1d718828e355a8a8446a9b2ca80f58"
+    },
+    {
+      "task_id": "vague_16",
+      "instruction": "我需要一件与参考图相近的商品。",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/query_images/07_shampoo/query.png",
+      "query_image_sha256": "42b379adb64e7639078c7f343b31a861cc1d718828e355a8a8446a9b2ca80f58"
+    },
+    {
+      "task_id": "vague_17",
+      "instruction": "请按照图片中的大致样式选购。",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/query_images/07_shampoo/query.png",
+      "query_image_sha256": "42b379adb64e7639078c7f343b31a861cc1d718828e355a8a8446a9b2ca80f58"
+    },
+    {
+      "task_id": "vague_18",
+      "instruction": "帮我购买与图里物品风格相近的商品。",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/query_images/07_shampoo/query.png",
+      "query_image_sha256": "42b379adb64e7639078c7f343b31a861cc1d718828e355a8a8446a9b2ca80f58"
+    },
+    {
+      "task_id": "vague_19",
+      "instruction": "请找一件整体看起来像参考图的商品。",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/query_images/07_shampoo/query.png",
+      "query_image_sha256": "42b379adb64e7639078c7f343b31a861cc1d718828e355a8a8446a9b2ca80f58"
+    },
+    {
+      "task_id": "vague_20",
+      "instruction": "请参考这张图购买一件相似商品即可。",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/query_images/07_shampoo/query.png",
+      "query_image_sha256": "42b379adb64e7639078c7f343b31a861cc1d718828e355a8a8446a9b2ca80f58"
+    }
+  ],
+  "conditions": [
+    {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    }
+  ],
+  "simultaneous_replacements": [
+    {
+      "source_id": "B09B63YYCW",
+      "image_sha256": "b8310207681ee1698191b0911f9d4a61d7202cb8408dec7210935da1fec94f28",
+      "source_memory_id": null
+    },
+    {
+      "source_id": "B09PNNXYJ4",
+      "image_sha256": "cde753d9028cfd1f37d7c2d782d742a0f4d3c2d1a7d46b507845e0a5d919a916",
+      "source_memory_id": null
+    }
+  ],
+  "memory_vector_cache_policy": "content_model_decoder_text_fusion_bound_v1",
+  "encoder_config": "/root/.gemini/antigravity/brain/e0388b53-0e9a-492d-97fa-c6472a1cb191/scratch/eval_b32_matched.json",
+  "encoder_config_sha256": "025ce58154ababe29c684433136dc098a7bb1cf29888c21e912be9466c09449c",
+  "key_image_weight": 0.5,
+  "query_image_weight": 0.5,
+  "query_mode": "joint",
+  "query_manifest": "/content/AmbiLAGE/resources/evaluation_base/evaluation_inputs_vague_joint/07_shampoo/queries.json",
+  "query_manifest_sha256": "7e3e1d59abeb7c0cd48b04266bf9e876be96d721a10005fb86038a3e3f7ac27c",
+  "index_text": "product_feature",
+  "query_image_defended": false,
+  "all_memory_images_equally_defended": true,
+  "shopping_allowed": false,
+  "record_kinds": {
+    "purchase_memory": 51,
+    "simulated_gallery": 138
+  }
+}

@@ -16,8 +16,29 @@ def validate_ready(root,require_production=True):
     names={'foreground_segmentation','foreground_statistics','color_harmonization','latent_generation_refinement'}
     if set(ready.get('stages',{}))!=names or any(s.get('status')!='completed' for s in ready['stages'].values()):
         raise ValueError('完整四阶段证据缺失')
-    if ready.get('steps_requested')!=ready.get('steps_completed') or ready.get('steps_completed',0)<1:
+    req=ready.get('steps_requested')
+    comp=ready.get('steps_completed')
+    if type(req) is not int or type(comp) is not int or req<1 or comp<1 or comp>req:
         raise ValueError('潜空间步骤未完整完成')
+    stage=ready['stages']['latent_generation_refinement']
+    anneal=ready.get('refinement',{}).get('adaptive_annealing')
+    cfg=ready.get('config',{})
+    if comp!=req:
+        min_steps=min(int(cfg.get('anneal_min_steps',req)),req) if type(cfg.get('anneal_min_steps')) is int and cfg['anneal_min_steps']>=1 else req
+        early_ok=(
+            isinstance(anneal,dict)
+            and anneal.get('early_stopped') is True
+            and anneal.get('stop_reason')=='adaptive_annealing_converged'
+            and ready.get('stop_reason')=='adaptive_annealing_converged'
+            and stage.get('stop_reason')=='adaptive_annealing_converged'
+            and cfg.get('adaptive_annealing') is True
+            and type(cfg.get('anneal_early_stop_patience')) is int
+            and cfg['anneal_early_stop_patience']>0
+            and anneal.get('steps_executed')==comp
+            and comp>=min_steps
+        )
+        if not early_ok:
+            raise ValueError('潜空间步骤未完整完成')
     if ready.get('pixel_optimization') is not False or ready.get('auxiliary_max_levels')!=0:
         raise ValueError('生产主方法不允许像素残差')
     if not ready.get('quality',{}).get('quality_ok') or ready.get('final_naturalness',{}).get('passed') is not True:
@@ -38,11 +59,11 @@ def validate_ready(root,require_production=True):
         Path(candidate.get('image','')).resolve()!=final or
         candidate.get('sha256')!=expected_digest or ready.get('output_image_sha256')!=expected_digest):
         raise ValueError('最终候选与冻结成图未绑定')
-    stage=ready['stages']['latent_generation_refinement']
-    if stage.get('steps_requested')!=ready['steps_requested'] or stage.get('steps_completed')!=ready['steps_completed']:
+    if stage.get('steps_requested')!=req or stage.get('steps_completed')!=comp:
         raise ValueError('阶段及顶层步数不一致')
-    if ready.get('config',{}).get('steps')!=ready['steps_completed'] or \
-       ready.get('refinement',{}).get('steps_completed')!=ready['steps_completed']:
+    if cfg.get('steps')!=req or \
+       ready.get('refinement',{}).get('steps_completed')!=comp or \
+       ready.get('refinement',{}).get('steps_requested',req)!=req:
         raise ValueError('配置或细化过程步数不一致')
     from src.visual.training_objectives import TRAINING_OBJECTIVE_KIND
     from src.visual.training_surrogates import validate_selection_audit, validate_loaded_surrogates
@@ -72,7 +93,7 @@ def validate_ready(root,require_production=True):
     metadata=json.loads((root/'metadata.json').read_text(encoding='utf-8'))
     for name in ('method','source_image','target_image','source_sha256','target_sha256',
                  'output_image','output_image_sha256','artifacts','stages','test_fixture','production_backend',
-                 'training_objective','refinement','config','final_naturalness','steps_requested','steps_completed'):
+                 'training_objective','refinement','config','final_naturalness','steps_requested','steps_completed','stop_reason'):
         if metadata.get(name)!=ready.get(name):
             raise ValueError('元数据与完成凭证不一致: '+name)
     result_path=root/'generation_result.json'

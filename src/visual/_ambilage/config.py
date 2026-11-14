@@ -20,10 +20,21 @@ MASK_POLICY = "ambilage_subject_micro_light_background_range_centered_ambient_sm
 
 @dataclass(frozen=True)
 class AmbiLAGEConfig:
-    # 优化迭代步数与检查周期
-    steps: int = 350
+    # 优化迭代步数、自适应退火区间 [180, 250] 与断点续跑配置
+    steps: int = 250
     check_every: int = 10
     log_every: int = 10
+    adaptive_annealing: bool = True
+    anneal_min_steps: int = 180
+    anneal_min_lr_ratio: float = 0.08
+    anneal_warmup_steps: int = 10
+    anneal_plateau_factor: float = 0.75
+    anneal_plateau_patience: int = 2
+    anneal_backtrack_factor: float = 0.90
+    anneal_improve_tol: float = 5e-4
+    anneal_early_stop_patience: int = 4
+    checkpoint_every: int = 5
+    resume_from_checkpoint: bool = True
 
     # 主体与背景扰动预算 (0~255 整数级)
     latent_levels: int = 6              # 主体微光影预算 (<= 6 级)
@@ -211,6 +222,28 @@ class AmbiLAGEConfig:
             raise ValueError("回退守门步数无效")
         if type(self.log_every) is not int or self.log_every < 1:
             raise ValueError("日志周期必须为正整数")
+        if type(self.adaptive_annealing) is not bool:
+            raise ValueError("自适应退火开关 adaptive_annealing 必须为布尔值")
+        if type(self.anneal_min_steps) is not int or self.anneal_min_steps < 1:
+            raise ValueError("自适应退火最小步数 anneal_min_steps 必须为正整数")
+        if not (0.0 < self.anneal_min_lr_ratio <= 1.0):
+            raise ValueError("自适应退火最小学习率比例 anneal_min_lr_ratio 必须位于 (0.0, 1.0]")
+        if type(self.anneal_warmup_steps) is not int or self.anneal_warmup_steps < 0:
+            raise ValueError("退火预热步数 anneal_warmup_steps 不能为负数")
+        if not (0.1 <= self.anneal_plateau_factor <= 1.0):
+            raise ValueError("平台期降温系数 anneal_plateau_factor 必须位于 [0.1, 1.0]")
+        if type(self.anneal_plateau_patience) is not int or self.anneal_plateau_patience < 1:
+            raise ValueError("平台期耐心周期 anneal_plateau_patience 必须为正整数")
+        if not (0.1 <= self.anneal_backtrack_factor <= 1.0):
+            raise ValueError("回退降温系数 anneal_backtrack_factor 必须位于 [0.1, 1.0]")
+        if self.anneal_improve_tol < 0.0:
+            raise ValueError("有效提升容差 anneal_improve_tol 不能为负数")
+        if type(self.anneal_early_stop_patience) is not int or self.anneal_early_stop_patience < 0:
+            raise ValueError("退火早停耐心次数 anneal_early_stop_patience 不能为负数")
+        if type(self.checkpoint_every) is not int or self.checkpoint_every < 1:
+            raise ValueError("断点保存周期 checkpoint_every 必须为正整数")
+        if type(self.resume_from_checkpoint) is not bool:
+            raise ValueError("断点续跑开关 resume_from_checkpoint 必须为布尔值")
         if type(self.smoke_test) is not bool:
             raise ValueError("轻量验证开关必须为布尔值")
         if self.editor_kind not in ("flux", "qwen"):

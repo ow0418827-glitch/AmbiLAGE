@@ -72,6 +72,34 @@ export AMBILAGE_MODEL_ROOT="$PWD/models"
 3. 先完成全部拟比较图片并冻结，再开放共享池与正式查询的读取。独立进程重新编码及复算，不能复用旧编码器向量。
 4. 确认一组的真实显存和磁盘占用后，再按冻结配置运行完整组数与防御矩阵。若出现技术错误，保存失败证据停止；不得改种子或重采样有效结果。
 
+### 长耗时任务默认运行方式（脱离伪终端与日志持久化）
+
+远程容器（例如 Colab 或远程主机）上运行动辄数十分钟的生成与全库评估时，若直接附着在交互式或工具默认分配的 `PTY`（伪终端，如 `/dev/pts/1`）上，一旦远程容器内的 `extensionHost`（VS Code Server 远程扩展宿主）或 `agy`（Antigravity 代理宿主）等服务端进程因网络重连、窗口重载或异常而重启，旧伪终端会被关闭，Python 下次打印进度就会触发 `OSError: [Errno 5] Input/output error`（写入已关闭终端的输入/输出错误）导致训练中断。
+
+因此，**后续在远程启动生成或完整评估任务时，默认统一按以下方案执行**：
+
+1. **脱离伪终端与会话**：使用 `setsid -f -w nohup`（新建独立会话并忽略 `SIGHUP` 挂断信号；若以纯后台方式拉起并立即返回，可省略 `-w`），同时用 `< /dev/null` 切断从原终端读取标准输入。
+2. **日志持久化与无缓冲写盘**：设置 `export PYTHONUNBUFFERED=1` 并给 Python 传入 `-u`（禁用输出缓冲），通过 `> <日志文件路径> 2>&1` 将 `stdout/stderr`（标准输出与标准错误流）全部持续写入硬盘上的普通日志文件（日志中禁止回显任何密钥或令牌；若写入 `output/` 目录下，提交前须一并经 `tools/check_github_sync.py` 扫描）。若需批处理脚本（`.sh`），保持 Unix `LF`（换行符）格式。
+3. **标准启动模板**：
+
+```bash
+export PYTHONUNBUFFERED=1
+mkdir -p output/remote_groups9
+setsid -f -w nohup .venv/bin/python -u -X utf8 tools/run_experiment.py generate \
+  --group all --method ambilage --output output/remote_groups9 --device cuda \
+  < /dev/null > output/remote_groups9/generate_ambilage.log 2>&1
+```
+
+4. **启动后即时核验（确认确实已脱离终端）**：
+
+```bash
+ps -eo pid,ppid,pgid,sid,tty,stat,cmd | grep run_experiment | grep -v grep
+ls -l /proc/<PID>/fd/0 /proc/<PID>/fd/1 /proc/<PID>/fd/2
+tail -n 30 output/remote_groups9/generate_ambilage.log
+```
+
+核验要点：`ps` 输出中的 `TTY` 列必须为 `?`（无控制终端）；`/proc/<PID>/fd/0` 指向 `/dev/null`，`fd/1` 与 `fd/2` 指向目标 `.log` 普通文件而非 `/dev/pts/*`。如此即使代理服务端或本地远程连接中途重启，训练仍会继续运行且每步日志完整留在硬盘中。
+
 先在一组上验收新方法真实生产生成；原始像素方法只登记已导入成图，不再训练。正式检索必须等待对应方法全部九张图冻结，不能在仅完成一组时提前评价。下方完整组数流程用于正式比较。
 
 原始像素对照已有完整成图，因此相关生成命令只会复用。下面示例不启用购物，不缩减默认训练日程；评估先选无防御，确认调用链与独立复算后再另建评估条件运行防御面板。

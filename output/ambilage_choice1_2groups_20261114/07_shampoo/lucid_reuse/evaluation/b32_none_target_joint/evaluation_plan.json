@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "scope": "shared",
+  "diagnostic_environment": "env4_feature_text_plus_target_image",
+  "query_image_is_target": true,
+  "pool_path": "/content/AmbiLAGE/resources/evaluation_base/shared_memory/shared_memory.json",
+  "pool_sha256": "bfd8964a4477b694796787ffe2fc746c5eb19a389c23c904ebccc81975cd77a8",
+  "pool_count": 189,
+  "source_memory_id": "groups9_reference_07_shampoo_B09B63YYCW",
+  "frozen_image_sha256": "dfd43aa9e1b45cefacb6adac7641712ca416cf539a64a6831f21acc6ed4aa800",
+  "method": "lucid",
+  "queries": [
+    {
+      "task_id": "feature_01",
+      "instruction": "I want to buy shampoo with plant-based haircare ingredients and a balancing formula.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/07_shampoo/target.jpg",
+      "query_image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e"
+    },
+    {
+      "task_id": "feature_02",
+      "instruction": "I would like to purchase shampoo featuring plant-based haircare ingredients and plant and flower essences.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/07_shampoo/target.jpg",
+      "query_image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e"
+    },
+    {
+      "task_id": "feature_03",
+      "instruction": "Looking to buy shampoo with a balancing formula and plant and flower essences.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/07_shampoo/target.jpg",
+      "query_image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e"
+    },
+    {
+      "task_id": "feature_04",
+      "instruction": "I am looking to buy shampoo with plant-based haircare ingredients and a balancing formula.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/07_shampoo/target.jpg",
+      "query_image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e"
+    },
+    {
+      "task_id": "feature_05",
+      "instruction": "Please help me buy shampoo featuring plant-based haircare ingredients and plant and flower essences.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/07_shampoo/target.jpg",
+      "query_image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e"
+    },
+    {
+      "task_id": "feature_06",
+      "instruction": "I am shopping for shampoo with a balancing formula and plant and flower essences.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/07_shampoo/target.jpg",
+      "query_image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e"
+    },
+    {
+      "task_id": "feature_07",
+      "instruction": "I would like to buy shampoo with plant-based haircare ingredients and a balancing formula.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/07_shampoo/target.jpg",
+      "query_image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e"
+    },
+    {
+      "task_id": "feature_08",
+      "instruction": "Help me purchase shampoo featuring plant-based haircare ingredients and plant and flower essences.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/07_shampoo/target.jpg",
+      "query_image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e"
+    },
+    {
+      "task_id": "feature_09",
+      "instruction": "I am looking for shampoo with a balancing formula and plant and flower essences.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/07_shampoo/target.jpg",
+      "query_image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e"
+    },
+    {
+      "task_id": "feature_10",
+      "instruction": "Please find shampoo with plant-based haircare ingredients and a balancing formula for me to buy.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/07_shampoo/target.jpg",
+      "query_image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e"
+    },
+    {
+      "task_id": "feature_11",
+      "instruction": "I want to purchase shampoo featuring plant-based haircare ingredients and plant and flower essences.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/07_shampoo/target.jpg",
+      "query_image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e"
+    },
+    {
+      "task_id": "feature_12",
+      "instruction": "Please help me purchase shampoo with a balancing formula and plant and flower essences.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/07_shampoo/target.jpg",
+      "query_image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e"
+    },
+    {
+      "task_id": "feature_13",
+      "instruction": "I need to buy shampoo with plant-based haircare ingredients and a balancing formula.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/07_shampoo/target.jpg",
+      "query_image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e"
+    },
+    {
+      "task_id": "feature_14",
+      "instruction": "I would like help finding shampoo featuring plant-based haircare ingredients and plant and flower essences.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/07_shampoo/target.jpg",
+      "query_image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e"
+    },
+    {
+      "task_id": "feature_15",
+      "instruction": "Find me shampoo with a balancing formula and plant and flower essences to purchase.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/07_shampoo/target.jpg",
+      "query_image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e"
+    },
+    {
+      "task_id": "feature_16",
+      "instruction": "Please look for shampoo with plant-based haircare ingredients and a balancing formula that I can buy.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/07_shampoo/target.jpg",
+      "query_image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e"
+    },
+    {
+      "task_id": "feature_17",
+      "instruction": "I am interested in buying shampoo featuring plant-based haircare ingredients and plant and flower essences.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/07_shampoo/target.jpg",
+      "query_image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e"
+    },
+    {
+      "task_id": "feature_18",
+      "instruction": "I would like to shop for shampoo with a balancing formula and plant and flower essences.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/07_shampoo/target.jpg",
+      "query_image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e"
+    },
+    {
+      "task_id": "feature_19",
+      "instruction": "Help me find shampoo with plant-based haircare ingredients and a balancing formula to buy.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/07_shampoo/target.jpg",
+      "query_image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e"
+    },
+    {
+      "task_id": "feature_20",
+      "instruction": "I am ready to purchase shampoo featuring plant-based haircare ingredients and plant and flower essences.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/07_shampoo/target.jpg",
+      "query_image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e"
+    }
+  ],
+  "conditions": [
+    {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    }
+  ],
+  "encoder_config": "/root/.gemini/antigravity/brain/e0388b53-0e9a-492d-97fa-c6472a1cb191/scratch/eval_b32_matched.json",
+  "encoder_config_sha256": "025ce58154ababe29c684433136dc098a7bb1cf29888c21e912be9466c09449c",
+  "key_image_weight": 0.5,
+  "query_image_weight": 0.5,
+  "query_mode": "joint",
+  "target_image_path": "/content/AmbiLAGE/resources/evaluation_base/groups/07_shampoo/target.jpg",
+  "target_image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e"
+}

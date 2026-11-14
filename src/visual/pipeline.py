@@ -48,7 +48,7 @@ def generate(
         source: 源商品图像路径
         target: 目标商品图像路径
         output_dir: 产物落盘目录
-        steps: 优化步数 (ambilage 默认 350, lucid 默认 1000)
+        steps: 优化步数 (ambilage 默认 250, lucid 默认 1000)
         device: 'cuda' 或 'cpu'
         target_text: 目标特点描述文本
         epsilon_levels: 扰动预算 (仅 lucid 使用，默认 16)

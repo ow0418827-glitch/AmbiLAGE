@@ -1,0 +1,30 @@
+=== [1/1] Generate 09_toothbrush/ambilage (180-250 steps adaptive annealing + checkpoint resume) at 2026-11-14T13:53:59Z ===
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  53%|█████▎    | 395/741 [00:00<00:00, 3948.10it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 3810.82it/s]
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  53%|█████▎    | 394/741 [00:00<00:00, 3932.87it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 3937.77it/s]
+WARNING:root:No pretrained weights loaded for model 'ViT-B-16'. Model initialized randomly.
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+Loading weights:   0%|          | 0/196 [00:00<?, ?it/s]Loading weights: 100%|██████████| 196/196 [00:00<00:00, 2220.34it/s]
+The config attributes {'skip_prk_steps': True} were passed to DDIMInverseScheduler, but are not expected and will be ignored. Please verify your scheduler_config.json configuration file.
+AmbiLAGE 细化 [10/250] Utility=0.7293 SSIM=0.9910 MAE=3.22 LR=1.000 (Accepted=10, Rejected=0)
+AmbiLAGE 细化 [20/250] Utility=0.7356 SSIM=0.9906 MAE=3.38 LR=0.996 (Accepted=20, Rejected=0)
+AmbiLAGE 细化 [30/250] Utility=0.7391 SSIM=0.9902 MAE=3.45 LR=0.984 (Accepted=30, Rejected=0)
+AmbiLAGE 细化 [40/250] Utility=0.7412 SSIM=0.9900 MAE=3.52 LR=0.965 (Accepted=40, Rejected=0)
+AmbiLAGE 细化 [50/250] Utility=0.7426 SSIM=0.9898 MAE=3.58 LR=0.704 (Accepted=50, Rejected=0)
+AmbiLAGE 细化 [60/250] Utility=0.7441 SSIM=0.9897 MAE=3.61 LR=0.679 (Accepted=60, Rejected=0)
+AmbiLAGE 细化 [70/250] Utility=0.7438 SSIM=0.9897 MAE=3.62 LR=0.487 (Accepted=70, Rejected=0)
+AmbiLAGE 细化 [80/250] Utility=0.7450 SSIM=0.9897 MAE=3.62 LR=0.461 (Accepted=80, Rejected=0)
+AmbiLAGE 细化 [90/250] Utility=0.7445 SSIM=0.9898 MAE=3.61 LR=0.325 (Accepted=90, Rejected=0)
+AmbiLAGE 细化 [100/250] Utility=0.7451 SSIM=0.9899 MAE=3.61 LR=0.302 (Accepted=100, Rejected=0)
+AmbiLAGE 细化 [110/250] Utility=0.7442 SSIM=0.9900 MAE=3.58 LR=0.209 (Accepted=110, Rejected=0)
+AmbiLAGE 细化 [120/250] Utility=0.7440 SSIM=0.9901 MAE=3.59 LR=0.190 (Accepted=120, Rejected=0)
+AmbiLAGE 细化 [130/250] Utility=0.7436 SSIM=0.9902 MAE=3.57 LR=0.128 (Accepted=130, Rejected=0)
+AmbiLAGE 细化 [140/250] Utility=0.7426 SSIM=0.9902 MAE=3.57 LR=0.114 (Accepted=140, Rejected=0)
+AmbiLAGE 细化 [150/250] Utility=0.7417 SSIM=0.9903 MAE=3.56 LR=0.080 (Accepted=150, Rejected=0)
+AmbiLAGE 细化 [160/250] Utility=0.7413 SSIM=0.9903 MAE=3.56 LR=0.080 (Accepted=160, Rejected=0)
+AmbiLAGE 细化 [170/250] Utility=0.7410 SSIM=0.9904 MAE=3.55 LR=0.080 (Accepted=170, Rejected=0)
+AmbiLAGE 细化 [180/250] Utility=0.7414 SSIM=0.9904 MAE=3.55 LR=0.080 (Accepted=180, Rejected=0)
+AmbiLAGE 自适应退火收敛早停 [180/250] (min_steps=180, lr_scale=0.0800, best_step=20, best_sel_utility=0.7149)
+=== GENERATION COMPLETE at 2026-11-14T14:38:01Z ===

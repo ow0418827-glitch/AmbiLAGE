@@ -1,0 +1,98 @@
+=== METHOD ambilage (ambilage) ===
+  frozen: /content/AmbiLAGE/output/ambilage_choice1_2groups_20261114/07_shampoo/ambilage/FROZEN_IMAGE.json
+  frozen: /content/AmbiLAGE/output/ambilage_choice1_2groups_20261114/09_toothbrush/ambilage/FROZEN_IMAGE.json
+[SKIP PASSED] 07_shampoo/ambilage/g14_none_text
+[RUN] 07_shampoo/ambilage/g14_none_feature_joint ...
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+none clean: 前三 4/20；前五 19/20
+none modified: 前三 12/20；前五 20/20
+[RUN] 07_shampoo/ambilage/g14_none_vague_joint ...
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 0/20
+[RUN] 07_shampoo/ambilage/g14_none_target_joint ...
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+env4 none clean: 前三 20/20; 前五 20/20
+env4 none modified: 前三 20/20; 前五 20/20
+[RUN] 07_shampoo/ambilage/b32_none_text ...
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+none clean: 前三 9/20；前五 14/20
+none modified: 前三 10/20；前五 18/20
+[RUN] 07_shampoo/ambilage/b32_none_feature_joint ...
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 9/20
+[RUN] 07_shampoo/ambilage/b32_none_vague_joint ...
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 0/20
+[RUN] 07_shampoo/ambilage/b32_none_target_joint ...
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+env4 none clean: 前三 19/20; 前五 20/20
+env4 none modified: 前三 20/20; 前五 20/20
+[SKIP PASSED] 09_toothbrush/ambilage/g14_none_text
+[RUN] 09_toothbrush/ambilage/g14_none_feature_joint ...
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+none clean: 前三 0/20；前五 20/20
+none modified: 前三 18/20；前五 20/20
+[RUN] 09_toothbrush/ambilage/g14_none_vague_joint ...
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 6/20；前五 20/20
+[RUN] 09_toothbrush/ambilage/g14_none_target_joint ...
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+env4 none clean: 前三 0/20; 前五 18/20
+env4 none modified: 前三 0/20; 前五 20/20
+[RUN] 09_toothbrush/ambilage/b32_none_text ...
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 0/20；前五 0/20
+[RUN] 09_toothbrush/ambilage/b32_none_feature_joint ...
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+none clean: 前三 11/20；前五 20/20
+none modified: 前三 16/20；前五 20/20
+[RUN] 09_toothbrush/ambilage/b32_none_vague_joint ...
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 2/20
+[RUN] 09_toothbrush/ambilage/b32_none_target_joint ...
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+env4 none clean: 前三 5/20; 前五 18/20
+env4 none modified: 前三 20/20; 前五 20/20
+=== METHOD lucid (lucid_reuse) ===
+  frozen: /content/AmbiLAGE/output/ambilage_2groups_20261114/07_shampoo/lucid/FROZEN_IMAGE.json
+  frozen: /content/AmbiLAGE/output/ambilage_2groups_20261114/09_toothbrush/lucid/FROZEN_IMAGE.json
+[RUN] 07_shampoo/lucid_reuse/g14_none_text ...
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+none clean: 前三 19/20；前五 20/20
+none modified: 前三 19/20；前五 20/20
+[RUN] 07_shampoo/lucid_reuse/g14_none_feature_joint ...
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+none clean: 前三 4/20；前五 19/20
+none modified: 前三 1/20；前五 6/20
+[RUN] 07_shampoo/lucid_reuse/g14_none_vague_joint ...
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 0/20
+[RUN] 07_shampoo/lucid_reuse/g14_none_target_joint ...
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+env4 none clean: 前三 20/20; 前五 20/20
+env4 none modified: 前三 3/20; 前五 19/20
+[RUN] 07_shampoo/lucid_reuse/b32_none_text ...
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+none clean: 前三 9/20；前五 14/20
+none modified: 前三 20/20；前五 20/20
+[RUN] 07_shampoo/lucid_reuse/b32_none_feature_joint ...
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 6/20；前五 18/20
+[RUN] 07_shampoo/lucid_reuse/b32_none_vague_joint ...
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 0/20
+[RUN] 07_shampoo/lucid_reuse/b32_none_target_joint ...
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+env4 none clean: 前三 19/20; 前五 20/20
+env4 none modified: 前三 20/20; 前五 20/20
+[RUN] 09_toothbrush/lucid_reuse/g14_none_text ...
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.

@@ -1,0 +1,32 @@
+{
+  "status": "completed",
+  "stage": "illumination_harmonization",
+  "blend_mode": "matte",
+  "selected_rgb": [
+    220,
+    195,
+    162
+  ],
+  "strength": 1.0,
+  "selected_color_mix": 0.25,
+  "smoothing_sigma": 12.0,
+  "chosen_fraction": 0.46875,
+  "line_search_steps": 32,
+  "source_ssim": 0.9651101842816474,
+  "source_mae_levels": 4.542821407318115,
+  "halo_error": 7.7902326583862305,
+  "ink_core_pixels": 19789,
+  "substrate_pixels": 667,
+  "max_body_change_levels": 52,
+  "mean_body_change_levels": 5.356681867535288,
+  "roi_change_levels": 0,
+  "zero_pixel_residual": true,
+  "generator": {
+    "model": "perceptual_illumination_line_search_v1",
+    "chosen_fraction": 0.46875,
+    "line_search_steps": 32
+  },
+  "trials_evaluated": 18,
+  "anchor_path": "/content/AmbiLAGE/output/ambilage_choice1_2groups_20261114/07_shampoo/ambilage/generation/color_harmonization/generative_anchor.png",
+  "anchor_sha256": "34c8c48f067ca71a3da628807335f17163c34a4b7022da72a28520009d2bd89b"
+}

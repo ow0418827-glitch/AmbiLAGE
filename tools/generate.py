@@ -57,7 +57,7 @@ def parse_args(argv=None) -> argparse.Namespace:
         "--steps",
         type=int,
         default=None,
-        help="优化步数 (ambilage 默认 350, lucid 默认 1000)",
+        help="优化步数 (ambilage 默认 250，配合 180-250 步自适应退火与断点续跑；lucid 默认 1000)",
     )
     parser.add_argument(
         "--device",

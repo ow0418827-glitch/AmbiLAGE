@@ -12,9 +12,17 @@ from __future__ import annotations
 
 import copy
 import gc
+import hashlib
+import json
+import math
+import os
 from pathlib import Path
+import random
+import signal
+import threading
 import time
-from typing import Any
+from typing import Any, Mapping
+import uuid
 
 import numpy as np
 import torch
@@ -66,6 +74,204 @@ class AmbiLAGEVae:
         return F.interpolate(decoded, size=target_shape[-2:], mode="bicubic", align_corners=False, antialias=True)
 
 
+STAGE4_CHECKPOINT_FILENAME = "checkpoint_latest.pt"
+
+
+class AdaptiveAnnealingController:
+    """Stage 4 自适应退火调度器：余弦包络 + 约束回退降温 + 平台期降温与区间早停收敛。"""
+
+    def __init__(self, config: AmbiLAGEConfig, init_utility: float) -> None:
+        self.config = config
+        self.effective_min_steps = min(int(config.anneal_min_steps), int(config.steps))
+        self.warmup = min(int(config.anneal_warmup_steps), int(config.steps) // 5)
+        self.adaptive_scale = 1.0
+        self.best_utility = float(init_utility)
+        self.stagnation_checks = 0
+        self.cool_events = 0
+        self.backtrack_events = 0
+        self.reject_events = 0
+
+    def lr_scale(self, step: int) -> float:
+        if not self.config.adaptive_annealing:
+            return max(0.05, 1.0 - 0.75 * (step / max(self.config.steps, 1)))
+        min_r = float(self.config.anneal_min_lr_ratio)
+        if self.warmup > 0 and step <= self.warmup:
+            cosine = 0.35 + 0.65 * (step / self.warmup)
+        else:
+            span = max(self.config.steps - self.warmup, 1)
+            progress = min(max((step - self.warmup) / span, 0.0), 1.0)
+            cosine = min_r + 0.5 * (1.0 - min_r) * (1.0 + math.cos(math.pi * progress))
+        return max(min_r, min(1.0, cosine * self.adaptive_scale))
+
+    def on_step_end(self, accepted: bool, used_backtracks: int) -> None:
+        if not self.config.adaptive_annealing:
+            return
+        min_r = float(self.config.anneal_min_lr_ratio)
+        factor = float(self.config.anneal_backtrack_factor)
+        if not accepted:
+            self.reject_events += 1
+            self.adaptive_scale = max(min_r, self.adaptive_scale * (factor * factor))
+        elif used_backtracks > 0:
+            self.backtrack_events += 1
+            self.adaptive_scale = max(min_r, self.adaptive_scale * factor)
+
+    def on_check(
+        self,
+        step: int,
+        sel_utility: float,
+        quality_ok: bool,
+        *,
+        current_lr_scale: float,
+        best_quality_ok: bool,
+    ) -> tuple[bool, str | None]:
+        if not self.config.adaptive_annealing:
+            return False, None
+        min_r = float(self.config.anneal_min_lr_ratio)
+        if quality_ok and sel_utility > self.best_utility + float(self.config.anneal_improve_tol):
+            self.best_utility = float(sel_utility)
+            self.stagnation_checks = 0
+        else:
+            self.stagnation_checks += 1
+            if self.stagnation_checks % self.config.anneal_plateau_patience == 0:
+                self.adaptive_scale = max(min_r, self.adaptive_scale * float(self.config.anneal_plateau_factor))
+                self.cool_events += 1
+        patience = int(self.config.anneal_early_stop_patience)
+        if patience > 0 and best_quality_ok and step >= self.effective_min_steps and step < self.config.steps:
+            if self.stagnation_checks >= patience or (
+                current_lr_scale <= min_r * 1.25 and self.stagnation_checks >= max(2, patience // 2)
+            ):
+                return True, "adaptive_annealing_converged"
+        return False, None
+
+    def state_dict(self) -> dict[str, Any]:
+        return {
+            "adaptive_scale": float(self.adaptive_scale),
+            "best_utility": float(self.best_utility),
+            "stagnation_checks": int(self.stagnation_checks),
+            "cool_events": int(self.cool_events),
+            "backtrack_events": int(self.backtrack_events),
+            "reject_events": int(self.reject_events),
+        }
+
+    def load_state_dict(self, state: Mapping[str, Any]) -> None:
+        self.adaptive_scale = float(state["adaptive_scale"])
+        self.best_utility = float(state["best_utility"])
+        self.stagnation_checks = int(state["stagnation_checks"])
+        self.cool_events = int(state["cool_events"])
+        self.backtrack_events = int(state["backtrack_events"])
+        self.reject_events = int(state["reject_events"])
+
+    def summary(self, executed_steps: int, stop_reason: str, final_lr_scale: float, best_step: int) -> dict[str, Any]:
+        return {
+            "enabled": bool(self.config.adaptive_annealing),
+            "schedule": "cosine_with_backtrack_and_plateau_cooling" if self.config.adaptive_annealing else "legacy_linear",
+            "min_steps": int(self.effective_min_steps),
+            "max_steps": int(self.config.steps),
+            "steps_executed": int(executed_steps),
+            "stop_reason": stop_reason,
+            "early_stopped": bool(stop_reason == "adaptive_annealing_converged"),
+            "final_lr_scale": float(final_lr_scale),
+            "final_adaptive_scale": float(self.adaptive_scale),
+            "stagnation_checks": int(self.stagnation_checks),
+            "cool_events": int(self.cool_events),
+            "backtrack_events": int(self.backtrack_events),
+            "reject_events": int(self.reject_events),
+            "best_step": int(best_step),
+        }
+
+
+def _tensor_sha256(tensor: torch.Tensor) -> str:
+    arr = np.ascontiguousarray(tensor.detach().cpu().numpy())
+    return hashlib.sha256(arr.tobytes()).hexdigest()
+
+
+def _stage4_signature(
+    anchor_tensor: torch.Tensor,
+    original_tensor: torch.Tensor,
+    config: AmbiLAGEConfig,
+    vae_identity: Mapping[str, Any],
+    checkpoint_binding: Mapping[str, Any] | None = None,
+) -> str:
+    cfg_dict = config.to_dict()
+    for runtime_key in ("log_every", "checkpoint_every", "resume_from_checkpoint", "save_intermediate_pngs", "device"):
+        cfg_dict.pop(runtime_key, None)
+    payload = {
+        "anchor_sha256": _tensor_sha256(anchor_tensor),
+        "original_sha256": _tensor_sha256(original_tensor),
+        "config": cfg_dict,
+        "vae": dict(vae_identity),
+        "binding": dict(checkpoint_binding or {}),
+    }
+    encoded = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def _optimizer_state_to_cpu(state_dict: Mapping[str, Any]) -> dict[str, Any]:
+    copied = copy.deepcopy(dict(state_dict))
+    for param_state in copied.get("state", {}).values():
+        if isinstance(param_state, dict):
+            for key, val in list(param_state.items()):
+                if torch.is_tensor(val):
+                    param_state[key] = val.detach().cpu().clone()
+    return copied
+
+
+def _optimizer_state_to_device(state_dict: Mapping[str, Any], device: torch.device) -> dict[str, Any]:
+    copied = copy.deepcopy(dict(state_dict))
+    for param_state in copied.get("state", {}).values():
+        if isinstance(param_state, dict):
+            for key, val in list(param_state.items()):
+                if torch.is_tensor(val):
+                    # PyTorch Adam 要求标量 step 张量保留在 CPU，其余动量张量放回参数设备
+                    target_device = torch.device("cpu") if key == "step" else device
+                    param_state[key] = val.detach().clone().to(target_device)
+    return copied
+
+
+def _capture_rng_state(device: torch.device) -> dict[str, Any]:
+    state: dict[str, Any] = {
+        "python": random.getstate(),
+        "numpy": np.random.get_state(),
+        "torch_cpu": torch.get_rng_state(),
+        "torch_cuda": None,
+    }
+    if device.type == "cuda" and torch.cuda.is_available():
+        state["torch_cuda"] = torch.cuda.get_rng_state(device)
+    return state
+
+
+def _restore_rng_state(rng_state: Mapping[str, Any] | None, device: torch.device) -> None:
+    if not rng_state:
+        return
+    if rng_state.get("python") is not None:
+        random.setstate(rng_state["python"])
+    if rng_state.get("numpy") is not None:
+        np.random.set_state(rng_state["numpy"])
+    if rng_state.get("torch_cpu") is not None:
+        torch.set_rng_state(rng_state["torch_cpu"])
+    cuda_state = rng_state.get("torch_cuda")
+    if cuda_state is not None and device.type == "cuda" and torch.cuda.is_available():
+        torch.cuda.set_rng_state(cuda_state, device)
+
+
+def _save_atomic_checkpoint(ckpt_path: Path, payload: Mapping[str, Any]) -> None:
+    ckpt_path.parent.mkdir(parents=True, exist_ok=True)
+    tmp_path = ckpt_path.with_name(f".ckpt-{uuid.uuid4().hex[:12]}.tmp")
+    try:
+        torch.save(dict(payload), tmp_path)
+        os.replace(tmp_path, ckpt_path)
+    finally:
+        if tmp_path.exists():
+            tmp_path.unlink(missing_ok=True)
+
+
+def _load_compatible_checkpoint(ckpt_path: Path, expected_signature: str) -> dict[str, Any]:
+    ckpt = torch.load(ckpt_path, map_location="cpu", weights_only=False)
+    if not isinstance(ckpt, dict) or ckpt.get("signature") != expected_signature:
+        raise ValueError("Stage 4 断点检查点与当前配置或输入不匹配，请清理旧目录或关闭断点续跑后重试")
+    return ckpt
+
+
 def refine_ambient_coop_latent(
     anchor_tensor: torch.Tensor,
     original_tensor: torch.Tensor,
@@ -75,8 +281,9 @@ def refine_ambient_coop_latent(
     vae: AmbiLAGEVae,
     config: AmbiLAGEConfig,
     output_dir: Path | str | None = None,
+    checkpoint_binding: Mapping[str, Any] | None = None,
 ) -> tuple[torch.Tensor, dict[str, Any]]:
-    """Stage 4: 执行原生环境光协同背景调整与主体微光影 350 步潜空间优化。"""
+    """Stage 4: 执行原生环境光协同背景调整与主体微光影潜空间优化 (支持自适应退火与断点续跑)。"""
     device = anchor_tensor.device
     shape = anchor_tensor.shape
     h, w = shape[-2:]
@@ -166,154 +373,301 @@ def refine_ambient_coop_latent(
             "quality_ok": bool(ss >= config.source_ssim_floor and mae <= config.source_mae_ceiling),
         }
 
-    history: list[dict[str, Any]] = []
     tick = time.perf_counter()
-    accepted = 0
-    rejected = 0
+    ckpt_path = (Path(output_dir) / STAGE4_CHECKPOINT_FILENAME) if output_dir is not None else None
+    expected_sig = (
+        _stage4_signature(anchor_tensor, original_tensor, config, vae.identity, checkpoint_binding)
+        if ckpt_path is not None
+        else ""
+    )
 
-    best_snap = snapshot_params()
-    best_row = evaluate_quality(compose())
-    initial_img = compose()
-    if not best_row["quality_ok"]:
-        raise RuntimeError("自然锚点未通过结构/误差门禁，不能标记为完整成图")
-    if hasattr(objective, "evaluate"):
-        init_utility, init_scores = objective.evaluate(initial_img)
-    else:
-        init_features = surrogate.encode_image(initial_img).global_embedding
-        init_utility, init_scores = objective.compute_utility(init_features, config)
-    init_penalty, _ = compute_spatial_variance_penalty(initial_img, anchor_tensor, None, fg_mask_t, bg_mask_t, config)
-    best_row.update({
-        "step": 0,
-        "training_utility": float(init_utility.detach()),
-        "selection_utility": float(init_utility.detach()) - float(init_penalty.detach()),
-        "joint_scores": init_scores.detach().cpu().tolist(),
-    })
-    history.append(best_row)
-
-    # 5. 优化循环 (原生 4 阶段第 4 阶段细化)
-    for step in range(1, config.steps + 1):
-        # 5.1 计算 SSIM 与 MAE 关于图像的法向量约束，准备切空间投影
-        image_eval = compose().detach().requires_grad_(True)
-        normals = []
-        slacks = []
-
-        structure = source_ssim(image_eval, original_tensor)
-        n_ssim, = torch.autograd.grad(structure, image_eval)
-        normals.append(n_ssim.detach())
-        slacks.append(float(structure.detach()) - config.source_ssim_floor)
-
-        mae_metric = (image_eval - original_tensor).abs().mean()
-        n_mae, = torch.autograd.grad(-mae_metric, image_eval)
-        normals.append(n_mae.detach())
-        slacks.append(config.source_mae_ceiling / 255.0 - float(mae_metric.detach()))
-
-        old_snap = snapshot_params()
-        old_opt_state = copy.deepcopy(optimizer.state_dict())
-        optimizer.zero_grad(set_to_none=True)
-
-        # 5.2 前向合成与切空间梯度反向传播
-        decoded_img, raw_img = compose_with_raw()
-
-        latent_normals = []
-        for n_img in normals:
-            d_latent, = torch.autograd.grad(decoded_img, delta, grad_outputs=n_img, retain_graph=True)
-            latent_normals.append(d_latent.detach())
-
-        if hasattr(objective, "image_gradient"):
-            utility, scores, image_gradient, objective_metrics = objective.image_gradient(decoded_img.detach(), step)
-        else:
-            feat = surrogate.encode_image(decoded_img).global_embedding
-            utility, scores = objective.compute_utility(feat, config)
-            image_gradient = None
-        penalty, reg_metrics = compute_spatial_variance_penalty(
-            decoded_img, anchor_tensor, raw_img, fg_mask_t, bg_mask_t, config
-        )
-        if image_gradient is not None:
-            torch.autograd.backward((decoded_img, penalty), (-image_gradient, torch.ones_like(penalty)))
-        else:
-            loss = -utility + penalty
-            loss.backward()
-
-        for p in (delta, ambient_field.ambient_global, ambient_field.ambient_grid):
-            if p.grad is not None:
-                torch.nan_to_num_(p.grad, nan=0.0, posinf=0.0, neginf=0.0)
-
-        # 学习率动态衰减
-        decay = 1.0 - 0.75 * (step / max(config.steps, 1))
-        optimizer.param_groups[0]["lr"] = config.latent_learning_rate * decay
-        optimizer.param_groups[1]["lr"] = config.ambient_learning_rate * decay
-        optimizer.step()
-
-        # 5.3 切空间投影与回退守门 (Tangent Space Projection & Backtracking Gate)
+    if ckpt_path is not None and config.resume_from_checkpoint and ckpt_path.is_file():
+        ckpt = _load_compatible_checkpoint(ckpt_path, expected_sig)
+        saved_step = int(ckpt["step"])
+        if saved_step < 0 or saved_step > config.steps or ckpt["delta"].shape != base_latent.shape:
+            raise ValueError("Stage 4 断点检查点状态越界或张量尺寸不匹配")
         with torch.no_grad():
-            delta.clamp_(-config.latent_limit, config.latent_limit)
-            if config.latent_smoothing_mix > 0.0:
-                smooth = F.avg_pool2d(F.pad(delta, (1, 1, 1, 1), mode="reflect"), 3, stride=1)
-                delta.lerp_(smooth, config.latent_smoothing_mix)
+            delta.copy_(ckpt["delta"].to(device=device, dtype=delta.dtype))
+            ambient_field.ambient_global.copy_(
+                ckpt["ambient_global"].to(device=device, dtype=ambient_field.ambient_global.dtype)
+            )
+            ambient_field.ambient_grid.copy_(
+                ckpt["ambient_grid"].to(device=device, dtype=ambient_field.ambient_grid.dtype)
+            )
+        optimizer.load_state_dict(_optimizer_state_to_device(ckpt["optimizer_state_dict"], device))
+        best_snap = {k: v.detach().clone().to(device) for k, v in ckpt["best_snap"].items()}
+        best_row = copy.deepcopy(ckpt["best_row"])
+        history = copy.deepcopy(ckpt["history"])
+        accepted = int(ckpt["accepted"])
+        rejected = int(ckpt["rejected"])
+        annealer = AdaptiveAnnealingController(config, best_row["selection_utility"])
+        annealer.load_state_dict(ckpt["annealer_state"])
+        baseline_vals = ckpt.get("objective_baseline_values")
+        if baseline_vals is not None and hasattr(objective, "_baseline_values"):
+            objective._baseline_values = baseline_vals.detach().clone().to(device)
+        _restore_rng_state(ckpt.get("rng_state"), device)
+        start_step = saved_step + 1
+        prior_elapsed = float(ckpt.get("accumulated_elapsed_seconds", 0.0))
+        resumed_from_step: int | None = saved_step
+        resume_count = int(ckpt.get("resume_count", 0)) + 1
+        checkpoints_saved = int(ckpt.get("checkpoints_saved", 0))
+        executed_steps = int(ckpt.get("executed_steps", saved_step))
+        stop_reason = str(ckpt.get("stop_reason", "requested_steps_completed"))
+        last_lr_scale = float(ckpt.get("last_lr_scale", annealer.lr_scale(max(1, saved_step))))
+        print(
+            f"AmbiLAGE 断点续跑恢复 [step={saved_step}/{config.steps}] "
+            f"(Accepted={accepted}, Rejected={rejected}, adaptive_scale={annealer.adaptive_scale:.4f})",
+            flush=True,
+        )
+    else:
+        history = []
+        accepted = 0
+        rejected = 0
+        best_snap = snapshot_params()
+        best_row = evaluate_quality(compose())
+        initial_img = compose()
+        if not best_row["quality_ok"]:
+            raise RuntimeError("自然锚点未通过结构/误差门禁，不能标记为完整成图")
+        if hasattr(objective, "evaluate"):
+            init_utility, init_scores = objective.evaluate(initial_img)
+        else:
+            init_features = surrogate.encode_image(initial_img).global_embedding
+            init_utility, init_scores = objective.compute_utility(init_features, config)
+        init_penalty, _ = compute_spatial_variance_penalty(initial_img, anchor_tensor, None, fg_mask_t, bg_mask_t, config)
+        init_sel_utility = float(init_utility.detach()) - float(init_penalty.detach())
+        annealer = AdaptiveAnnealingController(config, init_sel_utility)
+        best_row.update({
+            "step": 0,
+            "training_utility": float(init_utility.detach()),
+            "selection_utility": init_sel_utility,
+            "joint_scores": init_scores.detach().cpu().tolist(),
+            "lr_scale": float(annealer.lr_scale(1)),
+            "adaptive_scale": float(annealer.adaptive_scale),
+            "stagnation_checks": 0,
+        })
+        history.append(best_row)
+        start_step = 1
+        prior_elapsed = 0.0
+        resumed_from_step = None
+        resume_count = 0
+        checkpoints_saved = 0
+        executed_steps = 0
+        stop_reason = "requested_steps_completed"
+        last_lr_scale = float(annealer.lr_scale(1))
 
-            step_vector = delta - old_snap["delta"]
-            projected = tangent_projection(step_vector, latent_normals, slacks)
-            proposed_delta = (old_snap["delta"] + projected).clamp(-config.latent_limit, config.latent_limit)
-            proposed_global = ambient_field.ambient_global.clamp(-config.ambient_limit, config.ambient_limit).clone()
-            proposed_grid = ambient_field.ambient_grid.clamp(-config.ambient_limit, config.ambient_limit).clone()
+    interrupt_requested: dict[str, str | None] = {"name": None}
+    previous_handlers: dict[int, Any] = {}
+    if ckpt_path is not None and threading.current_thread() is threading.main_thread():
+        def _on_signal(signum: int, _frame: Any) -> None:
+            interrupt_requested["name"] = signal.Signals(signum).name
 
-            step_accepted = False
-            for backtrack in range(config.guard_backtracks + 1):
-                scale = 0.5 ** backtrack
-                delta.copy_(old_snap["delta"] + scale * (proposed_delta - old_snap["delta"]))
-                ambient_field.ambient_global.copy_(
-                    old_snap["ambient_global"] + scale * (proposed_global - old_snap["ambient_global"])
-                )
-                ambient_field.ambient_grid.copy_(
-                    old_snap["ambient_grid"] + scale * (proposed_grid - old_snap["ambient_grid"])
-                )
-                q = evaluate_quality(compose())
-                if q["quality_ok"]:
-                    step_accepted = True
-                    break
+        for sig in (signal.SIGINT, signal.SIGTERM):
+            try:
+                previous_handlers[sig] = signal.getsignal(sig)
+                signal.signal(sig, _on_signal)
+            except (ValueError, OSError):
+                pass
 
-            if step_accepted:
-                accepted += 1
+    # 5. 优化循环 (原生 4 阶段第 4 阶段细化，支持自适应退火与断点续跑)
+    try:
+        for step in range(start_step, config.steps + 1):
+            # 5.1 计算 SSIM 与 MAE 关于图像的法向量约束，准备切空间投影
+            image_eval = compose().detach().requires_grad_(True)
+            normals = []
+            slacks = []
+
+            structure = source_ssim(image_eval, original_tensor)
+            n_ssim, = torch.autograd.grad(structure, image_eval)
+            normals.append(n_ssim.detach())
+            slacks.append(float(structure.detach()) - config.source_ssim_floor)
+
+            mae_metric = (image_eval - original_tensor).abs().mean()
+            n_mae, = torch.autograd.grad(-mae_metric, image_eval)
+            normals.append(n_mae.detach())
+            slacks.append(config.source_mae_ceiling / 255.0 - float(mae_metric.detach()))
+
+            old_snap = snapshot_params()
+            old_opt_state = copy.deepcopy(optimizer.state_dict())
+            optimizer.zero_grad(set_to_none=True)
+
+            # 5.2 前向合成与切空间梯度反向传播
+            decoded_img, raw_img = compose_with_raw()
+
+            latent_normals = []
+            for n_img in normals:
+                d_latent, = torch.autograd.grad(decoded_img, delta, grad_outputs=n_img, retain_graph=True)
+                latent_normals.append(d_latent.detach())
+
+            if hasattr(objective, "image_gradient"):
+                utility, scores, image_gradient, objective_metrics = objective.image_gradient(decoded_img.detach(), step)
             else:
-                load_params(old_snap)
-                optimizer.load_state_dict(old_opt_state)
-                rejected += 1
+                feat = surrogate.encode_image(decoded_img).global_embedding
+                utility, scores = objective.compute_utility(feat, config)
+                image_gradient = None
+            penalty, reg_metrics = compute_spatial_variance_penalty(
+                decoded_img, anchor_tensor, raw_img, fg_mask_t, bg_mask_t, config
+            )
+            if image_gradient is not None:
+                torch.autograd.backward((decoded_img, penalty), (-image_gradient, torch.ones_like(penalty)))
+            else:
+                loss = -utility + penalty
+                loss.backward()
 
-        # 5.4 进度记录与检查 (512GB 磁盘防护：零 step PNG 刷盘)
-        if step % config.check_every == 0 or step == config.steps:
+            for p in (delta, ambient_field.ambient_global, ambient_field.ambient_grid):
+                if p.grad is not None:
+                    torch.nan_to_num_(p.grad, nan=0.0, posinf=0.0, neginf=0.0)
+
+            # 自适应退火学习率更新
+            lr_scale = annealer.lr_scale(step)
+            last_lr_scale = lr_scale
+            optimizer.param_groups[0]["lr"] = config.latent_learning_rate * lr_scale
+            optimizer.param_groups[1]["lr"] = config.ambient_learning_rate * lr_scale
+            optimizer.step()
+
+            # 5.3 切空间投影与回退守门 (Tangent Space Projection & Backtracking Gate)
             with torch.no_grad():
-                cur_img = compose()
-                q_row = evaluate_quality(cur_img)
-                if hasattr(objective, "evaluate"):
-                    u_val, s_val = objective.evaluate(cur_img, step=0)
-                else:
-                    c_feat = surrogate.encode_image(cur_img).global_embedding
-                    u_val, s_val = objective.compute_utility(c_feat, config)
-                _, current_reg = compute_spatial_variance_penalty(cur_img, anchor_tensor, None, fg_mask_t, bg_mask_t, config)
-                sel_utility = float(u_val) - current_reg["total_penalty"]
-                q_row.update({
-                    "step": step,
-                    "training_utility": float(u_val),
-                    "selection_utility": sel_utility,
-                    "regularization": current_reg["total_penalty"],
-                    "joint_scores": s_val.detach().cpu().tolist(),
-                    "accepted": accepted,
-                    "rejected": rejected,
-                })
-                history.append(q_row)
+                delta.clamp_(-config.latent_limit, config.latent_limit)
+                if config.latent_smoothing_mix > 0.0:
+                    smooth = F.avg_pool2d(F.pad(delta, (1, 1, 1, 1), mode="reflect"), 3, stride=1)
+                    delta.lerp_(smooth, config.latent_smoothing_mix)
 
-                if q_row["quality_ok"] and (sel_utility > best_row["selection_utility"] or not best_row.get("quality_ok")):
-                    best_row = q_row
-                    best_snap = snapshot_params()
+                step_vector = delta - old_snap["delta"]
+                projected = tangent_projection(step_vector, latent_normals, slacks)
+                proposed_delta = (old_snap["delta"] + projected).clamp(-config.latent_limit, config.latent_limit)
+                proposed_global = ambient_field.ambient_global.clamp(-config.ambient_limit, config.ambient_limit).clone()
+                proposed_grid = ambient_field.ambient_grid.clamp(-config.ambient_limit, config.ambient_limit).clone()
 
-                if step % config.log_every == 0 or step == config.steps:
-                    print(
-                        f"AmbiLAGE 细化 [{step}/{config.steps}] "
-                        f"Utility={u_val:.4f} SSIM={q_row['source_ssim']:.4f} "
-                        f"MAE={q_row['source_mae_levels']:.2f} "
-                        f"(Accepted={accepted}, Rejected={rejected})",
-                        flush=True,
+                step_accepted = False
+                used_backtracks = 0
+                for backtrack in range(config.guard_backtracks + 1):
+                    scale = 0.5 ** backtrack
+                    delta.copy_(old_snap["delta"] + scale * (proposed_delta - old_snap["delta"]))
+                    ambient_field.ambient_global.copy_(
+                        old_snap["ambient_global"] + scale * (proposed_global - old_snap["ambient_global"])
                     )
+                    ambient_field.ambient_grid.copy_(
+                        old_snap["ambient_grid"] + scale * (proposed_grid - old_snap["ambient_grid"])
+                    )
+                    q = evaluate_quality(compose())
+                    if q["quality_ok"]:
+                        step_accepted = True
+                        used_backtracks = backtrack
+                        break
+
+                if step_accepted:
+                    accepted += 1
+                else:
+                    load_params(old_snap)
+                    optimizer.load_state_dict(old_opt_state)
+                    rejected += 1
+
+            annealer.on_step_end(step_accepted, used_backtracks)
+
+            # 5.4 进度记录、自适应退火检查与收敛决策
+            should_stop = False
+            candidate_stop_reason: str | None = None
+            if step % config.check_every == 0 or step == config.steps:
+                with torch.no_grad():
+                    cur_img = compose()
+                    q_row = evaluate_quality(cur_img)
+                    if hasattr(objective, "evaluate"):
+                        u_val, s_val = objective.evaluate(cur_img, step=0)
+                    else:
+                        c_feat = surrogate.encode_image(cur_img).global_embedding
+                        u_val, s_val = objective.compute_utility(c_feat, config)
+                    _, current_reg = compute_spatial_variance_penalty(cur_img, anchor_tensor, None, fg_mask_t, bg_mask_t, config)
+                    sel_utility = float(u_val) - current_reg["total_penalty"]
+                    q_row.update({
+                        "step": step,
+                        "training_utility": float(u_val),
+                        "selection_utility": sel_utility,
+                        "regularization": current_reg["total_penalty"],
+                        "joint_scores": s_val.detach().cpu().tolist(),
+                        "accepted": accepted,
+                        "rejected": rejected,
+                    })
+
+                    if q_row["quality_ok"] and (sel_utility > best_row["selection_utility"] or not best_row.get("quality_ok")):
+                        best_row = q_row
+                        best_snap = snapshot_params()
+
+                    should_stop, candidate_stop_reason = annealer.on_check(
+                        step,
+                        sel_utility,
+                        q_row["quality_ok"],
+                        current_lr_scale=lr_scale,
+                        best_quality_ok=bool(best_row.get("quality_ok")),
+                    )
+                    q_row.update({
+                        "lr_scale": float(lr_scale),
+                        "adaptive_scale": float(annealer.adaptive_scale),
+                        "stagnation_checks": int(annealer.stagnation_checks),
+                    })
+                    history.append(q_row)
+
+                    if step % config.log_every == 0 or step == config.steps or should_stop:
+                        print(
+                            f"AmbiLAGE 细化 [{step}/{config.steps}] "
+                            f"Utility={u_val:.4f} SSIM={q_row['source_ssim']:.4f} "
+                            f"MAE={q_row['source_mae_levels']:.2f} LR={lr_scale:.3f} "
+                            f"(Accepted={accepted}, Rejected={rejected})",
+                            flush=True,
+                        )
+                    if should_stop:
+                        print(
+                            f"AmbiLAGE 自适应退火收敛早停 [{step}/{config.steps}] "
+                            f"(min_steps={annealer.effective_min_steps}, lr_scale={lr_scale:.4f}, "
+                            f"best_step={best_row['step']}, best_sel_utility={best_row['selection_utility']:.4f})",
+                            flush=True,
+                        )
+
+            executed_steps = step
+            if should_stop and candidate_stop_reason:
+                stop_reason = candidate_stop_reason
+
+            if ckpt_path is not None and (
+                step % config.checkpoint_every == 0
+                or step == config.steps
+                or should_stop
+                or interrupt_requested["name"] is not None
+            ):
+                baseline_tensor = getattr(objective, "_baseline_values", None)
+                checkpoints_saved += 1
+                _save_atomic_checkpoint(ckpt_path, {
+                    "signature": expected_sig,
+                    "step": int(step),
+                    "executed_steps": int(executed_steps),
+                    "stop_reason": stop_reason,
+                    "last_lr_scale": float(last_lr_scale),
+                    "delta": delta.detach().cpu().clone(),
+                    "ambient_global": ambient_field.ambient_global.detach().cpu().clone(),
+                    "ambient_grid": ambient_field.ambient_grid.detach().cpu().clone(),
+                    "optimizer_state_dict": _optimizer_state_to_cpu(optimizer.state_dict()),
+                    "best_snap": {k: v.detach().cpu().clone() for k, v in best_snap.items()},
+                    "best_row": copy.deepcopy(best_row),
+                    "history": copy.deepcopy(history),
+                    "accepted": int(accepted),
+                    "rejected": int(rejected),
+                    "annealer_state": annealer.state_dict(),
+                    "objective_baseline_values": (
+                        baseline_tensor.detach().cpu().clone() if torch.is_tensor(baseline_tensor) else None
+                    ),
+                    "rng_state": _capture_rng_state(device),
+                    "accumulated_elapsed_seconds": float(prior_elapsed + (time.perf_counter() - tick)),
+                    "checkpoints_saved": int(checkpoints_saved),
+                    "resume_count": int(resume_count),
+                })
+
+            if interrupt_requested["name"] is not None:
+                raise InterruptedError(f"收到中断信号 ({interrupt_requested['name']})，已保存完整断点至第 {step} 步")
+            if should_stop:
+                break
+    finally:
+        for sig, prev in previous_handlers.items():
+            try:
+                signal.signal(sig, prev)
+            except (ValueError, OSError):
+                pass
 
     # 6. 加载最佳快照并生成最终成图
     load_params(best_snap)
@@ -342,7 +696,8 @@ def refine_ambient_coop_latent(
         "status": "completed",
         "stage": "latent_generation_refinement",
         "steps_requested": config.steps,
-        "steps_completed": config.steps,
+        "steps_completed": executed_steps,
+        "stop_reason": stop_reason,
         "best_step": best_row["step"],
         "accepted_updates": accepted,
         "rejected_updates": rejected,
@@ -350,9 +705,17 @@ def refine_ambient_coop_latent(
         "fg_latent_max_levels": fg_max,
         "bg_latent_max_levels": bg_max,
         "roi_max_levels": 0,
-        "elapsed_seconds": float(time.perf_counter() - tick),
+        "elapsed_seconds": float(prior_elapsed + (time.perf_counter() - tick)),
         "zero_pixel_optimization": True,
         "vae": vae.identity,
+        "adaptive_annealing": annealer.summary(executed_steps, stop_reason, last_lr_scale, best_row["step"]),
+        "checkpoint_resume": {
+            "checkpoint_every": int(config.checkpoint_every),
+            "checkpoints_saved": int(checkpoints_saved),
+            "resumed": resumed_from_step is not None,
+            "resumed_from_step": resumed_from_step,
+            "resume_count": int(resume_count),
+        },
         "history": history,
         "auxiliary_levels": 0,
     }

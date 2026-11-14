@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "natural": true,
+  "text_preserved": true,
+  "artifact_free": true,
+  "reasons": [
+    "strict_mathematical_naturalness_gate_passed"
+  ],
+  "category": "toothbrush",
+  "metrics": {
+    "source_ssim": 0.9906213964546289,
+    "source_mae_levels": 3.3764307498931885,
+    "halo_error": 7.98539924621582,
+    "roi_max_abs_diff": 0.0
+  },
+  "thresholds": {
+    "source_ssim_floor": 0.78,
+    "source_mae_ceiling": 20.0,
+    "halo_ceiling": 8.0,
+    "roi_max_abs_diff": 0.0
+  },
+  "model": "mathematical_ssim_mae_halo_gate_v1",
+  "precision": "float32",
+  "candidate_sha256": "cde753d9028cfd1f37d7c2d782d742a0f4d3c2d1a7d46b507845e0a5d919a916"
+}

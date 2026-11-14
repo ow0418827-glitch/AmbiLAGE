@@ -1,0 +1,9 @@
+{
+  "setting": "matched_public_encoder",
+  "surrogate": {
+    "name": "ViT-B-32",
+    "pretrained": "openai",
+    "hf_repo": "timm/vit_base_patch32_clip_224.openai",
+    "weight_path": "/content/AmbiLAGE/models/clip_b32/open_clip_model.safetensors"
+  }
+}

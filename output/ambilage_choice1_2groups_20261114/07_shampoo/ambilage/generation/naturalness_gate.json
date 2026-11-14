@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "natural": true,
+  "text_preserved": true,
+  "artifact_free": true,
+  "reasons": [
+    "strict_mathematical_naturalness_gate_passed"
+  ],
+  "category": "Shampoo & Conditioner",
+  "metrics": {
+    "source_ssim": 0.9632000861189158,
+    "source_mae_levels": 4.777745723724365,
+    "halo_error": 7.799668312072754,
+    "roi_max_abs_diff": 0.0
+  },
+  "thresholds": {
+    "source_ssim_floor": 0.78,
+    "source_mae_ceiling": 20.0,
+    "halo_ceiling": 8.0,
+    "roi_max_abs_diff": 0.0
+  },
+  "model": "mathematical_ssim_mae_halo_gate_v1",
+  "precision": "float32",
+  "candidate_sha256": "b8310207681ee1698191b0911f9d4a61d7202cb8408dec7210935da1fec94f28"
+}

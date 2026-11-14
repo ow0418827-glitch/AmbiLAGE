@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 from dataclasses import asdict, replace
+import hashlib
+import json
 from pathlib import Path
 import time
 from typing import Any
@@ -17,8 +19,42 @@ from .backends import ProductionStages, release_memory
 from .color_selection import extract_foreground_statistics
 from .config import AmbiLAGEConfig, DEFINITION, METHOD
 from .illumination_harmonization import harmonize_illumination
-from .latent_refinement import AmbiLAGEVae, refine_ambient_coop_latent
+from .latent_refinement import AmbiLAGEVae, STAGE4_CHECKPOINT_FILENAME, refine_ambient_coop_latent
 from .segmentation import compute_spatial_envelopes, extract_ink_core_mask, print_region_mask
+
+
+STAGE3_STATE_FILENAME = 'stage3_state.json'
+
+
+def _stage3_signature(
+    source_sha256: str,
+    target_sha256: str,
+    target_text: str,
+    source_public_key: str,
+    source_category: str,
+    config: AmbiLAGEConfig,
+    source_boxes: Any,
+    target_boxes: Any,
+    print_regions: Any,
+    surrogate_specs_sha256: str,
+) -> str:
+    cfg_dict = config.to_dict()
+    for runtime_key in ('log_every', 'checkpoint_every', 'resume_from_checkpoint', 'save_intermediate_pngs', 'device'):
+        cfg_dict.pop(runtime_key, None)
+    payload = {
+        'source_sha256': source_sha256,
+        'target_sha256': target_sha256,
+        'target_text': target_text,
+        'source_public_key': source_public_key,
+        'source_category': source_category,
+        'source_boxes': source_boxes,
+        'target_boxes': target_boxes,
+        'print_regions': print_regions,
+        'config': cfg_dict,
+        'surrogate_specs_sha256': surrogate_specs_sha256,
+    }
+    raw = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(',', ':'), allow_nan=False).encode('utf-8')
+    return hashlib.sha256(raw).hexdigest()
 
 
 class AmbiLAGEPipeline:
@@ -57,38 +93,96 @@ class AmbiLAGEPipeline:
             raise FileExistsError('输出目录已有完成凭证，请使用新目录避免覆盖冻结结果')
         write_json(root/'training_surrogates.json',self.surrogate_selection.audit())
         started=time.perf_counter()
+        source_sha = sha256_file(source)
+        target_sha = sha256_file(target)
+        surrogate_specs_sha = self.surrogate_selection.audit()['specs_sha256']
+        stage3_sig = _stage3_signature(
+            source_sha, target_sha, target_text, source_public_key, source_category,
+            self.config, source_boxes, target_boxes, print_regions, surrogate_specs_sha,
+        )
+        stage3_path = root / STAGE3_STATE_FILENAME
+        ckpt4_path = root / STAGE4_CHECKPOINT_FILENAME
+        required_stage3_imgs = (
+            root / 'source_foreground.png',
+            root / 'target_foreground.png',
+            root / 'print_core.png',
+            root / 'latent_edit_mask.png',
+            root / 'generative_anchor.png',
+        )
+        prior_stage3_elapsed = 0.0
+        resumed_stage3 = False
         try:
-            plan=backend.plan(source,source_category)
-            backend.close()
-            detected,ocr=backend.detect_print(source)
-            regions=list(plan.get('print_regions',[]))+list(detected)+list(print_regions or [])
-            source_fg,source_seg=backend.segment(source,source_boxes or plan['source_boxes'])
-            target_fg,target_seg=backend.segment(target,target_boxes)
-            backend.close()
-            rect_roi = print_region_mask(source_fg.shape, regions)
-            source_rgb = read_rgb(source)
-            roi, substrate = extract_ink_core_mask(source_rgb, source_fg, rect_roi, self.config)
-            envelopes = compute_spatial_envelopes(source_fg, roi, self.config)
-            for name, mask in [('source_foreground', source_fg), ('target_foreground', target_fg), ('print_core', roi)]:
-                Image.fromarray(mask.astype(np.uint8) * 255).save(root / (name + '.png'))
-            Image.fromarray(np.rint(envelopes['macro_array'] * 255).astype(np.uint8)).save(root / 'latent_edit_mask.png')
-            color_stats, _ = extract_foreground_statistics(target, target_fg, output_dir=root / 'foreground_statistics')
-            initial, harmonization = harmonize_illumination(
-                source,
-                color_stats['rgb'],
-                source_fg,
-                regions,
-                self.config,
-                output_dir=root / 'color_harmonization',
-                ink_core_mask=roi,
-                substrate_mask=substrate,
-            )
-            anchor, anchor_audit = backend.generate_anchor(initial, plan['edit_prompt'], self.config.seed)
-            backend.close()
-            if anchor.shape != source_rgb.shape:
-                raise ValueError('自然锚点分辨率与源图不一致')
-            anchor[roi] = source_rgb[roi]
-            Image.fromarray(anchor).save(root / 'generative_anchor.png')
+            if self.config.resume_from_checkpoint and stage3_path.is_file() and all(p.is_file() for p in required_stage3_imgs):
+                saved_stage3 = json.loads(stage3_path.read_text(encoding='utf-8'))
+                if saved_stage3.get('signature') != stage3_sig:
+                    raise ValueError('Stage 3 断点状态与当前输入或配置不一致，请清理输出目录或禁用断点续跑后重试')
+                plan = saved_stage3['plan']
+                ocr = saved_stage3['ocr']
+                source_seg = saved_stage3['source_seg']
+                target_seg = saved_stage3['target_seg']
+                color_stats = saved_stage3['color_stats']
+                harmonization = saved_stage3['harmonization']
+                anchor_audit = saved_stage3['anchor_audit']
+                prior_stage3_elapsed = float(saved_stage3.get('stage3_elapsed_seconds', 0.0))
+                source_rgb = read_rgb(source)
+                source_fg = np.asarray(Image.open(root / 'source_foreground.png').convert('L')) > 0
+                roi = np.asarray(Image.open(root / 'print_core.png').convert('L')) > 0
+                envelopes = compute_spatial_envelopes(source_fg, roi, self.config)
+                anchor = np.asarray(Image.open(root / 'generative_anchor.png').convert('RGB')).copy()
+                if anchor.shape != source_rgb.shape or not np.array_equal(anchor[roi], source_rgb[roi]):
+                    raise ValueError('Stage 3 断点锚点图像与源图印刷核心不一致')
+                (root / 'FAILED.json').unlink(missing_ok=True)
+                resumed_stage3 = True
+                print('AmbiLAGE 检测到有效 Stage 3 断点，跳过分割与锚点生成直接恢复 Stage 4', flush=True)
+            else:
+                if not self.config.resume_from_checkpoint:
+                    stage3_path.unlink(missing_ok=True)
+                    ckpt4_path.unlink(missing_ok=True)
+                elif ckpt4_path.is_file():
+                    raise ValueError('发现孤立 Stage 4 断点文件但缺少对应 Stage 3 状态，请清理输出目录后重试')
+                (root / 'FAILED.json').unlink(missing_ok=True)
+                plan=backend.plan(source,source_category)
+                backend.close()
+                detected,ocr=backend.detect_print(source)
+                regions=list(plan.get('print_regions',[]))+list(detected)+list(print_regions or [])
+                source_fg,source_seg=backend.segment(source,source_boxes or plan['source_boxes'])
+                target_fg,target_seg=backend.segment(target,target_boxes)
+                backend.close()
+                rect_roi = print_region_mask(source_fg.shape, regions)
+                source_rgb = read_rgb(source)
+                roi, substrate = extract_ink_core_mask(source_rgb, source_fg, rect_roi, self.config)
+                envelopes = compute_spatial_envelopes(source_fg, roi, self.config)
+                for name, mask in [('source_foreground', source_fg), ('target_foreground', target_fg), ('print_core', roi)]:
+                    Image.fromarray(mask.astype(np.uint8) * 255).save(root / (name + '.png'))
+                Image.fromarray(np.rint(envelopes['macro_array'] * 255).astype(np.uint8)).save(root / 'latent_edit_mask.png')
+                color_stats, _ = extract_foreground_statistics(target, target_fg, output_dir=root / 'foreground_statistics')
+                initial, harmonization = harmonize_illumination(
+                    source,
+                    color_stats['rgb'],
+                    source_fg,
+                    regions,
+                    self.config,
+                    output_dir=root / 'color_harmonization',
+                    ink_core_mask=roi,
+                    substrate_mask=substrate,
+                )
+                anchor, anchor_audit = backend.generate_anchor(initial, plan['edit_prompt'], self.config.seed)
+                backend.close()
+                if anchor.shape != source_rgb.shape:
+                    raise ValueError('自然锚点分辨率与源图不一致')
+                anchor[roi] = source_rgb[roi]
+                Image.fromarray(anchor).save(root / 'generative_anchor.png')
+                write_json(stage3_path, {
+                    'signature': stage3_sig,
+                    'plan': plan,
+                    'ocr': ocr,
+                    'source_seg': source_seg,
+                    'target_seg': target_seg,
+                    'color_stats': color_stats,
+                    'harmonization': harmonization,
+                    'anchor_audit': anchor_audit,
+                    'stage3_elapsed_seconds': float(time.perf_counter() - started),
+                })
             from src.visual.training_objectives import SequentialEnsembleObjective, load_training_surrogates
             if self.config.smoke_test:
                 from .smoke import TinySurrogate, TinyPurifier
@@ -109,8 +203,16 @@ class AmbiLAGEPipeline:
                 effective, purifier=purifier, selection=self.surrogate_selection)
             audit = objective.audit
             anchor_t = torch.tensor(anchor.transpose(2, 0, 1).copy(), device=self.device, dtype=torch.float32)[None] / 255.
+            checkpoint_binding = {
+                'target_text': target_text,
+                'source_public_key': source_public_key,
+                'surrogate_specs_sha256': surrogate_specs_sha,
+            }
             final, refinement = refine_ambient_coop_latent(anchor_t, read_tensor(source, self.device), envelopes,
-                objective, None, vae, effective, output_dir=root)
+                objective, None, vae, effective, output_dir=root, checkpoint_binding=checkpoint_binding)
+            refinement_resume = dict(refinement.get('checkpoint_resume') or {})
+            refinement_resume['stage3_resumed'] = resumed_stage3
+            refinement['checkpoint_resume'] = refinement_resume
             del objective, surrogates, vae, purifier
             release_memory()
             final_rgb = np.rint(final[0].permute(1, 2, 0).cpu().numpy() * 255).astype(np.uint8)
@@ -126,26 +228,34 @@ class AmbiLAGEPipeline:
             adversarial=root/'adversarial.png';save_tensor_image(adversarial,final)
             stage_names=('foreground_segmentation','foreground_statistics','color_harmonization','latent_generation_refinement')
             stages={name:{'status':'completed'} for name in stage_names}
-            stages['latent_generation_refinement'].update(steps_requested=self.config.steps,steps_completed=refinement['steps_completed'])
+            stages['latent_generation_refinement'].update(
+                steps_requested=self.config.steps,
+                steps_completed=refinement['steps_completed'],
+                stop_reason=refinement.get('stop_reason', 'requested_steps_completed'),
+            )
             artifacts={name:sha256_file(root/name) for name in ('adversarial.png','generative_anchor.png','print_core.png',
                 'source_foreground.png','target_foreground.png','latent_edit_mask.png','naturalness_gate.json',
                 'naturalness_candidate.png','training_surrogates.json')}
             metadata=dict(schema_version=3,status='completed',method=METHOD,definition=DEFINITION,
                 test_fixture=self.config.smoke_test,production_backend=not self.config.smoke_test,
-                source_image=str(source),source_sha256=sha256_file(source),target_image=str(target),target_sha256=sha256_file(target),
+                source_image=str(source),source_sha256=source_sha,target_image=str(target),target_sha256=target_sha,
                 output_image=str(adversarial),output_image_sha256=sha256_file(adversarial),
                 candidates={'final':{'image':str(adversarial),'sha256':sha256_file(adversarial)}},
                 pipeline='ambilage_native_4stage_single_pass',stages=stages,artifacts=artifacts,
                 pixel_optimization=False,auxiliary_max_levels=0,optimization_mode='ambient_coop_latent_only',
                 steps=self.config.steps,steps_requested=self.config.steps,steps_completed=refinement['steps_completed'],
+                stop_reason=refinement.get('stop_reason', 'requested_steps_completed'),
                 quality=refinement['final_quality'],refinement=refinement,config=asdict(self.config),
                 planning=plan,ocr=ocr,segmentation={'source':source_seg,'target':target_seg},
                 color_statistics=color_stats,harmonization=harmonization,anchor_generation=anchor_audit,
                 training_objective=audit,final_naturalness=gate,hardware_profile=self.hardware_profile,
                 victim_memory_used=False,formal_queries_used=False,shadow_pool_used=False,true_rank_used=False,
-                elapsed_seconds=time.perf_counter()-started)
+                elapsed_seconds=prior_stage3_elapsed + (time.perf_counter() - started))
             write_json(root/'metadata.json',metadata)
             write_json(root/'ready.json',metadata)
+            ckpt4_path.unlink(missing_ok=True)
+            stage3_path.unlink(missing_ok=True)
+            (root / 'FAILED.json').unlink(missing_ok=True)
             return adversarial,metadata
         except Exception as exc:
             write_json(root/'FAILED.json',{'status':'failed','error_type':type(exc).__name__,'error':str(exc),

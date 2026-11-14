@@ -546,3 +546,229 @@ def test_production_stages_explicit_plan_anchor_and_mathematical_gate(tmp_path):
     bad_heavy[~roi] = 30
     failed_heavy = stages.gate(src_path, bad_heavy, 'shampoo', roi_mask=roi, fg_mask=fg)
     assert failed_heavy['passed'] is False
+
+
+def test_ambilage_config_annealing_and_checkpoint_defaults_and_validation():
+    """验证 180~250 步自适应退火与断点续跑默认配置及参数校验。"""
+    cfg = AmbiLAGEConfig()
+    cfg.validate()
+    assert cfg.steps == 250
+    assert cfg.adaptive_annealing is True
+    assert cfg.anneal_min_steps == 180
+    assert cfg.checkpoint_every == 5
+    assert cfg.resume_from_checkpoint is True
+
+    bad_cases = [
+        {"anneal_min_steps": 0},
+        {"anneal_min_lr_ratio": 0.0},
+        {"anneal_min_lr_ratio": 1.2},
+        {"anneal_warmup_steps": -1},
+        {"anneal_plateau_factor": 0.05},
+        {"anneal_plateau_patience": 0},
+        {"anneal_backtrack_factor": 1.1},
+        {"anneal_improve_tol": -1e-4},
+        {"anneal_early_stop_patience": -1},
+        {"checkpoint_every": 0},
+    ]
+    for kwargs in bad_cases:
+        with pytest.raises(ValueError):
+            AmbiLAGEConfig(**kwargs).validate()
+
+
+def test_adaptive_annealing_controller_cooling_and_bounded_early_stop():
+    """验证自适应退火在 [180, 250] 区间约束降温与早停行为。"""
+    from src.visual._ambilage.latent_refinement import AdaptiveAnnealingController
+
+    cfg = AmbiLAGEConfig(steps=250, anneal_min_steps=180, anneal_early_stop_patience=4, anneal_plateau_patience=2)
+    ctrl = AdaptiveAnnealingController(cfg, init_utility=0.50)
+    assert ctrl.lr_scale(1) < ctrl.lr_scale(cfg.anneal_warmup_steps)
+    peak_lr = ctrl.lr_scale(cfg.anneal_warmup_steps)
+    assert peak_lr == pytest.approx(1.0)
+
+    # 回退和拒步应压低自适应温度系数
+    ctrl.on_step_end(accepted=True, used_backtracks=1)
+    assert ctrl.adaptive_scale == pytest.approx(cfg.anneal_backtrack_factor)
+    ctrl.on_step_end(accepted=False, used_backtracks=0)
+    assert ctrl.adaptive_scale == pytest.approx(cfg.anneal_backtrack_factor ** 3)
+
+    # 平台期未到达 min_steps (180) 前绝不触发早停
+    for step in range(140, 180, 10):
+        stop, reason = ctrl.on_check(step, 0.50, True, current_lr_scale=ctrl.lr_scale(step), best_quality_ok=True)
+        assert stop is False and reason is None
+
+    # 达到 min_steps (180) 且停滞次数满足耐心值时收敛早停，且状态可序列化恢复
+    state = ctrl.state_dict()
+    ctrl_restored = AdaptiveAnnealingController(cfg, init_utility=0.50)
+    ctrl_restored.load_state_dict(state)
+    stop, reason = ctrl_restored.on_check(180, 0.50, True, current_lr_scale=ctrl_restored.lr_scale(180), best_quality_ok=True)
+    assert stop is True
+    assert reason == "adaptive_annealing_converged"
+
+
+def test_latent_refinement_checkpoint_resume_equivalence_and_signature_guard(tmp_path: Path):
+    """验证 Stage 4 断点续跑数值等价性及不匹配签名的严格拦截。"""
+    from src.visual._ambilage.latent_refinement import AmbiLAGEVae, refine_ambient_coop_latent
+    from src.visual._ambilage.smoke import TinyAutoencoder
+
+    class _DetObjective:
+        def __init__(self, fail_on_step: int | None = None):
+            self.fail_on_step = fail_on_step
+            self._baseline_values = None
+
+        def evaluate(self, img: torch.Tensor, step: int = 0):
+            score = (img.mean() * 0.5).reshape(1, 1)
+            if self._baseline_values is None:
+                self._baseline_values = torch.tensor([0.25], device=img.device)
+            return img.mean(), score
+
+        def image_gradient(self, img: torch.Tensor, step: int):
+            if self.fail_on_step is not None and step == self.fail_on_step:
+                raise OSError("[Errno 5] Simulated PTY disconnect")
+            if self._baseline_values is None:
+                self._baseline_values = torch.tensor([0.25], device=img.device)
+            leaf = img.detach().clone().requires_grad_(True)
+            util = leaf[:, 2].mean() - 0.1 * leaf[:, 0].mean()
+            grad, = torch.autograd.grad(util, leaf)
+            return util.detach(), util.detach().reshape(1, 1), grad.detach(), {}
+
+    h, w = 32, 32
+    fg = np.zeros((h, w), dtype=bool)
+    fg[6:26, 6:26] = True
+    roi = np.zeros((h, w), dtype=bool)
+    roi[12:20, 12:20] = True
+    cfg = AmbiLAGEConfig(
+        steps=6, check_every=2, log_every=10, checkpoint_every=2,
+        anneal_min_steps=6, anneal_early_stop_patience=0,
+        source_ssim_floor=0.5, source_mae_ceiling=50.0, smoke_test=True,
+    )
+    envelopes = compute_spatial_envelopes(fg, roi, cfg)
+    anchor = torch.full((1, 3, h, w), 0.75, dtype=torch.float32)
+    orig = torch.full((1, 3, h, w), 0.78, dtype=torch.float32)
+    vae = AmbiLAGEVae("cpu", model=TinyAutoencoder(), test_fixture=True)
+
+    torch.manual_seed(123)
+    full_img, full_meta = refine_ambient_coop_latent(
+        anchor, orig, envelopes, _DetObjective(), None, vae, cfg, output_dir=tmp_path / "full",
+    )
+
+    # 先跑到第 4 步保存断点并在第 5 步模拟崩溃，再从第 4 步断点续跑到第 6 步
+    ckpt_dir = tmp_path / "resumed"
+    torch.manual_seed(123)
+    with pytest.raises(OSError, match="Simulated PTY disconnect"):
+        refine_ambient_coop_latent(
+            anchor, orig, envelopes, _DetObjective(fail_on_step=5), None, vae, cfg, output_dir=ckpt_dir,
+        )
+    assert (ckpt_dir / "checkpoint_latest.pt").is_file()
+
+    resumed_img, resumed_meta = refine_ambient_coop_latent(
+        anchor, orig, envelopes, _DetObjective(), None, vae, cfg, output_dir=ckpt_dir,
+    )
+    assert torch.allclose(full_img, resumed_img, atol=1e-6)
+    assert full_meta["best_step"] == resumed_meta["best_step"]
+    assert full_meta["history"] == resumed_meta["history"]
+    assert resumed_meta["checkpoint_resume"]["resumed"] is True
+    assert resumed_meta["checkpoint_resume"]["resumed_from_step"] == 4
+
+    # 更改配置后复用不匹配检查点必须报错拦截
+    mismatched_cfg = AmbiLAGEConfig(
+        steps=7, check_every=2, log_every=10, checkpoint_every=2,
+        anneal_min_steps=7, anneal_early_stop_patience=0,
+        source_ssim_floor=0.5, source_mae_ceiling=50.0, smoke_test=True,
+    )
+    with pytest.raises(ValueError, match="断点检查点与当前配置或输入不匹配"):
+        refine_ambient_coop_latent(
+            anchor, orig, envelopes, _DetObjective(), None, vae, mismatched_cfg, output_dir=ckpt_dir,
+        )
+
+
+def test_pipeline_stage3_and_stage4_resume_and_early_stop_validation(tmp_path: Path, monkeypatch):
+    """验证完整管线从 Stage 3/4 断点续跑跳过前面阶段、自适应退火收敛早停与凭证门禁。"""
+    from src.visual._ambilage.evidence import validate_ready
+    from src.visual._ambilage.smoke import SmokeStages
+
+    class _CountingSmokeStages(SmokeStages):
+        def __init__(self, config, device):
+            self.config = config
+            self.calls = {"plan": 0, "detect": 0, "segment": 0, "anchor": 0}
+
+        def plan(self, source, category):
+            self.calls["plan"] += 1
+            return super().plan(source, category)
+
+        def detect_print(self, source):
+            self.calls["detect"] += 1
+            return super().detect_print(source)
+
+        def segment(self, image, boxes):
+            self.calls["segment"] += 1
+            return super().segment(image, boxes)
+
+        def generate_anchor(self, initial, prompt, seed):
+            self.calls["anchor"] += 1
+            return super().generate_anchor(initial, prompt, seed)
+
+    src_p = tmp_path / "source.png"
+    tgt_p = tmp_path / "target.png"
+    out_dir = tmp_path / "pipe_resume"
+    make_test_image(src_p, (32, 32), color=(225, 225, 225))
+    make_test_image(tgt_p, (32, 32), color=(40, 100, 200))
+
+    cfg = AmbiLAGEConfig(
+        steps=8, anneal_min_steps=6, check_every=1, log_every=1,
+        anneal_plateau_patience=1, anneal_early_stop_patience=2,
+        anneal_improve_tol=1.0,  # 触发平台期早停以测试在 [6, 8] 区间收敛停止
+        checkpoint_every=2, resume_from_checkpoint=True,
+        smoke_test=True, source_ssim_floor=0.50, source_mae_ceiling=50.0,
+    )
+
+    from src.visual.training_objectives import SequentialEnsembleObjective
+    orig_img_grad = SequentialEnsembleObjective.image_gradient
+    calls = {"n": 0}
+
+    def _crash_on_step5(self, image, step):
+        calls["n"] += 1
+        if step == 5:
+            raise OSError("[Errno 5] Simulated terminal disconnect")
+        return orig_img_grad(self, image, step)
+
+    monkeypatch.setattr(SequentialEnsembleObjective, "image_gradient", _crash_on_step5)
+    b1 = _CountingSmokeStages(cfg, "cpu")
+    with pytest.raises(OSError, match="Simulated terminal disconnect"):
+        AmbiLAGEPipeline(config=cfg, device="cpu", stage_backend=b1).execute(
+            source=src_p, target=tgt_p, output_dir=out_dir,
+            source_title="Test", target_text="Blue Herbal", print_regions=[[0.4, 0.4, 0.6, 0.6]],
+        )
+    assert (out_dir / "FAILED.json").is_file()
+    assert (out_dir / "stage3_state.json").is_file()
+    assert (out_dir / "checkpoint_latest.pt").is_file()
+    assert not (out_dir / "ready.json").exists()
+    assert b1.calls["plan"] == 1 and b1.calls["anchor"] == 1
+
+    # 移除故障注入后重跑同一输出目录：Stage 1~3 不应重复调用，并能在 [6, 8] 区间收敛完成
+    monkeypatch.setattr(SequentialEnsembleObjective, "image_gradient", orig_img_grad)
+    b2 = _CountingSmokeStages(cfg, "cpu")
+    adv_path, ready_doc = AmbiLAGEPipeline(config=cfg, device="cpu", stage_backend=b2).execute(
+        source=src_p, target=tgt_p, output_dir=out_dir,
+        source_title="Test", target_text="Blue Herbal", print_regions=[[0.4, 0.4, 0.6, 0.6]],
+    )
+    assert b2.calls == {"plan": 0, "detect": 0, "segment": 0, "anchor": 0}
+    assert adv_path.is_file()
+    assert not (out_dir / "FAILED.json").exists()
+    assert not (out_dir / "stage3_state.json").exists()
+    assert not (out_dir / "checkpoint_latest.pt").exists()
+    assert ready_doc["refinement"]["checkpoint_resume"]["resumed"] is True
+    assert ready_doc["refinement"]["checkpoint_resume"]["stage3_resumed"] is True
+    assert ready_doc["refinement"]["checkpoint_resume"]["resumed_from_step"] == 4
+    assert 6 <= ready_doc["steps_completed"] <= 8
+    assert ready_doc["stop_reason"] == "adaptive_annealing_converged"
+    assert validate_ready(out_dir, require_production=False)["status"] == "completed"
+
+    # 若伪造早停或越过 anneal_min_steps 下限，validate_ready 必须拒绝
+    tampered = json.loads((out_dir / "ready.json").read_text(encoding="utf-8"))
+    tampered["steps_completed"] = 2
+    tampered["stages"]["latent_generation_refinement"]["steps_completed"] = 2
+    tampered["refinement"]["steps_completed"] = 2
+    tampered["refinement"]["adaptive_annealing"]["steps_executed"] = 2
+    (out_dir / "ready.json").write_text(json.dumps(tampered), encoding="utf-8")
+    with pytest.raises(ValueError, match="潜空间步骤未完整完成"):
+        validate_ready(out_dir, require_production=False)

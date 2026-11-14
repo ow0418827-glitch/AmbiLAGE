@@ -1,0 +1,42 @@
+# Rebuildable runtime environments and model weights.
+.venv/
+venv/
+models/
+weights/
+/resources/webshop/catalog/
+/resources/webshop/catalog_bundle/manifest.partial.json
+/resources/webshop/catalog_bundle/**/*.tmp
+/resources/webshop/catalog_bundle/**/*.building
+dist/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+**/.cache/
+**/cache/
+# Disposable local verification and migration copies; keep formal experiment output.
+/output/migration_legacy/
+/output/archive/
+/output/github_sync_check/
+/output/local_validation/*/
+/output/package_check/
+/output/pv/
+/output/pytest*/
+/output/test_tmp/
+# Real credentials remain local; connection templates contain no key.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.local.json
+keyfile
+keyfile.*
+.keyfile
+.keyfile.*
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+credentials.json
+secrets.json

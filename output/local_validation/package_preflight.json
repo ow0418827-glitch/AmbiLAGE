@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-11-13T09:13:07.143208+00:00",
+  "resources": {
+    "entries": 189,
+    "groups": 9,
+    "queries": 180,
+    "shared_image_files": 197,
+    "path_and_hash_checks": 247,
+    "model_encoding_performed": false,
+    "selection_exceptions": [
+      "04_curtain",
+      "08_speaker"
+    ]
+  },
+  "runtime": {
+    "python": "3.11.15",
+    "platform": "Windows-10-10.0.26300-SP0",
+    "packages": {
+      "torch": "2.11.0+cu128",
+      "torchvision": "0.26.0+cu128",
+      "transformers": "5.13.0",
+      "diffusers": "0.39.0",
+      "accelerate": "1.15.0",
+      "open-clip-torch": "3.3.0",
+      "rapidocr-onnxruntime": "1.4.4",
+      "huggingface-hub": "1.22.0"
+    },
+    "disk_free_gib": 87.8
+  },
+  "models": {
+    "sam2": {
+      "present": false,
+      "repo_id": "facebook/sam2.1-hiera-large"
+    },
+    "planner": {
+      "present": false,
+      "repo_id": "Qwen/Qwen2.5-VL-32B-Instruct"
+    },
+    "editor": {
+      "present": false,
+      "repo_id": "black-forest-labs/FLUX.1-Kontext-dev"
+    },
+    "purifier": {
+      "present": false,
+      "repo_id": "stable-diffusion-v1-5/stable-diffusion-v1-5"
+    },
+    "clip_b16": {
+      "present": false,
+      "repo_id": "timm/vit_base_patch16_clip_224.openai"
+    },
+    "clip_b32": {
+      "present": false,
+      "repo_id": "timm/vit_base_patch32_clip_224.openai"
+    },
+    "clip_b32_laion": {
+      "present": false,
+      "repo_id": "laion/CLIP-ViT-B-32-laion2B-s34B-b79K"
+    },
+    "clip_l14": {
+      "present": false,
+      "repo_id": "timm/vit_large_patch14_clip_224.openai"
+    },
+    "siglip_so400m": {
+      "present": false,
+      "repo_id": "timm/ViT-SO400M-14-SigLIP-384"
+    },
+    "clip_h14": {
+      "present": false,
+      "repo_id": "laion/CLIP-ViT-H-14-laion2B-s32B-b79K"
+    },
+    "eval_g14": {
+      "present": false,
+      "repo_id": "laion/CLIP-ViT-g-14-laion2B-s12B-b42K"
+    },
+    "eval_gme": {
+      "present": false,
+      "repo_id": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+    },
+    "selection": {
+      "present": false,
+      "repo_id": "facebook/dinov2-small"
+    }
+  },
+  "remote_model_execution_verified": false
+}

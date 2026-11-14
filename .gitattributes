@@ -1,0 +1,7 @@
+# Frozen JSON, images, catalog chunks and historical evidence are hash-bound.
+# Preserve original bytes across Windows/Linux checkouts, even with core.autocrlf.
+* -text
+# Executable server entry points always use Unix line endings.
+*.sh text eol=lf
+# Large recovery chunks are opaque binary data.
+*.part -text -diff

@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "private_repo_required": false,
+  "repository_visibility": "public",
+  "visibility_confirmation": "user_confirmed",
+  "remote_visibility_verified": false,
+  "user_authorized_credentials": [],
+  "required_local_files": [
+    "output/imported_lucid_baseline_20261113/IMPORT_MANIFEST.json",
+    "resources/model_lock.json",
+    "resources/evaluation_base/shared_memory/shared_memory.json",
+    "src/agent/config/llm.example.json"
+  ],
+  "required_sync_paths": [
+    "output/imported_lucid_baseline_20261113/",
+    "output/<formal_experiment>/memory_vectors/",
+    "resources/model_lock.json",
+    "resources/evaluation_base/shared_memory/shared_memory.json",
+    "resources/evaluation_base/shared_memory/images/",
+    "data/private/",
+    "output/<formal_experiment>/",
+    "output/local_validation/*.{log,xml,json}",
+    "output/<formal_experiment>/retrieval_index_cache/",
+    "output/<formal_experiment>/query_index_cache/",
+    "src/agent/config/llm.example.json",
+    "resources/webshop/source/",
+    "resources/webshop/catalog_bundle/"
+  ],
+  "scope": "source_public_inputs_shared_evaluation_inputs_frozen_images_formal_results_and_resume_checkpoints",
+  "excluded": "real_credentials_environments_model_weights_restored_catalog_runtime_copies_rebuildable_caches_disposable_test_directories_migration_archives",
+  "credentials_must_not_be_committed": true,
+  "credential_source": "server_environment_or_git_ignored_local_configuration"
+}

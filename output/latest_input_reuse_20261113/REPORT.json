@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "completed_at": "2026-11-13T15:10:56.125850+00:00",
+  "status": "completed_input_and_baseline_reuse_integration",
+  "base_manifest_sha256": "ad8370e3e32ab4fa85a079adc1980586c5e0e4b664ea652a166d5b54472283a1",
+  "pool_sha256": "bfd8964a4477b694796787ffe2fc746c5eb19a389c23c904ebccc81975cd77a8",
+  "pool_entries": 189,
+  "background_records_exactly_preserved": 180,
+  "all_unchanged_records": 188,
+  "shared_image_files": 198,
+  "group7": {
+    "source_id": "B09B63YYCW",
+    "target_id": "B00BDJODWI",
+    "source_sha256": "b69cef9d597c09a1dd74baa2dc3a24343443d80fea3030c8994268c4f21b9c72",
+    "target_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e",
+    "target_decoded_pixel_difference_from_previous": {
+      "max": 0,
+      "mean": 0.0
+    }
+  },
+  "lucid_baseline": {
+    "groups": 9,
+    "steps": 1000,
+    "epsilon_levels": 8,
+    "seed": 42,
+    "original_files": 132,
+    "original_file_bytes": 39207916,
+    "import_manifest": "output/imported_lucid_baseline_20261113/IMPORT_MANIFEST.json",
+    "images_reused_without_training": true,
+    "historical_rankings_are_current_results": false
+  },
+  "evaluation_protocol": {
+    "simultaneous_source_image_replacements": 9,
+    "pool_scope": "all_189_entries",
+    "normal_records_untouched": true,
+    "same_bank_file_for_all_groups": true,
+    "memory_vector_cache": "strict_content_model_text_decoder_fusion_runtime_identity",
+    "independent_verification": "fresh_process_full_reencoding_without_inherited_cache"
+  },
+  "tests": {
+    "tests": 159,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 57.431
+  },
+  "real_model_training_encoding_or_ranking_executed": false,
+  "shopping_executed": false,
+  "source_project_modified": false,
+  "github_commit_or_push_executed": false
+}

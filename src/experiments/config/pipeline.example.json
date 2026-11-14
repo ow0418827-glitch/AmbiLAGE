@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "method": "ambilage",
+  "public_catalog": "output/runs/default/data/catalog.json",
+  "run_dir": "output/runs/default",
+  "selection": {"seed": 42, "calibration_path": "output/datasets/public/calibration/shape_v2_verified/threshold.json", "min_image_side": 64},
+  "selection_models": {"batch_size": 16},
+  "generation": {
+    "lucid": {"steps": 1000, "epsilon_levels": 16},
+    "ambilage": {}
+  },
+  "evaluation": {
+    "shared_pool": "resources/evaluation_base/shared_memory/shared_memory.json",
+    "query_manifest": "output/datasets/private/query_image.json"
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "bundle_manifest_sha256": "b317f9b1cb21f9ba5f712693e251fe7193d46ba01c574925cd90657dfcafb2f1",
+  "original_files": 92,
+  "chunks": 127,
+  "raw_bytes": 8676866828,
+  "stored_bytes": 2901882988,
+  "all_database_and_index_raw_hashes_verified_during_restore": true,
+  "database_sha256": "cbfe10eb111814c7a45e82383173df4f601d08cc9f7d2fd3069429ee71ce42a2",
+  "largest_chunk_bytes": 67108864,
+  "catalog_products": 1181430,
+  "catalog_goals": 12087,
+  "search_backend": "lucene",
+  "search_index_documents": 1181370,
+  "empty_product_asins": 60,
+  "search_index_rebuilt": false,
+  "search_ranking_changed": false,
+  "catalog_products_decoded_in_audit": 0,
+  "frozen_current_pair_products_found": [
+    {
+      "group": "01_camera",
+      "role": "source",
+      "asin": "B071ZFHTZN",
+      "has_public_name": true,
+      "has_public_image_url": true
+    },
+    {
+      "group": "01_camera",
+      "role": "target",
+      "asin": "B08V134QWR",
+      "has_public_name": true,
+      "has_public_image_url": true
+    },
+    {
+      "group": "02_chair",
+      "role": "source",
+      "asin": "B08GCSRXKS",
+      "has_public_name": true,
+      "has_public_image_url": true
+    },
+    {
+      "group": "02_chair",
+      "role": "target",
+      "asin": "B09CYFD5BX",
+      "has_public_name": true,
+      "has_public_image_url": true
+    },
+    {
+      "group": "03_cookies",
+      "role": "source",
+      "asin": "B07BBLWTLM",
+      "has_public_name": true,
+      "has_public_image_url": true
+    },
+    {
+      "group": "03_cookies",
+      "role": "target",
+      "asin": "B08Z8MHWVS",
+      "has_public_name": true,
+      "has_public_image_url": true
+    },
+    {
+      "group": "04_curtain",
+      "role": "source",
+      "asin": "B09PHLS2QD",
+      "has_public_name": true,
+      "has_public_image_url": true
+    },
+    {
+      "group": "04_curtain",
+      "role": "target",
+      "asin": "B086PW7TWX",
+      "has_public_name": true,
+      "has_public_image_url": true
+    },
+    {
+      "group": "05_hair_extension",
+      "role": "source",
+      "asin": "B07Z7MQSM1",
+      "has_public_name": true,
+      "has_public_image_url": true
+    },
+    {
+      "group": "05_hair_extension",
+      "role": "target",
+      "asin": "B01460C2I2",
+      "has_public_name": true,
+      "has_public_image_url": true
+    },
+    {
+      "group": "06_jeans",
+      "role": "source",
+      "asin": "B07FRKQNFV",
+      "has_public_name": true,
+      "has_public_image_url": true
+    },
+    {
+      "group": "06_jeans",
+      "role": "target",
+      "asin": "B09HH96NJY",
+      "has_public_name": true,
+      "has_public_image_url": true
+    },
+    {
+      "group": "07_shampoo",
+      "role": "source",
+      "asin": "B09B63YYCW",
+      "has_public_name": true,
+      "has_public_image_url": true
+    },
+    {
+      "group": "07_shampoo",
+      "role": "target",
+      "asin": "B00BDJODWI",
+      "has_public_name": true,
+      "has_public_image_url": true
+    },
+    {
+      "group": "08_speaker",
+      "role": "source",
+      "asin": "B01590FHS0",
+      "has_public_name": true,
+      "has_public_image_url": true
+    },
+    {
+      "group": "08_speaker",
+      "role": "target",
+      "asin": "B01N47U1VI",
+      "has_public_name": true,
+      "has_public_image_url": true
+    },
+    {
+      "group": "09_toothbrush",
+      "role": "source",
+      "asin": "B09PNNXYJ4",
+      "has_public_name": true,
+      "has_public_image_url": true
+    },
+    {
+      "group": "09_toothbrush",
+      "role": "target",
+      "asin": "B09J81RMLD",
+      "has_public_name": true,
+      "has_public_image_url": true
+    }
+  ],
+  "vendor_files": 18,
+  "vendor_bytes": 106910,
+  "vendor_sha256_checks_passed": true,
+  "micro_test_cases_passed": 14,
+  "large_models_loaded": false,
+  "shopping_or_external_model_calls_started": false,
+  "java_lucene_runtime_executed": false,
+  "linux_runtime_executed": false,
+  "product_image_scope": "frozen_experimental_images_local; full_catalog_images_remain_original_public_urls"
+}

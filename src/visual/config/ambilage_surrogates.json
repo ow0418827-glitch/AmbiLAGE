@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "surrogates": [
+    {"name":"ViT-B-16","pretrained":"openai","hf_repo":"timm/vit_base_patch16_clip_224.openai","weight_path":"clip_b16/open_clip_model.safetensors"},
+    {"name":"ViT-L-14","pretrained":"openai","hf_repo":"timm/vit_large_patch14_clip_224.openai","weight_path":"clip_l14/open_clip_model.safetensors"},
+    {"name":"ViT-SO400M-14-SigLIP-384","pretrained":"webli","hf_repo":"timm/ViT-SO400M-14-SigLIP-384","weight_path":"siglip_so400m/open_clip_model.safetensors","tokenizer_path":"siglip_so400m"},
+    {"name":"ViT-H-14","pretrained":"laion2b_s32b_b79k","hf_repo":"laion/CLIP-ViT-H-14-laion2B-s32B-b79K","weight_path":"clip_h14/open_clip_model.safetensors"}
+  ],
+  "held_out": ["ViT-g-14", "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"],
+  "allow_downloads": false
+}

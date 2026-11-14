@@ -1,0 +1,323 @@
+{
+  "schema_version": 1,
+  "title": "9组商品图对、特点文字与完善长期记忆库的统一实验准备资产",
+  "created_at": "2026-11-09T05:16:43.665115+00:00",
+  "output_base": ".",
+  "public_metadata": {
+    "path": "public_metadata/product_metadata.json",
+    "sha256": "4faa8a56119f213576ea065dab23b87dea7c7983cce89b6473515b03e831eff0",
+    "review_path": "public_metadata/product_feature_review.json",
+    "review_sha256": "0651b36338ced43e334cd2ab5de96083dd14aed0c5b42260a1be9347da6e6d40",
+    "products": 207,
+    "training_source": "public_metadata/product_metadata.json"
+  },
+  "evaluation_protocol": {
+    "query_mode": "text",
+    "query_images": false,
+    "queries_per_group": 20,
+    "instruction_policy": "public_target_features_fixed20_v1",
+    "conditions": [
+      "none"
+    ],
+    "encoder_config": "evaluation_encoder.json",
+    "encoder_config_sha256": "396c5294f5d022cfa13eead1b98816701c9e47e4b0aceb9954b812073eb0a2fe",
+    "evaluator_setting": "held_out_public_encoder",
+    "black_box_transfer_claimed": false,
+    "shared_pool_scope": "all_189_entries",
+    "final_shopping_enabled": false,
+    "library_substitution": "all_nine_frozen_source_images_simultaneously_in_one_complete_189_entry_pool_per_method"
+  },
+  "shared_memory": {
+    "pool_file": "shared_memory/shared_memory.json",
+    "pool_sha256": "bfd8964a4477b694796787ffe2fc746c5eb19a389c23c904ebccc81975cd77a8",
+    "total_entries": 189,
+    "source_mapping": {
+      "01_camera": {
+        "source_asin": "B071ZFHTZN",
+        "source_memory_id": "groups9_reference_01_camera_B071ZFHTZN"
+      },
+      "02_chair": {
+        "source_asin": "B08GCSRXKS",
+        "source_memory_id": "groups9_reference_02_chair_B08GCSRXKS"
+      },
+      "03_cookies": {
+        "source_asin": "B07BBLWTLM",
+        "source_memory_id": "groups9_reference_03_cookies_B07BBLWTLM"
+      },
+      "04_curtain": {
+        "source_asin": "B09PHLS2QD",
+        "source_memory_id": "groups9_reference_04_curtain_B09PHLS2QD"
+      },
+      "05_hair_extension": {
+        "source_asin": "B07Z7MQSM1",
+        "source_memory_id": "groups9_reference_05_hair_extension_B07Z7MQSM1"
+      },
+      "06_jeans": {
+        "source_asin": "B07FRKQNFV",
+        "source_memory_id": "groups9_reference_06_jeans_B07FRKQNFV"
+      },
+      "07_shampoo": {
+        "source_asin": "B09B63YYCW",
+        "source_memory_id": "groups9_reference_07_shampoo_B09B63YYCW"
+      },
+      "08_speaker": {
+        "source_asin": "B01590FHS0",
+        "source_memory_id": "groups9_reference_08_speaker_B01590FHS0"
+      },
+      "09_toothbrush": {
+        "source_asin": "B09PNNXYJ4",
+        "source_memory_id": "groups9_reference_09_toothbrush_B09PNNXYJ4"
+      }
+    },
+    "experiment_sources": "nine_new_public_source_references_not_observed_purchases",
+    "brands_covered": 115,
+    "retrieval_index_policy": "PRODUCT_FEATURE_INDEX_TEXT_POLICY (Title + Brand + Features, excluding actions)",
+    "index_cache_policy": "content_addressed_exact_encoder_text_image_fusion_runtime_identity_reuse_unchanged_entries",
+    "image_file_count": 198,
+    "background_entries": 180,
+    "reference_entries": 9,
+    "background_preservation": "all_180_original_entry_objects_exactly_preserved_including_diagnostic_fields"
+  },
+  "methods_unified": {
+    "lucid": "Original pixel optimization baseline",
+    "ambilage": "Native ambient lighting cooperative and subject micro-lighting method"
+  },
+  "groups": {
+    "01_camera": {
+      "name": "第一组相机",
+      "category": "camera",
+      "target_id": "B08V134QWR",
+      "target_brand": "HXVIEW",
+      "target_feature_text": "I want to buy a security camera with optical zoom and motion detection.",
+      "source_id": "B071ZFHTZN",
+      "shape_similarity": 0.7198,
+      "passes_calibrated_threshold": true,
+      "selection_basis": "user_confirmed_existing_nine_pairs_no_reselection",
+      "source_sha256": "eb5f729dbce74e5ea97f9b3af6eb902f947c9c8442b74acbf450bce12d1104cd",
+      "target_sha256": "3e640007088747b83c734fe3a612c241f88b370490d99b3aca717f92f4dd0126",
+      "directory": "groups/01_camera",
+      "definition": "groups/01_camera/definition.json",
+      "features": "groups/01_camera/features.json",
+      "query_manifest": "evaluation_inputs/01_camera/queries.json",
+      "lucid_config": "groups/01_camera/lucid_config.json",
+      "query_manifest_sha256": "200b897bee1af328fa26542df283fbd92270da8748f4520432fe3bdf721dddf8",
+      "features_sha256": "3641b0af266efb482993d3e51251c58d7e20565d9f12c39edaaab6698eb01cd9",
+      "method_config_sha256": {
+        "lucid": "91e55efa45bb0b91c483ccc8d3c937270c33fbdb78c4eb3851f68bedc62b3879"
+      },
+      "definition_sha256": "cfcd0b38ab682e9235b777a0a84c725ddf61918623830950097786797a6bd356"
+    },
+    "02_chair": {
+      "name": "第二组椅子",
+      "category": "seating",
+      "target_id": "B09CYFD5BX",
+      "target_brand": "LTHDD",
+      "target_feature_text": "I want to buy a barber chair with a heavy-duty hydraulic pump and 360-degree rotation.",
+      "source_id": "B08GCSRXKS",
+      "shape_similarity": 0.7436,
+      "passes_calibrated_threshold": true,
+      "selection_basis": "user_confirmed_existing_nine_pairs_no_reselection",
+      "source_sha256": "7a06ed70b92dc60b6cf37d29631bcfe52f8735adba0253b791350f464ca56d6b",
+      "target_sha256": "bec16e84034aa0a44b09f41298c795bdc087b0d008fce09cf67022c573e64e54",
+      "directory": "groups/02_chair",
+      "definition": "groups/02_chair/definition.json",
+      "features": "groups/02_chair/features.json",
+      "query_manifest": "evaluation_inputs/02_chair/queries.json",
+      "lucid_config": "groups/02_chair/lucid_config.json",
+      "query_manifest_sha256": "f323c3e60313628434b4021e967919645b47ceb3d97bf7eea629dae207077999",
+      "features_sha256": "93774e8633569631a443a6e0ba61591831d13668c9560d555c5008a57d26d4b5",
+      "method_config_sha256": {
+        "lucid": "e6f7f3ed95559bf49ed197f44d02727e597e7b5a757f61093f1c77cb6d4a1de0"
+      },
+      "definition_sha256": "b472e71267029d91ab8118250d3a45b10c4983efb391d60680da9c76a4fda41e"
+    },
+    "03_cookies": {
+      "name": "第三组饼干",
+      "category": "cookies",
+      "target_id": "B08Z8MHWVS",
+      "target_brand": "Big Dipper Dough Co",
+      "target_feature_text": "I want to buy cookie dough with natural ingredients and chocolate chips.",
+      "source_id": "B07BBLWTLM",
+      "shape_similarity": 0.718,
+      "passes_calibrated_threshold": true,
+      "selection_basis": "user_confirmed_existing_nine_pairs_no_reselection",
+      "source_sha256": "a1bb85bf4b8c4bbace4d1099142c0c7925c7b9f0d2e878fa43830e140fffbd28",
+      "target_sha256": "656132deaca60f9f6f1a34668699fe96289c3c1812dddde5b1cfe9685b317e71",
+      "directory": "groups/03_cookies",
+      "definition": "groups/03_cookies/definition.json",
+      "features": "groups/03_cookies/features.json",
+      "query_manifest": "evaluation_inputs/03_cookies/queries.json",
+      "lucid_config": "groups/03_cookies/lucid_config.json",
+      "query_manifest_sha256": "24c631dac7b7a5b91c94a372bcc9cba6df91bfd1fdfe8110b0481b7f88727adf",
+      "features_sha256": "cc5c69c45f1c5e93c6b5729df8c842fd6082dc62482f712aef9808a2f7929047",
+      "method_config_sha256": {
+        "lucid": "f3899384b06574739e22b79d41eb9fb265653d117ea4840c46d029cd9ba24748"
+      },
+      "definition_sha256": "523cb7f8f10e867580d8688d64e0bddf90b9bcfe89ddb56910d59513846d8133"
+    },
+    "04_curtain": {
+      "name": "第四组窗帘",
+      "category": "curtains",
+      "target_id": "B086PW7TWX",
+      "target_brand": "",
+      "target_feature_text": "I want to buy curtains with a blackout design and a vintage wood board texture.",
+      "source_id": "B09PHLS2QD",
+      "shape_similarity": 0.5703,
+      "passes_calibrated_threshold": false,
+      "selection_basis": "user_confirmed_existing_nine_pairs_no_reselection",
+      "source_sha256": "2eaea983aa4b1ab928567e1aeb57a255fa133f0b9fa2b9a4a6eeccd43d62d967",
+      "target_sha256": "5b91d14a4cd7f994eee97a58e55cf82ebfa8725d3a28d982bc695a7208e5e098",
+      "directory": "groups/04_curtain",
+      "definition": "groups/04_curtain/definition.json",
+      "features": "groups/04_curtain/features.json",
+      "query_manifest": "evaluation_inputs/04_curtain/queries.json",
+      "lucid_config": "groups/04_curtain/lucid_config.json",
+      "query_manifest_sha256": "405c37efe0ececf765acc783be4ebd28c753b2212b4ad2226a328a0612a8b671",
+      "features_sha256": "9386d5b3a56366ad0c96162ff1ffb009bb34a8320d104a303adfc8cb6708b6f3",
+      "method_config_sha256": {
+        "lucid": "27ac121fb2de33e324d3f6dbb183ad62972d604482bc25d00ab7dbd2c44aa6d4"
+      },
+      "definition_sha256": "490ef65304bfb3770423946be2697efcbedfaf40b7d17e17012e43699f667ab2"
+    },
+    "05_hair_extension": {
+      "name": "第五组接发",
+      "category": "hair_extensions",
+      "target_id": "B01460C2I2",
+      "target_brand": "S-noilite",
+      "target_feature_text": "I want to buy hair extensions with real human hair and double wefts.",
+      "source_id": "B07Z7MQSM1",
+      "shape_similarity": 0.7229,
+      "passes_calibrated_threshold": true,
+      "selection_basis": "user_confirmed_existing_nine_pairs_no_reselection",
+      "source_sha256": "0cdc1d80aaf88e4bb1e4e6919e468afe4716b741a890ce03a8c9368317ae36fe",
+      "target_sha256": "f1606cc72284b26cc9d055eb58b784b46c17a72561f452b1704a0e9f0970f9a4",
+      "directory": "groups/05_hair_extension",
+      "definition": "groups/05_hair_extension/definition.json",
+      "features": "groups/05_hair_extension/features.json",
+      "query_manifest": "evaluation_inputs/05_hair_extension/queries.json",
+      "lucid_config": "groups/05_hair_extension/lucid_config.json",
+      "query_manifest_sha256": "2876d0ae3011a08ba8493dafb3e538194bfdf9394d24cc23e123a6fe084c2790",
+      "features_sha256": "31f6cd86e314683a61aa4ea0d47ed63e5be17993330041a000e0855577c686f2",
+      "method_config_sha256": {
+        "lucid": "460e64cdbf356fad12c0ad1ea2cf21487033fb3b1d5d8a7ce89051d1e28dc1ed"
+      },
+      "definition_sha256": "f17239b97227c51beaa60927b1959330281c09cc1077974c92e3ad94950928a5"
+    },
+    "06_jeans": {
+      "name": "第六组牛仔裤",
+      "category": "apparel",
+      "target_id": "B09HH96NJY",
+      "target_brand": "",
+      "target_feature_text": "I want to buy jeans with a high waist and a baggy straight-leg cut.",
+      "source_id": "B07FRKQNFV",
+      "shape_similarity": 0.7325,
+      "passes_calibrated_threshold": true,
+      "selection_basis": "user_confirmed_existing_nine_pairs_no_reselection",
+      "source_sha256": "a945795bc33a1f094f2bae77742393c692e05e22917184f635f302756e9a2b8d",
+      "target_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241",
+      "directory": "groups/06_jeans",
+      "definition": "groups/06_jeans/definition.json",
+      "features": "groups/06_jeans/features.json",
+      "query_manifest": "evaluation_inputs/06_jeans/queries.json",
+      "lucid_config": "groups/06_jeans/lucid_config.json",
+      "query_manifest_sha256": "ea4ef3e68615e5aab6503a3ba86584ed31da3150c7bb6803ff5131b9d5d03513",
+      "features_sha256": "ddf42c95370fe5170a07591f1f14fca3ee4128d65ed93c245ec6e285d99f0b23",
+      "method_config_sha256": {
+        "lucid": "9bf8dc0c5cde0108e07c21b679ca662ba2cc2a46845f3479ffafcfc255fa18cf"
+      },
+      "definition_sha256": "b94fe24d92da411f73d0d9d5f8aeabc2b6f657f03105da6b22699445361f1c3a"
+    },
+    "07_shampoo": {
+      "name": "第七组洗发水（重选真人洗发水原图对比版）",
+      "category": "personal_care",
+      "target_id": "B00BDJODWI",
+      "target_brand": "Aveda",
+      "target_feature_text": "I want to buy shampoo with plant-based haircare ingredients and a balancing formula.",
+      "source_id": "B09B63YYCW",
+      "shape_similarity": 0.6974290898357522,
+      "passes_calibrated_threshold": true,
+      "selection_basis": "user_confirmed_reuse_of_completed_20261112_public_reselection",
+      "source_sha256": "b69cef9d597c09a1dd74baa2dc3a24343443d80fea3030c8994268c4f21b9c72",
+      "target_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e",
+      "directory": "groups/07_shampoo",
+      "definition": "groups/07_shampoo/definition.json",
+      "features": "groups/07_shampoo/features.json",
+      "query_manifest": "evaluation_inputs/07_shampoo/queries.json",
+      "lucid_config": "groups/07_shampoo/lucid_config.json",
+      "query_manifest_sha256": "eefa736b26048f149dc423c56aa506aa920788e29aefcc0036d69abe09345296",
+      "features_sha256": "dfc0f2e579c61c7f581dc3ee1a3e8462e660160bc8c21f7f0d5de728b68a20a4",
+      "method_config_sha256": {
+        "lucid": "2bde26aaf1a698a5404f07c32efbf9f5ade15e5dfbefd334fd0be3c390ff872a"
+      },
+      "definition_sha256": "f4946d621ea26029c928aef8acc2a3f9897012cb4f29e272da3ed984f0e684c7",
+      "calibrated_threshold": 0.6010808269912873,
+      "selection_status": "uniform_draw_reselected_isolated_20261112"
+    },
+    "08_speaker": {
+      "name": "第八组音箱",
+      "category": "audio",
+      "target_id": "B01N47U1VI",
+      "target_brand": "",
+      "target_feature_text": "I want to buy a Bluetooth speaker with water resistance and stereo sound.",
+      "source_id": "B01590FHS0",
+      "shape_similarity": 0.4333,
+      "passes_calibrated_threshold": false,
+      "selection_basis": "user_confirmed_existing_nine_pairs_no_reselection",
+      "source_sha256": "ead324b33b443daba5e0abe9c6ed59157e164d67b302f65a7661d53810be6390",
+      "target_sha256": "808882d53dd322b2a319a83f9ec29ec406cae6b93558ea98f60a5444b4eed928",
+      "directory": "groups/08_speaker",
+      "definition": "groups/08_speaker/definition.json",
+      "features": "groups/08_speaker/features.json",
+      "query_manifest": "evaluation_inputs/08_speaker/queries.json",
+      "lucid_config": "groups/08_speaker/lucid_config.json",
+      "query_manifest_sha256": "c3c1e31f0f17904793c57dc0350ce9d1f2e5a23572f4ff820a681cbd7eb2ab8c",
+      "features_sha256": "a14a4c52c137639e02fe3121a156089375344dc971fc7b04441f45af0dab8678",
+      "method_config_sha256": {
+        "lucid": "fb7560e7924ceeba2ab5864307b183702912cb21386ed48e5c077f8b4ea7100b"
+      },
+      "definition_sha256": "62f0fc958bd5c272b68b54ecb09f0526a1156cc6cc423aac26efb9c5d2800ffb"
+    },
+    "09_toothbrush": {
+      "name": "第九组牙刷",
+      "category": "oral_care",
+      "target_id": "B09J81RMLD",
+      "target_brand": "",
+      "target_feature_text": "I want to buy a toothbrush with a U-shaped design and soft silicone brush heads.",
+      "source_id": "B09PNNXYJ4",
+      "shape_similarity": 0.612,
+      "passes_calibrated_threshold": true,
+      "selection_basis": "user_confirmed_existing_nine_pairs_no_reselection",
+      "source_sha256": "74e0c705bd248dbec29190d33f7ecd38ef9a17e8853dd58ddb13c78fff4eae0f",
+      "target_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2",
+      "directory": "groups/09_toothbrush",
+      "definition": "groups/09_toothbrush/definition.json",
+      "features": "groups/09_toothbrush/features.json",
+      "query_manifest": "evaluation_inputs/09_toothbrush/queries.json",
+      "lucid_config": "groups/09_toothbrush/lucid_config.json",
+      "query_manifest_sha256": "adf6578bb0084ea5c0b144210ebb6e5110659740f6f185f34e86e2cd69b40386",
+      "features_sha256": "17fe7492f81fbb5a3eb4ea4bb3cb954d5fb2cf35862045ef948c3881c936f94c",
+      "method_config_sha256": {
+        "lucid": "d46f4a0f42edaf53a165b8a1598b490f6bba83f6c05073ae7773dd561cfb3c92"
+      },
+      "definition_sha256": "a9e21f374bbfd1368acd8ddd24bfbde7979b4ee6ed16327533e3e98026f493ce"
+    }
+  },
+  "ready_for_generation_and_evaluation": false,
+  "generated_attack_images_complete": false,
+  "formal_evaluation_performed": false,
+  "migration_status": "local_interfaces_validated_remote_models_not_yet_validated",
+  "input_revision": "groups9_shampoo_reselected_20261113",
+  "baseline_reuse": {
+    "method": "lucid",
+    "index": "output/imported_lucid_baseline_20261113/IMPORT_MANIFEST.json",
+    "steps": 1000,
+    "epsilon_levels": 8,
+    "groups": 9,
+    "new_generation_required": false,
+    "historical_rankings_are_current_results": false
+  },
+  "method_status": {
+    "lucid": "historical_full_step_images_imported_and_verified",
+    "ambilage": "new_images_pending_generation"
+  }
+}

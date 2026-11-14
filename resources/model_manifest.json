@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "download_default": "https://hf-mirror.com",
+  "models": {
+    "sam2": {
+      "repo_id": "facebook/sam2.1-hiera-large",
+      "role": "segmentation",
+      "scope": "generation"
+    },
+    "planner": {
+      "repo_id": "Qwen/Qwen2.5-VL-32B-Instruct",
+      "role": "public_planning_and_naturalness_gate",
+      "scope": "generation"
+    },
+    "planner_7b": {
+      "repo_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+      "role": "explicit_optional_smaller_planner",
+      "scope": "optional"
+    },
+    "editor": {
+      "repo_id": "black-forest-labs/FLUX.1-Kontext-dev",
+      "role": "natural_anchor_and_16_channel_vae",
+      "scope": "generation",
+      "access_note": "Accept the publisher license and configure HF_TOKEN outside the project."
+    },
+    "editor_qwen": {
+      "repo_id": "Qwen/Qwen-Image-Edit",
+      "role": "explicit_optional_chinese_packaging_editor",
+      "scope": "optional"
+    },
+    "purifier": {
+      "repo_id": "stable-diffusion-v1-5/stable-diffusion-v1-5",
+      "role": "differentiable_ddim_purification",
+      "scope": "generation"
+    },
+    "clip_b16": {
+      "repo_id": "timm/vit_base_patch16_clip_224.openai",
+      "role": "training_surrogate",
+      "scope": "encoders"
+    },
+    "clip_b32": {
+      "repo_id": "timm/vit_base_patch32_clip_224.openai",
+      "role": "lucid_surrogate",
+      "scope": "encoders"
+    },
+    "clip_b32_laion": {
+      "repo_id": "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
+      "role": "lucid_surrogate",
+      "scope": "encoders"
+    },
+    "clip_l14": {
+      "repo_id": "timm/vit_large_patch14_clip_224.openai",
+      "role": "training_surrogate",
+      "scope": "encoders"
+    },
+    "siglip_so400m": {
+      "repo_id": "timm/ViT-SO400M-14-SigLIP-384",
+      "role": "training_surrogate",
+      "scope": "encoders"
+    },
+    "clip_h14": {
+      "repo_id": "laion/CLIP-ViT-H-14-laion2B-s32B-b79K",
+      "role": "training_surrogate",
+      "scope": "encoders"
+    },
+    "eval_g14": {
+      "repo_id": "laion/CLIP-ViT-g-14-laion2B-s12B-b42K",
+      "role": "held_out_evaluator_only",
+      "scope": "evaluators"
+    },
+    "eval_gme": {
+      "repo_id": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+      "role": "held_out_evaluator_only",
+      "scope": "evaluators"
+    },
+    "selection": {
+      "repo_id": "facebook/dinov2-small",
+      "role": "frozen_public_grayscale_shape_gate",
+      "scope": "selection"
+    }
+  }
+}

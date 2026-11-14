@@ -1,0 +1,541 @@
+"""Image-only or joint text/image memory retrieval with auditable indexing."""
+import hashlib
+import importlib.metadata
+import json
+import platform
+from src.paths import ProjectPath as Path
+import uuid
+
+import numpy as np
+
+from src.visual.encoders.joint import ChunkedClipEncoder, GMEProcessEncoder, validated_image_weight
+
+
+RETRIEVAL_CACHE_SCHEMA = 4
+
+
+def pillow_decoder_signature():
+    """Read local decoder build information, without opening an image.
+
+    Imported only for encoders known to decode in this process. A retriever
+    captures this once; ranking every image does not repeat decoder inspection.
+    """
+    import PIL
+    from PIL import features
+
+    turbo = features.check_feature("libjpeg_turbo")
+    return {"schema_version": 1, "scope": "local_encoder_process", "library": "Pillow",
+            "verified": True, "pillow_version": PIL.__version__,
+            "jpeg_version": features.version_codec("jpg"),
+            "libjpeg_turbo_enabled": turbo,
+            "libjpeg_turbo_version": features.version_feature("libjpeg_turbo") if turbo else None}
+
+
+def encoder_image_decoder_signature(encoder):
+    """Do not attribute the parent Pillow build to a separate GME interpreter."""
+    provider = encoder.snapshot.get("provider")
+    if isinstance(encoder, GMEProcessEncoder) or provider == "gme":
+        return {"schema_version": 1, "scope": "encoder_worker_process", "verified": False,
+                "reason": "worker_image_decoder_runtime_not_reported"}
+    if isinstance(encoder, ChunkedClipEncoder) or provider == "clip":
+        return pillow_decoder_signature()
+    return {"schema_version": 1, "scope": "encoder_managed_or_unknown", "verified": False,
+            "reason": "image_decoder_runtime_not_reported"}
+
+
+def sha256(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def unit(vector):
+    vector = np.asarray(vector, dtype=np.float32)
+    if vector.ndim != 1 or not np.isfinite(vector).all() or np.linalg.norm(vector) <= 0:
+        raise ValueError("Invalid retrieval embedding")
+    return vector / np.linalg.norm(vector)
+
+
+INDEX_TEXT_POLICY = {
+    "version": 1,
+    "full_fields": ["Instruction", "Actions", "FinalASIN", "FinalOptions", "FinalPrice"],
+    "coverage": "complete_instruction_and_all_actions_observations_no_truncation",
+    "excluded": "audit_labels_source_role_attack_metadata_reward_policy_trace_task_goal",
+}
+
+SEMANTIC_INDEX_TEXT_POLICY = {
+    "version": 1,
+    "fields": ["Instruction", "PrimaryImage.Title", "FinalOptions"],
+    "coverage": "observed_instruction_purchased_title_and_final_options",
+    "purchase_binding": "primary_asin_must_match_final_asin",
+    "excluded": ["Actions", "FinalASIN", "FinalPrice", "audit_labels_source_role_attack_metadata"],
+}
+
+TITLE_INDEX_TEXT_POLICY = {
+    "version": 2,
+    "fields": ["PrimaryImage.Title"],
+    "coverage": "purchased_product_name_only",
+    "purchase_binding": "primary_asin_must_match_final_asin",
+    "excluded": ["Instruction", "OriginalInstruction", "Actions", "FinalASIN",
+                 "FinalOptions", "FinalPrice", "PolicyTrace", "Reward", "attack_metadata"],
+}
+
+PRODUCT_FEATURE_INDEX_TEXT_POLICY = {
+    "version": 2,
+    "fields": ["PrimaryImage.Title", "Brand", "Attributes", "FeatureText"],
+    "coverage": "purchased_product_title_brand_and_features_only",
+    "purchase_binding": "primary_asin_must_match_final_asin",
+    "excluded": ["Instruction", "OriginalInstruction", "Actions", "FinalASIN",
+                 "FinalOptions", "FinalPrice", "PolicyTrace", "Reward", "attack_metadata"],
+}
+
+
+def detect_index_text_policy(memory, metadata=None):
+    """Choose the product-key policy from the complete bank, never its first row.
+
+    Historical title-only banks remain reproducible. An enriched bank must not
+    silently lose its features because the first entry happens to lack them.
+    """
+    metadata = metadata or {}
+    policy = metadata.get("retrieval_policy") or {}
+    fields = policy.get("fields", []) if isinstance(policy, dict) else []
+    feature_fields = {"Brand", "Attributes", "Features", "FeatureText",
+                      "PrimaryImage.Brand", "PrimaryImage.Attributes",
+                      "PrimaryImage.Features", "PrimaryImage.FeatureText"}
+    if feature_fields.intersection(fields):
+        return "product_feature"
+    for entry in memory:
+        if not isinstance(entry, dict):
+            raise ValueError("Memory entries must be objects")
+        primary = entry.get("PrimaryImage") or {}
+        if any(field in entry or isinstance(primary, dict) and field in primary
+               for field in ("Brand", "Attributes", "Features", "FeatureText")):
+            return "product_feature"
+    return "title"
+
+
+def index_text_policy(mode):
+    if mode in ("product_feature", "feature", "title_brand_feature"):
+        return PRODUCT_FEATURE_INDEX_TEXT_POLICY
+    if mode == "title":
+        return TITLE_INDEX_TEXT_POLICY
+    if mode == "full":
+        return INDEX_TEXT_POLICY
+    if mode == "instruction":
+        return {"version": 1, "fields": ["Instruction"]}
+    if mode == "semantic":
+        return SEMANTIC_INDEX_TEXT_POLICY
+    raise ValueError("index_text must be title, product_feature, full, instruction or semantic")
+
+
+def canonical_digest(value):
+    raw = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"),
+                     default=str).encode("utf-8")
+    return hashlib.sha256(raw).hexdigest()
+
+
+def memory_index_text(entry, mode="title"):
+    """检索默认取商品名或升级为【商品名称+品牌+特点】；坚决排除操作流程与历史轨迹。"""
+    if mode in ("product_feature", "feature", "title_brand_feature"):
+        primary = entry.get("PrimaryImage")
+        if not isinstance(primary, dict):
+            raise ValueError("product_feature index requires a purchased PrimaryImage record")
+        title = primary.get("Title")
+        final_asin, primary_asin = entry.get("FinalASIN"), primary.get("ASIN")
+        if not isinstance(title, str) or not title.strip() or not final_asin or not primary_asin:
+            raise ValueError("product_feature index requires a purchased Title, PrimaryImage.ASIN and FinalASIN")
+        if primary_asin != final_asin:
+            raise ValueError("product_feature index purchased title ASIN does not match FinalASIN")
+        brand = entry.get("Brand") or primary.get("Brand") or ""
+        features = entry.get("Attributes") or primary.get("Attributes") or entry.get("Features") or primary.get("Features") or []
+        from src.visual.target_features import format_retrieval_text
+        text = format_retrieval_text(title, brand, features)
+        feature_text = entry.get("FeatureText") or primary.get("FeatureText") or ""
+        if feature_text:
+            if not isinstance(feature_text, str):
+                raise ValueError("FeatureText must be a string")
+            if feature_text.strip():
+                text += "\nFeatureText: " + feature_text.strip()
+        return text
+    if mode == "title":
+        primary = entry.get("PrimaryImage")
+        if not isinstance(primary, dict):
+            raise ValueError("title index requires a purchased PrimaryImage record")
+        title = primary.get("Title")
+        final_asin, primary_asin = entry.get("FinalASIN"), primary.get("ASIN")
+        if not isinstance(title, str) or not title.strip() or not final_asin or not primary_asin:
+            raise ValueError("title index requires a purchased Title, PrimaryImage.ASIN and FinalASIN")
+        if primary_asin != final_asin:
+            raise ValueError("title index purchased title ASIN does not match FinalASIN")
+        return title.strip()
+    if mode == "instruction":
+        return str(entry.get("Instruction", ""))
+    if mode == "semantic":
+        primary = entry.get("PrimaryImage") or {}
+        if not isinstance(primary, dict):
+            raise ValueError("semantic index requires an observed PrimaryImage record")
+        title = str(primary.get("Title") or "").strip()
+        primary_asin = str(primary.get("ASIN") or "").strip()
+        final_asin = str(entry.get("FinalASIN") or "").strip()
+        if not title or not primary_asin or not final_asin:
+            raise ValueError("semantic index requires a purchased Title, PrimaryImage.ASIN and FinalASIN")
+        if primary_asin != final_asin:
+            raise ValueError("semantic index purchased title ASIN does not match FinalASIN")
+        purchase = {"Title": title}
+        if entry.get("FinalOptions") is not None:
+            purchase["FinalOptions"] = entry["FinalOptions"]
+        return "Instruction:\n" + str(entry.get("Instruction", "")) + "\n\nObserved purchase:\n" + json.dumps(
+            purchase, ensure_ascii=False, sort_keys=True)
+    if mode != "full":
+        raise ValueError("index_text must be title, full, instruction or semantic")
+    sections = ["Instruction:\n" + str(entry.get("Instruction", ""))]
+    actions = entry.get("Actions", [])
+    if isinstance(actions, (list, tuple)):
+        actions = "\n".join(item if isinstance(item, str) else json.dumps(
+            item, ensure_ascii=False, sort_keys=True) for item in actions)
+    elif not isinstance(actions, str):
+        actions = json.dumps(actions, ensure_ascii=False, sort_keys=True)
+    sections.append("Actions and observations:\n" + actions)
+    purchase = {key: entry[key] for key in ("FinalASIN", "FinalOptions", "FinalPrice")
+                if key in entry and entry[key] is not None}
+    if purchase:
+        sections.append("Observed purchase:\n" + json.dumps(purchase, ensure_ascii=False,
+                                                              sort_keys=True))
+    return "\n\n".join(sections)
+
+
+def resolve_image(entry, memory_path):
+    # An explicitly present adversarial key must never silently fall back to A.
+    field = "RetrievalImage" if entry.get("RetrievalImage") is not None else "PrimaryImage"
+    record = entry.get(field)
+    if not record or not record.get("LocalPath"):
+        if field == "RetrievalImage":
+            raise ValueError("RetrievalImage must reference a local image")
+        return None
+    path = Path(record["LocalPath"])
+    if not path.is_absolute():
+        path = Path(memory_path).resolve().parent / path
+    path = path.resolve()
+    if not path.is_file():
+        raise FileNotFoundError(path)
+    if record.get("SHA256") and sha256(path) != record["SHA256"]:
+        raise ValueError(f"Image digest mismatch: {path}")
+    return path
+
+
+class VisualMemoryRetriever:
+    def __init__(self, encoder, memory_path, key_mode="joint", query_mode="joint",
+                 index_text="auto", cache_dir="auto", key_image_weight=0.5,
+                 query_image_weight=0.5, query_cache=None, entry_cache_dir=None, image_base_path=None):
+        if key_mode not in {"image", "joint"} or query_mode not in {"image", "joint", "text"}:
+            raise ValueError("key mode must be image/joint; query mode must be image/joint/text")
+        if query_mode == 'text' and not callable(getattr(encoder, 'encode_text', None)):
+            raise ValueError('所选编码器不支持纯文字查询；须显式选择支持文字编码的模型')
+        self.encoder = encoder
+        self.memory_path = Path(memory_path).resolve()
+        self.image_base_path = Path(image_base_path or memory_path).resolve()
+        self.key_mode, self.query_mode = key_mode, query_mode
+        if index_text == "auto":
+            index_text = self._detect_index_policy()
+        policy = index_text_policy(index_text)
+        if key_mode == "joint" and index_text not in ("title", "product_feature", "feature", "title_brand_feature"):
+            raise ValueError("联合记忆检索只接受 title 或 product_feature 策略；完整历史仅可用于展示或审计")
+        self.index_text = index_text
+        self.key_image_weight = validated_image_weight(key_image_weight)
+        self.query_image_weight = 0.0 if query_mode == 'text' else validated_image_weight(query_image_weight)
+        # Default calls remain compatible with encoders exposing only the old
+        # two positional arguments. A requested unsupported fusion must fail.
+        if getattr(encoder, "supports_image_weight", None) is False and (
+                (key_mode == 'joint' and self.key_image_weight != 0.5)
+                or (query_mode == 'joint' and self.query_image_weight != 0.5)):
+            raise ValueError("Selected encoder uses native joint fusion and does not support manual image weights")
+        self.cache_dir = (self.memory_path.parent / "retrieval_index_cache"
+                          if cache_dir == "auto" else Path(cache_dir).resolve()
+                          if cache_dir is not None else None)
+        self.cache = {}
+        self.audits = {}
+        try:
+            torch_version = importlib.metadata.version('torch')
+        except importlib.metadata.PackageNotFoundError:
+            torch_version = None
+        self.encoding_runtime = dict(torch=torch_version, numpy=np.__version__, machine=platform.machine())
+        from src.visual.memory_vector_cache import MemoryVectorCache
+        self.entry_cache = MemoryVectorCache(entry_cache_dir) if entry_cache_dir is not None else None
+
+        # 挂载长期文字查询向量缓存，实现免 GPU / 离线零显存极速检索
+        if query_cache is None and hasattr(encoder, "query_cache"):
+            query_cache = getattr(encoder, "query_cache")
+        if isinstance(query_cache, (str, Path)):
+            from src.visual.query_cache import QueryVectorCache
+            self.query_cache = QueryVectorCache.load(query_cache)
+        else:
+            self.query_cache = query_cache
+
+        self.image_decoder = encoder_image_decoder_signature(encoder)
+        self.snapshot = {"encoder": encoder.snapshot, "key_mode": key_mode,
+                         "query_mode": query_mode, "index_text": index_text,
+                         "index_text_policy": policy,
+                         "key_image_weight": self.key_image_weight,
+                         "query_image_weight": self.query_image_weight,
+                         "image_decoder": self.image_decoder,
+                         "encoding_runtime": self.encoding_runtime,
+                         "cache_schema": RETRIEVAL_CACHE_SCHEMA}
+
+    def _detect_index_policy(self):
+        """Detect enriched product fields without hiding malformed bank files."""
+        if not self.memory_path.is_file():
+            return "product_feature"
+        data = json.loads(self.memory_path.read_text(encoding="utf-8"))
+        if isinstance(data, dict):
+            return detect_index_text_policy(data.get("entries", []), data)
+        if isinstance(data, list):
+            return detect_index_text_policy(data)
+        raise ValueError("Memory bank must be an object or a list")
+
+    def _encode(self, text, path, mode, *, scope="query", image_weight=0.5):
+        weight = validated_image_weight(image_weight)
+        if mode == 'text' and (not isinstance(text, str) or not text.strip()):
+            raise ValueError('纯文字查询不能为空')
+        digest = None if mode == 'text' else sha256(path)
+        key = canonical_digest({"mode": mode, "image_sha256": digest,
+                                "text_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest()
+                                if mode in ("joint", "text") else None,
+                                "model_sha256": canonical_digest(self.encoder.snapshot),
+                                "image_decoder_sha256": canonical_digest(self.image_decoder),
+                                "scope": scope, "image_weight": weight if mode == "joint" else None,
+                                "cache_schema": RETRIEVAL_CACHE_SCHEMA})
+        if key not in self.cache:
+            entry_identity = None
+            if self.entry_cache is not None and scope != 'query':
+                entry_identity = dict(schema_version=1, cache_schema=RETRIEVAL_CACHE_SCHEMA,
+                    mode=mode, image_sha256=digest,
+                    text_sha256=hashlib.sha256(text.encode('utf-8')).hexdigest() if mode == 'joint' else None,
+                    model_sha256=canonical_digest(self.encoder.snapshot),
+                    image_decoder_sha256=canonical_digest(self.image_decoder),
+                    encoding_runtime_sha256=canonical_digest(self.encoding_runtime),
+                    index_text=self.index_text,
+                    index_text_policy_sha256=canonical_digest(self.snapshot['index_text_policy']),
+                    image_weight=weight if mode == 'joint' else None)
+                found = self.entry_cache.load(entry_identity)
+                if found is not None:
+                    self.cache[key], self.audits[key] = found
+                    return self.cache[key], key
+            if mode == 'text':
+                if self.query_cache is not None and text in self.query_cache:
+                    value = self.query_cache.get(text)
+                    audit = getattr(self.query_cache, "get_audit", lambda _: None)(text)
+                    self.cache[key] = unit(value)
+                    self.audits[key] = json.loads(json.dumps(audit)) if audit is not None else None
+                    return self.cache[key], key
+                value = self.encoder.encode_text(text)
+            elif mode == "joint":
+                value = (self.encoder.encode_joint(text, path) if weight == 0.5
+                         else self.encoder.encode_joint(text, path, image_weight=weight))
+            else:
+                value = self.encoder.encode(path)
+            self.cache[key] = unit(value)
+            audit = getattr(self.encoder, "last_encoding_audit", None) if mode in ("joint", "text") else None
+            self.audits[key] = json.loads(json.dumps(audit)) if audit is not None else None
+            if entry_identity is not None:
+                self.entry_cache.save(entry_identity, self.cache[key], self.audits[key])
+        return self.cache[key], key
+
+    def _load_index_cache(self, path, identity):
+        if not path or not path.is_file():
+            return
+        try:
+            document = json.loads(path.read_text(encoding="utf-8"))
+            if (not isinstance(document, dict)
+                    or document.get("schema_version") != RETRIEVAL_CACHE_SCHEMA
+                    or document.get("identity") != identity):
+                return
+            vectors = document.get("vectors", {})
+            if not isinstance(vectors, dict):
+                return
+            for key, record in vectors.items():
+                try:
+                    vector = record["vector"]
+                    if canonical_digest(vector) != record["vector_sha256"]:
+                        continue
+                    self.cache[key] = unit(vector)
+                    self.audits[key] = record.get("encoding_audit")
+                except (ValueError, KeyError, TypeError):
+                    continue
+        except (OSError, ValueError, KeyError, TypeError):
+            # A partial/corrupt cache is disposable; the bank and image checks are
+            # independent and must never be bypassed by cache recovery.
+            return
+
+    def _save_index_cache(self, path, identity, keys):
+        if path is None:
+            return
+        vectors = {}
+        for key in keys:
+            vector = self.cache[key].tolist()
+            vectors[key] = {"vector": vector, "vector_sha256": canonical_digest(vector),
+                            "encoding_audit": self.audits.get(key)}
+        payload = {"schema_version": RETRIEVAL_CACHE_SCHEMA, "identity": identity, "vectors": vectors}
+        path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = path.with_name('.write-' + uuid.uuid4().hex[:16] + '.tmp')
+        try:
+            temporary.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+            temporary.replace(path)
+        finally:
+            if temporary.is_file():
+                temporary.unlink()
+
+    def index_identity(self, memory):
+        """The same index identity is used by ranking and offline preparation."""
+        return {"bank_sha256": sha256(self.memory_path) if self.memory_path.is_file() else None,
+                "entries_sha256": canonical_digest(memory),
+                "model_sha256": canonical_digest(self.encoder.snapshot),
+                "key_mode": self.key_mode, "query_mode": self.query_mode,
+                "index_text": self.index_text,
+                "index_text_policy_sha256": canonical_digest(self.snapshot["index_text_policy"]),
+                "key_image_weight": self.key_image_weight,
+                "query_image_weight": self.query_image_weight,
+                "image_decoder_sha256": canonical_digest(self.image_decoder),
+                "encoding_runtime_sha256": canonical_digest(self.encoding_runtime),
+                "cache_schema": RETRIEVAL_CACHE_SCHEMA}
+
+    def rank(self, memory, instruction, query_image=None):
+        # Bank bytes, caller entries and encoder configuration are refreshed on
+        # every ranking, even if this retriever instance is reused after edits.
+        identity = self.index_identity(memory)
+        bank_sha, model_sha = identity["bank_sha256"], identity["model_sha256"]
+        scope = canonical_digest(identity)
+        cache_path = self.cache_dir / (scope + ".json") if self.cache_dir else None
+        self._load_index_cache(cache_path, identity)
+        self.snapshot.update(encoder=self.encoder.snapshot, bank_sha256=bank_sha,
+                             model_sha256=model_sha, entries_sha256=identity["entries_sha256"])
+        query_text = str(instruction or "")
+        if self.query_mode == 'text':
+            if query_image is not None:
+                raise ValueError('纯文字查询不得附带图片')
+            query_path = None
+        else:
+            if query_image is None:
+                raise ValueError('图文查询缺少正式参考图')
+            query_path = Path(query_image).resolve()
+        query, query_key = self._encode(query_text, query_path, self.query_mode,
+                                        image_weight=self.query_image_weight)
+        query_audit = self.audits.get(query_key)
+        self.snapshot["query_encoding_audit"] = query_audit
+        ranked = []
+        keys = []
+        for index, entry in enumerate(memory):
+            path = resolve_image(entry, self.image_base_path)
+            if path is None:
+                continue
+            text = memory_index_text(entry, self.index_text) if self.key_mode == "joint" else ""
+            vector, key = self._encode(text, path, self.key_mode, scope=scope,
+                                      image_weight=self.key_image_weight)
+            keys.append(key)
+            if vector.shape != query.shape:
+                raise ValueError("Query and memory vector dimensions differ")
+            ranked.append({"index": index, "Id": entry["Id"], "score": float(vector @ query),
+                           "image_sha256": sha256(path),
+                           "text_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
+                           "text_characters": len(text), "index_text": self.index_text,
+                           "key_image_weight": self.key_image_weight,
+                           "query_image_weight": self.query_image_weight,
+                           "image_decoder_sha256": canonical_digest(self.image_decoder),
+                           "model_sha256": model_sha, "bank_sha256": bank_sha,
+                           "query_text_sha256": hashlib.sha256(query_text.encode("utf-8")).hexdigest(),
+                           "query_image_sha256": sha256(query_path) if query_path is not None else None,
+                           "query_encoding_audit": query_audit,
+                           "encoding_audit": self.audits.get(key)})
+        ranked.sort(key=lambda item: (-item["score"], item["index"]))
+        for rank, item in enumerate(ranked, 1):
+            item["rank"] = rank
+        self._save_index_cache(cache_path, identity, keys)
+        if self.entry_cache is not None:
+            self.snapshot['memory_vector_reuse'] = dict(self.entry_cache.stats)
+        return ranked
+
+    def shortlist(self, memory, embeddings, instruction, query_image, candidates):
+        if not isinstance(candidates, int) or candidates < 1:
+            raise ValueError("Retrieval candidates must be a positive integer")
+        ranked = self.rank(memory, instruction, query_image)
+        selected = ranked[:candidates]
+        indexes = [item["index"] for item in selected]
+        subset = {}
+        for key, values in embeddings.items():
+            if isinstance(values, list):
+                subset[key] = [values[i] for i in indexes]
+            else:
+                subset[key] = values[indexes]
+        subset["VisualScores"] = np.asarray([item["score"] for item in selected], dtype=np.float32)
+        return [memory[i] for i in indexes], subset, ranked
+
+
+def dump_json(path, data):
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def populate_retriever_cache_from_base(
+    retriever: VisualMemoryRetriever,
+    bank: list[dict],
+    base_cache: dict,
+    pool_path: Path | str | None = None,
+) -> int:
+    """从母盘向量缓存中精确继承未修改商品的预计算检索向量。
+
+    仅继承实际图像及公开文字均未改变的条目。模型、解码、预处理和融合身份必须一致。
+    """
+    base_vectors = base_cache.get("vectors", {})
+    base_identity = base_cache.get("identity", {})
+    base_scope = canonical_digest(base_identity)
+
+    bank_identity = retriever.index_identity(bank)
+    compatibility = ('model_sha256', 'image_decoder_sha256', 'encoding_runtime_sha256', 'cache_schema', 'key_mode',
+                     'index_text', 'index_text_policy_sha256', 'key_image_weight')
+    if (base_cache.get('schema_version') != RETRIEVAL_CACHE_SCHEMA
+            or any(base_identity.get(k) != bank_identity.get(k) for k in compatibility)):
+        raise ValueError('母盘向量的模型、文字策略或融合身份与当前评估不兼容')
+    bank_scope = canonical_digest(bank_identity)
+
+    inherited_count = 0
+    for entry in bank:
+        path = resolve_image(entry, retriever.image_base_path)
+        if path is None:
+            continue
+        text = memory_index_text(entry, retriever.index_text) if retriever.key_mode == "joint" else ""
+        img_sha = sha256(path)
+        txt_sha = hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+        base_key = canonical_digest({
+            "mode": retriever.key_mode,
+            "image_sha256": img_sha,
+            "text_sha256": txt_sha if retriever.key_mode in ("joint", "text") else None,
+            "model_sha256": base_identity.get("model_sha256"),
+            "image_decoder_sha256": base_identity.get("image_decoder_sha256"),
+            "scope": base_scope,
+            "image_weight": retriever.key_image_weight if retriever.key_mode == "joint" else None,
+            "cache_schema": RETRIEVAL_CACHE_SCHEMA,
+        })
+
+        if base_key in base_vectors:
+            bank_key = canonical_digest({
+                "mode": retriever.key_mode,
+                "image_sha256": img_sha,
+                "text_sha256": txt_sha if retriever.key_mode in ("joint", "text") else None,
+                "model_sha256": canonical_digest(retriever.encoder.snapshot),
+                "image_decoder_sha256": canonical_digest(retriever.image_decoder),
+                "scope": bank_scope,
+                "image_weight": retriever.key_image_weight if retriever.key_mode == "joint" else None,
+                "cache_schema": RETRIEVAL_CACHE_SCHEMA,
+            })
+            record = base_vectors[base_key]
+            if canonical_digest(record['vector']) != record.get('vector_sha256'):
+                raise ValueError('母盘向量摘要不符')
+            vector = np.asarray(record['vector'], dtype=np.float32)
+            if (vector.ndim != 1 or not np.isfinite(vector).all()
+                    or abs(float(np.linalg.norm(vector)) - 1.0) > 1e-5):
+                raise ValueError('母盘向量无效或未规范化')
+            retriever.cache[bank_key] = vector
+            retriever.audits[bank_key] = base_vectors[base_key].get("encoding_audit")
+            inherited_count += 1
+
+    return inherited_count
+

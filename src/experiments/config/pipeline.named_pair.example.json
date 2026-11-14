@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "method": "ambilage",
+  "public_pair": "data/groups/02_chair/pair.json",
+  "run_dir": "output/runs/shape_v2/02_chair",
+  "selection": {},
+  "generation": {
+    "lucid": {"steps": 1000, "epsilon_levels": 16},
+    "ambilage": {}
+  },
+  "evaluation": {
+    "shared_pool": "resources/evaluation_base/shared_memory/shared_memory.json",
+    "query_manifest": "output/datasets/private/query_images/shape_v2/02_chair.json"
+  }
+}

@@ -1,0 +1,1616 @@
+{
+  "schema_version": 1,
+  "method": "lucid",
+  "scope": "frozen_historical_baseline_import",
+  "source_project": "D:\\Material\\Literature Reading\\code\\perLage",
+  "new_generation_executed": false,
+  "historical_evaluations_are_current": false,
+  "current_evaluation_requires_selected_encoder_and_current_complete_shared_pool": true,
+  "activation_note": "Preserve the three original recorded proxy activations; do not relabel as a fresh native-loader run.",
+  "groups": {
+    "01_camera": {
+      "image": {
+        "path": "output/imported_lucid_baseline_20261113/groups/01_camera/frozen.png",
+        "sha256": "9aeb87ce076f6ed5f4692be5cec0f46634c6962483debfe85e5df25c42b4e803"
+      },
+      "original_frozen": {
+        "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/01_camera/methods/lucid/FROZEN_IMAGE.json",
+        "sha256": "5a0dba9918c48c1f2789b7fa46a24a214daf52855181a87261dc1877ae50d605"
+      },
+      "metadata": {
+        "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/01_camera/methods/lucid/generation/generation_result.json",
+        "sha256": "b463e810874380678b9da61b6bdc49d9a56c4b130da2b22c252b9adf01c19867"
+      },
+      "source": {
+        "id": "B071ZFHTZN",
+        "title": "SUNBA 3MP Starlight IP PoE+ Outdoor PTZ Camera, 20x Optical Zoom @H.265, 24x7 Automatic PTZ Tour, Long Range Infrared Night Vision up to 328ft (405-D20X V2)",
+        "image_sha256": "eb5f729dbce74e5ea97f9b3af6eb902f947c9c8442b74acbf450bce12d1104cd"
+      },
+      "target": {
+        "id": "B08V134QWR",
+        "title": "PTZ Security Camera Outdoor 30X Optical Zoom Camera WiFi Wireless 5MP RTSP IP Camera 1000FT Night Vision Auto Tracking Emergency Strobe Light Alarm Human Detection 2-Way Audio IP66 Waterproof",
+        "image_sha256": "3e640007088747b83c734fe3a612c241f88b370490d99b3aca717f92f4dd0126",
+        "feature_text": "I want to buy a security camera with optical zoom and motion detection."
+      },
+      "parameters": {
+        "steps": 1000,
+        "epsilon_levels": 8,
+        "seed": 42,
+        "text_weight": 1.0
+      },
+      "checks": {
+        "full_generation_verified": true,
+        "decoded_maximum_pixel_levels": 8,
+        "steps": 1000,
+        "epsilon_levels": 8,
+        "seed": 42,
+        "text_weight": 1.0,
+        "target_text_sha256": "6af2e8036de77eae9bd868fcd8022878ff8bc7e19981007ba14e9530d69774ab",
+        "surrogate_activations": [
+          {
+            "name": "ViT-B-16",
+            "pretrained": "openai",
+            "weight_sha256": "4b8699299b1e8997753c64b052ba32031449d5d853f55a039148560ee02b820f",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          },
+          {
+            "name": "ViT-B-32",
+            "pretrained": "openai",
+            "weight_sha256": "e6d1bd7789aa45192b3bf90570a789b478bae1b74ebcce7eddd908e83a2b7c31",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          },
+          {
+            "name": "ViT-B-32",
+            "pretrained": "laion2b_s34b_b79k",
+            "weight_sha256": "ac4f8c4b88af6d963118cbf40ad93176d092abbedfcb752601ae1866352656e6",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          }
+        ]
+      },
+      "historical_evaluation": {
+        "status": "historical_passed",
+        "rankings": 40,
+        "encoder_setting": "D:\\Material\\Literature Reading\\code\\perLage\\output\\experiment_base_groups9_20261109\\evaluation_encoder.json",
+        "original_bank_files_not_duplicated": [
+          {
+            "source": "output/lucid_groups9_20261109/groups/01_camera/methods/lucid/evaluation/banks/none/clean.json",
+            "sha256": "9ad340bfd2afbc7d84d86e1e15aa9fb615710892d86990d187ed794066a2711a",
+            "bytes": 10359734
+          },
+          {
+            "source": "output/lucid_groups9_20261109/groups/01_camera/methods/lucid/evaluation/banks/none/modified.json",
+            "sha256": "da47298fcaab2756c3077b730fab915448ed92ea370e7245e67375593979e658",
+            "bytes": 10360030
+          }
+        ],
+        "reused_as_current_evaluation": false
+      }
+    },
+    "02_chair": {
+      "image": {
+        "path": "output/imported_lucid_baseline_20261113/groups/02_chair/frozen.png",
+        "sha256": "eff00fda5a23f6509dd6bb2ed13b0f1c9e4d59744bcdbb406bf5fe4bb831141f"
+      },
+      "original_frozen": {
+        "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/02_chair/methods/lucid/FROZEN_IMAGE.json",
+        "sha256": "661816deb6de46a8b812a3680a46ef4a2904f5d7a4db54b588fb0e2b9019c93f"
+      },
+      "metadata": {
+        "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/02_chair/methods/lucid/generation/generation_result.json",
+        "sha256": "d9c82fb6edd7a9174497e0a445ecf9db683207ccb98b818b10e931d690944f4c"
+      },
+      "source": {
+        "id": "B08GCSRXKS",
+        "title": "Buy-Rite Chelsea Styling Chair for Salons and Stylists, Tufted Seat-Back and Brass Nail Head Trim Detailing, Steel Frame with Hydraulic Pump, 3.5” Thick Removable Seat Cushion, NIN-9902 (Black)",
+        "image_sha256": "7a06ed70b92dc60b6cf37d29631bcfe52f8735adba0253b791350f464ca56d6b"
+      },
+      "target": {
+        "id": "B09CYFD5BX",
+        "title": "LTHDD Bar Stool Swivel Barber Chair Hydraulic Barber Chairs Heavy Duty 360 Degrees Rolling Salon Chair for Hair Stylist Tattoo Chair Salon Equipment,Blue,1 (Color : Black, Size : 1)",
+        "image_sha256": "bec16e84034aa0a44b09f41298c795bdc087b0d008fce09cf67022c573e64e54",
+        "feature_text": "I want to buy a barber chair with a heavy-duty hydraulic pump and 360-degree rotation."
+      },
+      "parameters": {
+        "steps": 1000,
+        "epsilon_levels": 8,
+        "seed": 42,
+        "text_weight": 1.0
+      },
+      "checks": {
+        "full_generation_verified": true,
+        "decoded_maximum_pixel_levels": 8,
+        "steps": 1000,
+        "epsilon_levels": 8,
+        "seed": 42,
+        "text_weight": 1.0,
+        "target_text_sha256": "52843e3f79f93a9c735af9a0c71ff2454114a0569e3d1f435f0be48e4b7c840d",
+        "surrogate_activations": [
+          {
+            "name": "ViT-B-16",
+            "pretrained": "openai",
+            "weight_sha256": "4b8699299b1e8997753c64b052ba32031449d5d853f55a039148560ee02b820f",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          },
+          {
+            "name": "ViT-B-32",
+            "pretrained": "openai",
+            "weight_sha256": "e6d1bd7789aa45192b3bf90570a789b478bae1b74ebcce7eddd908e83a2b7c31",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          },
+          {
+            "name": "ViT-B-32",
+            "pretrained": "laion2b_s34b_b79k",
+            "weight_sha256": "ac4f8c4b88af6d963118cbf40ad93176d092abbedfcb752601ae1866352656e6",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          }
+        ]
+      },
+      "historical_evaluation": {
+        "status": "historical_passed",
+        "rankings": 40,
+        "encoder_setting": "D:\\Material\\Literature Reading\\code\\perLage\\output\\experiment_base_groups9_20261109\\evaluation_encoder.json",
+        "original_bank_files_not_duplicated": [
+          {
+            "source": "output/lucid_groups9_20261109/groups/02_chair/methods/lucid/evaluation/banks/none/clean.json",
+            "sha256": "9ad340bfd2afbc7d84d86e1e15aa9fb615710892d86990d187ed794066a2711a",
+            "bytes": 10359734
+          },
+          {
+            "source": "output/lucid_groups9_20261109/groups/02_chair/methods/lucid/evaluation/banks/none/modified.json",
+            "sha256": "a3681b1f0807bcb8803c54985c4d205d5aa76751f7524f786bd17e9d7a9d4558",
+            "bytes": 10360029
+          }
+        ],
+        "reused_as_current_evaluation": false
+      }
+    },
+    "03_cookies": {
+      "image": {
+        "path": "output/imported_lucid_baseline_20261113/groups/03_cookies/frozen.png",
+        "sha256": "b46a9bb1e5ba99d9619750745f1aab9ced7d101037ae5be3673546c254f97167"
+      },
+      "original_frozen": {
+        "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/03_cookies/methods/lucid/FROZEN_IMAGE.json",
+        "sha256": "e7894a6898e164fffbab474c75edd0a6e85ebe2f309d92b6551dfb9984ad327b"
+      },
+      "metadata": {
+        "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/03_cookies/methods/lucid/generation/generation_result.json",
+        "sha256": "f5f3411998c8e89c4b840df1c147c09aeea9749351bd5d4a85c59bce935defae"
+      },
+      "source": {
+        "id": "B07BBLWTLM",
+        "title": "Natural Decadence, Cookie Dough Chocolate Chip, 14 Ounce",
+        "image_sha256": "a1bb85bf4b8c4bbace4d1099142c0c7925c7b9f0d2e878fa43830e140fffbd28"
+      },
+      "target": {
+        "id": "B08Z8MHWVS",
+        "title": "Eggless Raw Edible Cookie Dough, Edible Frozen Cookie Dough - Big Dipper Dough Co: (2 Pints-ChocoChip & CookienCream)",
+        "image_sha256": "656132deaca60f9f6f1a34668699fe96289c3c1812dddde5b1cfe9685b317e71",
+        "feature_text": "I want to buy cookie dough with natural ingredients and chocolate chips."
+      },
+      "parameters": {
+        "steps": 1000,
+        "epsilon_levels": 8,
+        "seed": 42,
+        "text_weight": 1.0
+      },
+      "checks": {
+        "full_generation_verified": true,
+        "decoded_maximum_pixel_levels": 8,
+        "steps": 1000,
+        "epsilon_levels": 8,
+        "seed": 42,
+        "text_weight": 1.0,
+        "target_text_sha256": "5caf3149655d1ef99c313a05173d42c5d76b3261891d1ae2286b4676af246e8e",
+        "surrogate_activations": [
+          {
+            "name": "ViT-B-16",
+            "pretrained": "openai",
+            "weight_sha256": "4b8699299b1e8997753c64b052ba32031449d5d853f55a039148560ee02b820f",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          },
+          {
+            "name": "ViT-B-32",
+            "pretrained": "openai",
+            "weight_sha256": "e6d1bd7789aa45192b3bf90570a789b478bae1b74ebcce7eddd908e83a2b7c31",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          },
+          {
+            "name": "ViT-B-32",
+            "pretrained": "laion2b_s34b_b79k",
+            "weight_sha256": "ac4f8c4b88af6d963118cbf40ad93176d092abbedfcb752601ae1866352656e6",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          }
+        ]
+      },
+      "historical_evaluation": {
+        "status": "historical_passed",
+        "rankings": 40,
+        "encoder_setting": "D:\\Material\\Literature Reading\\code\\perLage\\output\\experiment_base_groups9_20261109\\evaluation_encoder.json",
+        "original_bank_files_not_duplicated": [
+          {
+            "source": "output/lucid_groups9_20261109/groups/03_cookies/methods/lucid/evaluation/banks/none/clean.json",
+            "sha256": "9ad340bfd2afbc7d84d86e1e15aa9fb615710892d86990d187ed794066a2711a",
+            "bytes": 10359734
+          },
+          {
+            "source": "output/lucid_groups9_20261109/groups/03_cookies/methods/lucid/evaluation/banks/none/modified.json",
+            "sha256": "466ce7f9b4168caa3aa06bd527b9d696990c859320d747f969dba16556d0a8ac",
+            "bytes": 10360031
+          }
+        ],
+        "reused_as_current_evaluation": false
+      }
+    },
+    "04_curtain": {
+      "image": {
+        "path": "output/imported_lucid_baseline_20261113/groups/04_curtain/frozen.png",
+        "sha256": "02097751e0816fe7e3568c41e3a55ce4455418a79d4a1ebe7a2004db18ba102f"
+      },
+      "original_frozen": {
+        "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/04_curtain/methods/lucid/FROZEN_IMAGE.json",
+        "sha256": "316955bf9759bb7e4e2e61619e0ea3778e5f82832e875d6ab91726191b6b6193"
+      },
+      "metadata": {
+        "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/04_curtain/methods/lucid/generation/generation_result.json",
+        "sha256": "7db5bf823b4bfd4b7928c867bee20999eb230184fa35c990a9f60284e7751b5e"
+      },
+      "source": {
+        "id": "B09PHLS2QD",
+        "title": "Window Treatment Semi-Sheer Curtain Valentine's Day Red Flower Love Rose,Privacy Drapes for Kitchen/Living Room/Bathroom,Vintage Brown Wood Grain Light Filtering Curtains 52x84in",
+        "image_sha256": "2eaea983aa4b1ab928567e1aeb57a255fa133f0b9fa2b9a4a6eeccd43d62d967"
+      },
+      "target": {
+        "id": "B086PW7TWX",
+        "title": "Windows Treatment Blackout Curtains Grommet Drapes for Boys/Girls Kids Bedroom DRINKES ARE ON ME Vintage Wood Board Texture Printed Room Darkening Curtains for Livingroom/Office, 1 Panel 52x45in",
+        "image_sha256": "5b91d14a4cd7f994eee97a58e55cf82ebfa8725d3a28d982bc695a7208e5e098",
+        "feature_text": "I want to buy curtains with a blackout design and a vintage wood board texture."
+      },
+      "parameters": {
+        "steps": 1000,
+        "epsilon_levels": 8,
+        "seed": 42,
+        "text_weight": 1.0
+      },
+      "checks": {
+        "full_generation_verified": true,
+        "decoded_maximum_pixel_levels": 8,
+        "steps": 1000,
+        "epsilon_levels": 8,
+        "seed": 42,
+        "text_weight": 1.0,
+        "target_text_sha256": "401baa3b94f8c1b5f4327f35d00ca27d0b8bead363077ff4c4e01d4d57768b2a",
+        "surrogate_activations": [
+          {
+            "name": "ViT-B-16",
+            "pretrained": "openai",
+            "weight_sha256": "4b8699299b1e8997753c64b052ba32031449d5d853f55a039148560ee02b820f",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          },
+          {
+            "name": "ViT-B-32",
+            "pretrained": "openai",
+            "weight_sha256": "e6d1bd7789aa45192b3bf90570a789b478bae1b74ebcce7eddd908e83a2b7c31",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          },
+          {
+            "name": "ViT-B-32",
+            "pretrained": "laion2b_s34b_b79k",
+            "weight_sha256": "ac4f8c4b88af6d963118cbf40ad93176d092abbedfcb752601ae1866352656e6",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          }
+        ]
+      },
+      "historical_evaluation": {
+        "status": "historical_passed",
+        "rankings": 40,
+        "encoder_setting": "D:\\Material\\Literature Reading\\code\\perLage\\output\\experiment_base_groups9_20261109\\evaluation_encoder.json",
+        "original_bank_files_not_duplicated": [
+          {
+            "source": "output/lucid_groups9_20261109/groups/04_curtain/methods/lucid/evaluation/banks/none/clean.json",
+            "sha256": "9ad340bfd2afbc7d84d86e1e15aa9fb615710892d86990d187ed794066a2711a",
+            "bytes": 10359734
+          },
+          {
+            "source": "output/lucid_groups9_20261109/groups/04_curtain/methods/lucid/evaluation/banks/none/modified.json",
+            "sha256": "d85069d429b0ece3d2579e0ae6841bae751c26860625cbb0bc02b72c1a8e3ae1",
+            "bytes": 10360031
+          }
+        ],
+        "reused_as_current_evaluation": false
+      }
+    },
+    "05_hair_extension": {
+      "image": {
+        "path": "output/imported_lucid_baseline_20261113/groups/05_hair_extension/frozen.png",
+        "sha256": "f23a8e7a1ae0b1919fea527ff25ab776b1d4370760a3afe15ac0e888582bad0f"
+      },
+      "original_frozen": {
+        "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/FROZEN_IMAGE.json",
+        "sha256": "63a64b69d2e55335c2d3273eb9073145fcf0b294b983dd615e95b6b56856ed94"
+      },
+      "metadata": {
+        "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/generation/generation_result.json",
+        "sha256": "112bacd163a6b5c5be3a0b86b55f2590b1ef973fbb7096e23a9de05646a87041"
+      },
+      "source": {
+        "id": "B07Z7MQSM1",
+        "title": "Kinky Straight Clip In Human Hair Extensions for Women,120g 10pcs Remy Hair Clip In Extensions Double Weft 12 Inch #1B Natural Black Human Hair Clip in Extensions",
+        "image_sha256": "0cdc1d80aaf88e4bb1e4e6919e468afe4716b741a890ce03a8c9368317ae36fe"
+      },
+      "target": {
+        "id": "B01460C2I2",
+        "title": "S-noilite Clip in Hair Extension Human Hair Double Weft 8pcs 150g 20 Inch Jet Black Clip in Real Human Hair Extension for Women Adding Natural Volume Thick Clip in Extension #1",
+        "image_sha256": "f1606cc72284b26cc9d055eb58b784b46c17a72561f452b1704a0e9f0970f9a4",
+        "feature_text": "I want to buy hair extensions with real human hair and double wefts."
+      },
+      "parameters": {
+        "steps": 1000,
+        "epsilon_levels": 8,
+        "seed": 42,
+        "text_weight": 1.0
+      },
+      "checks": {
+        "full_generation_verified": true,
+        "decoded_maximum_pixel_levels": 8,
+        "steps": 1000,
+        "epsilon_levels": 8,
+        "seed": 42,
+        "text_weight": 1.0,
+        "target_text_sha256": "e7f582ecfaaa172e5296d45cfd1fb24840065f423cf9383f7ed22e74c9d5793e",
+        "surrogate_activations": [
+          {
+            "name": "ViT-B-16",
+            "pretrained": "openai",
+            "weight_sha256": "4b8699299b1e8997753c64b052ba32031449d5d853f55a039148560ee02b820f",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          },
+          {
+            "name": "ViT-B-32",
+            "pretrained": "openai",
+            "weight_sha256": "e6d1bd7789aa45192b3bf90570a789b478bae1b74ebcce7eddd908e83a2b7c31",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          },
+          {
+            "name": "ViT-B-32",
+            "pretrained": "laion2b_s34b_b79k",
+            "weight_sha256": "ac4f8c4b88af6d963118cbf40ad93176d092abbedfcb752601ae1866352656e6",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          }
+        ]
+      },
+      "historical_evaluation": {
+        "status": "historical_passed",
+        "rankings": 40,
+        "encoder_setting": "D:\\Material\\Literature Reading\\code\\perLage\\output\\experiment_base_groups9_20261109\\evaluation_encoder.json",
+        "original_bank_files_not_duplicated": [
+          {
+            "source": "output/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/evaluation/banks/none/clean.json",
+            "sha256": "9ad340bfd2afbc7d84d86e1e15aa9fb615710892d86990d187ed794066a2711a",
+            "bytes": 10359734
+          },
+          {
+            "source": "output/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/evaluation/banks/none/modified.json",
+            "sha256": "3258c9d542b6148782b4620f474331513f4a2231c48fc60585293dfa7c4c7f9b",
+            "bytes": 10360038
+          }
+        ],
+        "reused_as_current_evaluation": false
+      }
+    },
+    "06_jeans": {
+      "image": {
+        "path": "output/imported_lucid_baseline_20261113/groups/06_jeans/frozen.png",
+        "sha256": "56361e4b220dc034d110532055ae47b58eca2f658f3e9c7f1d64ce27759704b8"
+      },
+      "original_frozen": {
+        "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/06_jeans/methods/lucid/FROZEN_IMAGE.json",
+        "sha256": "03832ff2032e964db0cc8cf498a455eb5623d20967d036dac9cc60e0938b2e81"
+      },
+      "metadata": {
+        "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/06_jeans/methods/lucid/generation/generation_result.json",
+        "sha256": "dcceed33713d4ae1a32d682b88f4f3af31c0a54e4ff321a7d2cf675565a863bf"
+      },
+      "source": {
+        "id": "B07FRKQNFV",
+        "title": "Cinch Men's Bronze Label Tapered Slim Fit Jeans Dark Stone 29W x 32L",
+        "image_sha256": "a945795bc33a1f094f2bae77742393c692e05e22917184f635f302756e9a2b8d"
+      },
+      "target": {
+        "id": "B09HH96NJY",
+        "title": "Womens High Rise Jeans Wide Leg Pants Patchwork Straight Boyfriend Jeans Y2K 90s E-Girl Wild Baggy Trousers Denim Pants",
+        "image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241",
+        "feature_text": "I want to buy jeans with a high waist and a baggy straight-leg cut."
+      },
+      "parameters": {
+        "steps": 1000,
+        "epsilon_levels": 8,
+        "seed": 42,
+        "text_weight": 1.0
+      },
+      "checks": {
+        "full_generation_verified": true,
+        "decoded_maximum_pixel_levels": 8,
+        "steps": 1000,
+        "epsilon_levels": 8,
+        "seed": 42,
+        "text_weight": 1.0,
+        "target_text_sha256": "cfc5997d852316dda3fdca6876f266c3bc05a5927caeb8669996c1c68604d78b",
+        "surrogate_activations": [
+          {
+            "name": "ViT-B-16",
+            "pretrained": "openai",
+            "weight_sha256": "4b8699299b1e8997753c64b052ba32031449d5d853f55a039148560ee02b820f",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          },
+          {
+            "name": "ViT-B-32",
+            "pretrained": "openai",
+            "weight_sha256": "e6d1bd7789aa45192b3bf90570a789b478bae1b74ebcce7eddd908e83a2b7c31",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          },
+          {
+            "name": "ViT-B-32",
+            "pretrained": "laion2b_s34b_b79k",
+            "weight_sha256": "ac4f8c4b88af6d963118cbf40ad93176d092abbedfcb752601ae1866352656e6",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          }
+        ]
+      },
+      "historical_evaluation": {
+        "status": "historical_passed",
+        "rankings": 40,
+        "encoder_setting": "D:\\Material\\Literature Reading\\code\\perLage\\output\\experiment_base_groups9_20261109\\evaluation_encoder.json",
+        "original_bank_files_not_duplicated": [
+          {
+            "source": "output/lucid_groups9_20261109/groups/06_jeans/methods/lucid/evaluation/banks/none/clean.json",
+            "sha256": "9ad340bfd2afbc7d84d86e1e15aa9fb615710892d86990d187ed794066a2711a",
+            "bytes": 10359734
+          },
+          {
+            "source": "output/lucid_groups9_20261109/groups/06_jeans/methods/lucid/evaluation/banks/none/modified.json",
+            "sha256": "a3e5de257f25e08756e7e0febdb1d4c698701202236d7204189b5e26b7ed4ce8",
+            "bytes": 10360029
+          }
+        ],
+        "reused_as_current_evaluation": false
+      }
+    },
+    "07_shampoo": {
+      "image": {
+        "path": "output/imported_lucid_baseline_20261113/groups/07_shampoo/frozen.png",
+        "sha256": "dfd43aa9e1b45cefacb6adac7641712ca416cf539a64a6831f21acc6ed4aa800"
+      },
+      "original_frozen": {
+        "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/generation/lucid/07_shampoo/FROZEN_IMAGE.json",
+        "sha256": "b65bc6db71c6232c8aed26fa91bc67ff3438e9a4a3460fe7d2f39ece339f4b7c"
+      },
+      "metadata": {
+        "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/generation/lucid/07_shampoo/generation/generation_result.json",
+        "sha256": "6ee7fd70d78ec5413e08823d5d6022ddcbcb775fe3e822ced8d9768997227c97"
+      },
+      "source": {
+        "id": "B09B63YYCW",
+        "title": "BELLISSO Biotin Shampoo for Hair Growth | Thickening Anti Hair Loss Shampoo Treatment | Regrowth Shampoo for Dry Normal Oily & Color Treated Hair",
+        "image_sha256": "b69cef9d597c09a1dd74baa2dc3a24343443d80fea3030c8994268c4f21b9c72"
+      },
+      "target": {
+        "id": "B00BDJODWI",
+        "title": "Aveda Scalp Benefits Balancing Shampoo 33.8 OZ",
+        "image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e",
+        "feature_text": "I want to buy shampoo with plant-based haircare ingredients and a balancing formula."
+      },
+      "parameters": {
+        "steps": 1000,
+        "epsilon_levels": 8,
+        "seed": 42,
+        "text_weight": 1.0
+      },
+      "checks": {
+        "full_generation_verified": true,
+        "decoded_maximum_pixel_levels": 8,
+        "steps": 1000,
+        "epsilon_levels": 8,
+        "seed": 42,
+        "text_weight": 1.0,
+        "target_text_sha256": "5bf2d119600a94e08b65ca2ae70f530f2cf0d20d1422ff8f91ab64e37fb5869b",
+        "surrogate_activations": [
+          {
+            "name": "ViT-B-16",
+            "pretrained": "openai",
+            "weight_sha256": "4b8699299b1e8997753c64b052ba32031449d5d853f55a039148560ee02b820f",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          },
+          {
+            "name": "ViT-B-32",
+            "pretrained": "openai",
+            "weight_sha256": "e6d1bd7789aa45192b3bf90570a789b478bae1b74ebcce7eddd908e83a2b7c31",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          },
+          {
+            "name": "ViT-B-32",
+            "pretrained": "laion2b_s34b_b79k",
+            "weight_sha256": "ac4f8c4b88af6d963118cbf40ad93176d092abbedfcb752601ae1866352656e6",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          }
+        ]
+      },
+      "historical_evaluation": {
+        "status": "historical_passed",
+        "rankings": 80,
+        "candidate_scores": 15120,
+        "original_bank_files_not_duplicated": [
+          {
+            "source": "output/lucid_shampoo_reselect_20261112/banks/clean.json",
+            "sha256": "d3424e49748d0ea81971a0fb0b2ab6db37061ffc6575d48113c9ac12a952ad22",
+            "bytes": 10360634
+          },
+          {
+            "source": "output/lucid_shampoo_reselect_20261112/banks/lucid.json",
+            "sha256": "d2d462a08c0bd943370a6f1ae6a196df8e64b9db1f89467fdf4394b8c96be65d",
+            "bytes": 10360935
+          }
+        ],
+        "reused_as_current_evaluation": false
+      }
+    },
+    "08_speaker": {
+      "image": {
+        "path": "output/imported_lucid_baseline_20261113/groups/08_speaker/frozen.png",
+        "sha256": "cae74446bf862443707481c17ada07bb7a08c95be9f31413a33e25658fb0eaa7"
+      },
+      "original_frozen": {
+        "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/08_speaker/methods/lucid/FROZEN_IMAGE.json",
+        "sha256": "e1586cfbb777b7e130e487700a88722d595bdcb51715ba99cef3783c2c3b9885"
+      },
+      "metadata": {
+        "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/08_speaker/methods/lucid/generation/generation_result.json",
+        "sha256": "aef507dcb6c7ea39d5e0b7c58c541fc9c61955519e1fa26706b51feb7f4423e4"
+      },
+      "source": {
+        "id": "B01590FHS0",
+        "title": "Kicker KB6000 2-Way Full Range High-efficiency Speaker System Indoor Speaker Outdoor Speaker Marine Speakers System | 6.5 inch woofer | 2x5 inch Horn Tweeter with Quick Mounting System - Set of 4",
+        "image_sha256": "ead324b33b443daba5e0abe9c6ed59157e164d67b302f65a7661d53810be6390"
+      },
+      "target": {
+        "id": "B01N47U1VI",
+        "title": "BuyTVProducts4Less Touch of ECO Solar/Battery Powered 2x3W Bluetooth Speaker Splashproof Portable Wireless MP3 Player with Built-in Micphone, FM Radio/MicroSD Card (Red)",
+        "image_sha256": "808882d53dd322b2a319a83f9ec29ec406cae6b93558ea98f60a5444b4eed928",
+        "feature_text": "I want to buy a Bluetooth speaker with water resistance and stereo sound."
+      },
+      "parameters": {
+        "steps": 1000,
+        "epsilon_levels": 8,
+        "seed": 42,
+        "text_weight": 1.0
+      },
+      "checks": {
+        "full_generation_verified": true,
+        "decoded_maximum_pixel_levels": 8,
+        "steps": 1000,
+        "epsilon_levels": 8,
+        "seed": 42,
+        "text_weight": 1.0,
+        "target_text_sha256": "57d5b33c49163d274124fa95ac712ef8b73d7c03883a59e1e18210238f5c3844",
+        "surrogate_activations": [
+          {
+            "name": "ViT-B-16",
+            "pretrained": "openai",
+            "weight_sha256": "4b8699299b1e8997753c64b052ba32031449d5d853f55a039148560ee02b820f",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          },
+          {
+            "name": "ViT-B-32",
+            "pretrained": "openai",
+            "weight_sha256": "e6d1bd7789aa45192b3bf90570a789b478bae1b74ebcce7eddd908e83a2b7c31",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          },
+          {
+            "name": "ViT-B-32",
+            "pretrained": "laion2b_s34b_b79k",
+            "weight_sha256": "ac4f8c4b88af6d963118cbf40ad93176d092abbedfcb752601ae1866352656e6",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          }
+        ]
+      },
+      "historical_evaluation": {
+        "status": "historical_passed",
+        "rankings": 40,
+        "encoder_setting": "D:\\Material\\Literature Reading\\code\\perLage\\output\\experiment_base_groups9_20261109\\evaluation_encoder.json",
+        "original_bank_files_not_duplicated": [
+          {
+            "source": "output/lucid_groups9_20261109/groups/08_speaker/methods/lucid/evaluation/banks/none/clean.json",
+            "sha256": "9ad340bfd2afbc7d84d86e1e15aa9fb615710892d86990d187ed794066a2711a",
+            "bytes": 10359734
+          },
+          {
+            "source": "output/lucid_groups9_20261109/groups/08_speaker/methods/lucid/evaluation/banks/none/modified.json",
+            "sha256": "719deaf686bb051885886393b262d5646f15625e58e2d4d6bcfce9389b23571f",
+            "bytes": 10360031
+          }
+        ],
+        "reused_as_current_evaluation": false
+      }
+    },
+    "09_toothbrush": {
+      "image": {
+        "path": "output/imported_lucid_baseline_20261113/groups/09_toothbrush/frozen.png",
+        "sha256": "74c6404754e18b3481de5552cfedd846d5a47e5efb2de263bfa1f47d19b1c1b6"
+      },
+      "original_frozen": {
+        "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/FROZEN_IMAGE.json",
+        "sha256": "5bff1a19b3aa3a83427518961f3f39eda28f03c0b6b06549ef30e7a07c5a9781"
+      },
+      "metadata": {
+        "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/generation/generation_result.json",
+        "sha256": "b8a61185590cab19c3dc680daf86d2bebb106ddd9432c0509cc1b694255f4aa6"
+      },
+      "source": {
+        "id": "B09PNNXYJ4",
+        "title": "Tthxqing U shaped Toothbrush, Food Grade Soft Silicone Whole Mouth, Toddlers Manual Toothbrushes, Oral Teeth Cleaning Tools For Children 360 Degrees Toddler Toothbrush Soft Silicone Brush Head(Pink)",
+        "image_sha256": "74e0c705bd248dbec29190d33f7ecd38ef9a17e8853dd58ddb13c78fff4eae0f"
+      },
+      "target": {
+        "id": "B09J81RMLD",
+        "title": "Baby U Shaped Toothbrush for Aged 2-12 with 360° Soft Silicone Brush Heads Handle Kids Cute Teeth Whitening Massage Tool",
+        "image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2",
+        "feature_text": "I want to buy a toothbrush with a U-shaped design and soft silicone brush heads."
+      },
+      "parameters": {
+        "steps": 1000,
+        "epsilon_levels": 8,
+        "seed": 42,
+        "text_weight": 1.0
+      },
+      "checks": {
+        "full_generation_verified": true,
+        "decoded_maximum_pixel_levels": 8,
+        "steps": 1000,
+        "epsilon_levels": 8,
+        "seed": 42,
+        "text_weight": 1.0,
+        "target_text_sha256": "26774577d537636d47e2575be221c779ae5c3047468c0f8563e94a0fa92d9636",
+        "surrogate_activations": [
+          {
+            "name": "ViT-B-16",
+            "pretrained": "openai",
+            "weight_sha256": "4b8699299b1e8997753c64b052ba32031449d5d853f55a039148560ee02b820f",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          },
+          {
+            "name": "ViT-B-32",
+            "pretrained": "openai",
+            "weight_sha256": "e6d1bd7789aa45192b3bf90570a789b478bae1b74ebcce7eddd908e83a2b7c31",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          },
+          {
+            "name": "ViT-B-32",
+            "pretrained": "laion2b_s34b_b79k",
+            "weight_sha256": "ac4f8c4b88af6d963118cbf40ad93176d092abbedfcb752601ae1866352656e6",
+            "activation": "QuickGELU",
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            }
+          }
+        ]
+      },
+      "historical_evaluation": {
+        "status": "historical_passed",
+        "rankings": 40,
+        "encoder_setting": "D:\\Material\\Literature Reading\\code\\perLage\\output\\experiment_base_groups9_20261109\\evaluation_encoder.json",
+        "original_bank_files_not_duplicated": [
+          {
+            "source": "output/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/evaluation/banks/none/clean.json",
+            "sha256": "9ad340bfd2afbc7d84d86e1e15aa9fb615710892d86990d187ed794066a2711a",
+            "bytes": 10359734
+          },
+          {
+            "source": "output/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/evaluation/banks/none/modified.json",
+            "sha256": "893e12ce7faab94deb6b15a2552876a13bffaa531ee3f476d82730f39009c4f0",
+            "bytes": 10360034
+          }
+        ],
+        "reused_as_current_evaluation": false
+      }
+    }
+  },
+  "files": [
+    {
+      "source": "output/lucid_groups9_20261109/groups/01_camera/methods/lucid/evaluation/evaluation.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/01_camera/methods/lucid/evaluation/evaluation.json",
+      "sha256": "cd98086a1be705d92d56d3583194a0901c27437dd0b96d81d7c2a78308a2d191",
+      "bytes": 16342
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/01_camera/methods/lucid/evaluation/evaluation_plan.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/01_camera/methods/lucid/evaluation/evaluation_plan.json",
+      "sha256": "678d91f828696f20a0ee3d64f4f35113984b88ba8be5407d3feb31ae6794ed8c",
+      "bytes": 6144
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/01_camera/methods/lucid/evaluation/independent_verification.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/01_camera/methods/lucid/evaluation/independent_verification.json",
+      "sha256": "8e73627adb77cc3dbeba97182d5d0a0f2dbeeb59d2f8747afde2784e0bdc36d6",
+      "bytes": 365
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/01_camera/methods/lucid/evaluation/REPORT.md",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/01_camera/methods/lucid/evaluation/REPORT.md",
+      "sha256": "98a9f66c8952ecc8c1fa62dc76cd6f5303a80deb4bc935823bd3cec435d4e502",
+      "bytes": 981
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/01_camera/methods/lucid/frozen.png",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/01_camera/methods/lucid/frozen.png",
+      "sha256": "9aeb87ce076f6ed5f4692be5cec0f46634c6962483debfe85e5df25c42b4e803",
+      "bytes": 384713
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/01_camera/methods/lucid/FROZEN_IMAGE.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/01_camera/methods/lucid/FROZEN_IMAGE.json",
+      "sha256": "5a0dba9918c48c1f2789b7fa46a24a214daf52855181a87261dc1877ae50d605",
+      "bytes": 30713
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/01_camera/methods/lucid/generation/adversarial.png",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/01_camera/methods/lucid/generation/adversarial.png",
+      "sha256": "9aeb87ce076f6ed5f4692be5cec0f46634c6962483debfe85e5df25c42b4e803",
+      "bytes": 384713
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/01_camera/methods/lucid/generation/attack_metrics.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/01_camera/methods/lucid/generation/attack_metrics.json",
+      "sha256": "0bfdbc944de2eaa521ff5f38c67ff4d1b5acf63966cde6e9f39aad83a7a86949",
+      "bytes": 26093
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/01_camera/methods/lucid/generation/generation_result.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/01_camera/methods/lucid/generation/generation_result.json",
+      "sha256": "b463e810874380678b9da61b6bdc49d9a56c4b130da2b22c252b9adf01c19867",
+      "bytes": 27230
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/01_camera/methods/lucid/PUBLIC_RUN.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/01_camera/methods/lucid/PUBLIC_RUN.json",
+      "sha256": "29ce018b686d6924efdfe36663726d70ebab98271e4cb035d05055ed0cb549a0",
+      "bytes": 7815
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/01_camera/methods/lucid/QUERY_INPUT_REQUEST.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/01_camera/methods/lucid/QUERY_INPUT_REQUEST.json",
+      "sha256": "3ca8cf006555cc1c81e55c5db720ac48d04a74761ee214d676bd66c129388ae8",
+      "bytes": 76
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/01_camera/methods/lucid/TRAINING_ACCESS_AUDIT.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/01_camera/methods/lucid/TRAINING_ACCESS_AUDIT.json",
+      "sha256": "4a254ab90c454fcdb75df72a9e6be7d1ae658141cb44d4451fd7107253d99700",
+      "bytes": 59
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/01_camera/methods/lucid/frozen.png",
+      "path": "output/imported_lucid_baseline_20261113/groups/01_camera/frozen.png",
+      "sha256": "9aeb87ce076f6ed5f4692be5cec0f46634c6962483debfe85e5df25c42b4e803",
+      "bytes": 384713
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/02_chair/methods/lucid/evaluation/evaluation.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/02_chair/methods/lucid/evaluation/evaluation.json",
+      "sha256": "ace40ebc42ddf8fd3fc68801927664f4119d21ce3fcbcdc091286c317a231d47",
+      "bytes": 16336
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/02_chair/methods/lucid/evaluation/evaluation_plan.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/02_chair/methods/lucid/evaluation/evaluation_plan.json",
+      "sha256": "4f3806ad18a52b48cd17b2ae6a9eecd337e6927a22b75a71d834cc412e166e77",
+      "bytes": 6500
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/02_chair/methods/lucid/evaluation/independent_verification.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/02_chair/methods/lucid/evaluation/independent_verification.json",
+      "sha256": "5ea86ebfea2f79ecf79e9b4c6436d0d29abfef65bf833520ead0826493420ad4",
+      "bytes": 365
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/02_chair/methods/lucid/evaluation/REPORT.md",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/02_chair/methods/lucid/evaluation/REPORT.md",
+      "sha256": "56673ee473d6c6fe6a7a34228ed68343501eed9f4716b4c9c36a840f5d049ad4",
+      "bytes": 980
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/02_chair/methods/lucid/frozen.png",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/02_chair/methods/lucid/frozen.png",
+      "sha256": "eff00fda5a23f6509dd6bb2ed13b0f1c9e4d59744bcdbb406bf5fe4bb831141f",
+      "bytes": 359844
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/02_chair/methods/lucid/FROZEN_IMAGE.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/02_chair/methods/lucid/FROZEN_IMAGE.json",
+      "sha256": "661816deb6de46a8b812a3680a46ef4a2904f5d7a4db54b588fb0e2b9019c93f",
+      "bytes": 30737
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/02_chair/methods/lucid/generation/adversarial.png",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/02_chair/methods/lucid/generation/adversarial.png",
+      "sha256": "eff00fda5a23f6509dd6bb2ed13b0f1c9e4d59744bcdbb406bf5fe4bb831141f",
+      "bytes": 359844
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/02_chair/methods/lucid/generation/attack_metrics.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/02_chair/methods/lucid/generation/attack_metrics.json",
+      "sha256": "ce1fc6aaf1034465459c7dcc8183242cb0a0029bdacbb5351486eff5847e5b48",
+      "bytes": 26077
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/02_chair/methods/lucid/generation/generation_result.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/02_chair/methods/lucid/generation/generation_result.json",
+      "sha256": "d9c82fb6edd7a9174497e0a445ecf9db683207ccb98b818b10e931d690944f4c",
+      "bytes": 27214
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/02_chair/methods/lucid/PUBLIC_RUN.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/02_chair/methods/lucid/PUBLIC_RUN.json",
+      "sha256": "2e2543a5e1a86c938514dcffb9c807786bac068f7282b1f9205b3b675342b4e6",
+      "bytes": 7871
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/02_chair/methods/lucid/QUERY_INPUT_REQUEST.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/02_chair/methods/lucid/QUERY_INPUT_REQUEST.json",
+      "sha256": "a52cd59683f6e9977c4f14bb97b4b689b24672f671990eda9e6b9772d4fd45e8",
+      "bytes": 76
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/02_chair/methods/lucid/TRAINING_ACCESS_AUDIT.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/02_chair/methods/lucid/TRAINING_ACCESS_AUDIT.json",
+      "sha256": "5d87f2ae7dd10b9b2ace3452f41f00aea17b16657183b15a4126c73c537488b8",
+      "bytes": 59
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/02_chair/methods/lucid/frozen.png",
+      "path": "output/imported_lucid_baseline_20261113/groups/02_chair/frozen.png",
+      "sha256": "eff00fda5a23f6509dd6bb2ed13b0f1c9e4d59744bcdbb406bf5fe4bb831141f",
+      "bytes": 359844
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/03_cookies/methods/lucid/evaluation/evaluation.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/03_cookies/methods/lucid/evaluation/evaluation.json",
+      "sha256": "b1b1dccfc9d0411eebce99b3c4c735d30df06ad5f30418ca2d19ec184ded9f28",
+      "bytes": 16329
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/03_cookies/methods/lucid/evaluation/evaluation_plan.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/03_cookies/methods/lucid/evaluation/evaluation_plan.json",
+      "sha256": "9ac1395123ba028885f4d80f644b9a0d3e4976cd005d0e9749e7bdb050144d97",
+      "bytes": 6209
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/03_cookies/methods/lucid/evaluation/independent_verification.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/03_cookies/methods/lucid/evaluation/independent_verification.json",
+      "sha256": "fb554cd57347ec34b46df1ba46ee8ec1800befc7320ade2535c9187875932fd5",
+      "bytes": 365
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/03_cookies/methods/lucid/evaluation/REPORT.md",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/03_cookies/methods/lucid/evaluation/REPORT.md",
+      "sha256": "644fee4e28e009ffef10a48a970a00f86e1c3a465622791ca3ba24c1a6074b5a",
+      "bytes": 980
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/03_cookies/methods/lucid/frozen.png",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/03_cookies/methods/lucid/frozen.png",
+      "sha256": "b46a9bb1e5ba99d9619750745f1aab9ced7d101037ae5be3673546c254f97167",
+      "bytes": 441700
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/03_cookies/methods/lucid/FROZEN_IMAGE.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/03_cookies/methods/lucid/FROZEN_IMAGE.json",
+      "sha256": "e7894a6898e164fffbab474c75edd0a6e85ebe2f309d92b6551dfb9984ad327b",
+      "bytes": 30535
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/03_cookies/methods/lucid/generation/adversarial.png",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/03_cookies/methods/lucid/generation/adversarial.png",
+      "sha256": "b46a9bb1e5ba99d9619750745f1aab9ced7d101037ae5be3673546c254f97167",
+      "bytes": 441700
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/03_cookies/methods/lucid/generation/attack_metrics.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/03_cookies/methods/lucid/generation/attack_metrics.json",
+      "sha256": "056a03c3b9c5cb036d50c7ac2741dbdc3948ac1b90f2c8c43474413466990cbe",
+      "bytes": 26084
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/03_cookies/methods/lucid/generation/generation_result.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/03_cookies/methods/lucid/generation/generation_result.json",
+      "sha256": "f5f3411998c8e89c4b840df1c147c09aeea9749351bd5d4a85c59bce935defae",
+      "bytes": 27221
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/03_cookies/methods/lucid/PUBLIC_RUN.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/03_cookies/methods/lucid/PUBLIC_RUN.json",
+      "sha256": "17d9bd268779c74262d1ddbb2c69edc378793562c82a93eb85fd5872e1431400",
+      "bytes": 7646
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/03_cookies/methods/lucid/QUERY_INPUT_REQUEST.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/03_cookies/methods/lucid/QUERY_INPUT_REQUEST.json",
+      "sha256": "f1e486417529d1fc40d17093950a71af3d34ceefdf0bf520bd6a0e1946364a87",
+      "bytes": 76
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/03_cookies/methods/lucid/TRAINING_ACCESS_AUDIT.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/03_cookies/methods/lucid/TRAINING_ACCESS_AUDIT.json",
+      "sha256": "5d87f2ae7dd10b9b2ace3452f41f00aea17b16657183b15a4126c73c537488b8",
+      "bytes": 59
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/03_cookies/methods/lucid/frozen.png",
+      "path": "output/imported_lucid_baseline_20261113/groups/03_cookies/frozen.png",
+      "sha256": "b46a9bb1e5ba99d9619750745f1aab9ced7d101037ae5be3673546c254f97167",
+      "bytes": 441700
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/04_curtain/methods/lucid/evaluation/evaluation.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/04_curtain/methods/lucid/evaluation/evaluation.json",
+      "sha256": "9f1e2f44ef475b53a4c5b3e2fa2a7ac88e60762d5f3d10363fa0bbe408382b89",
+      "bytes": 16365
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/04_curtain/methods/lucid/evaluation/evaluation_plan.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/04_curtain/methods/lucid/evaluation/evaluation_plan.json",
+      "sha256": "a89c5a9cf4e29ccdf2a1a168b6554188277724ea9c78e20f555b9b19ee31f434",
+      "bytes": 6335
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/04_curtain/methods/lucid/evaluation/independent_verification.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/04_curtain/methods/lucid/evaluation/independent_verification.json",
+      "sha256": "87e0a3ae45fa18a20a88cfd13e2cf746b3c05b4ebd25bbd95ca9df98ed06ce0c",
+      "bytes": 365
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/04_curtain/methods/lucid/evaluation/REPORT.md",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/04_curtain/methods/lucid/evaluation/REPORT.md",
+      "sha256": "4323a5979502944d537e8e7b9fb741c275480555b3258037ec6d15aeb8480601",
+      "bytes": 977
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/04_curtain/methods/lucid/frozen.png",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/04_curtain/methods/lucid/frozen.png",
+      "sha256": "02097751e0816fe7e3568c41e3a55ce4455418a79d4a1ebe7a2004db18ba102f",
+      "bytes": 482869
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/04_curtain/methods/lucid/FROZEN_IMAGE.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/04_curtain/methods/lucid/FROZEN_IMAGE.json",
+      "sha256": "316955bf9759bb7e4e2e61619e0ea3778e5f82832e875d6ab91726191b6b6193",
+      "bytes": 30743
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/04_curtain/methods/lucid/generation/adversarial.png",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/04_curtain/methods/lucid/generation/adversarial.png",
+      "sha256": "02097751e0816fe7e3568c41e3a55ce4455418a79d4a1ebe7a2004db18ba102f",
+      "bytes": 482869
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/04_curtain/methods/lucid/generation/attack_metrics.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/04_curtain/methods/lucid/generation/attack_metrics.json",
+      "sha256": "b32bfbadff7af10eb248e1bdc4492b5eae416ae553157837661d0ffb951fdb9c",
+      "bytes": 26086
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/04_curtain/methods/lucid/generation/generation_result.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/04_curtain/methods/lucid/generation/generation_result.json",
+      "sha256": "7db5bf823b4bfd4b7928c867bee20999eb230184fa35c990a9f60284e7751b5e",
+      "bytes": 27223
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/04_curtain/methods/lucid/PUBLIC_RUN.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/04_curtain/methods/lucid/PUBLIC_RUN.json",
+      "sha256": "79fd0b403bd48eac93a48e4b4e0011f8de577d0d9eac2407d2e3e825404a98fb",
+      "bytes": 7859
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/04_curtain/methods/lucid/QUERY_INPUT_REQUEST.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/04_curtain/methods/lucid/QUERY_INPUT_REQUEST.json",
+      "sha256": "29f14d22e4b0011b04fffc0b0b37d76c981ef3a0a2d0d8ba6833a41ca4914731",
+      "bytes": 76
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/04_curtain/methods/lucid/TRAINING_ACCESS_AUDIT.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/04_curtain/methods/lucid/TRAINING_ACCESS_AUDIT.json",
+      "sha256": "5d87f2ae7dd10b9b2ace3452f41f00aea17b16657183b15a4126c73c537488b8",
+      "bytes": 59
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/04_curtain/methods/lucid/frozen.png",
+      "path": "output/imported_lucid_baseline_20261113/groups/04_curtain/frozen.png",
+      "sha256": "02097751e0816fe7e3568c41e3a55ce4455418a79d4a1ebe7a2004db18ba102f",
+      "bytes": 482869
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/evaluation/evaluation.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/evaluation/evaluation.json",
+      "sha256": "2658c281318ca5a0a095e0923293e4028c994a2b13c9934f1d6fb1b378b41201",
+      "bytes": 16344
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/evaluation/evaluation_plan.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/evaluation/evaluation_plan.json",
+      "sha256": "1406879c11892b9fe03ec8f54b4368fc45b120f15346290a61528699b9aa3f29",
+      "bytes": 6162
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/evaluation/independent_verification.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/evaluation/independent_verification.json",
+      "sha256": "a5f7aca8e433dc61b6b451cd3803cd0a998921425f8f3cb1238f93dce266760e",
+      "bytes": 365
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/evaluation/REPORT.md",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/evaluation/REPORT.md",
+      "sha256": "644fee4e28e009ffef10a48a970a00f86e1c3a465622791ca3ba24c1a6074b5a",
+      "bytes": 980
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/frozen.png",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/frozen.png",
+      "sha256": "f23a8e7a1ae0b1919fea527ff25ab776b1d4370760a3afe15ac0e888582bad0f",
+      "bytes": 491662
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/FROZEN_IMAGE.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/FROZEN_IMAGE.json",
+      "sha256": "63a64b69d2e55335c2d3273eb9073145fcf0b294b983dd615e95b6b56856ed94",
+      "bytes": 30749
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/generation/adversarial.png",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/generation/adversarial.png",
+      "sha256": "f23a8e7a1ae0b1919fea527ff25ab776b1d4370760a3afe15ac0e888582bad0f",
+      "bytes": 491662
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/generation/attack_metrics.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/generation/attack_metrics.json",
+      "sha256": "d0e4625e5bee99e174d591a861feda73a5349deca516193261ed1512080e0c50",
+      "bytes": 26109
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/generation/generation_result.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/generation/generation_result.json",
+      "sha256": "112bacd163a6b5c5be3a0b86b55f2590b1ef973fbb7096e23a9de05646a87041",
+      "bytes": 27246
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/PUBLIC_RUN.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/PUBLIC_RUN.json",
+      "sha256": "4d25de5ce03469f072eb0bcf3520fe38cf3c4bd82da28b42fb0a562258868ca9",
+      "bytes": 7824
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/QUERY_INPUT_REQUEST.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/QUERY_INPUT_REQUEST.json",
+      "sha256": "9b6c9b87d88fa213be92ac388af011dd40d1c8195fdc980e7a1fce0dbc18a1fa",
+      "bytes": 76
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/TRAINING_ACCESS_AUDIT.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/TRAINING_ACCESS_AUDIT.json",
+      "sha256": "5d87f2ae7dd10b9b2ace3452f41f00aea17b16657183b15a4126c73c537488b8",
+      "bytes": 59
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/05_hair_extension/methods/lucid/frozen.png",
+      "path": "output/imported_lucid_baseline_20261113/groups/05_hair_extension/frozen.png",
+      "sha256": "f23a8e7a1ae0b1919fea527ff25ab776b1d4370760a3afe15ac0e888582bad0f",
+      "bytes": 491662
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/06_jeans/methods/lucid/evaluation/evaluation.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/06_jeans/methods/lucid/evaluation/evaluation.json",
+      "sha256": "02b910e247c301198890620314928874e4a8b665f701be5d2722aec909f9e4fd",
+      "bytes": 16387
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/06_jeans/methods/lucid/evaluation/evaluation_plan.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/06_jeans/methods/lucid/evaluation/evaluation_plan.json",
+      "sha256": "b2490611c3a3f9c872c1a59dca55d99b43d017c616baf153b0f5aa3a799218e6",
+      "bytes": 6006
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/06_jeans/methods/lucid/evaluation/independent_verification.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/06_jeans/methods/lucid/evaluation/independent_verification.json",
+      "sha256": "272d4be5302503f1a66bb75d5e08ec6f08880f7384b4b2f0f90333bd11a54bee",
+      "bytes": 365
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/06_jeans/methods/lucid/evaluation/REPORT.md",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/06_jeans/methods/lucid/evaluation/REPORT.md",
+      "sha256": "9720425d0597272c8bedfebd614e35329a41b82212dbdf8d1ebee8b7dfbcd07d",
+      "bytes": 972
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/06_jeans/methods/lucid/frozen.png",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/06_jeans/methods/lucid/frozen.png",
+      "sha256": "56361e4b220dc034d110532055ae47b58eca2f658f3e9c7f1d64ce27759704b8",
+      "bytes": 327003
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/06_jeans/methods/lucid/FROZEN_IMAGE.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/06_jeans/methods/lucid/FROZEN_IMAGE.json",
+      "sha256": "03832ff2032e964db0cc8cf498a455eb5623d20967d036dac9cc60e0938b2e81",
+      "bytes": 30542
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/06_jeans/methods/lucid/generation/adversarial.png",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/06_jeans/methods/lucid/generation/adversarial.png",
+      "sha256": "56361e4b220dc034d110532055ae47b58eca2f658f3e9c7f1d64ce27759704b8",
+      "bytes": 327003
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/06_jeans/methods/lucid/generation/attack_metrics.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/06_jeans/methods/lucid/generation/attack_metrics.json",
+      "sha256": "40eb913f3b9668aedbf8c3c2da441b6428d69ceddc0e694c44bd07ba84a7b288",
+      "bytes": 26090
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/06_jeans/methods/lucid/generation/generation_result.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/06_jeans/methods/lucid/generation/generation_result.json",
+      "sha256": "dcceed33713d4ae1a32d682b88f4f3af31c0a54e4ff321a7d2cf675565a863bf",
+      "bytes": 27227
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/06_jeans/methods/lucid/PUBLIC_RUN.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/06_jeans/methods/lucid/PUBLIC_RUN.json",
+      "sha256": "a39911a29aab3ec3d3520e9feca0feab9e4fc712cc686a7640435eccb1afd4e1",
+      "bytes": 7644
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/06_jeans/methods/lucid/QUERY_INPUT_REQUEST.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/06_jeans/methods/lucid/QUERY_INPUT_REQUEST.json",
+      "sha256": "fb4be73973e3856de43ab409646543966e4e1677d2dc6fb3c144a56164574371",
+      "bytes": 76
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/06_jeans/methods/lucid/TRAINING_ACCESS_AUDIT.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/06_jeans/methods/lucid/TRAINING_ACCESS_AUDIT.json",
+      "sha256": "5d87f2ae7dd10b9b2ace3452f41f00aea17b16657183b15a4126c73c537488b8",
+      "bytes": 59
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/06_jeans/methods/lucid/frozen.png",
+      "path": "output/imported_lucid_baseline_20261113/groups/06_jeans/frozen.png",
+      "sha256": "56361e4b220dc034d110532055ae47b58eca2f658f3e9c7f1d64ce27759704b8",
+      "bytes": 327003
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/generation/lucid/07_shampoo/frozen.png",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/generation/lucid/07_shampoo/frozen.png",
+      "sha256": "dfd43aa9e1b45cefacb6adac7641712ca416cf539a64a6831f21acc6ed4aa800",
+      "bytes": 174188
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/generation/lucid/07_shampoo/FROZEN_IMAGE.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/generation/lucid/07_shampoo/FROZEN_IMAGE.json",
+      "sha256": "b65bc6db71c6232c8aed26fa91bc67ff3438e9a4a3460fe7d2f39ece339f4b7c",
+      "bytes": 39181
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/generation/lucid/07_shampoo/generation/adversarial.png",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/generation/lucid/07_shampoo/generation/adversarial.png",
+      "sha256": "dfd43aa9e1b45cefacb6adac7641712ca416cf539a64a6831f21acc6ed4aa800",
+      "bytes": 174188
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/generation/lucid/07_shampoo/generation/attack_metrics.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/generation/lucid/07_shampoo/generation/attack_metrics.json",
+      "sha256": "4e4b982f6d86817506f9d274ac278055eaf6b28703381eb32fe38084ddb8789e",
+      "bytes": 26085
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/generation/lucid/07_shampoo/generation/generation_result.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/generation/lucid/07_shampoo/generation/generation_result.json",
+      "sha256": "6ee7fd70d78ec5413e08823d5d6022ddcbcb775fe3e822ced8d9768997227c97",
+      "bytes": 27220
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/generation/lucid/07_shampoo/PUBLIC_RUN.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/generation/lucid/07_shampoo/PUBLIC_RUN.json",
+      "sha256": "c04e759689ca9b93facaabd0e50cc89209fe11e7ef53e5022918546e00e459a1",
+      "bytes": 4911
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/generation/lucid/07_shampoo/TRAINING_ACCESS_AUDIT.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/generation/lucid/07_shampoo/TRAINING_ACCESS_AUDIT.json",
+      "sha256": "5093317232c2961065efbbec880f0d34bf9f09eced8a3a38465d7e5263191f0f",
+      "bytes": 61
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/EXPERIMENT_PLAN.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/EXPERIMENT_PLAN.json",
+      "sha256": "cabdb7ca2d9f7db10f53eaef1bd656e9be5daa957e63d58cecfbecbb793af579",
+      "bytes": 20106
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/PREPARED.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/PREPARED.json",
+      "sha256": "7ed574a33cb108e86e828c4bb56af8d0555e4708b75b4a89956b0af3e091efab",
+      "bytes": 247
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/FROZEN_IMAGES.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/FROZEN_IMAGES.json",
+      "sha256": "40648aac8dee9a27f569cf24e8d4992c82267ecb873d7dd9bf88d547afbdd7f0",
+      "bytes": 1178
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/EVALUATION_INPUTS.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/EVALUATION_INPUTS.json",
+      "sha256": "b7ddcdc348eb721bd4733786aaf3581f80007f124b741d057ebc0b7781947e60",
+      "bytes": 20726
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/COMPLETED.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/COMPLETED.json",
+      "sha256": "69e66d725065fd27eac20e75b552a71ca0a93d276904547b52fd9438c8718a48",
+      "bytes": 983
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/RETRIEVAL_COMPLETED.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/RETRIEVAL_COMPLETED.json",
+      "sha256": "27c6c22b6b819560d21355f55bd99c72d1834eb1695c57557486a253a80d6f08",
+      "bytes": 1050
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/INDEPENDENT_VERIFICATION.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/INDEPENDENT_VERIFICATION.json",
+      "sha256": "008c93cf4529c005560f99bd1c6bfc59eb0aa3ff597940d098fb1a0664259a7d",
+      "bytes": 1273
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/SUMMARY.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/SUMMARY.json",
+      "sha256": "d61d1a5b2df74c8821f70e7f1fcb1252eb0b7448683708021938b9dd656debd2",
+      "bytes": 31460
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/REPORT.md",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/REPORT.md",
+      "sha256": "100165dc5ccee42b187250d596a1180d28e231533c31c93e6b40669a94964e2c",
+      "bytes": 4476
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/comparison_visual_07_shampoo_lucid.png",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/comparison_visual_07_shampoo_lucid.png",
+      "sha256": "6b88bba27aefd9028dc6e917b2b65971856bbcfa6ef99bb2b38228a7a431c1ee",
+      "bytes": 420380
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/retrieval/joint/clean.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/retrieval/joint/clean.json",
+      "sha256": "4cb0c16d04e6897dcfbf4fbcc07ee370d0b7b91be289e9443b5c68b6b9be2777",
+      "bytes": 6869392
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/retrieval/joint/lucid.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/retrieval/joint/lucid.json",
+      "sha256": "610376c8518705fb35ded2205695480127c75833237f7fd60e0d88eda2498209",
+      "bytes": 6869380
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/retrieval/text/clean.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/retrieval/text/clean.json",
+      "sha256": "11ab6c2eebc22a07bbf399224a234fb90cbf2a2442ac58f58858ee66a419fe17",
+      "bytes": 6636279
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/retrieval/text/lucid.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/retrieval/text/lucid.json",
+      "sha256": "d987d9886fd623275003b3d2469aff95a5d20e901ba8bc84e54c858589e9b8c2",
+      "bytes": 6636257
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/logs/evaluate.log",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/logs/evaluate.log",
+      "sha256": "ac2b6cc1474fb2398f52edd7fd09aace0cdcc6103cd93279bd3408ba014fb69e",
+      "bytes": 420
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/logs/generate_lucid.log",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/logs/generate_lucid.log",
+      "sha256": "3c0d70e056d443bf3b974ed947e9294637f2054b51cc96df3f8e7eb5cddd0149",
+      "bytes": 1384
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/logs/report.log",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/logs/report.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/logs/verify.log",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_shampoo_reselect_20261112/logs/verify.log",
+      "sha256": "561a63c1bf42ed8dbc84e2da2919a3cb114fb6cf5dda8823c7f1ac01b4bc213b",
+      "bytes": 93
+    },
+    {
+      "source": "output/lucid_shampoo_reselect_20261112/generation/lucid/07_shampoo/frozen.png",
+      "path": "output/imported_lucid_baseline_20261113/groups/07_shampoo/frozen.png",
+      "sha256": "dfd43aa9e1b45cefacb6adac7641712ca416cf539a64a6831f21acc6ed4aa800",
+      "bytes": 174188
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/08_speaker/methods/lucid/evaluation/evaluation.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/08_speaker/methods/lucid/evaluation/evaluation.json",
+      "sha256": "297b2338e4b83c0f7ba06cd72fee1197de8054bf47957c71de43b0ed148d140b",
+      "bytes": 16377
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/08_speaker/methods/lucid/evaluation/evaluation_plan.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/08_speaker/methods/lucid/evaluation/evaluation_plan.json",
+      "sha256": "11400e45b3f9c2552fdfa2ecff7cd8f73eb6d20eeccb9ef122b2ad0283e62502",
+      "bytes": 6216
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/08_speaker/methods/lucid/evaluation/independent_verification.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/08_speaker/methods/lucid/evaluation/independent_verification.json",
+      "sha256": "f9aff77d7ab8704381c37220e843499c341c30cd500a74d773c3f9da52804544",
+      "bytes": 365
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/08_speaker/methods/lucid/evaluation/REPORT.md",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/08_speaker/methods/lucid/evaluation/REPORT.md",
+      "sha256": "09501d54e9de70c582c0605e953e029d7084802e1ab13a44ed5a5b7616d466c3",
+      "bytes": 979
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/08_speaker/methods/lucid/frozen.png",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/08_speaker/methods/lucid/frozen.png",
+      "sha256": "cae74446bf862443707481c17ada07bb7a08c95be9f31413a33e25658fb0eaa7",
+      "bytes": 501359
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/08_speaker/methods/lucid/FROZEN_IMAGE.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/08_speaker/methods/lucid/FROZEN_IMAGE.json",
+      "sha256": "e1586cfbb777b7e130e487700a88722d595bdcb51715ba99cef3783c2c3b9885",
+      "bytes": 30747
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/08_speaker/methods/lucid/generation/adversarial.png",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/08_speaker/methods/lucid/generation/adversarial.png",
+      "sha256": "cae74446bf862443707481c17ada07bb7a08c95be9f31413a33e25658fb0eaa7",
+      "bytes": 501359
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/08_speaker/methods/lucid/generation/attack_metrics.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/08_speaker/methods/lucid/generation/attack_metrics.json",
+      "sha256": "5c2e11a0fcd70491c4b81500acf5e41ed366fcc471f7c6219b1c4bfb4a9a7f6d",
+      "bytes": 26104
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/08_speaker/methods/lucid/generation/generation_result.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/08_speaker/methods/lucid/generation/generation_result.json",
+      "sha256": "aef507dcb6c7ea39d5e0b7c58c541fc9c61955519e1fa26706b51feb7f4423e4",
+      "bytes": 27241
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/08_speaker/methods/lucid/PUBLIC_RUN.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/08_speaker/methods/lucid/PUBLIC_RUN.json",
+      "sha256": "89c662d84ac0bac82477e9658e67b8b5c262861d6669e230ede40bc946775476",
+      "bytes": 7839
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/08_speaker/methods/lucid/QUERY_INPUT_REQUEST.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/08_speaker/methods/lucid/QUERY_INPUT_REQUEST.json",
+      "sha256": "fd06c90489bf55a482fab360ea4bba843b8cf8f401816af5c7d566c21b3f7011",
+      "bytes": 76
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/08_speaker/methods/lucid/TRAINING_ACCESS_AUDIT.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/08_speaker/methods/lucid/TRAINING_ACCESS_AUDIT.json",
+      "sha256": "5d87f2ae7dd10b9b2ace3452f41f00aea17b16657183b15a4126c73c537488b8",
+      "bytes": 59
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/08_speaker/methods/lucid/frozen.png",
+      "path": "output/imported_lucid_baseline_20261113/groups/08_speaker/frozen.png",
+      "sha256": "cae74446bf862443707481c17ada07bb7a08c95be9f31413a33e25658fb0eaa7",
+      "bytes": 501359
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/evaluation/evaluation.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/evaluation/evaluation.json",
+      "sha256": "68bf33b1515b25f633ee111dbc99f7ca06426efbab71b58a1a58c088fccd8ee3",
+      "bytes": 16381
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/evaluation/evaluation_plan.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/evaluation/evaluation_plan.json",
+      "sha256": "be1026db76fe7233e87aaf3371fae218fb1f123f8ab31e9088fb2f9fc8265996",
+      "bytes": 6330
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/evaluation/independent_verification.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/evaluation/independent_verification.json",
+      "sha256": "cdd1bb4c17d28b37404ef8a5c242f7993399ebd30f6e351691e8a666e5c6d6e7",
+      "bytes": 365
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/evaluation/REPORT.md",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/evaluation/REPORT.md",
+      "sha256": "0c1dd5022627caa19567225efc9155aedf431183af2a5f60486a7cf203fc19b0",
+      "bytes": 977
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/frozen.png",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/frozen.png",
+      "sha256": "74c6404754e18b3481de5552cfedd846d5a47e5efb2de263bfa1f47d19b1c1b6",
+      "bytes": 389833
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/FROZEN_IMAGE.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/FROZEN_IMAGE.json",
+      "sha256": "5bff1a19b3aa3a83427518961f3f39eda28f03c0b6b06549ef30e7a07c5a9781",
+      "bytes": 30711
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/generation/adversarial.png",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/generation/adversarial.png",
+      "sha256": "74c6404754e18b3481de5552cfedd846d5a47e5efb2de263bfa1f47d19b1c1b6",
+      "bytes": 389833
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/generation/attack_metrics.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/generation/attack_metrics.json",
+      "sha256": "bc440b9e3a51f659fb164c6654fd39ad50ca2c3f1a0881317ef0de0617d626da",
+      "bytes": 26094
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/generation/generation_result.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/generation/generation_result.json",
+      "sha256": "b8a61185590cab19c3dc680daf86d2bebb106ddd9432c0509cc1b694255f4aa6",
+      "bytes": 27231
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/PUBLIC_RUN.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/PUBLIC_RUN.json",
+      "sha256": "af2dc8090bc74e1509dedbabd765cfc8201d93216e2e04a3d94531413f7f3da0",
+      "bytes": 7817
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/QUERY_INPUT_REQUEST.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/QUERY_INPUT_REQUEST.json",
+      "sha256": "e168fd1412ac7794297e6b70d050c8662880d4e5f94c0903f8d54f03914574d9",
+      "bytes": 76
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/TRAINING_ACCESS_AUDIT.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/TRAINING_ACCESS_AUDIT.json",
+      "sha256": "5d87f2ae7dd10b9b2ace3452f41f00aea17b16657183b15a4126c73c537488b8",
+      "bytes": 59
+    },
+    {
+      "source": "output/lucid_groups9_20261109/groups/09_toothbrush/methods/lucid/frozen.png",
+      "path": "output/imported_lucid_baseline_20261113/groups/09_toothbrush/frozen.png",
+      "sha256": "74c6404754e18b3481de5552cfedd846d5a47e5efb2de263bfa1f47d19b1c1b6",
+      "bytes": 389833
+    },
+    {
+      "source": "output/lucid_groups9_20261109/REPORT_ALL9.md",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/REPORT_ALL9.md",
+      "sha256": "2d491216c64d7ee8bb1e56c3bf66e9f6a461f03563452e2e6761d913720d876e",
+      "bytes": 3280
+    },
+    {
+      "source": "output/lucid_groups9_20261109/summary_metrics.json",
+      "path": "output/imported_lucid_baseline_20261113/original_evidence/lucid_groups9_20261109/summary_metrics.json",
+      "sha256": "f74c44c77d85cc7d0ecf37505c633d13d66bafca0332d9b374e1e4ad87eeba56",
+      "bytes": 5630
+    }
+  ]
+}

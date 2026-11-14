@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "origin": "explicit_read_only_existing_webshop_source",
+  "source_tree": "D:\\Material\\Literature Reading\\code\\MINJA-main\\rap\\webshop",
+  "files": [
+    {
+      "path": "LICENSE.md",
+      "source_sha256": "dc5f438bc8e050a66bd1cf81eef9b3ff5364fd967dac9dcb2573d96d638bacd1",
+      "vendored_sha256": "dc5f438bc8e050a66bd1cf81eef9b3ff5364fd967dac9dcb2573d96d638bacd1",
+      "original_bytes": 1115,
+      "vendored_bytes": 1115,
+      "modifications": []
+    },
+    {
+      "path": "web_agent_site/__init__.py",
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "vendored_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_bytes": 0,
+      "vendored_bytes": 0,
+      "modifications": []
+    },
+    {
+      "path": "web_agent_site/app.py",
+      "source_sha256": "8f0e652f456132c820fe6a6812cc424f402075ce176ed2b52d35ea1b13cd0b10",
+      "vendored_sha256": "8f0e652f456132c820fe6a6812cc424f402075ce176ed2b52d35ea1b13cd0b10",
+      "original_bytes": 10415,
+      "vendored_bytes": 10415,
+      "modifications": []
+    },
+    {
+      "path": "web_agent_site/utils.py",
+      "source_sha256": "8b7ebcd34026a3c9965b7df3704693c60d2406f9076b43250c447934d70f3b41",
+      "vendored_sha256": "8b7ebcd34026a3c9965b7df3704693c60d2406f9076b43250c447934d70f3b41",
+      "original_bytes": 2536,
+      "vendored_bytes": 2536,
+      "modifications": []
+    },
+    {
+      "path": "web_agent_site/engine/__init__.py",
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "vendored_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_bytes": 0,
+      "vendored_bytes": 0,
+      "modifications": []
+    },
+    {
+      "path": "web_agent_site/engine/engine.py",
+      "source_sha256": "7198c14d54a85bbff1dfd1f495ef6dba563f418cc5da45c85132585fdac5b47f",
+      "vendored_sha256": "7198c14d54a85bbff1dfd1f495ef6dba563f418cc5da45c85132585fdac5b47f",
+      "original_bytes": 13661,
+      "vendored_bytes": 13661,
+      "modifications": []
+    },
+    {
+      "path": "web_agent_site/engine/goal.py",
+      "source_sha256": "a0278cb0883fdb4f46764d111286dd1a44819fbc12633608f34775a240029c46",
+      "vendored_sha256": "4954c46b8f441b2db8daf139cb7159f071673d36d283ea5fc36ee3bc75f8d9c1",
+      "original_bytes": 10475,
+      "vendored_bytes": 11229,
+      "modifications": [
+        "initialize NLP only when explicitly serving/rewarding",
+        "require the historical en_core_web_lg 3.8.0 without a small-model fallback",
+        "resolve explicit relative NLP directories from the project root"
+      ]
+    },
+    {
+      "path": "web_agent_site/engine/normalize.py",
+      "source_sha256": "8e14f614c7bbad0b6444beb05bdedeaddfbd77456ca7d3b37b6437adeaa34010",
+      "vendored_sha256": "8e14f614c7bbad0b6444beb05bdedeaddfbd77456ca7d3b37b6437adeaa34010",
+      "original_bytes": 3922,
+      "vendored_bytes": 3922,
+      "modifications": []
+    },
+    {
+      "path": "web_agent_site/templates/attributes_page.html",
+      "source_sha256": "132f337e38c9e178c51a7c8956db76646157f8dd9fc4e705d59e0e888b3bfe5f",
+      "vendored_sha256": "132f337e38c9e178c51a7c8956db76646157f8dd9fc4e705d59e0e888b3bfe5f",
+      "original_bytes": 2624,
+      "vendored_bytes": 2624,
+      "modifications": []
+    },
+    {
+      "path": "web_agent_site/templates/description_page.html",
+      "source_sha256": "6a184065c7eacb12d0def64d9c0bb46bea62f2e4d316a9ea2a3b9ecb1c82f847",
+      "vendored_sha256": "6a184065c7eacb12d0def64d9c0bb46bea62f2e4d316a9ea2a3b9ecb1c82f847",
+      "original_bytes": 1787,
+      "vendored_bytes": 1787,
+      "modifications": []
+    },
+    {
+      "path": "web_agent_site/templates/done_page.html",
+      "source_sha256": "db07e3f53b2541af733f1610652ab408335dde6a9151dfea9ee141549cc4afc9",
+      "vendored_sha256": "db07e3f53b2541af733f1610652ab408335dde6a9151dfea9ee141549cc4afc9",
+      "original_bytes": 2703,
+      "vendored_bytes": 2703,
+      "modifications": []
+    },
+    {
+      "path": "web_agent_site/templates/features_page.html",
+      "source_sha256": "ba1427e13f81f1adf354f7101d66c077460389e772c5fe56da32bd08cd855379",
+      "vendored_sha256": "ba1427e13f81f1adf354f7101d66c077460389e772c5fe56da32bd08cd855379",
+      "original_bytes": 1934,
+      "vendored_bytes": 1934,
+      "modifications": []
+    },
+    {
+      "path": "web_agent_site/templates/item_page.html",
+      "source_sha256": "9fc55dedd5f1311a8bef855c8a119e858998bef210c5424dc37c7b3465d3a759",
+      "vendored_sha256": "9fc55dedd5f1311a8bef855c8a119e858998bef210c5424dc37c7b3465d3a759",
+      "original_bytes": 5671,
+      "vendored_bytes": 5671,
+      "modifications": []
+    },
+    {
+      "path": "web_agent_site/templates/results_page.html",
+      "source_sha256": "c3fca128ceec8a6f4523a83a65f87a7f86847b5fa37a54cdb5c0099c80d6878d",
+      "vendored_sha256": "c3fca128ceec8a6f4523a83a65f87a7f86847b5fa37a54cdb5c0099c80d6878d",
+      "original_bytes": 4252,
+      "vendored_bytes": 4252,
+      "modifications": []
+    },
+    {
+      "path": "web_agent_site/templates/review_page.html",
+      "source_sha256": "4f07cdaab1617b60ac3b8a90345eec8ee6d1a4bf888c5c222f9072931063d72d",
+      "vendored_sha256": "4f07cdaab1617b60ac3b8a90345eec8ee6d1a4bf888c5c222f9072931063d72d",
+      "original_bytes": 2564,
+      "vendored_bytes": 2564,
+      "modifications": []
+    },
+    {
+      "path": "web_agent_site/templates/search_page.html",
+      "source_sha256": "d347570d07468e49656d5da6aa7a4d1ab117752dc1338f2653e02d35f51d2c41",
+      "vendored_sha256": "d347570d07468e49656d5da6aa7a4d1ab117752dc1338f2653e02d35f51d2c41",
+      "original_bytes": 1501,
+      "vendored_bytes": 1501,
+      "modifications": []
+    },
+    {
+      "path": "web_agent_site/static/images/no-image-available.png",
+      "source_sha256": "ee79d06e254dcbcd3cc319b7e78993468c402af0234eeafbeb835a5fe0ce1b1b",
+      "vendored_sha256": "ee79d06e254dcbcd3cc319b7e78993468c402af0234eeafbeb835a5fe0ce1b1b",
+      "original_bytes": 37283,
+      "vendored_bytes": 37283,
+      "modifications": []
+    },
+    {
+      "path": "web_agent_site/static/style.css",
+      "source_sha256": "01dfac8dc1f84108a1d39074bdce030eb0c8e831d66958254a7114ca6d75b8a5",
+      "vendored_sha256": "01dfac8dc1f84108a1d39074bdce030eb0c8e831d66958254a7114ca6d75b8a5",
+      "original_bytes": 3713,
+      "vendored_bytes": 3713,
+      "modifications": []
+    }
+  ],
+  "license": "LICENSE.md",
+  "runtime_only": true,
+  "old_user_logs_models_drivers_and_raw_datasets_copied": false,
+  "nlp_protocol": {
+    "package": "en_core_web_lg",
+    "version": "3.8.0",
+    "initialization": "explicit_service_start"
+  }
+}

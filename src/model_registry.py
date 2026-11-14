@@ -24,3 +24,18 @@ def resolve_model(key_or_repo: str, *, allow_downloads: bool = False) -> str:
         return key_or_repo
     raise FileNotFoundError(
         f"Missing local model {key_or_repo!r} at {path}; prepare it with tools/prepare_models.py on the server.")
+
+
+def verify_locked_snapshot_files(
+    key: str,
+    spec: dict,
+    frozen_files: dict[str, str],
+    locked_files: dict[str, str],
+) -> bool:
+    """Verify prepared snapshot files against the recovery lock, allowing VAE-only subset for editor."""
+    if key == "editor" and spec.get("allow_patterns") and "vae/diffusion_pytorch_model.safetensors" in locked_files:
+        required_vae = {"vae/config.json", "vae/diffusion_pytorch_model.safetensors"}
+        return bool(frozen_files) and required_vae.issubset(frozen_files) and all(
+            locked_files.get(path) == digest for path, digest in frozen_files.items()
+        )
+    return frozen_files == locked_files

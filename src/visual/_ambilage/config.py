@@ -1,10 +1,10 @@
 """AmbiLAGE (环境光协同背景调整＋主体微光影优化) 原生配置模型与参数校验。
-面向 A100-SXM4-80GB 原生加速调优，包含：
-1. 四阶段空间参数与平滑滤波标准差；
-2. 背景无截断可行区间对称中点展开与网格参数；
-3. 严格零像素扰动约束 (auxiliary_levels == 0, pixel_optimization is False)；
-4. 印刷文字区域绝对保护 (change[roi] == 0)；
-5. A100 硬件画像参数 (TF32, 显存自适应检查点, 512GB 磁盘防护)。
+包含：
+1. 四阶段显式规划与形态学墨迹保护参数；
+2. Stage 3 标签底色透射融合与 32 步回溯线搜索数学守门参数；
+3. Stage 4 十六通道变分自编码器潜空间与零中心可行无截断环境光场参数；
+4. 严格零像素扰动约束 (auxiliary_levels == 0, pixel_optimization is False)；
+5. 印刷墨迹核心绝对零改动 (change[roi] == 0) 与结尾严格数学自然度门禁。
 """
 from __future__ import annotations
 
@@ -38,17 +38,19 @@ class AmbiLAGEConfig:
     roi_feather_pixels: float = 6.0     # 文字边缘余弦缓冲过渡宽度 (w_text: 6px buffer)
     edge_feather_mode: str = "cosine"   # 'cosine' | 'linear'
 
-    # Stage 4: 大核高斯平滑滤波与色度保留率参数
+    # Stage 4: 大核高斯平滑滤波与色度保留率参数（锁死背景高频杂色，保留16通道主体细腻光影）
     fg_luma_smooth_sigma: float = 5.0   # 主体明度大核高斯平滑标准差
     fg_chroma_smooth_sigma: float = 9.0 # 主体色度大核高斯平滑标准差
     fg_chroma_keep: float = 0.30        # 主体色度保留率 (抑制杂色斑块，仅保留柔光影)
-    bg_luma_smooth_sigma: float = 2.2   # 背景 VAE 明度高斯平滑标准差
-    bg_chroma_smooth_sigma: float = 4.5 # 背景 VAE 色度高斯平滑标准差
-    bg_chroma_keep: float = 0.75        # 背景 VAE 色度保留率
+    bg_luma_smooth_sigma: float = 12.0  # 背景明度超大核高斯平滑标准差 (锁死高频斑块)
+    bg_chroma_smooth_sigma: float = 16.0 # 背景色度超大核高斯平滑标准差
+    bg_chroma_keep: float = 0.10        # 背景色度保留率 (锁死背景杂色通道)
     ambient_smooth_sigma: float = 14.0  # 背景环境漫射光高斯平滑标准差
     ambient_grid_size: int = 8          # 背景低频环境光网格尺寸 (8x8)
-    ambient_init_bias: float = 0.30     # 初始环境光偏置系数 (0.30 * tau)
-    tau_scale: float = 0.75             # 双曲正切平滑缩放系数 (tau_bg = max(half_bg, 1/255) * tau_scale)
+    ambient_init_bias: float = 0.30     # 初始环境光偏置系数
+    tau_scale: float = 0.75             # 兼容缩放系数
+    tau_fg: float = 0.20                # 主体双曲正切温度尺度 (防止过早饱和)
+    tau_bg: float = 0.35                # 背景双曲正切温度尺度 (防止背景饱和成块)
 
     # 潜空间与环境光优化参数
     latent_working_size: int = 512
@@ -60,53 +62,66 @@ class AmbiLAGEConfig:
     temperature: float = 0.04
 
     # 目标函数与正则化权重
-    joint_weight: float = 1.0          # 唯一图文联合检索效用的整体权重
-    surrogate_set: str = 'lucid'       # 默认与原始像素方法共用三代理
+    joint_weight: float = 1.0               # 图文联合检索效用整体权重
+    compensation_weight: float = 0.35       # 源商品完整公开文本逆向补偿目标权重
+    ensemble_temperature: float = 0.20      # 跨代理相对增益软最小集成温度
+    ensemble_uniform_mix: float = 0.45      # 多代理均匀保底混合比例
+    surrogate_set: str = 'lucid'            # 默认与原始像素方法共用三代理
     surrogate_config: str | None = None
     compensated_weight: float = 0.5
-    fg_l2_weight: float = 0.0001        # 主体微光影 L2 惩罚
-    fg_tv_weight: float = 0.0004        # 主体空间全变分 (TV) 惩罚
-    bg_l2_weight: float = 0.00005       # 背景围绕均值偏移的方差惩罚 (不惩罚整体色调平移)
-    bg_tv_weight: float = 0.0012        # 背景空间全变分 (TV) 惩罚
-    bg_chroma_tv_weight: float = 0.0020 # 背景色度全变分惩罚
-    overflow_weight: float = 0.05       # 越界惩罚
-    halo_soft_weight: float = 0.0001    # 光晕软约束惩罚
+    fg_l2_weight: float = 0.0001            # 主体微光影 L2 惩罚
+    fg_tv_weight: float = 0.0004            # 主体空间全变分 (TV) 惩罚
+    bg_l2_weight: float = 0.08              # 背景围绕均值偏移的空间方差惩罚 (不惩罚整体色调平移)
+    bg_tv_weight: float = 0.15              # 背景空间全变分 (TV) 惩罚
+    bg_chroma_tv_weight: float = 0.30       # 背景色度全变分惩罚
+    overflow_weight: float = 0.05           # 越界惩罚
+    halo_weight: float = 0.15               # 边界光晕可微惩罚权重
+    halo_soft_weight: float = 0.0001        # 兼容旧光晕软约束权重
     halo_floor: float = 12.0
+    halo_ceiling: float = 8.0               # 严格数学门禁光晕误差上限
     halo_parent_multiplier: float = 1.0
-    guard_backtracks: int = 8           # 回退守门最大步数
+    guard_backtracks: int = 8               # 回退守门最大步数
 
-    # 质量守门门槛 (SSIM & MAE)
-    source_ssim_floor: float = 0.78     # 全图结构相似度下限
-    source_mae_ceiling: float = 20.0    # 全图平均绝对误差上限
+    # 质量守门门槛 (SSIM & MAE & Halo)
+    source_ssim_floor: float = 0.78         # 最终成图结构相似度下限
+    source_mae_ceiling: float = 20.0        # 最终成图平均绝对误差上限
+    anchor_ssim_floor: float = 0.72         # Stage 3 锚点线搜索结构相似度参考下限
+    anchor_mae_ceiling: float = 26.0        # Stage 3 锚点线搜索平均误差参考上限
 
-    # Stage 3: 光照一致性协调参数
+    # Stage 3: 光照一致性协调与形态学墨迹保护参数
     harmonization_smoothing_sigma: float = 12.0
     harmonization_print_ring_sigma: float = 7.0
     harmonization_selected_color_mix: float = 0.25
     harmonization_strength: float = 1.0
     harmonization_blend_mode: str = "matte"
+    ink_margin_pixels: int = 1
+    ink_closing_pixels: int = 9
+    ink_local_contrast: float = 3.0
+    ink_dark_luminance: float = 180.0
+    ink_colored_chroma: float = 12.0
 
-    # A100 硬件加速与资源防护画像
-    allow_tf32: bool = True             # 启用 TensorFloat-32 原生张量核矩阵乘法加速
-    enable_gradient_checkpointing: bool | None = None  # None: 显存>32GB 时自动禁用
-    save_intermediate_pngs: bool = False # 512GB 磁盘防护：严禁每步落盘 PNG，仅存最终成图
+    # 硬件加速、轻量模型路径与扩散净化画像
+    allow_tf32: bool = True                 # 启用 TensorFloat-32 原生张量核矩阵乘法加速
+    enable_gradient_checkpointing: bool | None = None
+    save_intermediate_pngs: bool = False
     device: str = "cuda"
     seed: int = 42
     # 生产后端只加载真实权重；轻量模式必须由调用者显式声明。
     smoke_test: bool = False
     sam_model_dir: str | None = None
-    planner_model_dir: str | None = None
-    editor_model_dir: str | None = None
+    planner_model_dir: str | None = None    # 兼容保留，Choice 1 显式规划不再加载 Qwen
+    editor_model_dir: str | None = None     # 兼容保留，Choice 1 仅使用其中 16 通道 vae 子目录
     vae_model_dir: str | None = None
+    vae_model_path: str | None = None
     purifier_model_path: str | None = None
     purifier_working_size: int = 256
     purifier_gradient_checkpointing: bool = True
     editor_kind: str = "flux"
-    anchor_steps: int = 30
+    anchor_steps: int = 32                  # Stage 3 32 步回溯线搜索步数
     anchor_guidance_scale: float = 2.5
     planner_max_new_tokens: int = 768
     eot_enabled: bool = True
-    diffusion_weight: float = 0.25
+    diffusion_weight: float = 0.08          # 压低扩散净化梯度权重以消除潜空间棋盘格伪影
     purifier_steps: int = 10
 
     def validate(self) -> None:
@@ -159,6 +174,8 @@ class AmbiLAGEConfig:
             raise ValueError("色度保留率必须位于 [0.05, 1.0]")
         if not (0.2 <= self.tau_scale <= 1.0):
             raise ValueError("平滑缩放系数 tau_scale 必须位于 [0.2, 1.0]")
+        if not (0.001 <= self.tau_fg <= 5.0) or not (0.001 <= self.tau_bg <= 5.0):
+            raise ValueError("双曲正切温度尺度 tau_fg/tau_bg 无效")
 
         # 学习率与优化参数校验
         if not (0.0 < self.latent_learning_rate <= 0.2):
@@ -171,14 +188,22 @@ class AmbiLAGEConfig:
             raise ValueError("环境光网格尺寸 ambient_grid_size 无效")
         if not (0.0 < self.temperature <= 1.0):
             raise ValueError("检索效用温度参数无效")
+        if not (0.0 <= self.compensation_weight < 1.0):
+            raise ValueError("逆向补偿目标权重 compensation_weight 必须位于 [0.0, 1.0)")
+        if not (0.0 < self.ensemble_temperature <= 5.0) or not (0.0 <= self.ensemble_uniform_mix <= 1.0):
+            raise ValueError("多代理集成权重参数无效")
 
         # 质量守门与正则化权重校验
         if not (0.25 <= self.source_ssim_floor < 1.0) or not (0.0 < self.source_mae_ceiling <= 128.0):
             raise ValueError("质量守门门槛无效")
+        if not (0.25 <= self.anchor_ssim_floor < 1.0) or not (0.0 < self.anchor_mae_ceiling <= 128.0):
+            raise ValueError("锚点线搜索质量门槛无效")
+        if self.halo_ceiling < 0.0:
+            raise ValueError("边界光晕门禁上限 halo_ceiling 不能为负数")
         weights = [
             self.fg_l2_weight, self.fg_tv_weight, self.bg_l2_weight,
             self.bg_tv_weight, self.bg_chroma_tv_weight, self.overflow_weight,
-            self.halo_soft_weight,
+            self.halo_soft_weight, self.halo_weight,
         ]
         if any(w < 0.0 for w in weights):
             raise ValueError("正则化权重不能为负数")

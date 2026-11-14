@@ -13,7 +13,7 @@ import shutil
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from src.paths import PROJECT, EVALUATION_BASE, MODEL_ROOT, RESOURCES
-from src.model_registry import model_specs
+from src.model_registry import model_specs, verify_locked_snapshot_files
 
 
 def sha256(path):
@@ -102,7 +102,7 @@ def check_code(root=PROJECT):
     if not checked:
         raise ValueError("Project source files are absent")
     manifest = json.loads((root / "resources/model_manifest.json").read_text(encoding="utf-8"))
-    if not {"sam2", "planner", "editor", "purifier", "selection", "eval_g14", "eval_gme"} <= set(manifest["models"]):
+    if not {"sam2", "editor", "purifier", "selection", "eval_g14", "eval_gme"} <= set(manifest["models"]):
         raise ValueError("Production model manifest is incomplete")
     return {"python_files_parsed": checked, "model_manifest_entries": len(manifest["models"]), "private_resources_read": False}
 
@@ -158,7 +158,20 @@ def check_webshop_resources(root=PROJECT):
 
 def inspect_runtime(include_hardware=False):
     packages = {}
-    for name in ("torch", "torchvision", "transformers", "diffusers", "accelerate", "open-clip-torch", "rapidocr-onnxruntime", "huggingface-hub"):
+    for name in (
+        "torch",
+        "torchvision",
+        "transformers",
+        "diffusers",
+        "accelerate",
+        "open-clip-torch",
+        "safetensors",
+        "huggingface-hub",
+        "rapidocr-onnxruntime",
+        "scikit-image",
+        "scipy",
+        "sentence-transformers",
+    ):
         try:
             packages[name] = importlib.metadata.version(name)
         except importlib.metadata.PackageNotFoundError:
@@ -170,7 +183,14 @@ def inspect_runtime(include_hardware=False):
         result["cuda_available"] = torch.cuda.is_available()
         if result["cuda_available"]:
             props = torch.cuda.get_device_properties(0)
-            result.update(cuda_device=props.name, vram_gib=round(props.total_memory / 1024 ** 3, 2), bf16_supported=torch.cuda.is_bf16_supported())
+            bf16 = torch.cuda.is_bf16_supported()
+            result.update(
+                cuda_device=props.name,
+                vram_gib=round(props.total_memory / 1024 ** 3, 2),
+                bf16_supported=bf16,
+                recommended_dtype="bfloat16" if bf16 else "float16",
+                fp32_fallback_compatible=True,
+            )
     return result
 
 
@@ -195,23 +215,32 @@ def main(argv=None):
                             if not (selection.profile=='custom' and spec.weight_path)}
     report['training_surrogates']=selection.audit()
     models = {}
+    optional_skipped = []
     lock_path = RESOURCES / 'model_lock.json'
     locked = json.loads(lock_path.read_text(encoding='utf-8')).get('models', {}) if lock_path.is_file() else {}
     for key, spec in registry.items():
-        if spec["scope"] == "optional" or (spec['scope']=='encoders' and key not in required_training_keys):
+        if spec["scope"] == "optional":
+            optional_skipped.append(key)
+            continue
+        if spec['scope']=='encoders' and key not in required_training_keys:
             continue
         destination = MODEL_ROOT / key
         record = destination / "download_manifest.json"
-        models[key] = {"present": record.is_file(), "repo_id": spec["repo_id"]}
+        entry = {"present": record.is_file(), "repo_id": spec["repo_id"], "role": spec["role"]}
+        if spec.get("allow_patterns"):
+            entry["allow_patterns"] = spec["allow_patterns"]
+        models[key] = entry
         if args.require_models and not record.is_file():
             raise FileNotFoundError("Prepare required model snapshot: " + key)
         if record.is_file() and (args.require_models or args.verify_model_hashes):
             frozen = json.loads(record.read_text(encoding="utf-8"))
             if frozen.get("repo_id") != spec["repo_id"] or not frozen.get("revision"):
                 raise ValueError("Prepared snapshot identity mismatch: " + key)
-            if key in locked and (locked[key].get('repo_id') != frozen['repo_id']
-                    or locked[key].get('revision') != frozen['revision']
-                    or locked[key].get('files') != frozen.get('files')):
+            if key in locked and (
+                locked[key].get('repo_id') != frozen['repo_id']
+                or locked[key].get('revision') != frozen['revision']
+                or not verify_locked_snapshot_files(key, spec, frozen.get('files', {}), locked[key].get('files', {}))
+            ):
                 raise ValueError('Prepared model differs from the repository recovery lock: ' + key)
             if not any(name.endswith(".safetensors") for name in frozen.get("files", {})):
                 raise ValueError("Prepared snapshot contains no weights: " + key)
@@ -222,6 +251,7 @@ def main(argv=None):
             models[key]["snapshot_files_verified"] = len(frozen["files"])
             models[key]["content_hashes_verified"] = args.verify_model_hashes
     report["models"] = models
+    report["optional_models_skipped"] = optional_skipped
     custom_models=[]
     if selection.profile=='custom':
         for spec,key in zip(selection.specs,training_keys):

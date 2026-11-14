@@ -82,7 +82,7 @@ class SmokeStages:
         return _heuristic_segmentation(image),{'test_fixture':True,'segmenter':'synthetic_fixture'}
     def generate_anchor(self, initial, prompt, seed):
         return self.source.copy(),{'test_fixture':True,'backend':'identity_fixture'}
-    def gate(self,source,candidate,category):
-        return {'passed':True,'reasons':['synthetic fixture only'],'test_fixture':True}
+    def gate(self, source, candidate, category='', *, roi_mask=None, fg_mask=None, **kwargs):
+        return {'passed': True, 'reasons': ['synthetic fixture only'], 'test_fixture': True}
     def make_vae(self):
         return AmbiLAGEVae('cpu',model=TinyAutoencoder(),test_fixture=True)

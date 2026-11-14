@@ -9,8 +9,8 @@
     },
     "planner": {
       "repo_id": "Qwen/Qwen2.5-VL-32B-Instruct",
-      "role": "public_planning_and_naturalness_gate",
-      "scope": "generation"
+      "role": "explicit_optional_vlm_planner",
+      "scope": "optional"
     },
     "planner_7b": {
       "repo_id": "Qwen/Qwen2.5-VL-7B-Instruct",
@@ -19,8 +19,9 @@
     },
     "editor": {
       "repo_id": "black-forest-labs/FLUX.1-Kontext-dev",
-      "role": "natural_anchor_and_16_channel_vae",
+      "role": "stage4_16_channel_flux_vae",
       "scope": "generation",
+      "allow_patterns": ["vae/*", "model_index.json", "*.md", "LICENSE*"],
       "access_note": "Accept the publisher license and configure HF_TOKEN outside the project."
     },
     "editor_qwen": {

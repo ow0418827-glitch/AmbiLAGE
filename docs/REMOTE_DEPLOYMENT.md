@@ -1,6 +1,6 @@
 # 远程部署与验收
 
-本地已经完成迁移修复及轻量验证。此文给出远程执行顺序，未执行的远程步骤不能记为通过。目标机器为 A100（八十吉字节显存计算卡）、约一百六十七吉字节内存和五百一十二吉字节磁盘；这些容量不能替代实际峰值测量。
+本地已经完成迁移修复及轻量验证。此文给出远程执行顺序，未执行的远程步骤不能记为通过。当前方案（Choice 1：显式公开配方规划 + 数学天然度门禁 + FLUX 仅十六通道 VAE 精修）大幅降低了显存需求，支持 NVIDIA T4（16GB 显存，自动降级为 FP16/FP32 安全计算）、L4（24GB 显存）及 A100（40GB/80GB 显存）计算卡，生成阶段峰值显存预计约 9.5–11.5 GB（含留出编码器评估时按需加载）；这些容量估算不能替代实际峰值测量。
 
 ## 同步与环境
 
@@ -59,11 +59,11 @@ export AMBILAGE_MODEL_ROOT="$PWD/models"
 .venv/bin/python -X utf8 tools/preflight.py --hardware --require-models --output output/deployment/remote_preflight.json
 ```
 
-默认下载端点为国内模型镜像，可显式追加 `--endpoint https://huggingface.co` 使用官方源。下载工具先解析实际仓库提交，再固定该提交下载；本地准备清单记录仓库、实际提交和逐文件内容摘要。它不下载量化文件或同模型的传统二进制重复权重。仓库内 resources/model_lock.json（模型恢复锁定清单）会保存这些提交与文件摘要；第一次真实下载后须将该清单一起提交。服务器清空后，准备工具优先按清单中的同一提交重新下载并逐文件比对，不能静默改用最新权重。本机尚未下载真实模型，因此当前锁定清单为空，这是实际状态。
+默认下载端点为国内模型镜像，可显式追加 `--endpoint https://huggingface.co` 使用官方源。下载工具先解析实际仓库提交，再固定该提交下载；本地准备清单记录仓库、实际提交和逐文件内容摘要。它不下载量化文件或同模型的传统二进制重复权重；其中 `editor` 通过 `allow_patterns` 仅拉取 `vae/*` 等十六通道 VAE 所需文件（约 335 MB，自动跳过约 34 GB 的 FLUX 扩散骨干及 T5 文本编码器）。仓库内 `resources/model_lock.json`（模型恢复锁定清单）当前保存有 `sam2`、`clip_b16`、`clip_b32`、`clip_b32_laion`、`eval_g14`、`selection`、`purifier`、`editor` 及历史可选 `planner` 的提交与文件摘要（`eval_gme` 尚未锁定）；后续新增下载也应将锁定清单更新后一并提交。服务器清空后，准备工具通过 `verify_locked_snapshot_files` 优先按锁定提交与模式白名单重新核验下载，不能静默改用未核验权重。
 
-默认生产组件是 SAM2.1-Hiera-Large（大型主体分割模型）、RapidOCR（快速文字识别工具）、Qwen2.5-VL-32B-Instruct（视觉语言规划与自然度检查模型）、FLUX.1-Kontext-dev（自然锚点编辑模型及十六通道变分自编码器）。复杂中文包装可显式准备 `editor_qwen`（中文包装编辑备选）；较小规划模型可显式准备 `planner_7b`（七十亿参数规划备选）。备选不会自动替换默认模型。训练默认与原始像素方法共用三代理，原四代理组合可显式选择；两个留出评估模型保持独立。准备和预检只要求所选训练方案对应的代理权重，参数和完整身份见 [训练代理选择说明](TRAINING_SURROGATES.md)。另有 DINOv2-small（小型自监督视觉编码器）作为公开选图的单一冻结外形代理，目录键为 `selection`（公开选择模型）；可用 `--scope selection` 单独准备，完整准备范围也包含它。公开选图标注复用同一大型分割目录，并显式遵循选图命令的设备参数。既有九组复用不触发重新选图；新的门槛校准必须提供真实公开开发集逐对标签，示例夹具不能替代。
+默认生产组件是 `SAM2.1-Hiera-Large`（大型主体分割模型）、`RapidOCR`（CPU 快速文字识别与墨迹核心保护工具）、阶段三三十二步显式几何/色阶线性搜索锚点（无视觉编辑大模型）、`FLUX.1-Kontext-dev` 十六通道变分自编码器（仅 `vae/*` 子目录）、`Stable Diffusion v1.5`（可微去噪净化器），以及显式公开品类配方规划与 `SSIM`/`MAE`/光晕（halo）数学自然度门禁。已停用的历史视觉语言大模型 `planner`（`Qwen2.5-VL-32B-Instruct`）、`planner_7b`（`Qwen2.5-VL-7B-Instruct`）和 `editor_qwen`（`Qwen-Image-Edit`）均在模型清单中标记为 `optional`（可选），`--scope all` 与 `--require-models` 均不再下载或校验它们；若仅需历史显式复现，可另行安装 `requirements/requirements-optional-vlm.txt`（含 `qwen-vl-utils`）并用 `--models` 显式拉取。基础运行依赖不再要求 `qwen-vl-utils`、`lpips`、`matplotlib` 或 `psutil`。训练默认与原始像素方法共用三代理，原四代理组合（`clip_l14`、`siglip_so400m`、`clip_h14`）可显式选择；两个留出评估模型保持独立。准备和预检只要求所选训练方案对应的代理权重，参数和完整身份见 [训练代理选择说明](TRAINING_SURROGATES.md)。另有 `DINOv2-small`（小型自监督视觉编码器）作为公开选图的单一冻结外形代理，目录键为 `selection`（公开选择模型）；可用 `--scope selection` 单独准备，完整准备范围也包含它。公开选图标注复用同一大型分割目录，并显式遵循选图命令的设备参数。既有九组复用不触发重新选图；新的门槛校准必须提供真实公开开发集逐对标签，示例夹具不能替代。
 
-官方接口参考：[分割模型](https://huggingface.co/facebook/sam2.1-hiera-large)、[规划模型](https://huggingface.co/Qwen/Qwen2.5-VL-32B-Instruct)、[编辑模型及许可](https://huggingface.co/black-forest-labs/FLUX.1-Kontext-dev)、[第二留出模型](https://huggingface.co/Alibaba-NLP/gme-Qwen2-VL-2B-Instruct)。
+官方接口参考：[分割模型](https://huggingface.co/facebook/sam2.1-hiera-large)、[FLUX 16通道 VAE 来源及许可](https://huggingface.co/black-forest-labs/FLUX.1-Kontext-dev)、[第一留出模型](https://huggingface.co/laion/CLIP-ViT-g-14-laion2B-s12B-b42K)、[第二留出模型](https://huggingface.co/Alibaba-NLP/gme-Qwen2-VL-2B-Instruct)、[可选历史规划模型（默认停用）](https://huggingface.co/Qwen/Qwen2.5-VL-32B-Instruct)。
 
 ## 真模型验收顺序
 
@@ -134,7 +134,7 @@ git push
 
 ## 本地与远程证据边界
 
-本地模拟测试只能证明相应逻辑、梯度连接、约束和调用契约。它不能证明真实模型的自然度、鲁棒性、黑盒迁移率、吞吐或八十吉字节显存适配。加载各阶段真实模型后，还需核验模型接口版本、峰值显存、实际图像质量及完整检索结果。所选训练代理与两个评估留出模型身份不同，也不能单凭名称隔离就宣称对任意现实系统有效。
+本地模拟测试只能证明相应逻辑、梯度连接、约束和调用契约。它不能证明真实模型的自然度、鲁棒性、黑盒迁移率、吞吐或目标显卡（T4 16GB / L4 24GB / A100 40GB/80GB）上的实际显存峰值与数值精度稳定性。加载各阶段真实模型后，还需核验模型接口版本、峰值显存、实际图像质量及完整检索结果。所选训练代理与两个评估留出模型身份不同，也不能单凭名称隔离就宣称对任意现实系统有效。
 
 购物默认关闭。必要商城源码、完整商品目录和原搜索索引现已包含在项目恢复资料内，不再借用相邻目录。现有九组生成与检索不需要这些可选服务。重新选商品前恢复数据库；最终购物前还需安装 Java（二十一版或更新爪哇运行时）、固定版本搜索接口及大型英语模型：
 

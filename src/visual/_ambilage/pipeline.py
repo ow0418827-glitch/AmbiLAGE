@@ -18,7 +18,7 @@ from .color_selection import extract_foreground_statistics
 from .config import AmbiLAGEConfig, DEFINITION, METHOD
 from .illumination_harmonization import harmonize_illumination
 from .latent_refinement import AmbiLAGEVae, refine_ambient_coop_latent
-from .segmentation import compute_spatial_envelopes, print_region_mask
+from .segmentation import compute_spatial_envelopes, extract_ink_core_mask, print_region_mask
 
 
 class AmbiLAGEPipeline:
@@ -65,48 +65,59 @@ class AmbiLAGEPipeline:
             source_fg,source_seg=backend.segment(source,source_boxes or plan['source_boxes'])
             target_fg,target_seg=backend.segment(target,target_boxes)
             backend.close()
-            roi=print_region_mask(source_fg.shape,regions)
-            envelopes=compute_spatial_envelopes(source_fg,roi,self.config)
-            for name,mask in [('source_foreground',source_fg),('target_foreground',target_fg),('print_core',roi)]:
-                Image.fromarray(mask.astype(np.uint8)*255).save(root/(name+'.png'))
-            Image.fromarray(np.rint(envelopes['macro_array']*255).astype(np.uint8)).save(root/'latent_edit_mask.png')
-            color_stats,_=extract_foreground_statistics(target,target_fg,output_dir=root/'foreground_statistics')
-            initial,harmonization=harmonize_illumination(source,color_stats['rgb'],source_fg,regions,self.config,
-                output_dir=root/'color_harmonization')
-            anchor,anchor_audit=backend.generate_anchor(initial,plan['edit_prompt'],self.config.seed)
+            rect_roi = print_region_mask(source_fg.shape, regions)
+            source_rgb = read_rgb(source)
+            roi, substrate = extract_ink_core_mask(source_rgb, source_fg, rect_roi, self.config)
+            envelopes = compute_spatial_envelopes(source_fg, roi, self.config)
+            for name, mask in [('source_foreground', source_fg), ('target_foreground', target_fg), ('print_core', roi)]:
+                Image.fromarray(mask.astype(np.uint8) * 255).save(root / (name + '.png'))
+            Image.fromarray(np.rint(envelopes['macro_array'] * 255).astype(np.uint8)).save(root / 'latent_edit_mask.png')
+            color_stats, _ = extract_foreground_statistics(target, target_fg, output_dir=root / 'foreground_statistics')
+            initial, harmonization = harmonize_illumination(
+                source,
+                color_stats['rgb'],
+                source_fg,
+                regions,
+                self.config,
+                output_dir=root / 'color_harmonization',
+                ink_core_mask=roi,
+                substrate_mask=substrate,
+            )
+            anchor, anchor_audit = backend.generate_anchor(initial, plan['edit_prompt'], self.config.seed)
             backend.close()
-            if anchor.shape!=read_rgb(source).shape:
+            if anchor.shape != source_rgb.shape:
                 raise ValueError('自然锚点分辨率与源图不一致')
-            anchor[roi]=read_rgb(source)[roi]
-            Image.fromarray(anchor).save(root/'generative_anchor.png')
-            from src.visual.training_objectives import SequentialEnsembleObjective,load_training_surrogates
+            anchor[roi] = source_rgb[roi]
+            Image.fromarray(anchor).save(root / 'generative_anchor.png')
+            from src.visual.training_objectives import SequentialEnsembleObjective, load_training_surrogates
             if self.config.smoke_test:
-                from .smoke import TinySurrogate,TinyPurifier
-                surrogates=[TinySurrogate(i) for i in range(len(self.surrogate_selection.specs))]
-                purifier=TinyPurifier()
-                vae=backend.make_vae()
-                effective=replace(self.config,latent_working_size=64)
+                from .smoke import TinySurrogate, TinyPurifier
+                surrogates = [TinySurrogate(i) for i in range(len(self.surrogate_selection.specs))]
+                purifier = TinyPurifier()
+                vae = backend.make_vae()
+                effective = replace(self.config, latent_working_size=64)
             else:
-                surrogates=list(surrogate_encoder) if surrogate_encoder is not None else load_training_surrogates(
-                    str(self.device),selection=self.surrogate_selection)
-                validate_loaded_surrogates(surrogates,self.surrogate_selection)
-                purifier=None
-                vae=AmbiLAGEVae(self.device,custom_model_dir=self.config.vae_model_dir,
+                surrogates = list(surrogate_encoder) if surrogate_encoder is not None else load_training_surrogates(
+                    str(self.device), selection=self.surrogate_selection)
+                validate_loaded_surrogates(surrogates, self.surrogate_selection)
+                purifier = None
+                vae_dir = self.config.vae_model_path or self.config.vae_model_dir or getattr(self.config, 'editor_model_dir', None)
+                vae = AmbiLAGEVae(self.device, custom_model_dir=vae_dir,
                     enable_checkpointing=self.config.enable_gradient_checkpointing)
-                effective=self.config
-            objective=SequentialEnsembleObjective(surrogates,read_tensor(target,self.device),source_public_key,target_text,
-                effective,purifier=purifier,selection=self.surrogate_selection)
-            audit=objective.audit
-            anchor_t=torch.tensor(anchor.transpose(2,0,1).copy(),device=self.device,dtype=torch.float32)[None]/255.
-            final,refinement=refine_ambient_coop_latent(anchor_t,read_tensor(source,self.device),envelopes,
-                objective,None,vae,effective,output_dir=root)
-            del objective,surrogates,vae,purifier
+                effective = self.config
+            objective = SequentialEnsembleObjective(surrogates, read_tensor(target, self.device), source_public_key, target_text,
+                effective, purifier=purifier, selection=self.surrogate_selection)
+            audit = objective.audit
+            anchor_t = torch.tensor(anchor.transpose(2, 0, 1).copy(), device=self.device, dtype=torch.float32)[None] / 255.
+            final, refinement = refine_ambient_coop_latent(anchor_t, read_tensor(source, self.device), envelopes,
+                objective, None, vae, effective, output_dir=root)
+            del objective, surrogates, vae, purifier
             release_memory()
-            final_rgb=np.rint(final[0].permute(1,2,0).cpu().numpy()*255).astype(np.uint8)
-            if not np.array_equal(final_rgb[roi],read_rgb(source)[roi]):
+            final_rgb = np.rint(final[0].permute(1, 2, 0).cpu().numpy() * 255).astype(np.uint8)
+            if not np.array_equal(final_rgb[roi], source_rgb[roi]):
                 raise AssertionError('最终印刷核心与源原图存在像素差异')
-            Image.fromarray(final_rgb).save(root/'naturalness_candidate.png')
-            gate=backend.gate(source,final_rgb,source_category)
+            Image.fromarray(final_rgb).save(root / 'naturalness_candidate.png')
+            gate = backend.gate(source, final_rgb, source_category, roi_mask=roi, fg_mask=source_fg)
             gate['candidate_sha256']=sha256_file(root/'naturalness_candidate.png')
             backend.close()
             write_json(root/'naturalness_gate.json',gate)

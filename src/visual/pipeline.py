@@ -52,8 +52,8 @@ def generate(
         device: 'cuda' 或 'cpu'
         target_text: 目标特点描述文本
         epsilon_levels: 扰动预算 (仅 lucid 使用，默认 16)
-        text_weight: 文字对齐损失权重
-        allow_tf32: 是否开启 A100 TensorFloat-32 原生加速
+        text_weight: 文字对齐损失权重（仅 lucid 使用）
+        allow_tf32: 是否开启 Ampere+/L4/A100 TensorFloat-32 原生加速（T4 自动兼容跳过）
         seed: 随机种子
         config: 通用配置对象 (根据 method 自动注入)
     返回:

@@ -1,0 +1,4 @@
+# 仅在显式启用已停用的历史可选视觉语言模型（planner / planner_7b / editor_qwen）时按需安装。
+# 当前默认方案（显式公开配方 + SAM2 + RapidOCR + 32步锚点 + FLUX 16通道 VAE + SD1.5 + 3 CLIP）不需要本文件。
+-r requirements.txt
+qwen-vl-utils>=0.0.14,<1

@@ -1,19 +1,16 @@
 """Stage 4 数理核心：环境光多尺度协同光场与主体微光影建模 (Ambient Cooperative Field)。
 
 数学原理与创新保证：
-1. 可行无截断区间中点对称展开 [r_min, r_max]：
-   r_min(x, y) = max(-eps_bg, -I_anchor(x, y))
-   r_max(x, y) = min(eps_bg, 1.0 - I_anchor(x, y))
-   mid_bg(x, y) = (r_min + r_max) / 2
-   half_bg(x, y) = (r_max - r_min) / 2
-   tau_bg(x, y) = max(half_bg, 1/255) * tau_scale
-   任何背景驱动值经 tanh 变换后，严格收敛于 (r_min, r_max) 内部，
-   数理上只保证可行区间内的幅度约束；自然斑块与光晕仍须由视觉门禁实际核验。
-2. 全局环境底色 a_global ∈ R^(1x3x1x1)，初始偏置 0.30 * tau_bg，处于最大梯度响应区；
-3. 低频漫射网格 a_grid ∈ R^(1x3x8x8)，经双三次插值上采样并施加大核高斯平滑 (sigma=14.0)；
-4. 主体微光影：eps_fg <= 6/255，超大尺度高斯平滑 (明度 sigma=5.0, 色度 sigma=9.0, 色度保留率 0.30)，
-   维持干净自然的主体质感；
-5. 印刷文字区域绝对锁定：change[roi] == 0。
+1. 零中心可行无截断边界投影 [r_min, r_max]：
+   r_min(x, y) = max(-eps, -I_anchor(x, y))
+   r_max(x, y) = min(eps, 1.0 - I_anchor(x, y))
+   raw_res(x, y) = eps * tanh(drive / tau)
+   res(x, y) = clamp(raw_res, r_min, r_max)
+   零驱动严格对应零残差（避免纯白背景发灰、暗部泛白及轮廓断层暗环），
+   任何驱动值均严格收敛于 [r_min, r_max] 内部，数理保证无 255 截断越界。
+2. 全局环境底色 a_global ∈ R^(1x3x1x1) 与低频漫射网格 a_grid ∈ R^(1x3x8x8)（大核平滑 sigma=14.0）；
+3. 主体微光影：eps_fg <= 6/255，保留 16 通道细腻微光影质感；背景明度 sigma=12.0、色度 sigma=16.0、色度保留率 0.10 锁死高频杂色；
+4. 印刷墨迹核心绝对锁定：change[roi] == 0。
 """
 from __future__ import annotations
 
@@ -87,17 +84,17 @@ class AmbientCoopField(nn.Module):
         self.config = config
         self.device = anchor.device
 
-        # 1. 计算背景无截断可行区间 [r_min, r_max] 及其中心 mid 与半宽 half
+        # 1. 计算背景与主体无截断可行区间 [r_min, r_max]（保留兼容属性，内部使用零中心可行投影）
         self.r_min = torch.maximum(-eps_bg_map, -anchor)
         self.r_max = torch.minimum(eps_bg_map, 1.0 - anchor)
         self.bg_mid = (0.5 * (self.r_min + self.r_max)).detach()
         self.bg_half = (0.5 * (self.r_max - self.r_min)).detach()
-        self.tau_bg = (self.bg_half.clamp_min(1.0 / 255.0) * config.tau_scale).detach()
-        fg_min = torch.maximum(-eps_fg_map, -anchor)
-        fg_max = torch.minimum(eps_fg_map, 1.0 - anchor)
-        self.fg_mid = (fg_min + fg_max) * .5
-        self.fg_half = (fg_max - fg_min) * .5
-        self.tau_fg = self.fg_half.clamp_min(1. / 255.) * config.tau_scale
+        self.fg_min = torch.maximum(-eps_fg_map, -anchor).detach()
+        self.fg_max = torch.minimum(eps_fg_map, 1.0 - anchor).detach()
+        self.fg_mid = ((self.fg_min + self.fg_max) * 0.5).detach()
+        self.fg_half = ((self.fg_max - self.fg_min) * 0.5).detach()
+        self.tau_fg = max(float(getattr(config, "tau_fg", 0.20)), 1e-4)
+        self.tau_bg = max(float(getattr(config, "tau_bg", 0.35)), 1e-4)
 
         # 2. 预计算常驻 GPU 的可分离高斯平滑核
         self.fg_luma_kernel = make_sep_gaussian(config.fg_luma_smooth_sigma, self.device, 1)
@@ -130,6 +127,17 @@ class AmbientCoopField(nn.Module):
             grid_up = smooth_sep(grid_up, self.ambient_kernel, groups=3)
         return self.ambient_global + grid_up
 
+    @staticmethod
+    def _feasible_bounded_residual(
+        drive: torch.Tensor,
+        eps_map: torch.Tensor,
+        r_min: torch.Tensor,
+        r_max: torch.Tensor,
+    ) -> torch.Tensor:
+        """零中心平滑映射后再做 [r_min, r_max] 无截断约束：drive==0 时严格返回 0。"""
+        raw_res = eps_map * torch.tanh(drive)
+        return torch.clamp(raw_res, min=r_min, max=r_max)
+
     def compute_residual(self, diff: torch.Tensor) -> torch.Tensor:
         """从 VAE 潜差分或特征差分场合成复合残差。
         
@@ -139,24 +147,28 @@ class AmbientCoopField(nn.Module):
         diff_luma = diff.mean(dim=1, keepdim=True)
         diff_chroma = diff - diff_luma
 
-        # 1. 商品主体微光影分支：大核平滑 + 低色度保留率 (0.30)
+        # 1. 商品主体微光影分支：大核平滑 + 低色度保留率 + 零中心可行投影
         if self.config.latent_levels > 0:
             fg_luma = smooth_sep(diff_luma, self.fg_luma_kernel, groups=1)
             fg_chroma = diff_chroma * self.config.fg_chroma_keep
             fg_chroma = smooth_sep(fg_chroma, self.fg_chroma_kernel, groups=3)
             fg_field = fg_luma + fg_chroma
-            res_fg = (self.fg_mid + self.fg_half * torch.tanh(fg_field / self.tau_fg)) * self.fg_mask_t
+            res_fg = self._feasible_bounded_residual(
+                fg_field / self.tau_fg, self.eps_fg_map, self.fg_min, self.fg_max
+            ) * self.fg_mask_t
         else:
             res_fg = torch.zeros_like(self.anchor)
 
-        # 2. 背景多尺度环境光协同分支：中点对称无截断展开
+        # 2. 背景多尺度环境光协同分支：大核平滑 + 极低色度保留率 + 零中心可行投影
         bg_luma = smooth_sep(diff_luma, self.bg_luma_kernel, groups=1)
         bg_chroma = diff_chroma * self.config.bg_chroma_keep
         bg_chroma = smooth_sep(bg_chroma, self.bg_chroma_kernel, groups=3)
         v_bg = bg_luma + bg_chroma
         a_bg = self.ambient_field()
         bg_drive = a_bg + self.w_bg_mod * v_bg
-        res_bg = (self.bg_mid + self.bg_half * torch.tanh(bg_drive / self.tau_bg)) * self.bg_mask_t
+        res_bg = self._feasible_bounded_residual(
+            bg_drive / self.tau_bg, self.eps_bg_map, self.r_min, self.r_max
+        ) * self.bg_mask_t
 
         # 3. 印刷文字区域绝对清零 (change[roi] == 0)
         return (res_fg + res_bg) * self.support_mask

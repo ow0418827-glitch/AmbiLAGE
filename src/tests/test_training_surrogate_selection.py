@@ -235,6 +235,7 @@ def test_preflight_does_not_require_unselected_training_weights(tmp_path, monkey
         (folder / 'download_manifest.json').write_text(json.dumps(dict(repo_id=registry[key]['repo_id'],
             revision='fixture', files={'fixture.safetensors': 'unused_hash_without_verification'})), encoding='utf-8')
     monkeypatch.setattr(preflight, 'MODEL_ROOT', models)
+    monkeypatch.setattr(preflight, 'RESOURCES', tmp_path / 'resources')
     monkeypatch.setattr(preflight, 'model_specs', lambda: registry)
     monkeypatch.setattr(preflight, 'check_code', lambda: {})
     monkeypatch.setattr(preflight, 'inspect_runtime', lambda hardware: {})

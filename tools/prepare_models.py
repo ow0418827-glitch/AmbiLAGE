@@ -7,7 +7,7 @@ import os
 from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from src.model_registry import model_specs
+from src.model_registry import model_specs, verify_locked_snapshot_files
 from src.paths import MODEL_ROOT, RESOURCES
 
 MODEL_LOCK_PATH = RESOURCES / 'model_lock.json'
@@ -72,9 +72,15 @@ def main(argv=None):
         parser.error("Unknown model key")
     if args.revision and len(keys) != 1:
         parser.error("--revision requires exactly one selected model")
-    plan = [{"key": key, "repo_id": specs[key]["repo_id"], "local_dir": str(MODEL_ROOT / key),
-             "role": specs[key]["role"],
-             "pinned_revision": args.revision or lock['models'].get(key, {}).get('revision')} for key in keys]
+    plan = [{
+        "key": key,
+        "repo_id": specs[key]["repo_id"],
+        "local_dir": str(MODEL_ROOT / key),
+        "scope": specs[key]["scope"],
+        "role": specs[key]["role"],
+        **({"allow_patterns": specs[key]["allow_patterns"]} if specs[key].get("allow_patterns") else {}),
+        "pinned_revision": args.revision or lock['models'].get(key, {}).get('revision'),
+    } for key in keys]
     print(json.dumps({"download": args.download, "endpoint": args.endpoint, "models": plan,
                       "training_surrogates":selected.audit() if selected else None}, ensure_ascii=False, indent=2), flush=True)
     if not args.download:
@@ -88,8 +94,8 @@ def main(argv=None):
             raise ValueError('Model identity differs from the recovery lock: ' + item['key'])
         revision = api.model_info(item["repo_id"], revision=item['pinned_revision']).sha
         destination = Path(item["local_dir"])
-        patterns = None
-        if item["key"].startswith("clip_") or item["key"] in {"siglip_so400m", "eval_g14"}:
+        patterns = specs[item["key"]].get("allow_patterns")
+        if patterns is None and (item["key"].startswith("clip_") or item["key"] in {"siglip_so400m", "eval_g14"}):
             patterns = ["open_clip*.safetensors", "*.json", "*.txt", "*.model", "LICENSE*", "README.md"]
         download_model(item["repo_id"], destination, allow_patterns=patterns, endpoint=args.endpoint, revision=revision)
         files = {p.relative_to(destination).as_posix(): _sha(p) for p in sorted(destination.rglob("*"))
@@ -97,7 +103,9 @@ def main(argv=None):
         if not any(name.endswith(".safetensors") for name in files):
             raise RuntimeError("Snapshot contains no model weights: " + item["key"])
         if previous and args.revision is None:
-            if revision != previous['revision'] or files != previous['files']:
+            if revision != previous['revision'] or not verify_locked_snapshot_files(
+                item["key"], specs[item["key"]], files, previous['files']
+            ):
                 raise ValueError('Restored model files differ from the frozen recovery lock: ' + item['key'])
         manifest = dict(item, revision=revision, endpoint=args.endpoint, files=files)
         (destination / "download_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

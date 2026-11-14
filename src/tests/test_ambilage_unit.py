@@ -445,3 +445,104 @@ def test_flux_canvas_and_sdedit_alignment_fallback(monkeypatch):
     assert audit_fb["sdedit_strength"] == 0.45
     assert len(st.editor.calls) == 2
     assert st.editor.calls[1]["sigmas"] is not None and max(st.editor.calls[1]["sigmas"]) <= 0.45
+
+
+def test_ambient_coop_field_zero_centered_and_strict_pure_white_zero_shift():
+    import torch
+    from src.visual._ambilage.ambient import AmbientCoopField
+    from src.visual._ambilage.config import AmbiLAGEConfig
+
+    white = torch.ones((1, 3, 32, 32), dtype=torch.float32)
+    fg = torch.zeros((1, 1, 32, 32), dtype=torch.float32)
+    fg[:, :, 8:24, 8:24] = 1.0
+    bg = 1.0 - fg
+    eps_fg = fg * (6.0 / 255.0)
+    eps_bg = bg * (28.0 / 255.0)
+    field_white = AmbientCoopField(white, eps_fg, eps_bg, bg, fg, bg, bg, AmbiLAGEConfig(ambient_init_bias=0.30))
+    residual_white = field_white.compute_residual(torch.zeros_like(white))
+    assert torch.max(torch.abs(residual_white)).item() == 0.0
+
+    gray = torch.full((1, 3, 32, 32), 0.5, dtype=torch.float32)
+    field_zero_init = AmbientCoopField(gray, eps_fg, eps_bg, bg, fg, bg, bg, AmbiLAGEConfig(ambient_init_bias=0.0))
+    residual_zero = field_zero_init.compute_residual(torch.zeros_like(gray))
+    assert torch.max(torch.abs(residual_zero)).item() < 1e-7
+
+
+def test_extract_ink_core_mask_releases_substrate_on_hd_and_falls_back_on_tiny():
+    import numpy as np
+    from src.visual._ambilage.config import AmbiLAGEConfig
+    from src.visual._ambilage.segmentation import extract_ink_core_mask
+
+    cfg = AmbiLAGEConfig()
+    img = np.full((160, 160, 3), 245, dtype=np.uint8)
+    fg = np.zeros((160, 160), dtype=bool)
+    fg[20:140, 20:140] = True
+    rect_roi = np.zeros((160, 160), dtype=bool)
+    rect_roi[40:120, 40:120] = True
+    # High-contrast dark ink stroke inside label ROI.
+    img[75:85, 65:95] = 20
+
+    ink_core, substrate = extract_ink_core_mask(img, fg, rect_roi, cfg)
+    assert np.all(ink_core[75:85, 65:95])
+    assert bool(ink_core[74, 65])
+    assert bool(substrate[45, 45])
+    assert not bool(ink_core[45, 45])
+
+    tiny_img = np.full((48, 48, 3), 240, dtype=np.uint8)
+    tiny_fg = np.ones((48, 48), dtype=bool)
+    tiny_roi = np.zeros((48, 48), dtype=bool)
+    tiny_roi[10:30, 10:30] = True
+    tiny_img[15:20, 15:25] = 20
+    tiny_ink, tiny_sub = extract_ink_core_mask(tiny_img, tiny_fg, tiny_roi, cfg)
+    assert np.array_equal(tiny_ink, tiny_roi)
+    assert int(tiny_sub.sum()) == 0
+
+
+def test_production_stages_explicit_plan_anchor_and_mathematical_gate(tmp_path):
+    import numpy as np
+    import torch
+    from PIL import Image
+    from src.visual._ambilage.backends import ProductionStages
+    from src.visual._ambilage.config import AmbiLAGEConfig
+
+    stages = ProductionStages.__new__(ProductionStages)
+    stages.config = AmbiLAGEConfig()
+    stages.device = torch.device('cpu')
+    stages.planner = stages.processor = stages.sam = stages.sam_processor = stages.editor = None
+
+    src_img = np.full((128, 128, 3), 220, dtype=np.uint8)
+    src_img[32:96, 32:96] = [180, 175, 170]
+    src_path = tmp_path / 'source.png'
+    Image.fromarray(src_img).save(src_path)
+
+    plan = stages.plan(src_path, 'shampoo')
+    assert plan['edit_prompt']
+    assert len(plan['source_boxes']) == 1
+    assert plan.get('backend') == 'explicit_public_recipe_v1' or 'planner_model' in plan
+
+    initial = src_img.copy()
+    initial[:16, :16] = 205
+    anchor, anchor_audit = stages.generate_anchor(initial, plan['edit_prompt'], 42)
+    assert np.array_equal(anchor, initial)
+    assert anchor_audit['backend'] == 'perceptual_illumination_line_search_v1'
+
+    roi = np.zeros((128, 128), dtype=bool)
+    roi[48:80, 48:80] = True
+    fg = np.zeros((128, 128), dtype=bool)
+    fg[32:96, 32:96] = True
+
+    good = src_img.copy()
+    good[:24, :24] = 212
+    passed = stages.gate(src_path, good, 'shampoo', roi_mask=roi, fg_mask=fg)
+    assert passed['passed'] is True
+    assert passed['metrics']['roi_max_abs_diff'] == 0.0
+
+    bad_roi = src_img.copy()
+    bad_roi[50:60, 50:60] = 10
+    failed_roi = stages.gate(src_path, bad_roi, 'shampoo', roi_mask=roi, fg_mask=fg)
+    assert failed_roi['passed'] is False
+
+    bad_heavy = src_img.copy()
+    bad_heavy[~roi] = 30
+    failed_heavy = stages.gate(src_path, bad_heavy, 'shampoo', roi_mask=roi, fg_mask=fg)
+    assert failed_heavy['passed'] is False

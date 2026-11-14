@@ -184,6 +184,62 @@ class PublicFullKeyObjective:
         }
 
 
+def differentiable_halo(
+    image: torch.Tensor,
+    reference: torch.Tensor,
+    fg_mask_t: torch.Tensor,
+    bg_mask_t: torch.Tensor,
+) -> torch.Tensor:
+    """可微前景轮廓边界光晕惩罚：度量前景外/内邻域环带上的局部跳变幅度。
+
+    全图均匀平移时局部差分严格为零，仅惩罚紧贴轮廓的生硬白边、灰边与阶跃伪影。
+    """
+    if fg_mask_t.sum() <= 0 or bg_mask_t.sum() <= 0:
+        return image.sum() * 0.0
+    outer_ring = (F.max_pool2d(fg_mask_t, 5, stride=1, padding=2) - fg_mask_t).clamp(0.0, 1.0) * bg_mask_t
+    inner_ring = (fg_mask_t - (1.0 - F.max_pool2d(1.0 - fg_mask_t, 5, stride=1, padding=2))).clamp(0.0, 1.0) * fg_mask_t
+    ring_mask = (outer_ring + inner_ring).clamp(0.0, 1.0)
+    ring_count = ring_mask.sum()
+    if float(ring_count.detach()) <= 0.0:
+        return image.sum() * 0.0
+    diff = (image - reference) * 255.0
+    # 与 5x5 局部邻域均值的偏差即为高频边缘光晕阶跃，均匀平移时该项严格为 0
+    local_mean = F.avg_pool2d(diff, 5, stride=1, padding=2)
+    halo_jump = (diff - local_mean) * ring_mask
+    return torch.sqrt(halo_jump.square().sum(dim=1, keepdim=True) + 1e-8).sum() / ring_count.clamp_min(1.0)
+
+
+def compute_boundary_halo_error(
+    source_rgb: np.ndarray,
+    candidate_rgb: np.ndarray,
+    fg_mask: np.ndarray | None = None,
+    roi_mask: np.ndarray | None = None,
+) -> float:
+    """与可微光晕一致的数学门禁边界光晕误差度量（[0, 255] 灰度级）。"""
+    src = np.asarray(source_rgb, dtype=np.float32)
+    cand = np.asarray(candidate_rgb, dtype=np.float32)
+    if src.shape != cand.shape or src.ndim != 3:
+        raise ValueError("光晕检测输入图像尺寸不一致")
+    h, w = src.shape[:2]
+    if fg_mask is None:
+        return 0.0
+    fg = np.asarray(fg_mask, dtype=bool)
+    if roi_mask is not None:
+        roi = np.asarray(roi_mask, dtype=bool)
+        if roi.shape == fg.shape:
+            fg = fg | roi
+    bg = ~fg
+    if not fg.any() or not bg.any():
+        return 0.0
+    fg_t = torch.as_tensor(fg, dtype=torch.float32)[None, None]
+    bg_t = torch.as_tensor(bg, dtype=torch.float32)[None, None]
+    cand_t = torch.as_tensor(cand.transpose(2, 0, 1).copy(), dtype=torch.float32)[None] / 255.0
+    src_t = torch.as_tensor(src.transpose(2, 0, 1).copy(), dtype=torch.float32)[None] / 255.0
+    with torch.no_grad():
+        val = differentiable_halo(cand_t, src_t, fg_t, bg_t)
+    return float(val.item())
+
+
 def compute_spatial_variance_penalty(
     image: torch.Tensor,
     anchor: torch.Tensor,
@@ -223,18 +279,21 @@ def compute_spatial_variance_penalty(
     )
     bg_l2 = bg_dev.square().sum() / bg_mask_t.sum().clamp_min(1.0) / 3.0
 
-    # 3. 越界惩罚
+    # 3. 边界光晕可微惩罚与越界惩罚
+    halo_loss = differentiable_halo(image, anchor, fg_mask_t, bg_mask_t)
     if raw_image is not None:
         overflow = F.relu(raw_image - 1.0).square().mean() + F.relu(-raw_image).square().mean()
     else:
         overflow = image.sum() * 0.0
 
+    halo_w = float(getattr(config, "halo_weight", 0.0))
     penalty = (
         config.fg_l2_weight * fg_l2
         + config.fg_tv_weight * fg_tv
         + config.bg_l2_weight * bg_l2
         + config.bg_tv_weight * bg_tv
         + config.bg_chroma_tv_weight * bg_chroma_tv
+        + halo_w * halo_loss
         + config.overflow_weight * overflow
     )
 
@@ -244,6 +303,7 @@ def compute_spatial_variance_penalty(
         "bg_l2": float(bg_l2.detach()),
         "bg_tv": float(bg_tv.detach()),
         "bg_chroma_tv": float(bg_chroma_tv.detach()),
+        "halo_loss": float(halo_loss.detach()),
         "overflow": float(overflow.detach()),
         "total_penalty": float(penalty.detach()),
     }

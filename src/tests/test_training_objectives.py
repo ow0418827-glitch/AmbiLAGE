@@ -332,3 +332,115 @@ def test_purification_loader_uses_regular_safetensors_without_fp16_variant(tmp_p
     assert all('variant' not in call and call['use_safetensors'] is True and call['local_files_only'] is True for call in calls)
     assert components.manifest['variant'] is None
     assert all(call['torch_dtype'] == torch.float32 for call in calls)
+
+
+def test_public_full_key_objective_applies_compensated_targets_when_positively_aligned():
+    from types import SimpleNamespace
+    import torch
+    import torch.nn.functional as F
+    from src.visual._ambilage.config import AmbiLAGEConfig
+    from src.visual._ambilage.smoke import TinySurrogate
+    from src.visual.robust_objectives import compensated_targets
+    from src.visual.training_objectives import PublicFullKeyObjective
+
+    class _MockTok:
+        context_length = 8
+        sot_token_id = 1
+        eot_token_id = 2
+        pad_token_id = 0
+
+        def encode(self, text):
+            return [3] if text == 'target feature' else [4]
+
+    class _MockModel:
+        def encode_text(self, tokens):
+            # Token payload is at index 1 after SOT token.
+            rows = []
+            for row in tokens:
+                tok = int(row[1].item())
+                rows.append([0.0, 1.0, 0.0, 0.0] if tok == 3 else [1.0, 0.0, 0.0, 0.0])
+            return torch.tensor(rows, dtype=torch.float32)
+
+    class _AlignedSurrogate(TinySurrogate):
+        def __init__(self):
+            super().__init__(0)
+            self.tokenizer = _MockTok()
+            self.model = _MockModel()
+
+        def encode_image(self, images):
+            feat = images[:, :3].mean(dim=(-2, -1))
+            pad = torch.zeros(feat.shape[0], 1, dtype=feat.dtype, device=feat.device)
+            emb = F.normalize(torch.cat([feat, pad], dim=-1), dim=-1)
+            return SimpleNamespace(global_embedding=emb, patch_tokens=emb[:, None])
+
+    surrogate = _AlignedSurrogate()
+    target_feat = torch.tensor([[1.0, 0.0, 0.0, 0.0]], dtype=torch.float32)
+    cfg = AmbiLAGEConfig(compensation_weight=0.35, smoke_test=True)
+    obj = PublicFullKeyObjective(surrogate, target_feat, 'source title', 'target feature', cfg)
+    cand = torch.tensor([0.3, 0.9, 0.2], dtype=torch.float32)[None, :, None, None].expand(1, 3, 16, 16)
+    cand_feat = surrogate.encode_image(cand).global_embedding
+    got = obj.scores(cand_feat)
+
+    with torch.no_grad():
+        own = F.normalize(torch.tensor([[1.0, 0.0, 0.0, 0.0]], dtype=torch.float32), dim=-1)
+        tgt_text = F.normalize(torch.tensor([[0.0, 1.0, 0.0, 0.0]], dtype=torch.float32), dim=-1)
+        q = F.normalize(target_feat + tgt_text, dim=-1)
+        comp_vec, comp_valid = compensated_targets(q, own)
+        assert bool(comp_valid.item())
+        assert obj.audit['compensated_target_enabled'] is True
+        cand_key = F.normalize(cand_feat + own, dim=-1)
+        expected = 0.65 * (cand_key @ q.T) + 0.35 * (cand_feat @ comp_vec.T)
+    assert torch.allclose(got, expected, atol=1e-6)
+
+
+def test_sequential_ensemble_baseline_calibrated_weighting_and_uniform_floor():
+    from types import SimpleNamespace
+    import torch
+    import torch.nn.functional as F
+    from src.visual._ambilage.config import AmbiLAGEConfig
+    from src.visual._ambilage.smoke import TinyPurifier, TinySurrogate
+    from src.visual.training_objectives import SequentialEnsembleObjective
+
+    class _BiasedSurrogate(TinySurrogate):
+        def __init__(self, idx, img_bias, text_vec):
+            super().__init__(idx)
+            self._img_bias = img_bias
+            tvec = F.normalize(torch.tensor(text_vec, dtype=torch.float32), dim=0)
+            self.model = SimpleNamespace(encode_text=lambda tokens, tv=tvec: tv[None].expand(tokens.shape[0], -1))
+
+        def encode_image(self, images):
+            delta = (images[:, 1].mean() - images[:, 0].mean()).reshape(1, 1)
+            raw = torch.cat([self._img_bias + delta, torch.full((1, 3), 0.3, dtype=images.dtype)], dim=-1)
+            emb = F.normalize(raw, dim=-1)
+            return SimpleNamespace(global_embedding=emb, patch_tokens=emb[:, None])
+
+    surrogates = [
+        _BiasedSurrogate(0, img_bias=0.90, text_vec=[1.0, 0.2, 0.0, 0.0]),
+        _BiasedSurrogate(1, img_bias=0.25, text_vec=[0.2, 1.0, 0.0, 0.0]),
+        _BiasedSurrogate(2, img_bias=0.10, text_vec=[0.2, 0.2, 1.0, 0.0]),
+    ]
+    cfg = AmbiLAGEConfig(ensemble_temperature=0.20, ensemble_uniform_mix=0.45, diffusion_weight=0.08, smoke_test=True)
+    target = torch.full((1, 3, 16, 16), 0.6, dtype=torch.float32)
+    ensemble = SequentialEnsembleObjective(
+        surrogates, target, 'source key', 'target text', cfg, purifier=TinyPurifier()
+    )
+
+    anchor = torch.full((1, 3, 16, 16), 0.5, dtype=torch.float32)
+    with torch.no_grad():
+        _, _, weights_step0, _, _ = ensemble._values(anchor, step=0)
+    assert torch.allclose(weights_step0, torch.full((3,), 1.0 / 3.0), atol=1e-5)
+    baseline_saved = ensemble._baseline_values.clone()
+
+    # Shifted image alters relative gain asymmetrically; checkpoint evaluate(step=0) must NOT reset baseline.
+    shifted = anchor.clone()
+    shifted[:, 1] = 0.8
+    shifted[:, 0] = 0.2
+    total, scores = ensemble.evaluate(shifted, step=0)
+    assert torch.isfinite(total) and isinstance(scores, torch.Tensor) and scores.shape[0] == 3
+    assert torch.allclose(ensemble._baseline_values, baseline_saved, atol=1e-6)
+    with torch.no_grad():
+        _, _, weights_shifted, _, _ = ensemble._values(shifted, step=0)
+    floor = cfg.ensemble_uniform_mix / len(surrogates)
+    assert torch.all(weights_shifted >= floor - 1e-6)
+    assert abs(float(weights_shifted.sum().item()) - 1.0) < 1e-5
+    assert not torch.allclose(weights_shifted, torch.full((3,), 1.0 / 3.0), atol=1e-4)

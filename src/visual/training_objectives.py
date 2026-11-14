@@ -17,7 +17,7 @@ import torch.nn.functional as F
 from src.paths import MODEL_ROOT
 from src.visual.encoders.backbone import OpenCLIPSurrogate
 from src.visual.encoders.joint import ChunkedClipEncoder
-from src.visual.robust_objectives import softmin, transformed_batch
+from src.visual.robust_objectives import compensated_targets, softmin, transformed_batch
 from src.visual.training_surrogates import (
     HELD_OUT_MODELS, select_training_surrogates, selection_from_config, spec_identity,
     validate_training_specs, validate_loaded_surrogates,
@@ -91,17 +91,33 @@ class PublicFullKeyObjective:
         target_text = torch.as_tensor(text, dtype=torch.float32, device=surrogate.device).reshape(1, -1)
         self.target = F.normalize(target_feature.detach().float(), dim=-1)
         self.joint_target = F.normalize(self.target + target_text, dim=-1)
+        comp_weight = float(getattr(config, 'compensation_weight', 0.35))
+        if not math.isfinite(comp_weight) or not (0.0 <= comp_weight < 1.0):
+            raise ValueError('逆向补偿目标权重 compensation_weight 必须位于 [0.0, 1.0)')
+        self.compensation_weight = comp_weight
+        comp_vec, comp_valid = compensated_targets(self.joint_target, self.own)
+        self.compensated_target = comp_vec.detach()
+        self.compensated_valid = bool(comp_valid.all())
         self.audit = {'source_public_key_sha256': hashlib.sha256(source_public_key.encode('utf-8')).hexdigest(),
             'training_text_sha256': hashlib.sha256(training_text.encode('utf-8')).hexdigest(),
             'source_text_encoding': own_audit, 'target_text_encoding': text_audit,
             'query_modes': ['multimodal_equal_weight'],
             'query_image_weight': 0.5, 'query_text_weight': 0.5,
-            'memory_key_image_weight': 0.5, 'victim_memory_used': False,
+            'memory_key_image_weight': 0.5,
+            'compensated_target_enabled': bool(self.compensation_weight > 0.0 and self.compensated_valid),
+            'compensated_valid': self.compensated_valid,
+            'compensation_weight': self.compensation_weight,
+            'victim_memory_used': False,
             'formal_queries_used': False, 'formal_ranking_used': False}
 
     def scores(self, features):
-        key = F.normalize(F.normalize(features.float(), dim=-1) + self.own, dim=-1)
-        return key @ self.joint_target.T
+        img_norm = F.normalize(features.float(), dim=-1)
+        key = F.normalize(img_norm + self.own, dim=-1)
+        joint_scores = key @ self.joint_target.T
+        if self.compensation_weight > 0.0 and self.compensated_valid:
+            comp_scores = img_norm @ self.compensated_target.T
+            return (1.0 - self.compensation_weight) * joint_scores + self.compensation_weight * comp_scores
+        return joint_scores
 
     def value(self, features):
         scores = self.scores(features)
@@ -113,7 +129,7 @@ class PublicFullKeyObjective:
 
 
 class SequentialEnsembleObjective:
-    """Detached weakest-proxy weights; exact per-proxy image gradients.
+    """Baseline-calibrated weakest-proxy weights; exact per-proxy image gradients.
 
     Recomputing each transformation/purification per proxy bounds graph memory.
     The same seed is reused within one step for scoring and differentiation.
@@ -127,9 +143,16 @@ class SequentialEnsembleObjective:
         self.selection = selection or selection_from_config(config)
         snapshots = validate_loaded_surrogates(self.surrogates, self.selection,
             allow_fixture=bool(getattr(config, 'smoke_test', False)))
-        self.diffusion_weight = float(getattr(config, 'diffusion_weight', 0.25))
+        self.diffusion_weight = float(getattr(config, 'diffusion_weight', 0.08))
         if not torch.isfinite(torch.tensor(self.diffusion_weight)) or self.diffusion_weight <= 0:
             raise ValueError('完整新方法必须启用正权重扩散净化目标')
+        self.ensemble_temperature = float(getattr(config, 'ensemble_temperature', 0.20))
+        self.ensemble_uniform_mix = float(getattr(config, 'ensemble_uniform_mix', 0.45))
+        if not math.isfinite(self.ensemble_temperature) or self.ensemble_temperature <= 0:
+            raise ValueError('集成权重温度 ensemble_temperature 必须为有限正数')
+        if not math.isfinite(self.ensemble_uniform_mix) or not (0.0 <= self.ensemble_uniform_mix <= 1.0):
+            raise ValueError('均匀保底混合比例 ensemble_uniform_mix 必须位于 [0.0, 1.0]')
+        self._baseline_values: torch.Tensor | None = None
         if purifier is None:
             from src.visual.diffusion_purification import LatentDiffusionPurifier, PurificationConfig
             from src.model_registry import resolve_model
@@ -152,7 +175,9 @@ class SequentialEnsembleObjective:
             'public_objectives': [o.audit for o in self.objectives],
             'held_out_models': list(HELD_OUT_MODELS),
             'gradient_execution': 'one_proxy_graph_at_a_time_recompute_purifier',
-            'weak_proxy_weighting': 'detached_softmax_negative_current_utility',
+            'weak_proxy_weighting': 'baseline_calibrated_relative_gain_softmin_with_uniform_floor',
+            'ensemble_temperature': self.ensemble_temperature,
+            'ensemble_uniform_mix': self.ensemble_uniform_mix,
             'eot_enabled': bool(getattr(config, 'eot_enabled', True)),
             'eot_paths': ['identity', 'pillow_blur_bpda', 'jpeg_exact_forward_ste', 'resize'],
             'diffusion_weight': self.diffusion_weight, 'diffusion_gradient': 'full',
@@ -184,16 +209,22 @@ class SequentialEnsembleObjective:
             scores.append(score.to(image.device))
             rows.append(row)
         values = torch.stack(values)
-        weights = torch.softmax(-values / float(self.config.temperature), dim=0).detach()
-        return values, torch.stack(scores), weights, rows
+        if self._baseline_values is None or self._baseline_values.shape != values.shape:
+            self._baseline_values = values.detach().clone()
+        gains = (values - self._baseline_values.to(values.device)).detach()
+        adaptive = torch.softmax(-gains / max(float(self.ensemble_temperature), 1e-4), dim=0)
+        uni_mix = min(max(float(self.ensemble_uniform_mix), 0.0), 1.0)
+        uniform = torch.full_like(adaptive, 1.0 / len(self.surrogates))
+        weights = ((1.0 - uni_mix) * adaptive + uni_mix * uniform).detach()
+        return values, torch.stack(scores), weights, rows, gains
 
     @torch.no_grad()
     def evaluate(self, image, step=0):
-        values, scores, weights, _ = self._values(image, step)
+        values, scores, weights, _, _ = self._values(image, step)
         return (weights * values).sum(), scores
 
     def image_gradient(self, image, step):
-        values, scores, weights, rows = self._values(image.detach(), step)
+        values, scores, weights, rows, gains = self._values(image.detach(), step)
         gradient = torch.zeros_like(image)
         for i in range(len(self.surrogates)):
             leaf = image.detach().clone().requires_grad_(True)
@@ -205,4 +236,5 @@ class SequentialEnsembleObjective:
             del leaf, value, grad
         utility = (weights * values).sum().detach()
         return utility, scores.detach(), gradient, {'model_weights': weights.cpu().tolist(),
-            'model_utilities': values.cpu().tolist(), 'paths': rows, 'purifier_gradient': 'full'}
+            'model_utilities': values.cpu().tolist(), 'model_relative_gains': gains.cpu().tolist(),
+            'paths': rows, 'purifier_gradient': 'full'}

@@ -23,4 +23,12 @@ if ($IndexUrl -ne '') {
 if ($LASTEXITCODE -ne 0) {
     throw '依赖安装失败，请检查网络设置'
 }
+& $pipExe -m pip install --no-deps --no-build-isolation -e .
+if ($LASTEXITCODE -ne 0) {
+    throw '注册当前项目可编辑包失败'
+}
+& $pipExe -X utf8 tools/preflight.py --code-only
+if ($LASTEXITCODE -ne 0) {
+    throw '仅代码运行前检查失败'
+}
 Write-Host ">>> 运行环境依赖安装成功完成！"

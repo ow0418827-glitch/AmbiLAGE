@@ -1,5 +1,5 @@
 """统一图像生成 CLI 命令行入口 (Unified Generation CLI Tool)。
-支持 ambilage 与 lucid 双方法，原生适配 A100 硬件画像参数。
+支持 ambilage 与 lucid 双方法，兼容 T4/L4/A100 显卡与 CPU 测试环境。
 """
 from __future__ import annotations
 
@@ -74,13 +74,13 @@ def parse_args(argv=None) -> argparse.Namespace:
         "--text-weight",
         type=float,
         default=1.0,
-        help="文字对齐监督权重",
+        help="文字对齐监督权重（仅用于 lucid；ambilage 固定使用图文 0.5/0.5 联合目标）",
     )
     parser.add_argument(
         "--allow-tf32",
         action="store_true",
         default=True,
-        help="是否开启 A100 TensorFloat-32 原生加速 (默认启用)",
+        help="是否开启 Ampere 及更新架构显卡 (L4/A100) 的 TensorFloat-32 加速 (T4/CPU 自动跳过，默认启用)",
     )
     parser.add_argument(
         "--no-tf32",

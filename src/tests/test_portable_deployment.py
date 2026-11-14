@@ -69,7 +69,39 @@ def test_model_plan_is_explicit_and_does_not_import_downloader():
     output = subprocess.check_output([sys.executable, "-X", "utf8", "-c", code], cwd=PROJECT, text=True, encoding="utf-8")
     plan = json.loads(output)
     assert plan["download"] is False
-    keys = {item["key"] for item in plan["models"]}
-    assert {"sam2", "planner", "editor", "purifier", "eval_g14", "eval_gme"}.issubset(keys)
+    by_key = {item["key"]: item for item in plan["models"]}
+    keys = set(by_key)
+    assert {"sam2", "editor", "purifier", "eval_g14", "eval_gme"}.issubset(keys)
+    assert not {"planner", "planner_7b", "editor_qwen"} & keys
+    assert by_key["editor"]["role"] == "stage4_16_channel_flux_vae"
+    assert by_key["editor"]["allow_patterns"] == ["vae/*", "model_index.json", "*.md", "LICENSE*"]
     assert {"clip_b16", "clip_b32", "clip_b32_laion"}.issubset(keys)
     assert not {"clip_l14", "siglip_so400m", "clip_h14"} & keys
+
+
+def test_choice1_requirements_exclude_deprecated_vlm_and_unused_packages():
+    import re
+    def _pkg_names(path: Path) -> set[str]:
+        names = set()
+        for raw in path.read_text(encoding="utf-8").splitlines():
+            line = raw.strip()
+            if not line or line.startswith("#") or line.startswith("-r "):
+                continue
+            names.add(re.split(r"[<>=!~;\s\[]", line, maxsplit=1)[0].lower())
+        return names
+
+    base_pkgs = _pkg_names(PROJECT / "requirements/requirements.txt")
+    optional_pkgs = _pkg_names(PROJECT / "requirements/requirements-optional-vlm.txt")
+    assert not {"qwen-vl-utils", "lpips", "matplotlib", "psutil"} & base_pkgs
+    assert {"diffusers", "rapidocr-onnxruntime", "open-clip-torch", "scikit-image", "scipy", "sentence-transformers"} <= base_pkgs
+    assert "qwen-vl-utils" in optional_pkgs
+
+
+def test_doctor_marks_optional_models_and_editor_vae_subset(capsys):
+    from src.experiments.runtime_check import doctor
+    report = doctor(device="cpu")
+    capsys.readouterr()
+    assert report["local_models"]["planner"]["optional"] is True
+    assert report["local_models"]["planner"]["required"] is False
+    assert report["local_models"]["editor"]["optional"] is False
+    assert report["local_models"]["editor"]["allow_patterns"] == ["vae/*", "model_index.json", "*.md", "LICENSE*"]

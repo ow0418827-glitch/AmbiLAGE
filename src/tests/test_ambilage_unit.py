@@ -20,6 +20,7 @@ from src.visual._ambilage.objectives import (
 )
 from src.visual._ambilage.pipeline import AmbiLAGEPipeline
 from src.visual._ambilage.segmentation import (
+    _resolve_box_coordinates,
     compute_spatial_envelopes,
     print_region_mask,
     segment_image,
@@ -332,3 +333,115 @@ def test_ambilage_single_pass_pipeline_end_to_end(tmp_path: Path):
     roi = print_region_mask((32, 32), [[0.4, 0.4, 0.6, 0.6]])
     diff = np.abs(adv_rgb.astype(np.int16) - anchor_rgb.astype(np.int16))
     assert np.all(diff[roi] == 0), "端到端生成中印刷区域文字发生改动！"
+
+
+def test_resolve_box_coordinates_accepts_normalized_and_pixel_boxes():
+    """验证分割提示框同时兼容归一化 [0, 1] 与原图像素坐标，并拦截越界框。"""
+    norm_default, px_default = _resolve_box_coordinates(None, 181, 500)
+    assert norm_default == [[0.0, 0.0, 1.0, 1.0]]
+    assert px_default == [[0.0, 0.0, 181.0, 500.0]]
+
+    norm_n, px_n = _resolve_box_coordinates([[0.1, 0.2, 0.9, 0.8]], 100, 200)
+    assert norm_n == [[0.1, 0.2, 0.9, 0.8]]
+    assert px_n == [[10.0, 40.0, 90.0, 160.0]]
+
+    norm_p, px_p = _resolve_box_coordinates([[1, 1, 180, 497]], 181, 500)
+    assert px_p == [[1.0, 1.0, 180.0, 497.0]]
+    assert np.allclose(norm_p, [[1.0 / 181.0, 1.0 / 500.0, 180.0 / 181.0, 497.0 / 500.0]])
+
+    with pytest.raises(ValueError, match="主体提示框"):
+        _resolve_box_coordinates([[10, 10, 200, 497]], 181, 500)
+    with pytest.raises(ValueError, match="主体提示框"):
+        _resolve_box_coordinates([[100, 10, 50, 400]], 181, 500)
+
+
+def test_planner_json_parser_and_box_normalization():
+    """验证规划 JSON 解析兼容 // 注释与尾逗号，并将像素输出归一化到 [0, 1]。"""
+    from src.visual._ambilage.backends import _normalize_planner_boxes, parse_json_response
+
+    raw = '''Here is the plan:
+```json
+{
+  "source_boxes": [[1, 1, 180, 497]], // product box
+  "print_regions": [
+    [38, 109, 115, 150], // "label // keep"
+  ],
+  "edit_prompt": "Preserve https://example.com label lighting",
+}
+```'''
+    parsed = parse_json_response(raw)
+    assert parsed["edit_prompt"] == "Preserve https://example.com label lighting"
+    norm_src = _normalize_planner_boxes(parsed["source_boxes"], 181, 500, allow_empty=False)
+    norm_roi = _normalize_planner_boxes(parsed["print_regions"], 181, 500, allow_empty=True)
+    assert all(0.0 <= b[0] < b[2] <= 1.0 and 0.0 <= b[1] < b[3] <= 1.0 for b in norm_src + norm_roi)
+    assert _normalize_planner_boxes([], 181, 500, allow_empty=True) == []
+    assert _normalize_planner_boxes([], 181, 500, allow_empty=False) == [[0.0, 0.0, 1.0, 1.0]]
+
+
+def test_flux_canvas_and_sdedit_alignment_fallback(monkeypatch):
+    """验证窄高比商品图会按上下文原生桶对称留白，并在全噪漂移时触发部分去噪回正。"""
+    from types import SimpleNamespace
+    from PIL import Image
+    from src.visual._ambilage.backends import ProductionStages, _prepare_flux_canvas
+
+    square = np.full((64, 64, 3), 240, dtype=np.uint8)
+    sq_canvas, sy0, sx0, sph, spw, skw, skh = _prepare_flux_canvas(square)
+    assert (sy0, sx0, sph, spw, skw, skh) == (0, 0, 64, 64, 1024, 1024)
+    assert np.array_equal(sq_canvas, square)
+
+    narrow = np.full((500, 181, 3), 255, dtype=np.uint8)
+    narrow[50:450, 20:160] = 120
+    canvas, y0, x0, pad_h, pad_w, kw, kh = _prepare_flux_canvas(narrow)
+    assert (kw, kh) == (672, 1568)
+    assert pad_h == 500 and pad_w > 181 and y0 == 0 and x0 > 0
+    assert np.array_equal(canvas[y0:y0 + 500, x0:x0 + 181], narrow)
+    assert np.all(canvas[:, :x0] == 255)
+
+    monkeypatch.setattr("src.visual._ambilage.backends.local_model", lambda *args: "/fake/editor")
+
+    class _FakeProc:
+        def resize(self, img, h, w):
+            return img.resize((w, h))
+
+        def preprocess(self, img, h, w):
+            arr = np.asarray(img).transpose(2, 0, 1).copy()
+            return torch.tensor(arr, dtype=torch.float32)[None] / 127.5 - 1.0
+
+    class _FakeEditor:
+        def __init__(self, drift_full: bool):
+            self.drift_full = drift_full
+            self.image_processor = _FakeProc()
+            self.transformer = SimpleNamespace(
+                parameters=lambda: iter([torch.zeros(1, dtype=torch.float32)]),
+                config=SimpleNamespace(in_channels=64),
+            )
+            self.calls = []
+
+        def prepare_latents(self, pre, b, c, h, w, dtype, dev, gen, lat):
+            base = torch.ones((1, 4, 8), dtype=dtype)
+            return torch.zeros_like(base), base, None, None
+
+        def __call__(self, *, image, prompt, num_inference_steps, guidance_scale, height, width,
+                     max_area=None, _auto_resize=True, generator=None, sigmas=None, latents=None):
+            self.calls.append({"sigmas": sigmas, "height": height, "width": width, "_auto_resize": _auto_resize})
+            if latents is None and self.drift_full:
+                return SimpleNamespace(images=[Image.new("RGB", (width, height), (30, 30, 30))])
+            return SimpleNamespace(images=[image.resize((width, height))])
+
+    st = ProductionStages.__new__(ProductionStages)
+    st.config = AmbiLAGEConfig()
+    st.device = torch.device("cpu")
+
+    st.editor = _FakeEditor(drift_full=False)
+    out_ok, audit_ok = st.generate_anchor(square, "relight", 42)
+    assert out_ok.shape == square.shape
+    assert audit_ok["alignment_mode"] == "full_kontext"
+    assert len(st.editor.calls) == 1
+
+    st.editor = _FakeEditor(drift_full=True)
+    out_fb, audit_fb = st.generate_anchor(narrow, "relight", 42)
+    assert out_fb.shape == narrow.shape
+    assert audit_fb["alignment_mode"] == "flow_matching_sdedit"
+    assert audit_fb["sdedit_strength"] == 0.45
+    assert len(st.editor.calls) == 2
+    assert st.editor.calls[1]["sigmas"] is not None and max(st.editor.calls[1]["sigmas"]) <= 0.45

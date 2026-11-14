@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-11-14T06:16:25.425915+00:00",
+  "code": {
+    "python_files_parsed": 131,
+    "model_manifest_entries": 15,
+    "private_resources_read": false
+  },
+  "resources": {
+    "entries": 189,
+    "groups": 9,
+    "queries": 180,
+    "shared_image_files": 198,
+    "path_and_hash_checks": 247,
+    "model_encoding_performed": false,
+    "selection_exceptions": [
+      "04_curtain",
+      "08_speaker"
+    ]
+  },
+  "runtime": {
+    "python": "3.11.17",
+    "platform": "Linux-6.6.159+-x86_64-with-glibc2.39",
+    "packages": {
+      "torch": "2.14.1+cu126",
+      "torchvision": "0.29.1+cu126",
+      "transformers": "5.23.0",
+      "diffusers": "0.43.0",
+      "accelerate": "1.15.0",
+      "open-clip-torch": "3.3.0",
+      "rapidocr-onnxruntime": "1.4.4",
+      "huggingface-hub": "1.33.0"
+    },
+    "disk_free_gib": 98.73,
+    "cuda_available": true,
+    "cuda_device": "NVIDIA A100-SXM4-80GB",
+    "vram_gib": 79.25,
+    "bf16_supported": true
+  },
+  "training_surrogates": {
+    "schema_version": 1,
+    "profile": "lucid",
+    "config_source": "src/visual/config/optimization.json",
+    "config_sha256": "41bd088cfd50df5f92e033a04ab23060a2daf080811254bcf998f0f23c6876d9",
+    "specs": [
+      {
+        "name": "ViT-B-16",
+        "pretrained": "openai",
+        "hf_repo": "timm/vit_base_patch16_clip_224.openai",
+        "weight_path": null,
+        "tokenizer_path": null
+      },
+      {
+        "name": "ViT-B-32",
+        "pretrained": "openai",
+        "hf_repo": "timm/vit_base_patch32_clip_224.openai",
+        "weight_path": null,
+        "tokenizer_path": null
+      },
+      {
+        "name": "ViT-B-32",
+        "pretrained": "laion2b_s34b_b79k",
+        "hf_repo": "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
+        "weight_path": null,
+        "tokenizer_path": null
+      }
+    ],
+    "specs_sha256": "67e3e7ce158c094b1d414288bb08fcb8504aa5cd1bbcac469e90ff279bd29af6",
+    "comparison_reference": "current_lucid_configuration_and_loader",
+    "activation_policy": "pretrained_native",
+    "model_count": 3,
+    "held_out_models": [
+      "ViT-g-14",
+      "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+    ],
+    "downloads_during_training": false
+  },
+  "models": {
+    "sam2": {
+      "present": true,
+      "repo_id": "facebook/sam2.1-hiera-large"
+    },
+    "planner": {
+      "present": true,
+      "repo_id": "Qwen/Qwen2.5-VL-32B-Instruct"
+    },
+    "editor": {
+      "present": true,
+      "repo_id": "black-forest-labs/FLUX.1-Kontext-dev"
+    },
+    "purifier": {
+      "present": true,
+      "repo_id": "stable-diffusion-v1-5/stable-diffusion-v1-5"
+    },
+    "clip_b16": {
+      "present": true,
+      "repo_id": "timm/vit_base_patch16_clip_224.openai"
+    },
+    "clip_b32": {
+      "present": true,
+      "repo_id": "timm/vit_base_patch32_clip_224.openai"
+    },
+    "clip_b32_laion": {
+      "present": true,
+      "repo_id": "laion/CLIP-ViT-B-32-laion2B-s34B-b79K"
+    },
+    "eval_g14": {
+      "present": true,
+      "repo_id": "laion/CLIP-ViT-g-14-laion2B-s12B-b42K"
+    },
+    "eval_gme": {
+      "present": false,
+      "repo_id": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+    },
+    "selection": {
+      "present": true,
+      "repo_id": "facebook/dinov2-small"
+    }
+  },
+  "remote_model_execution_verified": false
+}

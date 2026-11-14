@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "profile": "lucid",
+  "config_source": "src/visual/config/optimization.json",
+  "config_sha256": "41bd088cfd50df5f92e033a04ab23060a2daf080811254bcf998f0f23c6876d9",
+  "specs": [
+    {
+      "name": "ViT-B-16",
+      "pretrained": "openai",
+      "hf_repo": "timm/vit_base_patch16_clip_224.openai",
+      "weight_path": null,
+      "tokenizer_path": null
+    },
+    {
+      "name": "ViT-B-32",
+      "pretrained": "openai",
+      "hf_repo": "timm/vit_base_patch32_clip_224.openai",
+      "weight_path": null,
+      "tokenizer_path": null
+    },
+    {
+      "name": "ViT-B-32",
+      "pretrained": "laion2b_s34b_b79k",
+      "hf_repo": "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
+      "weight_path": null,
+      "tokenizer_path": null
+    }
+  ],
+  "specs_sha256": "67e3e7ce158c094b1d414288bb08fcb8504aa5cd1bbcac469e90ff279bd29af6",
+  "comparison_reference": "current_lucid_configuration_and_loader",
+  "activation_policy": "pretrained_native",
+  "model_count": 3,
+  "held_out_models": [
+    "ViT-g-14",
+    "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+  ],
+  "downloads_during_training": false
+}

@@ -1,0 +1,60 @@
+{
+  "method": "lucid",
+  "group": "07_shampoo",
+  "execution": "historical_frozen_image_reuse",
+  "public": {
+    "definition_sha256": "f4946d621ea26029c928aef8acc2a3f9897012cb4f29e272da3ed984f0e684c7",
+    "features_sha256": "dfc0f2e579c61c7f581dc3ee1a3e8462e660160bc8c21f7f0d5de728b68a20a4",
+    "public_metadata_sha256": "4faa8a56119f213576ea065dab23b87dea7c7983cce89b6473515b03e831eff0",
+    "public_review_sha256": "0651b36338ced43e334cd2ab5de96083dd14aed0c5b42260a1be9347da6e6d40",
+    "source_sha256": "b69cef9d597c09a1dd74baa2dc3a24343443d80fea3030c8994268c4f21b9c72",
+    "target_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e"
+  },
+  "target_text": "I want to buy shampoo with plant-based haircare ingredients and a balancing formula.",
+  "parameters": {
+    "steps": 1000,
+    "epsilon_levels": 8
+  },
+  "image_sha256": "dfd43aa9e1b45cefacb6adac7641712ca416cf539a64a6831f21acc6ed4aa800",
+  "provenance": {
+    "kind": "historical_completed_baseline_reuse",
+    "generation_executed": false,
+    "newly_evaluated": false,
+    "original_evidence_kept_unchanged": true,
+    "import_manifest_sha256": "7e3fb45d6ba0bb54b62b810cf31c52a03f160e65ee130b0e718557a43f1ade84",
+    "original_frozen_sha256": "b65bc6db71c6232c8aed26fa91bc67ff3438e9a4a3460fe7d2f39ece339f4b7c",
+    "original_metadata_sha256": "6ee7fd70d78ec5413e08823d5d6022ddcbcb775fe3e822ced8d9768997227c97",
+    "original_proxy_activation_record": [
+      {
+        "name": "ViT-B-16",
+        "pretrained": "openai",
+        "weight_sha256": "4b8699299b1e8997753c64b052ba32031449d5d853f55a039148560ee02b820f",
+        "activation": "QuickGELU",
+        "actual_activation_modules": {
+          "QuickGELU": 24,
+          "GELU": 0
+        }
+      },
+      {
+        "name": "ViT-B-32",
+        "pretrained": "openai",
+        "weight_sha256": "e6d1bd7789aa45192b3bf90570a789b478bae1b74ebcce7eddd908e83a2b7c31",
+        "activation": "QuickGELU",
+        "actual_activation_modules": {
+          "QuickGELU": 24,
+          "GELU": 0
+        }
+      },
+      {
+        "name": "ViT-B-32",
+        "pretrained": "laion2b_s34b_b79k",
+        "weight_sha256": "ac4f8c4b88af6d963118cbf40ad93176d092abbedfcb752601ae1866352656e6",
+        "activation": "QuickGELU",
+        "actual_activation_modules": {
+          "QuickGELU": 24,
+          "GELU": 0
+        }
+      }
+    ]
+  }
+}

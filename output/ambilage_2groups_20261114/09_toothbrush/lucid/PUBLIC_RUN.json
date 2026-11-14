@@ -1,0 +1,60 @@
+{
+  "method": "lucid",
+  "group": "09_toothbrush",
+  "execution": "historical_frozen_image_reuse",
+  "public": {
+    "definition_sha256": "a9e21f374bbfd1368acd8ddd24bfbde7979b4ee6ed16327533e3e98026f493ce",
+    "features_sha256": "17fe7492f81fbb5a3eb4ea4bb3cb954d5fb2cf35862045ef948c3881c936f94c",
+    "public_metadata_sha256": "4faa8a56119f213576ea065dab23b87dea7c7983cce89b6473515b03e831eff0",
+    "public_review_sha256": "0651b36338ced43e334cd2ab5de96083dd14aed0c5b42260a1be9347da6e6d40",
+    "source_sha256": "74e0c705bd248dbec29190d33f7ecd38ef9a17e8853dd58ddb13c78fff4eae0f",
+    "target_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+  },
+  "target_text": "I want to buy a toothbrush with a U-shaped design and soft silicone brush heads.",
+  "parameters": {
+    "steps": 1000,
+    "epsilon_levels": 8
+  },
+  "image_sha256": "74c6404754e18b3481de5552cfedd846d5a47e5efb2de263bfa1f47d19b1c1b6",
+  "provenance": {
+    "kind": "historical_completed_baseline_reuse",
+    "generation_executed": false,
+    "newly_evaluated": false,
+    "original_evidence_kept_unchanged": true,
+    "import_manifest_sha256": "7e3fb45d6ba0bb54b62b810cf31c52a03f160e65ee130b0e718557a43f1ade84",
+    "original_frozen_sha256": "5bff1a19b3aa3a83427518961f3f39eda28f03c0b6b06549ef30e7a07c5a9781",
+    "original_metadata_sha256": "b8a61185590cab19c3dc680daf86d2bebb106ddd9432c0509cc1b694255f4aa6",
+    "original_proxy_activation_record": [
+      {
+        "name": "ViT-B-16",
+        "pretrained": "openai",
+        "weight_sha256": "4b8699299b1e8997753c64b052ba32031449d5d853f55a039148560ee02b820f",
+        "activation": "QuickGELU",
+        "actual_activation_modules": {
+          "QuickGELU": 24,
+          "GELU": 0
+        }
+      },
+      {
+        "name": "ViT-B-32",
+        "pretrained": "openai",
+        "weight_sha256": "e6d1bd7789aa45192b3bf90570a789b478bae1b74ebcce7eddd908e83a2b7c31",
+        "activation": "QuickGELU",
+        "actual_activation_modules": {
+          "QuickGELU": 24,
+          "GELU": 0
+        }
+      },
+      {
+        "name": "ViT-B-32",
+        "pretrained": "laion2b_s34b_b79k",
+        "weight_sha256": "ac4f8c4b88af6d963118cbf40ad93176d092abbedfcb752601ae1866352656e6",
+        "activation": "QuickGELU",
+        "actual_activation_modules": {
+          "QuickGELU": 24,
+          "GELU": 0
+        }
+      }
+    ]
+  }
+}

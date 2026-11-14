@@ -68,6 +68,33 @@ def _heuristic_segmentation(image_array: np.ndarray) -> np.ndarray:
     return fg_filled
 
 
+def _resolve_box_coordinates(
+    boxes: Sequence[Sequence[float]] | None,
+    width: int,
+    height: int,
+) -> tuple[list[list[float]], list[list[float]]]:
+    """将归一化或原图像素提示框统一解析为 `(normalized_boxes, pixel_boxes)`。"""
+    if width <= 0 or height <= 0:
+        raise ValueError(f"无效图像尺寸: {width}x{height}")
+    raw_boxes = list(boxes) if boxes else [[0.0, 0.0, 1.0, 1.0]]
+    normalized: list[list[float]] = []
+    pixels: list[list[float]] = []
+    for box in raw_boxes:
+        if len(box) != 4:
+            raise ValueError(f"主体提示框必须包含四个坐标值: {box}")
+        x0, y0, x1, y1 = (float(v) for v in box)
+        if 0.0 <= x0 < x1 <= 1.0 and 0.0 <= y0 < y1 <= 1.0:
+            normalized.append([x0, y0, x1, y1])
+            pixels.append([x0 * width, y0 * height, x1 * width, y1 * height])
+        elif 0.0 <= x0 < x1 <= float(width) and 0.0 <= y0 < y1 <= float(height):
+            # 冻结分组 definition.json 中的 product_boxes() 存储像素框，按原图尺寸归一化
+            normalized.append([x0 / width, y0 / height, x1 / width, y1 / height])
+            pixels.append([x0, y0, x1, y1])
+        else:
+            raise ValueError(f"主体提示框必须是有效归一化坐标或图像内像素坐标: {box}")
+    return normalized, pixels
+
+
 def segment_image(
     image_path: Path | str,
     boxes: Sequence[Sequence[float]] | None = None,
@@ -75,17 +102,11 @@ def segment_image(
     model_dir: Path | str | None = None,
     device: str = "cuda",
 ) -> tuple[np.ndarray, dict[str, Any]]:
-    """真实大模型分割；归一化提示框转换为原图像素，失败即停止。"""
+    """真实大模型分割；兼容归一化与像素提示框并转换为原图像素，失败即停止。"""
     from transformers import Sam2Processor, Sam2Model
     image = Image.open(image_path).convert("RGB")
     w, h = image.size
-    normalized = boxes or [[0., 0., 1., 1.]]
-    pixels = []
-    for box in normalized:
-        x0, y0, x1, y1 = box
-        if not (0 <= x0 < x1 <= 1 and 0 <= y0 < y1 <= 1):
-            raise ValueError("主体提示框必须是有效归一化坐标")
-        pixels.append([x0*w, y0*h, x1*w, y1*h])
+    normalized, pixels = _resolve_box_coordinates(boxes, w, h)
     path = Path(model_dir or model_path("sam2"))
     if not path.is_dir():
         raise FileNotFoundError(f"缺少真实分割权重: {path}")
@@ -103,7 +124,7 @@ def segment_image(
         if not .01 < ratio < .99:
             raise ValueError(f"主体分割面积异常，停止生成: {ratio:.4f}")
         record = dict(image_path=str(image_path), image_sha256=sha256_file(image_path),
-                      boxes=normalized, segmenter="sam2.1-hiera-large", model=str(path),
+                      boxes=normalized, pixel_boxes=pixels, segmenter="sam2.1-hiera-large", model=str(path),
                       scores=scores.tolist(), foreground_ratio=ratio)
     finally:
         del model, processor

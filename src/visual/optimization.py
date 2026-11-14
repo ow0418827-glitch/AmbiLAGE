@@ -58,9 +58,12 @@ def _adjacent_feature_text(target):
 def generate_attack(source, target, output_dir, *, method='ambilage', steps=None,
                     epsilon_levels=16, device='cuda', optimization_config=None,
                     ambilage_config=None, target_text=None, text_weight=1.0,
-                    allow_tf32=True, seed=42, definition=None, smoke_test=False):
+                    allow_tf32=True, seed=42, definition=None, smoke_test=False,
+                    surrogate_set=None,surrogate_config=None):
     method = normalize_method(method)
     if method == 'lucid':
+        if surrogate_set is not None or surrogate_config is not None:
+            raise ValueError('训练代理选择参数用于新方法；原始像素方法使用自己的冻结配置')
         if ambilage_config:
             raise ValueError('像素方法不能读取 ambilage 方法配置')
         frozen_text = _adjacent_feature_text(target)
@@ -102,6 +105,7 @@ def generate_attack(source, target, output_dir, *, method='ambilage', steps=None
             ambilage_config=ambilage_config,
             allow_tf32=allow_tf32,
             seed=seed,definition=definition,smoke_test=smoke_test,
+            surrogate_set=surrogate_set,surrogate_config=surrogate_config,
         )
         metadata=dict(metadata,status='success',source_image_sha256=metadata['source_sha256'],
                       target_image_sha256=metadata['target_sha256'],ambilage_ready=copy.deepcopy(metadata))

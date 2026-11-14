@@ -147,7 +147,7 @@ def test_forging_top_level_production_flags_does_not_hide_tiny_models(tmp_path):
         document=json.loads((root/name).read_text(encoding='utf-8'))
         document['test_fixture']=False;document['production_backend']=True
         (root/name).write_text(json.dumps(document),encoding='utf-8')
-    with pytest.raises(ValueError,match='四个指定真实训练代理'):
+    with pytest.raises(ValueError,match='所选方案的真实训练代理'):
         validate_ready(root)
 
 

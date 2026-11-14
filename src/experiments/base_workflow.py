@@ -73,7 +73,7 @@ def public_group(base, group):
 
 
 def generate_group(base, group, method, output, *, device='cuda', steps=None,
-                   epsilon_levels=8, ambilage_config=None):
+                   epsilon_levels=8, ambilage_config=None,surrogate_set=None,surrogate_config=None):
     from src.visual.catalog_training_guard import catalog_training_guard
     from src.visual.optimization import generate_attack
     from src.visual.attack_completion import validate_attack_completion
@@ -83,6 +83,8 @@ def generate_group(base, group, method, output, *, device='cuda', steps=None,
         raise ValueError('运行结果必须保存在当前项目输出目录')
     frozen_path = root / 'FROZEN_IMAGE.json'
     if method == 'lucid':
+        if surrogate_set is not None or surrogate_config is not None:
+            raise ValueError('训练代理选择参数用于新方法；固定原始像素对照按原记录复用')
         if steps not in (None, 1000) or epsilon_levels != 8 or ambilage_config is not None:
             raise ValueError('冻结对照只复用八除以二百五十五、完整千步的原始像素成图')
         from src.experiments.lucid_baseline_import import load_imported_baseline
@@ -97,10 +99,16 @@ def generate_group(base, group, method, output, *, device='cuda', steps=None,
     protected = [base / 'shared_memory', base / 'evaluation_inputs', base / 'evaluation_encoder.json']
     with catalog_training_guard(allowed_output_roots=[root, base / 'groups'], private_paths=protected):
         inputs = public_group(base, group)
+        from src.visual._ambilage.config import AmbiLAGEConfig
+        from src.visual.training_surrogates import apply_surrogate_overrides,selection_from_config
+        if isinstance(ambilage_config,(str,Path)):
+            ambilage_config=read_json(ambilage_config)
+        effective_config=AmbiLAGEConfig.from_dict(ambilage_config) if isinstance(ambilage_config,dict) else (ambilage_config or AmbiLAGEConfig())
+        effective_config=apply_surrogate_overrides(effective_config,surrogate_set,surrogate_config)
         binding = dict(method=method, group=group, public=inputs['public_binding'],
                        target_text=inputs['target_text'], steps=steps,
                        epsilon_levels=epsilon_levels if method == 'lucid' else None,
-                       config=ambilage_config if method == 'ambilage' else None)
+                       config=effective_config.to_dict(),training_surrogates=selection_from_config(effective_config).audit())
         binding['source_files'] = source_snapshot()
         freeze_json(root / 'PUBLIC_RUN.json', binding)
         if frozen_path.exists():
@@ -115,12 +123,14 @@ def generate_group(base, group, method, output, *, device='cuda', steps=None,
         if steps is not None:
             options['steps'] = steps
         if method == 'ambilage':
-            options.update(ambilage_config=ambilage_config, definition=inputs['definition'])
+            options.update(ambilage_config=effective_config, definition=inputs['definition'])
         else:
             options['epsilon_levels'] = epsilon_levels
         image, metadata = generate_attack(inputs['source']['image'], inputs['target']['image'],
                                          root / 'generation', **options)
         count = metadata.get('steps_requested', metadata.get('attack', {}).get('steps_requested'))
+        if metadata.get('training_objective',{}).get('surrogate_selection')!=binding['training_surrogates']:
+            raise ValueError('实际训练代理与本次冻结选择不一致')
         validate_attack_completion(metadata, count, dict(method=method,
             source_image_sha256=inputs['source']['image_sha256'], target_image_sha256=inputs['target']['image_sha256']))
         final = root / 'frozen.png'
@@ -144,6 +154,8 @@ def main(argv=None):
     parser.add_argument('--steps', type=int)
     parser.add_argument('--epsilon-levels', type=int, default=8)
     parser.add_argument('--ambilage-config', type=Path)
+    from src.visual.training_surrogates import add_surrogate_arguments
+    add_surrogate_arguments(parser)
     parser.add_argument('--query-mode', choices=('text', 'joint'), default='text')
     parser.add_argument('--query-manifest', type=Path)
     parser.add_argument('--encoder-config', type=Path)
@@ -151,6 +163,9 @@ def main(argv=None):
                         help='独立评估目录名；不同查询模式或留出编码器使用不同名称')
     parser.add_argument('--defense-mode', choices=('none', 'panel'), default='panel')
     args = parser.parse_args(argv)
+    if args.surrogate_set is not None or args.surrogate_config is not None:
+        if args.method!='ambilage' or args.stage not in ('generate','all'):
+            parser.error('训练代理选择参数仅用于新方法的生成或全阶段命令')
     if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]{0,63}', args.evaluation_name):
         parser.error('评估名称只允许字母、数字、横线和下划线')
     base, output = args.base.resolve(), args.output.resolve()
@@ -165,7 +180,8 @@ def main(argv=None):
     if args.stage in ('generate', 'all'):
         for group in groups:
             generate_group(base, group, args.method, output / group / args.method, device=args.device,
-                           steps=args.steps, epsilon_levels=args.epsilon_levels, ambilage_config=config)
+                           steps=args.steps, epsilon_levels=args.epsilon_levels, ambilage_config=config,
+                           surrogate_set=args.surrogate_set,surrogate_config=args.surrogate_config)
     replacement_frozens = None
     if args.stage in ('evaluate', 'all'):
         replacement_frozens = []

@@ -48,10 +48,26 @@ def main(argv=None):
     parser.add_argument("--endpoint", "--mirror", default=os.environ.get("HF_ENDPOINT", "https://hf-mirror.com"))
     parser.add_argument("--download", action="store_true", help="Actually download snapshots; omitted means plan only")
     parser.add_argument("--revision", help="Pin the same explicit revision for the selected model; use with a single --models key")
+    from src.visual.training_surrogates import add_surrogate_arguments,select_training_surrogates,training_model_keys
+    add_surrogate_arguments(parser)
     args = parser.parse_args(argv)
     specs = model_specs()
     lock = read_model_lock()
-    keys = args.models or [key for key, spec in specs.items() if spec["scope"] == args.scope or (args.scope == "all" and spec["scope"] != "optional")]
+    selected=None
+    if args.models and (args.surrogate_set is not None or args.surrogate_config is not None):
+        parser.error('显式模型编号与训练代理方案请选择一种方式')
+    if not args.models and args.scope in ('encoders','all'):
+        selected=select_training_surrogates('custom' if args.surrogate_config else (args.surrogate_set or 'lucid'),args.surrogate_config)
+        training_keys=training_model_keys(selected,specs)
+        if None in training_keys:
+            parser.error('自定义代理包含未登记仓库，请先显式准备本地权重；其他模型可通过 --models 单独准备')
+        keys=[key for key,spec in specs.items() if
+              (key in training_keys and spec['scope']=='encoders') or
+              (args.scope=='all' and spec['scope'] not in ('optional','encoders'))]
+    else:
+        if args.surrogate_set is not None or args.surrogate_config is not None:
+            parser.error('训练代理方案用于 --scope encoders 或 --scope all')
+        keys=args.models or [key for key,spec in specs.items() if spec['scope']==args.scope]
     if any(key not in specs for key in keys):
         parser.error("Unknown model key")
     if args.revision and len(keys) != 1:
@@ -59,7 +75,8 @@ def main(argv=None):
     plan = [{"key": key, "repo_id": specs[key]["repo_id"], "local_dir": str(MODEL_ROOT / key),
              "role": specs[key]["role"],
              "pinned_revision": args.revision or lock['models'].get(key, {}).get('revision')} for key in keys]
-    print(json.dumps({"download": args.download, "endpoint": args.endpoint, "models": plan}, ensure_ascii=False, indent=2), flush=True)
+    print(json.dumps({"download": args.download, "endpoint": args.endpoint, "models": plan,
+                      "training_surrogates":selected.audit() if selected else None}, ensure_ascii=False, indent=2), flush=True)
     if not args.download:
         return 0
     from huggingface_hub import HfApi

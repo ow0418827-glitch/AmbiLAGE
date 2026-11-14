@@ -67,7 +67,7 @@ class TinyPurifier:
 
 def config(**kw):
     defaults = dict(joint_weight=1., temperature=.04, eot_enabled=False,
-                    diffusion_weight=.25, seed=42)
+                    diffusion_weight=.25, seed=42,smoke_test=True,surrogate_set='lucid',surrogate_config=None)
     return SimpleNamespace(**(defaults | kw))
 
 
@@ -152,26 +152,28 @@ def test_joint_is_the_only_retrieval_target_and_matches_its_reference_gradient(m
 
 
 @pytest.mark.parametrize('eot_enabled', [False, True])
-def test_sequential_proxy_gradient_matches_fixed_weight_autograd(eot_enabled):
-    models, purifier = [TinySurrogate(i) for i in range(4)], TinyPurifier()
+@pytest.mark.parametrize('profile,count',[('lucid',3),('heterogeneous4',4)])
+def test_sequential_proxy_gradient_matches_fixed_weight_autograd(eot_enabled,profile,count):
+    models, purifier = [TinySurrogate(i) for i in range(count)], TinyPurifier()
     image = torch.rand(1, 3, 16, 16) * .6 + .2
     target = torch.rand_like(image)
     ensemble = SequentialEnsembleObjective(models, target, 'own public key', 'target public features',
-                                           config(eot_enabled=eot_enabled), purifier)
+                                           config(eot_enabled=eot_enabled,surrogate_set=profile), purifier)
     utility, scores, gradient, metrics = ensemble.image_gradient(image, 3)
     leaf = image.clone().requires_grad_(True)
     weights = torch.tensor(metrics['model_weights'])
-    values = torch.stack([ensemble._one_value(i, leaf, 3, 'full')[0] for i in range(4)])
+    values = torch.stack([ensemble._one_value(i, leaf, 3, 'full')[0] for i in range(count)])
     expected = torch.autograd.grad((values * weights).sum(), leaf)[0]
     torch.testing.assert_close(gradient, expected, atol=1e-7, rtol=1e-5)
     assert gradient.abs().sum() > 0
-    assert scores.shape == (4, 1) and torch.isfinite(utility)
+    assert scores.shape == (count, 1) and torch.isfinite(utility)
     assert ensemble.audit['kind'] == TRAINING_OBJECTIVE_KIND
     assert all(row['query_modes'] == ['multimodal_equal_weight'] for row in ensemble.audit['public_objectives'])
     assert {mode for _, mode in purifier.calls} == {'none', 'full'}
     assert all(seed == 45 for seed, _ in purifier.calls)
     with pytest.raises(ValueError):
-        SequentialEnsembleObjective(models, target, 'source', 'target', config(diffusion_weight=0), purifier)
+        SequentialEnsembleObjective(models, target, 'source', 'target',
+            config(diffusion_weight=0,surrogate_set=profile), purifier)
 
 
 def test_training_steps_cover_all_eot_paths_with_gradients():

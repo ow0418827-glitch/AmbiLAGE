@@ -61,6 +61,8 @@ class AmbiLAGEConfig:
 
     # 目标函数与正则化权重
     joint_weight: float = 1.0          # 唯一图文联合检索效用的整体权重
+    surrogate_set: str = 'lucid'       # 默认与原始像素方法共用三代理
+    surrogate_config: str | None = None
     compensated_weight: float = 0.5
     fg_l2_weight: float = 0.0001        # 主体微光影 L2 惩罚
     fg_tv_weight: float = 0.0004        # 主体空间全变分 (TV) 惩罚
@@ -109,6 +111,14 @@ class AmbiLAGEConfig:
 
     def validate(self) -> None:
         """严格校验配置参数有效性，杜绝越界或无效数值。"""
+        from src.visual.training_surrogates import SURROGATE_SETS
+        if self.surrogate_set not in SURROGATE_SETS:
+            raise ValueError('未知训练代理方案：' + str(self.surrogate_set))
+        if self.surrogate_set == 'custom':
+            if not isinstance(self.surrogate_config, str) or not self.surrogate_config.strip():
+                raise ValueError('自定义训练代理必须提供配置文件')
+        elif self.surrogate_config is not None:
+            raise ValueError('内置训练代理方案不能同时指定自定义代理配置')
         if type(self.steps) is not int or self.steps < 1:
             raise ValueError("优化步数 steps 必须为正整数")
         if type(self.check_every) is not int or self.check_every < 1:

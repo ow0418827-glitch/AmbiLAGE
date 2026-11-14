@@ -12,6 +12,7 @@ import torch
 
 from src.visual.hardware import apply_hardware_profile
 from src.visual.image_utils import read_rgb, read_tensor, save_tensor_image, sha256_file, write_json
+from src.visual.training_surrogates import selection_from_config, validate_loaded_surrogates, apply_surrogate_overrides
 from .backends import ProductionStages, release_memory
 from .color_selection import extract_foreground_statistics
 from .config import AmbiLAGEConfig, DEFINITION, METHOD
@@ -24,6 +25,7 @@ class AmbiLAGEPipeline:
     def __init__(self, config=None, device='cuda', *, stage_backend=None):
         self.config=config or AmbiLAGEConfig()
         self.config.validate()
+        self.surrogate_selection=selection_from_config(self.config)
         self.device=torch.device(device)
         self.hardware_profile=apply_hardware_profile(self.device,allow_tf32=self.config.allow_tf32,seed=self.config.seed)
         self.stage_backend=stage_backend
@@ -53,6 +55,7 @@ class AmbiLAGEPipeline:
         root=Path(output_dir).resolve();root.mkdir(parents=True,exist_ok=True)
         if (root/'ready.json').exists():
             raise FileExistsError('输出目录已有完成凭证，请使用新目录避免覆盖冻结结果')
+        write_json(root/'training_surrogates.json',self.surrogate_selection.audit())
         started=time.perf_counter()
         try:
             plan=backend.plan(source,source_category)
@@ -79,21 +82,20 @@ class AmbiLAGEPipeline:
             from src.visual.training_objectives import SequentialEnsembleObjective,load_training_surrogates
             if self.config.smoke_test:
                 from .smoke import TinySurrogate,TinyPurifier
-                surrogates=[TinySurrogate(i) for i in range(4)]
+                surrogates=[TinySurrogate(i) for i in range(len(self.surrogate_selection.specs))]
                 purifier=TinyPurifier()
                 vae=backend.make_vae()
                 effective=replace(self.config,latent_working_size=64)
             else:
-                surrogates=list(surrogate_encoder) if surrogate_encoder is not None else load_training_surrogates(str(self.device))
-                from src.visual.training_objectives import TRAINING_FAMILIES
-                identities=tuple(s.snapshot().get('name') for s in surrogates)
-                if identities!=TRAINING_FAMILIES or any(s.snapshot().get('test_fixture') for s in surrogates):
-                    raise ValueError('生产方法必须使用指定的四个异构真实训练代理')
+                surrogates=list(surrogate_encoder) if surrogate_encoder is not None else load_training_surrogates(
+                    str(self.device),selection=self.surrogate_selection)
+                validate_loaded_surrogates(surrogates,self.surrogate_selection)
                 purifier=None
                 vae=AmbiLAGEVae(self.device,custom_model_dir=self.config.vae_model_dir,
                     enable_checkpointing=self.config.enable_gradient_checkpointing)
                 effective=self.config
-            objective=SequentialEnsembleObjective(surrogates,read_tensor(target,self.device),source_public_key,target_text,effective,purifier=purifier)
+            objective=SequentialEnsembleObjective(surrogates,read_tensor(target,self.device),source_public_key,target_text,
+                effective,purifier=purifier,selection=self.surrogate_selection)
             audit=objective.audit
             anchor_t=torch.tensor(anchor.transpose(2,0,1).copy(),device=self.device,dtype=torch.float32)[None]/255.
             final,refinement=refine_ambient_coop_latent(anchor_t,read_tensor(source,self.device),envelopes,
@@ -115,7 +117,8 @@ class AmbiLAGEPipeline:
             stages={name:{'status':'completed'} for name in stage_names}
             stages['latent_generation_refinement'].update(steps_requested=self.config.steps,steps_completed=refinement['steps_completed'])
             artifacts={name:sha256_file(root/name) for name in ('adversarial.png','generative_anchor.png','print_core.png',
-                'source_foreground.png','target_foreground.png','latent_edit_mask.png','naturalness_gate.json','naturalness_candidate.png')}
+                'source_foreground.png','target_foreground.png','latent_edit_mask.png','naturalness_gate.json',
+                'naturalness_candidate.png','training_surrogates.json')}
             metadata=dict(schema_version=3,status='completed',method=METHOD,definition=DEFINITION,
                 test_fixture=self.config.smoke_test,production_backend=not self.config.smoke_test,
                 source_image=str(source),source_sha256=sha256_file(source),target_image=str(target),target_sha256=sha256_file(target),
@@ -142,9 +145,11 @@ class AmbiLAGEPipeline:
 
 
 def generate_ambilage(source,target,output_dir,*,definition=None,config=None,device='cuda',target_text=None,
-                      steps=None,allow_tf32=True,seed=42,smoke_test=False,**kwargs):
+                      steps=None,allow_tf32=True,seed=42,smoke_test=False,
+                      surrogate_set=None,surrogate_config=None,**kwargs):
     definition=definition or {}
     cfg=config or AmbiLAGEConfig()
+    cfg=apply_surrogate_overrides(cfg,surrogate_set,surrogate_config)
     overrides=dict(allow_tf32=allow_tf32,seed=seed,device=device,smoke_test=smoke_test or cfg.smoke_test)
     if steps is not None:
         overrides['steps']=steps

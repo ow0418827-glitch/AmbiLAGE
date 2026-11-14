@@ -54,7 +54,12 @@ def test_unified_generate_ambilage(tmp_path: Path):
     assert result.metadata["status"] == "success"
 
 
-def test_cli_generate_subprocess(tmp_path: Path):
+@pytest.mark.parametrize('extra,count', [
+    ([],3),
+    (['--surrogate-set','heterogeneous4'],4),
+    (['--surrogate-config','src/visual/config/training_surrogates.custom.example.json'],2),
+])
+def test_cli_generate_subprocess(tmp_path: Path,extra,count):
     """测试 tools/generate.py 命令行端到端调用。"""
     src_p = tmp_path / "cli_src.png"
     tgt_p = tmp_path / "cli_tgt.png"
@@ -76,9 +81,13 @@ def test_cli_generate_subprocess(tmp_path: Path):
         "--device", "cpu",
         "--target-text", "CLI Herbal Test",
     ]
+    cmd += extra
 
     res = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8")
     assert res.returncode == 0, f"CLI 执行失败: STDERR:\n{res.stderr}\nSTDOUT:\n{res.stdout}"
     assert (out_dir / "adversarial.png").is_file()
     assert (out_dir / "ready.json").is_file()
     assert (out_dir / "metadata.json").is_file()
+    import json
+    record=json.loads((out_dir/'ready.json').read_text(encoding='utf-8'))
+    assert record['training_objective']['surrogate_selection']['model_count']==count

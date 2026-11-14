@@ -1,0 +1,341 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-11-14T03:08:09.231944+00:00",
+  "requested_change": "Selectable training surrogates; default shares current Lucid configuration and loader",
+  "default_profile": "lucid",
+  "profiles": {
+    "lucid": {
+      "schema_version": 1,
+      "profile": "lucid",
+      "config_source": "src/visual/config/optimization.json",
+      "config_sha256": "41bd088cfd50df5f92e033a04ab23060a2daf080811254bcf998f0f23c6876d9",
+      "specs": [
+        {
+          "name": "ViT-B-16",
+          "pretrained": "openai",
+          "hf_repo": "timm/vit_base_patch16_clip_224.openai",
+          "weight_path": null,
+          "tokenizer_path": null
+        },
+        {
+          "name": "ViT-B-32",
+          "pretrained": "openai",
+          "hf_repo": "timm/vit_base_patch32_clip_224.openai",
+          "weight_path": null,
+          "tokenizer_path": null
+        },
+        {
+          "name": "ViT-B-32",
+          "pretrained": "laion2b_s34b_b79k",
+          "hf_repo": "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
+          "weight_path": null,
+          "tokenizer_path": null
+        }
+      ],
+      "specs_sha256": "67e3e7ce158c094b1d414288bb08fcb8504aa5cd1bbcac469e90ff279bd29af6",
+      "comparison_reference": "current_lucid_configuration_and_loader",
+      "activation_policy": "pretrained_native",
+      "model_count": 3,
+      "held_out_models": [
+        "ViT-g-14",
+        "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+      ],
+      "downloads_during_training": false
+    },
+    "heterogeneous4": {
+      "schema_version": 1,
+      "profile": "heterogeneous4",
+      "config_source": "src/visual/config/surrogates.heterogeneous4.json",
+      "config_sha256": "87453d7282c969fc20b44acb7a991a256c47dcac206d6a7afd963275b9158bf1",
+      "specs": [
+        {
+          "name": "ViT-B-16",
+          "pretrained": "openai",
+          "hf_repo": "timm/vit_base_patch16_clip_224.openai",
+          "weight_path": "clip_b16/open_clip_model.safetensors",
+          "tokenizer_path": null
+        },
+        {
+          "name": "ViT-L-14",
+          "pretrained": "openai",
+          "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+          "weight_path": "clip_l14/open_clip_model.safetensors",
+          "tokenizer_path": null
+        },
+        {
+          "name": "ViT-SO400M-14-SigLIP-384",
+          "pretrained": "webli",
+          "hf_repo": "timm/ViT-SO400M-14-SigLIP-384",
+          "weight_path": "siglip_so400m/open_clip_model.safetensors",
+          "tokenizer_path": "siglip_so400m"
+        },
+        {
+          "name": "ViT-H-14",
+          "pretrained": "laion2b_s32b_b79k",
+          "hf_repo": "laion/CLIP-ViT-H-14-laion2B-s32B-b79K",
+          "weight_path": "clip_h14/open_clip_model.safetensors",
+          "tokenizer_path": null
+        }
+      ],
+      "specs_sha256": "e2cc925814ced93e9ceff9e11f72f4a91f24bd826a11b4bbc6ec37117a6cd42d",
+      "comparison_reference": "explicit_alternative",
+      "activation_policy": "pretrained_native",
+      "model_count": 4,
+      "held_out_models": [
+        "ViT-g-14",
+        "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+      ],
+      "downloads_during_training": false
+    }
+  },
+  "model_preparation_plans": {
+    "lucid": {
+      "download": false,
+      "endpoint": "https://hf-mirror.com",
+      "models": [
+        {
+          "key": "clip_b16",
+          "repo_id": "timm/vit_base_patch16_clip_224.openai",
+          "local_dir": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\models\\clip_b16",
+          "role": "training_surrogate",
+          "pinned_revision": null
+        },
+        {
+          "key": "clip_b32",
+          "repo_id": "timm/vit_base_patch32_clip_224.openai",
+          "local_dir": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\models\\clip_b32",
+          "role": "lucid_surrogate",
+          "pinned_revision": null
+        },
+        {
+          "key": "clip_b32_laion",
+          "repo_id": "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
+          "local_dir": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\models\\clip_b32_laion",
+          "role": "lucid_surrogate",
+          "pinned_revision": null
+        }
+      ],
+      "training_surrogates": {
+        "schema_version": 1,
+        "profile": "lucid",
+        "config_source": "src/visual/config/optimization.json",
+        "config_sha256": "41bd088cfd50df5f92e033a04ab23060a2daf080811254bcf998f0f23c6876d9",
+        "specs": [
+          {
+            "name": "ViT-B-16",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_base_patch16_clip_224.openai",
+            "weight_path": null,
+            "tokenizer_path": null
+          },
+          {
+            "name": "ViT-B-32",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_base_patch32_clip_224.openai",
+            "weight_path": null,
+            "tokenizer_path": null
+          },
+          {
+            "name": "ViT-B-32",
+            "pretrained": "laion2b_s34b_b79k",
+            "hf_repo": "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
+            "weight_path": null,
+            "tokenizer_path": null
+          }
+        ],
+        "specs_sha256": "67e3e7ce158c094b1d414288bb08fcb8504aa5cd1bbcac469e90ff279bd29af6",
+        "comparison_reference": "current_lucid_configuration_and_loader",
+        "activation_policy": "pretrained_native",
+        "model_count": 3,
+        "held_out_models": [
+          "ViT-g-14",
+          "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+        ],
+        "downloads_during_training": false
+      }
+    },
+    "heterogeneous4": {
+      "download": false,
+      "endpoint": "https://hf-mirror.com",
+      "models": [
+        {
+          "key": "clip_b16",
+          "repo_id": "timm/vit_base_patch16_clip_224.openai",
+          "local_dir": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\models\\clip_b16",
+          "role": "training_surrogate",
+          "pinned_revision": null
+        },
+        {
+          "key": "clip_l14",
+          "repo_id": "timm/vit_large_patch14_clip_224.openai",
+          "local_dir": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\models\\clip_l14",
+          "role": "training_surrogate",
+          "pinned_revision": null
+        },
+        {
+          "key": "siglip_so400m",
+          "repo_id": "timm/ViT-SO400M-14-SigLIP-384",
+          "local_dir": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\models\\siglip_so400m",
+          "role": "training_surrogate",
+          "pinned_revision": null
+        },
+        {
+          "key": "clip_h14",
+          "repo_id": "laion/CLIP-ViT-H-14-laion2B-s32B-b79K",
+          "local_dir": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\models\\clip_h14",
+          "role": "training_surrogate",
+          "pinned_revision": null
+        }
+      ],
+      "training_surrogates": {
+        "schema_version": 1,
+        "profile": "heterogeneous4",
+        "config_source": "src/visual/config/surrogates.heterogeneous4.json",
+        "config_sha256": "87453d7282c969fc20b44acb7a991a256c47dcac206d6a7afd963275b9158bf1",
+        "specs": [
+          {
+            "name": "ViT-B-16",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_base_patch16_clip_224.openai",
+            "weight_path": "clip_b16/open_clip_model.safetensors",
+            "tokenizer_path": null
+          },
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_path": "clip_l14/open_clip_model.safetensors",
+            "tokenizer_path": null
+          },
+          {
+            "name": "ViT-SO400M-14-SigLIP-384",
+            "pretrained": "webli",
+            "hf_repo": "timm/ViT-SO400M-14-SigLIP-384",
+            "weight_path": "siglip_so400m/open_clip_model.safetensors",
+            "tokenizer_path": "siglip_so400m"
+          },
+          {
+            "name": "ViT-H-14",
+            "pretrained": "laion2b_s32b_b79k",
+            "hf_repo": "laion/CLIP-ViT-H-14-laion2B-s32B-b79K",
+            "weight_path": "clip_h14/open_clip_model.safetensors",
+            "tokenizer_path": null
+          }
+        ],
+        "specs_sha256": "e2cc925814ced93e9ceff9e11f72f4a91f24bd826a11b4bbc6ec37117a6cd42d",
+        "comparison_reference": "explicit_alternative",
+        "activation_policy": "pretrained_native",
+        "model_count": 4,
+        "held_out_models": [
+          "ViT-g-14",
+          "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+        ],
+        "downloads_during_training": false
+      }
+    }
+  },
+  "custom_example": {
+    "schema_version": 1,
+    "profile": "custom",
+    "config_source": "src/visual/config/training_surrogates.custom.example.json",
+    "config_sha256": "76a7b932bc109765e51cdd918e37a8a86482448d5d257e70f6bcf747561772b6",
+    "specs": [
+      {
+        "name": "ViT-B-16",
+        "pretrained": "openai",
+        "hf_repo": "timm/vit_base_patch16_clip_224.openai",
+        "weight_path": null,
+        "tokenizer_path": null
+      },
+      {
+        "name": "ViT-L-14",
+        "pretrained": "openai",
+        "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+        "weight_path": null,
+        "tokenizer_path": null
+      }
+    ],
+    "specs_sha256": "479b8d2f0316a85d066ffe895098b2a3d0f362da41e0bd74b69b2eb2d4873821",
+    "comparison_reference": "explicit_alternative",
+    "activation_policy": "pretrained_native",
+    "model_count": 2,
+    "held_out_models": [
+      "ViT-g-14",
+      "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+    ],
+    "downloads_during_training": false
+  },
+  "cli_parameters": [
+    "--surrogate-set",
+    "--surrogate-config"
+  ],
+  "interfaces": [
+    "tools/generate.py",
+    "tools/run_experiment.py",
+    "run_pipeline.sh",
+    "tools/prepare_models.py",
+    "tools/preflight.py"
+  ],
+  "frozen_selection_file": "training_surrogates.json",
+  "heldout_encoders_forbidden": true,
+  "test_results": {
+    "tests": "265",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "68.313"
+  },
+  "historical_model_names_and_pretrained_match_by_group": {
+    "01_camera": true,
+    "02_chair": true,
+    "03_cookies": true,
+    "04_curtain": true,
+    "05_hair_extension": true,
+    "06_jeans": true,
+    "07_shampoo": true,
+    "08_speaker": true,
+    "09_toothbrush": true
+  },
+  "historical_activation_records_preserved": true,
+  "historical_numeric_proxy_equivalence_verified": false,
+  "historical_boundary": "Imported baselines retain legacy QuickGELU records; current shared loader uses native pretrained activations",
+  "code": {
+    "python_files_parsed": 131,
+    "model_manifest_entries": 15,
+    "private_resources_read": false
+  },
+  "evaluation_resources": {
+    "entries": 189,
+    "groups": 9,
+    "queries": 180,
+    "shared_image_files": 198,
+    "path_and_hash_checks": 247,
+    "model_encoding_performed": false,
+    "selection_exceptions": [
+      "04_curtain",
+      "08_speaker"
+    ]
+  },
+  "webshop_resources": {
+    "source_files": 18,
+    "catalog_files": 92,
+    "products": 1181430,
+    "raw_bytes": 8676866828,
+    "stored_bytes": 2901882988,
+    "chunks": 202,
+    "materialized": true,
+    "status": "ready",
+    "large_file_hashes_checked": false,
+    "models_loaded": false,
+    "shop_started": false,
+    "shopping_model_calls": 0,
+    "old_sibling_directories_required": false
+  },
+  "source_inputs_and_imported_lucid_baselines_unchanged": true,
+  "real_model_weights_loaded": false,
+  "production_generation_executed": false,
+  "formal_evaluation_executed": false,
+  "shopping_or_external_model_calls": 0,
+  "remote_model_execution_verified": false,
+  "bootstrap_planning_without_model_packages_verified": true
+}

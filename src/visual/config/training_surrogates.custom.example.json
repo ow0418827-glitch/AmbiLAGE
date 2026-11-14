@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "surrogates": [
+    {"name": "ViT-B-16", "pretrained": "openai", "hf_repo": "timm/vit_base_patch16_clip_224.openai"},
+    {"name": "ViT-L-14", "pretrained": "openai", "hf_repo": "timm/vit_large_patch14_clip_224.openai"}
+  ],
+  "allow_downloads": false
+}

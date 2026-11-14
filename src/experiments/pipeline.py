@@ -252,6 +252,8 @@ def load_frozen(method_root):
     validate_attack_completion(frozen['metadata'], frozen['requested_steps'],
         dict(method=frozen['method'], source_image_sha256=frozen['source']['image_sha256'],
              target_image_sha256=frozen['target']['image_sha256']))
+    if frozen['method']=='ambilage' and frozen['metadata'].get('training_objective',{}).get('surrogate_selection')!=binding.get('training_surrogates'):
+        raise ValueError('冻结图片的训练代理与公开运行配置不一致')
     return frozen
 
 
@@ -284,6 +286,10 @@ def generate(config, root, selection, method, *, device='cuda', generator=None):
                      project_path(evaluation.get('encoder_config', PRIVATE / 'evaluator.json'))]
     with catalog_training_guard(allowed_output_roots=[output, Path(root) / 'selection',
             Path(source['image']).parent, Path(target['image']).parent], private_paths=private_paths) as audit:
+        if method in NATURAL_METHODS:
+            from src.visual._ambilage.config import AmbiLAGEConfig
+            from src.visual.training_surrogates import selection_from_config
+            public_binding['training_surrogates']=selection_from_config(AmbiLAGEConfig.from_dict(options)).audit()
         freeze_json(output / 'PUBLIC_RUN.json', public_binding)
         if (output / 'FROZEN_IMAGE.json').exists():
             frozen = read_json(output / 'FROZEN_IMAGE.json')
@@ -308,6 +314,8 @@ def generate(config, root, selection, method, *, device='cuda', generator=None):
                 method=method, device=device, **options)
         validate_attack_completion(metadata, steps, dict(method=method,
             source_image_sha256=source['image_sha256'], target_image_sha256=target['image_sha256']))
+        if method in NATURAL_METHODS and metadata.get('training_objective',{}).get('surrogate_selection')!=public_binding['training_surrogates']:
+            raise ValueError('实际训练代理与本次冻结选择不一致')
         final = output / 'frozen.png'
         final.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(image, final)
@@ -330,11 +338,13 @@ def main(argv=None):
     parser.add_argument('--query-mode', choices=('text', 'joint'), help='正式询问采用纯文字或独立图文协议')
     parser.add_argument('--query-manifest', type=Path, help='显式复用已冻结的正式询问清单')
     parser.add_argument('--no-defense', action='store_true', help='仅运行无防御条件，不运行完整防御面板')
+    from src.visual.training_surrogates import add_surrogate_arguments,apply_surrogate_overrides
+    add_surrogate_arguments(parser)
     args = parser.parse_args(argv)
     os.environ.update(HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1', TOKENIZERS_PARALLELISM='false', PYTHONDONTWRITEBYTECODE='1')
     if args.stage == 'doctor':
         from src.experiments.runtime_check import doctor
-        doctor(args.device)
+        doctor(args.device,surrogate_set=args.surrogate_set or 'lucid',surrogate_config=args.surrogate_config)
         return 0
     config = load_config(args.config)
     if args.query_mode is not None:
@@ -344,6 +354,13 @@ def main(argv=None):
     if args.no_defense:
         config.setdefault('evaluation', {})['defense_mode'] = 'none'
     method = normalize_method(args.method or config.get('method', 'ambilage'))
+    if args.surrogate_set is not None or args.surrogate_config is not None:
+        if method!='ambilage' or args.stage not in ('generate','all'):
+            parser.error('训练代理选择参数仅用于新方法的生成或全阶段命令')
+        from src.visual._ambilage.config import AmbiLAGEConfig
+        options=config.setdefault('generation',{}).get('ambilage',{})
+        selected=apply_surrogate_overrides(AmbiLAGEConfig.from_dict(options),args.surrogate_set,args.surrogate_config)
+        config['generation']['ambilage']=selected.to_dict()
     root = project_path(config.get('run_dir', OUTPUT / 'runs/default'))
     if not root.is_relative_to(OUTPUT.resolve()):
         parser.error('运行结果须置于新项目的输出目录，不得写入原项目')

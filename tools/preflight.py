@@ -182,13 +182,23 @@ def main(argv=None):
     parser.add_argument("--verify-model-hashes", action="store_true", help="Read and hash prepared model files; intended for remote use")
     parser.add_argument("--webshop", action="store_true", help="Check optional project-local shop source and recovery bundle without loading models or starting services")
     parser.add_argument("--output", type=Path)
+    from src.visual.training_surrogates import add_surrogate_arguments,select_training_surrogates,training_model_keys
+    add_surrogate_arguments(parser)
     args = parser.parse_args(argv)
     report = {"schema_version": 1, "checked_at": datetime.now(timezone.utc).isoformat(), "code": check_code(), "resources": ({"status": "skipped_code_only", "private_resources_read": False} if args.code_only else check_resources()), "runtime": inspect_runtime(args.hardware)}
+    registry=model_specs()
+    selection=select_training_surrogates('custom' if args.surrogate_config else (args.surrogate_set or 'lucid'),args.surrogate_config)
+    training_keys=training_model_keys(selection,registry)
+    if selection.profile!='custom' and None in training_keys:
+        raise ValueError('内置训练代理模型没有完整登记在模型准备清单中')
+    required_training_keys={key for spec,key in zip(selection.specs,training_keys)
+                            if not (selection.profile=='custom' and spec.weight_path)}
+    report['training_surrogates']=selection.audit()
     models = {}
     lock_path = RESOURCES / 'model_lock.json'
     locked = json.loads(lock_path.read_text(encoding='utf-8')).get('models', {}) if lock_path.is_file() else {}
-    for key, spec in model_specs().items():
-        if spec["scope"] == "optional":
+    for key, spec in registry.items():
+        if spec["scope"] == "optional" or (spec['scope']=='encoders' and key not in required_training_keys):
             continue
         destination = MODEL_ROOT / key
         record = destination / "download_manifest.json"
@@ -212,6 +222,18 @@ def main(argv=None):
             models[key]["snapshot_files_verified"] = len(frozen["files"])
             models[key]["content_hashes_verified"] = args.verify_model_hashes
     report["models"] = models
+    custom_models=[]
+    if selection.profile=='custom':
+        for spec,key in zip(selection.specs,training_keys):
+            if spec.weight_path or key is None:
+                weight=Path(spec.weight_path) if spec.weight_path else None
+                weight=(weight if weight.is_absolute() else MODEL_ROOT/weight) if weight else None
+                present=bool(weight and weight.is_file())
+                if args.require_models and not present:
+                    raise FileNotFoundError('Prepare explicit custom training weights: '+spec.name)
+                custom_models.append(dict(name=spec.name,pretrained=spec.pretrained,present=present,
+                    content_sha256=sha256(weight) if present and args.verify_model_hashes else None))
+        report['custom_training_models']=custom_models
     if args.webshop:
         report['webshop'] = check_webshop_resources()
     report["remote_model_execution_verified"] = False

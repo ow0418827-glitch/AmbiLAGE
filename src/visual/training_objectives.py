@@ -1,4 +1,4 @@
-"""Public-only joint image/text training and sequential four-surrogate gradients.
+"""Public-only joint image/text training with selectable sequential surrogates.
 
 No memory pool, formal queries or evaluation rank is accepted by this module.
 All surrogate image graphs (including the DDIM path) are released one at a time.
@@ -7,47 +7,67 @@ from __future__ import annotations
 
 from dataclasses import replace
 import hashlib
-import json
 import math
 from pathlib import Path
 from types import SimpleNamespace
-from typing import Any
 
 import torch
 import torch.nn.functional as F
 
-from src.paths import MODEL_ROOT, VISUAL_CONFIGS
-from src.visual.encoders.backbone import BackboneConfig, OpenCLIPSurrogate
+from src.paths import MODEL_ROOT
+from src.visual.encoders.backbone import OpenCLIPSurrogate
 from src.visual.encoders.joint import ChunkedClipEncoder
 from src.visual.robust_objectives import softmin, transformed_batch
+from src.visual.training_surrogates import (
+    HELD_OUT_MODELS, select_training_surrogates, selection_from_config, spec_identity,
+    validate_training_specs, validate_loaded_surrogates,
+)
 
-TRAINING_FAMILIES = ('ViT-B-16', 'ViT-L-14', 'ViT-SO400M-14-SigLIP-384', 'ViT-H-14')
-HELD_OUT_MODELS = ('ViT-g-14', 'Alibaba-NLP/gme-Qwen2-VL-2B-Instruct')
-TRAINING_OBJECTIVE_KIND = 'four_proxy_sequential_public_joint_goal_v1'
-
-
-def validate_training_specs(specs):
-    names = tuple(spec.name for spec in specs)
-    if names != TRAINING_FAMILIES:
-        raise ValueError('新方法须按顺序配置四个冻结训练代理，留出模型不得参与训练')
-    return specs
+TRAINING_OBJECTIVE_KIND = 'sequential_public_joint_goal_v2'
 
 
-def load_training_surrogates(device='cuda', config_path=None):
+def load_training_surrogates(device='cuda', config_path=None, *, surrogate_set=None, selection=None):
     """Load only declared local models; dependency/model failures propagate."""
-    path = Path(config_path or VISUAL_CONFIGS / 'ambilage_surrogates.json')
-    raw = json.loads(path.read_text(encoding='utf-8'))
-    specs = validate_training_specs(tuple(BackboneConfig.from_mapping(s) for s in raw['surrogates']))
+    selection = selection or select_training_surrogates(
+        surrogate_set or ('custom' if config_path is not None else 'lucid'), config_path)
+    if selection.profile == 'lucid':
+        # Use Lucid's exact weight resolution, loader and preprocessing path.
+        from src.visual._lucid.config import resolve_optimization
+        from src.visual._lucid.surrogates import load_surrogates
+        lucid = resolve_optimization(selection.source)
+        if tuple(map(spec_identity, lucid.surrogates)) != tuple(map(spec_identity, selection.specs)):
+            raise ValueError('原始像素代理配置在加载期间发生变化')
+        models = load_surrogates(lucid.surrogates, device=device, precision=lucid.attack_precision,
+            allow_downloads=False, allow_device_fallback=False,
+            require_true_local_tokens=lucid.runtime.require_true_local_tokens,
+            hash_weights=lucid.runtime.hash_model_weights)
+        validate_loaded_surrogates(models, selection)
+        if hashlib.sha256(selection.source.read_bytes()).hexdigest() != selection.source_sha256:
+            raise ValueError('原始像素代理配置在加载期间发生变化')
+        return models
     models = []
-    for spec in specs:
+    for spec in selection.specs:
         # All relative paths use the relocatable model root, not the shell CWD.
         weight = Path(spec.weight_path) if spec.weight_path else None
         tokenizer = Path(spec.tokenizer_path) if spec.tokenizer_path else None
-        spec = replace(spec,
-            weight_path=str(MODEL_ROOT / weight) if weight and not weight.is_absolute() else spec.weight_path,
+        weight = (MODEL_ROOT / weight if weight and not weight.is_absolute() else weight)
+        if weight is None:
+            from src.model_registry import resolve_model
+            directory = Path(resolve_model(spec.hf_repo)) if spec.hf_repo else None
+            weight = next((directory / name for name in ('open_clip_model.safetensors', 'open_clip_pytorch_model.safetensors')
+                           if directory and (directory / name).is_file()), None)
+        elif not weight.is_file() and weight.name in ('open_clip_model.safetensors', 'open_clip_pytorch_model.safetensors'):
+            weight = next((weight.parent / name for name in ('open_clip_model.safetensors', 'open_clip_pytorch_model.safetensors')
+                           if (weight.parent / name).is_file()), weight)
+        if weight is None or not weight.is_file():
+            raise FileNotFoundError('所选训练代理缺少本地权重：' + spec.name + '/' + spec.pretrained)
+        spec = replace(spec, weight_path=str(weight),
             tokenizer_path=str(MODEL_ROOT / tokenizer) if tokenizer and not tokenizer.is_absolute() else spec.tokenizer_path)
         models.append(OpenCLIPSurrogate(spec, device=device, precision='fp32',
             allow_downloads=False, allow_device_fallback=False, require_true_local_tokens=False))
+    validate_loaded_surrogates(models, selection)
+    if hashlib.sha256(selection.source.read_bytes()).hexdigest() != selection.source_sha256:
+        raise ValueError('训练代理配置在加载期间发生变化')
     return models
 
 
@@ -99,11 +119,14 @@ class SequentialEnsembleObjective:
     The same seed is reused within one step for scoring and differentiation.
     """
     def __init__(self, surrogates, target_tensor, source_public_key, training_text, config,
-                 purifier=None):
+                 purifier=None, *, selection=None):
         self.surrogates = list(surrogates)
         if not self.surrogates:
             raise ValueError('训练代理不能为空')
         self.config, self.purifier = config, purifier
+        self.selection = selection or selection_from_config(config)
+        snapshots = validate_loaded_surrogates(self.surrogates, self.selection,
+            allow_fixture=bool(getattr(config, 'smoke_test', False)))
         self.diffusion_weight = float(getattr(config, 'diffusion_weight', 0.25))
         if not torch.isfinite(torch.tensor(self.diffusion_weight)) or self.diffusion_weight <= 0:
             raise ValueError('完整新方法必须启用正权重扩散净化目标')
@@ -121,15 +144,11 @@ class SequentialEnsembleObjective:
             raise ValueError('完整新方法固定十步扩散净化')
         self.objectives = []
         for surrogate in self.surrogates:
-            snapshot = surrogate.snapshot()
-            model_name = str(snapshot.get('name', snapshot.get('architecture', '')))
-            if 'vit-g-14' in model_name.casefold() or 'gme' in model_name.casefold():
-                raise ValueError('留出评估编码器禁止参与训练')
             with torch.no_grad():
                 target = surrogate.encode_image(target_tensor.to(surrogate.device)).global_embedding
             self.objectives.append(PublicFullKeyObjective(surrogate, target, source_public_key, training_text, config))
         self.audit = {'kind': TRAINING_OBJECTIVE_KIND,
-            'surrogates': [s.snapshot() for s in self.surrogates],
+            'surrogates': snapshots, 'surrogate_selection': self.selection.audit(),
             'public_objectives': [o.audit for o in self.objectives],
             'held_out_models': list(HELD_OUT_MODELS),
             'gradient_execution': 'one_proxy_graph_at_a_time_recompute_purifier',

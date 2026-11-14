@@ -71,4 +71,5 @@ def test_model_plan_is_explicit_and_does_not_import_downloader():
     assert plan["download"] is False
     keys = {item["key"] for item in plan["models"]}
     assert {"sam2", "planner", "editor", "purifier", "eval_g14", "eval_gme"}.issubset(keys)
-    assert {"clip_b16", "clip_l14", "siglip_so400m", "clip_h14"}.issubset(keys)
+    assert {"clip_b16", "clip_b32", "clip_b32_laion"}.issubset(keys)
+    assert not {"clip_l14", "siglip_so400m", "clip_h14"} & keys

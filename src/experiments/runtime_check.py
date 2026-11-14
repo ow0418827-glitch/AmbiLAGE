@@ -6,8 +6,10 @@ from src.paths import PROJECT, MODEL_ROOT, SHARED_MEMORY
 from src.model_registry import model_specs
 
 
-def doctor(device='cuda'):
+def doctor(device='cuda',*,surrogate_set='lucid',surrogate_config=None):
     import torch
+    from src.visual.training_surrogates import select_training_surrogates
+    selection=select_training_surrogates('custom' if surrogate_config else surrogate_set,surrogate_config)
     packages = {}
     for name in ('torch', 'torchvision', 'transformers', 'diffusers', 'accelerate',
                  'open-clip-torch', 'sentence-transformers', 'rapidocr-onnxruntime'):
@@ -22,6 +24,7 @@ def doctor(device='cuda'):
                           has_manifest=(root / 'download_manifest.json').is_file(),
                           role=spec['role'], loaded=False)
     result = dict(project=str(PROJECT), platform=platform.platform(), requested_device=device,
+                  training_surrogates=selection.audit(),
                   cuda_available=torch.cuda.is_available(), packages=packages,
                   local_models=models, shared_pool_configured=SHARED_MEMORY.is_file(),
                   real_model_execution_verified=False, external_model_calls=0)

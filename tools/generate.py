@@ -17,7 +17,7 @@ from src.visual.optimization import METHODS
 from src.visual.pipeline import generate
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args(argv=None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="AmbiLAGE 统一对抗样本图像生成工具 (AmbiLAGE & Lucid)"
     )
@@ -106,11 +106,16 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument('--definition',help='冻结公开图对定义及源商品完整公开检索键')
     parser.add_argument('--smoke-test',action='store_true',help='显式微型夹具，仅中央处理器/六十四像素/至多三步，禁止作为正式实验输入')
-    return parser.parse_args()
+    from src.visual.training_surrogates import add_surrogate_arguments
+    add_surrogate_arguments(parser)
+    args=parser.parse_args(argv)
+    if args.method!='ambilage' and (args.surrogate_set is not None or args.surrogate_config is not None):
+        parser.error('训练代理选择参数仅用于新方法；固定原始像素方法使用自己的配置')
+    return args
 
 
-def main() -> int:
-    args = parse_args()
+def main(argv=None) -> int:
+    args = parse_args(argv)
     
     amb_cfg = None
     if args.ambilage_config:
@@ -147,6 +152,7 @@ def main() -> int:
         optimization_config=args.optimization_config,
         definition=json.loads(Path(args.definition).read_text(encoding='utf-8')) if args.definition else None,
         smoke_test=args.smoke_test,
+        surrogate_set=args.surrogate_set,surrogate_config=args.surrogate_config,
     )
 
     print("\n" + "=" * 60)

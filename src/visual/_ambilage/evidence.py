@@ -27,7 +27,8 @@ def validate_ready(root,require_production=True):
         if not path.is_relative_to(root) or sha256_file(path)!=digest:
             raise ValueError('生成文件摘要不匹配: '+name)
     required={'adversarial.png','generative_anchor.png','print_core.png','naturalness_gate.json',
-              'source_foreground.png','target_foreground.png','latent_edit_mask.png','naturalness_candidate.png'}
+              'source_foreground.png','target_foreground.png','latent_edit_mask.png','naturalness_candidate.png',
+              'training_surrogates.json'}
     if not required.issubset(ready.get('artifacts',{})):
         raise ValueError('缺少关键冻结文件')
     final=(root/'adversarial.png').resolve()
@@ -43,18 +44,22 @@ def validate_ready(root,require_production=True):
     if ready.get('config',{}).get('steps')!=ready['steps_completed'] or \
        ready.get('refinement',{}).get('steps_completed')!=ready['steps_completed']:
         raise ValueError('配置或细化过程步数不一致')
-    from src.visual.training_objectives import TRAINING_FAMILIES, TRAINING_OBJECTIVE_KIND
+    from src.visual.training_objectives import TRAINING_OBJECTIVE_KIND
+    from src.visual.training_surrogates import validate_selection_audit, validate_loaded_surrogates
     training=ready.get('training_objective',{})
+    selection_audit=training.get('surrogate_selection')
+    selection=validate_selection_audit(selection_audit,ready.get('config',{}))
+    if json.loads((root/'training_surrogates.json').read_text(encoding='utf-8'))!=selection_audit:
+        raise ValueError('冻结训练代理文件与实际训练记录不一致')
     public_objectives=training.get('public_objectives',[])
-    if (training.get('kind')!=TRAINING_OBJECTIVE_KIND or len(public_objectives)!=4 or any(
+    if (training.get('kind')!=TRAINING_OBJECTIVE_KIND or len(public_objectives)!=len(selection.specs) or any(
         p.get('query_modes')!=['multimodal_equal_weight'] or
         p.get('query_image_weight')!=0.5 or p.get('query_text_weight')!=0.5
         for p in public_objectives) or 'text_weight' in ready.get('config',{})):
         raise ValueError('仅图文联合训练目标证据不完整；旧双目标产物不能作为当前成图复用')
+    validate_loaded_surrogates(training.get('surrogates',[]),selection,
+        allow_fixture=not require_production and ready.get('test_fixture') is True)
     if require_production:
-        proxies=training.get('surrogates',[])
-        if tuple(p.get('name') for p in proxies)!=TRAINING_FAMILIES or any(p.get('test_fixture') for p in proxies):
-            raise ValueError('缺少四个指定真实训练代理的审计证据')
         if (training.get('eot_enabled') is not True or training.get('diffusion_weight',0)<=0 or
             training.get('diffusion_gradient')!='full' or
             training.get('purifier',{}).get('config',{}).get('reverse_steps')!=10):

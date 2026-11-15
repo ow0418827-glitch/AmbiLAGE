@@ -1,0 +1,15 @@
+=== Evaluate 09_toothbrush/lucid_reuse under Env 4 (feature text + target image, none defense) at 2026-11-15T07:39:53Z ===
+=== [EVAL] 09_toothbrush/ambilage/g14_none_target_joint ===
+SKIP verified /content/AmbiLAGE/output/ambilage_toothbrush_20261115/09_toothbrush/ambilage/evaluation/g14_none_target_joint
+=== [EVAL] 09_toothbrush/ambilage/b32_none_target_joint ===
+SKIP verified /content/AmbiLAGE/output/ambilage_toothbrush_20261115/09_toothbrush/ambilage/evaluation/b32_none_target_joint
+=== [EVAL] 09_toothbrush/lucid_reuse/g14_none_target_joint ===
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+env4 none clean: Top-3=0/20, Top-5=18/20, mean=5.10, ranks=[5, 5, 5, 5, 5, 5, 5, 5, 6, 5, 5, 4, 5, 5, 7, 5, 5, 5, 5, 5]
+env4 none modified: Top-3=0/20, Top-5=16/20, mean=5.40, ranks=[5, 5, 5, 5, 5, 7, 5, 5, 7, 5, 5, 5, 5, 5, 8, 5, 5, 6, 5, 5]
+=== [EVAL] 09_toothbrush/lucid_reuse/b32_none_target_joint ===
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+env4 none clean: Top-3=5/20, Top-5=18/20, mean=4.05, ranks=[3, 4, 5, 4, 4, 4, 3, 4, 4, 3, 4, 6, 3, 4, 6, 3, 4, 5, 4, 4]
+env4 none modified: Top-3=20/20, Top-5=20/20, mean=2.15, ranks=[1, 3, 3, 1, 3, 3, 1, 3, 3, 1, 1, 3, 1, 2, 3, 1, 3, 3, 1, 3]
+ENV4 EVALUATION COMPLETED AND VERIFIED: {'ambilage': {'g14': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 0, 'mod_top3': 0, 'clean_top5': 18, 'mod_top5': 20, 'n_queries': 20, 'clean_mean_rank': 5.1, 'mod_mean_rank': 4.9, 'top3_gain_pp': 0.0, 'mean_rank_gain': 0.2, 'clean_range': [4, 7], 'mod_range': [4, 5]}, 'b32': {'clean_top1': 0, 'mod_top1': 20, 'clean_top3': 5, 'mod_top3': 20, 'clean_top5': 18, 'mod_top5': 20, 'n_queries': 20, 'clean_mean_rank': 4.05, 'mod_mean_rank': 1.0, 'top3_gain_pp': 75.0, 'mean_rank_gain': 3.05, 'clean_range': [3, 6], 'mod_range': [1, 1]}}, 'lucid_reuse': {'g14': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 0, 'mod_top3': 0, 'clean_top5': 18, 'mod_top5': 16, 'n_queries': 20, 'clean_mean_rank': 5.1, 'mod_mean_rank': 5.4, 'top3_gain_pp': 0.0, 'mean_rank_gain': -0.3, 'clean_range': [4, 7], 'mod_range': [5, 8]}, 'b32': {'clean_top1': 0, 'mod_top1': 8, 'clean_top3': 5, 'mod_top3': 20, 'clean_top5': 18, 'mod_top5': 20, 'n_queries': 20, 'clean_mean_rank': 4.05, 'mod_mean_rank': 2.15, 'top3_gain_pp': 75.0, 'mean_rank_gain': 1.9, 'clean_range': [3, 6], 'mod_range': [1, 3]}}}
+=== LUCID REUSE ENV4 EVALUATION COMPLETE at 2026-11-15T07:44:46Z ===

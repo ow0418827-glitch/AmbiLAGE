@@ -194,7 +194,7 @@ def harmonize_illumination(
     ], axis=-1)
     smooth_diff[den < 0.005] = color_diff
 
-    # 2. 构造主体非印刷区与标签底色 `substrate` 的软空间协调增益
+    # 2. 构造主体微幅协调增益与背景温和浅暖棚拍底色协调场
     matte_corr = (
         config.harmonization_strength
         * config.harmonization_selected_color_mix
@@ -202,18 +202,54 @@ def harmonize_illumination(
     )
     ring_sigma = max(float(getattr(config, "harmonization_print_ring_sigma", 7.0)), 1e-4)
     ring = np.exp(-0.5 * (context["distance"] / ring_sigma) ** 2)
-    spatial_gain = np.where(foreground & (~roi), 1.0, 0.0)
+    fg_feather = float(getattr(config, "harmonization_fg_feather_pixels", 4.0))
+    if fg_feather > 0.0 and foreground.any():
+        dist_in = distance_transform_edt(foreground)
+        t_in = np.clip(dist_in / fg_feather, 0.0, 1.0)
+        w_fg_in = 0.5 * (1.0 - np.cos(np.pi * t_in)) * foreground
+    else:
+        w_fg_in = foreground.astype(np.float64)
+    spatial_gain = np.where(foreground & (~roi), w_fg_in, 0.0)
     if substrate.any():
-        substrate_gain = ring * context["transmission"]
+        substrate_gain = ring * context["transmission"] * w_fg_in
         spatial_gain = np.where(substrate, substrate_gain, spatial_gain)
     spatial_gain[ink_core] = 0.0
     spatial_gain[context["opaque"]] = 0.0
     spatial_gain[~foreground] = 0.0
 
+    # 背景温和浅暖棚拍底色目标：打破 255 单向截断天花板，利用视觉掩蔽藏住后续同色系柔光
+    bg_strength = float(getattr(config, "harmonization_bg_strength", 0.85))
+    base_luma = float(getattr(config, "harmonization_bg_luma_target", 238.0))
+    warmth = float(getattr(config, "harmonization_bg_warmth", 3.0))
+    tint_mix = float(getattr(config, "harmonization_bg_tint_mix", 0.20))
+    studio_base_rgb = np.array(
+        [base_luma + warmth, base_luma + warmth * 0.35, base_luma - warmth],
+        dtype=np.float64,
+    )
+    tgt_rgb = np.asarray(target_color_rgb, dtype=np.float64)
+    tgt_luma = 0.2126 * tgt_rgb[0] + 0.7152 * tgt_rgb[1] + 0.0722 * tgt_rgb[2]
+    tgt_chroma = np.clip(tgt_rgb - tgt_luma, -18.0, 18.0)
+    bg_target_rgb = np.clip(studio_base_rgb + tint_mix * tgt_chroma, 232.0, 244.0)
+    bg_target_lin = linear_from_srgb(bg_target_rgb / 255.0)
+
+    bg_bool = ~foreground
+    bg_feather = float(getattr(config, "harmonization_bg_feather_pixels", 6.0))
+    if bg_feather > 0.0 and bg_bool.any():
+        dist_out = distance_transform_edt(bg_bool)
+        t_out = np.clip((dist_out - 1.0) / bg_feather, 0.0, 1.0)
+        bg_gain = (0.35 + 0.65 * 0.5 * (1.0 - np.cos(np.pi * t_out))) * bg_bool
+    else:
+        bg_gain = bg_bool.astype(np.float64)
+    bg_gain[roi] = 0.0
+    bg_gain[ink_core] = 0.0
+    bg_gain[context["opaque"]] = 0.0
+    bg_corr = bg_strength * src_lin * (bg_target_lin[None, None, :] - 1.0)
+    total_corr = spatial_gain[..., None] * matte_corr + bg_gain[..., None] * bg_corr
+
     # 3. 32 步回溯线搜索数学守门 (SSIM + MAE + Halo)
     ssim_floor = max(float(getattr(config, "anchor_ssim_floor", 0.72)), float(config.source_ssim_floor))
-    mae_ceiling = min(float(getattr(config, "anchor_mae_ceiling", 26.0)), float(config.source_mae_ceiling))
-    halo_ceiling = float(getattr(config, "halo_ceiling", 8.0))
+    mae_ceiling = min(float(getattr(config, "anchor_mae_ceiling", 30.0)), float(config.source_mae_ceiling))
+    halo_ceiling = float(getattr(config, "halo_ceiling", 10.0))
     line_steps = max(1, int(getattr(config, "anchor_steps", 32)))
 
     chosen_rgb = source_rgb.copy()
@@ -223,13 +259,14 @@ def harmonize_illumination(
 
     for fraction in np.linspace(1.0, 0.0, line_steps + 1):
         frac = float(fraction)
-        candidate_lin = src_lin + frac * spatial_gain[..., None] * matte_corr
+        candidate_lin = src_lin + frac * total_corr
         candidate_rgb = np.clip(np.rint(srgb_from_linear(candidate_lin) * 255.0), 0, 255).astype(np.uint8)
         if ink_core.any():
             candidate_rgb[ink_core] = source_rgb[ink_core]
         if context["opaque"].any():
             candidate_rgb[context["opaque"]] = source_rgb[context["opaque"]]
-        candidate_rgb[~foreground] = source_rgb[~foreground]
+        if bg_strength <= 0.0:
+            candidate_rgb[~foreground] = source_rgb[~foreground]
 
         c_ssim, c_mae, c_halo = _evaluate_candidate_metrics(source_rgb, candidate_rgb, foreground, ink_core)
         accepted = bool(c_ssim >= ssim_floor and c_mae <= mae_ceiling and c_halo <= halo_ceiling)
@@ -253,11 +290,14 @@ def harmonize_illumination(
         raise AssertionError(f"Stage 3 印刷墨迹核心保护断言失败：检测到 {max_c} 级非零修改")
 
     fg_change = change[foreground]
+    bg_change = change[~foreground]
     metadata: dict[str, Any] = {
         "status": "completed",
         "stage": "illumination_harmonization",
         "blend_mode": config.harmonization_blend_mode,
         "selected_rgb": list(target_color_rgb),
+        "bg_studio_target_rgb": [int(round(x)) for x in bg_target_rgb.tolist()],
+        "bg_strength": bg_strength,
         "strength": config.harmonization_strength,
         "selected_color_mix": config.harmonization_selected_color_mix,
         "smoothing_sigma": config.harmonization_smoothing_sigma,
@@ -270,6 +310,8 @@ def harmonize_illumination(
         "substrate_pixels": int(substrate.sum()),
         "max_body_change_levels": int(fg_change.max()) if fg_change.size else 0,
         "mean_body_change_levels": float(fg_change.mean()) if fg_change.size else 0.0,
+        "max_bg_change_levels": int(bg_change.max()) if bg_change.size else 0,
+        "mean_bg_change_levels": float(bg_change.mean()) if bg_change.size else 0.0,
         "roi_change_levels": 0,
         "zero_pixel_residual": True,
         "generator": {

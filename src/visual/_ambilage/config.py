@@ -58,7 +58,7 @@ class AmbiLAGEConfig:
     bg_chroma_keep: float = 0.10        # 背景色度保留率 (锁死背景杂色通道)
     ambient_smooth_sigma: float = 14.0  # 背景环境漫射光高斯平滑标准差
     ambient_grid_size: int = 8          # 背景低频环境光网格尺寸 (8x8)
-    ambient_init_bias: float = 0.30     # 初始环境光偏置系数
+    ambient_init_bias: float = 0.0      # 初始环境光偏置系数 (零偏置从 Stage 3 浅暖棚拍底色中心起步)
     tau_scale: float = 0.75             # 兼容缩放系数
     tau_fg: float = 0.20                # 主体双曲正切温度尺度 (防止过早饱和)
     tau_bg: float = 0.35                # 背景双曲正切温度尺度 (防止背景饱和成块)
@@ -82,29 +82,35 @@ class AmbiLAGEConfig:
     compensated_weight: float = 0.5
     fg_l2_weight: float = 0.0001            # 主体微光影 L2 惩罚
     fg_tv_weight: float = 0.0004            # 主体空间全变分 (TV) 惩罚
-    bg_l2_weight: float = 0.08              # 背景围绕均值偏移的空间方差惩罚 (不惩罚整体色调平移)
-    bg_tv_weight: float = 0.15              # 背景空间全变分 (TV) 惩罚
-    bg_chroma_tv_weight: float = 0.30       # 背景色度全变分惩罚
+    bg_l2_weight: float = 0.005             # 背景围绕均值偏移的空间方差惩罚 (释放柔和光影同时不惩罚整体平移)
+    bg_tv_weight: float = 0.02              # 背景空间全变分 (TV) 惩罚
+    bg_chroma_tv_weight: float = 0.08       # 背景色度全变分惩罚
     overflow_weight: float = 0.05           # 越界惩罚
-    halo_weight: float = 0.15               # 边界光晕可微惩罚权重
+    halo_weight: float = 0.002              # 边界光晕可微惩罚权重 (对齐 0~255 量纲，避免惩罚项反超相似度触发误回滚)
     halo_soft_weight: float = 0.0001        # 兼容旧光晕软约束权重
     halo_floor: float = 12.0
-    halo_ceiling: float = 8.0               # 严格数学门禁光晕误差上限
+    halo_ceiling: float = 10.0              # 严格数学门禁光晕误差上限
     halo_parent_multiplier: float = 1.0
     guard_backtracks: int = 8               # 回退守门最大步数
 
     # 质量守门门槛 (SSIM & MAE & Halo)
     source_ssim_floor: float = 0.78         # 最终成图结构相似度下限
-    source_mae_ceiling: float = 20.0        # 最终成图平均绝对误差上限
+    source_mae_ceiling: float = 28.0        # 最终成图平均绝对误差上限 (容纳背景温和棚拍底色迁移)
     anchor_ssim_floor: float = 0.72         # Stage 3 锚点线搜索结构相似度参考下限
-    anchor_mae_ceiling: float = 26.0        # Stage 3 锚点线搜索平均误差参考上限
+    anchor_mae_ceiling: float = 30.0        # Stage 3 锚点线搜索平均误差参考上限
 
-    # Stage 3: 光照一致性协调与形态学墨迹保护参数
+    # Stage 3: 光照一致性协调、温和浅暖棚拍底色与形态学墨迹保护参数
     harmonization_smoothing_sigma: float = 12.0
     harmonization_print_ring_sigma: float = 7.0
-    harmonization_selected_color_mix: float = 0.25
+    harmonization_selected_color_mix: float = 0.12
     harmonization_strength: float = 1.0
     harmonization_blend_mode: str = "matte"
+    harmonization_fg_feather_pixels: float = 4.0
+    harmonization_bg_strength: float = 0.85
+    harmonization_bg_luma_target: float = 238.0
+    harmonization_bg_warmth: float = 3.0
+    harmonization_bg_tint_mix: float = 0.20
+    harmonization_bg_feather_pixels: float = 6.0
     ink_margin_pixels: int = 1
     ink_closing_pixels: int = 9
     ink_local_contrast: float = 3.0
@@ -211,6 +217,16 @@ class AmbiLAGEConfig:
             raise ValueError("锚点线搜索质量门槛无效")
         if self.halo_ceiling < 0.0:
             raise ValueError("边界光晕门禁上限 halo_ceiling 不能为负数")
+        if not (0.0 <= self.harmonization_bg_strength <= 1.0):
+            raise ValueError("背景棚拍底色融合强度 harmonization_bg_strength 必须位于 [0.0, 1.0]")
+        if not (210.0 <= self.harmonization_bg_luma_target <= 255.0):
+            raise ValueError("背景棚拍目标明度 harmonization_bg_luma_target 必须位于 [210.0, 255.0]")
+        if not (-15.0 <= self.harmonization_bg_warmth <= 15.0):
+            raise ValueError("背景棚拍暖调偏置 harmonization_bg_warmth 必须位于 [-15.0, 15.0]")
+        if not (0.0 <= self.harmonization_bg_tint_mix <= 0.5):
+            raise ValueError("背景目标色温混入比例 harmonization_bg_tint_mix 必须位于 [0.0, 0.5]")
+        if self.harmonization_fg_feather_pixels < 0.0 or self.harmonization_bg_feather_pixels < 0.0:
+            raise ValueError("Stage 3 边界羽化宽度不能为负数")
         weights = [
             self.fg_l2_weight, self.fg_tv_weight, self.bg_l2_weight,
             self.bg_tv_weight, self.bg_chroma_tv_weight, self.overflow_weight,

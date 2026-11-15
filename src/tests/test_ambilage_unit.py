@@ -37,7 +37,15 @@ def test_ambilage_config_validation():
     assert cfg.auxiliary_levels == 0
     assert cfg.pixel_optimization is False
     assert cfg.joint_weight == 1.0
+    assert cfg.ambient_init_bias == 0.0
+    assert cfg.halo_weight == 0.002
+    assert cfg.bg_l2_weight == 0.005
+    assert cfg.harmonization_selected_color_mix == 0.12
+    assert cfg.harmonization_bg_strength == 0.85
     assert 'text_weight' not in cfg.to_dict()
+
+    with pytest.raises(ValueError, match="背景棚拍底色融合强度"):
+        AmbiLAGEConfig(harmonization_bg_strength=1.5).validate()
 
     # 试图启用像素优化或像素残差 -> 抛出异常
     with pytest.raises(ValueError, match="严格禁止像素残差与像素优化"):
@@ -171,10 +179,24 @@ def test_illumination_harmonization_strict_roi_zero(tmp_path: Path):
     assert np.all(change[roi] == 0), "印刷文字区发生改动！"
     assert np.array_equal(anchor_rgb[roi], source[roi])
 
-    # 2. 验证背景区保持源图不变
-    assert np.array_equal(anchor_rgb[~fg], source[~fg])
+    # 2. 验证默认配置下背景平滑过渡为温和浅暖棚拍底色 (摆脱 255 饱和死区)
+    assert record["mean_bg_change_levels"] > 0.0
+    assert float(anchor_rgb[~fg].mean()) <= 245.0
+    assert float(anchor_rgb[~fg].mean()) >= 225.0
 
-    # 3. 验证产物文件已落盘
+    # 3. 验证显式关闭背景调色 (harmonization_bg_strength=0.0) 时背景严格保持源图不变
+    cfg_locked = AmbiLAGEConfig(harmonization_bg_strength=0.0)
+    anchor_locked, rec_locked = harmonize_illumination(
+        source_image=source,
+        target_color_rgb=target_color,
+        foreground=fg,
+        regions=roi_regions,
+        config=cfg_locked,
+    )
+    assert np.array_equal(anchor_locked[~fg], source[~fg])
+    assert rec_locked["mean_bg_change_levels"] == 0.0
+
+    # 4. 验证产物文件已落盘
     assert (tmp_path / "generative_anchor.png").is_file()
     assert (tmp_path / "initial.png").is_file()
     assert record["zero_pixel_residual"] is True

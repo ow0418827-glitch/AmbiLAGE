@@ -20,6 +20,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from .config import AmbiLAGEConfig
+from .objectives import oklab_to_srgb, srgb_to_oklab
 
 
 def make_sep_gaussian(
@@ -72,6 +73,7 @@ class AmbientCoopField(nn.Module):
         bg_mask_t: torch.Tensor,
         support_mask: torch.Tensor,
         config: AmbiLAGEConfig,
+        w_fg_recolor: torch.Tensor | None = None,
     ):
         super().__init__()
         self.anchor = anchor
@@ -82,9 +84,10 @@ class AmbientCoopField(nn.Module):
         self.bg_mask_t = bg_mask_t
         self.support_mask = support_mask
         self.config = config
+        self.w_fg_recolor = w_fg_recolor
         self.device = anchor.device
 
-        # 1. 计算背景与主体无截断可行区间 [r_min, r_max]（保留兼容属性，内部使用零中心可行投影）
+        # 1. 计算背景与主体无截断可行区间 [r_min, r_max]
         self.r_min = torch.maximum(-eps_bg_map, -anchor)
         self.r_max = torch.minimum(eps_bg_map, 1.0 - anchor)
         self.bg_mid = (0.5 * (self.r_min + self.r_max)).detach()
@@ -95,37 +98,52 @@ class AmbientCoopField(nn.Module):
         self.fg_half = ((self.fg_max - self.fg_min) * 0.5).detach()
         self.tau_fg = max(float(getattr(config, "tau_fg", 0.20)), 1e-4)
         self.tau_bg = max(float(getattr(config, "tau_bg", 0.35)), 1e-4)
+        self.fg_luma_scale = max(float(getattr(config, "fg_luma_scale", 0.40)), 0.0)
+        self.fg_chroma_limit = max(float(getattr(config, "fg_chroma_limit", 0.16)), 0.0)
 
-        # 2. 预计算常驻 GPU 的可分离高斯平滑核
+        with torch.no_grad():
+            self.anchor_lab = srgb_to_oklab(self.anchor).detach()
+            self.anchor_oklab_rebuilt = oklab_to_srgb(
+                self.anchor_lab, clamp=True, gamut_preserve_luma=True
+            ).detach()
+        fg_chroma_levels = float(getattr(config, "fg_chroma_levels", 64))
+        if w_fg_recolor is not None:
+            self.fg_chroma_eps_map = (fg_chroma_levels / 255.0) * w_fg_recolor
+        else:
+            self.fg_chroma_eps_map = torch.zeros_like(eps_fg_map)
+
+        # 2. 预计算常驻 GPU 的可分离高斯平滑核与低频径向暗角轮廓
         self.fg_luma_kernel = make_sep_gaussian(config.fg_luma_smooth_sigma, self.device, 1)
         self.fg_chroma_kernel = make_sep_gaussian(config.fg_chroma_smooth_sigma, self.device, 3)
         self.bg_luma_kernel = make_sep_gaussian(config.bg_luma_smooth_sigma, self.device, 1)
         self.bg_chroma_kernel = make_sep_gaussian(config.bg_chroma_smooth_sigma, self.device, 3)
         self.ambient_kernel = make_sep_gaussian(config.ambient_smooth_sigma, self.device, 3)
 
-        # 3. 可学习环境光变量初始化
+        h, w = anchor.shape[-2:]
+        yy = torch.linspace(-1.0, 1.0, h, device=self.device, dtype=torch.float32)
+        xx = torch.linspace(-1.0, 1.0, w, device=self.device, dtype=torch.float32)
+        gy, gx = torch.meshgrid(yy, xx, indexing="ij")
+        r2_norm = (gy * gy + gx * gx) * 0.5
+        self.radial_profile = (1.0 - r2_norm).clamp(0.0, 1.0)[None, None].detach()
+
+        # 3. 可学习参数：全局三维背景色向量 bg_color_shift ([1,3,1,1]) + 单标量径向暗角系数 ([1,1,1,1]) + 前景全局 OKLab 色度向量 ([1,2,1,1])
         init_tau = 0.5 * (config.background_levels / 255.0) * config.tau_scale
         init_val = float(config.ambient_init_bias * init_tau)
         self.ambient_global = nn.Parameter(
             torch.full((1, 3, 1, 1), init_val, device=self.device, dtype=torch.float32)
         )
-        gsize = config.ambient_grid_size
+        self.bg_color_shift = self.ambient_global
         self.ambient_grid = nn.Parameter(
-            torch.zeros((1, 3, gsize, gsize), device=self.device, dtype=torch.float32)
+            torch.zeros((1, 1, 1, 1), device=self.device, dtype=torch.float32)
+        )
+        self.fg_chroma_shift = nn.Parameter(
+            torch.zeros((1, 2, 1, 1), device=self.device, dtype=torch.float32)
         )
 
     def ambient_field(self) -> torch.Tensor:
-        """合成全局底色与低频漫射网格环境光场。"""
-        grid_up = F.interpolate(
-            self.ambient_grid,
-            size=self.anchor.shape[-2:],
-            mode="bicubic",
-            align_corners=False,
-            antialias=True,
-        )
-        if self.ambient_kernel is not None:
-            grid_up = smooth_sep(grid_up, self.ambient_kernel, groups=3)
-        return self.ambient_global + grid_up
+        """合成全局三维背景颜色与极低频 1 自由度径向暗角光场（无空间杂色自由度）。"""
+        vig_scale = float(getattr(self.config, "bg_radial_vignette_scale", 0.05))
+        return self.bg_color_shift + vig_scale * self.ambient_grid * self.radial_profile
 
     @staticmethod
     def _feasible_bounded_residual(
@@ -147,8 +165,31 @@ class AmbientCoopField(nn.Module):
         diff_luma = diff.mean(dim=1, keepdim=True)
         diff_chroma = diff - diff_luma
 
-        # 1. 商品主体微光影分支：大核平滑 + 低色度保留率 + 零中心可行投影
-        if self.config.latent_levels > 0:
+        # 1. 商品主体分支：
+        #    - 若提供双重掩膜 w_fg_recolor：在 OKLab 空间执行“锁亮度 L、放色度 (a, b)”换色；
+        #    - 兼容传统 8 参数调用 (w_fg_recolor=None)：保持受 eps_fg_map 严格约束的微光影分支。
+        if self.w_fg_recolor is not None and int(getattr(self.config, "fg_chroma_levels", 0)) > 0:
+            if self.config.latent_levels > 0 and self.fg_luma_scale > 0.0:
+                fg_luma_drive = smooth_sep(diff_luma, self.fg_luma_kernel, groups=1)
+                eps_luma = self.eps_fg_map * self.fg_luma_scale
+                d_luma = eps_luma * torch.tanh(fg_luma_drive / self.tau_fg)
+            else:
+                d_luma = torch.zeros_like(diff_luma)
+
+            fg_chroma_rgb = smooth_sep(diff_chroma, self.fg_chroma_kernel, groups=3)
+            vae_a = 0.22 * (fg_chroma_rgb[:, 0:1] - fg_chroma_rgb[:, 1:2])
+            vae_b = 0.22 * (0.5 * (fg_chroma_rgb[:, 0:1] + fg_chroma_rgb[:, 1:2]) - fg_chroma_rgb[:, 2:3])
+            ab_drive = self.fg_chroma_shift + torch.cat([vae_a, vae_b], dim=1)
+            d_ab = self.fg_chroma_eps_map * torch.tanh(ab_drive / 0.12)
+
+            lab_new = torch.cat(
+                [self.anchor_lab[:, 0:1] + d_luma, self.anchor_lab[:, 1:3] + d_ab],
+                dim=1,
+            )
+            recolored = oklab_to_srgb(lab_new, clamp=True, gamut_preserve_luma=True)
+            res_fg_raw = recolored - self.anchor_oklab_rebuilt
+            res_fg = torch.clamp(res_fg_raw, min=-self.anchor, max=1.0 - self.anchor) * self.fg_mask_t
+        elif self.config.latent_levels > 0:
             fg_luma = smooth_sep(diff_luma, self.fg_luma_kernel, groups=1)
             fg_chroma = diff_chroma * self.config.fg_chroma_keep
             fg_chroma = smooth_sep(fg_chroma, self.fg_chroma_kernel, groups=3)
@@ -159,15 +200,10 @@ class AmbientCoopField(nn.Module):
         else:
             res_fg = torch.zeros_like(self.anchor)
 
-        # 2. 背景多尺度环境光协同分支：大核平滑 + 极低色度保留率 + 零中心可行投影
-        bg_luma = smooth_sep(diff_luma, self.bg_luma_kernel, groups=1)
-        bg_chroma = diff_chroma * self.config.bg_chroma_keep
-        bg_chroma = smooth_sep(bg_chroma, self.bg_chroma_kernel, groups=3)
-        v_bg = bg_luma + bg_chroma
+        # 2. 背景全局三维颜色 + 单自由度径向暗角分支：彻底屏蔽 VAE 潜空间局部差分 diff (v_bg)
         a_bg = self.ambient_field()
-        bg_drive = a_bg + self.w_bg_mod * v_bg
         res_bg = self._feasible_bounded_residual(
-            bg_drive / self.tau_bg, self.eps_bg_map, self.r_min, self.r_max
+            a_bg / self.tau_bg, self.eps_bg_map, self.r_min, self.r_max
         ) * self.bg_mask_t
 
         # 3. 印刷文字区域绝对清零 (change[roi] == 0)

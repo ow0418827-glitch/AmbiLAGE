@@ -127,7 +127,7 @@ class AmbiLAGEPipeline:
                 source_rgb = read_rgb(source)
                 source_fg = np.asarray(Image.open(root / 'source_foreground.png').convert('L')) > 0
                 roi = np.asarray(Image.open(root / 'print_core.png').convert('L')) > 0
-                envelopes = compute_spatial_envelopes(source_fg, roi, self.config)
+                envelopes = compute_spatial_envelopes(source_fg, roi, self.config, source_rgb=source_rgb)
                 anchor = np.asarray(Image.open(root / 'generative_anchor.png').convert('RGB')).copy()
                 if anchor.shape != source_rgb.shape or not np.array_equal(anchor[roi], source_rgb[roi]):
                     raise ValueError('Stage 3 断点锚点图像与源图印刷核心不一致')
@@ -151,7 +151,7 @@ class AmbiLAGEPipeline:
                 rect_roi = print_region_mask(source_fg.shape, regions)
                 source_rgb = read_rgb(source)
                 roi, substrate = extract_ink_core_mask(source_rgb, source_fg, rect_roi, self.config)
-                envelopes = compute_spatial_envelopes(source_fg, roi, self.config)
+                envelopes = compute_spatial_envelopes(source_fg, roi, self.config, source_rgb=source_rgb)
                 for name, mask in [('source_foreground', source_fg), ('target_foreground', target_fg), ('print_core', roi)]:
                     Image.fromarray(mask.astype(np.uint8) * 255).save(root / (name + '.png'))
                 Image.fromarray(np.rint(envelopes['macro_array'] * 255).astype(np.uint8)).save(root / 'latent_edit_mask.png')

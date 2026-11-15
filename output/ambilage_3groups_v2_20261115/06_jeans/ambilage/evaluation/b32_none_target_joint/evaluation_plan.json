@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "scope": "shared",
+  "group": "06_jeans",
+  "diagnostic_environment": "env4_feature_text_plus_target_image",
+  "query_image_is_target": true,
+  "pool_path": "/content/AmbiLAGE/resources/evaluation_base/shared_memory/shared_memory.json",
+  "pool_sha256": "bfd8964a4477b694796787ffe2fc746c5eb19a389c23c904ebccc81975cd77a8",
+  "pool_count": 189,
+  "source_memory_id": "groups9_reference_06_jeans_B07FRKQNFV",
+  "frozen_image_sha256": "08d48044ac459d1eb03540c94f7254bf5d85981d58ba5d8c2d0871bffe87f3a6",
+  "method": "ambilage",
+  "queries": [
+    {
+      "task_id": "feature_01",
+      "instruction": "I want to buy jeans with a high waist and a baggy straight-leg cut.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/06_jeans/target.jpg",
+      "query_image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241"
+    },
+    {
+      "task_id": "feature_02",
+      "instruction": "I would like to purchase jeans featuring a high waist and flap pockets.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/06_jeans/target.jpg",
+      "query_image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241"
+    },
+    {
+      "task_id": "feature_03",
+      "instruction": "Looking to buy jeans with a baggy straight-leg cut and flap pockets.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/06_jeans/target.jpg",
+      "query_image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241"
+    },
+    {
+      "task_id": "feature_04",
+      "instruction": "I am looking to buy jeans with a high waist and a baggy straight-leg cut.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/06_jeans/target.jpg",
+      "query_image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241"
+    },
+    {
+      "task_id": "feature_05",
+      "instruction": "Please help me buy jeans featuring a high waist and flap pockets.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/06_jeans/target.jpg",
+      "query_image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241"
+    },
+    {
+      "task_id": "feature_06",
+      "instruction": "I am shopping for jeans with a baggy straight-leg cut and flap pockets.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/06_jeans/target.jpg",
+      "query_image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241"
+    },
+    {
+      "task_id": "feature_07",
+      "instruction": "I would like to buy jeans with a high waist and a baggy straight-leg cut.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/06_jeans/target.jpg",
+      "query_image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241"
+    },
+    {
+      "task_id": "feature_08",
+      "instruction": "Help me purchase jeans featuring a high waist and flap pockets.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/06_jeans/target.jpg",
+      "query_image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241"
+    },
+    {
+      "task_id": "feature_09",
+      "instruction": "I am looking for jeans with a baggy straight-leg cut and flap pockets.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/06_jeans/target.jpg",
+      "query_image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241"
+    },
+    {
+      "task_id": "feature_10",
+      "instruction": "Please find jeans with a high waist and a baggy straight-leg cut for me to buy.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/06_jeans/target.jpg",
+      "query_image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241"
+    },
+    {
+      "task_id": "feature_11",
+      "instruction": "I want to purchase jeans featuring a high waist and flap pockets.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/06_jeans/target.jpg",
+      "query_image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241"
+    },
+    {
+      "task_id": "feature_12",
+      "instruction": "Please help me purchase jeans with a baggy straight-leg cut and flap pockets.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/06_jeans/target.jpg",
+      "query_image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241"
+    },
+    {
+      "task_id": "feature_13",
+      "instruction": "I need to buy jeans with a high waist and a baggy straight-leg cut.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/06_jeans/target.jpg",
+      "query_image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241"
+    },
+    {
+      "task_id": "feature_14",
+      "instruction": "I would like help finding jeans featuring a high waist and flap pockets.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/06_jeans/target.jpg",
+      "query_image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241"
+    },
+    {
+      "task_id": "feature_15",
+      "instruction": "Find me jeans with a baggy straight-leg cut and flap pockets to purchase.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/06_jeans/target.jpg",
+      "query_image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241"
+    },
+    {
+      "task_id": "feature_16",
+      "instruction": "Please look for jeans with a high waist and a baggy straight-leg cut that I can buy.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/06_jeans/target.jpg",
+      "query_image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241"
+    },
+    {
+      "task_id": "feature_17",
+      "instruction": "I am interested in buying jeans featuring a high waist and flap pockets.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/06_jeans/target.jpg",
+      "query_image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241"
+    },
+    {
+      "task_id": "feature_18",
+      "instruction": "I would like to shop for jeans with a baggy straight-leg cut and flap pockets.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/06_jeans/target.jpg",
+      "query_image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241"
+    },
+    {
+      "task_id": "feature_19",
+      "instruction": "Help me find jeans with a high waist and a baggy straight-leg cut to buy.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/06_jeans/target.jpg",
+      "query_image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241"
+    },
+    {
+      "task_id": "feature_20",
+      "instruction": "I am ready to purchase jeans featuring a high waist and flap pockets.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/06_jeans/target.jpg",
+      "query_image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241"
+    }
+  ],
+  "conditions": [
+    {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    }
+  ],
+  "encoder_config": "/content/AmbiLAGE/output/ambilage_3groups_v2_20261115/logs/eval_b32_matched.json",
+  "encoder_config_sha256": "025ce58154ababe29c684433136dc098a7bb1cf29888c21e912be9466c09449c",
+  "key_image_weight": 0.5,
+  "query_image_weight": 0.5,
+  "query_mode": "joint",
+  "target_image_path": "/content/AmbiLAGE/resources/evaluation_base/groups/06_jeans/target.jpg",
+  "target_image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241"
+}

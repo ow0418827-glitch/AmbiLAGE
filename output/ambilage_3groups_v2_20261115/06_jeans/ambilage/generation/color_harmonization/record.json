@@ -1,0 +1,40 @@
+{
+  "status": "completed",
+  "stage": "illumination_harmonization",
+  "blend_mode": "matte",
+  "selected_rgb": [
+    31,
+    27,
+    27
+  ],
+  "bg_studio_target_rgb": [
+    242,
+    239,
+    235
+  ],
+  "bg_strength": 0.85,
+  "strength": 1.0,
+  "selected_color_mix": 0.12,
+  "smoothing_sigma": 12.0,
+  "chosen_fraction": 1.0,
+  "line_search_steps": 32,
+  "source_ssim": 0.9973039575786208,
+  "source_mae_levels": 6.79594087600708,
+  "halo_error": 0.7079560160636902,
+  "ink_core_pixels": 0,
+  "substrate_pixels": 0,
+  "max_body_change_levels": 25,
+  "mean_body_change_levels": 4.312921794892314,
+  "max_bg_change_levels": 17,
+  "mean_bg_change_levels": 13.519606571057125,
+  "roi_change_levels": 0,
+  "zero_pixel_residual": true,
+  "generator": {
+    "model": "perceptual_illumination_line_search_v1",
+    "chosen_fraction": 1.0,
+    "line_search_steps": 32
+  },
+  "trials_evaluated": 1,
+  "anchor_path": "/content/AmbiLAGE/output/ambilage_3groups_v2_20261115/06_jeans/ambilage/generation/color_harmonization/generative_anchor.png",
+  "anchor_sha256": "c63c8bf56dfa25e087a339a3326b318fc77bd9d49bcdb9064f0c9744ac31e088"
+}

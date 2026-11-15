@@ -18,11 +18,22 @@ from typing import Any, Sequence
 import numpy as np
 from PIL import Image
 from scipy.ndimage import distance_transform_edt, gaussian_filter, grey_closing
+import torch
 
 from src.visual.image_utils import read_rgb, sha256_file, write_json
 from .config import AmbiLAGEConfig
-from .objectives import compute_boundary_halo_error, source_ssim
-from .segmentation import extract_ink_core_mask, print_region_mask
+from .objectives import (
+    compute_boundary_halo_error,
+    oklab_to_srgb,
+    source_luma_mae_levels,
+    source_ssim,
+    srgb_to_oklab,
+)
+from .segmentation import (
+    compute_recolor_attenuation_mask,
+    extract_ink_core_mask,
+    print_region_mask,
+)
 
 
 def linear_from_srgb(a: np.ndarray) -> np.ndarray:
@@ -70,8 +81,6 @@ def prepare_print_context(
 
     transmission = np.zeros((h, w), dtype=np.float64)
     opaque = ink_core.copy()
-    chroma = source_rgb.max(axis=-1).astype(float) - source_rgb.min(axis=-1).astype(float)
-    colored = chroma >= 12.0
 
     if regions:
         for region in regions:
@@ -83,17 +92,17 @@ def prepare_print_context(
             trans = np.clip((ys - darkest) / np.maximum(yb - darkest, 1e-4), 0.0, 1.0)
             if (local & substrate).any():
                 transmission[local & substrate] = trans[local & substrate]
-            elif np.median(ys[inside]) < 0.35 or np.median(chroma[inside]) >= 12.0:
+            elif np.median(ys[inside]) < 0.35:
                 opaque |= local
             else:
-                local_opaque = local & ((trans <= 0.04) | colored)
+                local_opaque = local & (trans <= 0.04)
                 transmission[local] = trans[local]
                 opaque |= local_opaque
     transmission[opaque] = 0.0
     transmission[ink_core] = 0.0
 
-    # 油墨与距离变换
-    ink = ink_core | (roi & ((source_rgb.min(axis=-1) < 180) | colored))
+    # 油墨与距离变换：仅基于真实墨迹核估算笔画距离，不再把彩色/灰银瓶身整框锁为油墨
+    ink = ink_core.copy() if ink_core.any() else (roi & (source_rgb.min(axis=-1) < 80))
     distance = distance_transform_edt(~ink) if ink.any() else np.full(roi.shape, 64.0)
 
     # 可信未印刷主体参考点 (Trusted body pixels)
@@ -128,12 +137,10 @@ def _evaluate_candidate_metrics(
     foreground: np.ndarray,
     ink_core: np.ndarray,
 ) -> tuple[float, float, float]:
-    import torch
-
     t_cand = torch.tensor(candidate_rgb.transpose(2, 0, 1).copy(), dtype=torch.float32)[None] / 255.0
     t_src = torch.tensor(source_rgb.transpose(2, 0, 1).copy(), dtype=torch.float32)[None] / 255.0
     ssim_val = float(source_ssim(t_cand, t_src))
-    mae_val = float(np.abs(candidate_rgb.astype(np.float32) - source_rgb.astype(np.float32)).mean())
+    mae_val = float(source_luma_mae_levels(t_cand, t_src))
     halo_val = compute_boundary_halo_error(source_rgb, candidate_rgb, fg_mask=foreground, roi_mask=ink_core)
     return ssim_val, mae_val, halo_val
 
@@ -175,31 +182,10 @@ def harmonize_illumination(
     substrate = context["substrate"]
     trusted = context["trusted"]
 
-    # 1. 在线性色彩空间计算目标色与源主体表面光照差异
+    # 1. 计算源图线性空间供背景温和浅暖棚拍底色迁移使用
     src_lin = linear_from_srgb(source_rgb.astype(np.float64) / 255.0)
-    target_lin = linear_from_srgb(np.asarray(target_color_rgb, dtype=np.float64) / 255.0)
 
-    if trusted.any():
-        trusted_mean_lin = src_lin[trusted].mean(axis=0)
-    else:
-        trusted_mean_lin = src_lin[foreground].mean(axis=0) if foreground.any() else src_lin.mean(axis=(0, 1))
-
-    color_diff = target_lin - trusted_mean_lin
-    weight = trusted.astype(np.float64)
-    den = gaussian_filter(weight, sigma=config.harmonization_smoothing_sigma, mode="nearest")
-    smooth_diff = np.stack([
-        gaussian_filter(color_diff[c] * weight, sigma=config.harmonization_smoothing_sigma, mode="nearest")
-        / np.maximum(den, 1e-6)
-        for c in range(3)
-    ], axis=-1)
-    smooth_diff[den < 0.005] = color_diff
-
-    # 2. 构造主体微幅协调增益与背景温和浅暖棚拍底色协调场
-    matte_corr = (
-        config.harmonization_strength
-        * config.harmonization_selected_color_mix
-        * smooth_diff
-    )
+    # 2. 构造主体 OKLab 锁亮度放色度协调场（叠加上高光/暗部衰减与饱和度调制）与背景温和浅暖棚拍底色场
     ring_sigma = max(float(getattr(config, "harmonization_print_ring_sigma", 7.0)), 1e-4)
     ring = np.exp(-0.5 * (context["distance"] / ring_sigma) ** 2)
     fg_feather = float(getattr(config, "harmonization_fg_feather_pixels", 4.0))
@@ -216,6 +202,25 @@ def harmonize_illumination(
     spatial_gain[ink_core] = 0.0
     spatial_gain[context["opaque"]] = 0.0
     spatial_gain[~foreground] = 0.0
+
+    recolor_att = compute_recolor_attenuation_mask(
+        source_rgb, foreground, ink_core | context["opaque"], config
+    )
+    chroma_strength = float(getattr(config, "harmonization_chroma_transfer_strength", 0.55))
+    fg_recolor_gain = spatial_gain * recolor_att * chroma_strength * config.harmonization_strength
+    fg_recolor_gain[ink_core] = 0.0
+    fg_recolor_gain[context["opaque"]] = 0.0
+    fg_recolor_gain[~foreground] = 0.0
+
+    src_t = torch.from_numpy((source_rgb.astype(np.float32) / 255.0).transpose(2, 0, 1).copy())[None]
+    tgt_rgb_01 = np.clip(np.asarray(target_color_rgb, dtype=np.float32) / 255.0, 0.0, 1.0)
+    tgt_t = torch.from_numpy(tgt_rgb_01.reshape(1, 3, 1, 1).copy())
+    with torch.no_grad():
+        src_lab = srgb_to_oklab(src_t)
+        tgt_lab = srgb_to_oklab(tgt_t)
+    fg_ab_delta = (tgt_lab[:, 1:3] - src_lab[:, 1:3]) * torch.from_numpy(
+        fg_recolor_gain[None, None].astype(np.float32)
+    )
 
     # 背景温和浅暖棚拍底色目标：打破 255 单向截断天花板，利用视觉掩蔽藏住后续同色系柔光
     bg_strength = float(getattr(config, "harmonization_bg_strength", 0.85))
@@ -244,9 +249,9 @@ def harmonize_illumination(
     bg_gain[ink_core] = 0.0
     bg_gain[context["opaque"]] = 0.0
     bg_corr = bg_strength * src_lin * (bg_target_lin[None, None, :] - 1.0)
-    total_corr = spatial_gain[..., None] * matte_corr + bg_gain[..., None] * bg_corr
+    bg_field_corr = bg_gain[..., None] * bg_corr
 
-    # 3. 32 步回溯线搜索数学守门 (SSIM + MAE + Halo)
+    # 3. 32 步回溯线搜索数学守门 (亮度 L SSIM + 亮度 MAE + Halo)
     ssim_floor = max(float(getattr(config, "anchor_ssim_floor", 0.72)), float(config.source_ssim_floor))
     mae_ceiling = min(float(getattr(config, "anchor_mae_ceiling", 30.0)), float(config.source_mae_ceiling))
     halo_ceiling = float(getattr(config, "halo_ceiling", 10.0))
@@ -259,8 +264,15 @@ def harmonize_illumination(
 
     for fraction in np.linspace(1.0, 0.0, line_steps + 1):
         frac = float(fraction)
-        candidate_lin = src_lin + frac * total_corr
-        candidate_rgb = np.clip(np.rint(srgb_from_linear(candidate_lin) * 255.0), 0, 255).astype(np.uint8)
+        bg_candidate_lin = src_lin + frac * bg_field_corr
+        bg_candidate_rgb = np.clip(np.rint(srgb_from_linear(bg_candidate_lin) * 255.0), 0, 255).astype(np.uint8)
+        with torch.no_grad():
+            cand_lab = torch.cat([src_lab[:, 0:1], src_lab[:, 1:3] + frac * fg_ab_delta], dim=1)
+            fg_candidate_01 = oklab_to_srgb(
+                cand_lab, clamp=True, gamut_preserve_luma=True
+            )[0].cpu().numpy().transpose(1, 2, 0)
+        fg_candidate_rgb = np.clip(np.rint(fg_candidate_01 * 255.0), 0, 255).astype(np.uint8)
+        candidate_rgb = np.where(foreground[..., None], fg_candidate_rgb, bg_candidate_rgb)
         if ink_core.any():
             candidate_rgb[ink_core] = source_rgb[ink_core]
         if context["opaque"].any():

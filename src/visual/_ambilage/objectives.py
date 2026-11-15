@@ -27,10 +27,128 @@ from src.visual.robust_objectives import compensated_targets, softmin
 from .config import AmbiLAGEConfig
 
 
-def source_ssim(image: torch.Tensor, source: torch.Tensor) -> torch.Tensor:
-    """七像素均匀窗口、无偏样本协方差的结构相似度 (SSIM)。"""
-    img_d = image.double()
-    src_d = source.double()
+def srgb_to_oklab(rgb: torch.Tensor) -> torch.Tensor:
+    """可微 sRGB -> OKLab 色彩空间转换（输入值域 [0, 1]，形状 [B, 3, H, W] 或 [3, H, W]）。
+
+    在极暗区间 (lms <= 1e-6) 采用 C0 连续线性延拓，确保 0 像素反传梯度有限无 NaN/Inf，
+    正常亮度区与标准 Björn Ottosson OKLab 往返误差 <= 1e-5。
+    """
+    squeeze = rgb.ndim == 3
+    x = rgb.unsqueeze(0) if squeeze else rgb
+    lin = torch.where(
+        x <= 0.04045,
+        x / 12.92,
+        ((x.clamp_min(0.04045) + 0.055) / 1.055).pow(2.4),
+    )
+    r, g, b = lin[:, 0:1], lin[:, 1:2], lin[:, 2:3]
+    l = 0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b
+    m = 0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b
+    s = 0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b
+
+    def _safe_cbrt(v: torch.Tensor) -> torch.Tensor:
+        return torch.where(v > 1e-6, v.clamp_min(1e-6).pow(1.0 / 3.0), v * 1e4)
+
+    l_ = _safe_cbrt(l)
+    m_ = _safe_cbrt(m)
+    s_ = _safe_cbrt(s)
+
+    big_l = 0.2104542553 * l_ + 0.7936177850 * m_ - 0.0040720468 * s_
+    comp_a = 1.9779984951 * l_ - 2.4285922050 * m_ + 0.4505937099 * s_
+    comp_b = 0.0259040371 * l_ + 0.7827717662 * m_ - 0.8086757660 * s_
+    out = torch.cat([big_l, comp_a, comp_b], dim=1)
+    return out.squeeze(0) if squeeze else out
+
+
+def oklab_to_srgb(
+    lab: torch.Tensor,
+    clamp: bool = True,
+    gamut_preserve_luma: bool = False,
+) -> torch.Tensor:
+    """可微 OKLab -> sRGB 色彩空间逆变换（形状 [B, 3, H, W] 或 [3, H, W]）。"""
+    squeeze = lab.ndim == 3
+    x = lab.unsqueeze(0) if squeeze else lab
+    big_l, comp_a, comp_b = x[:, 0:1], x[:, 1:2], x[:, 2:3]
+
+    l_ = big_l + 0.3963377774 * comp_a + 0.2158037573 * comp_b
+    m_ = big_l - 0.1055613458 * comp_a - 0.0638541728 * comp_b
+    s_ = big_l - 0.0894841775 * comp_a - 1.2914855480 * comp_b
+
+    l = l_ * l_ * l_
+    m = m_ * m_ * m_
+    s = s_ * s_ * s_
+
+    r = 4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s
+    g = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s
+    b = -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s
+    lin = torch.cat([r, g, b], dim=1)
+
+    if gamut_preserve_luma:
+        # 若固定亮度换色导致线性 RGB 越出色域 [0, 1]，沿等亮度中性灰点 L^3 软压缩色度，防止截断偏暗
+        lin_neutral = big_l.clamp(0.0, 1.0).pow(3)
+        t_low = torch.where(
+            lin < lin_neutral,
+            lin_neutral / (lin_neutral - lin).clamp_min(1e-6),
+            torch.ones_like(lin),
+        )
+        t_high = torch.where(
+            lin > lin_neutral,
+            (1.0 - lin_neutral) / (lin - lin_neutral).clamp_min(1e-6),
+            torch.ones_like(lin),
+        )
+        t = torch.minimum(t_low, t_high).min(dim=1, keepdim=True).values.clamp(0.0, 1.0)
+        lin = lin_neutral + t * (lin - lin_neutral)
+
+    srgb = torch.where(
+        lin <= 0.0031308,
+        lin * 12.92,
+        1.055 * (lin.clamp_min(0.0031308).pow(1.0 / 2.4)) - 0.055,
+    )
+    if clamp:
+        srgb = srgb.clamp(0.0, 1.0)
+    return srgb.squeeze(0) if squeeze else srgb
+
+
+def extract_oklab_luma(image: torch.Tensor) -> torch.Tensor:
+    """提取图像的 OKLab 感知亮度通道 L（值域近似 [0, 1]，形状 [B, 1, H, W]）。"""
+    if image.ndim == 4 and image.shape[1] == 1:
+        return image
+    if image.ndim == 3 and image.shape[0] == 1:
+        return image
+    lab = srgb_to_oklab(image)
+    return lab[:, 0:1] if lab.ndim == 4 else lab[0:1]
+
+
+def source_luma_mae_levels(image: torch.Tensor, source: torch.Tensor) -> torch.Tensor:
+    """计算 OKLab 感知亮度通道 L 的平均绝对误差（折算 [0, 255] 等价量纲）。"""
+    luma_img = extract_oklab_luma(image)
+    luma_src = extract_oklab_luma(source)
+    return (luma_img - luma_src).abs().mean() * 255.0
+
+
+def compute_fg_chroma_tv_levels(
+    image: torch.Tensor,
+    reference: torch.Tensor,
+    fg_mask_t: torch.Tensor,
+) -> torch.Tensor:
+    """计算前景内部相对参考图的 OKLab 色度 (a, b) 变化全变分平滑度（[0, 255] 等价量纲）。"""
+    if float(fg_mask_t.sum().detach()) <= 0.0:
+        return image.sum() * 0.0
+    ab_diff = (srgb_to_oklab(image)[:, 1:3] - srgb_to_oklab(reference)[:, 1:3]) * 255.0
+    mask_h = fg_mask_t[..., 1:, :] * fg_mask_t[..., :-1, :]
+    mask_w = fg_mask_t[..., :, 1:] * fg_mask_t[..., :, :-1]
+    denom_h = mask_h.sum().clamp_min(1.0)
+    denom_w = mask_w.sum().clamp_min(1.0)
+    tv_h = ((ab_diff[..., 1:, :] - ab_diff[..., :-1, :]).abs() * mask_h).sum() / (2.0 * denom_h)
+    tv_w = ((ab_diff[..., :, 1:] - ab_diff[..., :, :-1]).abs() * mask_w).sum() / (2.0 * denom_w)
+    return tv_h + tv_w
+
+
+def source_ssim(image: torch.Tensor, source: torch.Tensor, luma_only: bool = True) -> torch.Tensor:
+    """七像素均匀窗口、无偏样本协方差的结构相似度 (SSIM)，默认仅在 OKLab 亮度 L 上考核。"""
+    img_in = extract_oklab_luma(image) if luma_only else image
+    src_in = extract_oklab_luma(source) if luma_only else source
+    img_d = img_in.double()
+    src_d = src_in.double()
     mu_x = F.avg_pool2d(img_d, 7, stride=1)
     mu_y = F.avg_pool2d(src_d, 7, stride=1)
     cov_scale = 49.0 / 48.0
@@ -189,10 +307,12 @@ def differentiable_halo(
     reference: torch.Tensor,
     fg_mask_t: torch.Tensor,
     bg_mask_t: torch.Tensor,
+    luma_only: bool = True,
 ) -> torch.Tensor:
-    """可微前景轮廓边界光晕惩罚：度量前景外/内邻域环带上的局部跳变幅度。
+    """可微前景轮廓边界光晕惩罚：度量前景外/内邻域环带上的局部亮度阶跃幅度。
 
-    全图均匀平移时局部差分严格为零，仅惩罚紧贴轮廓的生硬白边、灰边与阶跃伪影。
+    默认在 OKLab 亮度 L 上度量轮廓光晕，避免前景合法换色与背景色温差产生虚假 RGB 阶跃；
+    全图均匀平移时局部差分严格为零。
     """
     if fg_mask_t.sum() <= 0 or bg_mask_t.sum() <= 0:
         return image.sum() * 0.0
@@ -202,7 +322,10 @@ def differentiable_halo(
     ring_count = ring_mask.sum()
     if float(ring_count.detach()) <= 0.0:
         return image.sum() * 0.0
-    diff = (image - reference) * 255.0
+    if luma_only:
+        diff = (extract_oklab_luma(image) - extract_oklab_luma(reference)) * 255.0
+    else:
+        diff = (image - reference) * 255.0
     # 与 5x5 局部邻域均值的偏差即为高频边缘光晕阶跃，均匀平移时该项严格为 0
     local_mean = F.avg_pool2d(diff, 5, stride=1, padding=2)
     halo_jump = (diff - local_mean) * ring_mask
@@ -254,14 +377,18 @@ def compute_spatial_variance_penalty(
     背景正则项通过 (bg_unit - bg_mean) 仅惩罚背景像素偏离自身均值的空间波动方差，
     绝不惩罚整体背景环境光均值向目标色温平移！
     """
-    # 1. 主体微光影平滑与幅度惩罚
-    fg_denom = max(config.latent_levels, 1) / 255.0
-    fg_unit = ((image - anchor) * fg_mask_t) / fg_denom
+    # 1. 主体亮度 L 微光影平滑与幅度惩罚 + 色度 (a, b) 变化平滑 TV 惩罚（不惩罚合法主体均匀换色）
+    fg_luma_scale = max(float(getattr(config, "fg_luma_scale", 1.0)), 1e-4)
+    fg_denom = max(float(config.latent_levels) * fg_luma_scale, 1.0) / 255.0
+    fg_luma_diff = extract_oklab_luma(image) - extract_oklab_luma(anchor)
+    fg_unit = (fg_luma_diff * fg_mask_t) / fg_denom
     fg_tv = (
         (fg_unit[..., 1:, :] - fg_unit[..., :-1, :]).abs().mean()
         + (fg_unit[..., :, 1:] - fg_unit[..., :, :-1]).abs().mean()
     )
-    fg_l2 = fg_unit.square().sum() / fg_mask_t.sum().clamp_min(1.0) / 3.0
+    fg_l2 = fg_unit.square().sum() / fg_mask_t.sum().clamp_min(1.0)
+    fg_chroma_denom = max(float(getattr(config, "fg_chroma_levels", 64)), 1.0)
+    fg_chroma_tv = compute_fg_chroma_tv_levels(image, anchor, fg_mask_t) / fg_chroma_denom
 
     # 2. 背景空间平滑与色度平滑 (仅惩罚方差与 TV，不惩罚整体均值平移)
     bg_denom = max(config.background_levels, 1) / 255.0
@@ -287,9 +414,11 @@ def compute_spatial_variance_penalty(
         overflow = image.sum() * 0.0
 
     halo_w = float(getattr(config, "halo_weight", 0.0))
+    fg_chroma_tv_w = float(getattr(config, "fg_chroma_tv_weight", 0.0))
     penalty = (
         config.fg_l2_weight * fg_l2
         + config.fg_tv_weight * fg_tv
+        + fg_chroma_tv_w * fg_chroma_tv
         + config.bg_l2_weight * bg_l2
         + config.bg_tv_weight * bg_tv
         + config.bg_chroma_tv_weight * bg_chroma_tv
@@ -300,6 +429,7 @@ def compute_spatial_variance_penalty(
     metrics = {
         "fg_l2": float(fg_l2.detach()),
         "fg_tv": float(fg_tv.detach()),
+        "fg_chroma_tv": float(fg_chroma_tv.detach()),
         "bg_l2": float(bg_l2.detach()),
         "bg_tv": float(bg_tv.detach()),
         "bg_chroma_tv": float(bg_chroma_tv.detach()),

@@ -22,11 +22,11 @@ from scipy.ndimage import (
     binary_dilation,
     binary_fill_holes,
     distance_transform_edt,
-    gaussian_filter,
-    grey_closing,
-    sobel,
+    median_filter,
 )
 import torch
+
+from .objectives import srgb_to_oklab
 
 from src.paths import model_path
 from src.visual.image_utils import read_rgb, sha256_file, write_json
@@ -125,24 +125,23 @@ def extract_ink_core_mask(
     ):
         return rect.copy(), np.zeros_like(rect, dtype=bool)
 
+    ys, xs = np.where(rect)
+    rect_h = int(ys.max() - ys.min() + 1)
+    rect_w = int(xs.max() - xs.min() + 1)
+    if rect_h < 12 or rect_w < 12:
+        return rect.copy(), np.zeros_like(rect, dtype=bool)
+
     a = rgb.astype(np.float64)
     luminance = a @ np.array([0.2126, 0.7152, 0.0722], dtype=np.float64)
-    closing_px = max(3, int(getattr(config, "ink_closing_pixels", 9)) | 1)
-    bg_close = grey_closing(luminance, size=(closing_px, closing_px), mode="nearest")
-    local_blur = gaussian_filter(luminance, sigma=3.0, mode="nearest")
-    grad_mag = np.hypot(sobel(luminance, axis=0), sobel(luminance, axis=1))
-    chroma = a.max(axis=-1) - a.min(axis=-1)
-
-    local_contrast = float(getattr(config, "ink_local_contrast", 3.0))
-    dark_lum = float(getattr(config, "ink_dark_luminance", 180.0))
-    colored_ch = float(getattr(config, "ink_colored_chroma", 12.0))
+    k = max(5, min(11, int(getattr(config, "ink_closing_pixels", 9)) | 1))
+    bg_luma = median_filter(luminance, size=k, mode="nearest")
+    bg_rgb = np.stack([median_filter(a[..., c], size=k, mode="nearest") for c in range(3)], axis=-1)
+    rgb_dev = np.sqrt(np.sum((a - bg_rgb) ** 2, axis=-1))
 
     ink = rect & (
-        (bg_close - luminance >= local_contrast)
-        | (np.abs(luminance - local_blur) >= local_contrast * 1.5)
-        | (grad_mag >= 24.0)
-        | (luminance <= dark_lum)
-        | (chroma >= colored_ch)
+        (np.abs(luminance - bg_luma) >= 18.0)
+        | (rgb_dev >= 30.0)
+        | (luminance <= 30.0)
     )
     if not ink.any():
         ink = rect.copy()
@@ -154,6 +153,44 @@ def extract_ink_core_mask(
         ink_core = ink.copy()
     substrate = (rect & fg) & (~ink_core)
     return ink_core.astype(bool), substrate.astype(bool)
+
+
+def compute_recolor_attenuation_mask(
+    source_rgb: np.ndarray,
+    foreground: np.ndarray,
+    roi: np.ndarray,
+    config: AmbiLAGEConfig,
+) -> np.ndarray:
+    """计算前景高光中性反光/深阴影衰减与底色饱和度调制系数 (0~1)。
+
+    - 高光中性区 (L > fg_highlight_luma_knee) 与深阴影/瞳孔五官特征区 (L < fg_shadow_luma_knee)
+      平滑衰减接近 0，防止反光和纯黑区域被染上违和杂色；
+    - 原本彩色塑胶/液体区域接近 1.0，中性哑光塑料取 fg_neutral_recolor_base。
+    """
+    rgb_arr = np.asarray(source_rgb, dtype=np.float32) / 255.0
+    t_rgb = torch.from_numpy(rgb_arr.transpose(2, 0, 1).copy())[None]
+    with torch.no_grad():
+        lab = srgb_to_oklab(t_rgb)[0].cpu().numpy()
+    big_l, comp_a, comp_b = lab[0], lab[1], lab[2]
+    chroma = np.sqrt(comp_a * comp_a + comp_b * comp_b)
+
+    base = float(getattr(config, "fg_neutral_recolor_base", 0.45))
+    hi_knee = float(getattr(config, "fg_highlight_luma_knee", 0.88))
+    lo_knee = float(getattr(config, "fg_shadow_luma_knee", 0.25))
+
+    sat_gain = np.clip(base + (1.0 - base) * (chroma / 0.08), base, 1.0)
+    hi_att = np.where(
+        big_l > hi_knee,
+        np.clip((1.0 - big_l) / max(1.0 - hi_knee, 1e-4), 0.0, 1.0) ** 2,
+        1.0,
+    )
+    lo_att = np.where(
+        big_l < lo_knee,
+        np.clip((big_l - 0.08) / max(lo_knee - 0.08, 1e-4), 0.0, 1.0) ** 2,
+        1.0,
+    )
+    fg_non_roi = np.asarray(foreground, dtype=bool) & (~np.asarray(roi, dtype=bool))
+    return (sat_gain * hi_att * lo_att * fg_non_roi).astype(np.float32)
 
 
 def segment_image(
@@ -212,6 +249,7 @@ def compute_spatial_envelopes(
     foreground: np.ndarray,
     roi: np.ndarray,
     config: AmbiLAGEConfig,
+    source_rgb: np.ndarray | None = None,
 ) -> dict[str, Any]:
     """计算基于欧氏距离变换 (EDT) 的四重空间余弦平滑包络张量与扰动预算映射。
     
@@ -259,12 +297,20 @@ def compute_spatial_envelopes(
         w_text = np.ones_like(w_fg)
         w_fg_body = w_fg * (~roi_bool)
 
-    # 4. 空间扰动预算分配（文字区强制为 0）
+    # 4. 空间扰动预算分配（文字区强制为 0）与前景双重掩膜换色包络
     fg_level_array = (config.latent_levels * w_fg_body) * (~roi_bool)
     bg_level_array = (config.background_levels * w_bg_budget) * (~roi_bool)
     level_array = fg_level_array + bg_level_array
     max_level = float(max(config.background_levels, config.latent_levels, 1))
     macro_array = level_array / max_level
+
+    if source_rgb is not None:
+        recolor_att = compute_recolor_attenuation_mask(source_rgb, fg_bool, roi_bool, config)
+        w_fg_recolor = (w_fg_body * recolor_att).astype(np.float32)
+    else:
+        w_fg_recolor = w_fg_body.astype(np.float32).copy()
+    fg_chroma_levels = float(getattr(config, "fg_chroma_levels", 64))
+    fg_chroma_level_array = (fg_chroma_levels * w_fg_recolor) * (~roi_bool)
 
     return {
         "w_bg_budget": w_bg_budget.astype(np.float32),
@@ -272,6 +318,8 @@ def compute_spatial_envelopes(
         "w_fg": w_fg.astype(np.float32),
         "w_text": w_text.astype(np.float32),
         "w_fg_body": w_fg_body.astype(np.float32),
+        "w_fg_recolor": w_fg_recolor.astype(np.float32),
+        "fg_chroma_level_array": fg_chroma_level_array.astype(np.float32),
         "fg_level_array": fg_level_array.astype(np.float32),
         "bg_level_array": bg_level_array.astype(np.float32),
         "level_array": level_array.astype(np.float32),

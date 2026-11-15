@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "natural": true,
+  "text_preserved": true,
+  "artifact_free": true,
+  "reasons": [
+    "strict_mathematical_naturalness_gate_passed"
+  ],
+  "category": "outdoor speakers",
+  "metrics": {
+    "source_ssim": 0.9982943320781225,
+    "source_mae_levels": 5.619694232940674,
+    "fg_chroma_tv_levels": 2.57924747467041,
+    "halo_error": 0.49116402864456177,
+    "roi_max_abs_diff": 0.0
+  },
+  "thresholds": {
+    "source_ssim_floor": 0.78,
+    "source_mae_ceiling": 28.0,
+    "fg_chroma_tv_ceiling": 12.0,
+    "halo_ceiling": 10.0,
+    "roi_max_abs_diff": 0.0
+  },
+  "model": "mathematical_ssim_mae_halo_gate_v1",
+  "precision": "float32",
+  "candidate_sha256": "133d4286b2c240f5f0944683508b6627fe3f839ed446f4739d211551570b4d00"
+}

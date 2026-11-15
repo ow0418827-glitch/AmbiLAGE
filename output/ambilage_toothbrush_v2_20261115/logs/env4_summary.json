@@ -1,0 +1,46 @@
+{
+  "ambilage": {
+    "g14": {
+      "clean_top1": 0,
+      "mod_top1": 0,
+      "clean_top3": 0,
+      "mod_top3": 0,
+      "clean_top5": 18,
+      "mod_top5": 20,
+      "n_queries": 20,
+      "clean_mean_rank": 5.1,
+      "mod_mean_rank": 4.75,
+      "top3_gain_pp": 0.0,
+      "mean_rank_gain": 0.35,
+      "clean_range": [
+        4,
+        7
+      ],
+      "mod_range": [
+        4,
+        5
+      ]
+    },
+    "b32": {
+      "clean_top1": 0,
+      "mod_top1": 20,
+      "clean_top3": 5,
+      "mod_top3": 20,
+      "clean_top5": 18,
+      "mod_top5": 20,
+      "n_queries": 20,
+      "clean_mean_rank": 4.05,
+      "mod_mean_rank": 1.0,
+      "top3_gain_pp": 75.0,
+      "mean_rank_gain": 3.05,
+      "clean_range": [
+        3,
+        6
+      ],
+      "mod_range": [
+        1,
+        1
+      ]
+    }
+  }
+}

@@ -184,12 +184,12 @@ def _prepare_flux_canvas(initial: np.ndarray) -> tuple[np.ndarray, int, int, int
 
 
 def _measure_anchor_alignment(candidate: np.ndarray, initial: np.ndarray) -> tuple[float, float]:
-    """评估生成锚点与第 3 阶段底图之间的结构相似度 (SSIM) 与平均像素漂移 (MAE)。"""
-    from .objectives import source_ssim
+    """评估生成锚点与第 3 阶段底图之间的 OKLab 亮度结构相似度 (SSIM) 与亮度平均绝对误差 (MAE)。"""
+    from .objectives import source_luma_mae_levels, source_ssim
     t_cand = torch.tensor(candidate.transpose(2, 0, 1).copy(), dtype=torch.float32)[None] / 255.0
     t_init = torch.tensor(initial.transpose(2, 0, 1).copy(), dtype=torch.float32)[None] / 255.0
     ss = float(source_ssim(t_cand, t_init))
-    mae = float(np.abs(candidate.astype(np.float32) - initial.astype(np.float32)).mean())
+    mae = float(source_luma_mae_levels(t_cand, t_init))
     return ss, mae
 
 
@@ -414,6 +414,19 @@ class ProductionStages:
 
         ssim_val, mae_val = _measure_anchor_alignment(cand_rgb, src_rgb)
         halo_val = compute_boundary_halo_error(src_rgb, cand_rgb, fg_mask=fg_mask, roi_mask=roi_mask)
+        if fg_mask is not None and np.any(fg_mask):
+            from .objectives import compute_fg_chroma_tv_levels
+            fg_eff = np.asarray(fg_mask, dtype=bool)
+            if roi_mask is not None and np.any(roi_mask):
+                fg_eff = fg_eff & (~np.asarray(roi_mask, dtype=bool))
+            fg_t = torch.as_tensor(fg_eff, dtype=torch.float32)[None, None]
+            t_cand = torch.tensor(cand_rgb.transpose(2, 0, 1).copy(), dtype=torch.float32)[None] / 255.0
+            t_src = torch.tensor(src_rgb.transpose(2, 0, 1).copy(), dtype=torch.float32)[None] / 255.0
+            with torch.no_grad():
+                fg_chroma_tv_val = float(compute_fg_chroma_tv_levels(t_cand, t_src, fg_t))
+        else:
+            fg_chroma_tv_val = 0.0
+
         if roi_mask is not None and np.any(roi_mask):
             roi_bool = np.asarray(roi_mask, dtype=bool)
             roi_max_diff = float(np.abs(cand_rgb.astype(np.int16) - src_rgb.astype(np.int16))[roi_bool].max())
@@ -423,10 +436,11 @@ class ProductionStages:
         ssim_floor = float(self.config.source_ssim_floor)
         mae_ceiling = float(self.config.source_mae_ceiling)
         halo_ceiling = float(getattr(self.config, 'halo_ceiling', 8.0))
+        fg_chroma_tv_ceiling = float(getattr(self.config, 'fg_chroma_tv_ceiling', 12.0))
 
         natural = bool(ssim_val >= ssim_floor and mae_val <= mae_ceiling)
         text_preserved = bool(roi_max_diff == 0.0)
-        artifact_free = bool(halo_val <= halo_ceiling)
+        artifact_free = bool(halo_val <= halo_ceiling and fg_chroma_tv_val <= fg_chroma_tv_ceiling)
         passed = bool(natural and text_preserved and artifact_free)
 
         reasons: list[str] = []
@@ -436,6 +450,8 @@ class ProductionStages:
             reasons.append(f'source_mae={mae_val:.3f} > ceiling={mae_ceiling:.3f}')
         if halo_val > halo_ceiling:
             reasons.append(f'halo_error={halo_val:.3f} > ceiling={halo_ceiling:.3f}')
+        if fg_chroma_tv_val > fg_chroma_tv_ceiling:
+            reasons.append(f'fg_chroma_tv={fg_chroma_tv_val:.3f} > ceiling={fg_chroma_tv_ceiling:.3f}')
         if roi_max_diff > 0.0:
             reasons.append(f'roi_max_abs_diff={roi_max_diff:.1f} != 0')
         if not reasons:
@@ -451,12 +467,14 @@ class ProductionStages:
             'metrics': {
                 'source_ssim': float(ssim_val),
                 'source_mae_levels': float(mae_val),
+                'fg_chroma_tv_levels': float(fg_chroma_tv_val),
                 'halo_error': float(halo_val),
                 'roi_max_abs_diff': float(roi_max_diff),
             },
             'thresholds': {
                 'source_ssim_floor': ssim_floor,
                 'source_mae_ceiling': mae_ceiling,
+                'fg_chroma_tv_ceiling': fg_chroma_tv_ceiling,
                 'halo_ceiling': halo_ceiling,
                 'roi_max_abs_diff': 0.0,
             },

@@ -36,8 +36,12 @@ from .ambient import AmbientCoopField
 from .config import AmbiLAGEConfig
 from .objectives import (
     PublicFullKeyObjective,
+    compute_fg_chroma_tv_levels,
     compute_spatial_variance_penalty,
+    extract_oklab_luma,
+    source_luma_mae_levels,
     source_ssim,
+    srgb_to_oklab,
     tangent_projection,
 )
 
@@ -295,6 +299,8 @@ def refine_ambient_coop_latent(
     eps_fg_map = torch.as_tensor(envelopes["fg_level_array"] / 255.0, device=device, dtype=torch.float32)[None, None]
     eps_bg_map = torch.as_tensor(envelopes["bg_level_array"] / 255.0, device=device, dtype=torch.float32)[None, None]
     w_bg_mod = torch.as_tensor(envelopes["w_bg_mod"], device=device, dtype=torch.float32)[None, None]
+    w_fg_recolor_np = envelopes.get("w_fg_recolor", envelopes["w_fg_body"])
+    w_fg_recolor_t = torch.as_tensor(w_fg_recolor_np, device=device, dtype=torch.float32)[None, None]
     fg_bool = torch.as_tensor(envelopes["foreground"], device=device, dtype=torch.bool)
     bg_bool = ~fg_bool
     roi_bool = torch.as_tensor(envelopes["roi"], device=device, dtype=torch.bool)
@@ -309,6 +315,7 @@ def refine_ambient_coop_latent(
         bg_mask_t=bg_mask_t,
         support_mask=support_mask,
         config=config,
+        w_fg_recolor=w_fg_recolor_t,
     )
 
     # 3. 计算 VAE 潜空间基准 latent
@@ -327,7 +334,14 @@ def refine_ambient_coop_latent(
     delta = nn.Parameter(torch.zeros_like(base_latent))
     optimizer = torch.optim.Adam([
         {"params": [delta], "lr": config.latent_learning_rate},
-        {"params": [ambient_field.ambient_global, ambient_field.ambient_grid], "lr": config.ambient_learning_rate},
+        {
+            "params": [
+                ambient_field.ambient_global,
+                ambient_field.ambient_grid,
+                ambient_field.fg_chroma_shift,
+            ],
+            "lr": config.ambient_learning_rate,
+        },
     ])
 
     def snapshot_params() -> dict[str, torch.Tensor]:
@@ -335,6 +349,7 @@ def refine_ambient_coop_latent(
             "delta": delta.detach().clone(),
             "ambient_global": ambient_field.ambient_global.detach().clone(),
             "ambient_grid": ambient_field.ambient_grid.detach().clone(),
+            "fg_chroma_shift": ambient_field.fg_chroma_shift.detach().clone(),
         }
 
     def load_params(snap: dict[str, torch.Tensor]) -> None:
@@ -342,6 +357,8 @@ def refine_ambient_coop_latent(
             delta.copy_(snap["delta"])
             ambient_field.ambient_global.copy_(snap["ambient_global"])
             ambient_field.ambient_grid.copy_(snap["ambient_grid"])
+            if "fg_chroma_shift" in snap:
+                ambient_field.fg_chroma_shift.copy_(snap["fg_chroma_shift"])
 
     def compose_with_raw() -> tuple[torch.Tensor, torch.Tensor]:
         decoded = vae.decode_raw(base_latent + delta, shape)
@@ -358,19 +375,33 @@ def refine_ambient_coop_latent(
     @torch.no_grad()
     def evaluate_quality(image: torch.Tensor) -> dict[str, Any]:
         ss = float(source_ssim(image, original_tensor))
+        luma_mae = float(source_luma_mae_levels(image, original_tensor))
+        luma_diff = (extract_oklab_luma(image) - extract_oklab_luma(original_tensor)).abs() * 255.0
+        fg_luma_mae = float(luma_diff[:, :, fg_bool].mean()) if fg_bool.any() else 0.0
+        bg_luma_mae = float(luma_diff[:, :, bg_bool].mean()) if bg_bool.any() else 0.0
+        fg_chroma_tv = float(compute_fg_chroma_tv_levels(image, anchor_tensor, fg_mask_t))
         diff_orig = (image - original_tensor).abs() * 255.0
         diff_anchor = (image - anchor_tensor).abs() * 255.0
-        mae = float(diff_orig.mean())
-        fg_mae = float(diff_orig[:, :, fg_bool].mean()) if fg_bool.any() else 0.0
-        bg_mae = float(diff_orig[:, :, bg_bool].mean()) if bg_bool.any() else 0.0
+        rgb_mae = float(diff_orig.mean())
+        fg_rgb_mae = float(diff_orig[:, :, fg_bool].mean()) if fg_bool.any() else 0.0
+        bg_rgb_mae = float(diff_orig[:, :, bg_bool].mean()) if bg_bool.any() else 0.0
         anchor_mae = float(diff_anchor.mean())
+        chroma_tv_ceiling = float(getattr(config, "fg_chroma_tv_ceiling", 12.0))
         return {
             "source_ssim": ss,
-            "source_mae_levels": mae,
-            "fg_source_mae_levels": fg_mae,
-            "bg_source_mae_levels": bg_mae,
+            "source_mae_levels": luma_mae,
+            "fg_source_mae_levels": fg_luma_mae,
+            "bg_source_mae_levels": bg_luma_mae,
+            "rgb_source_mae_levels": rgb_mae,
+            "fg_rgb_source_mae_levels": fg_rgb_mae,
+            "bg_rgb_source_mae_levels": bg_rgb_mae,
+            "fg_chroma_tv_levels": fg_chroma_tv,
             "anchor_mae_levels": anchor_mae,
-            "quality_ok": bool(ss >= config.source_ssim_floor and mae <= config.source_mae_ceiling),
+            "quality_ok": bool(
+                ss >= config.source_ssim_floor
+                and luma_mae <= config.source_mae_ceiling
+                and fg_chroma_tv <= chroma_tv_ceiling
+            ),
         }
 
     tick = time.perf_counter()
@@ -394,6 +425,10 @@ def refine_ambient_coop_latent(
             ambient_field.ambient_grid.copy_(
                 ckpt["ambient_grid"].to(device=device, dtype=ambient_field.ambient_grid.dtype)
             )
+            if "fg_chroma_shift" in ckpt:
+                ambient_field.fg_chroma_shift.copy_(
+                    ckpt["fg_chroma_shift"].to(device=device, dtype=ambient_field.fg_chroma_shift.dtype)
+                )
         optimizer.load_state_dict(_optimizer_state_to_device(ckpt["optimizer_state_dict"], device))
         best_snap = {k: v.detach().clone().to(device) for k, v in ckpt["best_snap"].items()}
         best_row = copy.deepcopy(ckpt["best_row"])
@@ -471,7 +506,7 @@ def refine_ambient_coop_latent(
     # 5. 优化循环 (原生 4 阶段第 4 阶段细化，支持自适应退火与断点续跑)
     try:
         for step in range(start_step, config.steps + 1):
-            # 5.1 计算 SSIM 与 MAE 关于图像的法向量约束，准备切空间投影
+            # 5.1 计算亮度 L SSIM 与亮度 L MAE 关于图像的法向量约束，准备切空间投影
             image_eval = compose().detach().requires_grad_(True)
             normals = []
             slacks = []
@@ -481,7 +516,7 @@ def refine_ambient_coop_latent(
             normals.append(n_ssim.detach())
             slacks.append(float(structure.detach()) - config.source_ssim_floor)
 
-            mae_metric = (image_eval - original_tensor).abs().mean()
+            mae_metric = source_luma_mae_levels(image_eval, original_tensor) / 255.0
             n_mae, = torch.autograd.grad(-mae_metric, image_eval)
             normals.append(n_mae.detach())
             slacks.append(config.source_mae_ceiling / 255.0 - float(mae_metric.detach()))
@@ -513,7 +548,7 @@ def refine_ambient_coop_latent(
                 loss = -utility + penalty
                 loss.backward()
 
-            for p in (delta, ambient_field.ambient_global, ambient_field.ambient_grid):
+            for p in (delta, ambient_field.ambient_global, ambient_field.ambient_grid, ambient_field.fg_chroma_shift):
                 if p.grad is not None:
                     torch.nan_to_num_(p.grad, nan=0.0, posinf=0.0, neginf=0.0)
 
@@ -535,7 +570,9 @@ def refine_ambient_coop_latent(
                 projected = tangent_projection(step_vector, latent_normals, slacks)
                 proposed_delta = (old_snap["delta"] + projected).clamp(-config.latent_limit, config.latent_limit)
                 proposed_global = ambient_field.ambient_global.clamp(-config.ambient_limit, config.ambient_limit).clone()
-                proposed_grid = ambient_field.ambient_grid.clamp(-config.ambient_limit, config.ambient_limit).clone()
+                proposed_grid = ambient_field.ambient_grid.clamp(-1.0, 1.0).clone()
+                fg_chroma_lim = float(getattr(config, "fg_chroma_limit", 0.16))
+                proposed_fg_chroma = ambient_field.fg_chroma_shift.clamp(-fg_chroma_lim, fg_chroma_lim).clone()
 
                 step_accepted = False
                 used_backtracks = 0
@@ -547,6 +584,9 @@ def refine_ambient_coop_latent(
                     )
                     ambient_field.ambient_grid.copy_(
                         old_snap["ambient_grid"] + scale * (proposed_grid - old_snap["ambient_grid"])
+                    )
+                    ambient_field.fg_chroma_shift.copy_(
+                        old_snap["fg_chroma_shift"] + scale * (proposed_fg_chroma - old_snap["fg_chroma_shift"])
                     )
                     q = evaluate_quality(compose())
                     if q["quality_ok"]:
@@ -642,6 +682,7 @@ def refine_ambient_coop_latent(
                     "delta": delta.detach().cpu().clone(),
                     "ambient_global": ambient_field.ambient_global.detach().cpu().clone(),
                     "ambient_grid": ambient_field.ambient_grid.detach().cpu().clone(),
+                    "fg_chroma_shift": ambient_field.fg_chroma_shift.detach().cpu().clone(),
                     "optimizer_state_dict": _optimizer_state_to_cpu(optimizer.state_dict()),
                     "best_snap": {k: v.detach().cpu().clone() for k, v in best_snap.items()},
                     "best_row": copy.deepcopy(best_row),
@@ -685,10 +726,33 @@ def refine_ambient_coop_latent(
         max_roi_diff = int(diff_anchor[roi_np].max())
         raise AssertionError(f"印刷文字区域保护断言失败：检测到 {max_roi_diff} 级改动 (change[roi] == 0 失败)")
 
-    fg_max = int(diff_anchor[fg_np].max()) if fg_np.any() else 0
+    fg_rgb_max = int(diff_anchor[fg_np].max()) if fg_np.any() else 0
     bg_max = int(diff_anchor[bg_np].max()) if bg_np.any() else 0
-    if fg_max > config.latent_levels:
-        raise AssertionError(f"商品主体微光影超出预算: {fg_max} > {config.latent_levels}")
+    fg_chroma_budget = int(getattr(config, "fg_chroma_levels", 64))
+    with torch.no_grad():
+        final_u8_t = torch.from_numpy((final_rgb.astype(np.float32) / 255.0).transpose(2, 0, 1).copy())[None]
+        anchor_u8_t = torch.from_numpy((anchor_rgb.astype(np.float32) / 255.0).transpose(2, 0, 1).copy())[None]
+        final_lab = srgb_to_oklab(final_u8_t)
+        anchor_lab = srgb_to_oklab(anchor_u8_t)
+        fg_luma_diff_np = ((final_lab[:, 0] - anchor_lab[:, 0]).abs() * 255.0)[0].cpu().numpy()
+        fg_chroma_diff_np = (torch.maximum(
+            (final_lab[:, 1] - anchor_lab[:, 1]).abs(),
+            (final_lab[:, 2] - anchor_lab[:, 2]).abs(),
+        ) * 255.0)[0].cpu().numpy()
+    fg_luma_max = float(fg_luma_diff_np[fg_np].max()) if fg_np.any() else 0.0
+    fg_chroma_max = float(fg_chroma_diff_np[fg_np].max()) if fg_np.any() else 0.0
+
+    if fg_chroma_budget > 0:
+        if fg_luma_max > float(config.latent_levels) + 1.0:
+            raise AssertionError(
+                f"商品主体 OKLab 亮度 L 超出锁亮度预算: {fg_luma_max:.2f} > {config.latent_levels + 1}"
+            )
+        if fg_chroma_max > float(fg_chroma_budget) + 2.0:
+            raise AssertionError(
+                f"商品主体 OKLab 色度 (a, b) 超出预算: {fg_chroma_max:.2f} > {fg_chroma_budget + 2}"
+            )
+    elif fg_rgb_max > config.latent_levels:
+        raise AssertionError(f"商品主体微光影超出预算: {fg_rgb_max} > {config.latent_levels}")
     if bg_max > config.background_levels:
         raise AssertionError(f"背景光场超出预算: {bg_max} > {config.background_levels}")
 
@@ -702,7 +766,9 @@ def refine_ambient_coop_latent(
         "accepted_updates": accepted,
         "rejected_updates": rejected,
         "final_quality": best_row,
-        "fg_latent_max_levels": fg_max,
+        "fg_latent_max_levels": int(round(fg_luma_max)) if fg_chroma_budget > 0 else fg_rgb_max,
+        "fg_chroma_max_levels": float(fg_chroma_max),
+        "fg_rgb_max_levels": fg_rgb_max,
         "bg_latent_max_levels": bg_max,
         "roi_max_levels": 0,
         "elapsed_seconds": float(prior_elapsed + (time.perf_counter() - tick)),

@@ -794,3 +794,180 @@ def test_pipeline_stage3_and_stage4_resume_and_early_stop_validation(tmp_path: P
     (out_dir / "ready.json").write_text(json.dumps(tampered), encoding="utf-8")
     with pytest.raises(ValueError, match="潜空间步骤未完整完成"):
         validate_ready(out_dir, require_production=False)
+
+
+def test_oklab_roundtrip_and_differentiability():
+    """验证可微 OKLab 往返精度、边界零值有限梯度及纯色度迁移下的亮度 SSIM/MAE 门禁特性。"""
+    import torch
+    from src.visual._ambilage.objectives import (
+        oklab_to_srgb,
+        source_luma_mae_levels,
+        source_ssim,
+        srgb_to_oklab,
+    )
+
+    torch.manual_seed(0)
+    rgb = torch.rand((1, 3, 24, 24), dtype=torch.float32)
+    rebuilt = oklab_to_srgb(srgb_to_oklab(rgb), clamp=True)
+    assert float((rgb - rebuilt).abs().max()) <= 1e-4
+
+    pts = torch.tensor([[[[0.0]], [[1e-6]], [[0.5]], [[1.0]]]], dtype=torch.float32).repeat(1, 3, 1, 1)
+    pts.requires_grad_(True)
+    loss = oklab_to_srgb(srgb_to_oklab(pts), clamp=False).sum()
+    loss.backward()
+    assert pts.grad is not None
+    assert torch.isfinite(pts.grad).all()
+
+    pink = torch.tensor([0.90, 0.45, 0.58], dtype=torch.float32).view(1, 3, 1, 1).expand(1, 3, 32, 32).clone()
+    pink_lab = srgb_to_oklab(pink)
+    blue_lab = torch.cat([pink_lab[:, 0:1], pink_lab[:, 1:3] - 0.16], dim=1)
+    recolored_blue = oklab_to_srgb(blue_lab, clamp=True, gamut_preserve_luma=True)
+    rgb_mae = float((pink - recolored_blue).abs().mean() * 255.0)
+    luma_mae = float(source_luma_mae_levels(recolored_blue, pink))
+    luma_ssim = float(source_ssim(recolored_blue, pink))
+    assert rgb_mae > 20.0
+    assert luma_mae < 5.0
+    assert luma_ssim > 0.90
+
+
+def test_ambient_field_global_background_zero_spatial_variance():
+    """验证背景彻底脱离 16 通道 VAE 潜差分，强局部噪声 diff 下左右背景变化完全一致。"""
+    import torch
+    from src.visual._ambilage.ambient import AmbientCoopField
+    from src.visual._ambilage.config import AmbiLAGEConfig
+    from src.visual._ambilage.segmentation import compute_spatial_envelopes
+
+    h, w = 48, 48
+    anchor = torch.full((1, 3, h, w), 0.85, dtype=torch.float32)
+    fg = np.zeros((h, w), dtype=bool)
+    fg[16:32, 16:32] = True
+    roi = np.zeros((h, w), dtype=bool)
+    cfg = AmbiLAGEConfig(bg_radial_vignette_scale=0.05)
+    env = compute_spatial_envelopes(fg, roi, cfg, source_rgb=np.full((h, w, 3), 217, dtype=np.uint8))
+
+    field = AmbientCoopField(
+        anchor=anchor,
+        eps_fg_map=torch.as_tensor(env["fg_level_array"] / 255.0, dtype=torch.float32)[None, None],
+        eps_bg_map=torch.as_tensor(env["bg_level_array"] / 255.0, dtype=torch.float32)[None, None],
+        w_bg_mod=torch.as_tensor(env["w_bg_mod"], dtype=torch.float32)[None, None],
+        fg_mask_t=torch.as_tensor(fg, dtype=torch.float32)[None, None],
+        bg_mask_t=torch.as_tensor(~fg, dtype=torch.float32)[None, None],
+        support_mask=torch.as_tensor(env["support_mask"], dtype=torch.float32)[None, None],
+        config=cfg,
+        w_fg_recolor=torch.as_tensor(env["w_fg_recolor"], dtype=torch.float32)[None, None],
+    )
+    with torch.no_grad():
+        field.bg_color_shift.copy_(torch.tensor([[[[0.05]], [[-0.02]], [[-0.06]]]], dtype=torch.float32))
+
+    # 仅在左半背景注入极大空间异质噪声 diff，右半完全为零
+    heterogeneous_diff = torch.zeros_like(anchor)
+    heterogeneous_diff[:, :, :, : w // 2] = torch.randn((1, 3, h, w // 2)) * 500.0
+    res = field.compute_residual(heterogeneous_diff)
+
+    # 远离前景边界的稳定背景区（w_bg_budget == 1.0），左右两侧残差均值与逐通道空间标准差必须完全相等且零斑块
+    outer_bg = torch.ones((h, w), dtype=bool)
+    outer_bg[8:40, 8:40] = False
+    left_outer = res[:, :, outer_bg & (torch.arange(w)[None, :] < w // 2)].detach()
+    right_outer = res[:, :, outer_bg & (torch.arange(w)[None, :] >= w // 2)].detach()
+    assert float((left_outer.mean(dim=-1) - right_outer.mean(dim=-1)).abs().max()) < 1e-6
+    assert float(left_outer.std(dim=-1).max()) < 1e-6
+    assert float(right_outer.std(dim=-1).max()) < 1e-6
+
+
+def test_oklab_foreground_recolor_passes_luma_gate_and_protects_highlights(tmp_path):
+    """验证高光/深阴影衰减掩膜与 OKLab 前景换色可通过严格亮度门禁及文字零改动检查。"""
+    import numpy as np
+    from PIL import Image
+    import torch
+    from src.visual._ambilage.ambient import AmbientCoopField
+    from src.visual._ambilage.backends import ProductionStages
+    from src.visual._ambilage.config import AmbiLAGEConfig
+    from src.visual._ambilage.illumination_harmonization import harmonize_illumination
+    from src.visual._ambilage.segmentation import (
+        compute_recolor_attenuation_mask,
+        compute_spatial_envelopes,
+        print_region_mask,
+    )
+
+    h, w = 160, 160
+    src = np.full((h, w, 3), 255, dtype=np.uint8)
+    fg = np.zeros((h, w), dtype=bool)
+    fg[20:140, 20:140] = True
+    src[fg] = [235, 115, 145]  # 粉橘色商品本体
+    src[30:45, 30:45] = [252, 252, 252]  # 高光反光点
+    src[115:130, 30:45] = [12, 12, 12]   # 深黑阴影点
+    roi_boxes = [[0.40, 0.40, 0.60, 0.60]]
+    roi = print_region_mask((h, w), roi_boxes)
+    src[roi] = [20, 20, 20]
+
+    cfg = AmbiLAGEConfig(latent_levels=6, fg_chroma_levels=64, fg_chroma_tv_ceiling=12.0)
+    att = compute_recolor_attenuation_mask(src, fg, roi, cfg)
+    assert float(att[32:42, 32:42].mean()) < 0.15
+    assert float(att[118:128, 32:42].mean()) < 0.15
+    assert float(att[25:35, 100:120].mean()) > 0.80
+
+    anchor_rgb, _ = harmonize_illumination(
+        source_image=src,
+        target_color_rgb=[40, 130, 225],
+        foreground=fg,
+        regions=roi_boxes,
+        config=cfg,
+    )
+    assert np.array_equal(anchor_rgb[roi], src[roi])
+
+    env = compute_spatial_envelopes(fg, roi, cfg, source_rgb=anchor_rgb)
+    anchor_t = torch.from_numpy(anchor_rgb.astype(np.float32) / 255.0).permute(2, 0, 1)[None]
+    field = AmbientCoopField(
+        anchor=anchor_t,
+        eps_fg_map=torch.as_tensor(env["fg_level_array"] / 255.0)[None, None],
+        eps_bg_map=torch.as_tensor(env["bg_level_array"] / 255.0)[None, None],
+        w_bg_mod=torch.as_tensor(env["w_bg_mod"])[None, None],
+        fg_mask_t=torch.as_tensor(fg, dtype=torch.float32)[None, None],
+        bg_mask_t=torch.as_tensor(~fg, dtype=torch.float32)[None, None],
+        support_mask=torch.as_tensor(env["support_mask"])[None, None],
+        config=cfg,
+        w_fg_recolor=torch.as_tensor(env["w_fg_recolor"])[None, None],
+    )
+    with torch.no_grad():
+        field.fg_chroma_shift.copy_(torch.tensor([[[[-0.14]], [[-0.12]]]], dtype=torch.float32))
+        res = field.compute_residual(torch.zeros_like(anchor_t))
+        final_rgb = np.clip(np.rint((anchor_t + res)[0].permute(1, 2, 0).numpy() * 255.0), 0, 255).astype(np.uint8)
+
+    src_path = tmp_path / "src.png"
+    Image.fromarray(src).save(src_path)
+    stages = ProductionStages.__new__(ProductionStages)
+    stages.config = cfg
+    stages.device = torch.device("cpu")
+    stages.planner = stages.processor = stages.sam = stages.sam_processor = stages.editor = None
+    gate_res = stages.gate(
+        src_path, final_rgb, category="toothbrush", roi_mask=roi, fg_mask=fg
+    )
+    assert gate_res["passed"] is True
+    assert gate_res["metrics"]["roi_max_abs_diff"] == 0.0
+    assert gate_res["metrics"]["source_mae_levels"] < 12.0
+    assert gate_res["metrics"]["fg_chroma_tv_levels"] <= cfg.fg_chroma_tv_ceiling
+    assert float(np.abs(final_rgb[25:35, 100:120].astype(float) - src[25:35, 100:120].astype(float)).mean()) > 20.0
+
+
+def test_extract_ink_core_mask_releases_colored_bottle_substrate():
+    """验证局部中值对比提取仅锁死彩色瓶身中的文字笔画而释放彩色底色基底。"""
+    import numpy as np
+    from src.visual._ambilage.config import AmbiLAGEConfig
+    from src.visual._ambilage.segmentation import extract_ink_core_mask
+
+    cfg = AmbiLAGEConfig()
+    img = np.full((160, 160, 3), 255, dtype=np.uint8)
+    fg = np.zeros((160, 160), dtype=bool)
+    fg[16:144, 24:136] = True
+    # 彩色渐变/中等饱和度蓝色瓶身 (RGB chroma = 120 >= 12)
+    img[fg] = [75, 125, 195]
+    rect_roi = np.zeros((160, 160), dtype=bool)
+    rect_roi[50:100, 40:120] = True
+    # 在印刷框中央添加白字细笔画 (与蓝色底色对比 >= 30)
+    img[72:76, 55:105] = [245, 245, 245]
+
+    ink_core, substrate = extract_ink_core_mask(img, fg, rect_roi, cfg)
+    assert np.all(ink_core[72:76, 55:105])
+    assert int(substrate.sum()) > int(rect_roi.sum() * 0.5)
+    assert bool(substrate[54, 44])
+    assert not bool(ink_core[54, 44])

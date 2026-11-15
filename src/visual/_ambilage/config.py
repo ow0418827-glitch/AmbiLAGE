@@ -82,6 +82,7 @@ class AmbiLAGEConfig:
     compensated_weight: float = 0.5
     fg_l2_weight: float = 0.0001            # 主体微光影 L2 惩罚
     fg_tv_weight: float = 0.0004            # 主体空间全变分 (TV) 惩罚
+    fg_chroma_tv_weight: float = 0.02       # 主体 OKLab 色度平滑 (TV) 惩罚
     bg_l2_weight: float = 0.005             # 背景围绕均值偏移的空间方差惩罚 (释放柔和光影同时不惩罚整体平移)
     bg_tv_weight: float = 0.02              # 背景空间全变分 (TV) 惩罚
     bg_chroma_tv_weight: float = 0.08       # 背景色度全变分惩罚
@@ -90,19 +91,30 @@ class AmbiLAGEConfig:
     halo_soft_weight: float = 0.0001        # 兼容旧光晕软约束权重
     halo_floor: float = 12.0
     halo_ceiling: float = 10.0              # 严格数学门禁光晕误差上限
+    fg_chroma_tv_ceiling: float = 12.0      # 主体 OKLab 色度 TV 门禁上限
     halo_parent_multiplier: float = 1.0
     guard_backtracks: int = 8               # 回退守门最大步数
 
+    # Stage 3 & 4 前景 OKLab 锁亮度放色度换色与背景全局三维颜色参数
+    fg_chroma_levels: int = 64              # 主体 OKLab 色度通道自由度折算上限 (等价 0~255 量纲)
+    fg_chroma_limit: float = 0.16           # 主体 OKLab 全局色度平移 [1,2,1,1] 最大幅值
+    fg_luma_scale: float = 0.40             # 主体 OKLab 明度 L 锁死折算系数 (|dL| <= latent_levels/255 * scale)
+    fg_neutral_recolor_base: float = 0.45   # 中性哑光非印刷表面基础换色增益 (高饱和塑料接近 1.0)
+    fg_highlight_luma_knee: float = 0.88    # 高光反光中性区保护起衰减明度阈值 (OKLab L)
+    fg_shadow_luma_knee: float = 0.25       # 深阴影/黑瞳孔五官特征区保护起衰减明度阈值 (OKLab L)
+    bg_radial_vignette_scale: float = 0.05  # 背景低频径向暗角/光晕最大调制幅度
+
     # 质量守门门槛 (SSIM & MAE & Halo)
-    source_ssim_floor: float = 0.78         # 最终成图结构相似度下限
-    source_mae_ceiling: float = 28.0        # 最终成图平均绝对误差上限 (容纳背景温和棚拍底色迁移)
-    anchor_ssim_floor: float = 0.72         # Stage 3 锚点线搜索结构相似度参考下限
-    anchor_mae_ceiling: float = 30.0        # Stage 3 锚点线搜索平均误差参考上限
+    source_ssim_floor: float = 0.78         # 最终成图结构相似度下限 (基于 OKLab 亮度 L)
+    source_mae_ceiling: float = 28.0        # 最终成图亮度平均绝对误差上限 (基于 OKLab 亮度 L)
+    anchor_ssim_floor: float = 0.72         # Stage 3 锚点线搜索结构相似度参考下限 (基于 OKLab 亮度 L)
+    anchor_mae_ceiling: float = 30.0        # Stage 3 锚点线搜索亮度平均误差参考上限
 
     # Stage 3: 光照一致性协调、温和浅暖棚拍底色与形态学墨迹保护参数
     harmonization_smoothing_sigma: float = 12.0
     harmonization_print_ring_sigma: float = 7.0
     harmonization_selected_color_mix: float = 0.12
+    harmonization_chroma_transfer_strength: float = 0.55
     harmonization_strength: float = 1.0
     harmonization_blend_mode: str = "matte"
     harmonization_fg_feather_pixels: float = 4.0
@@ -217,6 +229,22 @@ class AmbiLAGEConfig:
             raise ValueError("锚点线搜索质量门槛无效")
         if self.halo_ceiling < 0.0:
             raise ValueError("边界光晕门禁上限 halo_ceiling 不能为负数")
+        if self.fg_chroma_tv_ceiling < 0.0:
+            raise ValueError("前景 OKLab 色度 TV 门禁上限 fg_chroma_tv_ceiling 不能为负数")
+        if type(self.fg_chroma_levels) is not int or not (0 <= self.fg_chroma_levels <= 128):
+            raise ValueError("前景 OKLab 色度预算 fg_chroma_levels 必须位于 [0, 128]")
+        if not (0.0 <= self.fg_chroma_limit <= 0.5):
+            raise ValueError("前景 OKLab 全局色度偏移上限 fg_chroma_limit 无效")
+        if not (0.0 <= self.fg_luma_scale <= 2.0):
+            raise ValueError("前景 OKLab 明度约束比例 fg_luma_scale 无效")
+        if not (0.0 <= self.fg_neutral_recolor_base <= 1.0):
+            raise ValueError("中性材质换色基础增益 fg_neutral_recolor_base 必须位于 [0.0, 1.0]")
+        if not (0.5 <= self.fg_highlight_luma_knee <= 1.0) or not (0.0 <= self.fg_shadow_luma_knee <= 0.5):
+            raise ValueError("前景高低光保护阈值无效")
+        if not (0.0 <= self.bg_radial_vignette_scale <= 0.25):
+            raise ValueError("背景径向暗角系数 bg_radial_vignette_scale 必须位于 [0.0, 0.25]")
+        if not (0.0 <= self.harmonization_chroma_transfer_strength <= 1.0):
+            raise ValueError("Stage 3 OKLab 色度迁移强度 harmonization_chroma_transfer_strength 必须位于 [0.0, 1.0]")
         if not (0.0 <= self.harmonization_bg_strength <= 1.0):
             raise ValueError("背景棚拍底色融合强度 harmonization_bg_strength 必须位于 [0.0, 1.0]")
         if not (210.0 <= self.harmonization_bg_luma_target <= 255.0):
@@ -228,9 +256,9 @@ class AmbiLAGEConfig:
         if self.harmonization_fg_feather_pixels < 0.0 or self.harmonization_bg_feather_pixels < 0.0:
             raise ValueError("Stage 3 边界羽化宽度不能为负数")
         weights = [
-            self.fg_l2_weight, self.fg_tv_weight, self.bg_l2_weight,
-            self.bg_tv_weight, self.bg_chroma_tv_weight, self.overflow_weight,
-            self.halo_soft_weight, self.halo_weight,
+            self.fg_l2_weight, self.fg_tv_weight, self.fg_chroma_tv_weight,
+            self.bg_l2_weight, self.bg_tv_weight, self.bg_chroma_tv_weight,
+            self.overflow_weight, self.halo_soft_weight, self.halo_weight,
         ]
         if any(w < 0.0 for w in weights):
             raise ValueError("正则化权重不能为负数")

@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "natural": true,
+  "text_preserved": true,
+  "artifact_free": true,
+  "reasons": [
+    "strict_mathematical_naturalness_gate_passed"
+  ],
+  "category": "jeans",
+  "metrics": {
+    "source_ssim": 0.9967931912396929,
+    "source_mae_levels": 8.251704216003418,
+    "fg_chroma_tv_levels": 1.446307897567749,
+    "halo_error": 1.010074257850647,
+    "roi_max_abs_diff": 0.0
+  },
+  "thresholds": {
+    "source_ssim_floor": 0.78,
+    "source_mae_ceiling": 28.0,
+    "fg_chroma_tv_ceiling": 12.0,
+    "halo_ceiling": 10.0,
+    "roi_max_abs_diff": 0.0
+  },
+  "model": "mathematical_ssim_mae_halo_gate_v1",
+  "precision": "float32",
+  "candidate_sha256": "08d48044ac459d1eb03540c94f7254bf5d85981d58ba5d8c2d0871bffe87f3a6"
+}

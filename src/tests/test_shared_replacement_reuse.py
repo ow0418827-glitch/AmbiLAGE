@@ -92,3 +92,16 @@ def test_formal_evaluation_waits_for_all_nine_frozen_images(tmp_path, monkeypatc
     with pytest.raises(ValueError, match='全部九组成图'):
         base_workflow.main(['evaluate', '--group', '07_shampoo', '--method', 'ambilage',
                             '--output', str(output), '--device', 'cpu'])
+
+
+def test_selected_subset_simultaneous_replacement_requires_multiple_groups(tmp_path, monkeypatch):
+    from src.experiments import base_workflow
+    output = tmp_path / 'output'
+    monkeypatch.setattr(base_workflow, 'OUTPUT', output)
+    with pytest.raises(ValueError, match='禁止单组隔离建立修改库'):
+        base_workflow.main(['evaluate', '--group', '07_shampoo', '--replacement-groups', 'selected',
+                            '--method', 'ambilage', '--output', str(output), '--device', 'cpu'])
+    with pytest.raises(ValueError, match='先完成选定多组成图并冻结'):
+        base_workflow.main(['evaluate', '--group', '06_jeans,07_shampoo,08_speaker',
+                            '--replacement-groups', 'selected', '--environments', 'standard3',
+                            '--method', 'ambilage', '--output', str(output), '--device', 'cpu'])

@@ -18,6 +18,17 @@ def validate_attack_completion(metadata, requested_steps, expected=None):
     for key, value in (expected or {}).items():
         if metadata.get(key) != value:
             raise ValueError('完成记录未绑定本次冻结输入：' + key)
+    if method == 'visual_inception':
+        from src.visual._visual_inception.evidence import validate_ready
+        ready = validate_ready(output.parent, require_production=True)
+        if (type(requested_steps) is not int or requested_steps < 1
+                or ready.get('attack', {}).get('steps_completed') != requested_steps):
+            raise ValueError('视觉记忆植入完成凭证与请求步数不一致')
+        for key in ('method', 'output_image_sha256', 'source_image_sha256', 'target_image_sha256',
+                    'attack', 'training_objective', 'config', 'test_fixture', 'production_backend'):
+            if ready.get(key) != metadata.get(key):
+                raise ValueError('视觉记忆植入冻结元数据与完成证据不一致：' + key)
+        return
     if method == 'ambilage':
         from src.visual._ambilage.evidence import validate_ready
         ready = validate_ready(output.parent, require_production=True)

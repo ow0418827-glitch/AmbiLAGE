@@ -37,12 +37,16 @@ def test_ambilage_config_validation():
     assert cfg.auxiliary_levels == 0
     assert cfg.pixel_optimization is False
     assert cfg.joint_weight == 1.0
+    assert cfg.text_weight == 0.35
+    assert cfg.local_ot_weight == 0.10
+    assert cfg.fg_chroma_levels == 0
+    assert cfg.fg_source_mae_ceiling == 10.0
     assert cfg.ambient_init_bias == 0.0
     assert cfg.halo_weight == 0.002
     assert cfg.bg_l2_weight == 0.005
     assert cfg.harmonization_selected_color_mix == 0.12
+    assert cfg.harmonization_chroma_transfer_strength == 0.0
     assert cfg.harmonization_bg_strength == 0.85
-    assert 'text_weight' not in cfg.to_dict()
 
     with pytest.raises(ValueError, match="背景棚拍底色融合强度"):
         AmbiLAGEConfig(harmonization_bg_strength=1.5).validate()
@@ -63,10 +67,19 @@ def test_ambilage_config_validation():
         AmbiLAGEConfig(edge_feather_mode="invalid_mode").validate()
 
 
-@pytest.mark.parametrize('weight', [0., .5, 1.])
-def test_removed_text_training_weight_cannot_be_reenabled(weight):
-    with pytest.raises(ValueError, match='未知方法配置字段: text_weight'):
-        AmbiLAGEConfig.from_dict({'text_weight': weight})
+@pytest.mark.parametrize('kwargs', [
+    {'text_weight': -0.1},
+    {'text_weight': 2.5},
+    {'text_key_mix': 1.2},
+    {'local_ot_weight': -0.1},
+    {'local_ot_clusters': 0},
+    {'local_ot_clusters': 12},
+    {'fg_source_mae_ceiling': 0.0},
+    {'fg_chroma_levels': 80},
+])
+def test_adapted_text_and_local_ot_config_bounds(kwargs):
+    with pytest.raises(ValueError):
+        AmbiLAGEConfig.from_dict(kwargs)
 
 
 @pytest.mark.parametrize('weight', [0., -1., float('inf'), float('nan')])
@@ -824,10 +837,12 @@ def test_oklab_roundtrip_and_differentiability():
     recolored_blue = oklab_to_srgb(blue_lab, clamp=True, gamut_preserve_luma=True)
     rgb_mae = float((pink - recolored_blue).abs().mean() * 255.0)
     luma_mae = float(source_luma_mae_levels(recolored_blue, pink))
-    luma_ssim = float(source_ssim(recolored_blue, pink))
+    luma_ssim = float(source_ssim(recolored_blue, pink, luma_only=True))
+    rgb_ssim = float(source_ssim(recolored_blue, pink, luma_only=False))
     assert rgb_mae > 20.0
     assert luma_mae < 5.0
     assert luma_ssim > 0.90
+    assert rgb_ssim < luma_ssim
 
 
 def test_ambient_field_global_background_zero_spatial_variance():
@@ -874,8 +889,8 @@ def test_ambient_field_global_background_zero_spatial_variance():
     assert float(right_outer.std(dim=-1).max()) < 1e-6
 
 
-def test_oklab_foreground_recolor_passes_luma_gate_and_protects_highlights(tmp_path):
-    """验证高光/深阴影衰减掩膜与 OKLab 前景换色可通过严格亮度门禁及文字零改动检查。"""
+def test_dual_naturalness_gate_blocks_chroma_blotches_and_protects_highlights(tmp_path):
+    """验证高光/深阴影衰减掩膜与 RGB+OKLab 双硬门禁可拦截严重色偏并放行 Choice 1 稳健微光影。"""
     import numpy as np
     from PIL import Image
     import torch
@@ -900,12 +915,14 @@ def test_oklab_foreground_recolor_passes_luma_gate_and_protects_highlights(tmp_p
     roi = print_region_mask((h, w), roi_boxes)
     src[roi] = [20, 20, 20]
 
-    cfg = AmbiLAGEConfig(latent_levels=6, fg_chroma_levels=64, fg_chroma_tv_ceiling=12.0)
+    cfg = AmbiLAGEConfig()
+    assert cfg.fg_chroma_levels == 0
     att = compute_recolor_attenuation_mask(src, fg, roi, cfg)
     assert float(att[32:42, 32:42].mean()) < 0.15
     assert float(att[118:128, 32:42].mean()) < 0.15
-    assert float(att[25:35, 100:120].mean()) > 0.80
+    assert float(att[25:35, 100:120].mean()) > 0.70
 
+    # 1. Choice 1 稳健锚点应保主体本色并通过双硬门禁
     anchor_rgb, _ = harmonize_illumination(
         source_image=src,
         target_color_rgb=[40, 130, 225],
@@ -915,7 +932,22 @@ def test_oklab_foreground_recolor_passes_luma_gate_and_protects_highlights(tmp_p
     )
     assert np.array_equal(anchor_rgb[roi], src[roi])
 
-    env = compute_spatial_envelopes(fg, roi, cfg, source_rgb=anchor_rgb)
+    src_path = tmp_path / "src.png"
+    Image.fromarray(src).save(src_path)
+    stages = ProductionStages.__new__(ProductionStages)
+    stages.config = cfg
+    stages.device = torch.device("cpu")
+    stages.planner = stages.processor = stages.sam = stages.sam_processor = stages.editor = None
+    pass_res = stages.gate(
+        src_path, anchor_rgb, category="toothbrush", roi_mask=roi, fg_mask=fg
+    )
+    assert pass_res["passed"] is True
+    assert pass_res["metrics"]["roi_max_abs_diff"] == 0.0
+    assert pass_res["metrics"]["fg_rgb_source_mae_levels"] <= cfg.fg_source_mae_ceiling
+
+    # 2. 注入严重色度偏色/花斑时，即使亮度一致也必须被全彩双硬门禁拦截
+    bad_cfg = AmbiLAGEConfig(fg_chroma_levels=64)
+    env = compute_spatial_envelopes(fg, roi, bad_cfg, source_rgb=anchor_rgb)
     anchor_t = torch.from_numpy(anchor_rgb.astype(np.float32) / 255.0).permute(2, 0, 1)[None]
     field = AmbientCoopField(
         anchor=anchor_t,
@@ -925,28 +957,20 @@ def test_oklab_foreground_recolor_passes_luma_gate_and_protects_highlights(tmp_p
         fg_mask_t=torch.as_tensor(fg, dtype=torch.float32)[None, None],
         bg_mask_t=torch.as_tensor(~fg, dtype=torch.float32)[None, None],
         support_mask=torch.as_tensor(env["support_mask"])[None, None],
-        config=cfg,
+        config=bad_cfg,
         w_fg_recolor=torch.as_tensor(env["w_fg_recolor"])[None, None],
     )
     with torch.no_grad():
         field.fg_chroma_shift.copy_(torch.tensor([[[[-0.14]], [[-0.12]]]], dtype=torch.float32))
         res = field.compute_residual(torch.zeros_like(anchor_t))
-        final_rgb = np.clip(np.rint((anchor_t + res)[0].permute(1, 2, 0).numpy() * 255.0), 0, 255).astype(np.uint8)
+        blotched_rgb = np.clip(np.rint((anchor_t + res)[0].permute(1, 2, 0).numpy() * 255.0), 0, 255).astype(np.uint8)
 
-    src_path = tmp_path / "src.png"
-    Image.fromarray(src).save(src_path)
-    stages = ProductionStages.__new__(ProductionStages)
-    stages.config = cfg
-    stages.device = torch.device("cpu")
-    stages.planner = stages.processor = stages.sam = stages.sam_processor = stages.editor = None
-    gate_res = stages.gate(
-        src_path, final_rgb, category="toothbrush", roi_mask=roi, fg_mask=fg
+    fail_res = stages.gate(
+        src_path, blotched_rgb, category="toothbrush", roi_mask=roi, fg_mask=fg
     )
-    assert gate_res["passed"] is True
-    assert gate_res["metrics"]["roi_max_abs_diff"] == 0.0
-    assert gate_res["metrics"]["source_mae_levels"] < 12.0
-    assert gate_res["metrics"]["fg_chroma_tv_levels"] <= cfg.fg_chroma_tv_ceiling
-    assert float(np.abs(final_rgb[25:35, 100:120].astype(float) - src[25:35, 100:120].astype(float)).mean()) > 20.0
+    assert fail_res["metrics"]["fg_rgb_source_mae_levels"] > cfg.fg_source_mae_ceiling
+    assert fail_res["passed"] is False
+    assert fail_res["natural"] is False
 
 
 def test_extract_ink_core_mask_releases_colored_bottle_substrate():

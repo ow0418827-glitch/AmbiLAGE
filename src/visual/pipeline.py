@@ -1,5 +1,5 @@
 """统一视觉生成接口与结果规约 (Unified Visual Generation Pipeline)。
-对外暴露统一的 GenerationResult 与 generate() 函数，无缝调度 ambilage 与 lucid 两种对等方法。
+对外暴露统一的 GenerationResult 与 generate() 函数，调度已登记的公开方法。
 """
 from __future__ import annotations
 
@@ -30,12 +30,13 @@ def generate(
     steps: int | None = None,
     device: str = "cuda",
     target_text: str | None = None,
-    epsilon_levels: int = 16,
+    epsilon_levels: int | None = None,
     text_weight: float = 1.0,
     allow_tf32: bool = True,
     seed: int = 42,
     config: Any = None,
     ambilage_config: Any = None,
+    visual_inception_config: Any = None,
     optimization_config: Any = None,
     surrogate_set: str | None = None,
     surrogate_config: str | Path | None = None,
@@ -44,15 +45,15 @@ def generate(
     """统一视觉生成接口。
     
     参数:
-        method: 'ambilage' 或 'lucid'
+        method: 'ambilage'、'lucid' 或 'visual_inception'
         source: 源商品图像路径
         target: 目标商品图像路径
         output_dir: 产物落盘目录
         steps: 优化步数 (ambilage 默认 250, lucid 默认 1000)
         device: 'cuda' 或 'cpu'
         target_text: 目标特点描述文本
-        epsilon_levels: 扰动预算 (仅 lucid 使用，默认 16)
-        text_weight: 文字对齐损失权重（仅 lucid 使用）
+        epsilon_levels: 像素扰动预算，原始像素默认十六级，视觉记忆植入默认八级
+        text_weight: 文字对齐损失权重（lucid 默认 1.0；ambilage 由 AmbiLAGEConfig.text_weight 控制）
         allow_tf32: 是否开启 Ampere+/L4/A100 TensorFloat-32 原生加速（T4 自动兼容跳过）
         seed: 随机种子
         config: 通用配置对象 (根据 method 自动注入)
@@ -65,6 +66,7 @@ def generate(
 
     amb_cfg = ambilage_config or (config if m == "ambilage" else None)
     opt_cfg = optimization_config or (config if m == "lucid" else None)
+    inception_cfg = visual_inception_config or (config if m == 'visual_inception' else None)
 
     img_path, meta = generate_attack(
         source=source,
@@ -76,6 +78,7 @@ def generate(
         device=device,
         optimization_config=opt_cfg,
         ambilage_config=amb_cfg,
+        visual_inception_config=inception_cfg,
         target_text=target_text,
         text_weight=text_weight,
         allow_tf32=allow_tf32,

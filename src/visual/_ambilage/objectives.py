@@ -125,6 +125,11 @@ def source_luma_mae_levels(image: torch.Tensor, source: torch.Tensor) -> torch.T
     return (luma_img - luma_src).abs().mean() * 255.0
 
 
+def source_rgb_mae_levels(image: torch.Tensor, source: torch.Tensor) -> torch.Tensor:
+    """计算标准三通道 RGB 平均绝对误差（[0, 255] 灰度级量纲）。"""
+    return (image - source).abs().mean() * 255.0
+
+
 def compute_fg_chroma_tv_levels(
     image: torch.Tensor,
     reference: torch.Tensor,
@@ -143,8 +148,8 @@ def compute_fg_chroma_tv_levels(
     return tv_h + tv_w
 
 
-def source_ssim(image: torch.Tensor, source: torch.Tensor, luma_only: bool = True) -> torch.Tensor:
-    """七像素均匀窗口、无偏样本协方差的结构相似度 (SSIM)，默认仅在 OKLab 亮度 L 上考核。"""
+def source_ssim(image: torch.Tensor, source: torch.Tensor, luma_only: bool = False) -> torch.Tensor:
+    """七像素均匀窗口、无偏样本协方差的结构相似度 (SSIM)，默认考核全彩三通道 RGB。"""
     img_in = extract_oklab_luma(image) if luma_only else image
     src_in = extract_oklab_luma(source) if luma_only else source
     img_d = img_in.double()
@@ -224,6 +229,10 @@ class PublicFullKeyObjective:
         target_feature: torch.Tensor,
         source_public_key: str,
         training_queries: Sequence[str],
+        *,
+        target_patch_tokens: torch.Tensor | None = None,
+        source_fg_mask: Any = None,
+        target_fg_mask: Any = None,
     ):
         if len(training_queries) != 1 or not isinstance(training_queries[0], str) or not training_queries[0].strip():
             raise ValueError("AmbiLAGE 优化目标严格绑定一条目标特点训练正文")
@@ -254,8 +263,21 @@ class PublicFullKeyObjective:
             raise ValueError("训练联合查询与自身公开全文键不在正半球，解析补偿教师计算无效")
         self.compensated_features = teachers.detach()
 
+        text_teachers, text_valid = compensated_targets(self.training_text_feature, self.title_feature)
+        self.text_compensated_features = text_teachers.detach()
+        self.text_compensated_valid = bool(text_valid.all())
+
+        self.source_fg_mask = source_fg_mask
+        self.target_fg_centers = None
+        if target_patch_tokens is not None:
+            from src.visual.training_objectives import extract_foreground_patch_tokens
+            from src.visual._lucid.objective import token_kmeans
+            tgt_fg = extract_foreground_patch_tokens(target_patch_tokens, target_fg_mask, threshold=0.5, min_patches=4)
+            if tgt_fg is not None:
+                self.target_fg_centers = token_kmeans(tgt_fg, clusters=4, iterations=50).detach()
+
         self.audit = {
-            "algorithm": "ambilage_public_fullkey_joint_and_analytic_compensated_image_v1",
+            "algorithm": "ambilage_public_fullkey_joint_text_fg_ot_v3",
             "source_public_key_text": source_public_key,
             "source_public_key_sha256": hashlib.sha256(source_public_key.encode("utf-8")).hexdigest(),
             "source_public_key_audit": own_audit,
@@ -274,6 +296,16 @@ class PublicFullKeyObjective:
         key = F.normalize(F.normalize(features.float(), dim=-1) + self.title_feature, dim=-1)
         return key @ self.query_features.T
 
+    def text_scores(self, features: torch.Tensor, key_mix: float = 0.60) -> torch.Tensor:
+        """独立目标特点文本对齐打分（兼容解析补偿方向保护）。"""
+        img_norm = F.normalize(features.float(), dim=-1)
+        key = F.normalize(img_norm + self.title_feature, dim=-1)
+        s_key = key @ self.training_text_feature.T
+        if self.text_compensated_valid and key_mix < 1.0:
+            s_comp = img_norm @ self.text_compensated_features.T
+            return key_mix * s_key + (1.0 - key_mix) * s_comp
+        return s_key
+
     def compensated_scores(self, features: torch.Tensor) -> torch.Tensor:
         """解析补偿特征余弦打分。"""
         return F.normalize(features.float(), dim=-1) @ self.compensated_features.T
@@ -282,13 +314,39 @@ class PublicFullKeyObjective:
         self,
         features: torch.Tensor,
         config: AmbiLAGEConfig,
+        patch_tokens: torch.Tensor | None = None,
     ) -> tuple[torch.Tensor, torch.Tensor]:
-        """计算检索效用 (结合 Softmin 保障最低召回条件)。"""
+        """计算检索效用（联合目标 + 独立文本对齐 + 前景局部特征最优传输）。"""
         s_joint = self.scores(features)
         u_joint = 0.5 * s_joint.mean() + 0.5 * softmin(s_joint.flatten(), config.temperature)
         s_comp = self.compensated_scores(features)
         u_comp = 0.5 * s_comp.mean() + 0.5 * softmin(s_comp.flatten(), config.temperature)
         total_utility = config.joint_weight * u_joint + config.compensated_weight * u_comp
+        text_w = float(getattr(config, "text_weight", 0.0))
+        if text_w > 0.0:
+            s_text = self.text_scores(features, key_mix=float(getattr(config, "text_key_mix", 0.60)))
+            u_text = 0.5 * s_text.mean() + 0.5 * softmin(s_text.flatten(), config.temperature)
+            total_utility = total_utility + text_w * u_text
+        ot_w = float(getattr(config, "local_ot_weight", 0.0))
+        if ot_w > 0.0 and patch_tokens is not None and self.target_fg_centers is not None:
+            from src.visual.training_objectives import extract_foreground_patch_tokens
+            from src.visual._lucid.objective import local_ot_similarity_from_centers
+            src_fg = extract_foreground_patch_tokens(
+                patch_tokens,
+                self.source_fg_mask,
+                threshold=float(getattr(config, "local_ot_fg_threshold", 0.50)),
+                min_patches=int(getattr(config, "local_ot_clusters", 4)),
+            )
+            if src_fg is not None:
+                ot_sim = local_ot_similarity_from_centers(
+                    src_fg,
+                    self.target_fg_centers.expand(src_fg.shape[0], -1, -1),
+                    sinkhorn_iterations=int(getattr(config, "local_ot_iterations", 50)),
+                    sinkhorn_regularization=float(getattr(config, "local_ot_sinkhorn_regularization", 0.10)),
+                    detach_transport_plan=True,
+                )
+                u_ot = 0.5 * ot_sim.mean() + 0.5 * softmin(ot_sim.flatten(), config.temperature)
+                total_utility = total_utility + ot_w * u_ot
         return total_utility, s_joint
 
     def diagnostics(self, features: torch.Tensor) -> dict[str, Any]:
@@ -307,12 +365,11 @@ def differentiable_halo(
     reference: torch.Tensor,
     fg_mask_t: torch.Tensor,
     bg_mask_t: torch.Tensor,
-    luma_only: bool = True,
+    luma_only: bool = False,
 ) -> torch.Tensor:
-    """可微前景轮廓边界光晕惩罚：度量前景外/内邻域环带上的局部亮度阶跃幅度。
+    """可微前景轮廓边界光晕惩罚：度量前景外/内邻域环带上的局部轮廓阶跃幅度。
 
-    默认在 OKLab 亮度 L 上度量轮廓光晕，避免前景合法换色与背景色温差产生虚假 RGB 阶跃；
-    全图均匀平移时局部差分严格为零。
+    默认考核三通道 RGB 轮廓光晕，及时拦截边界红蓝彩边；全图均匀平移时局部差分严格为零。
     """
     if fg_mask_t.sum() <= 0 or bg_mask_t.sum() <= 0:
         return image.sum() * 0.0
@@ -387,7 +444,7 @@ def compute_spatial_variance_penalty(
         + (fg_unit[..., :, 1:] - fg_unit[..., :, :-1]).abs().mean()
     )
     fg_l2 = fg_unit.square().sum() / fg_mask_t.sum().clamp_min(1.0)
-    fg_chroma_denom = max(float(getattr(config, "fg_chroma_levels", 64)), 1.0)
+    fg_chroma_denom = max(float(config.latent_levels), 1.0)
     fg_chroma_tv = compute_fg_chroma_tv_levels(image, anchor, fg_mask_t) / fg_chroma_denom
 
     # 2. 背景空间平滑与色度平滑 (仅惩罚方差与 TV，不惩罚整体均值平移)

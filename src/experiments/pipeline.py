@@ -236,6 +236,19 @@ def generation_definition(selection, options, method='ambilage'):
     return definition
 
 
+def visual_inception_definition(selection):
+    """从冻结公开商品特点构造基线输入，不接受正式查询。"""
+    from src.visual.target_features import extract_product_features
+    target = selection['target']
+    features = selection.get('target_product_features') or extract_product_features(target['id'])
+    if (features.get('canonical_sentence') != selected_feature_text(selection)
+            or features.get('title', target['title']) != target['title']
+            or features.get('asin', target['id']) != target['id']):
+        raise ValueError('基线公开特点与冻结目标商品身份或正文不一致')
+    return dict(target_product_features=features, target_feature_text=selected_feature_text(selection),
+                source=selection['source'], target=target)
+
+
 def load_frozen(method_root):
     from src.visual.attack_completion import validate_attack_completion
     method_root = Path(method_root)
@@ -252,7 +265,7 @@ def load_frozen(method_root):
     validate_attack_completion(frozen['metadata'], frozen['requested_steps'],
         dict(method=frozen['method'], source_image_sha256=frozen['source']['image_sha256'],
              target_image_sha256=frozen['target']['image_sha256']))
-    if frozen['method']=='ambilage' and frozen['metadata'].get('training_objective',{}).get('surrogate_selection')!=binding.get('training_surrogates'):
+    if frozen['method'] in ('ambilage', 'visual_inception') and frozen['metadata'].get('training_objective',{}).get('surrogate_selection')!=binding.get('training_surrogates'):
         raise ValueError('冻结图片的训练代理与公开运行配置不一致')
     return frozen
 
@@ -263,7 +276,7 @@ def generate(config, root, selection, method, *, device='cuda', generator=None):
     method = normalize_method(method)
     generation = config.get('generation', {})
     if set(generation) - set(METHODS):
-        raise ValueError('生成设置只能使用当前登记的两种方法')
+        raise ValueError('生成设置只能使用当前登记的方法')
     options = copy.deepcopy(generation.get(method, {}))
     feature_text = selected_feature_text(selection)
     if feature_text is None:
@@ -273,6 +286,9 @@ def generate(config, root, selection, method, *, device='cuda', generator=None):
             raise ValueError('像素方法与感知方法必须使用同一份目标商品特点文字')
         options['target_text'] = feature_text
         options.setdefault('text_weight', 1.0)
+    elif method == 'visual_inception':
+        from src.visual._visual_inception.config import VisualInceptionConfig
+        options = VisualInceptionConfig.from_dict(options).to_dict()
     output = Path(root) / 'methods' / method
     source, target = selection['source'], selection['target']
     public_binding = dict(method=method, selection_sha256=sha256_file(Path(root) / 'selection/SELECTED_PAIR.json'),
@@ -286,10 +302,13 @@ def generate(config, root, selection, method, *, device='cuda', generator=None):
                      project_path(evaluation.get('encoder_config', PRIVATE / 'evaluator.json'))]
     with catalog_training_guard(allowed_output_roots=[output, Path(root) / 'selection',
             Path(source['image']).parent, Path(target['image']).parent], private_paths=private_paths) as audit:
-        if method in NATURAL_METHODS:
-            from src.visual._ambilage.config import AmbiLAGEConfig
+        if method in (*NATURAL_METHODS, 'visual_inception'):
             from src.visual.training_surrogates import selection_from_config
-            public_binding['training_surrogates']=selection_from_config(AmbiLAGEConfig.from_dict(options)).audit()
+            if method == 'visual_inception':
+                from src.visual._visual_inception.config import VisualInceptionConfig as GenerationConfig
+            else:
+                from src.visual._ambilage.config import AmbiLAGEConfig as GenerationConfig
+            public_binding['training_surrogates']=selection_from_config(GenerationConfig.from_dict(options)).audit()
         freeze_json(output / 'PUBLIC_RUN.json', public_binding)
         if (output / 'FROZEN_IMAGE.json').exists():
             frozen = read_json(output / 'FROZEN_IMAGE.json')
@@ -306,6 +325,13 @@ def generate(config, root, selection, method, *, device='cuda', generator=None):
                 method=method, device=device, ambilage_config=options, definition=definition,
                 target_text=feature_text)
             steps = metadata.get('steps_requested', options.get('steps', 350))
+        elif method == 'visual_inception':
+            definition = visual_inception_definition(selection)
+            freeze_json(output / 'definition.json', definition)
+            steps = options['steps']
+            image, metadata = (generator or generate_attack)(source['image'], target['image'], output / 'generation',
+                method=method, device=device, visual_inception_config=options, definition=definition,
+                target_text=feature_text)
         else:
             if set(options) - {'steps', 'epsilon_levels', 'target_text', 'text_weight'}:
                 raise ValueError('像素方法生成选项含未知字段')
@@ -314,7 +340,7 @@ def generate(config, root, selection, method, *, device='cuda', generator=None):
                 method=method, device=device, **options)
         validate_attack_completion(metadata, steps, dict(method=method,
             source_image_sha256=source['image_sha256'], target_image_sha256=target['image_sha256']))
-        if method in NATURAL_METHODS and metadata.get('training_objective',{}).get('surrogate_selection')!=public_binding['training_surrogates']:
+        if method in (*NATURAL_METHODS, 'visual_inception') and metadata.get('training_objective',{}).get('surrogate_selection')!=public_binding['training_surrogates']:
             raise ValueError('实际训练代理与本次冻结选择不一致')
         final = output / 'frozen.png'
         final.parent.mkdir(parents=True, exist_ok=True)
@@ -338,13 +364,21 @@ def main(argv=None):
     parser.add_argument('--query-mode', choices=('text', 'joint'), help='正式询问采用纯文字或独立图文协议')
     parser.add_argument('--query-manifest', type=Path, help='显式复用已冻结的正式询问清单')
     parser.add_argument('--no-defense', action='store_true', help='仅运行无防御条件，不运行完整防御面板')
+    parser.add_argument('--visual-inception-config', type=Path, help='视觉记忆植入基线的独立公开配置')
     from src.visual.training_surrogates import add_surrogate_arguments,apply_surrogate_overrides
     add_surrogate_arguments(parser)
     args = parser.parse_args(argv)
     os.environ.update(HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1', TOKENIZERS_PARALLELISM='false', PYTHONDONTWRITEBYTECODE='1')
     if args.stage == 'doctor':
         from src.experiments.runtime_check import doctor
-        doctor(args.device,surrogate_set=args.surrogate_set or 'lucid',surrogate_config=args.surrogate_config)
+        profile, profile_config = args.surrogate_set or 'lucid', args.surrogate_config
+        if args.method == 'visual_inception':
+            from src.visual._visual_inception.config import VisualInceptionConfig
+            options = read_json(args.visual_inception_config) if args.visual_inception_config else {}
+            selected = apply_surrogate_overrides(VisualInceptionConfig.from_dict(options),
+                args.surrogate_set, args.surrogate_config)
+            profile, profile_config = selected.surrogate_set, selected.surrogate_config
+        doctor(args.device,surrogate_set=profile,surrogate_config=profile_config)
         return 0
     config = load_config(args.config)
     if args.query_mode is not None:
@@ -354,13 +388,20 @@ def main(argv=None):
     if args.no_defense:
         config.setdefault('evaluation', {})['defense_mode'] = 'none'
     method = normalize_method(args.method or config.get('method', 'ambilage'))
+    if args.visual_inception_config is not None:
+        if method != 'visual_inception' or args.stage not in ('generate', 'all'):
+            parser.error('视觉记忆植入配置仅用于该方法的生成或全阶段命令')
+        config.setdefault('generation', {})['visual_inception'] = read_json(args.visual_inception_config)
     if args.surrogate_set is not None or args.surrogate_config is not None:
-        if method!='ambilage' or args.stage not in ('generate','all'):
+        if method=='lucid' or args.stage not in ('generate','all'):
             parser.error('训练代理选择参数仅用于新方法的生成或全阶段命令')
-        from src.visual._ambilage.config import AmbiLAGEConfig
-        options=config.setdefault('generation',{}).get('ambilage',{})
-        selected=apply_surrogate_overrides(AmbiLAGEConfig.from_dict(options),args.surrogate_set,args.surrogate_config)
-        config['generation']['ambilage']=selected.to_dict()
+        if method == 'visual_inception':
+            from src.visual._visual_inception.config import VisualInceptionConfig as GenerationConfig
+        else:
+            from src.visual._ambilage.config import AmbiLAGEConfig as GenerationConfig
+        options=config.setdefault('generation',{}).get(method,{})
+        selected=apply_surrogate_overrides(GenerationConfig.from_dict(options),args.surrogate_set,args.surrogate_config)
+        config['generation'][method]=selected.to_dict()
     root = project_path(config.get('run_dir', OUTPUT / 'runs/default'))
     if not root.is_relative_to(OUTPUT.resolve()):
         parser.error('运行结果须置于新项目的输出目录，不得写入原项目')

@@ -74,10 +74,13 @@ def validate_ready(root,require_production=True):
         raise ValueError('冻结训练代理文件与实际训练记录不一致')
     public_objectives=training.get('public_objectives',[])
     if (training.get('kind')!=TRAINING_OBJECTIVE_KIND or len(public_objectives)!=len(selection.specs) or any(
-        p.get('query_modes')!=['multimodal_equal_weight'] or
-        p.get('query_image_weight')!=0.5 or p.get('query_text_weight')!=0.5
-        for p in public_objectives) or 'text_weight' in ready.get('config',{})):
-        raise ValueError('仅图文联合训练目标证据不完整；旧双目标产物不能作为当前成图复用')
+        'multimodal_equal_weight' not in p.get('query_modes', []) or
+        'text_only' in p.get('query_modes', []) or
+        p.get('query_image_weight')!=0.5 or p.get('query_text_weight')!=0.5 or
+        float(p.get('text_weight', -1.0)) != float(cfg.get('text_weight', 0.0)) or
+        float(p.get('local_ot_weight', -1.0)) != float(cfg.get('local_ot_weight', 0.0))
+        for p in public_objectives)):
+        raise ValueError('新版图文+独立文本+前景局部最优传输训练目标审计不完整；旧版产物不能作为当前成图复用')
     validate_loaded_surrogates(training.get('surrogates',[]),selection,
         allow_fixture=not require_production and ready.get('test_fixture') is True)
     if require_production:

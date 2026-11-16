@@ -66,7 +66,8 @@ class TinyPurifier:
 
 
 def config(**kw):
-    defaults = dict(joint_weight=1., temperature=.04, eot_enabled=False,
+    defaults = dict(joint_weight=1., text_weight=0., local_ot_weight=0.,
+                    temperature=.04, eot_enabled=False,
                     diffusion_weight=.25, seed=42,smoke_test=True,surrogate_set='lucid',surrogate_config=None)
     return SimpleNamespace(**(defaults | kw))
 
@@ -444,3 +445,136 @@ def test_sequential_ensemble_baseline_calibrated_weighting_and_uniform_floor():
     assert torch.all(weights_shifted >= floor - 1e-6)
     assert abs(float(weights_shifted.sum().item()) - 1.0) < 1e-5
     assert not torch.allclose(weights_shifted, torch.full((3,), 1.0 / 3.0), atol=1e-4)
+
+
+def test_adapted_independent_text_loss_and_compensated_branch():
+    from src.visual._ambilage.config import AmbiLAGEConfig
+    from src.visual._ambilage.smoke import TinySurrogate
+    from src.visual.robust_objectives import compensated_targets
+    from src.visual.training_objectives import PublicFullKeyObjective
+
+    class _Tok:
+        context_length = 8
+        sot_token_id = 1
+        eot_token_id = 2
+        pad_token_id = 0
+
+        def encode(self, text):
+            return [3] if text == 'target feature' else [4]
+
+    class _Model:
+        def encode_text(self, tokens):
+            rows = []
+            for row in tokens:
+                tok = int(row[1].item())
+                rows.append([0.6, 0.8, 0.0, 0.0] if tok == 3 else [1.0, 0.0, 0.0, 0.0])
+            return torch.tensor(rows, dtype=torch.float32)
+
+    class _Aligned(TinySurrogate):
+        def __init__(self):
+            super().__init__(0)
+            self.tokenizer = _Tok()
+            self.model = _Model()
+
+    surrogate = _Aligned()
+    target_feat = torch.tensor([[0.8, 0.6, 0.0, 0.0]], dtype=torch.float32)
+    cfg = AmbiLAGEConfig(compensation_weight=0.35, text_weight=0.35, text_key_mix=0.60, local_ot_weight=0.0, smoke_test=True)
+    obj = PublicFullKeyObjective(surrogate, target_feat, 'source title', 'target feature', cfg)
+    assert obj.audit['query_modes'] == ['multimodal_equal_weight', 'independent_target_text']
+    assert obj.text_compensated_valid is True
+
+    f = torch.tensor([[0.2, 0.9, 0.1, 0.3], [0.5, 0.4, 0.7, 0.1]], requires_grad=True)
+    val = obj.value(f)
+    grad = torch.autograd.grad(val, f)[0]
+    assert torch.isfinite(grad).all() and float(grad.abs().sum()) > 0.0
+
+    with torch.no_grad():
+        own = F.normalize(torch.tensor([[1.0, 0.0, 0.0, 0.0]]), dim=-1)
+        tgt_text = F.normalize(torch.tensor([[0.6, 0.8, 0.0, 0.0]]), dim=-1)
+        c_text, _ = compensated_targets(tgt_text, own)
+        f_norm = F.normalize(f.detach(), dim=-1)
+        key = F.normalize(f_norm + own, dim=-1)
+        expected_text = 0.60 * (key @ tgt_text.T) + 0.40 * (f_norm @ c_text.T)
+        torch.testing.assert_close(obj.text_scores(f.detach()), expected_text, atol=1e-6, rtol=1e-5)
+
+
+def test_masked_foreground_local_ot_strips_cls_and_ignores_background():
+    from src.visual._ambilage.config import AmbiLAGEConfig
+    from src.visual._ambilage.smoke import TinySurrogate
+    from src.visual.training_objectives import (
+        SequentialEnsembleObjective,
+        extract_foreground_patch_tokens,
+    )
+
+    class _PatchSurrogate(TinySurrogate):
+        def __init__(self):
+            super().__init__(0)
+            self.model = SimpleNamespace(
+                context_length=77,
+                encode_text=lambda tokens: torch.tensor([[1.0, 0.2, 0.2, 0.1]], dtype=torch.float32).expand(tokens.shape[0], -1),
+            )
+
+        def encode_image(self, image):
+            # 将 28x28 图像下采样为 7x7 = 49 个空间 Patch Tokens，并在位置 0 拼入 [CLS] 构成 50 个 Token
+            patches = F.adaptive_avg_pool2d(image, (7, 7))
+            spatial = torch.cat([patches, patches[:, :1]], dim=1).flatten(2).transpose(1, 2)
+            spatial = F.normalize(spatial + 0.1, dim=-1)
+            cls_tok = F.normalize(spatial.mean(dim=1, keepdim=True), dim=-1)
+            tokens_with_cls = torch.cat([cls_tok, spatial], dim=1)
+            return SimpleNamespace(global_embedding=cls_tok.squeeze(1), patch_tokens=tokens_with_cls)
+
+    class _IdPurifier:
+        config = SimpleNamespace(reverse_steps=10)
+
+        def __call__(self, image, *, seed, gradient):
+            return image
+
+        def snapshot(self):
+            return {'kind': 'identity_fixture', 'reverse_steps': 10, 'test_fixture': True}
+
+    fg = np.zeros((28, 28), dtype=bool)
+    fg[8:20, 8:20] = True
+    src_img = torch.full((1, 3, 28, 28), 0.5, dtype=torch.float32)
+    tgt_img = torch.full((1, 3, 28, 28), 0.2, dtype=torch.float32)
+    tgt_img[:, 2, 8:20, 8:20] = 0.9
+
+    model = _PatchSurrogate()
+    out = model.encode_image(src_img)
+    assert out.patch_tokens.shape == (1, 50, 4)
+    fg_tokens = extract_foreground_patch_tokens(out.patch_tokens, fg, threshold=0.5, min_patches=4)
+    assert fg_tokens is not None and 4 <= fg_tokens.shape[1] < 49
+
+    cfg_no_ot = AmbiLAGEConfig(
+        surrogate_set='custom', surrogate_config='src/visual/config/training_surrogates.custom.example.json',
+        text_weight=0.0, local_ot_weight=0.0, eot_enabled=False, smoke_test=True,
+    )
+    cfg_with_ot = AmbiLAGEConfig(
+        surrogate_set='custom', surrogate_config='src/visual/config/training_surrogates.custom.example.json',
+        text_weight=0.0, local_ot_weight=0.5, local_ot_clusters=4, local_ot_iterations=20,
+        eot_enabled=False, smoke_test=True,
+    )
+
+    from src.paths import PROJECT
+    from src.visual.training_surrogates import TrainingSurrogateSelection
+    from src.visual.encoders.spec import BackboneConfig
+    dummy_sel = TrainingSurrogateSelection(
+        'custom', (BackboneConfig('ViT-B-32', 'openai'),),
+        (PROJECT / 'src/visual/config/training_surrogates.custom.example.json').resolve(), '0' * 64,
+    )
+    ens_no = SequentialEnsembleObjective(
+        [model], tgt_img, 'source title', 'target text', cfg_no_ot,
+        purifier=_IdPurifier(), selection=dummy_sel, source_fg_mask=fg, target_fg_mask=fg,
+    )
+    ens_ot = SequentialEnsembleObjective(
+        [model], tgt_img, 'source title', 'target text', cfg_with_ot,
+        purifier=_IdPurifier(), selection=dummy_sel, source_fg_mask=fg, target_fg_mask=fg,
+    )
+    assert ens_no.objectives[0].audit['local_ot_active'] is False
+    assert ens_ot.objectives[0].audit['local_ot_active'] is True
+
+    _, _, grad_no, _ = ens_no.image_gradient(src_img, 1)
+    _, _, grad_ot, _ = ens_ot.image_gradient(src_img, 1)
+    ot_diff = (grad_ot - grad_no).abs()
+    # 纯背景角落 [0:4, 0:4] 绝不接收前景局部 OT 梯度，而中心前景区域应收到明显非零梯度
+    assert float(ot_diff[:, :, 0:4, 0:4].max()) < 1e-7
+    assert float(ot_diff[:, :, 8:20, 8:20].abs().mean()) > 1e-4

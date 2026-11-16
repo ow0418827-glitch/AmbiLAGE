@@ -374,7 +374,9 @@ def refine_ambient_coop_latent(
 
     @torch.no_grad()
     def evaluate_quality(image: torch.Tensor) -> dict[str, Any]:
-        ss = float(source_ssim(image, original_tensor))
+        rgb_ssim = float(source_ssim(image, original_tensor, luma_only=False))
+        luma_ssim = float(source_ssim(image, original_tensor, luma_only=True))
+        ss = min(rgb_ssim, luma_ssim)
         luma_mae = float(source_luma_mae_levels(image, original_tensor))
         luma_diff = (extract_oklab_luma(image) - extract_oklab_luma(original_tensor)).abs() * 255.0
         fg_luma_mae = float(luma_diff[:, :, fg_bool].mean()) if fg_bool.any() else 0.0
@@ -386,10 +388,18 @@ def refine_ambient_coop_latent(
         fg_rgb_mae = float(diff_orig[:, :, fg_bool].mean()) if fg_bool.any() else 0.0
         bg_rgb_mae = float(diff_orig[:, :, bg_bool].mean()) if bg_bool.any() else 0.0
         anchor_mae = float(diff_anchor.mean())
-        chroma_tv_ceiling = float(getattr(config, "fg_chroma_tv_ceiling", 12.0))
+        effective_mae = max(rgb_mae, luma_mae)
+        fg_mae_ceiling = max(
+            float(getattr(config, "fg_source_mae_ceiling", 10.0)),
+            float(config.source_mae_ceiling) if config.source_mae_ceiling > 30.0 else 0.0,
+        )
+        chroma_tv_ceiling = float(getattr(config, "fg_chroma_tv_ceiling", 2.5))
         return {
             "source_ssim": ss,
-            "source_mae_levels": luma_mae,
+            "rgb_source_ssim": rgb_ssim,
+            "luma_source_ssim": luma_ssim,
+            "source_mae_levels": effective_mae,
+            "luma_source_mae_levels": luma_mae,
             "fg_source_mae_levels": fg_luma_mae,
             "bg_source_mae_levels": bg_luma_mae,
             "rgb_source_mae_levels": rgb_mae,
@@ -399,7 +409,8 @@ def refine_ambient_coop_latent(
             "anchor_mae_levels": anchor_mae,
             "quality_ok": bool(
                 ss >= config.source_ssim_floor
-                and luma_mae <= config.source_mae_ceiling
+                and effective_mae <= config.source_mae_ceiling
+                and fg_rgb_mae <= fg_mae_ceiling
                 and fg_chroma_tv <= chroma_tv_ceiling
             ),
         }
@@ -506,17 +517,17 @@ def refine_ambient_coop_latent(
     # 5. 优化循环 (原生 4 阶段第 4 阶段细化，支持自适应退火与断点续跑)
     try:
         for step in range(start_step, config.steps + 1):
-            # 5.1 计算亮度 L SSIM 与亮度 L MAE 关于图像的法向量约束，准备切空间投影
+            # 5.1 计算全彩 RGB SSIM 与 RGB MAE 关于图像的法向量约束，准备切空间投影
             image_eval = compose().detach().requires_grad_(True)
             normals = []
             slacks = []
 
-            structure = source_ssim(image_eval, original_tensor)
+            structure = source_ssim(image_eval, original_tensor, luma_only=False)
             n_ssim, = torch.autograd.grad(structure, image_eval)
             normals.append(n_ssim.detach())
             slacks.append(float(structure.detach()) - config.source_ssim_floor)
 
-            mae_metric = source_luma_mae_levels(image_eval, original_tensor) / 255.0
+            mae_metric = (image_eval - original_tensor).abs().mean()
             n_mae, = torch.autograd.grad(-mae_metric, image_eval)
             normals.append(n_mae.detach())
             slacks.append(config.source_mae_ceiling / 255.0 - float(mae_metric.detach()))
@@ -728,7 +739,7 @@ def refine_ambient_coop_latent(
 
     fg_rgb_max = int(diff_anchor[fg_np].max()) if fg_np.any() else 0
     bg_max = int(diff_anchor[bg_np].max()) if bg_np.any() else 0
-    fg_chroma_budget = int(getattr(config, "fg_chroma_levels", 64))
+    fg_chroma_budget = int(getattr(config, "fg_chroma_levels", 0))
     with torch.no_grad():
         final_u8_t = torch.from_numpy((final_rgb.astype(np.float32) / 255.0).transpose(2, 0, 1).copy())[None]
         anchor_u8_t = torch.from_numpy((anchor_rgb.astype(np.float32) / 255.0).transpose(2, 0, 1).copy())[None]

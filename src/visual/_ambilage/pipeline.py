@@ -126,6 +126,7 @@ class AmbiLAGEPipeline:
                 prior_stage3_elapsed = float(saved_stage3.get('stage3_elapsed_seconds', 0.0))
                 source_rgb = read_rgb(source)
                 source_fg = np.asarray(Image.open(root / 'source_foreground.png').convert('L')) > 0
+                target_fg = np.asarray(Image.open(root / 'target_foreground.png').convert('L')) > 0
                 roi = np.asarray(Image.open(root / 'print_core.png').convert('L')) > 0
                 envelopes = compute_spatial_envelopes(source_fg, roi, self.config, source_rgb=source_rgb)
                 anchor = np.asarray(Image.open(root / 'generative_anchor.png').convert('RGB')).copy()
@@ -199,8 +200,17 @@ class AmbiLAGEPipeline:
                 vae = AmbiLAGEVae(self.device, custom_model_dir=vae_dir,
                     enable_checkpointing=self.config.enable_gradient_checkpointing)
                 effective = self.config
-            objective = SequentialEnsembleObjective(surrogates, read_tensor(target, self.device), source_public_key, target_text,
-                effective, purifier=purifier, selection=self.surrogate_selection)
+            objective = SequentialEnsembleObjective(
+                surrogates,
+                read_tensor(target, self.device),
+                source_public_key,
+                target_text,
+                effective,
+                purifier=purifier,
+                selection=self.surrogate_selection,
+                source_fg_mask=source_fg & (~roi),
+                target_fg_mask=target_fg,
+            )
             audit = objective.audit
             anchor_t = torch.tensor(anchor.transpose(2, 0, 1).copy(), device=self.device, dtype=torch.float32)[None] / 255.
             checkpoint_binding = {
@@ -276,12 +286,18 @@ def generate_ambilage(source,target,output_dir,*,definition=None,config=None,dev
         overrides['steps']=steps
     cfg=replace(cfg,**overrides);cfg.validate()
     data=definition.get('data',{})
+    explicit_print = list(definition.get('print_regions') or [])
+    src_meta = definition.get('source') or {}
+    if isinstance(src_meta, dict) and src_meta.get('text_regions'):
+        for reg in src_meta['text_regions']:
+            if reg not in explicit_print:
+                explicit_print.append(reg)
     return AmbiLAGEPipeline(cfg,device).execute(source,target,output_dir,
         target_text=target_text or (data.get('training_queries') or [None])[0],
         source_public_key=definition.get('source_public_key') or data.get('source_public_key'),
         source_title=data.get('source_title'),source_category=definition.get('source_category') or data.get('source_category'),
         source_boxes=definition.get('source_boxes'),target_boxes=definition.get('target_boxes'),
-        print_regions=definition.get('print_regions'),**kwargs)
+        print_regions=explicit_print or None,**kwargs)
 
 
 def run_attack(source,target,output_dir,*,target_text=None,steps=None,device='cuda',ambilage_config=None,

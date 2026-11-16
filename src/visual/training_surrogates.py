@@ -10,7 +10,7 @@ import re
 from src.paths import PROJECT, MODEL_ROOT, VISUAL_CONFIGS
 from src.visual.encoders.spec import BackboneConfig
 
-SURROGATE_SETS = ('lucid', 'heterogeneous4', 'custom')
+SURROGATE_SETS = ('lucid', 'heterogeneous4', 'visual_inception_paper', 'custom')
 HELD_OUT_MODELS = ('ViT-g-14', 'Alibaba-NLP/gme-Qwen2-VL-2B-Instruct')
 
 
@@ -29,6 +29,8 @@ def validate_training_specs(specs):
     if len({spec_identity(s) for s in specs}) != len(specs):
         raise ValueError('训练代理不能重复；同架构的不同预训练权重可以分别选择')
     for spec in specs:
+        # The registered ViT-bigG-14 architecture is distinct from the held-out
+        # ViT-g-14. Never shorten or case-normalize bigG into the evaluator name.
         fields = ' '.join(str(v or '') for v in asdict(spec).values()).casefold()
         if any(name in fields for name in ('vit-g-14', 'gme', 'eval_g14', 'eval_gme')):
             raise ValueError('留出评估编码器禁止参与训练')
@@ -45,11 +47,20 @@ class TrainingSurrogateSelection:
     def audit(self):
         source = self.source.relative_to(PROJECT).as_posix()
         specs = [asdict(s) for s in self.specs]
-        return dict(schema_version=1, profile=self.profile, config_source=source,
+        reference = ('current_lucid_configuration_and_loader' if self.profile == 'lucid'
+                     else 'visual_inception_paper_architectures_explicit_checkpoints'
+                     if self.profile == 'visual_inception_paper' else 'explicit_alternative')
+        audit = dict(schema_version=1, profile=self.profile, config_source=source,
                     config_sha256=self.source_sha256, specs=specs, specs_sha256=_digest(specs),
-                    comparison_reference='current_lucid_configuration_and_loader' if self.profile == 'lucid' else 'explicit_alternative',
+                    comparison_reference=reference,
                     activation_policy='pretrained_native', model_count=len(specs),
                     held_out_models=list(HELD_OUT_MODELS), downloads_during_training=False)
+        if self.profile == 'visual_inception_paper':
+            audit['paper_architectures'] = ['CLIP-ViT-L/14', 'SigLIP-SO400M-patch14-384', 'OpenCLIP-ViT-G-14']
+            audit['registered_architecture_aliases'] = {'OpenCLIP-ViT-G-14': 'ViT-bigG-14'}
+            audit['paper_exact_checkpoints_specified'] = False
+            audit['checkpoint_policy'] = 'explicit_public_pretrained_identity_not_claimed_author_checkpoint'
+        return audit
 
 
 def select_training_surrogates(profile='lucid', config_path=None):
@@ -65,7 +76,9 @@ def select_training_surrogates(profile='lucid', config_path=None):
     else:
         if config_path is not None:
             raise ValueError('内置训练代理方案不能同时指定自定义代理配置')
-        path = VISUAL_CONFIGS / ('optimization.json' if profile == 'lucid' else 'surrogates.heterogeneous4.json')
+        filenames = {'lucid': 'optimization.json', 'heterogeneous4': 'surrogates.heterogeneous4.json',
+                     'visual_inception_paper': 'surrogates.visual_inception.json'}
+        path = VISUAL_CONFIGS / filenames[profile]
     data = path.read_bytes()
     raw = json.loads(data.decode('utf-8'))
     if profile == 'custom' and set(raw) - {'schema_version', 'surrogates', 'held_out', 'allow_downloads'}:
@@ -139,8 +152,8 @@ def validate_selection_audit(audit, config):
 
 def add_surrogate_arguments(parser):
     group = parser.add_mutually_exclusive_group()
-    group.add_argument('--surrogate-set', choices=('lucid', 'heterogeneous4'),
-                       help='训练代理方案：默认复用原始像素三代理；heterogeneous4 为原四代理组合')
+    group.add_argument('--surrogate-set', choices=('lucid', 'heterogeneous4', 'visual_inception_paper'),
+                       help='训练代理方案：lucid 为原始像素三代理；heterogeneous4 为四代理组合；visual_inception_paper 为论文三代理架构')
     group.add_argument('--surrogate-config', type=Path,
                        help='项目内自定义公开训练代理配置文件；与内置方案互斥')
 

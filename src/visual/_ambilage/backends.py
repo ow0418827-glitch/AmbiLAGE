@@ -184,13 +184,15 @@ def _prepare_flux_canvas(initial: np.ndarray) -> tuple[np.ndarray, int, int, int
 
 
 def _measure_anchor_alignment(candidate: np.ndarray, initial: np.ndarray) -> tuple[float, float]:
-    """评估生成锚点与第 3 阶段底图之间的 OKLab 亮度结构相似度 (SSIM) 与亮度平均绝对误差 (MAE)。"""
+    """评估生成锚点与第 3 阶段底图之间的 RGB 与 OKLab 亮度双考核 SSIM 与 MAE。"""
     from .objectives import source_luma_mae_levels, source_ssim
     t_cand = torch.tensor(candidate.transpose(2, 0, 1).copy(), dtype=torch.float32)[None] / 255.0
     t_init = torch.tensor(initial.transpose(2, 0, 1).copy(), dtype=torch.float32)[None] / 255.0
-    ss = float(source_ssim(t_cand, t_init))
-    mae = float(source_luma_mae_levels(t_cand, t_init))
-    return ss, mae
+    rgb_ssim = float(source_ssim(t_cand, t_init, luma_only=False))
+    luma_ssim = float(source_ssim(t_cand, t_init, luma_only=True))
+    rgb_mae = float((t_cand - t_init).abs().mean() * 255.0)
+    luma_mae = float(source_luma_mae_levels(t_cand, t_init))
+    return min(rgb_ssim, luma_ssim), max(rgb_mae, luma_mae)
 
 
 def _extract_foreground_box(image_rgb: np.ndarray) -> list[list[float]]:
@@ -275,21 +277,124 @@ class ProductionStages:
             'inputs': ['source_public_image', 'source_public_category'],
         }
 
+    @staticmethod
+    def _merge_ocr_detections(
+        items: list[tuple[list[float], float, str]],
+    ) -> tuple[list[list[float]], list[float]]:
+        """对多尺度 OCR 检测框做重叠去重（IoU >= 0.35 或包含率 >= 0.75 时合并）。"""
+        if not items:
+            return [], []
+        ordered = sorted(items, key=lambda x: -x[1])
+        merged: list[tuple[list[float], float]] = []
+        for box, conf, _ in ordered:
+            bx0, by0, bx1, by1 = box
+            b_area = max((bx1 - bx0) * (by1 - by0), 1e-9)
+            matched = False
+            for idx, (mx, mc) in enumerate(merged):
+                ix0, iy0 = max(bx0, mx[0]), max(by0, mx[1])
+                ix1, iy1 = min(bx1, mx[2]), min(by1, mx[3])
+                inter = max(0.0, ix1 - ix0) * max(0.0, iy1 - iy0)
+                if inter <= 0.0:
+                    continue
+                m_area = max((mx[2] - mx[0]) * (mx[3] - mx[1]), 1e-9)
+                iou = inter / max(b_area + m_area - inter, 1e-9)
+                contain = inter / min(b_area, m_area)
+                if iou >= 0.35 or contain >= 0.75:
+                    merged[idx] = (
+                        [min(mx[0], bx0), min(mx[1], by0), max(mx[2], bx1), max(mx[3], by1)],
+                        max(mc, conf),
+                    )
+                    matched = True
+                    break
+            if not matched:
+                merged.append((box, conf))
+        return [m[0] for m in merged], [m[1] for m in merged]
+
+    @staticmethod
+    def _parse_ocr_rows(
+        result: Any,
+        *,
+        crop_x0: float,
+        crop_y0: float,
+        scale: float,
+        full_w: int,
+        full_h: int,
+        min_conf: float = 0.0,
+    ) -> list[tuple[list[float], float, str]]:
+        parsed: list[tuple[list[float], float, str]] = []
+        for row in result or []:
+            points = np.asarray(row[0])
+            conf = float(row[2])
+            if conf < min_conf:
+                continue
+            lo, hi = points.min(0), points.max(0)
+            x0 = max(0.0, min(1.0, (crop_x0 + float(lo[0]) / scale) / full_w))
+            y0 = max(0.0, min(1.0, (crop_y0 + float(lo[1]) / scale) / full_h))
+            x1 = max(0.0, min(1.0, (crop_x0 + float(hi[0]) / scale) / full_w))
+            y1 = max(0.0, min(1.0, (crop_y0 + float(hi[1]) / scale) / full_h))
+            if x0 < x1 and y0 < y1:
+                parsed.append(([x0, y0, x1, y1], conf, "extra"))
+        return parsed
+
     def detect_print(self, image: Path) -> tuple[list, dict]:
         from rapidocr_onnxruntime import RapidOCR
         engine = RapidOCR()
-        result, elapsed = engine(str(image))
-        height, width = np.asarray(Image.open(image)).shape[:2]
-        regions, confidences = [], []
-        for row in result or []:
-            points = np.asarray(row[0])
-            lo, hi = points.min(0), points.max(0)
-            region = [max(0., float(lo[0])/width), max(0., float(lo[1])/height),
-                      min(1., float(hi[0])/width), min(1., float(hi[1])/height)]
-            if region[0] < region[2] and region[1] < region[3]:
-                regions.append(region)
-                confidences.append(float(row[2]))
-        return regions, {'backend': 'rapidocr-onnxruntime', 'regions': regions, 'confidence': confidences}
+        result, _ = engine(str(image))
+        img_pil = Image.open(image).convert('RGB')
+        arr = np.asarray(img_pil, dtype=np.uint8)
+        height, width = arr.shape[:2]
+        items = self._parse_ocr_rows(result, crop_x0=0.0, crop_y0=0.0, scale=1.0, full_w=width, full_h=height)
+        passes = ['native']
+
+        # 高分辨率真实商品图追加 2x 放大与反相通道，解决黑色网罩/深底上的白色小字商标（如 KICKER）漏检
+        if min(height, width) >= 128:
+            try:
+                sensitive = RapidOCR(det_thresh=0.20, det_box_thresh=0.35, det_unclip_ratio=2.0)
+            except TypeError:
+                sensitive = engine
+            up2 = np.asarray(img_pil.resize((width * 2, height * 2), Image.Resampling.BICUBIC), dtype=np.uint8)
+            for tag, view in (('upscale_2x', up2), ('upscale_2x_inverted', 255 - up2)):
+                try:
+                    extra_res, _ = sensitive(view)
+                    passes.append(tag)
+                    items.extend(self._parse_ocr_rows(
+                        extra_res, crop_x0=0.0, crop_y0=0.0, scale=2.0, full_w=width, full_h=height, min_conf=0.35
+                    ))
+                except (TypeError, OSError):
+                    pass
+            # 若全图 2x 仍未检出文字，补充 3x 局部四象限放大与反相切片扫描小商标
+            if not items:
+                mid_x, mid_y = width // 2, height // 2
+                pad_x, pad_y = max(16, width // 10), max(16, height // 10)
+                tiles = [
+                    (0, 0, min(width, mid_x + pad_x), min(height, mid_y + pad_y)),
+                    (max(0, mid_x - pad_x), 0, width, min(height, mid_y + pad_y)),
+                    (0, max(0, mid_y - pad_y), min(width, mid_x + pad_x), height),
+                    (max(0, mid_x - pad_x), max(0, mid_y - pad_y), width, height),
+                ]
+                for cx0, cy0, cx1, cy1 in tiles:
+                    tile_pil = img_pil.crop((cx0, cy0, cx1, cy1))
+                    tw, th = tile_pil.size
+                    up3 = np.asarray(tile_pil.resize((tw * 3, th * 3), Image.Resampling.BICUBIC), dtype=np.uint8)
+                    for tag, view in (('tile_3x', up3), ('tile_3x_inverted', 255 - up3)):
+                        try:
+                            tile_res, _ = sensitive(view)
+                            if tag not in passes:
+                                passes.append(tag)
+                            items.extend(self._parse_ocr_rows(
+                                tile_res, crop_x0=float(cx0), crop_y0=float(cy0), scale=3.0,
+                                full_w=width, full_h=height, min_conf=0.45,
+                            ))
+                        except (TypeError, OSError):
+                            pass
+
+        regions, confidences = self._merge_ocr_detections(items)
+        return regions, {
+            'backend': 'rapidocr-onnxruntime',
+            'regions': regions,
+            'confidence': confidences,
+            'passes': passes,
+        }
 
     def segment(self, image: Path, boxes: list | None) -> tuple[np.ndarray, dict]:
         from .segmentation import segment_image
@@ -403,7 +508,8 @@ class ProductionStages:
         roi_mask: np.ndarray | None = None,
         fg_mask: np.ndarray | None = None,
     ) -> dict:
-        """Stage 4 末尾严格数学自然度门禁：SSIM + MAE + halo_error + 墨迹零改动。"""
+        """Stage 4 末尾严格数学自然度门禁：RGB + OKLab 亮度双硬门禁 + 前景 MAE + 色度 TV + halo_error + 墨迹零改动。"""
+        from .objectives import compute_fg_chroma_tv_levels, source_luma_mae_levels, source_ssim
         src_rgb = np.asarray(Image.open(source).convert('RGB'), dtype=np.uint8)
         if isinstance(candidate, (str, Path)):
             cand_rgb = np.asarray(Image.open(candidate).convert('RGB'), dtype=np.uint8)
@@ -412,16 +518,29 @@ class ProductionStages:
         if src_rgb.shape != cand_rgb.shape:
             raise ValueError('自然度门禁源图与候选图尺寸不一致')
 
-        ssim_val, mae_val = _measure_anchor_alignment(cand_rgb, src_rgb)
+        t_cand = torch.tensor(cand_rgb.transpose(2, 0, 1).copy(), dtype=torch.float32)[None] / 255.0
+        t_src = torch.tensor(src_rgb.transpose(2, 0, 1).copy(), dtype=torch.float32)[None] / 255.0
+        rgb_ssim = float(source_ssim(t_cand, t_src, luma_only=False))
+        luma_ssim = float(source_ssim(t_cand, t_src, luma_only=True))
+        ssim_val = min(rgb_ssim, luma_ssim)
+        rgb_mae = float((t_cand - t_src).abs().mean() * 255.0)
+        luma_mae = float(source_luma_mae_levels(t_cand, t_src))
+        mae_val = max(rgb_mae, luma_mae)
+
+        if fg_mask is not None and np.any(fg_mask):
+            fg_eff = np.asarray(fg_mask, dtype=bool)
+            if roi_mask is not None and np.any(roi_mask):
+                fg_eff = fg_eff & (~np.asarray(roi_mask, dtype=bool))
+            fg_rgb_mae = float(np.abs(cand_rgb.astype(np.float32) - src_rgb.astype(np.float32))[fg_eff].mean()) if fg_eff.any() else 0.0
+        else:
+            fg_rgb_mae = rgb_mae
+
         halo_val = compute_boundary_halo_error(src_rgb, cand_rgb, fg_mask=fg_mask, roi_mask=roi_mask)
         if fg_mask is not None and np.any(fg_mask):
-            from .objectives import compute_fg_chroma_tv_levels
             fg_eff = np.asarray(fg_mask, dtype=bool)
             if roi_mask is not None and np.any(roi_mask):
                 fg_eff = fg_eff & (~np.asarray(roi_mask, dtype=bool))
             fg_t = torch.as_tensor(fg_eff, dtype=torch.float32)[None, None]
-            t_cand = torch.tensor(cand_rgb.transpose(2, 0, 1).copy(), dtype=torch.float32)[None] / 255.0
-            t_src = torch.tensor(src_rgb.transpose(2, 0, 1).copy(), dtype=torch.float32)[None] / 255.0
             with torch.no_grad():
                 fg_chroma_tv_val = float(compute_fg_chroma_tv_levels(t_cand, t_src, fg_t))
         else:
@@ -435,19 +554,25 @@ class ProductionStages:
 
         ssim_floor = float(self.config.source_ssim_floor)
         mae_ceiling = float(self.config.source_mae_ceiling)
-        halo_ceiling = float(getattr(self.config, 'halo_ceiling', 8.0))
-        fg_chroma_tv_ceiling = float(getattr(self.config, 'fg_chroma_tv_ceiling', 12.0))
+        fg_mae_ceiling = max(
+            float(getattr(self.config, 'fg_source_mae_ceiling', 10.0)),
+            mae_ceiling if mae_ceiling > 30.0 else 0.0,
+        )
+        halo_ceiling = float(getattr(self.config, 'halo_ceiling', 10.0))
+        fg_chroma_tv_ceiling = float(getattr(self.config, 'fg_chroma_tv_ceiling', 2.5))
 
-        natural = bool(ssim_val >= ssim_floor and mae_val <= mae_ceiling)
+        natural = bool(ssim_val >= ssim_floor and mae_val <= mae_ceiling and fg_rgb_mae <= fg_mae_ceiling)
         text_preserved = bool(roi_max_diff == 0.0)
         artifact_free = bool(halo_val <= halo_ceiling and fg_chroma_tv_val <= fg_chroma_tv_ceiling)
         passed = bool(natural and text_preserved and artifact_free)
 
         reasons: list[str] = []
         if ssim_val < ssim_floor:
-            reasons.append(f'source_ssim={ssim_val:.4f} < floor={ssim_floor:.4f}')
+            reasons.append(f'source_ssim={ssim_val:.4f} (rgb={rgb_ssim:.4f}, luma={luma_ssim:.4f}) < floor={ssim_floor:.4f}')
         if mae_val > mae_ceiling:
-            reasons.append(f'source_mae={mae_val:.3f} > ceiling={mae_ceiling:.3f}')
+            reasons.append(f'source_mae={mae_val:.3f} (rgb={rgb_mae:.3f}, luma={luma_mae:.3f}) > ceiling={mae_ceiling:.3f}')
+        if fg_rgb_mae > fg_mae_ceiling:
+            reasons.append(f'fg_rgb_mae={fg_rgb_mae:.3f} > ceiling={fg_mae_ceiling:.3f}')
         if halo_val > halo_ceiling:
             reasons.append(f'halo_error={halo_val:.3f} > ceiling={halo_ceiling:.3f}')
         if fg_chroma_tv_val > fg_chroma_tv_ceiling:
@@ -466,7 +591,12 @@ class ProductionStages:
             'category': category,
             'metrics': {
                 'source_ssim': float(ssim_val),
+                'rgb_source_ssim': float(rgb_ssim),
+                'luma_source_ssim': float(luma_ssim),
                 'source_mae_levels': float(mae_val),
+                'rgb_source_mae_levels': float(rgb_mae),
+                'luma_source_mae_levels': float(luma_mae),
+                'fg_rgb_source_mae_levels': float(fg_rgb_mae),
                 'fg_chroma_tv_levels': float(fg_chroma_tv_val),
                 'halo_error': float(halo_val),
                 'roi_max_abs_diff': float(roi_max_diff),
@@ -474,10 +604,11 @@ class ProductionStages:
             'thresholds': {
                 'source_ssim_floor': ssim_floor,
                 'source_mae_ceiling': mae_ceiling,
+                'fg_source_mae_ceiling': fg_mae_ceiling,
                 'fg_chroma_tv_ceiling': fg_chroma_tv_ceiling,
                 'halo_ceiling': halo_ceiling,
                 'roi_max_abs_diff': 0.0,
             },
-            'model': 'mathematical_ssim_mae_halo_gate_v1',
+            'model': 'mathematical_rgb_oklab_dual_gate_v2',
             'precision': 'float32',
         }

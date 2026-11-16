@@ -357,32 +357,37 @@ class OpenCLIPSurrogate:
     def encode_image(self, images: torch.Tensor) -> ImageFeatures:
         normalized = self.preprocess(images)
         visual = self.model.visual
-        if not self.require_true_local_tokens:
-            # Global-only objectives intentionally do not request, fabricate, or
-            # claim patch tokens from heterogeneous visual backbones.
-            global_embedding = F.normalize(self.model.encode_image(normalized), dim=-1)
-            return ImageFeatures(global_embedding, global_embedding[:, None, :])
         if not hasattr(visual, "forward_intermediates"):
             if self.require_true_local_tokens:
                 raise RuntimeError(
                     f"代理 {self.config.name}/{self.config.pretrained} 没有局部特征接口，兼容实验已中止。"
                 )
-            global_embedding = self.model.encode_image(normalized, normalize=True)
+            global_embedding = F.normalize(self.model.encode_image(normalized), dim=-1)
             return ImageFeatures(global_embedding, global_embedding[:, None, :])
 
-        output = visual.forward_intermediates(
-            normalized,
-            indices=[-1],
-            output_fmt="NLC",
-            output_extra_tokens=True,
-        )
-        if not isinstance(output, dict):
-            raise RuntimeError("当前 open_clip_torch 返回了未知的局部特征结构。")
         try:
-            global_embedding = F.normalize(output["image_features"], dim=-1)
+            output = visual.forward_intermediates(
+                normalized,
+                indices=[-1],
+                output_fmt="NLC",
+                output_extra_tokens=True,
+            )
+            if not isinstance(output, dict):
+                raise RuntimeError("当前 open_clip_torch 返回了未知的局部特征结构。")
+            raw_feat = output.get("image_features")
+            if raw_feat is None and not self.require_true_local_tokens:
+                raw_feat = self.model.encode_image(normalized)
+            if raw_feat is None or "image_intermediates" not in output:
+                raise KeyError("缺少 image_features 或 image_intermediates")
+            global_embedding = F.normalize(raw_feat, dim=-1)
             patch_tokens = F.normalize(output["image_intermediates"][-1], dim=-1)
-        except (KeyError, IndexError, TypeError) as exc:
-            raise RuntimeError("代理模型局部特征接口缺少预期字段。") from exc
+        except (KeyError, IndexError, TypeError, RuntimeError) as exc:
+            if self.require_true_local_tokens:
+                if isinstance(exc, RuntimeError):
+                    raise
+                raise RuntimeError("代理模型局部特征接口缺少预期字段。") from exc
+            global_embedding = F.normalize(self.model.encode_image(normalized), dim=-1)
+            return ImageFeatures(global_embedding, global_embedding[:, None, :])
         if patch_tokens.ndim != 3:
             raise RuntimeError(f"代理模型局部特征形状异常：{tuple(patch_tokens.shape)}")
         if self.require_true_local_tokens and patch_tokens.shape[1] <= 1:

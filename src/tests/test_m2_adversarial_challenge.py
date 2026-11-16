@@ -298,11 +298,12 @@ def test_gradient_nan_to_num_sanitization():
 
 def test_ssim_fallback_gate_rejection(tmp_path: Path):
     """验证当步长导致 SSIM 低于阈值 (source_ssim_floor) 时，回退守门触发回滚并锁定 step 0 最佳快照。"""
-    # 构造极严格的 SSIM 门槛 (floor = 0.9999)
+    # 构造极严格的 SSIM 门槛 (floor = 0.9999) 与非零初偏置验证门禁拒绝
     cfg = AmbiLAGEConfig(
         steps=3,smoke_test=True,
         source_ssim_floor=0.9999,  # 极其严苛的门槛，任何实质扰动都无法通过
         source_mae_ceiling=50.0,
+        ambient_init_bias=0.30,
         latent_levels=6,
         background_levels=28,
         guard_backtracks=4,
@@ -323,11 +324,12 @@ def test_ssim_fallback_gate_rejection(tmp_path: Path):
 
 def test_mae_fallback_gate_rejection(tmp_path: Path):
     """验证当步长导致 MAE 高于阈值 (source_mae_ceiling) 时，回退守门触发回滚并锁定 step 0。"""
-    # 构造极严苛的 MAE 门槛 (ceiling = 0.01 灰度级)
+    # 构造极严苛的 MAE 门槛 (ceiling = 0.01 灰度级) 与非零初偏置验证门禁拒绝
     cfg = AmbiLAGEConfig(
         steps=3,smoke_test=True,
         source_ssim_floor=0.50,
         source_mae_ceiling=0.01,  # 极其严苛的 MAE 上限
+        ambient_init_bias=0.30,
         latent_levels=6,
         background_levels=28,
         guard_backtracks=4,

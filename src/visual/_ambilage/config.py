@@ -52,7 +52,7 @@ class AmbiLAGEConfig:
     # Stage 4: 大核高斯平滑滤波与色度保留率参数（锁死背景高频杂色，保留16通道主体细腻光影）
     fg_luma_smooth_sigma: float = 5.0   # 主体明度大核高斯平滑标准差
     fg_chroma_smooth_sigma: float = 9.0 # 主体色度大核高斯平滑标准差
-    fg_chroma_keep: float = 0.30        # 主体色度保留率 (抑制杂色斑块，仅保留柔光影)
+    fg_chroma_keep: float = 0.15        # 主体色度保留率 (紧缩杂色斑块，仅保留柔和微光影)
     bg_luma_smooth_sigma: float = 12.0  # 背景明度超大核高斯平滑标准差 (锁死高频斑块)
     bg_chroma_smooth_sigma: float = 16.0 # 背景色度超大核高斯平滑标准差
     bg_chroma_keep: float = 0.10        # 背景色度保留率 (锁死背景杂色通道)
@@ -75,6 +75,13 @@ class AmbiLAGEConfig:
     # 目标函数与正则化权重
     joint_weight: float = 1.0               # 图文联合检索效用整体权重
     compensation_weight: float = 0.35       # 源商品完整公开文本逆向补偿目标权重
+    text_weight: float = 0.35               # 独立目标特点文本对齐权重（突破 Modality Gap 提升 Env 1~3）
+    text_key_mix: float = 0.60              # 文本对齐中候选全键与解析补偿方向的混合比例
+    local_ot_weight: float = 0.10           # 仅限前景掩膜内部的 Sinkhorn 局部特征最优传输权重
+    local_ot_clusters: int = 4              # 前景局部特征语义聚类中心数 (3~5 类适配部件对齐)
+    local_ot_iterations: int = 50           # 局部特征聚类与 Sinkhorn 传输迭代次数
+    local_ot_sinkhorn_regularization: float = 0.10  # Sinkhorn 熵正则平滑系数
+    local_ot_fg_threshold: float = 0.50     # 前景 Patch Token 掩膜占比选中阈值
     ensemble_temperature: float = 0.20      # 跨代理相对增益软最小集成温度
     ensemble_uniform_mix: float = 0.45      # 多代理均匀保底混合比例
     surrogate_set: str = 'lucid'            # 默认与原始像素方法共用三代理
@@ -82,7 +89,7 @@ class AmbiLAGEConfig:
     compensated_weight: float = 0.5
     fg_l2_weight: float = 0.0001            # 主体微光影 L2 惩罚
     fg_tv_weight: float = 0.0004            # 主体空间全变分 (TV) 惩罚
-    fg_chroma_tv_weight: float = 0.02       # 主体 OKLab 色度平滑 (TV) 惩罚
+    fg_chroma_tv_weight: float = 0.15       # 主体 OKLab 色度平滑 (TV) 惩罚
     bg_l2_weight: float = 0.005             # 背景围绕均值偏移的空间方差惩罚 (释放柔和光影同时不惩罚整体平移)
     bg_tv_weight: float = 0.02              # 背景空间全变分 (TV) 惩罚
     bg_chroma_tv_weight: float = 0.08       # 背景色度全变分惩罚
@@ -91,30 +98,31 @@ class AmbiLAGEConfig:
     halo_soft_weight: float = 0.0001        # 兼容旧光晕软约束权重
     halo_floor: float = 12.0
     halo_ceiling: float = 10.0              # 严格数学门禁光晕误差上限
-    fg_chroma_tv_ceiling: float = 12.0      # 主体 OKLab 色度 TV 门禁上限
+    fg_chroma_tv_ceiling: float = 2.5       # 主体 OKLab 色度 TV 门禁上限
     halo_parent_multiplier: float = 1.0
     guard_backtracks: int = 8               # 回退守门最大步数
 
-    # Stage 3 & 4 前景 OKLab 锁亮度放色度换色与背景全局三维颜色参数
-    fg_chroma_levels: int = 64              # 主体 OKLab 色度通道自由度折算上限 (等价 0~255 量纲)
-    fg_chroma_limit: float = 0.16           # 主体 OKLab 全局色度平移 [1,2,1,1] 最大幅值
-    fg_luma_scale: float = 0.40             # 主体 OKLab 明度 L 锁死折算系数 (|dL| <= latent_levels/255 * scale)
-    fg_neutral_recolor_base: float = 0.45   # 中性哑光非印刷表面基础换色增益 (高饱和塑料接近 1.0)
+    # Stage 3 & 4 前景主体保本色微光影与温和影棚背景参数
+    fg_chroma_levels: int = 0               # 默认 0 = Choice 1 主体保本色与微光影 (消融可设 <= 64)
+    fg_chroma_limit: float = 0.04           # 主体 OKLab 全局色度平移 [1,2,1,1] 最大幅值 (仅 fg_chroma_levels > 0 时生效)
+    fg_luma_scale: float = 0.40             # 主体 OKLab 明度 L 约束折算系数
+    fg_neutral_recolor_base: float = 0.05   # 中性材质基础调色增益 (避免黑白灰表面被误染)
     fg_highlight_luma_knee: float = 0.88    # 高光反光中性区保护起衰减明度阈值 (OKLab L)
     fg_shadow_luma_knee: float = 0.25       # 深阴影/黑瞳孔五官特征区保护起衰减明度阈值 (OKLab L)
     bg_radial_vignette_scale: float = 0.05  # 背景低频径向暗角/光晕最大调制幅度
 
-    # 质量守门门槛 (SSIM & MAE & Halo)
-    source_ssim_floor: float = 0.78         # 最终成图结构相似度下限 (基于 OKLab 亮度 L)
-    source_mae_ceiling: float = 28.0        # 最终成图亮度平均绝对误差上限 (基于 OKLab 亮度 L)
-    anchor_ssim_floor: float = 0.72         # Stage 3 锚点线搜索结构相似度参考下限 (基于 OKLab 亮度 L)
-    anchor_mae_ceiling: float = 30.0        # Stage 3 锚点线搜索亮度平均误差参考上限
+    # 质量守门门槛 (RGB + OKLab Luma 双硬门禁)
+    source_ssim_floor: float = 0.85         # 最终成图结构相似度下限 (RGB 与 OKLab 亮度 L 取最小值)
+    source_mae_ceiling: float = 22.0        # 最终成图平均绝对误差上限 (RGB 与 OKLab 亮度 L 取最大值)
+    fg_source_mae_ceiling: float = 10.0     # 主体前景三通道 RGB 平均绝对误差硬上限 (严防前景花斑偏色)
+    anchor_ssim_floor: float = 0.85         # Stage 3 锚点线搜索结构相似度参考下限 (RGB + OKLab 亮度双考核)
+    anchor_mae_ceiling: float = 22.0        # Stage 3 锚点线搜索平均误差参考上限 (RGB + OKLab 亮度双考核)
 
     # Stage 3: 光照一致性协调、温和浅暖棚拍底色与形态学墨迹保护参数
     harmonization_smoothing_sigma: float = 12.0
     harmonization_print_ring_sigma: float = 7.0
     harmonization_selected_color_mix: float = 0.12
-    harmonization_chroma_transfer_strength: float = 0.55
+    harmonization_chroma_transfer_strength: float = 0.0
     harmonization_strength: float = 1.0
     harmonization_blend_mode: str = "matte"
     harmonization_fg_feather_pixels: float = 4.0
@@ -123,7 +131,7 @@ class AmbiLAGEConfig:
     harmonization_bg_warmth: float = 3.0
     harmonization_bg_tint_mix: float = 0.20
     harmonization_bg_feather_pixels: float = 6.0
-    ink_margin_pixels: int = 1
+    ink_margin_pixels: int = 2
     ink_closing_pixels: int = 9
     ink_local_contrast: float = 3.0
     ink_dark_luminance: float = 180.0
@@ -219,20 +227,36 @@ class AmbiLAGEConfig:
             raise ValueError("检索效用温度参数无效")
         if not (0.0 <= self.compensation_weight < 1.0):
             raise ValueError("逆向补偿目标权重 compensation_weight 必须位于 [0.0, 1.0)")
+        if not (0.0 <= self.text_weight <= 2.0):
+            raise ValueError("独立文本对齐权重 text_weight 必须位于 [0.0, 2.0]")
+        if not (0.0 <= self.text_key_mix <= 1.0):
+            raise ValueError("文本对齐全键混合比例 text_key_mix 必须位于 [0.0, 1.0]")
+        if not (0.0 <= self.local_ot_weight <= 1.0):
+            raise ValueError("局部特征 OT 权重 local_ot_weight 必须位于 [0.0, 1.0]")
+        if type(self.local_ot_clusters) is not int or not (1 <= self.local_ot_clusters <= 8):
+            raise ValueError("前景局部特征聚类数 local_ot_clusters 必须位于 [1, 8]")
+        if type(self.local_ot_iterations) is not int or not (1 <= self.local_ot_iterations <= 200):
+            raise ValueError("局部特征 OT 迭代次数 local_ot_iterations 必须位于 [1, 200]")
+        if not (0.01 <= self.local_ot_sinkhorn_regularization <= 1.0):
+            raise ValueError("Sinkhorn 正则系数 local_ot_sinkhorn_regularization 必须位于 [0.01, 1.0]")
+        if not (0.10 <= self.local_ot_fg_threshold <= 0.90):
+            raise ValueError("前景 Patch Token 掩膜阈值 local_ot_fg_threshold 必须位于 [0.10, 0.90]")
         if not (0.0 < self.ensemble_temperature <= 5.0) or not (0.0 <= self.ensemble_uniform_mix <= 1.0):
             raise ValueError("多代理集成权重参数无效")
 
         # 质量守门与正则化权重校验
         if not (0.25 <= self.source_ssim_floor < 1.0) or not (0.0 < self.source_mae_ceiling <= 128.0):
             raise ValueError("质量守门门槛无效")
+        if not (0.0 < self.fg_source_mae_ceiling <= 128.0):
+            raise ValueError("前景平均绝对误差门槛 fg_source_mae_ceiling 无效")
         if not (0.25 <= self.anchor_ssim_floor < 1.0) or not (0.0 < self.anchor_mae_ceiling <= 128.0):
             raise ValueError("锚点线搜索质量门槛无效")
         if self.halo_ceiling < 0.0:
             raise ValueError("边界光晕门禁上限 halo_ceiling 不能为负数")
         if self.fg_chroma_tv_ceiling < 0.0:
             raise ValueError("前景 OKLab 色度 TV 门禁上限 fg_chroma_tv_ceiling 不能为负数")
-        if type(self.fg_chroma_levels) is not int or not (0 <= self.fg_chroma_levels <= 128):
-            raise ValueError("前景 OKLab 色度预算 fg_chroma_levels 必须位于 [0, 128]")
+        if type(self.fg_chroma_levels) is not int or not (0 <= self.fg_chroma_levels <= 64):
+            raise ValueError("前景 OKLab 色度预算 fg_chroma_levels 必须位于 [0, 64]")
         if not (0.0 <= self.fg_chroma_limit <= 0.5):
             raise ValueError("前景 OKLab 全局色度偏移上限 fg_chroma_limit 无效")
         if not (0.0 <= self.fg_luma_scale <= 2.0):

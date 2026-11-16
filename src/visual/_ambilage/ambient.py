@@ -106,9 +106,10 @@ class AmbientCoopField(nn.Module):
             self.anchor_oklab_rebuilt = oklab_to_srgb(
                 self.anchor_lab, clamp=True, gamut_preserve_luma=True
             ).detach()
-        fg_chroma_levels = float(getattr(config, "fg_chroma_levels", 64))
-        if w_fg_recolor is not None:
-            self.fg_chroma_eps_map = (fg_chroma_levels / 255.0) * w_fg_recolor
+        fg_chroma_levels = float(getattr(config, "fg_chroma_levels", 0))
+        if w_fg_recolor is not None and fg_chroma_levels > 0.0:
+            # 将 0~255 等价色度等级换算为安全 OKLab (a, b) 半径 (0.25 系数使 64 级约等于 0.063 均匀色度半径)
+            self.fg_chroma_eps_map = (fg_chroma_levels / 255.0) * 0.25 * w_fg_recolor
         else:
             self.fg_chroma_eps_map = torch.zeros_like(eps_fg_map)
 
@@ -166,8 +167,8 @@ class AmbientCoopField(nn.Module):
         diff_chroma = diff - diff_luma
 
         # 1. 商品主体分支：
-        #    - 若提供双重掩膜 w_fg_recolor：在 OKLab 空间执行“锁亮度 L、放色度 (a, b)”换色；
-        #    - 兼容传统 8 参数调用 (w_fg_recolor=None)：保持受 eps_fg_map 严格约束的微光影分支。
+        #    - 默认 (fg_chroma_levels == 0)：Choice 1 稳健主体保本色 + 受 eps_fg_map 严格约束的微光影；
+        #    - 显式消融 (fg_chroma_levels > 0)：仅使用全局平滑色度 fg_chroma_shift（禁止局部 VAE 色度差值制造花斑）。
         if self.w_fg_recolor is not None and int(getattr(self.config, "fg_chroma_levels", 0)) > 0:
             if self.config.latent_levels > 0 and self.fg_luma_scale > 0.0:
                 fg_luma_drive = smooth_sep(diff_luma, self.fg_luma_kernel, groups=1)
@@ -176,11 +177,7 @@ class AmbientCoopField(nn.Module):
             else:
                 d_luma = torch.zeros_like(diff_luma)
 
-            fg_chroma_rgb = smooth_sep(diff_chroma, self.fg_chroma_kernel, groups=3)
-            vae_a = 0.22 * (fg_chroma_rgb[:, 0:1] - fg_chroma_rgb[:, 1:2])
-            vae_b = 0.22 * (0.5 * (fg_chroma_rgb[:, 0:1] + fg_chroma_rgb[:, 1:2]) - fg_chroma_rgb[:, 2:3])
-            ab_drive = self.fg_chroma_shift + torch.cat([vae_a, vae_b], dim=1)
-            d_ab = self.fg_chroma_eps_map * torch.tanh(ab_drive / 0.12)
+            d_ab = self.fg_chroma_eps_map * torch.tanh(self.fg_chroma_shift / 0.08)
 
             lab_new = torch.cat(
                 [self.anchor_lab[:, 0:1] + d_luma, self.anchor_lab[:, 1:3] + d_ab],

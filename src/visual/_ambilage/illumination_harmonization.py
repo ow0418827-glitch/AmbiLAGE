@@ -136,13 +136,19 @@ def _evaluate_candidate_metrics(
     candidate_rgb: np.ndarray,
     foreground: np.ndarray,
     ink_core: np.ndarray,
-) -> tuple[float, float, float]:
+) -> tuple[float, float, float, float]:
     t_cand = torch.tensor(candidate_rgb.transpose(2, 0, 1).copy(), dtype=torch.float32)[None] / 255.0
     t_src = torch.tensor(source_rgb.transpose(2, 0, 1).copy(), dtype=torch.float32)[None] / 255.0
-    ssim_val = float(source_ssim(t_cand, t_src))
-    mae_val = float(source_luma_mae_levels(t_cand, t_src))
+    rgb_ssim = float(source_ssim(t_cand, t_src, luma_only=False))
+    luma_ssim = float(source_ssim(t_cand, t_src, luma_only=True))
+    ssim_val = min(rgb_ssim, luma_ssim)
+    rgb_mae = float((t_cand - t_src).abs().mean() * 255.0)
+    luma_mae = float(source_luma_mae_levels(t_cand, t_src))
+    mae_val = max(rgb_mae, luma_mae)
+    fg_mask = np.asarray(foreground, dtype=bool)
+    fg_rgb_mae = float(np.abs(candidate_rgb.astype(np.float32) - source_rgb.astype(np.float32))[fg_mask].mean()) if fg_mask.any() else 0.0
     halo_val = compute_boundary_halo_error(source_rgb, candidate_rgb, fg_mask=foreground, roi_mask=ink_core)
-    return ssim_val, mae_val, halo_val
+    return ssim_val, mae_val, fg_rgb_mae, halo_val
 
 
 def harmonize_illumination(
@@ -182,10 +188,29 @@ def harmonize_illumination(
     substrate = context["substrate"]
     trusted = context["trusted"]
 
-    # 1. 计算源图线性空间供背景温和浅暖棚拍底色迁移使用
+    # 1. 在线性色彩空间计算源图及 Choice 1 主体微幅棚拍光影融合项
     src_lin = linear_from_srgb(source_rgb.astype(np.float64) / 255.0)
+    target_lin = linear_from_srgb(np.asarray(target_color_rgb, dtype=np.float64) / 255.0)
+    if trusted.any():
+        trusted_mean_lin = src_lin[trusted].mean(axis=0)
+    else:
+        trusted_mean_lin = src_lin[foreground].mean(axis=0) if foreground.any() else src_lin.mean(axis=(0, 1))
+    color_diff = target_lin - trusted_mean_lin
+    weight = trusted.astype(np.float64)
+    den = gaussian_filter(weight, sigma=config.harmonization_smoothing_sigma, mode="nearest")
+    smooth_diff = np.stack([
+        gaussian_filter(color_diff[c] * weight, sigma=config.harmonization_smoothing_sigma, mode="nearest")
+        / np.maximum(den, 1e-6)
+        for c in range(3)
+    ], axis=-1)
+    smooth_diff[den < 0.005] = color_diff
+    matte_corr = (
+        config.harmonization_strength
+        * config.harmonization_selected_color_mix
+        * smooth_diff
+    )
 
-    # 2. 构造主体 OKLab 锁亮度放色度协调场（叠加上高光/暗部衰减与饱和度调制）与背景温和浅暖棚拍底色场
+    # 2. 构造主体协调场与背景温和浅暖棚拍底色场
     ring_sigma = max(float(getattr(config, "harmonization_print_ring_sigma", 7.0)), 1e-4)
     ring = np.exp(-0.5 * (context["distance"] / ring_sigma) ** 2)
     fg_feather = float(getattr(config, "harmonization_fg_feather_pixels", 4.0))
@@ -203,24 +228,28 @@ def harmonize_illumination(
     spatial_gain[context["opaque"]] = 0.0
     spatial_gain[~foreground] = 0.0
 
-    recolor_att = compute_recolor_attenuation_mask(
-        source_rgb, foreground, ink_core | context["opaque"], config
-    )
-    chroma_strength = float(getattr(config, "harmonization_chroma_transfer_strength", 0.55))
-    fg_recolor_gain = spatial_gain * recolor_att * chroma_strength * config.harmonization_strength
-    fg_recolor_gain[ink_core] = 0.0
-    fg_recolor_gain[context["opaque"]] = 0.0
-    fg_recolor_gain[~foreground] = 0.0
+    chroma_strength = float(getattr(config, "harmonization_chroma_transfer_strength", 0.0))
+    use_oklab_chroma = chroma_strength > 0.0
+    if use_oklab_chroma:
+        recolor_att = compute_recolor_attenuation_mask(
+            source_rgb, foreground, ink_core | context["opaque"], config
+        )
+        fg_recolor_gain = spatial_gain * recolor_att * chroma_strength * config.harmonization_strength
+        fg_recolor_gain[ink_core] = 0.0
+        fg_recolor_gain[context["opaque"]] = 0.0
+        fg_recolor_gain[~foreground] = 0.0
 
-    src_t = torch.from_numpy((source_rgb.astype(np.float32) / 255.0).transpose(2, 0, 1).copy())[None]
-    tgt_rgb_01 = np.clip(np.asarray(target_color_rgb, dtype=np.float32) / 255.0, 0.0, 1.0)
-    tgt_t = torch.from_numpy(tgt_rgb_01.reshape(1, 3, 1, 1).copy())
-    with torch.no_grad():
-        src_lab = srgb_to_oklab(src_t)
-        tgt_lab = srgb_to_oklab(tgt_t)
-    fg_ab_delta = (tgt_lab[:, 1:3] - src_lab[:, 1:3]) * torch.from_numpy(
-        fg_recolor_gain[None, None].astype(np.float32)
-    )
+        src_t = torch.from_numpy((source_rgb.astype(np.float32) / 255.0).transpose(2, 0, 1).copy())[None]
+        tgt_rgb_01 = np.clip(np.asarray(target_color_rgb, dtype=np.float32) / 255.0, 0.0, 1.0)
+        tgt_t = torch.from_numpy(tgt_rgb_01.reshape(1, 3, 1, 1).copy())
+        with torch.no_grad():
+            src_lab = srgb_to_oklab(src_t)
+            tgt_lab = srgb_to_oklab(tgt_t)
+        fg_ab_delta = (tgt_lab[:, 1:3] - src_lab[:, 1:3]) * torch.from_numpy(
+            fg_recolor_gain[None, None].astype(np.float32)
+        )
+    else:
+        fg_field_corr = spatial_gain[..., None] * matte_corr
 
     # 背景温和浅暖棚拍底色目标：打破 255 单向截断天花板，利用视觉掩蔽藏住后续同色系柔光
     bg_strength = float(getattr(config, "harmonization_bg_strength", 0.85))
@@ -251,27 +280,35 @@ def harmonize_illumination(
     bg_corr = bg_strength * src_lin * (bg_target_lin[None, None, :] - 1.0)
     bg_field_corr = bg_gain[..., None] * bg_corr
 
-    # 3. 32 步回溯线搜索数学守门 (亮度 L SSIM + 亮度 MAE + Halo)
-    ssim_floor = max(float(getattr(config, "anchor_ssim_floor", 0.72)), float(config.source_ssim_floor))
-    mae_ceiling = min(float(getattr(config, "anchor_mae_ceiling", 30.0)), float(config.source_mae_ceiling))
+    # 3. 32 步回溯线搜索数学守门 (RGB + OKLab 亮度双硬门禁 + Halo)
+    ssim_floor = max(float(getattr(config, "anchor_ssim_floor", 0.85)), float(config.source_ssim_floor))
+    mae_ceiling = min(float(getattr(config, "anchor_mae_ceiling", 22.0)), float(config.source_mae_ceiling))
+    fg_mae_ceiling = max(
+        float(getattr(config, "fg_source_mae_ceiling", 10.0)),
+        float(config.source_mae_ceiling) if config.source_mae_ceiling > 30.0 else 0.0,
+    )
     halo_ceiling = float(getattr(config, "halo_ceiling", 10.0))
     line_steps = max(1, int(getattr(config, "anchor_steps", 32)))
 
     chosen_rgb = source_rgb.copy()
     chosen_fraction = 0.0
-    chosen_ssim, chosen_mae, chosen_halo = _evaluate_candidate_metrics(source_rgb, chosen_rgb, foreground, ink_core)
+    chosen_ssim, chosen_mae, chosen_fg_mae, chosen_halo = _evaluate_candidate_metrics(source_rgb, chosen_rgb, foreground, ink_core)
     trials: list[dict[str, Any]] = []
 
     for fraction in np.linspace(1.0, 0.0, line_steps + 1):
         frac = float(fraction)
         bg_candidate_lin = src_lin + frac * bg_field_corr
         bg_candidate_rgb = np.clip(np.rint(srgb_from_linear(bg_candidate_lin) * 255.0), 0, 255).astype(np.uint8)
-        with torch.no_grad():
-            cand_lab = torch.cat([src_lab[:, 0:1], src_lab[:, 1:3] + frac * fg_ab_delta], dim=1)
-            fg_candidate_01 = oklab_to_srgb(
-                cand_lab, clamp=True, gamut_preserve_luma=True
-            )[0].cpu().numpy().transpose(1, 2, 0)
-        fg_candidate_rgb = np.clip(np.rint(fg_candidate_01 * 255.0), 0, 255).astype(np.uint8)
+        if use_oklab_chroma:
+            with torch.no_grad():
+                cand_lab = torch.cat([src_lab[:, 0:1], src_lab[:, 1:3] + frac * fg_ab_delta], dim=1)
+                fg_candidate_01 = oklab_to_srgb(
+                    cand_lab, clamp=True, gamut_preserve_luma=True
+                )[0].cpu().numpy().transpose(1, 2, 0)
+            fg_candidate_rgb = np.clip(np.rint(fg_candidate_01 * 255.0), 0, 255).astype(np.uint8)
+        else:
+            fg_candidate_lin = src_lin + frac * fg_field_corr
+            fg_candidate_rgb = np.clip(np.rint(srgb_from_linear(fg_candidate_lin) * 255.0), 0, 255).astype(np.uint8)
         candidate_rgb = np.where(foreground[..., None], fg_candidate_rgb, bg_candidate_rgb)
         if ink_core.any():
             candidate_rgb[ink_core] = source_rgb[ink_core]
@@ -280,19 +317,25 @@ def harmonize_illumination(
         if bg_strength <= 0.0:
             candidate_rgb[~foreground] = source_rgb[~foreground]
 
-        c_ssim, c_mae, c_halo = _evaluate_candidate_metrics(source_rgb, candidate_rgb, foreground, ink_core)
-        accepted = bool(c_ssim >= ssim_floor and c_mae <= mae_ceiling and c_halo <= halo_ceiling)
+        c_ssim, c_mae, c_fg_mae, c_halo = _evaluate_candidate_metrics(source_rgb, candidate_rgb, foreground, ink_core)
+        accepted = bool(
+            c_ssim >= ssim_floor
+            and c_mae <= mae_ceiling
+            and c_fg_mae <= fg_mae_ceiling
+            and c_halo <= halo_ceiling
+        )
         trials.append({
             "fraction": frac,
             "source_ssim": c_ssim,
             "source_mae_levels": c_mae,
+            "fg_rgb_source_mae_levels": c_fg_mae,
             "halo_error": c_halo,
             "accepted": accepted,
         })
         if accepted:
             chosen_rgb = candidate_rgb
             chosen_fraction = frac
-            chosen_ssim, chosen_mae, chosen_halo = c_ssim, c_mae, c_halo
+            chosen_ssim, chosen_mae, chosen_fg_mae, chosen_halo = c_ssim, c_mae, c_fg_mae, c_halo
             break
 
     anchor_rgb = chosen_rgb
@@ -317,6 +360,7 @@ def harmonize_illumination(
         "line_search_steps": line_steps,
         "source_ssim": chosen_ssim,
         "source_mae_levels": chosen_mae,
+        "fg_rgb_source_mae_levels": chosen_fg_mae,
         "halo_error": chosen_halo,
         "ink_core_pixels": int(ink_core.sum()),
         "substrate_pixels": int(substrate.sum()),

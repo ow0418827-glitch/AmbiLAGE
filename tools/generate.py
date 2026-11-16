@@ -1,5 +1,5 @@
 """统一图像生成 CLI 命令行入口 (Unified Generation CLI Tool)。
-支持 ambilage 与 lucid 双方法，兼容 T4/L4/A100 显卡与 CPU 测试环境。
+支持登记的三种方法，兼容显卡与中央处理器测试环境。
 """
 from __future__ import annotations
 
@@ -19,13 +19,13 @@ from src.visual.pipeline import generate
 
 def parse_args(argv=None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="AmbiLAGE 统一对抗样本图像生成工具 (AmbiLAGE & Lucid)"
+        description='统一对抗样本图像生成工具'
     )
     parser.add_argument(
         "--method",
         choices=METHODS,
         default="ambilage",
-        help="生成方法身份：'ambilage' (环境光协同) 或 'lucid' (原始像素)",
+        help='生成方法：环境光协同、原始像素或视觉记忆植入',
     )
     parser.add_argument(
         "--source",
@@ -57,7 +57,7 @@ def parse_args(argv=None) -> argparse.Namespace:
         "--steps",
         type=int,
         default=None,
-        help="优化步数 (ambilage 默认 250，配合 180-250 步自适应退火与断点续跑；lucid 默认 1000)",
+        help='优化步数；环境光协同默认二百五十，原始像素默认一千，视觉记忆植入默认一百',
     )
     parser.add_argument(
         "--device",
@@ -67,14 +67,14 @@ def parse_args(argv=None) -> argparse.Namespace:
     parser.add_argument(
         "--epsilon-levels",
         type=int,
-        default=16,
-        help="像素预算扰动级别 (仅用于 lucid 方法，默认 16)",
+        default=None,
+        help='像素扰动预算；原始像素默认十六级，视觉记忆植入默认八级',
     )
     parser.add_argument(
         "--text-weight",
         type=float,
         default=1.0,
-        help="文字对齐监督权重（仅用于 lucid；ambilage 固定使用图文 0.5/0.5 联合目标）",
+        help="文字对齐监督权重（lucid 默认 1.0；ambilage 通过 --ambilage-config 设置，默认 0.35）",
     )
     parser.add_argument(
         "--allow-tf32",
@@ -105,12 +105,17 @@ def parse_args(argv=None) -> argparse.Namespace:
         help="Lucid 优化配置 JSON 路径",
     )
     parser.add_argument('--definition',help='冻结公开图对定义及源商品完整公开检索键')
+    parser.add_argument('--visual-inception-config', help='视觉记忆植入基线的配置文件路径')
     parser.add_argument('--smoke-test',action='store_true',help='显式微型夹具，仅中央处理器/六十四像素/至多三步，禁止作为正式实验输入')
     from src.visual.training_surrogates import add_surrogate_arguments
     add_surrogate_arguments(parser)
     args=parser.parse_args(argv)
-    if args.method!='ambilage' and (args.surrogate_set is not None or args.surrogate_config is not None):
+    if args.method=='lucid' and (args.surrogate_set is not None or args.surrogate_config is not None):
         parser.error('训练代理选择参数仅用于新方法；固定原始像素方法使用自己的配置')
+    if args.visual_inception_config and args.method != 'visual_inception':
+        parser.error('视觉记忆植入配置只能用于对应方法')
+    if args.ambilage_config and args.method != 'ambilage':
+        parser.error('环境光协同配置只能用于对应方法')
     return args
 
 
@@ -149,6 +154,7 @@ def main(argv=None) -> int:
         allow_tf32=args.allow_tf32,
         seed=args.seed,
         ambilage_config=amb_cfg,
+        visual_inception_config=args.visual_inception_config,
         optimization_config=args.optimization_config,
         definition=json.loads(Path(args.definition).read_text(encoding='utf-8')) if args.definition else None,
         smoke_test=args.smoke_test,

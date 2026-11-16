@@ -1,6 +1,7 @@
 """自包含基础包的分阶段串行流程；生成与正式评估隔离。"""
 from __future__ import annotations
 import argparse
+from dataclasses import replace
 import re
 from pathlib import Path
 import shutil
@@ -62,7 +63,7 @@ def public_group(base, group):
                             image=str(source), image_sha256=binding['source_sha256']),
                 target=dict(id=binding['target_id'], title=target_features['title'],
                             image=str(target), image_sha256=binding['target_sha256']),
-                target_text=feature_text, definition=definition,
+                target_text=feature_text, definition=definition, target_features=target_features,
                 selection=dict(basis=binding['selection_basis'],
                                passes_calibrated_threshold=binding['passes_calibrated_threshold'],
                                shape_similarity=binding['shape_similarity']),
@@ -73,11 +74,18 @@ def public_group(base, group):
 
 
 def generate_group(base, group, method, output, *, device='cuda', steps=None,
-                   epsilon_levels=8, ambilage_config=None,surrogate_set=None,surrogate_config=None):
+                   epsilon_levels=None, ambilage_config=None,visual_inception_config=None,
+                   surrogate_set=None,surrogate_config=None):
     from src.visual.catalog_training_guard import catalog_training_guard
     from src.visual.optimization import generate_attack
     from src.visual.attack_completion import validate_attack_completion
     from src.experiments.pipeline import source_snapshot
+    from src.visual.optimization import normalize_method
+    method = normalize_method(method)
+    if visual_inception_config is not None and method != 'visual_inception':
+        raise ValueError('视觉记忆植入配置只能用于对应方法')
+    if ambilage_config is not None and method != 'ambilage':
+        raise ValueError('环境光协同配置只能用于对应方法')
     base, root = Path(base).resolve(), Path(output).resolve()
     if not root.is_relative_to(OUTPUT.resolve()):
         raise ValueError('运行结果必须保存在当前项目输出目录')
@@ -85,7 +93,7 @@ def generate_group(base, group, method, output, *, device='cuda', steps=None,
     if method == 'lucid':
         if surrogate_set is not None or surrogate_config is not None:
             raise ValueError('训练代理选择参数用于新方法；固定原始像素对照按原记录复用')
-        if steps not in (None, 1000) or epsilon_levels != 8 or ambilage_config is not None:
+        if steps not in (None, 1000) or epsilon_levels not in (None, 8):
             raise ValueError('冻结对照只复用八除以二百五十五、完整千步的原始像素成图')
         from src.experiments.lucid_baseline_import import load_imported_baseline
         inputs = public_group(base, group)
@@ -101,15 +109,28 @@ def generate_group(base, group, method, output, *, device='cuda', steps=None,
                  base / 'query_images', base / 'evaluation_encoder.json']
     with catalog_training_guard(allowed_output_roots=[root, base / 'groups'], private_paths=protected):
         inputs = public_group(base, group)
-        from src.visual._ambilage.config import AmbiLAGEConfig
         from src.visual.training_surrogates import apply_surrogate_overrides,selection_from_config
-        if isinstance(ambilage_config,(str,Path)):
-            ambilage_config=read_json(ambilage_config)
-        effective_config=AmbiLAGEConfig.from_dict(ambilage_config) if isinstance(ambilage_config,dict) else (ambilage_config or AmbiLAGEConfig())
+        if method == 'visual_inception':
+            from src.visual._visual_inception.config import VisualInceptionConfig
+            configuration, config_type = visual_inception_config, VisualInceptionConfig
+        else:
+            from src.visual._ambilage.config import AmbiLAGEConfig
+            configuration, config_type = ambilage_config, AmbiLAGEConfig
+        if isinstance(configuration,(str,Path)):
+            configuration=read_json(configuration)
+        effective_config=config_type.from_dict(configuration) if isinstance(configuration,dict) else (configuration or config_type())
         effective_config=apply_surrogate_overrides(effective_config,surrogate_set,surrogate_config)
+        if method == 'visual_inception':
+            overrides = {}
+            if steps is not None:
+                overrides['steps'] = steps
+            if epsilon_levels is not None:
+                overrides['epsilon_levels'] = epsilon_levels
+            effective_config = replace(effective_config, **overrides)
+            effective_config = config_type.from_dict(effective_config.to_dict())
         binding = dict(method=method, group=group, public=inputs['public_binding'],
                        target_text=inputs['target_text'], steps=steps,
-                       epsilon_levels=epsilon_levels if method == 'lucid' else None,
+                       epsilon_levels=effective_config.epsilon_levels if method == 'visual_inception' else None,
                        config=effective_config.to_dict(),training_surrogates=selection_from_config(effective_config).audit())
         binding['source_files'] = source_snapshot()
         freeze_json(root / 'PUBLIC_RUN.json', binding)
@@ -127,7 +148,8 @@ def generate_group(base, group, method, output, *, device='cuda', steps=None,
         if method == 'ambilage':
             options.update(ambilage_config=effective_config, definition=inputs['definition'])
         else:
-            options['epsilon_levels'] = epsilon_levels
+            definition = dict(inputs['definition'], target_product_features=inputs['target_features'])
+            options.update(visual_inception_config=effective_config, definition=definition)
         image, metadata = generate_attack(inputs['source']['image'], inputs['target']['image'],
                                          root / 'generation', **options)
         count = metadata.get('steps_requested', metadata.get('attack', {}).get('steps_requested'))
@@ -149,13 +171,14 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('stage', choices=('generate', 'evaluate', 'verify', 'report', 'all'))
     parser.add_argument('--base', type=Path, default=EVALUATION_BASE)
-    parser.add_argument('--group', required=True, help='冻结组键，如 07_shampoo；all 表示九组')
+    parser.add_argument('--group', required=True, help='冻结组键，如 07_shampoo，或逗号分隔多组（如 06_jeans,07_shampoo,08_speaker）；all 表示九组')
     parser.add_argument('--method', choices=METHODS, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--device', choices=('cuda', 'cpu'), default='cuda')
     parser.add_argument('--steps', type=int)
-    parser.add_argument('--epsilon-levels', type=int, default=8)
+    parser.add_argument('--epsilon-levels', type=int, default=None)
     parser.add_argument('--ambilage-config', type=Path)
+    parser.add_argument('--visual-inception-config', type=Path)
     from src.visual.training_surrogates import add_surrogate_arguments
     add_surrogate_arguments(parser)
     parser.add_argument('--query-mode', choices=('text', 'joint'), default='text')
@@ -164,36 +187,63 @@ def main(argv=None):
     parser.add_argument('--evaluation-name', default='default',
                         help='独立评估目录名；不同查询模式或留出编码器使用不同名称')
     parser.add_argument('--defense-mode', choices=('none', 'panel'), default='panel')
+    parser.add_argument('--replacement-groups', choices=('all', 'selected'), default='all',
+                        help='统一修改库同时替换范围：all 为全部九组，selected 为当前选定多组子集（至少两组）')
+    parser.add_argument('--environments', choices=('single', 'standard3'), default='single',
+                        help='single 按 query-mode/manifest 单项评测；standard3 依次评测 none_text/none_feature_joint/none_vague_joint')
     args = parser.parse_args(argv)
     if args.surrogate_set is not None or args.surrogate_config is not None:
-        if args.method!='ambilage' or args.stage not in ('generate','all'):
+        if args.method=='lucid' or args.stage not in ('generate','all'):
             parser.error('训练代理选择参数仅用于新方法的生成或全阶段命令')
+    if args.visual_inception_config and args.method != 'visual_inception':
+        parser.error('视觉记忆植入配置只能用于对应方法')
+    if args.ambilage_config and args.method != 'ambilage':
+        parser.error('环境光协同配置只能用于对应方法')
+    if args.environments != 'single' and args.query_manifest is not None:
+        parser.error('standard3 多环境评测不能同时指定单个 query-manifest')
     if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]{0,63}', args.evaluation_name):
         parser.error('评估名称只允许字母、数字、横线和下划线')
     base, output = args.base.resolve(), args.output.resolve()
     if not output.is_relative_to(OUTPUT.resolve()):
         parser.error('输出目录必须位于当前项目 output 内')
     manifest = read_json(base / 'manifest.json')
-    groups = list(manifest['groups']) if args.group == 'all' else [args.group]
+    if args.group == 'all':
+        groups = list(manifest['groups'])
+    else:
+        groups = [g.strip() for g in str(args.group).split(',') if g.strip()]
+        if not groups or len(set(groups)) != len(groups):
+            parser.error('组键列表无效或存在重复')
+        unknown = [g for g in groups if g not in manifest['groups']]
+        if unknown:
+            parser.error('未知冻结组键: ' + ', '.join(unknown))
     if args.query_manifest is not None and len(groups) != 1:
         parser.error('多组运行不能共用一份正式询问清单')
     config = read_json(args.ambilage_config) if args.ambilage_config else None
+    inception_config = read_json(args.visual_inception_config) if args.visual_inception_config else None
     # 所有生成先完成并冻结，随后才进入任何一组正式评估。
     if args.stage in ('generate', 'all'):
         for group in groups:
             generate_group(base, group, args.method, output / group / args.method, device=args.device,
                            steps=args.steps, epsilon_levels=args.epsilon_levels, ambilage_config=config,
+                           visual_inception_config=inception_config,
                            surrogate_set=args.surrogate_set,surrogate_config=args.surrogate_config)
     replacement_frozens = None
     if args.stage in ('evaluate', 'all'):
+        if args.replacement_groups == 'selected':
+            if len(groups) < 2:
+                raise ValueError('同时替库至少需要选择两个已冻结分组；禁止单组隔离建立修改库')
+            replacement_keys = list(groups)
+        else:
+            replacement_keys = list(manifest['groups'])
         replacement_frozens = []
-        for key in manifest['groups']:
+        for key in replacement_keys:
             method_root = output / key / args.method
             path = method_root / 'FROZEN_IMAGE.json'
             if not path.is_file() and args.method == 'lucid':
                 generate_group(base, key, 'lucid', method_root, device=args.device)
             if not path.is_file():
-                raise ValueError('统一修改库须先完成全部九组成图并冻结，尚缺：' + key)
+                msg = '统一修改库须先完成选定多组成图并冻结，尚缺：' if args.replacement_groups == 'selected' else '统一修改库须先完成全部九组成图并冻结，尚缺：'
+                raise ValueError(msg + key)
             item = read_json(path)
             public = public_group(base, key)
             if (any(item['source'].get(k) != public['source'][k] for k in ('id', 'title', 'image_sha256'))
@@ -211,21 +261,31 @@ def main(argv=None):
                 from src.experiments.shared_evaluation import evaluate, report
                 from src.experiments.defenses import conditions
                 binding = manifest['groups'][group]
-                query_path = args.query_manifest or base / binding['query_manifest']
-                if args.query_manifest is None and sha256_file(query_path) != binding['query_manifest_sha256']:
-                    raise ValueError('基础包正式询问清单摘要不符')
                 pool = base / manifest['shared_memory']['pool_file']
                 if sha256_file(pool) != manifest['shared_memory']['pool_sha256']:
                     raise ValueError('基础包共享池摘要不符')
-                evaluate(read_json(root / 'FROZEN_IMAGE.json'), evaluation_root, pool_path=pool,
-                    query_manifest=query_path, query_mode=args.query_mode, device=args.device,
-                    source_memory_id=manifest['shared_memory']['source_mapping'][group]['source_memory_id'],
-                    selected_conditions=conditions() if args.defense_mode == 'panel' else conditions()[:1],
-                    encoder_config=args.encoder_config or base / 'evaluation_encoder.json',
-                    replacement_frozens=replacement_frozens,
-                    bank_root=output / 'shared_banks' / args.method / args.evaluation_name,
-                    memory_vector_cache_dir=output / 'memory_vectors' / args.evaluation_name)
-                report(evaluation_root)
+                if args.environments == 'standard3':
+                    env_specs = [
+                        (f"{args.evaluation_name}_none_text", 'text', base / binding['query_manifest'], True),
+                        (f"{args.evaluation_name}_none_feature_joint", 'joint', base / 'evaluation_inputs_joint' / group / 'queries.json', False),
+                        (f"{args.evaluation_name}_none_vague_joint", 'joint', base / 'evaluation_inputs_vague_joint' / group / 'queries.json', False),
+                    ]
+                else:
+                    q_path = args.query_manifest or base / binding['query_manifest']
+                    env_specs = [(args.evaluation_name, args.query_mode, q_path, args.query_manifest is None)]
+                for eval_label, q_mode, query_path, check_manifest_hash in env_specs:
+                    if check_manifest_hash and q_mode == 'text' and sha256_file(query_path) != binding['query_manifest_sha256']:
+                        raise ValueError('基础包正式询问清单摘要不符')
+                    env_root = root / 'evaluation' / eval_label
+                    evaluate(read_json(root / 'FROZEN_IMAGE.json'), env_root, pool_path=pool,
+                        query_manifest=query_path, query_mode=q_mode, device=args.device,
+                        source_memory_id=manifest['shared_memory']['source_mapping'][group]['source_memory_id'],
+                        selected_conditions=conditions() if args.defense_mode == 'panel' else conditions()[:1],
+                        encoder_config=args.encoder_config or base / 'evaluation_encoder.json',
+                        replacement_frozens=replacement_frozens,
+                        bank_root=output / 'shared_banks' / args.method / eval_label,
+                        memory_vector_cache_dir=output / 'memory_vectors' / eval_label)
+                    report(env_root)
             elif args.stage == 'verify':
                 from src.experiments.shared_evaluation import verify
                 verify(evaluation_root, device=args.device, isolated_process=True)

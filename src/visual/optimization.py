@@ -1,11 +1,9 @@
-"""两个平级公开方法的统一生成接口；完整实验先由公共筛选阶段选定图对。
-新项目仅公开保留 lucid（原始像素优化）与 ambilage（环境光协同＋主体微光影优化）。
-"""
+"""公开生成方法的统一接口；完整实验先冻结公开图对及特点。"""
 import copy
 import json
 from src.paths import ProjectPath as Path
 
-METHODS = ('lucid', 'ambilage')
+METHODS = ('lucid', 'ambilage', 'visual_inception')
 NATURAL_METHODS = ('ambilage',)
 
 
@@ -14,14 +12,15 @@ def normalize_method(method):
         raise ValueError('方法名称必须为字符串')
     m = method.lower()
     if m not in METHODS:
-        raise ValueError("方法必须是 'lucid' 或 'ambilage'")
+        raise ValueError("方法必须是 'lucid' 或 'ambilage' 或 'visual_inception'")
     return m
 
 
 def add_method_arguments(parser):
     parser.add_argument('--method', choices=METHODS, default='ambilage',
-                        help="公开生成方法身份：'lucid' 或 'ambilage'")
+                        help='公开生成方法身份：原始像素、环境光协同或视觉记忆植入')
     parser.add_argument('--ambilage-config', help='AmbiLAGE 环境光协同优化的公开训练配置')
+    parser.add_argument('--visual-inception-config', help='视觉记忆植入图片扰动基线的公开配置')
 
 
 def options_from_args(args, group=None):
@@ -31,7 +30,10 @@ def options_from_args(args, group=None):
     config = getattr(args, 'ambilage_config', None)
     if config and method != 'ambilage':
         raise ValueError('ambilage 配置只能用于 ambilage 方法')
-    return {'ambilage_config': config} if config else {}
+    inception = getattr(args, 'visual_inception_config', None)
+    if inception and method != 'visual_inception':
+        raise ValueError('视觉记忆植入配置只能用于对应方法')
+    return ({'ambilage_config': config} if config else {}) | ({'visual_inception_config': inception} if inception else {})
 
 
 def _adjacent_feature_text(target):
@@ -56,11 +58,13 @@ def _adjacent_feature_text(target):
 
 
 def generate_attack(source, target, output_dir, *, method='ambilage', steps=None,
-                    epsilon_levels=16, device='cuda', optimization_config=None,
-                    ambilage_config=None, target_text=None, text_weight=1.0,
+                    epsilon_levels=None, device='cuda', optimization_config=None,
+                    ambilage_config=None, visual_inception_config=None, target_text=None, text_weight=1.0,
                     allow_tf32=True, seed=42, definition=None, smoke_test=False,
                     surrogate_set=None,surrogate_config=None):
     method = normalize_method(method)
+    if visual_inception_config is not None and method != 'visual_inception':
+        raise ValueError('视觉记忆植入配置只能用于对应方法')
     if method == 'lucid':
         if surrogate_set is not None or surrogate_config is not None:
             raise ValueError('训练代理选择参数用于新方法；原始像素方法使用自己的冻结配置')
@@ -77,7 +81,7 @@ def generate_attack(source, target, output_dir, *, method='ambilage', steps=None
         image, metadata = generate_lucid(
             source, target, output_dir,
             optimization_config=optimization_config, steps=1000 if steps is None else steps,
-            epsilon_levels=epsilon_levels, device=device,
+            epsilon_levels=16 if epsilon_levels is None else epsilon_levels, device=device,
             target_text=target_text, text_weight=text_weight,
             allow_tf32=allow_tf32,seed=seed,smoke_test=smoke_test
         )
@@ -86,6 +90,15 @@ def generate_attack(source, target, output_dir, *, method='ambilage', steps=None
                         target_image_sha256=sha256_file(target))
         if metadata.get('text_alignment'):
             metadata['text_alignment']['source'] = 'target_product_features'
+    elif method == 'visual_inception':
+        if ambilage_config is not None or optimization_config is not None or text_weight != 1.0:
+            raise ValueError('视觉记忆植入基线须使用自己的配置和损失权重')
+        from src.visual._visual_inception.pipeline import generate_visual_inception
+        image, metadata = generate_visual_inception(source, target, output_dir,
+            config=visual_inception_config, steps=steps, epsilon_levels=epsilon_levels,
+            device=device, target_text=target_text, definition=definition,
+            allow_tf32=allow_tf32, seed=seed, smoke_test=smoke_test,
+            surrogate_set=surrogate_set, surrogate_config=surrogate_config)
     elif method == 'ambilage':
         from src.visual._ambilage.pipeline import run_attack as run_ambilage_attack
         frozen_text = _adjacent_feature_text(target)

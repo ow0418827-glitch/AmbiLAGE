@@ -151,21 +151,59 @@ def test_forging_top_level_production_flags_does_not_hide_tiny_models(tmp_path):
         validate_ready(root)
 
 
-@pytest.mark.parametrize('mutation', ['dual_kind', 'text_target', 'old_config'])
-def test_old_dual_target_evidence_cannot_be_reused_as_joint_only(tmp_path, mutation):
+@pytest.mark.parametrize('mutation', ['dual_kind', 'v2_joint_only', 'text_target', 'config_mismatch'])
+def test_legacy_evidence_cannot_be_reused_as_v3_and_rejects_tampered_config(tmp_path, mutation):
+    from src.visual.training_objectives import TRAINING_OBJECTIVE_KIND
     source, target = images(tmp_path)
     root = tmp_path / 'out'
     _, ready = AmbiLAGEPipeline(AmbiLAGEConfig(steps=1, smoke_test=True), device='cpu').execute(
         source, target, root, target_text='公开特点')
-    assert ready['training_objective']['public_objectives'][0]['query_modes'] == ['multimodal_equal_weight']
+    assert ready['training_objective']['kind'] == TRAINING_OBJECTIVE_KIND
+    assert ready['training_objective']['public_objectives'][0]['query_modes'] == [
+        'multimodal_equal_weight', 'independent_target_text'
+    ]
     for name in ('ready.json', 'metadata.json'):
         document = json.loads((root / name).read_text(encoding='utf-8'))
         if mutation == 'dual_kind':
             document['training_objective']['kind'] = 'four_proxy_sequential_public_dual_goal_v1'
+        elif mutation == 'v2_joint_only':
+            document['training_objective']['kind'] = 'sequential_public_joint_goal_v2'
         elif mutation == 'text_target':
             document['training_objective']['public_objectives'][0]['query_modes'].append('text_only')
         else:
-            document['config']['text_weight'] = .5
+            document['config']['text_weight'] = 0.99
         (root / name).write_text(json.dumps(document), encoding='utf-8')
-    with pytest.raises(ValueError, match='仅图文联合训练目标'):
+    with pytest.raises(ValueError, match='新版图文\\+独立文本\\+前景局部最优传输'):
         validate_ready(root, require_production=False)
+
+
+def test_detect_print_multiscale_and_inverted_recovers_white_on_dark_logo(tmp_path, monkeypatch):
+    import sys
+    from types import SimpleNamespace
+    from src.visual._ambilage.backends import ProductionStages
+
+    # 构建黑底白字小商标（模拟 08_speaker 网罩上的白色 KICKER 标志）
+    arr = np.zeros((160, 160, 3), dtype=np.uint8)
+    arr[120:132, 40:80] = 245
+    src_path = tmp_path / 'speaker_dark.png'
+    Image.fromarray(arr).save(src_path)
+
+    class _FakeMultiScaleOCR:
+        def __init__(self, **kwargs):
+            self.kwargs = kwargs
+
+        def __call__(self, inp):
+            if isinstance(inp, str):
+                return [], 0.01
+            # 仅反相 2x 图（平均亮度高 > 128）成功识别到位于 2x 坐标 [80, 240, 160, 264] 的标志
+            if isinstance(inp, np.ndarray) and inp.shape[:2] == (320, 320) and float(inp.mean()) > 128.0:
+                return [[[[80, 240], [160, 240], [160, 264], [80, 264]], 'KICKER', 0.91]], 0.01
+            return [], 0.01
+
+    monkeypatch.setitem(sys.modules, 'rapidocr_onnxruntime', SimpleNamespace(RapidOCR=_FakeMultiScaleOCR))
+    backend = ProductionStages.__new__(ProductionStages)
+    regions, audit = backend.detect_print(src_path)
+    assert len(regions) == 1
+    assert regions[0] == pytest.approx([40 / 160, 120 / 160, 80 / 160, 132 / 160])
+    assert 'upscale_2x_inverted' in audit['passes']
+    assert audit['confidence'] == [0.91]

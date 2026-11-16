@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "scope": "shared",
+  "group": "09_toothbrush",
+  "diagnostic_environment": "env4_feature_text_plus_target_image",
+  "query_image_is_target": true,
+  "pool_path": "/content/AmbiLAGE/resources/evaluation_base/shared_memory/shared_memory.json",
+  "pool_sha256": "bfd8964a4477b694796787ffe2fc746c5eb19a389c23c904ebccc81975cd77a8",
+  "pool_count": 189,
+  "source_memory_id": "groups9_reference_09_toothbrush_B09PNNXYJ4",
+  "frozen_image_sha256": "4387c0c9b6b1cb4686fe63223f7a1343465acc1a1e2882416ea271cc6a38727e",
+  "method": "ambilage",
+  "queries": [
+    {
+      "task_id": "feature_01",
+      "instruction": "I want to buy a toothbrush with a u-shaped design and soft silicone brush heads.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+      "query_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+    },
+    {
+      "task_id": "feature_02",
+      "instruction": "I would like to purchase a toothbrush featuring a u-shaped design and 360-degree cleaning.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+      "query_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+    },
+    {
+      "task_id": "feature_03",
+      "instruction": "Looking to buy a toothbrush with soft silicone brush heads and 360-degree cleaning.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+      "query_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+    },
+    {
+      "task_id": "feature_04",
+      "instruction": "I am looking to buy a toothbrush with a u-shaped design and soft silicone brush heads.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+      "query_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+    },
+    {
+      "task_id": "feature_05",
+      "instruction": "Please help me buy a toothbrush featuring a u-shaped design and 360-degree cleaning.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+      "query_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+    },
+    {
+      "task_id": "feature_06",
+      "instruction": "I am shopping for a toothbrush with soft silicone brush heads and 360-degree cleaning.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+      "query_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+    },
+    {
+      "task_id": "feature_07",
+      "instruction": "I would like to buy a toothbrush with a u-shaped design and soft silicone brush heads.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+      "query_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+    },
+    {
+      "task_id": "feature_08",
+      "instruction": "Help me purchase a toothbrush featuring a u-shaped design and 360-degree cleaning.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+      "query_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+    },
+    {
+      "task_id": "feature_09",
+      "instruction": "I am looking for a toothbrush with soft silicone brush heads and 360-degree cleaning.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+      "query_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+    },
+    {
+      "task_id": "feature_10",
+      "instruction": "Please find a toothbrush with a u-shaped design and soft silicone brush heads for me to buy.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+      "query_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+    },
+    {
+      "task_id": "feature_11",
+      "instruction": "I want to purchase a toothbrush featuring a u-shaped design and 360-degree cleaning.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+      "query_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+    },
+    {
+      "task_id": "feature_12",
+      "instruction": "Please help me purchase a toothbrush with soft silicone brush heads and 360-degree cleaning.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+      "query_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+    },
+    {
+      "task_id": "feature_13",
+      "instruction": "I need to buy a toothbrush with a u-shaped design and soft silicone brush heads.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+      "query_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+    },
+    {
+      "task_id": "feature_14",
+      "instruction": "I would like help finding a toothbrush featuring a u-shaped design and 360-degree cleaning.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+      "query_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+    },
+    {
+      "task_id": "feature_15",
+      "instruction": "Find me a toothbrush with soft silicone brush heads and 360-degree cleaning to purchase.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+      "query_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+    },
+    {
+      "task_id": "feature_16",
+      "instruction": "Please look for a toothbrush with a u-shaped design and soft silicone brush heads that I can buy.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+      "query_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+    },
+    {
+      "task_id": "feature_17",
+      "instruction": "I am interested in buying a toothbrush featuring a u-shaped design and 360-degree cleaning.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+      "query_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+    },
+    {
+      "task_id": "feature_18",
+      "instruction": "I would like to shop for a toothbrush with soft silicone brush heads and 360-degree cleaning.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+      "query_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+    },
+    {
+      "task_id": "feature_19",
+      "instruction": "Help me find a toothbrush with a u-shaped design and soft silicone brush heads to buy.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+      "query_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+    },
+    {
+      "task_id": "feature_20",
+      "instruction": "I am ready to purchase a toothbrush featuring a u-shaped design and 360-degree cleaning.",
+      "query_mode": "joint",
+      "query_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+      "query_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+    }
+  ],
+  "conditions": [
+    {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    }
+  ],
+  "encoder_config": "/content/AmbiLAGE/output/ambilage_v3_20261116/logs/eval_b32_matched.json",
+  "encoder_config_sha256": "025ce58154ababe29c684433136dc098a7bb1cf29888c21e912be9466c09449c",
+  "key_image_weight": 0.5,
+  "query_image_weight": 0.5,
+  "query_mode": "joint",
+  "target_image_path": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+  "target_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+}

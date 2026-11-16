@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "natural": true,
+  "text_preserved": true,
+  "artifact_free": true,
+  "reasons": [
+    "strict_mathematical_naturalness_gate_passed"
+  ],
+  "category": "outdoor speakers",
+  "metrics": {
+    "source_ssim": 0.9561579662032025,
+    "rgb_source_ssim": 0.9561579662032025,
+    "luma_source_ssim": 0.9627197001994001,
+    "source_mae_levels": 4.916074752807617,
+    "rgb_source_mae_levels": 4.916074752807617,
+    "luma_source_mae_levels": 4.820977687835693,
+    "fg_rgb_source_mae_levels": 9.334779739379883,
+    "fg_chroma_tv_levels": 1.0290906429290771,
+    "halo_error": 3.0662715435028076,
+    "roi_max_abs_diff": 0.0
+  },
+  "thresholds": {
+    "source_ssim_floor": 0.85,
+    "source_mae_ceiling": 22.0,
+    "fg_source_mae_ceiling": 10.0,
+    "fg_chroma_tv_ceiling": 2.5,
+    "halo_ceiling": 10.0,
+    "roi_max_abs_diff": 0.0
+  },
+  "model": "mathematical_rgb_oklab_dual_gate_v2",
+  "precision": "float32",
+  "candidate_sha256": "6a040289a8367e16a3a2c5f20dd588568b7584cb361d09cba72b684a44c5fa5d"
+}

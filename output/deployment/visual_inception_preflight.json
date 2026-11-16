@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-11-16T09:17:36.564224+00:00",
+  "code": {
+    "python_files_parsed": 140,
+    "model_manifest_entries": 16,
+    "private_resources_read": false
+  },
+  "resources": {
+    "entries": 189,
+    "groups": 9,
+    "queries": 180,
+    "shared_image_files": 198,
+    "path_and_hash_checks": 247,
+    "model_encoding_performed": false,
+    "selection_exceptions": [
+      "04_curtain",
+      "08_speaker"
+    ]
+  },
+  "runtime": {
+    "python": "3.11.17",
+    "platform": "Linux-6.6.159+-x86_64-with-glibc2.39",
+    "packages": {
+      "torch": "2.14.1+cu126",
+      "torchvision": "0.29.1+cu126",
+      "transformers": "5.23.0",
+      "diffusers": "0.43.0",
+      "accelerate": "1.15.0",
+      "open-clip-torch": "3.3.0",
+      "safetensors": "0.8.0",
+      "huggingface-hub": "1.33.0",
+      "rapidocr-onnxruntime": "1.4.4",
+      "scikit-image": "0.26.0",
+      "scipy": "1.17.1",
+      "sentence-transformers": "5.7.0"
+    },
+    "disk_free_gib": 178.93,
+    "cuda_available": true,
+    "cuda_device": "NVIDIA L4",
+    "vram_gib": 22.03,
+    "bf16_supported": true,
+    "recommended_dtype": "bfloat16",
+    "fp32_fallback_compatible": true
+  },
+  "training_surrogates": {
+    "schema_version": 1,
+    "profile": "visual_inception_paper",
+    "config_source": "src/visual/config/surrogates.visual_inception.json",
+    "config_sha256": "51ada2e4add4bb85084f3529b2c5430d120fc1f505966a07dd7b980d19f9ec01",
+    "specs": [
+      {
+        "name": "ViT-L-14",
+        "pretrained": "openai",
+        "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+        "weight_path": "clip_l14/open_clip_model.safetensors",
+        "tokenizer_path": null
+      },
+      {
+        "name": "ViT-SO400M-14-SigLIP-384",
+        "pretrained": "webli",
+        "hf_repo": "timm/ViT-SO400M-14-SigLIP-384",
+        "weight_path": "siglip_so400m/open_clip_model.safetensors",
+        "tokenizer_path": "siglip_so400m"
+      },
+      {
+        "name": "ViT-bigG-14",
+        "pretrained": "laion2b_s39b_b160k",
+        "hf_repo": "laion/CLIP-ViT-bigG-14-laion2B-39B-b160k",
+        "weight_path": "clip_bigG14/open_clip_model.safetensors",
+        "tokenizer_path": null
+      }
+    ],
+    "specs_sha256": "d6dd5f0bd899269caf9e169ef800196e8594c4a8fcc72bf86eca24d14e6dfdd1",
+    "comparison_reference": "visual_inception_paper_architectures_explicit_checkpoints",
+    "activation_policy": "pretrained_native",
+    "model_count": 3,
+    "held_out_models": [
+      "ViT-g-14",
+      "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+    ],
+    "downloads_during_training": false,
+    "paper_architectures": [
+      "CLIP-ViT-L/14",
+      "SigLIP-SO400M-patch14-384",
+      "OpenCLIP-ViT-G-14"
+    ],
+    "registered_architecture_aliases": {
+      "OpenCLIP-ViT-G-14": "ViT-bigG-14"
+    },
+    "paper_exact_checkpoints_specified": false,
+    "checkpoint_policy": "explicit_public_pretrained_identity_not_claimed_author_checkpoint"
+  },
+  "models": {
+    "sam2": {
+      "present": true,
+      "repo_id": "facebook/sam2.1-hiera-large",
+      "role": "segmentation",
+      "snapshot_files_verified": 7,
+      "content_hashes_verified": true
+    },
+    "editor": {
+      "present": true,
+      "repo_id": "black-forest-labs/FLUX.1-Kontext-dev",
+      "role": "stage4_16_channel_flux_vae",
+      "allow_patterns": [
+        "vae/*",
+        "model_index.json",
+        "*.md",
+        "LICENSE*"
+      ],
+      "snapshot_files_verified": 5,
+      "content_hashes_verified": true
+    },
+    "purifier": {
+      "present": true,
+      "repo_id": "stable-diffusion-v1-5/stable-diffusion-v1-5",
+      "role": "differentiable_ddim_purification",
+      "snapshot_files_verified": 20,
+      "content_hashes_verified": true
+    },
+    "clip_l14": {
+      "present": true,
+      "repo_id": "timm/vit_large_patch14_clip_224.openai",
+      "role": "training_surrogate",
+      "snapshot_files_verified": 9,
+      "content_hashes_verified": true
+    },
+    "siglip_so400m": {
+      "present": true,
+      "repo_id": "timm/ViT-SO400M-14-SigLIP-384",
+      "role": "training_surrogate",
+      "snapshot_files_verified": 6,
+      "content_hashes_verified": true
+    },
+    "clip_bigG14": {
+      "present": true,
+      "repo_id": "laion/CLIP-ViT-bigG-14-laion2B-39B-b160k",
+      "role": "visual_inception_paper_giant_training_surrogate",
+      "snapshot_files_verified": 11,
+      "content_hashes_verified": true
+    },
+    "eval_g14": {
+      "present": true,
+      "repo_id": "laion/CLIP-ViT-g-14-laion2B-s12B-b42K",
+      "role": "held_out_evaluator_only",
+      "snapshot_files_verified": 10,
+      "content_hashes_verified": true
+    },
+    "eval_gme": {
+      "present": false,
+      "repo_id": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+      "role": "held_out_evaluator_only"
+    },
+    "selection": {
+      "present": true,
+      "repo_id": "facebook/dinov2-small",
+      "role": "frozen_public_grayscale_shape_gate",
+      "snapshot_files_verified": 4,
+      "content_hashes_verified": true
+    }
+  },
+  "optional_models_skipped": [
+    "planner",
+    "planner_7b",
+    "editor_qwen"
+  ],
+  "remote_model_execution_verified": false
+}

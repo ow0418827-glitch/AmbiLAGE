@@ -1,0 +1,79 @@
+=== [09_toothbrush] Step 1/2: Generate (09_toothbrush/ambilage) at 2026-11-16T08:43:27Z ===
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  62%|██████▏   | 461/741 [00:00<00:00, 4601.39it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 4402.11it/s]
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  34%|███▎      | 249/741 [00:00<00:00, 2477.37it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 5029.67it/s]
+WARNING:root:No pretrained weights loaded for model 'ViT-B-16'. Model initialized randomly.
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+Loading weights:   0%|          | 0/196 [00:00<?, ?it/s]Loading weights: 100%|██████████| 196/196 [00:00<00:00, 2582.03it/s]
+The config attributes {'skip_prk_steps': True} were passed to DDIMInverseScheduler, but are not expected and will be ignored. Please verify your scheduler_config.json configuration file.
+AmbiLAGE 细化 [10/250] Utility=0.9227 SSIM=0.9896 MAE=11.39 LR=1.000 (Accepted=10, Rejected=0)
+AmbiLAGE 细化 [20/250] Utility=0.9295 SSIM=0.9891 MAE=11.68 LR=0.996 (Accepted=20, Rejected=0)
+AmbiLAGE 细化 [30/250] Utility=0.9324 SSIM=0.9887 MAE=11.70 LR=0.984 (Accepted=30, Rejected=0)
+AmbiLAGE 细化 [40/250] Utility=0.9351 SSIM=0.9884 MAE=11.69 LR=0.965 (Accepted=40, Rejected=0)
+AmbiLAGE 细化 [50/250] Utility=0.9381 SSIM=0.9882 MAE=11.55 LR=0.938 (Accepted=50, Rejected=0)
+AmbiLAGE 细化 [60/250] Utility=0.9427 SSIM=0.9877 MAE=11.90 LR=0.905 (Accepted=60, Rejected=0)
+AmbiLAGE 细化 [70/250] Utility=0.9427 SSIM=0.9873 MAE=11.95 LR=0.865 (Accepted=70, Rejected=0)
+AmbiLAGE 细化 [80/250] Utility=0.9456 SSIM=0.9872 MAE=11.90 LR=0.820 (Accepted=80, Rejected=0)
+AmbiLAGE 细化 [90/250] Utility=0.9474 SSIM=0.9871 MAE=11.72 LR=0.770 (Accepted=90, Rejected=0)
+AmbiLAGE 细化 [100/250] Utility=0.9503 SSIM=0.9867 MAE=11.74 LR=0.716 (Accepted=100, Rejected=0)
+AmbiLAGE 细化 [110/250] Utility=0.9509 SSIM=0.9865 MAE=11.87 LR=0.659 (Accepted=110, Rejected=0)
+AmbiLAGE 细化 [120/250] Utility=0.9514 SSIM=0.9865 MAE=11.89 LR=0.600 (Accepted=120, Rejected=0)
+AmbiLAGE 细化 [130/250] Utility=0.9506 SSIM=0.9865 MAE=11.86 LR=0.540 (Accepted=130, Rejected=0)
+AmbiLAGE 细化 [140/250] Utility=0.9523 SSIM=0.9865 MAE=11.88 LR=0.480 (Accepted=140, Rejected=0)
+AmbiLAGE 细化 [150/250] Utility=0.9512 SSIM=0.9865 MAE=11.88 LR=0.421 (Accepted=150, Rejected=0)
+AmbiLAGE 细化 [160/250] Utility=0.9511 SSIM=0.9866 MAE=11.87 LR=0.364 (Accepted=160, Rejected=0)
+AmbiLAGE 细化 [170/250] Utility=0.9514 SSIM=0.9868 MAE=11.86 LR=0.233 (Accepted=170, Rejected=0)
+AmbiLAGE 细化 [180/250] Utility=0.9507 SSIM=0.9869 MAE=11.85 LR=0.195 (Accepted=180, Rejected=0)
+AmbiLAGE 自适应退火收敛早停 [180/250] (min_steps=180, lr_scale=0.1950, best_step=140, best_sel_utility=0.9436)
+=== [09_toothbrush] Step 2/2: Evaluate Env 4 (09_toothbrush/ambilage, none defense) at 2026-11-16T08:55:17Z ===
+=== [EVAL] 09_toothbrush/ambilage/g14_none_target_joint ===
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+09_toothbrush env4 none clean: Top-3=0/20, Top-5=18/20, mean=5.10, ranks=[5, 5, 5, 5, 5, 5, 5, 5, 6, 5, 5, 4, 5, 5, 7, 5, 5, 5, 5, 5]
+09_toothbrush env4 none modified: Top-3=0/20, Top-5=20/20, mean=4.50, ranks=[5, 4, 4, 5, 5, 4, 5, 4, 4, 5, 4, 4, 5, 5, 4, 5, 5, 4, 5, 4]
+=== [EVAL] 09_toothbrush/ambilage/b32_none_target_joint ===
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+09_toothbrush env4 none clean: Top-3=5/20, Top-5=18/20, mean=4.05, ranks=[3, 4, 5, 4, 4, 4, 3, 4, 4, 3, 4, 6, 3, 4, 6, 3, 4, 5, 4, 4]
+09_toothbrush env4 none modified: Top-3=20/20, Top-5=20/20, mean=2.50, ranks=[2, 3, 3, 1, 3, 3, 2, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 1, 3]
+ENV4 EVALUATION COMPLETED AND VERIFIED: {'09_toothbrush': {'g14': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 0, 'mod_top3': 0, 'clean_top5': 18, 'mod_top5': 20, 'n_queries': 20, 'clean_mean_rank': 5.1, 'mod_mean_rank': 4.5, 'top3_gain_pp': 0.0, 'mean_rank_gain': 0.6, 'clean_range': [4, 7], 'mod_range': [4, 5], 'clean_mean_score': 0.7830134272575379, 'mod_mean_score': 0.7974903672933579, 'score_delta': 0.014476940035820007, 'clean_ranks': [5, 5, 5, 5, 5, 5, 5, 5, 6, 5, 5, 4, 5, 5, 7, 5, 5, 5, 5, 5], 'mod_ranks': [5, 4, 4, 5, 5, 4, 5, 4, 4, 5, 4, 4, 5, 5, 4, 5, 5, 4, 5, 4]}, 'b32': {'clean_top1': 0, 'mod_top1': 4, 'clean_top3': 5, 'mod_top3': 20, 'clean_top5': 18, 'mod_top5': 20, 'n_queries': 20, 'clean_mean_rank': 4.05, 'mod_mean_rank': 2.5, 'top3_gain_pp': 75.0, 'mean_rank_gain': 1.55, 'clean_range': [3, 6], 'mod_range': [1, 3], 'clean_mean_score': 0.8112514197826386, 'mod_mean_score': 0.8282981932163238, 'score_delta': 0.017046773433685214, 'clean_ranks': [3, 4, 5, 4, 4, 4, 3, 4, 4, 3, 4, 6, 3, 4, 6, 3, 4, 5, 4, 4], 'mod_ranks': [2, 3, 3, 1, 3, 3, 2, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 1, 3]}}}
+=== [06_jeans] Step 1/2: Generate (06_jeans/ambilage) at 2026-11-16T08:59:12Z ===
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  61%|██████    | 449/741 [00:00<00:00, 4480.53it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 5833.11it/s]
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  56%|█████▌    | 412/741 [00:00<00:00, 4103.50it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 5913.03it/s]
+WARNING:root:No pretrained weights loaded for model 'ViT-B-16'. Model initialized randomly.
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+Loading weights:   0%|          | 0/196 [00:00<?, ?it/s]Loading weights: 100%|██████████| 196/196 [00:00<00:00, 2840.31it/s]
+The config attributes {'skip_prk_steps': True} were passed to DDIMInverseScheduler, but are not expected and will be ignored. Please verify your scheduler_config.json configuration file.
+AmbiLAGE 细化 [10/250] Utility=0.7485 SSIM=0.9845 MAE=11.24 LR=1.000 (Accepted=10, Rejected=0)
+AmbiLAGE 细化 [20/250] Utility=0.7569 SSIM=0.9839 MAE=11.45 LR=0.996 (Accepted=20, Rejected=0)
+AmbiLAGE 细化 [30/250] Utility=0.7581 SSIM=0.9833 MAE=11.84 LR=0.984 (Accepted=30, Rejected=0)
+AmbiLAGE 细化 [40/250] Utility=0.7601 SSIM=0.9828 MAE=12.19 LR=0.965 (Accepted=40, Rejected=0)
+AmbiLAGE 细化 [50/250] Utility=0.7669 SSIM=0.9825 MAE=12.22 LR=0.938 (Accepted=50, Rejected=0)
+AmbiLAGE 细化 [60/250] Utility=0.7767 SSIM=0.9825 MAE=12.31 LR=0.905 (Accepted=60, Rejected=0)
+AmbiLAGE 细化 [70/250] Utility=0.7784 SSIM=0.9828 MAE=12.62 LR=0.865 (Accepted=70, Rejected=0)
+AmbiLAGE 细化 [80/250] Utility=0.7803 SSIM=0.9828 MAE=12.46 LR=0.820 (Accepted=80, Rejected=0)
+AmbiLAGE 细化 [90/250] Utility=0.7856 SSIM=0.9827 MAE=12.50 LR=0.770 (Accepted=90, Rejected=0)
+AmbiLAGE 细化 [100/250] Utility=0.7871 SSIM=0.9826 MAE=12.62 LR=0.716 (Accepted=100, Rejected=0)
+AmbiLAGE 细化 [110/250] Utility=0.7887 SSIM=0.9826 MAE=12.46 LR=0.659 (Accepted=110, Rejected=0)
+AmbiLAGE 细化 [120/250] Utility=0.7929 SSIM=0.9824 MAE=12.48 LR=0.600 (Accepted=120, Rejected=0)
+AmbiLAGE 细化 [130/250] Utility=0.7888 SSIM=0.9824 MAE=12.60 LR=0.540 (Accepted=130, Rejected=0)
+AmbiLAGE 细化 [140/250] Utility=0.7923 SSIM=0.9824 MAE=12.61 LR=0.480 (Accepted=140, Rejected=0)
+AmbiLAGE 细化 [150/250] Utility=0.7905 SSIM=0.9824 MAE=12.60 LR=0.316 (Accepted=150, Rejected=0)
+AmbiLAGE 细化 [160/250] Utility=0.7872 SSIM=0.9825 MAE=12.60 LR=0.273 (Accepted=160, Rejected=0)
+AmbiLAGE 细化 [170/250] Utility=0.7849 SSIM=0.9828 MAE=12.58 LR=0.174 (Accepted=170, Rejected=0)
+AmbiLAGE 细化 [180/250] Utility=0.7821 SSIM=0.9828 MAE=12.59 LR=0.146 (Accepted=180, Rejected=0)
+AmbiLAGE 自适应退火收敛早停 [180/250] (min_steps=180, lr_scale=0.1462, best_step=120, best_sel_utility=0.7822)
+=== [06_jeans] Step 2/2: Evaluate Env 4 (06_jeans/ambilage, none defense) at 2026-11-16T09:10:05Z ===
+=== [EVAL] 06_jeans/ambilage/g14_none_target_joint ===
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+06_jeans env4 none clean: Top-3=0/20, Top-5=0/20, mean=19.85, ranks=[20, 20, 20, 20, 20, 20, 19, 20, 20, 19, 20, 20, 20, 20, 20, 19, 20, 20, 20, 20]
+06_jeans env4 none modified: Top-3=0/20, Top-5=0/20, mean=18.10, ranks=[16, 18, 19, 18, 19, 19, 18, 19, 19, 17, 18, 19, 17, 18, 19, 16, 18, 19, 18, 18]
+=== [EVAL] 06_jeans/ambilage/b32_none_target_joint ===
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+06_jeans env4 none clean: Top-3=0/20, Top-5=0/20, mean=20.95, ranks=[21, 21, 20, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21]
+06_jeans env4 none modified: Top-3=0/20, Top-5=0/20, mean=20.20, ranks=[20, 20, 20, 20, 21, 20, 20, 21, 20, 20, 21, 20, 20, 20, 20, 20, 21, 20, 20, 20]
+ENV4 EVALUATION COMPLETED AND VERIFIED: {'09_toothbrush': {'g14': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 0, 'mod_top3': 0, 'clean_top5': 18, 'mod_top5': 20, 'n_queries': 20, 'clean_mean_rank': 5.1, 'mod_mean_rank': 4.5, 'top3_gain_pp': 0.0, 'mean_rank_gain': 0.6, 'clean_range': [4, 7], 'mod_range': [4, 5], 'clean_mean_score': 0.7830134272575379, 'mod_mean_score': 0.7974903672933579, 'score_delta': 0.014476940035820007, 'clean_ranks': [5, 5, 5, 5, 5, 5, 5, 5, 6, 5, 5, 4, 5, 5, 7, 5, 5, 5, 5, 5], 'mod_ranks': [5, 4, 4, 5, 5, 4, 5, 4, 4, 5, 4, 4, 5, 5, 4, 5, 5, 4, 5, 4]}, 'b32': {'clean_top1': 0, 'mod_top1': 4, 'clean_top3': 5, 'mod_top3': 20, 'clean_top5': 18, 'mod_top5': 20, 'n_queries': 20, 'clean_mean_rank': 4.05, 'mod_mean_rank': 2.5, 'top3_gain_pp': 75.0, 'mean_rank_gain': 1.55, 'clean_range': [3, 6], 'mod_range': [1, 3], 'clean_mean_score': 0.8112514197826386, 'mod_mean_score': 0.8282981932163238, 'score_delta': 0.017046773433685214, 'clean_ranks': [3, 4, 5, 4, 4, 4, 3, 4, 4, 3, 4, 6, 3, 4, 6, 3, 4, 5, 4, 4], 'mod_ranks': [2, 3, 3, 1, 3, 3, 2, 3, 3, 1, 3, 3, 3, 3, 3, 1, 3, 3, 1, 3]}}, '06_jeans': {'g14': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 0, 'mod_top3': 0, 'clean_top5': 0, 'mod_top5': 0, 'n_queries': 20, 'clean_mean_rank': 19.85, 'mod_mean_rank': 18.1, 'top3_gain_pp': 0.0, 'mean_rank_gain': 1.75, 'clean_range': [19, 20], 'mod_range': [16, 19], 'clean_mean_score': 0.6524856209754943, 'mod_mean_score': 0.6668336153030395, 'score_delta': 0.014347994327545188, 'clean_ranks': [20, 20, 20, 20, 20, 20, 19, 20, 20, 19, 20, 20, 20, 20, 20, 19, 20, 20, 20, 20], 'mod_ranks': [16, 18, 19, 18, 19, 19, 18, 19, 19, 17, 18, 19, 17, 18, 19, 16, 18, 19, 18, 18]}, 'b32': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 0, 'mod_top3': 0, 'clean_top5': 0, 'mod_top5': 0, 'n_queries': 20, 'clean_mean_rank': 20.95, 'mod_mean_rank': 20.2, 'top3_gain_pp': 0.0, 'mean_rank_gain': 0.75, 'clean_range': [20, 21], 'mod_range': [20, 21], 'clean_mean_score': 0.7316566348075867, 'mod_mean_score': 0.7539842814207077, 'score_delta': 0.022327646613121033, 'clean_ranks': [21, 21, 20, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21], 'mod_ranks': [20, 20, 20, 20, 21, 20, 20, 21, 20, 20, 21, 20, 20, 20, 20, 20, 21, 20, 20, 20]}}}
+=== 2 GROUPS (09_toothbrush, 06_jeans) COMPLETE at 2026-11-16T09:13:34Z ===

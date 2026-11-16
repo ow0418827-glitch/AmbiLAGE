@@ -1,0 +1,819 @@
+{
+  "schema_version": 1,
+  "method": "visual_inception",
+  "status": "success",
+  "test_fixture": false,
+  "production_backend": true,
+  "config": {
+    "steps": 100,
+    "epsilon_levels": 8,
+    "step_size_levels": 2,
+    "semantic_weight": 1.0,
+    "perceptual_weight": 0.1,
+    "gradient_restarts": 10,
+    "seed": 42,
+    "surrogate_set": "visual_inception_paper",
+    "surrogate_config": null,
+    "lpips_backbone_weights": null,
+    "lpips_linear_weights": null,
+    "smoke_test": false
+  },
+  "config_sha256": "c8d842e8f3458c5deda374543b48e50f4c9878ff008629be53c867be5fab86b2",
+  "seed": 42,
+  "source_image": "/content/AmbiLAGE/resources/evaluation_base/groups/08_speaker/source.jpg",
+  "source_image_sha256": "ead324b33b443daba5e0abe9c6ed59157e164d67b302f65a7661d53810be6390",
+  "target_image": "/content/AmbiLAGE/resources/evaluation_base/groups/08_speaker/target.jpg",
+  "target_image_sha256": "808882d53dd322b2a319a83f9ec29ec406cae6b93558ea98f60a5444b4eed928",
+  "output_image": "/content/AmbiLAGE/output/visual_inception_4groups_20261116/08_speaker/visual_inception/generation/adversarial.png",
+  "output_image_sha256": "bc9c9af73873a7a5aeb4c7dfe7a475868e26d159255573640db8baa3acf81c55",
+  "training_objective": {
+    "kind": "visual_inception_semantic_perceptual_no_retrieval_v1",
+    "semantic_weight": 1.0,
+    "perceptual_weight": 0.1,
+    "semantic_reduction": "mean_one_minus_cosine_across_three_public_text_templates",
+    "retrieval_loss_omitted": true,
+    "retrieval_loss_weight": 0.0,
+    "memory_denominator_implemented": false,
+    "target_image_used_for_optimization": false,
+    "target_concept_text": "I want to buy a Bluetooth speaker with water resistance and stereo sound.",
+    "semantic_targets": [
+      "I want to buy a bluetooth speaker with water resistance and stereo sound.",
+      "I would like to purchase a bluetooth speaker featuring water resistance and solar charging.",
+      "Looking to buy a bluetooth speaker with stereo sound and a rechargeable battery."
+    ],
+    "semantic_targets_sha256": "0caf0ef80c688ed1bcb65298d5a0d7dd47ae06aa2d4db24a2b8c2da58f41ff10",
+    "paper_query_distribution_reproduced": false,
+    "query_count": 3,
+    "query_template_adaptation": "user_requested_public_templates_replace_paper_future_query_sources_for_semantic_alignment",
+    "surrogate_selection": {
+      "schema_version": 1,
+      "profile": "visual_inception_paper",
+      "config_source": "src/visual/config/surrogates.visual_inception.json",
+      "config_sha256": "51ada2e4add4bb85084f3529b2c5430d120fc1f505966a07dd7b980d19f9ec01",
+      "specs": [
+        {
+          "name": "ViT-L-14",
+          "pretrained": "openai",
+          "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+          "weight_path": "clip_l14/open_clip_model.safetensors",
+          "tokenizer_path": null
+        },
+        {
+          "name": "ViT-SO400M-14-SigLIP-384",
+          "pretrained": "webli",
+          "hf_repo": "timm/ViT-SO400M-14-SigLIP-384",
+          "weight_path": "siglip_so400m/open_clip_model.safetensors",
+          "tokenizer_path": "siglip_so400m"
+        },
+        {
+          "name": "ViT-bigG-14",
+          "pretrained": "laion2b_s39b_b160k",
+          "hf_repo": "laion/CLIP-ViT-bigG-14-laion2B-39B-b160k",
+          "weight_path": "clip_bigG14/open_clip_model.safetensors",
+          "tokenizer_path": null
+        }
+      ],
+      "specs_sha256": "d6dd5f0bd899269caf9e169ef800196e8594c4a8fcc72bf86eca24d14e6dfdd1",
+      "comparison_reference": "visual_inception_paper_architectures_explicit_checkpoints",
+      "activation_policy": "pretrained_native",
+      "model_count": 3,
+      "held_out_models": [
+        "ViT-g-14",
+        "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+      ],
+      "downloads_during_training": false,
+      "paper_architectures": [
+        "CLIP-ViT-L/14",
+        "SigLIP-SO400M-patch14-384",
+        "OpenCLIP-ViT-G-14"
+      ],
+      "registered_architecture_aliases": {
+        "OpenCLIP-ViT-G-14": "ViT-bigG-14"
+      },
+      "paper_exact_checkpoints_specified": false,
+      "checkpoint_policy": "explicit_public_pretrained_identity_not_claimed_author_checkpoint"
+    }
+  },
+  "semantic_target_audit": {
+    "category": "bluetooth speaker",
+    "core_attributes": [
+      "water resistance",
+      "stereo sound",
+      "solar charging",
+      "a rechargeable battery"
+    ],
+    "canonical_text": "I want to buy a Bluetooth speaker with water resistance and stereo sound.",
+    "canonical_text_sha256": "57d5b33c49163d274124fa95ac712ef8b73d7c03883a59e1e18210238f5c3844",
+    "semantic_texts": [
+      "I want to buy a bluetooth speaker with water resistance and stereo sound.",
+      "I would like to purchase a bluetooth speaker featuring water resistance and solar charging.",
+      "Looking to buy a bluetooth speaker with stereo sound and a rechargeable battery."
+    ],
+    "template_canonical_text": "I want to buy a bluetooth speaker with water resistance and stereo sound.",
+    "template_canonical_text_sha256": "e647bf193706f720d970892bea0c523fee9f1e873dce96c344e489a6ce4eb5a5",
+    "semantic_text_sha256": [
+      "e647bf193706f720d970892bea0c523fee9f1e873dce96c344e489a6ce4eb5a5",
+      "5dc4beb0c8d2d5f251ffbc10f856a0a7a738ce69798606c3775e10c8839929d7",
+      "e875eba12aa42df9c203ab1af46d9f08230908a8104a070dbd50aa3f67aabf8c"
+    ],
+    "semantic_targets_sha256": "0caf0ef80c688ed1bcb65298d5a0d7dd47ae06aa2d4db24a2b8c2da58f41ff10",
+    "template": "public_three_buyer_intent_templates_v1",
+    "distinct_query_count": 3,
+    "canonical_template_consistency": "casefold_comparison_preserve_frozen_canonical_bytes",
+    "query_sampling": "three_fixed_public_templates_no_100_query_padding",
+    "paper_query_distribution_reproduced": false,
+    "adaptation": "user_requested_public_templates_replace_paper_future_query_sources_for_semantic_alignment",
+    "retrieval_loss_omitted": true,
+    "target_image_used_for_optimization": false,
+    "source_image": {
+      "path": "/content/AmbiLAGE/resources/evaluation_base/groups/08_speaker/source.jpg",
+      "sha256": "ead324b33b443daba5e0abe9c6ed59157e164d67b302f65a7661d53810be6390"
+    },
+    "target_image": {
+      "path": "/content/AmbiLAGE/resources/evaluation_base/groups/08_speaker/target.jpg",
+      "sha256": "808882d53dd322b2a319a83f9ec29ec406cae6b93558ea98f60a5444b4eed928"
+    },
+    "provenance": [
+      "/content/AmbiLAGE/resources/evaluation_base/groups/08_speaker/features.json",
+      "explicit_definition"
+    ],
+    "frozen_files": [
+      {
+        "path": "/content/AmbiLAGE/resources/evaluation_base/groups/08_speaker/definition.json",
+        "sha256": "62f0fc958bd5c272b68b54ecb09f0526a1156cc6cc423aac26efb9c5d2800ffb"
+      },
+      {
+        "path": "/content/AmbiLAGE/resources/evaluation_base/groups/08_speaker/features.json",
+        "sha256": "a14a4c52c137639e02fe3121a156089375344dc971fc7b04441f45af0dab8678"
+      }
+    ],
+    "explicit_definition_sha256": "c8cd3b7a89987b161be6526b2309f813ccfd394462295a16df4f5bfecaf370fd",
+    "audit_sha256": "fc91f0a42ffc9cca4d770b226f90b4739c4562cdd505662dec0d049363636f30"
+  },
+  "surrogate_selection": {
+    "schema_version": 1,
+    "profile": "visual_inception_paper",
+    "config_source": "src/visual/config/surrogates.visual_inception.json",
+    "config_sha256": "51ada2e4add4bb85084f3529b2c5430d120fc1f505966a07dd7b980d19f9ec01",
+    "specs": [
+      {
+        "name": "ViT-L-14",
+        "pretrained": "openai",
+        "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+        "weight_path": "clip_l14/open_clip_model.safetensors",
+        "tokenizer_path": null
+      },
+      {
+        "name": "ViT-SO400M-14-SigLIP-384",
+        "pretrained": "webli",
+        "hf_repo": "timm/ViT-SO400M-14-SigLIP-384",
+        "weight_path": "siglip_so400m/open_clip_model.safetensors",
+        "tokenizer_path": "siglip_so400m"
+      },
+      {
+        "name": "ViT-bigG-14",
+        "pretrained": "laion2b_s39b_b160k",
+        "hf_repo": "laion/CLIP-ViT-bigG-14-laion2B-39B-b160k",
+        "weight_path": "clip_bigG14/open_clip_model.safetensors",
+        "tokenizer_path": null
+      }
+    ],
+    "specs_sha256": "d6dd5f0bd899269caf9e169ef800196e8594c4a8fcc72bf86eca24d14e6dfdd1",
+    "comparison_reference": "visual_inception_paper_architectures_explicit_checkpoints",
+    "activation_policy": "pretrained_native",
+    "model_count": 3,
+    "held_out_models": [
+      "ViT-g-14",
+      "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+    ],
+    "downloads_during_training": false,
+    "paper_architectures": [
+      "CLIP-ViT-L/14",
+      "SigLIP-SO400M-patch14-384",
+      "OpenCLIP-ViT-G-14"
+    ],
+    "registered_architecture_aliases": {
+      "OpenCLIP-ViT-G-14": "ViT-bigG-14"
+    },
+    "paper_exact_checkpoints_specified": false,
+    "checkpoint_policy": "explicit_public_pretrained_identity_not_claimed_author_checkpoint"
+  },
+  "surrogates": [
+    {
+      "role": "attack_surrogate",
+      "name": "ViT-L-14",
+      "pretrained": "openai",
+      "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+      "tokenizer_path": null,
+      "weight_path": "/content/AmbiLAGE/models/clip_l14/open_clip_model.safetensors",
+      "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e",
+      "weight_revision": null,
+      "device": "cuda",
+      "precision": "fp32",
+      "image_size": 224,
+      "preprocess": {
+        "resize": "bicubic_direct_square",
+        "align_corners": false,
+        "antialias": true,
+        "mean": [
+          0.48145466,
+          0.4578275,
+          0.40821073
+        ],
+        "std": [
+          0.26862954,
+          0.26130258,
+          0.27577711
+        ]
+      },
+      "open_clip_torch_version": "3.3.0",
+      "cache_identity": "78829b73bb6fb95a45cff8dd977003a9750f164eb66f21fd3fce1b67bda5009b",
+      "requires_true_local_tokens": false,
+      "loading": {
+        "architecture": {
+          "embed_dim": 768,
+          "vision_cfg": {
+            "image_size": 224,
+            "layers": 24,
+            "width": 1024,
+            "patch_size": 14
+          },
+          "text_cfg": {
+            "context_length": 77,
+            "vocab_size": 49408,
+            "width": 768,
+            "heads": 12,
+            "layers": 12
+          }
+        },
+        "quick_gelu": true,
+        "activation": "QuickGELU",
+        "mean": [
+          0.48145466,
+          0.4578275,
+          0.40821073
+        ],
+        "std": [
+          0.26862954,
+          0.26130258,
+          0.27577711
+        ],
+        "metadata_source": "registered_pretrained_tag",
+        "registered_preprocess": {
+          "interpolation": "bicubic",
+          "resize_mode": "shortest"
+        },
+        "strict_state_dict": true,
+        "actual_activation_modules": {
+          "QuickGELU": 36,
+          "GELU": 0
+        },
+        "loader_version": 3,
+        "loader_sha256": "bd95e02bd732616cdc4216349cae33a1581b29109611355f1aaa1e51004995b3"
+      },
+      "tokenizer": {
+        "type": "SimpleTokenizer",
+        "special_tokens": {
+          "sot_token_id": 49406,
+          "eot_token_id": 49407,
+          "pad_token_id": null,
+          "context_length": 77
+        },
+        "content_sha256": "4710f312ff5993f9721ddf2ff9d4d3c1b49ac86b646e95e32b0e3d1ac1abf7b8"
+      }
+    },
+    {
+      "role": "attack_surrogate",
+      "name": "ViT-SO400M-14-SigLIP-384",
+      "pretrained": "webli",
+      "hf_repo": "timm/ViT-SO400M-14-SigLIP-384",
+      "tokenizer_path": "/content/AmbiLAGE/models/siglip_so400m",
+      "weight_path": "/content/AmbiLAGE/models/siglip_so400m/open_clip_model.safetensors",
+      "weight_sha256": "97faeafa0576c1ba4c92bae739ca06ef5f5d0c2db92f86a6086653d82a262043",
+      "weight_revision": null,
+      "device": "cuda",
+      "precision": "fp32",
+      "image_size": 384,
+      "preprocess": {
+        "resize": "bicubic_direct_square",
+        "align_corners": false,
+        "antialias": true,
+        "mean": [
+          0.5,
+          0.5,
+          0.5
+        ],
+        "std": [
+          0.5,
+          0.5,
+          0.5
+        ]
+      },
+      "open_clip_torch_version": "3.3.0",
+      "cache_identity": "c77839e34fd3761f07d9629aceda46b7d6f16789b2345ca6bcbe850b76180c7e",
+      "requires_true_local_tokens": false,
+      "loading": {
+        "architecture": {
+          "embed_dim": 1152,
+          "init_logit_bias": -10,
+          "custom_text": true,
+          "vision_cfg": {
+            "image_size": 384,
+            "timm_model_name": "vit_so400m_patch14_siglip_384",
+            "timm_model_pretrained": false,
+            "timm_pool": "map",
+            "timm_proj": "none"
+          },
+          "text_cfg": {
+            "context_length": 64,
+            "vocab_size": 32000,
+            "hf_tokenizer_name": "timm/ViT-B-16-SigLIP",
+            "tokenizer_kwargs": {
+              "clean": "canonicalize"
+            },
+            "width": 1152,
+            "heads": 16,
+            "layers": 27,
+            "mlp_ratio": 3.7362,
+            "no_causal_mask": true,
+            "proj_bias": true,
+            "pool_type": "last",
+            "norm_kwargs": {
+              "eps": 1e-06
+            }
+          }
+        },
+        "quick_gelu": false,
+        "activation": "native",
+        "mean": [
+          0.5,
+          0.5,
+          0.5
+        ],
+        "std": [
+          0.5,
+          0.5,
+          0.5
+        ],
+        "metadata_source": "registered_pretrained_tag",
+        "registered_preprocess": {
+          "interpolation": "bicubic",
+          "resize_mode": "squash"
+        },
+        "strict_state_dict": true,
+        "actual_activation_modules": {
+          "QuickGELU": 0,
+          "GELU": 55
+        },
+        "loader_version": 3,
+        "loader_sha256": "bd95e02bd732616cdc4216349cae33a1581b29109611355f1aaa1e51004995b3"
+      },
+      "tokenizer": {
+        "type": "HFTokenizer",
+        "special_tokens": {
+          "sot_token_id": null,
+          "eot_token_id": null,
+          "pad_token_id": null,
+          "context_length": 64
+        },
+        "content_sha256": "e71db1ac6bdfbb30baf3dbc203876d7a650afc0f864a4125c14b2929625025ca"
+      }
+    },
+    {
+      "role": "attack_surrogate",
+      "name": "ViT-bigG-14",
+      "pretrained": "laion2b_s39b_b160k",
+      "hf_repo": "laion/CLIP-ViT-bigG-14-laion2B-39B-b160k",
+      "tokenizer_path": null,
+      "weight_path": "/content/AmbiLAGE/models/clip_bigG14/open_clip_model.safetensors",
+      "weight_sha256": "db71bd27925917762c506c1b8a08e191d236e5586b5cd99f77d11aced578ec34",
+      "weight_revision": null,
+      "device": "cuda",
+      "precision": "fp32",
+      "image_size": 224,
+      "preprocess": {
+        "resize": "bicubic_direct_square",
+        "align_corners": false,
+        "antialias": true,
+        "mean": [
+          0.48145466,
+          0.4578275,
+          0.40821073
+        ],
+        "std": [
+          0.26862954,
+          0.26130258,
+          0.27577711
+        ]
+      },
+      "open_clip_torch_version": "3.3.0",
+      "cache_identity": "9a478367c00aff6379e510a7c7034b017ac2b43d21735dbd5d446a26cf83237d",
+      "requires_true_local_tokens": false,
+      "loading": {
+        "architecture": {
+          "embed_dim": 1280,
+          "vision_cfg": {
+            "image_size": 224,
+            "layers": 48,
+            "width": 1664,
+            "head_width": 104,
+            "mlp_ratio": 4.9231,
+            "patch_size": 14
+          },
+          "text_cfg": {
+            "context_length": 77,
+            "vocab_size": 49408,
+            "width": 1280,
+            "heads": 20,
+            "layers": 32
+          }
+        },
+        "quick_gelu": false,
+        "activation": "native",
+        "mean": [
+          0.48145466,
+          0.4578275,
+          0.40821073
+        ],
+        "std": [
+          0.26862954,
+          0.26130258,
+          0.27577711
+        ],
+        "metadata_source": "registered_pretrained_tag",
+        "registered_preprocess": {
+          "interpolation": "bicubic",
+          "resize_mode": "shortest"
+        },
+        "strict_state_dict": true,
+        "actual_activation_modules": {
+          "QuickGELU": 0,
+          "GELU": 80
+        },
+        "loader_version": 3,
+        "loader_sha256": "bd95e02bd732616cdc4216349cae33a1581b29109611355f1aaa1e51004995b3"
+      },
+      "tokenizer": {
+        "type": "SimpleTokenizer",
+        "special_tokens": {
+          "sot_token_id": 49406,
+          "eot_token_id": 49407,
+          "pad_token_id": null,
+          "context_length": 77
+        },
+        "content_sha256": "4710f312ff5993f9721ddf2ff9d4d3c1b49ac86b646e95e32b0e3d1ac1abf7b8"
+      }
+    }
+  ],
+  "text_encoding_audits": [
+    [
+      {
+        "text_sha256": "e647bf193706f720d970892bea0c523fee9f1e873dce96c344e489a6ce4eb5a5",
+        "input_tokens": 14,
+        "encoded_tokens": 14,
+        "chunks": 1,
+        "payload_tokens_per_chunk": 75,
+        "chunk_token_counts": [
+          14
+        ],
+        "truncated": false,
+        "test_fixture": false
+      },
+      {
+        "text_sha256": "5dc4beb0c8d2d5f251ffbc10f856a0a7a738ce69798606c3775e10c8839929d7",
+        "input_tokens": 15,
+        "encoded_tokens": 15,
+        "chunks": 1,
+        "payload_tokens_per_chunk": 75,
+        "chunk_token_counts": [
+          15
+        ],
+        "truncated": false,
+        "test_fixture": false
+      },
+      {
+        "text_sha256": "e875eba12aa42df9c203ab1af46d9f08230908a8104a070dbd50aa3f67aabf8c",
+        "input_tokens": 14,
+        "encoded_tokens": 14,
+        "chunks": 1,
+        "payload_tokens_per_chunk": 75,
+        "chunk_token_counts": [
+          14
+        ],
+        "truncated": false,
+        "test_fixture": false
+      }
+    ],
+    [
+      {
+        "text_sha256": "e647bf193706f720d970892bea0c523fee9f1e873dce96c344e489a6ce4eb5a5",
+        "input_tokens": 15,
+        "encoded_tokens": 15,
+        "chunks": 1,
+        "payload_tokens_per_chunk": 63,
+        "chunk_token_counts": [
+          15
+        ],
+        "truncated": false,
+        "test_fixture": false
+      },
+      {
+        "text_sha256": "5dc4beb0c8d2d5f251ffbc10f856a0a7a738ce69798606c3775e10c8839929d7",
+        "input_tokens": 16,
+        "encoded_tokens": 16,
+        "chunks": 1,
+        "payload_tokens_per_chunk": 63,
+        "chunk_token_counts": [
+          16
+        ],
+        "truncated": false,
+        "test_fixture": false
+      },
+      {
+        "text_sha256": "e875eba12aa42df9c203ab1af46d9f08230908a8104a070dbd50aa3f67aabf8c",
+        "input_tokens": 15,
+        "encoded_tokens": 15,
+        "chunks": 1,
+        "payload_tokens_per_chunk": 63,
+        "chunk_token_counts": [
+          15
+        ],
+        "truncated": false,
+        "test_fixture": false
+      }
+    ],
+    [
+      {
+        "text_sha256": "e647bf193706f720d970892bea0c523fee9f1e873dce96c344e489a6ce4eb5a5",
+        "input_tokens": 14,
+        "encoded_tokens": 14,
+        "chunks": 1,
+        "payload_tokens_per_chunk": 75,
+        "chunk_token_counts": [
+          14
+        ],
+        "truncated": false,
+        "test_fixture": false
+      },
+      {
+        "text_sha256": "5dc4beb0c8d2d5f251ffbc10f856a0a7a738ce69798606c3775e10c8839929d7",
+        "input_tokens": 15,
+        "encoded_tokens": 15,
+        "chunks": 1,
+        "payload_tokens_per_chunk": 75,
+        "chunk_token_counts": [
+          15
+        ],
+        "truncated": false,
+        "test_fixture": false
+      },
+      {
+        "text_sha256": "e875eba12aa42df9c203ab1af46d9f08230908a8104a070dbd50aa3f67aabf8c",
+        "input_tokens": 14,
+        "encoded_tokens": 14,
+        "chunks": 1,
+        "payload_tokens_per_chunk": 75,
+        "chunk_token_counts": [
+          14
+        ],
+        "truncated": false,
+        "test_fixture": false
+      }
+    ]
+  ],
+  "perceptual": {
+    "kind": "lpips_alexnet_v0.1",
+    "version": "0.1",
+    "test_fixture": false,
+    "pretrained": true,
+    "production_backend": true,
+    "downloads_during_training": false,
+    "backbone_initialization": "strict_local_official_pretrained_state",
+    "official_backbone_sha256_prefix": "7be5be79",
+    "official_linear_sha256": "df73285e35b22355a2df87cdb6b70b343713b667eddbda73e1977e0c860835c0",
+    "implementation": "official_feature_slices_scaling_channel_calibration",
+    "backbone_path": "/content/AmbiLAGE/models/lpips/alexnet-owt-7be5be79.pth",
+    "backbone_sha256": "7be5be791159472b1fbf3c69796f7cb30dca7ad8466c2df70058c37116cdee02",
+    "linear_path": "/content/AmbiLAGE/models/lpips/alex_v0.1.pth",
+    "linear_sha256": "df73285e35b22355a2df87cdb6b70b343713b667eddbda73e1977e0c860835c0"
+  },
+  "attack": {
+    "steps_requested": 100,
+    "steps_completed": 100,
+    "selected_step": 100,
+    "stop_reason": "requested_steps_completed",
+    "epsilon": 0.03137254901960784,
+    "epsilon_levels": 8,
+    "step_size": 0.00784313725490196,
+    "step_size_levels": 2,
+    "norm": "linf",
+    "optimizer": "projected_sign_gradient_descent",
+    "initialization": "clean_source_zero_delta",
+    "gradient_execution": "sequential_surrogate_graphs_plus_separate_perceptual_graph",
+    "gradient_restarts": 10,
+    "gradient_variances": [
+      7.196373292671045e-07,
+      3.9236845191526834e-07,
+      1.5164690813589243e-06
+    ],
+    "variance_definition": "mean_elementwise_population_variance_of_semantic_input_gradient_over_random_projected_starts",
+    "variance_floor": 1.5164690813589242e-18,
+    "variance_floor_policy": "max(max_model_variance*1e-12,float64_tiny)",
+    "ensemble_weight_formula": "normalize(max(variance,relative_floor)^-2)",
+    "ensemble_weights": [
+      0.21790927549108302,
+      0.7330184754528463,
+      0.049072249056070674
+    ],
+    "weights_frozen_before_optimization": true
+  },
+  "history": [
+    {
+      "step": 1,
+      "semantic_losses": [
+        0.7993412017822266,
+        0.935991644859314,
+        0.6945586204528809
+      ],
+      "semantic_loss": 0.8943665843088174,
+      "perceptual_loss": 0.0,
+      "loss": 0.8943665843088174,
+      "linf_after_update": 0.007843166589736938
+    },
+    {
+      "step": 10,
+      "semantic_losses": [
+        0.6695924997329712,
+        0.8223869204521179,
+        0.5819590091705322
+      ],
+      "semantic_loss": 0.777293260591688,
+      "perceptual_loss": 0.08085880428552628,
+      "loss": 0.7853791410202406,
+      "linf_after_update": 0.03137257695198059
+    },
+    {
+      "step": 20,
+      "semantic_losses": [
+        0.6642630100250244,
+        0.8124573230743408,
+        0.5538235902786255
+      ],
+      "semantic_loss": 0.7674726687358129,
+      "perceptual_loss": 0.08501098304986954,
+      "loss": 0.7759737670407998,
+      "linf_after_update": 0.03137257695198059
+    },
+    {
+      "step": 30,
+      "semantic_losses": [
+        0.6565065979957581,
+        0.8047787547111511,
+        0.5481118559837341
+      ],
+      "semantic_loss": 0.7598736544869985,
+      "perceptual_loss": 0.08762869983911514,
+      "loss": 0.76863652447091,
+      "linf_after_update": 0.03137257695198059
+    },
+    {
+      "step": 40,
+      "semantic_losses": [
+        0.6751253008842468,
+        0.791822612285614,
+        0.5314120054244995
+      ],
+      "semantic_loss": 0.7536142515496536,
+      "perceptual_loss": 0.08847766369581223,
+      "loss": 0.7624620179192347,
+      "linf_after_update": 0.03137257695198059
+    },
+    {
+      "step": 50,
+      "semantic_losses": [
+        0.6521207690238953,
+        0.7778496742248535,
+        0.5434234142303467
+      ],
+      "semantic_loss": 0.738948355768492,
+      "perceptual_loss": 0.0860622376203537,
+      "loss": 0.7475545795305274,
+      "linf_after_update": 0.03137257695198059
+    },
+    {
+      "step": 60,
+      "semantic_losses": [
+        0.643328070640564,
+        0.7776827812194824,
+        0.5514754056930542
+      ],
+      "semantic_loss": 0.7373051389082632,
+      "perceptual_loss": 0.09045110642910004,
+      "loss": 0.7463502495511732,
+      "linf_after_update": 0.03137257695198059
+    },
+    {
+      "step": 70,
+      "semantic_losses": [
+        0.6612221002578735,
+        0.7719086408615112,
+        0.5255368947982788
+      ],
+      "semantic_loss": 0.7356990013087643,
+      "perceptual_loss": 0.08944201469421387,
+      "loss": 0.7446432027781857,
+      "linf_after_update": 0.03137257695198059
+    },
+    {
+      "step": 80,
+      "semantic_losses": [
+        0.6502032279968262,
+        0.7864480018615723,
+        0.5352845788002014
+      ],
+      "semantic_loss": 0.7444338478490161,
+      "perceptual_loss": 0.0899197906255722,
+      "loss": 0.7534258269115733,
+      "linf_after_update": 0.03137257695198059
+    },
+    {
+      "step": 90,
+      "semantic_losses": [
+        0.6253033876419067,
+        0.7939755320549011,
+        0.5156103372573853
+      ],
+      "semantic_loss": 0.7435603011026929,
+      "perceptual_loss": 0.09171721339225769,
+      "loss": 0.7527320224419186,
+      "linf_after_update": 0.03137257695198059
+    },
+    {
+      "step": 100,
+      "semantic_losses": [
+        0.6491445302963257,
+        0.7833054065704346,
+        0.5292813777923584
+      ],
+      "semantic_loss": 0.7416049768158705,
+      "perceptual_loss": 0.08879872411489487,
+      "loss": 0.7504848492273599,
+      "linf_after_update": 0.03137257695198059
+    }
+  ],
+  "decoded_image_audit": {
+    "shape": [
+      500,
+      500,
+      3
+    ],
+    "max_absolute_pixel_difference_levels": 8,
+    "mean_absolute_pixel_difference_levels": 4.31788,
+    "mean_squared_pixel_difference_levels": 26.140088,
+    "budget_levels": 8,
+    "within_budget": true
+  },
+  "final_objective": {
+    "semantic_losses": [
+      0.6314187049865723,
+      0.7709710597991943,
+      0.5173335075378418
+    ],
+    "perceptual_loss": 0.0910768136382103,
+    "loss": 0.7372224234981811
+  },
+  "hardware": {
+    "tf32_enabled": true,
+    "device": "cuda",
+    "vram_gb": 22.03,
+    "gradient_checkpointing_recommended": true,
+    "seed": 42
+  },
+  "runtime": {
+    "torch_version": "2.14.1+cu126",
+    "device": "cuda"
+  },
+  "optimization_seconds": 36.77090657000008,
+  "retrieval_loss_omitted": true,
+  "victim_memory_used": false,
+  "formal_queries_used": false,
+  "formal_ranking_used": false,
+  "primary_evaluator_used_during_attack": false,
+  "paper_encoder_profile_selected": true,
+  "paper_encoder_architectures_aligned": true,
+  "paper_encoder_checkpoint_status": "public_checkpoint_choices_paper_exact_revisions_unspecified",
+  "paper_encoder_ensemble_reproduced": false,
+  "paper_full_attack_reproduced": false,
+  "assumptions": [
+    "linf_projection",
+    "clean_source_initialization",
+    "random_start_semantic_gradient_population_variance_mean",
+    "fixed_uncertainty_weights",
+    "three_public_templates_are_semantic_targets_without_retrieval_loss"
+  ],
+  "training_access_audit": {
+    "checked_accesses": 6692,
+    "blocked_accesses": [],
+    "private_access_allowed": false
+  }
+}

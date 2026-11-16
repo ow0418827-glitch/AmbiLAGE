@@ -159,6 +159,50 @@
         "vae/config.json": "eceae082880f54ee4b02888e8fc8afd22791aa75f24fc737491ede9be830c187",
         "vae/diffusion_pytorch_model.safetensors": "f5b59a26851551b67ae1fe58d32e76486e1e812def4696a4bea97f16604d40a3"
       }
+    },
+    "clip_l14": {
+      "repo_id": "timm/vit_large_patch14_clip_224.openai",
+      "revision": "18d0535469bb561bf468d76c1d73aa35156c922b",
+      "files": {
+        "README.md": "9f8ff885fcfce593f31288f7fbd549336745bcffb9532e9c734a7d69e57efe06",
+        "config.json": "8a5bb1350acbf8b9157d977ac705f48e4bc9d86d36d0f8fd4e36d11e5ef9cf33",
+        "merges.txt": "9fd691f7c8039210e0fced15865466c65820d09b63988b0174bfe25de299051a",
+        "open_clip_config.json": "226d0493cefd57fb28eec2b9c5c19e0e9a1899cebab80998646b5c3076ecabf5",
+        "open_clip_model.safetensors": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e",
+        "special_tokens_map.json": "2cdb3b8331a60c92fc1e55a13e9fd61fd2293c5a51275fdcccd62b780052530e",
+        "tokenizer.json": "43d4281659ce30b6aca2c7485944b3d73925bb7f87c7234daf3b6b094a6d618c",
+        "tokenizer_config.json": "c8758738997537b9e24885a081a043e1c9f5beff1355f0ec68ca19349e8699aa",
+        "vocab.json": "5047b556ce86ccaf6aa22b3ffccfc52d391ea4accdab9c2f2407da5b742d4363"
+      }
+    },
+    "siglip_so400m": {
+      "repo_id": "timm/ViT-SO400M-14-SigLIP-384",
+      "revision": "ac16108d567c4389e6cd2b11c9b8585f7474435b",
+      "files": {
+        "README.md": "477cbd734995f495b7c585b2e0d5b40a2d0b6c659d085c99ec1afdb444ff15c6",
+        "open_clip_config.json": "befc34b883ae561a59afc3207f2342379d82e1cec657a791465bb1b4550ca936",
+        "open_clip_model.safetensors": "97faeafa0576c1ba4c92bae739ca06ef5f5d0c2db92f86a6086653d82a262043",
+        "special_tokens_map.json": "3a60d3bb0808e7e629845031c2d720d33c2aceee1a6c535255de15d45b9f1ac7",
+        "tokenizer.json": "83051c8005acc696637fe0c62c711ecee4b59083b4cf07ff9ad5f637eb2a3d2a",
+        "tokenizer_config.json": "8571e0cf70f7ae095c5c544ab94b7967e94c79262202d61604da10cbe426cecb"
+      }
+    },
+    "clip_bigG14": {
+      "repo_id": "laion/CLIP-ViT-bigG-14-laion2B-39B-b160k",
+      "revision": "743c27bd53dfe508a0ade0f50698f99b39d03bec",
+      "files": {
+        "README.md": "def887b9bed5aea6d97ef898ade975fa60ad3b44a1cd7a83ec07291ef4963af4",
+        "config.json": "19e294229f72b1db7b9442869b814f71eeb05eae3eb2729fa41da7f444039dfb",
+        "merges.txt": "9fd691f7c8039210e0fced15865466c65820d09b63988b0174bfe25de299051a",
+        "open_clip_config.json": "5bd7ad69ec151ba9e4a5e92a622655cb88cd6c76764df97a1ea0279062755e7b",
+        "open_clip_model.safetensors": "db71bd27925917762c506c1b8a08e191d236e5586b5cd99f77d11aced578ec34",
+        "preprocessor_config.json": "910e70b3956ac9879ebc90b22fb3bc8a75b6a0677814500101a4c072bd7857bd",
+        "pytorch_model.bin.index.json": "6ca527d72dc2b160beb7542bcbe14a9fc71084caf1ce90bf6eca559736a8cf5b",
+        "special_tokens_map.json": "f8c0d6c39aee3f8431078ef6646567b0aba7f2246e9c54b8b99d55c22b707cbf",
+        "tokenizer.json": "b556ac8c99757ffb677208af34bc8c6721572114111a6e0aaf5fa69ff0b8d842",
+        "tokenizer_config.json": "e19f34ef773563fb695f96cfcae1e4c7b112ab6ad532f6962061df5242d924f0",
+        "vocab.json": "5047b556ce86ccaf6aa22b3ffccfc52d391ea4accdab9c2f2407da5b742d4363"
+      }
     }
   }
 }

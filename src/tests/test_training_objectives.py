@@ -170,8 +170,12 @@ def test_sequential_proxy_gradient_matches_fixed_weight_autograd(eot_enabled,pro
     assert scores.shape == (count, 1) and torch.isfinite(utility)
     assert ensemble.audit['kind'] == TRAINING_OBJECTIVE_KIND
     assert all(row['query_modes'] == ['multimodal_equal_weight'] for row in ensemble.audit['public_objectives'])
-    assert {mode for _, mode in purifier.calls} == {'none', 'full'}
+    assert {mode for _, mode in purifier.calls} == {'full'}
+    assert len(purifier.calls) == 1 + count
     assert all(seed == 45 for seed, _ in purifier.calls)
+    purifier.calls.clear()
+    ensemble.evaluate(image, step=3)
+    assert [mode for _, mode in purifier.calls] == ['none']
     with pytest.raises(ValueError):
         SequentialEnsembleObjective(models, target, 'source', 'target',
             config(diffusion_weight=0,surrogate_set=profile), purifier)

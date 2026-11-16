@@ -1,0 +1,40 @@
+=== [L1+VAE] Generate 09_toothbrush at 2026-11-16T07:57:00Z ===
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  41%|████▏     | 306/741 [00:00<00:00, 3058.31it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 4870.36it/s]
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  54%|█████▍    | 402/741 [00:00<00:00, 4019.58it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 5949.70it/s]
+WARNING:root:No pretrained weights loaded for model 'ViT-B-16'. Model initialized randomly.
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+Loading weights:   0%|          | 0/196 [00:00<?, ?it/s]Loading weights: 100%|██████████| 196/196 [00:00<00:00, 2919.19it/s]
+The config attributes {'skip_prk_steps': True} were passed to DDIMInverseScheduler, but are not expected and will be ignored. Please verify your scheduler_config.json configuration file.
+AmbiLAGE 细化 [10/250] Utility=0.9227 SSIM=0.9896 MAE=11.39 LR=1.000 (Accepted=10, Rejected=0)
+AmbiLAGE 细化 [20/250] Utility=0.9300 SSIM=0.9892 MAE=11.68 LR=0.996 (Accepted=20, Rejected=0)
+AmbiLAGE 细化 [30/250] Utility=0.9347 SSIM=0.9889 MAE=11.47 LR=0.984 (Accepted=30, Rejected=0)
+AmbiLAGE 细化 [40/250] Utility=0.9371 SSIM=0.9884 MAE=11.53 LR=0.965 (Accepted=40, Rejected=0)
+AmbiLAGE 细化 [50/250] Utility=0.9366 SSIM=0.9882 MAE=11.72 LR=0.938 (Accepted=50, Rejected=0)
+AmbiLAGE 细化 [60/250] Utility=0.9407 SSIM=0.9880 MAE=11.59 LR=0.905 (Accepted=60, Rejected=0)
+AmbiLAGE 细化 [70/250] Utility=0.9434 SSIM=0.9876 MAE=11.75 LR=0.865 (Accepted=70, Rejected=0)
+AmbiLAGE 细化 [80/250] Utility=0.9445 SSIM=0.9873 MAE=11.82 LR=0.820 (Accepted=80, Rejected=0)
+AmbiLAGE 细化 [90/250] Utility=0.9449 SSIM=0.9872 MAE=11.67 LR=0.770 (Accepted=90, Rejected=0)
+AmbiLAGE 细化 [100/250] Utility=0.9480 SSIM=0.9872 MAE=11.58 LR=0.716 (Accepted=100, Rejected=0)
+AmbiLAGE 细化 [110/250] Utility=0.9491 SSIM=0.9872 MAE=11.49 LR=0.659 (Accepted=110, Rejected=0)
+AmbiLAGE 细化 [120/250] Utility=0.9480 SSIM=0.9873 MAE=11.29 LR=0.600 (Accepted=120, Rejected=0)
+AmbiLAGE 细化 [130/250] Utility=0.9470 SSIM=0.9875 MAE=11.18 LR=0.540 (Accepted=130, Rejected=0)
+AmbiLAGE 细化 [140/250] Utility=0.9473 SSIM=0.9876 MAE=11.15 LR=0.360 (Accepted=140, Rejected=0)
+AmbiLAGE 细化 [150/250] Utility=0.9482 SSIM=0.9877 MAE=11.12 LR=0.316 (Accepted=150, Rejected=0)
+AmbiLAGE 细化 [160/250] Utility=0.9458 SSIM=0.9878 MAE=11.10 LR=0.205 (Accepted=160, Rejected=0)
+AmbiLAGE 细化 [170/250] Utility=0.9453 SSIM=0.9880 MAE=11.09 LR=0.174 (Accepted=170, Rejected=0)
+AmbiLAGE 细化 [180/250] Utility=0.9440 SSIM=0.9881 MAE=11.08 LR=0.110 (Accepted=180, Rejected=0)
+AmbiLAGE 自适应退火收敛早停 [180/250] (min_steps=180, lr_scale=0.1097, best_step=110, best_sel_utility=0.9419)
+=== [L1+VAE] Evaluate Env 4 09_toothbrush at 2026-11-16T08:20:07Z ===
+=== [EVAL] 09_toothbrush/ambilage/g14_none_target_joint ===
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+09_toothbrush env4 none clean: Top-3=0/20, Top-5=18/20, mean=5.10, ranks=[5, 5, 5, 5, 5, 5, 5, 5, 6, 5, 5, 4, 5, 5, 7, 5, 5, 5, 5, 5]
+09_toothbrush env4 none modified: Top-3=0/20, Top-5=20/20, mean=4.75, ranks=[5, 5, 4, 5, 5, 5, 5, 5, 5, 5, 4, 4, 5, 5, 4, 5, 5, 4, 5, 5]
+=== [EVAL] 09_toothbrush/ambilage/b32_none_target_joint ===
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+09_toothbrush env4 none clean: Top-3=5/20, Top-5=18/20, mean=4.05, ranks=[3, 4, 5, 4, 4, 4, 3, 4, 4, 3, 4, 6, 3, 4, 6, 3, 4, 5, 4, 4]
+09_toothbrush env4 none modified: Top-3=20/20, Top-5=20/20, mean=2.60, ranks=[2, 3, 3, 2, 3, 3, 2, 3, 3, 1, 3, 3, 3, 3, 3, 2, 3, 3, 1, 3]
+ENV4 EVALUATION COMPLETED AND VERIFIED: {'09_toothbrush': {'g14': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 0, 'mod_top3': 0, 'clean_top5': 18, 'mod_top5': 20, 'n_queries': 20, 'clean_mean_rank': 5.1, 'mod_mean_rank': 4.75, 'top3_gain_pp': 0.0, 'mean_rank_gain': 0.35, 'clean_range': [4, 7], 'mod_range': [4, 5], 'clean_mean_score': 0.7830134272575379, 'mod_mean_score': 0.7943143546581268, 'score_delta': 0.011300927400588967, 'clean_ranks': [5, 5, 5, 5, 5, 5, 5, 5, 6, 5, 5, 4, 5, 5, 7, 5, 5, 5, 5, 5], 'mod_ranks': [5, 5, 4, 5, 5, 5, 5, 5, 5, 5, 4, 4, 5, 5, 4, 5, 5, 4, 5, 5]}, 'b32': {'clean_top1': 0, 'mod_top1': 2, 'clean_top3': 5, 'mod_top3': 20, 'clean_top5': 18, 'mod_top5': 20, 'n_queries': 20, 'clean_mean_rank': 4.05, 'mod_mean_rank': 2.6, 'top3_gain_pp': 75.0, 'mean_rank_gain': 1.45, 'clean_range': [3, 6], 'mod_range': [1, 3], 'clean_mean_score': 0.8112514197826386, 'mod_mean_score': 0.8267967164516449, 'score_delta': 0.015545296669006281, 'clean_ranks': [3, 4, 5, 4, 4, 4, 3, 4, 4, 3, 4, 6, 3, 4, 6, 3, 4, 5, 4, 4], 'mod_ranks': [2, 3, 3, 2, 3, 3, 2, 3, 3, 1, 3, 3, 3, 3, 3, 2, 3, 3, 1, 3]}}}
+=== [L1+VAE] COMPLETE at 2026-11-16T08:24:01Z ===

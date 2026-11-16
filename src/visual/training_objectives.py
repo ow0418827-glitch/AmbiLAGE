@@ -318,7 +318,7 @@ class SequentialEnsembleObjective:
             'surrogates': snapshots, 'surrogate_selection': self.selection.audit(),
             'public_objectives': [o.audit for o in self.objectives],
             'held_out_models': list(HELD_OUT_MODELS),
-            'gradient_execution': 'one_proxy_graph_at_a_time_recompute_purifier',
+            'gradient_execution': 'shared_views_and_purified_single_backward',
             'weak_proxy_weighting': 'baseline_calibrated_relative_gain_softmin_with_uniform_floor',
             'ensemble_temperature': self.ensemble_temperature,
             'ensemble_uniform_mix': self.ensemble_uniform_mix,
@@ -331,32 +331,29 @@ class SequentialEnsembleObjective:
     def _seed(self, step):
         return (int(getattr(self.config, 'seed', 42)) + max(0, int(step))) % (2**63)
 
-    def _one_value(self, index, image, step, gradient):
+    def _shared_inputs(self, image, step, *, gradient):
+        base_device = getattr(self.purifier, 'device', self.surrogates[0].device)
+        base_img = image.to(base_device)
+        eot_on = bool(getattr(self.config, 'eot_enabled', True))
+        views = transformed_batch(base_img, step=max(1, int(step))) if eot_on else base_img
+        purified = self.purifier(base_img, seed=self._seed(step), gradient=gradient)
+        return views, purified, eot_on
+
+    def _evaluate_proxy_from_inputs(self, index, views, purified):
         surrogate, objective = self.surrogates[index], self.objectives[index]
-        image = image.to(surrogate.device)
-        views = transformed_batch(image, step=max(1, int(step))) if getattr(self.config, 'eot_enabled', True) else image
-        views_out = surrogate.encode_image(views)
+        views_out = surrogate.encode_image(views.to(surrogate.device))
         feature = views_out.global_embedding
         views_patches = getattr(views_out, 'patch_tokens', None)
         score = objective.scores(feature)
         eot = objective.value(feature, patch_tokens=views_patches)
-        purified = self.purifier(image, seed=self._seed(step), gradient=gradient)
-        purified_out = surrogate.encode_image(purified)
+        purified_out = surrogate.encode_image(purified.to(surrogate.device))
         purified_feature = purified_out.global_embedding
         purified_patches = getattr(purified_out, 'patch_tokens', None)
         pvalue = objective.value(purified_feature, patch_tokens=purified_patches)
         utility = (eot + self.diffusion_weight * pvalue) / (1.0 + self.diffusion_weight)
         return utility, score.mean(0), {'eot': float(eot.detach()), 'purified': float(pvalue.detach())}
 
-    @torch.no_grad()
-    def _values(self, image, step):
-        values, scores, rows = [], [], []
-        for i in range(len(self.surrogates)):
-            value, score, row = self._one_value(i, image, step, 'none')
-            values.append(value.to(image.device))
-            scores.append(score.to(image.device))
-            rows.append(row)
-        values = torch.stack(values)
+    def _weights_from_values(self, values):
         if self._baseline_values is None or self._baseline_values.shape != values.shape:
             self._baseline_values = values.detach().clone()
         gains = (values - self._baseline_values.to(values.device)).detach()
@@ -364,6 +361,23 @@ class SequentialEnsembleObjective:
         uni_mix = min(max(float(self.ensemble_uniform_mix), 0.0), 1.0)
         uniform = torch.full_like(adaptive, 1.0 / len(self.surrogates))
         weights = ((1.0 - uni_mix) * adaptive + uni_mix * uniform).detach()
+        return weights, gains
+
+    def _one_value(self, index, image, step, gradient):
+        views, purified, _ = self._shared_inputs(image, step, gradient=gradient)
+        return self._evaluate_proxy_from_inputs(index, views, purified)
+
+    @torch.no_grad()
+    def _values(self, image, step):
+        views, purified, _ = self._shared_inputs(image, step, gradient='none')
+        values, scores, rows = [], [], []
+        for i in range(len(self.surrogates)):
+            value, score, row = self._evaluate_proxy_from_inputs(i, views, purified)
+            values.append(value.to(image.device))
+            scores.append(score.to(image.device))
+            rows.append(row)
+        values = torch.stack(values)
+        weights, gains = self._weights_from_values(values)
         return values, torch.stack(scores), weights, rows, gains
 
     @torch.no_grad()
@@ -372,16 +386,37 @@ class SequentialEnsembleObjective:
         return (weights * values).sum(), scores
 
     def image_gradient(self, image, step):
-        values, scores, weights, rows, gains = self._values(image.detach(), step)
-        gradient = torch.zeros_like(image)
+        base_device = getattr(self.purifier, 'device', self.surrogates[0].device)
+        leaf_img = image.detach().to(base_device).clone().requires_grad_(True)
+        views, purified, eot_on = self._shared_inputs(leaf_img, step, gradient='full')
+        v_leaf = views.detach().requires_grad_(True)
+        p_leaf = purified.detach().requires_grad_(True)
+        values, scores, rows, gv_list, gp_list = [], [], [], [], []
         for i in range(len(self.surrogates)):
-            leaf = image.detach().clone().requires_grad_(True)
-            value, _, _ = self._one_value(i, leaf, step, 'full')
-            grad = torch.autograd.grad(value, leaf, retain_graph=False)[0]
-            if not torch.isfinite(grad).all():
-                raise FloatingPointError('代理目标梯度含非有限值')
-            gradient.add_(grad.detach(), alpha=float(weights[i]))
-            del leaf, value, grad
+            value, score, row = self._evaluate_proxy_from_inputs(i, v_leaf, p_leaf)
+            gv, gp = torch.autograd.grad(value, (v_leaf, p_leaf), retain_graph=False)
+            values.append(value.detach().to(image.device))
+            scores.append(score.detach().to(image.device))
+            rows.append(row)
+            gv_list.append(gv.detach())
+            gp_list.append(gp.detach())
+            del value, score, gv, gp
+        values = torch.stack(values)
+        scores = torch.stack(scores)
+        weights, gains = self._weights_from_values(values)
+        grad_views = torch.zeros_like(v_leaf)
+        grad_purified = torch.zeros_like(p_leaf)
+        for i in range(len(self.surrogates)):
+            w_i = float(weights[i])
+            grad_views.add_(gv_list[i], alpha=w_i)
+            grad_purified.add_(gp_list[i], alpha=w_i)
+        if eot_on:
+            gradient = torch.autograd.grad((views, purified), leaf_img, grad_outputs=(grad_views, grad_purified))[0]
+        else:
+            gradient = grad_views + torch.autograd.grad(purified, leaf_img, grad_outputs=grad_purified)[0]
+        gradient = gradient.detach().to(image.device)
+        if not torch.isfinite(gradient).all():
+            raise FloatingPointError('代理目标梯度含非有限值')
         utility = (weights * values).sum().detach()
         return utility, scores.detach(), gradient, {'model_weights': weights.cpu().tolist(),
             'model_utilities': values.cpu().tolist(), 'model_relative_gains': gains.cpu().tolist(),

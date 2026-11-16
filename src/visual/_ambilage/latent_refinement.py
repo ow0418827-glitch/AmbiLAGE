@@ -470,8 +470,9 @@ def refine_ambient_coop_latent(
         accepted = 0
         rejected = 0
         best_snap = snapshot_params()
-        best_row = evaluate_quality(compose())
-        initial_img = compose()
+        with torch.no_grad():
+            initial_img = compose()
+        best_row = evaluate_quality(initial_img)
         if not best_row["quality_ok"]:
             raise RuntimeError("自然锚点未通过结构/误差门禁，不能标记为完整成图")
         if hasattr(objective, "evaluate"):
@@ -517,8 +518,13 @@ def refine_ambient_coop_latent(
     # 5. 优化循环 (原生 4 阶段第 4 阶段细化，支持自适应退火与断点续跑)
     try:
         for step in range(start_step, config.steps + 1):
-            # 5.1 计算全彩 RGB SSIM 与 RGB MAE 关于图像的法向量约束，准备切空间投影
-            image_eval = compose().detach().requires_grad_(True)
+            old_snap = snapshot_params()
+            old_opt_state = copy.deepcopy(optimizer.state_dict())
+            optimizer.zero_grad(set_to_none=True)
+
+            # 5.1/5.2 前向合成一次，并复用同一解码图计算法向量约束与切空间梯度反向传播
+            decoded_img, raw_img = compose_with_raw()
+            image_eval = decoded_img.detach().requires_grad_(True)
             normals = []
             slacks = []
 
@@ -531,13 +537,7 @@ def refine_ambient_coop_latent(
             n_mae, = torch.autograd.grad(-mae_metric, image_eval)
             normals.append(n_mae.detach())
             slacks.append(config.source_mae_ceiling / 255.0 - float(mae_metric.detach()))
-
-            old_snap = snapshot_params()
-            old_opt_state = copy.deepcopy(optimizer.state_dict())
-            optimizer.zero_grad(set_to_none=True)
-
-            # 5.2 前向合成与切空间梯度反向传播
-            decoded_img, raw_img = compose_with_raw()
+            del image_eval, structure, mae_metric
 
             latent_normals = []
             for n_img in normals:
@@ -558,6 +558,7 @@ def refine_ambient_coop_latent(
             else:
                 loss = -utility + penalty
                 loss.backward()
+            del decoded_img, raw_img
 
             for p in (delta, ambient_field.ambient_global, ambient_field.ambient_grid, ambient_field.fg_chroma_shift):
                 if p.grad is not None:
@@ -587,6 +588,8 @@ def refine_ambient_coop_latent(
 
                 step_accepted = False
                 used_backtracks = 0
+                accepted_img: torch.Tensor | None = None
+                accepted_q: dict[str, Any] | None = None
                 for backtrack in range(config.guard_backtracks + 1):
                     scale = 0.5 ** backtrack
                     delta.copy_(old_snap["delta"] + scale * (proposed_delta - old_snap["delta"]))
@@ -599,10 +602,13 @@ def refine_ambient_coop_latent(
                     ambient_field.fg_chroma_shift.copy_(
                         old_snap["fg_chroma_shift"] + scale * (proposed_fg_chroma - old_snap["fg_chroma_shift"])
                     )
-                    q = evaluate_quality(compose())
+                    cand_img = compose()
+                    q = evaluate_quality(cand_img)
                     if q["quality_ok"]:
                         step_accepted = True
                         used_backtracks = backtrack
+                        accepted_img = cand_img
+                        accepted_q = q
                         break
 
                 if step_accepted:
@@ -619,8 +625,12 @@ def refine_ambient_coop_latent(
             candidate_stop_reason: str | None = None
             if step % config.check_every == 0 or step == config.steps:
                 with torch.no_grad():
-                    cur_img = compose()
-                    q_row = evaluate_quality(cur_img)
+                    if step_accepted and accepted_img is not None and accepted_q is not None:
+                        cur_img = accepted_img
+                        q_row = dict(accepted_q)
+                    else:
+                        cur_img = compose()
+                        q_row = evaluate_quality(cur_img)
                     if hasattr(objective, "evaluate"):
                         u_val, s_val = objective.evaluate(cur_img, step=0)
                     else:
@@ -723,7 +733,8 @@ def refine_ambient_coop_latent(
 
     # 6. 加载最佳快照并生成最终成图
     load_params(best_snap)
-    final_tensor = compose().detach()
+    with torch.no_grad():
+        final_tensor = compose().detach()
 
     # 7. 严格质量与文字区域零改动断言
     final_rgb = np.rint(final_tensor[0].permute(1, 2, 0).cpu().numpy() * 255.0).astype(np.uint8)

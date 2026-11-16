@@ -1,0 +1,101 @@
+=== [07_shampoo] Step 1/2: Generate (07_shampoo/visual_inception) at 2026-11-16T09:29:01Z ===
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+视觉记忆植入优化 1/100，目标值 0.760589
+视觉记忆植入优化 10/100，目标值 0.657473
+视觉记忆植入优化 20/100，目标值 0.637922
+视觉记忆植入优化 30/100，目标值 0.608323
+视觉记忆植入优化 40/100，目标值 0.597655
+视觉记忆植入优化 50/100，目标值 0.612535
+视觉记忆植入优化 60/100，目标值 0.594898
+视觉记忆植入优化 70/100，目标值 0.599422
+视觉记忆植入优化 80/100，目标值 0.569474
+视觉记忆植入优化 90/100，目标值 0.583518
+视觉记忆植入优化 100/100，目标值 0.569264
+=== [07_shampoo] Step 2/2: Evaluate Env 4 (07_shampoo/visual_inception, none defense) at 2026-11-16T09:31:18Z ===
+=== [EVAL] 07_shampoo/visual_inception/g14_none_target_joint ===
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+07_shampoo env4 none clean: Top-3=20/20, Top-5=20/20, mean=2.80, ranks=[3, 3, 2, 3, 2, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+07_shampoo env4 none modified: Top-3=20/20, Top-5=20/20, mean=2.50, ranks=[3, 3, 1, 3, 2, 3, 3, 2, 1, 3, 2, 2, 3, 3, 2, 3, 3, 2, 3, 3]
+=== [EVAL] 07_shampoo/visual_inception/b32_none_target_joint ===
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+07_shampoo env4 none clean: Top-3=19/20, Top-5=20/20, mean=2.25, ranks=[2, 2, 2, 2, 3, 2, 2, 3, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 3]
+07_shampoo env4 none modified: Top-3=7/20, Top-5=10/20, mean=4.60, ranks=[5, 6, 6, 3, 6, 2, 3, 6, 2, 6, 6, 2, 4, 7, 3, 5, 6, 2, 6, 6]
+ENV4 EVALUATION COMPLETED AND VERIFIED: {'07_shampoo': {'g14': {'clean_top1': 0, 'mod_top1': 2, 'clean_top3': 20, 'mod_top3': 20, 'clean_top5': 20, 'mod_top5': 20, 'n_queries': 20, 'clean_mean_rank': 2.8, 'mod_mean_rank': 2.5, 'top3_gain_pp': 0.0, 'mean_rank_gain': 0.3, 'clean_range': [2, 3], 'mod_range': [1, 3], 'clean_mean_score': 0.6274527072906494, 'mod_mean_score': 0.63245869576931, 'score_delta': 0.005005988478660628, 'clean_ranks': [3, 3, 2, 3, 2, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3], 'mod_ranks': [3, 3, 1, 3, 2, 3, 3, 2, 1, 3, 2, 2, 3, 3, 2, 3, 3, 2, 3, 3]}, 'b32': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 19, 'mod_top3': 7, 'clean_top5': 20, 'mod_top5': 10, 'n_queries': 20, 'clean_mean_rank': 2.25, 'mod_mean_rank': 4.6, 'top3_gain_pp': -60.0, 'mean_rank_gain': -2.35, 'clean_range': [2, 4], 'mod_range': [2, 7], 'clean_mean_score': 0.7483224630355835, 'mod_mean_score': 0.7342690825462341, 'score_delta': -0.014053380489349343, 'clean_ranks': [2, 2, 2, 2, 3, 2, 2, 3, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 3], 'mod_ranks': [5, 6, 6, 3, 6, 2, 3, 6, 2, 6, 6, 2, 4, 7, 3, 5, 6, 2, 6, 6]}}}
+=== [09_toothbrush] Step 1/2: Generate (09_toothbrush/visual_inception) at 2026-11-16T09:35:16Z ===
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+视觉记忆植入优化 1/100，目标值 0.819562
+视觉记忆植入优化 10/100，目标值 0.744122
+视觉记忆植入优化 20/100，目标值 0.733868
+视觉记忆植入优化 30/100，目标值 0.712253
+视觉记忆植入优化 40/100，目标值 0.706289
+视觉记忆植入优化 50/100，目标值 0.706297
+视觉记忆植入优化 60/100，目标值 0.705414
+视觉记忆植入优化 70/100，目标值 0.710236
+视觉记忆植入优化 80/100，目标值 0.704124
+视觉记忆植入优化 90/100，目标值 0.717765
+视觉记忆植入优化 100/100，目标值 0.709050
+=== [09_toothbrush] Step 2/2: Evaluate Env 4 (09_toothbrush/visual_inception, none defense) at 2026-11-16T09:37:33Z ===
+=== [EVAL] 09_toothbrush/visual_inception/g14_none_target_joint ===
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+09_toothbrush env4 none clean: Top-3=0/20, Top-5=18/20, mean=5.10, ranks=[5, 5, 5, 5, 5, 5, 5, 5, 6, 5, 5, 4, 5, 5, 7, 5, 5, 5, 5, 5]
+09_toothbrush env4 none modified: Top-3=0/20, Top-5=15/20, mean=5.55, ranks=[5, 5, 7, 5, 5, 7, 5, 5, 7, 5, 5, 5, 5, 5, 9, 5, 5, 6, 5, 5]
+=== [EVAL] 09_toothbrush/visual_inception/b32_none_target_joint ===
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+09_toothbrush env4 none clean: Top-3=5/20, Top-5=18/20, mean=4.05, ranks=[3, 4, 5, 4, 4, 4, 3, 4, 4, 3, 4, 6, 3, 4, 6, 3, 4, 5, 4, 4]
+09_toothbrush env4 none modified: Top-3=0/20, Top-5=9/20, mean=5.50, ranks=[4, 6, 7, 4, 6, 7, 4, 7, 7, 4, 4, 7, 4, 6, 7, 4, 5, 7, 4, 6]
+ENV4 EVALUATION COMPLETED AND VERIFIED: {'07_shampoo': {'g14': {'clean_top1': 0, 'mod_top1': 2, 'clean_top3': 20, 'mod_top3': 20, 'clean_top5': 20, 'mod_top5': 20, 'n_queries': 20, 'clean_mean_rank': 2.8, 'mod_mean_rank': 2.5, 'top3_gain_pp': 0.0, 'mean_rank_gain': 0.3, 'clean_range': [2, 3], 'mod_range': [1, 3], 'clean_mean_score': 0.6274527072906494, 'mod_mean_score': 0.63245869576931, 'score_delta': 0.005005988478660628, 'clean_ranks': [3, 3, 2, 3, 2, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3], 'mod_ranks': [3, 3, 1, 3, 2, 3, 3, 2, 1, 3, 2, 2, 3, 3, 2, 3, 3, 2, 3, 3]}, 'b32': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 19, 'mod_top3': 7, 'clean_top5': 20, 'mod_top5': 10, 'n_queries': 20, 'clean_mean_rank': 2.25, 'mod_mean_rank': 4.6, 'top3_gain_pp': -60.0, 'mean_rank_gain': -2.35, 'clean_range': [2, 4], 'mod_range': [2, 7], 'clean_mean_score': 0.7483224630355835, 'mod_mean_score': 0.7342690825462341, 'score_delta': -0.014053380489349343, 'clean_ranks': [2, 2, 2, 2, 3, 2, 2, 3, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 3], 'mod_ranks': [5, 6, 6, 3, 6, 2, 3, 6, 2, 6, 6, 2, 4, 7, 3, 5, 6, 2, 6, 6]}}, '09_toothbrush': {'g14': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 0, 'mod_top3': 0, 'clean_top5': 18, 'mod_top5': 15, 'n_queries': 20, 'clean_mean_rank': 5.1, 'mod_mean_rank': 5.55, 'top3_gain_pp': 0.0, 'mean_rank_gain': -0.45, 'clean_range': [4, 7], 'mod_range': [5, 9], 'clean_mean_score': 0.7830134272575379, 'mod_mean_score': 0.7773703396320343, 'score_delta': -0.0056430876255035844, 'clean_ranks': [5, 5, 5, 5, 5, 5, 5, 5, 6, 5, 5, 4, 5, 5, 7, 5, 5, 5, 5, 5], 'mod_ranks': [5, 5, 7, 5, 5, 7, 5, 5, 7, 5, 5, 5, 5, 5, 9, 5, 5, 6, 5, 5]}, 'b32': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 5, 'mod_top3': 0, 'clean_top5': 18, 'mod_top5': 9, 'n_queries': 20, 'clean_mean_rank': 4.05, 'mod_mean_rank': 5.5, 'top3_gain_pp': -25.0, 'mean_rank_gain': -1.45, 'clean_range': [3, 6], 'mod_range': [4, 7], 'clean_mean_score': 0.8112514197826386, 'mod_mean_score': 0.8027891546487809, 'score_delta': -0.008462265133857727, 'clean_ranks': [3, 4, 5, 4, 4, 4, 3, 4, 4, 3, 4, 6, 3, 4, 6, 3, 4, 5, 4, 4], 'mod_ranks': [4, 6, 7, 4, 6, 7, 4, 7, 7, 4, 4, 7, 4, 6, 7, 4, 5, 7, 4, 6]}}}
+=== [06_jeans] Step 1/2: Generate (06_jeans/visual_inception) at 2026-11-16T09:41:04Z ===
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+视觉记忆植入优化 1/100，目标值 0.866236
+视觉记忆植入优化 10/100，目标值 0.784503
+视觉记忆植入优化 20/100，目标值 0.761491
+视觉记忆植入优化 30/100，目标值 0.758155
+视觉记忆植入优化 40/100，目标值 0.756807
+视觉记忆植入优化 50/100，目标值 0.751728
+视觉记忆植入优化 60/100，目标值 0.745785
+视觉记忆植入优化 70/100，目标值 0.751973
+视觉记忆植入优化 80/100，目标值 0.745391
+视觉记忆植入优化 90/100，目标值 0.731574
+视觉记忆植入优化 100/100，目标值 0.736802
+=== [06_jeans] Step 2/2: Evaluate Env 4 (06_jeans/visual_inception, none defense) at 2026-11-16T09:43:21Z ===
+=== [EVAL] 06_jeans/visual_inception/g14_none_target_joint ===
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+06_jeans env4 none clean: Top-3=0/20, Top-5=0/20, mean=19.85, ranks=[20, 20, 20, 20, 20, 20, 19, 20, 20, 19, 20, 20, 20, 20, 20, 19, 20, 20, 20, 20]
+06_jeans env4 none modified: Top-3=0/20, Top-5=0/20, mean=18.35, ranks=[17, 18, 19, 18, 19, 19, 17, 19, 19, 18, 18, 19, 17, 18, 20, 17, 18, 19, 19, 19]
+=== [EVAL] 06_jeans/visual_inception/b32_none_target_joint ===
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+06_jeans env4 none clean: Top-3=0/20, Top-5=0/20, mean=20.95, ranks=[21, 21, 20, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21]
+06_jeans env4 none modified: Top-3=0/20, Top-5=0/20, mean=21.00, ranks=[21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21]
+ENV4 EVALUATION COMPLETED AND VERIFIED: {'07_shampoo': {'g14': {'clean_top1': 0, 'mod_top1': 2, 'clean_top3': 20, 'mod_top3': 20, 'clean_top5': 20, 'mod_top5': 20, 'n_queries': 20, 'clean_mean_rank': 2.8, 'mod_mean_rank': 2.5, 'top3_gain_pp': 0.0, 'mean_rank_gain': 0.3, 'clean_range': [2, 3], 'mod_range': [1, 3], 'clean_mean_score': 0.6274527072906494, 'mod_mean_score': 0.63245869576931, 'score_delta': 0.005005988478660628, 'clean_ranks': [3, 3, 2, 3, 2, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3], 'mod_ranks': [3, 3, 1, 3, 2, 3, 3, 2, 1, 3, 2, 2, 3, 3, 2, 3, 3, 2, 3, 3]}, 'b32': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 19, 'mod_top3': 7, 'clean_top5': 20, 'mod_top5': 10, 'n_queries': 20, 'clean_mean_rank': 2.25, 'mod_mean_rank': 4.6, 'top3_gain_pp': -60.0, 'mean_rank_gain': -2.35, 'clean_range': [2, 4], 'mod_range': [2, 7], 'clean_mean_score': 0.7483224630355835, 'mod_mean_score': 0.7342690825462341, 'score_delta': -0.014053380489349343, 'clean_ranks': [2, 2, 2, 2, 3, 2, 2, 3, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 3], 'mod_ranks': [5, 6, 6, 3, 6, 2, 3, 6, 2, 6, 6, 2, 4, 7, 3, 5, 6, 2, 6, 6]}}, '09_toothbrush': {'g14': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 0, 'mod_top3': 0, 'clean_top5': 18, 'mod_top5': 15, 'n_queries': 20, 'clean_mean_rank': 5.1, 'mod_mean_rank': 5.55, 'top3_gain_pp': 0.0, 'mean_rank_gain': -0.45, 'clean_range': [4, 7], 'mod_range': [5, 9], 'clean_mean_score': 0.7830134272575379, 'mod_mean_score': 0.7773703396320343, 'score_delta': -0.0056430876255035844, 'clean_ranks': [5, 5, 5, 5, 5, 5, 5, 5, 6, 5, 5, 4, 5, 5, 7, 5, 5, 5, 5, 5], 'mod_ranks': [5, 5, 7, 5, 5, 7, 5, 5, 7, 5, 5, 5, 5, 5, 9, 5, 5, 6, 5, 5]}, 'b32': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 5, 'mod_top3': 0, 'clean_top5': 18, 'mod_top5': 9, 'n_queries': 20, 'clean_mean_rank': 4.05, 'mod_mean_rank': 5.5, 'top3_gain_pp': -25.0, 'mean_rank_gain': -1.45, 'clean_range': [3, 6], 'mod_range': [4, 7], 'clean_mean_score': 0.8112514197826386, 'mod_mean_score': 0.8027891546487809, 'score_delta': -0.008462265133857727, 'clean_ranks': [3, 4, 5, 4, 4, 4, 3, 4, 4, 3, 4, 6, 3, 4, 6, 3, 4, 5, 4, 4], 'mod_ranks': [4, 6, 7, 4, 6, 7, 4, 7, 7, 4, 4, 7, 4, 6, 7, 4, 5, 7, 4, 6]}}, '06_jeans': {'g14': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 0, 'mod_top3': 0, 'clean_top5': 0, 'mod_top5': 0, 'n_queries': 20, 'clean_mean_rank': 19.85, 'mod_mean_rank': 18.35, 'top3_gain_pp': 0.0, 'mean_rank_gain': 1.5, 'clean_range': [19, 20], 'mod_range': [17, 20], 'clean_mean_score': 0.6524856209754943, 'mod_mean_score': 0.6659231692552566, 'score_delta': 0.01343754827976229, 'clean_ranks': [20, 20, 20, 20, 20, 20, 19, 20, 20, 19, 20, 20, 20, 20, 20, 19, 20, 20, 20, 20], 'mod_ranks': [17, 18, 19, 18, 19, 19, 17, 19, 19, 18, 18, 19, 17, 18, 20, 17, 18, 19, 19, 19]}, 'b32': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 0, 'mod_top3': 0, 'clean_top5': 0, 'mod_top5': 0, 'n_queries': 20, 'clean_mean_rank': 20.95, 'mod_mean_rank': 21.0, 'top3_gain_pp': 0.0, 'mean_rank_gain': -0.05, 'clean_range': [20, 21], 'mod_range': [21, 21], 'clean_mean_score': 0.7316566348075867, 'mod_mean_score': 0.7292890399694443, 'score_delta': -0.0023675948381424172, 'clean_ranks': [21, 21, 20, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21], 'mod_ranks': [21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21]}}}
+=== [08_speaker] Step 1/2: Generate (08_speaker/visual_inception) at 2026-11-16T09:46:52Z ===
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+视觉记忆植入优化 1/100，目标值 0.894367
+视觉记忆植入优化 10/100，目标值 0.785379
+视觉记忆植入优化 20/100，目标值 0.775974
+视觉记忆植入优化 30/100，目标值 0.768637
+视觉记忆植入优化 40/100，目标值 0.762462
+视觉记忆植入优化 50/100，目标值 0.747555
+视觉记忆植入优化 60/100，目标值 0.746350
+视觉记忆植入优化 70/100，目标值 0.744643
+视觉记忆植入优化 80/100，目标值 0.753426
+视觉记忆植入优化 90/100，目标值 0.752732
+视觉记忆植入优化 100/100，目标值 0.750485
+=== [08_speaker] Step 2/2: Evaluate Env 4 (08_speaker/visual_inception, none defense) at 2026-11-16T09:49:10Z ===
+=== [EVAL] 08_speaker/visual_inception/g14_none_target_joint ===
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+08_speaker env4 none clean: Top-3=0/20, Top-5=0/20, mean=14.70, ranks=[15, 14, 15, 15, 15, 15, 15, 13, 15, 15, 14, 15, 15, 14, 15, 15, 15, 15, 15, 14]
+08_speaker env4 none modified: Top-3=0/20, Top-5=0/20, mean=13.30, ranks=[14, 12, 14, 13, 12, 15, 14, 12, 14, 14, 12, 13, 14, 12, 14, 14, 12, 15, 14, 12]
+=== [EVAL] 08_speaker/visual_inception/b32_none_target_joint ===
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+08_speaker env4 none clean: Top-3=0/20, Top-5=0/20, mean=12.15, ranks=[12, 12, 12, 12, 12, 12, 12, 12, 14, 12, 12, 12, 12, 12, 12, 12, 13, 12, 12, 12]
+08_speaker env4 none modified: Top-3=0/20, Top-5=0/20, mean=12.40, ranks=[12, 12, 12, 13, 12, 13, 12, 12, 14, 12, 12, 14, 12, 12, 12, 12, 12, 12, 14, 12]
+ENV4 EVALUATION COMPLETED AND VERIFIED: {'07_shampoo': {'g14': {'clean_top1': 0, 'mod_top1': 2, 'clean_top3': 20, 'mod_top3': 20, 'clean_top5': 20, 'mod_top5': 20, 'n_queries': 20, 'clean_mean_rank': 2.8, 'mod_mean_rank': 2.5, 'top3_gain_pp': 0.0, 'mean_rank_gain': 0.3, 'clean_range': [2, 3], 'mod_range': [1, 3], 'clean_mean_score': 0.6274527072906494, 'mod_mean_score': 0.63245869576931, 'score_delta': 0.005005988478660628, 'clean_ranks': [3, 3, 2, 3, 2, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3], 'mod_ranks': [3, 3, 1, 3, 2, 3, 3, 2, 1, 3, 2, 2, 3, 3, 2, 3, 3, 2, 3, 3]}, 'b32': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 19, 'mod_top3': 7, 'clean_top5': 20, 'mod_top5': 10, 'n_queries': 20, 'clean_mean_rank': 2.25, 'mod_mean_rank': 4.6, 'top3_gain_pp': -60.0, 'mean_rank_gain': -2.35, 'clean_range': [2, 4], 'mod_range': [2, 7], 'clean_mean_score': 0.7483224630355835, 'mod_mean_score': 0.7342690825462341, 'score_delta': -0.014053380489349343, 'clean_ranks': [2, 2, 2, 2, 3, 2, 2, 3, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 3], 'mod_ranks': [5, 6, 6, 3, 6, 2, 3, 6, 2, 6, 6, 2, 4, 7, 3, 5, 6, 2, 6, 6]}}, '09_toothbrush': {'g14': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 0, 'mod_top3': 0, 'clean_top5': 18, 'mod_top5': 15, 'n_queries': 20, 'clean_mean_rank': 5.1, 'mod_mean_rank': 5.55, 'top3_gain_pp': 0.0, 'mean_rank_gain': -0.45, 'clean_range': [4, 7], 'mod_range': [5, 9], 'clean_mean_score': 0.7830134272575379, 'mod_mean_score': 0.7773703396320343, 'score_delta': -0.0056430876255035844, 'clean_ranks': [5, 5, 5, 5, 5, 5, 5, 5, 6, 5, 5, 4, 5, 5, 7, 5, 5, 5, 5, 5], 'mod_ranks': [5, 5, 7, 5, 5, 7, 5, 5, 7, 5, 5, 5, 5, 5, 9, 5, 5, 6, 5, 5]}, 'b32': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 5, 'mod_top3': 0, 'clean_top5': 18, 'mod_top5': 9, 'n_queries': 20, 'clean_mean_rank': 4.05, 'mod_mean_rank': 5.5, 'top3_gain_pp': -25.0, 'mean_rank_gain': -1.45, 'clean_range': [3, 6], 'mod_range': [4, 7], 'clean_mean_score': 0.8112514197826386, 'mod_mean_score': 0.8027891546487809, 'score_delta': -0.008462265133857727, 'clean_ranks': [3, 4, 5, 4, 4, 4, 3, 4, 4, 3, 4, 6, 3, 4, 6, 3, 4, 5, 4, 4], 'mod_ranks': [4, 6, 7, 4, 6, 7, 4, 7, 7, 4, 4, 7, 4, 6, 7, 4, 5, 7, 4, 6]}}, '06_jeans': {'g14': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 0, 'mod_top3': 0, 'clean_top5': 0, 'mod_top5': 0, 'n_queries': 20, 'clean_mean_rank': 19.85, 'mod_mean_rank': 18.35, 'top3_gain_pp': 0.0, 'mean_rank_gain': 1.5, 'clean_range': [19, 20], 'mod_range': [17, 20], 'clean_mean_score': 0.6524856209754943, 'mod_mean_score': 0.6659231692552566, 'score_delta': 0.01343754827976229, 'clean_ranks': [20, 20, 20, 20, 20, 20, 19, 20, 20, 19, 20, 20, 20, 20, 20, 19, 20, 20, 20, 20], 'mod_ranks': [17, 18, 19, 18, 19, 19, 17, 19, 19, 18, 18, 19, 17, 18, 20, 17, 18, 19, 19, 19]}, 'b32': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 0, 'mod_top3': 0, 'clean_top5': 0, 'mod_top5': 0, 'n_queries': 20, 'clean_mean_rank': 20.95, 'mod_mean_rank': 21.0, 'top3_gain_pp': 0.0, 'mean_rank_gain': -0.05, 'clean_range': [20, 21], 'mod_range': [21, 21], 'clean_mean_score': 0.7316566348075867, 'mod_mean_score': 0.7292890399694443, 'score_delta': -0.0023675948381424172, 'clean_ranks': [21, 21, 20, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21], 'mod_ranks': [21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21]}}, '08_speaker': {'g14': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 0, 'mod_top3': 0, 'clean_top5': 0, 'mod_top5': 0, 'n_queries': 20, 'clean_mean_rank': 14.7, 'mod_mean_rank': 13.3, 'top3_gain_pp': 0.0, 'mean_rank_gain': 1.4, 'clean_range': [13, 15], 'mod_range': [12, 15], 'clean_mean_score': 0.5808841824531555, 'mod_mean_score': 0.6078261017799378, 'score_delta': 0.02694191932678225, 'clean_ranks': [15, 14, 15, 15, 15, 15, 15, 13, 15, 15, 14, 15, 15, 14, 15, 15, 15, 15, 15, 14], 'mod_ranks': [14, 12, 14, 13, 12, 15, 14, 12, 14, 14, 12, 13, 14, 12, 14, 14, 12, 15, 14, 12]}, 'b32': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 0, 'mod_top3': 0, 'clean_top5': 0, 'mod_top5': 0, 'n_queries': 20, 'clean_mean_rank': 12.15, 'mod_mean_rank': 12.4, 'top3_gain_pp': 0.0, 'mean_rank_gain': -0.25, 'clean_range': [12, 14], 'mod_range': [12, 14], 'clean_mean_score': 0.7019686013460159, 'mod_mean_score': 0.6985481470823288, 'score_delta': -0.0034204542636870894, 'clean_ranks': [12, 12, 12, 12, 12, 12, 12, 12, 14, 12, 12, 12, 12, 12, 12, 12, 13, 12, 12, 12], 'mod_ranks': [12, 12, 12, 13, 12, 13, 12, 12, 14, 12, 12, 14, 12, 12, 12, 12, 12, 12, 14, 12]}}}
+=== 4 GROUPS (07_shampoo, 09_toothbrush, 06_jeans, 08_speaker) COMPLETE at 2026-11-16T09:52:44Z ===

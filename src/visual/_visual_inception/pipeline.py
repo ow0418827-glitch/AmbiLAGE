@@ -23,7 +23,15 @@ from .perceptual import load_perceptual, resolve_lpips_weights
 
 OBJECTIVE_KIND = 'visual_inception_semantic_perceptual_no_retrieval_v1'
 RETRIEVAL_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_v2'
+ENHANCED_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_hardneg_advquery_v3'
 QUERY_SAMPLING_KIND = 'fixed_pool_per_step_without_replacement_cross_step_reuse_v1'
+MECHANISM_FIELDS = ('mechanism_profile', 'contrastive_margin', 'hard_negative_count',
+    'hard_negative_same_category_count', 'hard_negative_proxy_memory_count', 'hard_negative_popularity_count',
+    'query_adversarial_radius', 'query_adversarial_steps', 'query_adversarial_step_size', 'query_adversarial_mix')
+
+
+def mechanism_parameters(config):
+    return {name: getattr(config, name) for name in MECHANISM_FIELDS}
 
 
 def _prepare_text_features(models, texts, *, fixture):
@@ -43,15 +51,22 @@ def _prepare_text_features(models, texts, *, fixture):
 
 
 def _proxy_components(model, image, target, *, retrieval_state=None, model_index=0,
-                      query_indices=None, temperature=.07):
+                      query_indices=None, temperature=.07, config=None, return_audit=False):
     if retrieval_state is None:
-        return semantic_loss(model, image, target), image.new_zeros(())
+        values = (semantic_loss(model, image, target), image.new_zeros(()))
+        return (*values, None) if return_audit else values
     if query_indices is None:
         raise ValueError('检索优化必须显式指定冻结查询池中的批次索引')
     feature = model.encode_image(image).global_embedding
     queries = retrieval_state['query_features'][model_index][query_indices]
-    return retrieval_semantic_losses(feature, target, queries,
-        retrieval_state['negative_features'][model_index], temperature)
+    negatives = retrieval_state['negative_features'][model_index]
+    if config is not None and config.mechanism_profile == 'enhanced_v3':
+        from .enhanced_objective import enhanced_retrieval_semantic_losses
+        semantic, retrieval, audit = enhanced_retrieval_semantic_losses(feature, target, queries,
+            negatives, negative_policy=retrieval_state['negative_policies'][model_index], config=config)
+        return (semantic, retrieval, audit) if return_audit else (semantic, retrieval)
+    values = retrieval_semantic_losses(feature, target, queries, negatives, temperature)
+    return (*values, None) if return_audit else values
 
 
 def _gradient(image, source, models, text_features, weights, perceptual, config, *,
@@ -59,17 +74,19 @@ def _gradient(image, source, models, text_features, weights, perceptual, config,
     if config.objective_mode == 'retrieval_semantic_perceptual' and retrieval_state is None:
         raise ValueError('完整三项训练目标缺少独立查询与公开代理库向量')
     total_gradient = torch.zeros_like(image)
-    similarities, retrieval_values = [], []
+    similarities, retrieval_values, mechanism_audits = [], [], []
     for index, (model, targets, weight) in enumerate(zip(models, text_features, weights)):
         leaf = image.detach().requires_grad_(True)
-        semantic, retrieval = _proxy_components(model, leaf, targets,
+        semantic, retrieval, mechanism_audit = _proxy_components(model, leaf, targets,
             retrieval_state=retrieval_state, model_index=index, query_indices=query_indices,
-            temperature=config.retrieval_temperature)
+            temperature=config.retrieval_temperature, config=config, return_audit=True)
         loss = config.semantic_weight * semantic + config.retrieval_weight * retrieval
         gradient, = torch.autograd.grad(loss, leaf)
         total_gradient.add_(gradient.detach(), alpha=weight)
         similarities.append(float(semantic.detach()))
         retrieval_values.append(float(retrieval.detach()))
+        if mechanism_audit is not None:
+            mechanism_audits.append(mechanism_audit)
         del leaf, loss, gradient, semantic, retrieval
     leaf = image.detach().requires_grad_(True)
     distance = perceptual(source, leaf)
@@ -81,6 +98,8 @@ def _gradient(image, source, models, text_features, weights, perceptual, config,
         perceptual_loss=float(distance.detach()))
     record['loss'] = (config.semantic_weight * record['semantic_loss']
         + config.retrieval_weight * record['retrieval_loss'] + config.perceptual_weight * record['perceptual_loss'])
+    if mechanism_audits:
+        record['mechanism_audits'] = mechanism_audits
     if not torch.isfinite(total_gradient).all():
         raise FloatingPointError('图片梯度含非有限值')
     return total_gradient, record
@@ -112,6 +131,7 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
     semantic = prepare_semantic_targets(source, target, target_text=target_text, definition=definition)
     bundle = _load_bundle(config, source, target, semantic)
     retrieval_enabled = bundle is not None
+    enhanced_enabled = retrieval_enabled and config.mechanism_profile == 'enhanced_v3'
     source_pil, target_pil = load_image(source), load_image(target)
     requested_device = torch.device(device)
     if config.smoke_test:
@@ -143,7 +163,7 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
     if retrieval_enabled:
         from .retrieval_cache import encode_candidate_cache
         query_features, query_encoding = _prepare_text_features(models, bundle['queries'], fixture=config.smoke_test)
-        negatives = []
+        negatives, negative_policies = [], []
         cache_root = _project_path(config.candidate_cache_dir) if config.candidate_cache_dir else root / 'candidate_cache'
         for model, concept in zip(models, text_features):
             vectors, record = encode_candidate_cache(model, bundle['candidates'], cache_root,
@@ -151,7 +171,13 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
             if vectors.shape[1] != concept.shape[1]:
                 raise ValueError('固定公开候选向量与当前模型文字维度不一致')
             negatives.append(vectors.detach()); cache_records.append(record)
+            if enhanced_enabled:
+                from .negative_sampling import build_negative_policy
+                negative_policies.append(build_negative_policy(bundle['candidate_metadata'], vectors,
+                    category=bundle['audit']['category']))
         retrieval_state = dict(concept_features=text_features, query_features=query_features, negative_features=negatives)
+        if enhanced_enabled:
+            retrieval_state['negative_policies'] = negative_policies
         sampling = dict(algorithm=QUERY_SAMPLING_KIND, pool_size=100, batch_size=config.query_batch_size,
             calibration_indices=sample_query_indices(100, config.query_batch_size, config.seed, 0),
             step_indices=[sample_query_indices(100, config.query_batch_size, config.seed, step)
@@ -160,39 +186,53 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
     started = time.perf_counter()
     epsilon = config.epsilon_levels / 255.0
     step_size = config.step_size_levels / 255.0
+    calibration_audits = [[] for _ in models]
+    def enhanced_calibration_loss(model_index, model, leaf, target_features):
+        sem, ret, audit = _proxy_components(model, leaf, target_features,
+            retrieval_state=retrieval_state, model_index=model_index,
+            query_indices=sampling['calibration_indices'], temperature=config.retrieval_temperature,
+            config=config, return_audit=True)
+        calibration_audits[model_index].append(audit)
+        return config.semantic_weight * sem + config.retrieval_weight * ret
     variances = estimate_gradient_variances(source_tensor, models, text_features,
         epsilon=epsilon, restarts=config.gradient_restarts, seed=config.seed,
         retrieval_state=retrieval_state, calibration_indices=sampling['calibration_indices'] if sampling else None,
         retrieval_weight=config.retrieval_weight, semantic_weight=config.semantic_weight,
-        temperature=config.retrieval_temperature)
+        temperature=config.retrieval_temperature,
+        loss_function=enhanced_calibration_loss if enhanced_enabled else None)
     weights = inverse_variance_weights(variances)
     lower, upper = (source_tensor - epsilon).clamp(0, 1), (source_tensor + epsilon).clamp(0, 1)
     # Clean-image initialization is an explicit reproduction assumption; random
     # restarts estimate ensemble uncertainty, not outcome-based seed selection.
     image = source_tensor.clone()
-    history = []
+    history, mechanism_steps = [], []
     for step in range(1, config.steps + 1):
         indices = sampling['step_indices'][step - 1] if sampling else None
         gradient, record = _gradient(image, source_tensor, models, text_features, weights, perceptual, config,
             retrieval_state=retrieval_state, query_indices=indices)
         image = torch.maximum(lower, torch.minimum(upper, image - step_size * gradient.sign())).detach()
+        if enhanced_enabled:
+            mechanism_steps.append(dict(step=step, query_indices=indices, model_audits=record['mechanism_audits']))
         if step == 1 or step == config.steps or step % 10 == 0:
             history.append(dict(step=step, **record, query_indices=indices,
                                 linf_after_update=float((image - source_tensor).abs().max())))
             print(f'视觉记忆植入优化 {step}/{config.steps}，目标值 {record["loss"]:.6f}', flush=True)
     with torch.no_grad():
-        final_semantic, final_retrieval = [], []
+        final_semantic, final_retrieval, final_mechanism_audits = [], [], []
         for index, (model, targets) in enumerate(zip(models, text_features)):
-            sem, ret = _proxy_components(model, image, targets, retrieval_state=retrieval_state,
+            sem, ret, mechanism_audit = _proxy_components(model, image, targets, retrieval_state=retrieval_state,
                 model_index=index, query_indices=list(range(100)) if retrieval_enabled else None,
-                temperature=config.retrieval_temperature)
+                temperature=config.retrieval_temperature, config=config, return_audit=True)
             final_semantic.append(float(sem)); final_retrieval.append(float(ret))
+            if mechanism_audit is not None:
+                final_mechanism_audits.append(mechanism_audit)
         final_distance = float(perceptual(source_tensor, image))
     output = save_tensor_png(root / 'adversarial.png', image)
     decoded = decoded_image_audit(source_pil, output, maximum_levels=config.epsilon_levels)
     if not decoded['within_budget']:
         raise AssertionError('实际解码图片超过冻结像素预算')
-    semantic_definition = dict(kind=RETRIEVAL_OBJECTIVE_KIND if retrieval_enabled else OBJECTIVE_KIND,
+    objective_kind = ENHANCED_OBJECTIVE_KIND if enhanced_enabled else RETRIEVAL_OBJECTIVE_KIND if retrieval_enabled else OBJECTIVE_KIND
+    semantic_definition = dict(kind=objective_kind,
         semantic_weight=config.semantic_weight,
         perceptual_weight=config.perceptual_weight,
         semantic_reduction='mean_one_minus_cosine_across_three_public_text_templates',
@@ -218,6 +258,18 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
             paper_query_source_proportions_reproduced=True,
             paper_query_generator_reproduced=bundle['audit'].get('paper_query_generator_reproduced', False),
             query_template_adaptation='target_concept_and_future_queries_are_separate')
+    if enhanced_enabled:
+        semantic_definition.update(
+            mechanism_profile='enhanced_v3', mechanism_parameters=mechanism_parameters(config),
+            retrieval_denominator='one_dynamic_adversarial_positive_plus_query_selected_public_hard_negatives',
+            hard_negative_pool_size=len(bundle['candidates']), hard_negative_limit=config.hard_negative_count,
+            contrastive_margin=config.contrastive_margin,
+            contrastive_margin_algorithm='positive_cosine_additive_margin_before_temperature_v1',
+            query_adversarial_space='normalized_text_embedding',
+            query_adversarial_algorithm='spherical_l2_pgd_best_per_query_v1',
+            proxy_user_memory_is_independent_public_role=True,
+            popularity_is_declared_proxy_not_real_sales=True,
+            paper_missing_mechanisms_implemented=True, author_exact_mechanism_details_reproduced=False)
     attack = dict(steps_requested=config.steps, steps_completed=config.steps, selected_step=config.steps,
         stop_reason='requested_steps_completed', epsilon=epsilon, epsilon_levels=config.epsilon_levels,
         step_size=step_size, step_size_levels=config.step_size_levels, norm='linf',
@@ -230,7 +282,7 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
         variance_floor_policy='max(max_model_variance*1e-12,float64_tiny)',
         ensemble_weight_formula='normalize(max(variance,relative_floor)^-2)',
         ensemble_weights=weights, weights_frozen_before_optimization=True)
-    metadata = dict(schema_version=2 if retrieval_enabled else 1, method='visual_inception', status='success',
+    metadata = dict(schema_version=3 if enhanced_enabled else 2 if retrieval_enabled else 1, method='visual_inception', status='success',
         test_fixture=config.smoke_test, production_backend=not config.smoke_test,
         config=config.to_dict(), config_sha256=content_sha256(config.to_dict()), seed=config.seed,
         source_image=str(source), source_image_sha256=semantic['source_image']['sha256'],
@@ -261,6 +313,19 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
             training_bundle_sha256=bundle['bundle_sha256'], training_bundle_audit=bundle['audit'],
             training_data_audit=bundle['audit'], future_queries=bundle['queries'],
             query_text_encoding_audits=query_encoding, query_sampling=sampling, negative_candidate_caches=cache_records)
+    if enhanced_enabled:
+        execution = dict(schema_version=1, kind=ENHANCED_OBJECTIVE_KIND,
+            parameters=mechanism_parameters(config), negative_policies=negative_policies,
+            calibration_audits=calibration_audits, step_audits=mechanism_steps,
+            final_model_audits=final_mechanism_audits,
+            author_exact_implementation_claimed=False,
+            paper_underspecified_choices=['public_proxy_user_memory_role', 'feature_centrality_popularity_proxy',
+                'source_quotas_and_querywise_hard_selection', 'positive_cosine_margin_before_temperature',
+                'unit_sphere_l2_text_embedding_adversarial_queries'])
+        execution['execution_sha256'] = content_sha256(execution)
+        metadata['enhanced_mechanisms'] = execution
+        metadata['paper_missing_mechanisms_implemented'] = True
+        metadata['assumptions'] += execution['paper_underspecified_choices']
     for name in ('metadata.json', 'attack_metrics.json'):
         save_json(root / name, metadata)
     ready = dict(schema_version=metadata['schema_version'], method='visual_inception', status='completed',
@@ -276,6 +341,9 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
     if retrieval_enabled:
         ready.update(training_bundle_sha256=bundle['bundle_sha256'],
             training_manifest_sha256=semantic_definition['training_manifest_sha256'])
+    if enhanced_enabled:
+        ready.update(mechanism_profile='enhanced_v3',
+                     enhanced_mechanisms_sha256=metadata['enhanced_mechanisms']['execution_sha256'])
     save_json(root / 'ready.json', ready)
     del models, perceptual, text_features, image, retrieval_state
     gc.collect()

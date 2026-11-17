@@ -293,13 +293,14 @@ def load_training_bundle(manifest_path, *, source, target, public_semantic, requ
     _require(isinstance(candidates, list) and len(candidates) >= 2, '训练包必须提供至少两张独立公开候选图片')
     source_pixels, target_pixels = decoded_image_sha256(source), decoded_image_sha256(target)
     candidate_ids, candidate_hashes, candidate_pixels, resolved_candidates = set(), set(), set(), []
+    candidate_metadata = []
     for candidate in candidates:
         _require(isinstance(candidate, dict), '候选图片条目必须为对象')
         identifier = candidate.get('id')
         _require(isinstance(identifier, str) and bool(identifier.strip()) and identifier not in candidate_ids,
                  '候选商品编号为空或重复')
         candidate_ids.add(identifier)
-        _, _, row, _ = _provenance_row(candidate, loaded, 'candidate_catalog')
+        candidate_source_id, _, row, candidate_provenance = _provenance_row(candidate, loaded, 'candidate_catalog')
         image = bundle_path(root, candidate.get('image'), '候选图片')
         image_hash = sha256_file(image)
         _require(image_hash == candidate.get('image_sha256') == row.get('image_sha256'), '候选图片与公开来源行摘要不一致')
@@ -312,6 +313,10 @@ def load_training_bundle(manifest_path, *, source, target, public_semantic, requ
         candidate_pixels.add(pixels)
         resolved_candidates.append(dict(id=identifier, image_path=str(image), image_sha256=image_hash,
                                        decoded_image_sha256=pixels))
+        # Additional public role metadata is separate from legacy candidates and
+        # audit identity, so previously frozen evidence remains unchanged.
+        candidate_metadata.append(dict(row, candidate_id=identifier,
+            source_id=candidate_source_id, source_row_id=str(candidate_provenance['row_id'])))
     _require(sha256_file(path) == raw_sha, '读取训练包时清单发生变化')
     bundle_sha = content_sha256(manifest)
     audit = dict(schema_version=1, kind='visual_inception_independent_public_training_bundle_v1',
@@ -332,4 +337,5 @@ def load_training_bundle(manifest_path, *, source, target, public_semantic, requ
     audit['audit_sha256'] = content_sha256(audit)
     return dict(target_concept_text=concept, queries=[q['text'] for q in queries],
         candidates=resolved_candidates, audit=audit, bundle_sha256=bundle_sha,
-        manifest_path=str(path), manifest_sha256=raw_sha, allowed_roots=[str(root)])
+        manifest_path=str(path), manifest_sha256=raw_sha, allowed_roots=[str(root)],
+        candidate_metadata=candidate_metadata)

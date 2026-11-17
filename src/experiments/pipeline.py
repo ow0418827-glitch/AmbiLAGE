@@ -473,9 +473,8 @@ def main(argv=None):
         if args.stage == 'verify':
             from src.experiments.shared_evaluation import verify
             settings = config.get('evaluation', {})
-            from src.experiments.shared_evaluation import make_eval_encoder
-            verify(method_root / 'evaluation', encoder_factory=lambda: make_eval_encoder(args.device,
-                project_path(settings['encoder_config']) if settings.get('encoder_config') else None),
+            verify(method_root / 'evaluation', device=args.device,
+                encoder_config=project_path(settings['encoder_config']) if settings.get('encoder_config') else None,
                 isolated_process=True,
                 query_mode=settings.get('query_mode'),
                 key_mode=settings.get('key_mode'),

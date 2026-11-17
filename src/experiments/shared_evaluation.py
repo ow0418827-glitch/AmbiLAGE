@@ -2,6 +2,7 @@
 import copy
 import math
 import os
+import re
 import subprocess
 import sys
 import uuid
@@ -19,6 +20,122 @@ from src.experiments.query_contract import load_formal_queries, query_retriever_
 
 SCORE_TOLERANCE = 1e-7
 KEY_MODES = ('image', 'joint')
+
+
+def _is_sha256(value):
+    return isinstance(value, str) and re.fullmatch(r'[0-9a-f]{64}', value) is not None
+
+
+def _actual_training_identities(rows):
+    """Keep the frozen model/weight identity, without loading training weights."""
+    if not isinstance(rows, list) or not rows:
+        raise ValueError('缺少实际冻结的训练代理身份')
+    identities = []
+    for row in rows:
+        if (not isinstance(row, dict)
+                or any(not isinstance(row.get(k), str) or not row[k].strip()
+                       for k in ('name', 'pretrained'))
+                or not _is_sha256(row.get('weight_sha256'))):
+            raise ValueError('实际冻结训练代理缺少模型、预训练身份或权重摘要')
+        identity = {key: row.get(key) for key in ('name', 'pretrained', 'hf_repo', 'weight_sha256')}
+        if identity not in identities:
+            identities.append(identity)
+    return identities
+
+
+def _frozen_training_context(frozen, replacement_frozens, *, required):
+    """The modified bank may contain attacks trained with different proxies."""
+    images = []
+    for item in [frozen, *(replacement_frozens or [])]:
+        metadata = item.get('metadata', {})
+        rows = metadata.get('surrogates') or metadata.get('training_objective', {}).get('surrogates')
+        if not rows:
+            if required:
+                raise ValueError('冻结成图缺少实际训练代理，不能声明独立留出评估')
+            continue
+        record = dict(method=item['method'], source_id=item['source']['id'], image_sha256=item['image_sha256'],
+                      surrogates=_actual_training_identities(rows))
+        if record not in images:
+            images.append(record)
+    if not images:
+        return None
+    body = dict(schema_version=1, scope='all_frozen_images_in_modified_bank', images=images)
+    return dict(body, context_sha256=digest(body))
+
+
+def _context_training_identities(context):
+    if context is None:
+        return None
+    if (not isinstance(context, dict) or context.get('schema_version') != 1
+            or context.get('scope') != 'all_frozen_images_in_modified_bank'
+            or not isinstance(context.get('images'), list) or not context['images']
+            or context.get('context_sha256') != digest({k: v for k, v in context.items()
+                                                       if k != 'context_sha256'})):
+        raise ValueError('冻结评估计划的训练代理上下文或摘要不一致')
+    rows = []
+    for image in context['images']:
+        if (not isinstance(image, dict) or not isinstance(image.get('method'), str)
+                or not isinstance(image.get('source_id'), str) or not image['source_id']
+                or not _is_sha256(image.get('image_sha256'))):
+            raise ValueError('训练代理上下文没有绑定实际冻结图片')
+        rows.extend(_actual_training_identities(image.get('surrogates')))
+    return _actual_training_identities(rows)
+
+
+def _plan_training_identities(plan):
+    context = plan.get('training_surrogate_context')
+    if plan.get('training_identity_policy') == 'actual_frozen_surrogates_v1' and context is None:
+        raise ValueError('冻结评估计划缺少实际训练代理上下文')
+    rows = _context_training_identities(context)
+    if context is not None:
+        expected = {(plan.get('source_public_id'), plan['frozen_image_sha256'])}
+        expected.update((row['source_id'], row['image_sha256'])
+                        for row in plan.get('simultaneous_replacements', []))
+        actual = {(row['source_id'], row['image_sha256']) for row in context['images']}
+        if actual != expected or any(row['method'] != plan['method'] for row in context['images']):
+            raise ValueError('训练代理上下文未覆盖本次全部冻结替换图片')
+    return rows
+
+
+def _builtin_training_identities():
+    """Read every maintained built-in selection, rather than a second name list."""
+    from src.visual.training_surrogates import SURROGATE_SETS, select_training_surrogates
+    rows = []
+    for profile in SURROGATE_SETS:
+        if profile == 'custom':
+            continue
+        selection = select_training_surrogates(profile)
+        for index, spec in enumerate(selection.specs):
+            rows.append(dict(name=spec.name, pretrained=spec.pretrained, hf_repo=spec.hf_repo,
+                             weight_path=spec.weight_path, profile=profile, profile_index=index,
+                             config_path=str(selection.source)))
+    return rows
+
+
+def _builtin_weight_sha256(row):
+    """Resolve only a matching built-in candidate; never load a model."""
+    from src.paths import MODEL_ROOT
+    try:
+        if row['profile'] == 'lucid':
+            from src.visual._lucid.config import resolve_optimization
+            config = resolve_optimization(row['config_path'], surrogate_indices=[row['profile_index']])
+            weight = Path(config.surrogates[0].weight_path)
+        elif row.get('weight_path'):
+            weight = Path(row['weight_path'])
+            weight = weight if weight.is_absolute() else MODEL_ROOT / weight
+            if not weight.is_file():
+                weight = next((weight.parent / name for name in
+                               ('open_clip_model.safetensors', 'open_clip_pytorch_model.safetensors')
+                               if (weight.parent / name).is_file()), weight)
+        else:
+            from src.model_registry import resolve_model
+            directory = Path(resolve_model(row['hf_repo']))
+            weight = next((directory / name for name in
+                           ('open_clip_model.safetensors', 'open_clip_pytorch_model.safetensors')
+                           if (directory / name).is_file()), None)
+        return sha256_file(weight) if weight is not None and weight.is_file() else None
+    except FileNotFoundError:
+        return None
 
 
 def default_key_mode_for_method(method: str | None) -> str:
@@ -87,6 +204,9 @@ def evaluate(frozen, output, *, pool_path=SHARED_MEMORY, query_manifest,
                 raise ValueError('统一修改库中的冻结图片摘要改变')
             replacement_inputs.append(dict(source=item['source'], image=item['image'],
                                            source_memory_id=item.get('source_memory_id')))
+    training_context = _frozen_training_context(frozen, replacement_frozens,
+                                                required=encoder_factory is None)
+    actual_training_surrogates = _context_training_identities(training_context)
     # 正式图未就绪时，在读取共享库前退出。
     queries = load_formal_queries(query_manifest, frozen['target'], query_mode=query_mode)
     query_options = query_retriever_options(queries)
@@ -103,7 +223,10 @@ def evaluate(frozen, output, *, pool_path=SHARED_MEMORY, query_manifest,
     plan = dict(schema_version=1, scope='shared', pool_path=str(Path(pool_path).resolve()),
                 pool_sha256=sha256_file(pool_path), pool_count=len(entries),
                 source_memory_id=source_id, frozen_image_sha256=frozen['image_sha256'],
+                source_public_id=frozen['source']['id'],
                 method=frozen['method'], queries=queries, conditions=specs,
+                training_surrogate_context=training_context,
+                training_identity_policy='actual_frozen_surrogates_v1' if training_context else 'explicit_custom_encoder',
                 simultaneous_replacements=[dict(source_id=i['source']['id'], image_sha256=sha256_file(i['image']),
                                                source_memory_id=i.get('source_memory_id')) for i in replacement_inputs or []],
                 memory_vector_cache_policy='content_model_decoder_text_fusion_bound_v1' if memory_vector_cache_dir else 'disabled',
@@ -121,7 +244,8 @@ def evaluate(frozen, output, *, pool_path=SHARED_MEMORY, query_manifest,
     freeze_json(output / 'evaluation_plan.json', plan)
     custom_encoder = encoder_factory is not None
     if encoder_factory is None:
-        encoder_factory = lambda: make_eval_encoder(device, encoder_config)
+        encoder_factory = lambda: make_eval_encoder(device, encoder_config,
+                                                   training_surrogates=actual_training_surrogates)
     encoder = encoder_factory()
     bank_root = Path(bank_root) if bank_root is not None else output
     defender = defense_factory(bank_root / 'defended', device) if defense_factory else Defender(bank_root / 'defended', device)
@@ -206,7 +330,7 @@ class _EqualWeightGME:
         self.base.close()
 
 
-def make_eval_encoder(device='cuda', config_path=None):
+def make_eval_encoder(device='cuda', config_path=None, *, training_surrogates=None):
     """默认使用独立留出模型；仅显式配置可以选择同代理评估，且如实标记。"""
     # 同一进程先训练再评估时，也必须与独立复算进程使用相同数值模式。
     if str(device).startswith('cuda'):
@@ -225,6 +349,12 @@ def make_eval_encoder(device='cuda', config_path=None):
         raise ValueError('评估编码器须显式标明独立留出或同代理评估设置')
     if setting == 'matched_public_encoder' and config_path is None:
         raise ValueError('同代理评估只能由本次实验显式配置启用')
+    actual_context = training_surrogates is not None
+    training_specs = (_actual_training_identities(training_surrogates) if actual_context
+                      else _builtin_training_identities())
+    identity_scope = 'actual_frozen_surrogates' if actual_context else 'all_builtin_surrogate_configurations'
+    identity_audit = dict(training_identity_scope=identity_scope,
+                          training_surrogates_sha256=digest(training_specs))
     from src.visual._lucid.surrogates import resolve_hf_cached_weight
     from src.visual.encoders.clip import MatchedClipEncoder
     if settings.get('provider') == 'gme':
@@ -239,14 +369,9 @@ def make_eval_encoder(device='cuda', config_path=None):
             python=settings.get('python'), model=model, device=device))
         encoder.snapshot['evaluation_protocol'] = dict(
             setting=setting, matches_training_surrogate=False, black_box_transfer_claimed=True,
-            tf32_enabled=False, fusion='explicit_equal_unit_image_and_full_text')
+            tf32_enabled=False, fusion='explicit_equal_unit_image_and_full_text', **identity_audit)
         return encoder
     spec = settings['surrogate']
-    training_specs = read_json(VISUAL_CONFIGS / 'optimization.json')['surrogates']
-    # 两种方法全部训练代理都参与隔离校验，而非只检查原始像素方法。
-    training_specs += [dict(name='ViT-L-14', pretrained='openai'),
-                       dict(name='ViT-SO400M-14-SigLIP-384', pretrained='webli'),
-                       dict(name='ViT-H-14', pretrained='laion2b_s32b_b79k')]
     matching = [i for i, m in enumerate(training_specs)
                 if (m['name'], m['pretrained']) == (spec['name'], spec['pretrained'])]
     if matching and setting == 'held_out_public_encoder':
@@ -271,13 +396,16 @@ def make_eval_encoder(device='cuda', config_path=None):
                            if (path := resolve_hf_cached_weight(spec['hf_repo'], filename=filename)) is not None), None)
     if weight is None or not weight.is_file():
         raise FileNotFoundError('缺少评估检索器的本地权重，请先显式准备')
-    if setting == 'matched_public_encoder':
-        from src.visual._lucid.config import resolve_optimization
-        trained = resolve_optimization(VISUAL_CONFIGS / 'optimization.json')
+    if actual_context or setting == 'matched_public_encoder':
         chosen_hash = sha256_file(weight)
-        matching = [i for i in matching if i < len(trained.surrogates)
-                    and sha256_file(trained.surrogates[i].weight_path) == chosen_hash]
-        if not matching:
+        weight_matches = [i for i, row in enumerate(training_specs)
+                          if row.get('weight_sha256') == chosen_hash] if actual_context else []
+        if weight_matches and setting == 'held_out_public_encoder':
+            raise ValueError('正式留出检索器与训练代理使用相同权重，不能作为黑盒迁移评估')
+        matching = [i for i in matching if
+                    (training_specs[i]['weight_sha256'] if actual_context
+                     else _builtin_weight_sha256(training_specs[i])) == chosen_hash]
+        if setting == 'matched_public_encoder' and not matching:
             raise ValueError('同代理评估的实际权重与训练代理不符')
     spec = dict(spec, weight_path=str(weight.resolve()))
     for key in ('tokenizer_path',):
@@ -289,14 +417,15 @@ def make_eval_encoder(device='cuda', config_path=None):
     encoder.snapshot['evaluation_protocol'] = dict(setting=setting,
         matches_training_surrogate=bool(matching), matching_training_surrogate_indices=matching,
         black_box_transfer_claimed=setting == 'held_out_public_encoder',
-        tf32_enabled=False, precision='float32')
+        tf32_enabled=False, precision='float32', **identity_audit)
     return encoder
 
 
 def verify(output, *, encoder_factory=None, device='cuda', query_mode=None, query_manifest=None,
-           key_mode=None, isolated_process=False):
+           key_mode=None, encoder_config=None, isolated_process=False):
     output = Path(output)
     plan = read_json(output / 'evaluation_plan.json')
+    actual_training_surrogates = _plan_training_identities(plan)
     if plan.get('query_manifest') and sha256_file(plan['query_manifest']) != plan['query_manifest_sha256']:
         raise ValueError('正式询问清单在评估后改变')
     query_options = query_retriever_options(plan['queries'])
@@ -314,6 +443,9 @@ def verify(output, *, encoder_factory=None, device='cuda', query_mode=None, quer
         raise ValueError('基础共享池在评估后改变')
     if plan.get('encoder_config') and sha256_file(plan['encoder_config']) != plan['encoder_config_sha256']:
         raise ValueError('评估编码器配置在评估后改变')
+    if encoder_config is not None and (not plan.get('encoder_config_sha256')
+            or sha256_file(encoder_config) != plan['encoder_config_sha256']):
+        raise ValueError('复算指定的评估编码器配置与冻结评估不一致')
     entries = load_shared_pool(plan['pool_path'])
     ids = [e['Id'] for e in entries]
     rows = read_json(output / 'evaluation.json')
@@ -332,7 +464,8 @@ def verify(output, *, encoder_factory=None, device='cuda', query_mode=None, quer
             raise ValueError('全候选分数归档的标识或顺序不符')
     if scores.shape != (len(rows), len(plan['queries']), len(ids)) or not np.isfinite(scores).all():
         raise ValueError('全候选分数归档维度无效或包含非有限值')
-    encoder = (encoder_factory or (lambda: make_eval_encoder(device, plan.get('encoder_config'))))()
+    encoder = (encoder_factory or (lambda: make_eval_encoder(device, plan.get('encoder_config'),
+                                            training_surrogates=actual_training_surrogates)))()
     max_error, count, score_count = 0.0, 0, 0
     try:
         for row_index, row in enumerate(rows):

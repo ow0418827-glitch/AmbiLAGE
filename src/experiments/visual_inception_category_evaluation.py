@@ -33,6 +33,8 @@ from src.visual.image_utils import sha256_file
 PROTOCOL = 'visual_inception_category_diversity_v1'
 ORACLE_PROTOCOL = 'visual_inception_training_oracle_v1'
 REQUIRED_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_v2'
+ENHANCED_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_hardneg_advquery_v3'
+SUPPORTED_OBJECTIVE_KINDS = (REQUIRED_OBJECTIVE_KIND, ENHANCED_OBJECTIVE_KIND)
 
 TRAINING_ORACLE_QUERY_ROOT = RESOURCES / 'visual_inception_evaluation/training_queries_oracle_v1'
 ZERO_OVERLAP_QUERY_ROOT = RESOURCES / 'visual_inception_evaluation/category_queries_v1'
@@ -148,7 +150,7 @@ def load_frozen_suite(images_root, *, base=EVALUATION_BASE):
                  and metadata.get('production_backend') is True,
                  '测试夹具或非生产后端成图不能进入正式评估：' + group)
         objective_kind = metadata.get('training_objective', {}).get('kind')
-        _require(objective_kind == REQUIRED_OBJECTIVE_KIND,
+        _require(objective_kind in SUPPORTED_OBJECTIVE_KINDS,
                  '早期无检索版本或未知目标版本不能用于完整版本评估：' + str(objective_kind))
         image_value = item.get('image')
         _require(isinstance(image_value, str) and bool(image_value.strip()), '冻结成图缺少图片路径：' + group)
@@ -177,6 +179,8 @@ def load_frozen_suite(images_root, *, base=EVALUATION_BASE):
         item['group'] = group
         item['source_memory_id'] = source_memory_id
         suite.append(item)
+    _require(len({item['metadata']['training_objective']['kind'] for item in suite}) == 1,
+             '同一次九组评估不能混用第二版与增强第三版成图')
     return suite
 
 

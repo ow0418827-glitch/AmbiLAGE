@@ -11,6 +11,7 @@ from .perceptual import OFFICIAL_ALEXNET_SHA256_PREFIX, OFFICIAL_LPIPS_ALEX_V01_
 
 OBJECTIVE_KIND = 'visual_inception_semantic_perceptual_no_retrieval_v1'
 RETRIEVAL_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_v2'
+ENHANCED_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_hardneg_advquery_v3'
 
 
 def _require(condition, message):
@@ -37,7 +38,7 @@ def _check_encoding_audits(rows, texts, *, model_count, fixture):
 def _validate_retrieval(root, metadata, ready, config, public_semantic, selection):
     from .training_data import load_training_bundle
     from .objective import sample_query_indices
-    from .retrieval_cache import validate_candidate_cache
+    from .retrieval_cache import CACHE_KIND, LEGACY_CACHE_KIND, validate_candidate_cache
     _require(bool(config.training_manifest), '完整检索证据缺少冻结训练清单')
     path = _project_path(config.training_manifest)
     _require(Path(metadata.get('training_bundle_manifest', '')).resolve() == path, '实际训练清单与配置不一致')
@@ -66,7 +67,10 @@ def _validate_retrieval(root, metadata, ready, config, public_semantic, selectio
              '独立目标概念与未来查询的正文或摘要不一致')
     _require(objective.get('query_roles_separated') is True
              and objective.get('semantic_reduction') == 'one_minus_cosine_single_independent_target_concept'
-             and objective.get('retrieval_denominator') == 'one_dynamic_adversarial_positive_plus_fixed_public_image_negatives'
+             and objective.get('retrieval_denominator') == (
+                 'one_dynamic_adversarial_positive_plus_query_selected_public_hard_negatives'
+                 if config.mechanism_profile == 'enhanced_v3' else
+                 'one_dynamic_adversarial_positive_plus_fixed_public_image_negatives')
              and objective.get('retrieval_positive_count') == 1
              and objective.get('negative_candidate_count') == len(bundle['candidates'])
              and objective.get('clean_source_duplicate_excluded') is True
@@ -93,6 +97,7 @@ def _validate_retrieval(root, metadata, ready, config, public_semantic, selectio
     cache_root = _project_path(config.candidate_cache_dir) if config.candidate_cache_dir else root / 'candidate_cache'
     _require(cache_root.resolve().is_relative_to(PROJECT.resolve()), '固定候选缓存不在当前项目内')
     candidate_identity = [dict(id=row['id'], image_sha256=row['image_sha256']) for row in bundle['candidates']]
+    candidate_vectors = []
     for snapshot, record in zip(metadata['surrogates'], records):
         identity = record.get('identity', {})
         key = record.get('cache_key', '')
@@ -103,12 +108,141 @@ def _validate_retrieval(root, metadata, ready, config, public_semantic, selectio
                  and Path(record.get('metadata_path', '')).resolve() == (cache_root / key / 'cache.json').resolve()
                  and Path(record.get('vector_path', '')).resolve() == (cache_root / key / 'vectors.npy').resolve(),
                  '固定候选缓存路径与冻结配置不一致')
-        _require(identity.get('model') == snapshot and identity.get('bundle_sha256') == bundle['bundle_sha256']
+        _require(record.get('kind') in (CACHE_KIND, LEGACY_CACHE_KIND)
+                 and identity.get('kind') == record.get('kind'), '固定候选缓存版本身份无效')
+        _require(identity.get('model') == snapshot
                  and identity.get('candidates') == candidate_identity and identity.get('test_fixture') is config.smoke_test
                  and identity.get('runtime', {}).get('torch_version') == metadata['runtime']['torch_version'],
                  '固定候选缓存的模型、图片、文字或运行时身份不一致')
-        validate_candidate_cache(record, identity)
+        candidate_vectors.append(validate_candidate_cache(record, identity,
+            expected_bundle_sha256=bundle['bundle_sha256']))
     _require(metadata.get('semantic_target_audit_usage') == 'public_feature_identity_only', '公开特点审计被误标为训练查询')
+    return bundle, candidate_vectors
+
+
+def _finite(value):
+    return not isinstance(value, bool) and isinstance(value, (int, float)) and math.isfinite(value)
+
+
+def _validate_enhanced_mechanisms(metadata, ready, config, bundle, candidate_vectors):
+    from .pipeline import mechanism_parameters
+    from .negative_sampling import build_negative_policy, validate_negative_selection_audit
+    from .enhanced_objective import QUERY_AUGMENTATION_KIND, MARGIN_KIND
+    execution = metadata.get('enhanced_mechanisms', {})
+    body = {k:v for k,v in execution.items() if k != 'execution_sha256'}
+    _require(execution.get('schema_version') == 1 and execution.get('kind') == ENHANCED_OBJECTIVE_KIND
+             and execution.get('parameters') == mechanism_parameters(config)
+             and execution.get('execution_sha256') == content_sha256(body)
+             == ready.get('enhanced_mechanisms_sha256'), '增强机制执行审计摘要或配置不一致')
+    _require(ready.get('mechanism_profile') == 'enhanced_v3'
+             and execution.get('author_exact_implementation_claimed') is False
+             and metadata.get('paper_missing_mechanisms_implemented') is True
+             and metadata.get('paper_full_attack_reproduced') is False,
+             '增强机制不得冒称作者未公开细节的精确复现')
+    objective = metadata['training_objective']
+    _require(objective.get('mechanism_profile') == 'enhanced_v3'
+             and objective.get('mechanism_parameters') == mechanism_parameters(config)
+             and objective.get('hard_negative_pool_size') == len(bundle['candidates'])
+             and objective.get('hard_negative_limit') == config.hard_negative_count
+             and objective.get('contrastive_margin') == config.contrastive_margin
+             and objective.get('contrastive_margin_algorithm') == MARGIN_KIND
+             and objective.get('query_adversarial_algorithm') == QUERY_AUGMENTATION_KIND
+             and objective.get('query_adversarial_space') == 'normalized_text_embedding'
+             and objective.get('proxy_user_memory_is_independent_public_role') is True
+             and objective.get('popularity_is_declared_proxy_not_real_sales') is True
+             and objective.get('paper_missing_mechanisms_implemented') is True
+             and objective.get('author_exact_mechanism_details_reproduced') is False,
+             '增强训练目标未绑定实际机制参数及公开代理约定')
+    policies = execution.get('negative_policies')
+    expected_policies = [build_negative_policy(bundle['candidate_metadata'], vectors,
+                         category=bundle['audit']['category']) for vectors in candidate_vectors]
+    _require(policies == expected_policies, '困难负例角色策略与冻结候选和真实编码向量不一致')
+
+    def check_audit(audit, model_index, query_count):
+        _require(isinstance(audit, dict) and audit.get('schema_version') == 1
+                 and audit.get('mechanism_profile') == 'enhanced_v3'
+                 and audit.get('margin_algorithm') == MARGIN_KIND
+                 and audit.get('contrastive_margin') == config.contrastive_margin
+                 and audit.get('retrieval_temperature') == config.retrieval_temperature
+                 and audit.get('reduction') == 'query_mean_of_clean_adversarial_weighted_losses'
+                 and audit.get('paper_exact_missing_mechanisms_reproduced') is False,
+                 '逐次增强损失审计身份或间隔参数不符')
+        for key in ('clean_retrieval_loss', 'adversarial_retrieval_loss', 'retrieval_loss', 'semantic_loss'):
+            _require(_finite(audit.get(key)), '增强损失审计存在非有限值')
+        expected = ((1-config.query_adversarial_mix) * audit['clean_retrieval_loss']
+                    + config.query_adversarial_mix * audit['adversarial_retrieval_loss'])
+        _require(abs(audit['retrieval_loss'] - expected) <= 1e-5 * max(1.0, abs(expected)),
+                 '增强检索损失与干净及对抗查询混合权重不符')
+        for key in ('clean_negative_selection', 'adversarial_negative_selection'):
+            validate_negative_selection_audit(audit.get(key), policies[model_index], config, query_count)
+        q = audit.get('query_augmentation', {})
+        enabled = (config.query_adversarial_radius > 0 and config.query_adversarial_steps > 0
+                   and config.query_adversarial_step_size > 0 and config.query_adversarial_mix > 0)
+        _require(q.get('algorithm') == QUERY_AUGMENTATION_KIND and q.get('enabled') is enabled
+                 and q.get('radius') == config.query_adversarial_radius
+                 and q.get('steps') == config.query_adversarial_steps
+                 and q.get('step_size') == config.query_adversarial_step_size
+                 and q.get('mix') == config.query_adversarial_mix,
+                 '查询对抗增强实际参数与冻结配置不一致')
+        _require(q.get('space') == 'normalized_text_embedding'
+                 and q.get('optimization') == 'per_query_l2_normalized_gradient_ascent'
+                 and q.get('projection') == 'unit_sphere_cap_intersection_with_original_l2_ball'
+                 and q.get('initialization') == 'clean_query'
+                 and q.get('image_features_detached_in_inner') is True
+                 and q.get('negatives_detached') is True
+                 and q.get('queries_detached_for_outer') is True
+                 and q.get('paper_exact_query_augmentation_reproduced') is False,
+                 '查询增强算法空间、梯度隔离或实现声明不一致')
+        for key in ('clean_query_features_sha256', 'adversarial_query_features_sha256'):
+            digest = q.get(key)
+            _require(isinstance(digest, str) and len(digest) == 64
+                     and all(c in '0123456789abcdef' for c in digest), '查询向量摘要无效')
+        for key in ('clean_negative_selection', 'adversarial_negative_selection'):
+            _require(q.get(key) == audit.get(key), '查询增强与外层目标的困难负例选择不一致')
+        tolerance = q.get('numerical_tolerance')
+        _require(_finite(tolerance) and 0 < tolerance <= 1e-4
+                 and _finite(q.get('max_l2_perturbation'))
+                 and 0 <= q['max_l2_perturbation'] <= config.query_adversarial_radius + tolerance
+                 and _finite(q.get('max_unit_norm_error')) and 0 <= q['max_unit_norm_error'] <= tolerance,
+                 '对抗查询超出单位球面或扰动预算')
+        clean, adversarial = q.get('clean_losses'), q.get('adversarial_losses')
+        _require(isinstance(clean, list) and isinstance(adversarial, list)
+                 and len(clean) == len(adversarial) == query_count
+                 and all(_finite(v) for v in clean + adversarial)
+                 and all(a >= c - tolerance for c,a in zip(clean, adversarial)),
+                 '对抗查询未逐条保持最坏检索损失')
+        _require(abs(sum(clean)/query_count - audit['clean_retrieval_loss']) <= tolerance * 4
+                 and abs(sum(adversarial)/query_count - audit['adversarial_retrieval_loss']) <= tolerance * 4,
+                 '对抗查询逐条损失与实际外层目标不一致')
+        _require(_finite(q.get('minimum_loss_gain'))
+                 and abs(q['minimum_loss_gain'] - min(a-c for c,a in zip(clean, adversarial))) <= tolerance,
+                 '对抗查询最小损失增量与逐条审计不一致')
+        return audit
+
+    calibration = execution.get('calibration_audits')
+    _require(isinstance(calibration, list) and len(calibration) == len(policies), '增强梯度方差校准模型数不符')
+    for model_index, rows in enumerate(calibration):
+        _require(isinstance(rows, list) and len(rows) == config.gradient_restarts, '增强梯度方差随机起点数不符')
+        for row in rows:
+            check_audit(row, model_index, config.query_batch_size)
+    steps = execution.get('step_audits')
+    _require(isinstance(steps, list) and len(steps) == config.steps, '增强机制实际优化步数不完整')
+    for step, row in enumerate(steps, 1):
+        _require(row.get('step') == step
+                 and row.get('query_indices') == metadata['query_sampling']['step_indices'][step-1]
+                 and isinstance(row.get('model_audits'), list) and len(row['model_audits']) == len(policies),
+                 '增强机制每步查询或模型审计不符')
+        for model_index, audit in enumerate(row['model_audits']):
+            check_audit(audit, model_index, config.query_batch_size)
+    for row in metadata.get('history', []):
+        _require(row.get('mechanism_audits') == steps[row['step']-1]['model_audits'], '增强优化日志与逐步执行证据不一致')
+    final = execution.get('final_model_audits')
+    _require(isinstance(final, list) and len(final) == len(policies), '增强最终模型审计缺失')
+    for model_index, audit in enumerate(final):
+        check_audit(audit, model_index, 100)
+        _require(audit['retrieval_loss'] == metadata['final_objective']['retrieval_losses'][model_index]
+                 and audit['semantic_loss'] == metadata['final_objective']['semantic_losses'][model_index],
+                 '增强最终目标值与实际审计不一致')
 
 
 def validate_ready(root, ready=None, *, require_production=True):
@@ -128,15 +262,18 @@ def validate_ready(root, ready=None, *, require_production=True):
     _require(metadata.get('method') == 'visual_inception' and metadata.get('status') == 'success', '生成方法或状态无效')
     objective = metadata.get('training_objective', {})
     kind = objective.get('kind')
-    _require(kind in (OBJECTIVE_KIND, RETRIEVAL_OBJECTIVE_KIND)
+    _require(kind in (OBJECTIVE_KIND, RETRIEVAL_OBJECTIVE_KIND, ENHANCED_OBJECTIVE_KIND)
              and kind == ready.get('training_objective_kind'), '训练目标身份无效')
-    retrieval_enabled = kind == RETRIEVAL_OBJECTIVE_KIND
+    retrieval_enabled = kind in (RETRIEVAL_OBJECTIVE_KIND, ENHANCED_OBJECTIVE_KIND)
     raw_config = metadata.get('config')
     _require(isinstance(raw_config, dict), '冻结配置必须为对象')
     interpretation = dict(raw_config)
     if 'objective_mode' not in interpretation and not retrieval_enabled:
         interpretation['objective_mode'] = 'semantic_perceptual'
     config = VisualInceptionConfig.from_dict(interpretation)
+    if retrieval_enabled:
+        _require((kind == ENHANCED_OBJECTIVE_KIND) is (config.mechanism_profile == 'enhanced_v3'),
+                 '增强机制版本与冻结训练目标不一致，旧图不能重签')
     _require(config.objective_mode == ('retrieval_semantic_perceptual' if retrieval_enabled else 'semantic_perceptual'),
              '目标版本与冻结配置模式不一致')
     _require(content_sha256(raw_config) == metadata.get('config_sha256') == ready.get('config_sha256'), '冻结配置摘要不一致')
@@ -188,7 +325,9 @@ def validate_ready(root, ready=None, *, require_production=True):
                  '论文代理声明与冻结选择或微型夹具状态不一致')
     validate_loaded_surrogates(metadata.get('surrogates', []), selection, allow_fixture=fixture)
     if retrieval_enabled:
-        _validate_retrieval(root, metadata, ready, config, audit, selection)
+        bundle, candidate_vectors = _validate_retrieval(root, metadata, ready, config, audit, selection)
+        if kind == ENHANCED_OBJECTIVE_KIND:
+            _validate_enhanced_mechanisms(metadata, ready, config, bundle, candidate_vectors)
     perceptual = metadata.get('perceptual', {})
     if fixture:
         _require(perceptual.get('test_fixture') is True and perceptual.get('kind') == 'tiny_test_squared_pixel_distance_not_lpips', '感知测试夹具身份无效')

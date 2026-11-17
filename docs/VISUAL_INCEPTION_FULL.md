@@ -2,6 +2,8 @@
 
 本版本按用户于二〇二六年十一月十六日选定的方案恢复检索损失、独立目标概念、五十／三十／二十查询来源及三项联合优化。默认方法仍是 `visual_inception`(视觉记忆植入方法标识)，默认目标模式为 `retrieval_semantic_perceptual`(检索、语义与感知联合目标)。早期无检索版本保留为显式模式，二者不能混用完成凭证。
 
+二〇二六年十一月十七日进一步补入困难负例、零点三对比间隔和对抗查询增强，新配置默认使用增强第三版。下文无间隔的检索公式用于说明历史第二版；增强版在温度缩放前将正例相似度减零点三，使用逐查询筛选的公开困难负例，并将干净查询与球面有界增强查询的检索损失各半混合。完整参数、工程约定和作者未公开细节的边界见[增强第三版说明](VISUAL_INCEPTION_ENHANCED.md)。历史版本继续保留原目标身份，不能用旧图片补签增强版凭证。
+
 初次交付为算法、数据导入、改写服务连接和冻结校验接口。二〇二六年十一月十七日已按用户授权实际准备独立公开商品图片、公开描述、稀宇模型改写和真实搜索查询。具体资料、完整组与缺额组见[公开训练资料说明](VISUAL_INCEPTION_PUBLIC_DATA.md)。本次没有执行真实代理模型的图片扰动训练或正式效果评估。
 
 ## 联合目标与数据角色
@@ -123,12 +125,15 @@ python -B -X utf8 tools/run_experiment.py generate \
 python -B -X utf8 tools/run_experiment.py generate \
   --group all --method visual_inception \
   --training-bundles-root data/public/visual_inception \
+  --visual-inception-config src/visual/config/visual_inception.example.json \
   --output output/visual_inception_full --device cuda
 ```
 
 远程长任务按[远程部署规定](REMOTE_DEPLOYMENT.md)脱离伪终端、断开标准输入并持久化日志。全部九张成图完成并冻结后，才使用现有评估流程；本轮没有恢复购物。
 
-固定候选向量按每个代理分别缓存。缓存身份包含模型快照、真实权重、候选图片字节、编码及像素预处理实现、数值运行时和训练包身份，文件本身另验摘要与单位范数。当前对抗图片不进入固定缓存，优化每步重新计算。换模型、图片或数值运行时不能改名复用缓存。
+固定候选向量按每个代理分别缓存。新版固定缓存身份包含模型快照、真实权重、候选图片字节及顺序、编码及像素预处理实现、设备与数值运行时；组别训练包摘要记录在每次请求的外层证据中。因此在指定同一个缓存目录时，候选及编码身份相同的不同组可以共用向量，同时各自保留查询包绑定。旧缓存按旧版本核验，不改名复用。文件本身另验摘要与单位范数；当前对抗图片不进入固定缓存，优化每步重新计算。换模型、图片、预处理或数值运行时仍会生成新缓存键。
+
+增强配置示例将共同缓存目录设为 `output/cache/visual_inception_fixed_public`(固定公开候选共用缓存目录)，上面的多组命令据此跨组复用。未指定该字段或显式设为空时仍使用各成图目录内的独立缓存，保留历史运行路径；这类独立目录之间不会自动共享文件。
 
 完成凭证绑定联合目标版本、完整查询包、候选缓存、采样索引、实际完成步数及最终图片。已有完成目录禁止覆盖；默认完整目标缺训练包时在装载大模型前停止。早期模式须显式使用 [无检索配置](../src/visual/config/visual_inception.semantic_only.example.json)，旧证据按原身份核验，不能重签为完整版本。
 
@@ -156,7 +161,7 @@ python -B -X utf8 tools/run_experiment.py generate \
 
 运行前提与评估口径：
 
-1. 须先完成全部九组完整联合目标（`visual_inception_retrieval_semantic_perceptual_v2`）图片生成并冻结；缺组、测试夹具或早期无检索版本均会被拒绝。
+1. 须先完成全部九组同一完整联合目标版本的图片生成并冻结；历史第二版或增强第三版分别评估，禁止一次九组评估混用目标版本。缺组、测试夹具或早期无检索版本均会被拒绝。
 2. 沿用 `resources/evaluation_base/shared_memory/shared_memory.json` 一百八十九条完整共享长期记忆库，并将九组冻结源图同时替换进同一个修改库副本，不建按组隔离小库。
 3. 记忆库检索向量开关（`--key-mode {image,joint}`）：测试 `visual_inception`（视觉记忆植入方法）时默认使用 `image`（纯图片向量，`key_image_weight=1.0`，按原论文设定只编码记忆库图片）；测试其他方法（如 `lucid` 原始像素方法与 `ambilage` 环境光协同方法）时默认仍使用 `joint`（图文各半融合向量，`key_image_weight=0.5`）。两种模式均可通过 `--key-mode` 显式切换，以兼顾原论文口径与跨方法统一口径对照。
 4. 汇总输出写入 `category_retrieval_summary.json`（检索汇总）与 `REPORT.md`（评估报告），同时报告总体（一百八十条）、按协议分类（`training_oracle` 按 10/6/4 三类训练来源；`zero_overlap` 按五类问法各 4 条）及逐组（每组二十条）的原图与修改图 Top-1（首位）、Top-3（前三）、Top-5（前五）命中数、增量百分点与平均名次改善，并对每组全库候选分数执行独立复算。

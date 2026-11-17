@@ -77,7 +77,7 @@ def inverse_variance_weights(variances, floor=None):
 
 def estimate_gradient_variances(source, models, text_features, *, epsilon, restarts, seed,
         retrieval_state=None, calibration_indices=None, retrieval_weight=1.0,
-        semantic_weight=1.0, temperature=0.07):
+        semantic_weight=1.0, temperature=0.07, loss_function=None):
     """Mean elementwise population variance of semantic image gradients.
 
     Online moments keep no graph or restart gradient stack alive. Each encoder
@@ -93,7 +93,9 @@ def estimate_gradient_variances(source, models, text_features, *, epsilon, resta
         for index in range(1, restarts + 1):
             noise = torch.rand(source.shape, generator=generator, device=source.device, dtype=source.dtype)
             leaf = (source + (2 * noise - 1) * epsilon).clamp(0, 1).detach().requires_grad_(True)
-            if retrieval_state is None:
+            if loss_function is not None:
+                loss = loss_function(model_index, model, leaf, target)
+            elif retrieval_state is None:
                 loss = semantic_loss(model, leaf, target)
             else:
                 if calibration_indices is None:

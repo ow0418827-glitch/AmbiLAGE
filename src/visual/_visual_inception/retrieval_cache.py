@@ -13,7 +13,8 @@ from src.paths import PROJECT
 from src.visual.io import load_image, pil_to_tensor, save_json, sha256_file
 from .targets import content_sha256
 
-CACHE_KIND = 'visual_inception_fixed_public_image_vectors_v1'
+LEGACY_CACHE_KIND = 'visual_inception_fixed_public_image_vectors_v1'
+CACHE_KIND = 'visual_inception_fixed_public_image_vectors_v2'
 
 
 def _canonical_json(value):
@@ -30,7 +31,12 @@ def _runtime_identity():
 
 
 def candidate_cache_identity(model, candidates, *, bundle_sha256, fixture=False):
-    return _canonical_json(dict(kind=CACHE_KIND, bundle_sha256=bundle_sha256,
+    """Identity of image encoding only; the caller's training bundle is separate.
+
+    ``bundle_sha256`` remains accepted so historical callers need no signature
+    change. It is deliberately not part of the reusable vector content key.
+    """
+    return _canonical_json(dict(kind=CACHE_KIND,
         model=model.snapshot(), device=str(model.device), test_fixture=bool(fixture),
         candidates=[dict(id=row['id'], image_sha256=row['image_sha256']) for row in candidates],
         encoder_implementation_sha256=sha256_file(PROJECT / 'src/visual/encoders/backbone.py'),
@@ -39,22 +45,45 @@ def candidate_cache_identity(model, candidates, *, bundle_sha256, fixture=False)
         runtime=_runtime_identity()))
 
 
-def validate_candidate_cache(record, expected_identity=None):
+def _valid_sha256(value):
+    return (isinstance(value, str) and len(value) == 64
+            and all(character in '0123456789abcdef' for character in value))
+
+
+def validate_candidate_cache(record, expected_identity=None, *, expected_bundle_sha256=None):
     """Validate on-disk bytes and return CPU vectors; no unsafe deserialization."""
-    if not isinstance(record, dict) or record.get('kind') != CACHE_KIND:
+    if not isinstance(record, dict) or record.get('kind') not in (CACHE_KIND, LEGACY_CACHE_KIND):
         raise ValueError('固定公开候选向量缓存身份无效')
+    kind = record['kind']
     metadata_path, vector_path = Path(record['metadata_path']), Path(record['vector_path'])
     if sha256_file(metadata_path) != record.get('metadata_sha256'):
         raise ValueError('候选向量缓存元数据摘要改变')
     metadata = json.loads(metadata_path.read_text(encoding='utf-8'))
     identity = metadata.get('identity')
     normalized_expected = _canonical_json(expected_identity) if expected_identity is not None else None
-    if (not isinstance(identity, dict) or metadata.get('kind') != CACHE_KIND
+    if (not isinstance(identity, dict) or metadata.get('kind') != kind
+            or identity.get('kind') != kind
             or record.get('cache_key') != content_sha256(identity)
             or metadata.get('cache_key') != record['cache_key']
             or metadata_path.parent.name != record['cache_key']
             or vector_path.resolve() != (metadata_path.parent / 'vectors.npy').resolve()):
         raise ValueError('候选向量缓存与模型、数据或路径绑定不一致')
+    if kind == CACHE_KIND:
+        if 'bundle_sha256' in identity:
+            raise ValueError('新版固定图片缓存不能包含组别训练包身份')
+        bound_bundle = record.get('training_bundle_sha256')
+    else:
+        # A v1 cache remains bound to its original full bundle. Validation is
+        # supported, but encoding never migrates/relabels those bytes to v2.
+        bound_bundle = identity.get('bundle_sha256')
+        if ('training_bundle_sha256' in record
+                and record['training_bundle_sha256'] != bound_bundle):
+            raise ValueError('历史候选缓存的内外训练包绑定不一致')
+    if not _valid_sha256(bound_bundle):
+        raise ValueError('候选向量缓存缺少有效训练包绑定摘要')
+    if expected_bundle_sha256 is not None:
+        if not _valid_sha256(expected_bundle_sha256) or bound_bundle != expected_bundle_sha256:
+            raise ValueError('候选向量缓存与本次冻结训练包绑定不一致')
     if normalized_expected is not None and identity != normalized_expected:
         raise ValueError('候选缓存不能跨模型、文字、图片、预处理或数值运行时复用')
     if identity != _canonical_json(record.get('identity')):
@@ -75,6 +104,8 @@ def validate_candidate_cache(record, expected_identity=None):
 def encode_candidate_cache(model, candidates, cache_dir, *, bundle_sha256, fixture=False):
     if not candidates:
         raise ValueError('独立公开代理库不能为空')
+    if not _valid_sha256(bundle_sha256):
+        raise ValueError('候选向量缓存需要有效的本次训练包摘要')
     for candidate in candidates:
         if sha256_file(Path(candidate['image_path'])) != candidate['image_sha256']:
             raise ValueError('公开候选图片字节与冻结清单不一致')
@@ -85,10 +116,11 @@ def encode_candidate_cache(model, candidates, cache_dir, *, bundle_sha256, fixtu
     if metadata_path.is_file():
         metadata = json.loads(metadata_path.read_text(encoding='utf-8'))
         record = dict(kind=CACHE_KIND, cache_key=key, identity=identity,
+            training_bundle_sha256=bundle_sha256,
             metadata_path=str(metadata_path), metadata_sha256=sha256_file(metadata_path),
             vector_path=str(vector_path), vector_sha256=metadata.get('vector_sha256'),
             shape=metadata.get('shape'), cache_hit=True)
-        vectors = validate_candidate_cache(record, identity)
+        vectors = validate_candidate_cache(record, identity, expected_bundle_sha256=bundle_sha256)
         return vectors.to(model.device), record
     if vector_path.exists():
         raise ValueError('候选向量缓存不完整；请核验后使用新的缓存目录')
@@ -119,7 +151,8 @@ def encode_candidate_cache(model, candidates, cache_dir, *, bundle_sha256, fixtu
         shape=list(vectors.shape), vector_sha256=sha256_file(vector_path))
     save_json(metadata_path, metadata)
     record = dict(kind=CACHE_KIND, cache_key=key, identity=identity, shape=list(vectors.shape),
+        training_bundle_sha256=bundle_sha256,
         metadata_path=str(metadata_path), metadata_sha256=sha256_file(metadata_path),
         vector_path=str(vector_path), vector_sha256=metadata['vector_sha256'], cache_hit=False)
-    checked = validate_candidate_cache(record, identity)
+    checked = validate_candidate_cache(record, identity, expected_bundle_sha256=bundle_sha256)
     return checked.to(model.device), record

@@ -190,7 +190,7 @@ def test_sequential_retrieval_semantic_perceptual_gradient_matches_joint_graph()
     queries = [torch.eye(3), torch.tensor([[1., 1., 0.], [0., 1., 1.], [1., 0., 1.]])]
     negatives = [torch.tensor([[.1, .8, .1], [.9, .1, .1]]), torch.tensor([[.2, .1, .8], [.2, .8, .1]])]
     weights, indices = [.25, .75], [0, 2]
-    config = VisualInceptionConfig(semantic_weight=1.7, retrieval_weight=.8,
+    config = VisualInceptionConfig(mechanism_profile='legacy_v2', semantic_weight=1.7, retrieval_weight=.8,
         retrieval_temperature=.3, perceptual_weight=.3)
     state = dict(concept_features=concepts, query_features=queries, negative_features=negatives)
     distance = lambda origin, changed: (origin - changed).square().mean()
@@ -373,6 +373,116 @@ def test_candidate_cache_reuses_identical_identity_and_rebuilds_for_real_changes
     assert image_record['cache_hit'] is False and image_record['cache_key'] != first['cache_key']
 
 
+def test_shared_candidates_reuse_vectors_across_distinct_frozen_training_bundles(tiny_pair, tmp_path):
+    from src.visual._visual_inception.retrieval_cache import encode_candidate_cache, validate_candidate_cache
+    first_manifest, _, first_semantic = make_training_fixture(tmp_path / 'first_bundle', tiny_pair)
+    first_bundle = _load_fixture(first_manifest, tiny_pair, first_semantic)
+    second_manifest, second_document, second_semantic = make_training_fixture(tmp_path / 'second_bundle', tiny_pair)
+    provenance = second_document['sources']['category_description']
+    descriptions = second_manifest.parent / provenance['path']
+    rows = [json.loads(line) for line in descriptions.read_text(encoding='utf-8').splitlines()]
+    rows[0]['text'] += ' Different independent training wording.'
+    _write_rows(descriptions, rows)
+    provenance['sha256'] = sha256_file(descriptions)
+    second_document['queries'][0]['text'] = rows[0]['text']
+    second_document['queries'][0]['provenance']['text_sha256'] = text_sha256(rows[0]['text'])
+    _write_json(second_manifest, second_document)
+    second_bundle = _load_fixture(second_manifest, tiny_pair, second_semantic)
+    assert first_bundle['bundle_sha256'] != second_bundle['bundle_sha256']
+    assert first_bundle['queries'] != second_bundle['queries']
+    model = CachedColorSurrogate()
+    vectors, first = encode_candidate_cache(model, first_bundle['candidates'], tmp_path / 'shared_cache',
+        bundle_sha256=first_bundle['bundle_sha256'], fixture=True)
+    again, second = encode_candidate_cache(model, second_bundle['candidates'], tmp_path / 'shared_cache',
+        bundle_sha256=second_bundle['bundle_sha256'], fixture=True)
+    assert model.calls == len(first_bundle['candidates'])
+    assert first['cache_hit'] is False and second['cache_hit'] is True
+    assert first['cache_key'] == second['cache_key'] and first['identity'] == second['identity']
+    assert first['metadata_sha256'] == second['metadata_sha256']
+    assert first['training_bundle_sha256'] == first_bundle['bundle_sha256']
+    assert second['training_bundle_sha256'] == second_bundle['bundle_sha256']
+    assert 'bundle_sha256' not in first['identity']
+    disk_metadata = json.loads(Path(first['metadata_path']).read_text(encoding='utf-8'))
+    assert 'training_bundle_sha256' not in disk_metadata
+    assert torch.equal(vectors, again)
+    assert torch.equal(validate_candidate_cache(first, expected_bundle_sha256=first_bundle['bundle_sha256']), vectors)
+    assert torch.equal(validate_candidate_cache(second, expected_bundle_sha256=second_bundle['bundle_sha256']), vectors)
+    with pytest.raises(ValueError, match='训练包'):
+        validate_candidate_cache(second, expected_bundle_sha256=first_bundle['bundle_sha256'])
+    tampered = copy.deepcopy(second)
+    tampered['training_bundle_sha256'] = first_bundle['bundle_sha256']
+    with pytest.raises(ValueError, match='训练包'):
+        validate_candidate_cache(tampered, expected_bundle_sha256=second_bundle['bundle_sha256'])
+
+
+def test_candidate_cache_identity_preserves_order_runtime_and_fixture_isolation(tiny_pair, tmp_path, monkeypatch):
+    from src.visual._visual_inception import retrieval_cache
+    manifest, _, semantic = make_training_fixture(tmp_path / 'bundle', tiny_pair)
+    bundle = _load_fixture(manifest, tiny_pair, semantic)
+    model, root = CachedColorSurrogate(), tmp_path / 'cache'
+    _, first = retrieval_cache.encode_candidate_cache(model, bundle['candidates'], root,
+        bundle_sha256=bundle['bundle_sha256'], fixture=True)
+    _, reordered = retrieval_cache.encode_candidate_cache(model, list(reversed(bundle['candidates'])), root,
+        bundle_sha256=bundle['bundle_sha256'], fixture=True)
+    _, different_fixture = retrieval_cache.encode_candidate_cache(model, bundle['candidates'], root,
+        bundle_sha256=bundle['bundle_sha256'], fixture=False)
+    changed_runtime = dict(first['identity']['runtime'], float32_matmul_precision='explicit_changed_fixture')
+    monkeypatch.setattr(retrieval_cache, '_runtime_identity', lambda: changed_runtime)
+    _, runtime_record = retrieval_cache.encode_candidate_cache(model, bundle['candidates'], root,
+        bundle_sha256=bundle['bundle_sha256'], fixture=True)
+    assert len({record['cache_key'] for record in (first, reordered, different_fixture, runtime_record)}) == 4
+    assert all(record['cache_hit'] is False for record in (reordered, different_fixture, runtime_record))
+    assert model.calls == 4 * len(bundle['candidates'])
+
+
+def _legacy_cache_fixture(record, bundle_sha256, root):
+    """Build explicit synthetic v1-schema evidence without relabeling production data."""
+    from src.visual._visual_inception.retrieval_cache import LEGACY_CACHE_KIND
+    from src.visual._visual_inception.targets import content_sha256
+    identity = dict(record['identity'], kind=LEGACY_CACHE_KIND, bundle_sha256=bundle_sha256)
+    key = content_sha256(identity)
+    directory = root / key
+    directory.mkdir(parents=True, exist_ok=True)
+    vector_path = directory / 'vectors.npy'
+    vector_path.write_bytes(Path(record['vector_path']).read_bytes())
+    metadata_path = directory / 'cache.json'
+    _write_json(metadata_path, dict(kind=LEGACY_CACHE_KIND, cache_key=key, identity=identity,
+        shape=record['shape'], vector_sha256=sha256_file(vector_path)))
+    return dict(kind=LEGACY_CACHE_KIND, cache_key=key, identity=identity, shape=record['shape'],
+        vector_path=str(vector_path), vector_sha256=sha256_file(vector_path),
+        metadata_path=str(metadata_path), metadata_sha256=sha256_file(metadata_path), cache_hit=False)
+
+
+def test_legacy_candidate_cache_validates_only_original_bundle_and_is_never_relabelled(tiny_pair, tmp_path):
+    from src.visual._visual_inception import retrieval_cache
+    from src.visual._visual_inception.targets import content_sha256
+    manifest, _, semantic = make_training_fixture(tmp_path / 'bundle', tiny_pair)
+    bundle = _load_fixture(manifest, tiny_pair, semantic)
+    model = CachedColorSurrogate()
+    vectors, record = retrieval_cache.encode_candidate_cache(model, bundle['candidates'], tmp_path / 'original_cache',
+        bundle_sha256=bundle['bundle_sha256'], fixture=True)
+    legacy = _legacy_cache_fixture(record, bundle['bundle_sha256'], tmp_path / 'shared_cache')
+    assert torch.equal(retrieval_cache.validate_candidate_cache(legacy,
+        expected_bundle_sha256=bundle['bundle_sha256']), vectors)
+    with pytest.raises(ValueError, match='训练包'):
+        retrieval_cache.validate_candidate_cache(legacy, expected_bundle_sha256='f' * 64)
+    again, fresh = retrieval_cache.encode_candidate_cache(model, bundle['candidates'], tmp_path / 'shared_cache',
+        bundle_sha256=bundle['bundle_sha256'], fixture=True)
+    assert fresh['kind'] == retrieval_cache.CACHE_KIND and fresh['cache_hit'] is False
+    assert fresh['cache_key'] != legacy['cache_key'] and model.calls == 2 * len(bundle['candidates'])
+    assert torch.equal(again, vectors)
+    # Even copying v1 files into the v2 address cannot make them a valid hit.
+    new_key = content_sha256(fresh['identity'])
+    renamed = tmp_path / 'renamed_legacy_cache' / new_key
+    renamed.mkdir(parents=True)
+    (renamed / 'cache.json').write_bytes(Path(legacy['metadata_path']).read_bytes())
+    (renamed / 'vectors.npy').write_bytes(Path(legacy['vector_path']).read_bytes())
+    with pytest.raises(ValueError, match='绑定|身份'):
+        retrieval_cache.encode_candidate_cache(model, bundle['candidates'], renamed.parent,
+            bundle_sha256=bundle['bundle_sha256'], fixture=True)
+    assert model.calls == 2 * len(bundle['candidates'])
+
+
 def test_candidate_cache_rejects_vector_tampering_and_wrong_expected_encoder(tiny_pair, tmp_path):
     from src.visual._visual_inception.retrieval_cache import (
         encode_candidate_cache, candidate_cache_identity, validate_candidate_cache,
@@ -417,7 +527,7 @@ def test_full_micro_generation_has_separate_target_queries_and_live_positive(tin
     from src.visual._visual_inception.pipeline import generate_visual_inception
     from src.visual._visual_inception.evidence import validate_ready
     manifest, document, semantic = make_training_fixture(tmp_path / 'bundle', tiny_pair)
-    config = VisualInceptionConfig(steps=2, gradient_restarts=2, smoke_test=True,
+    config = VisualInceptionConfig(steps=2, gradient_restarts=2, smoke_test=True, mechanism_profile='legacy_v2',
         training_manifest=str(manifest), candidate_cache_dir=str(tmp_path / 'candidate_cache'))
     output, metadata = generate_visual_inception(*tiny_pair, tmp_path / 'full', config=config,
         device='cpu', definition=public_definition())
@@ -462,6 +572,38 @@ def test_full_ready_rejects_changed_training_manifest_after_image_generation(tin
     _write_json(manifest, document)
     with pytest.raises(ValueError):
         validate_ready(output.parent, require_production=False)
+
+
+def test_full_ready_checks_external_bundle_binding_and_accepts_legacy_cache_schema(tiny_pair, tmp_path):
+    from src.visual._visual_inception.pipeline import generate_visual_inception
+    from src.visual._visual_inception.evidence import validate_ready
+    manifest, _, _ = make_training_fixture(tmp_path / 'bundle', tiny_pair)
+    cache_root = tmp_path / 'cache'
+    config = VisualInceptionConfig(steps=1, gradient_restarts=2, smoke_test=True,
+        mechanism_profile='legacy_v2', training_manifest=str(manifest), candidate_cache_dir=str(cache_root))
+    output, metadata = generate_visual_inception(*tiny_pair, tmp_path / 'full', config=config,
+        device='cpu', definition=public_definition())
+    root = output.parent
+    ready = json.loads((root / 'ready.json').read_text(encoding='utf-8'))
+
+    def write_evidence(document):
+        _write_json(root / 'metadata.json', document)
+        _write_json(root / 'attack_metrics.json', document)
+        ready.update(metadata_sha256=sha256_file(root / 'metadata.json'),
+            attack_metrics_sha256=sha256_file(root / 'attack_metrics.json'))
+        _write_json(root / 'ready.json', ready)
+
+    changed = copy.deepcopy(metadata)
+    changed['negative_candidate_caches'][0]['training_bundle_sha256'] = 'f' * 64
+    write_evidence(changed)
+    with pytest.raises(ValueError, match='训练包'):
+        validate_ready(root, require_production=False)
+    legacy = copy.deepcopy(metadata)
+    legacy['negative_candidate_caches'] = [_legacy_cache_fixture(record,
+        metadata['training_bundle_sha256'], cache_root) for record in metadata['negative_candidate_caches']]
+    write_evidence(legacy)
+    restored = validate_ready(root, require_production=False)
+    assert restored['negative_candidate_caches'] == legacy['negative_candidate_caches']
 
 
 def test_legacy_evidence_without_new_configuration_fields_still_validates(tiny_pair, tmp_path):
@@ -574,7 +716,8 @@ def test_full_command_line_passes_training_manifest_into_micro_generation(tiny_p
     metadata = validate_ready(output, require_production=False)
     assert metadata['config']['objective_mode'] == 'retrieval_semantic_perceptual'
     assert Path(metadata['config']['training_manifest']).resolve() == manifest.resolve()
-    assert metadata['training_objective']['kind'] == 'visual_inception_retrieval_semantic_perceptual_v2'
+    assert metadata['config']['mechanism_profile'] == 'enhanced_v3'
+    assert metadata['training_objective']['kind'] == 'visual_inception_retrieval_semantic_perceptual_hardneg_advquery_v3'
     assert metadata['training_objective']['retrieval_positive_count'] == 1
     assert metadata['query_sampling']['pool_size'] == 100
 

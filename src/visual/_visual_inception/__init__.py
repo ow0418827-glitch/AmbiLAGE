@@ -1,4 +1,4 @@
-"""Explicit public-only adaptation of Visual Inception without retrieval loss."""
+"""Public-only Visual Inception, with explicit legacy and enhanced identities."""
 from .config import VisualInceptionConfig
 
 

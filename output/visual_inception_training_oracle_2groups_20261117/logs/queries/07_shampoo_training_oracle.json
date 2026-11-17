@@ -1,0 +1,68 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "query_mode": "text",
+  "target_public_id": "B00BDJODWI",
+  "instruction_policy": "visual_inception_training_oracle_50_30_20_v1",
+  "category": "shampoo",
+  "source_metadata": "resources/evaluation_base/public_metadata/product_metadata.json#B00BDJODWI",
+  "sampling_ratios": {
+    "public_description_and_metadata": "10/20 (50%)",
+    "paraphrased_feature_queries": "6/20 (30%)",
+    "buyer_intent_queries": "4/20 (20%)"
+  },
+  "paper_exact_log_source": false,
+  "breakdown": {
+    "50pct_public_description_and_metadata": [
+      "Aveda Scalp Benefits Balancing Shampoo 33.8 OZ",
+      "Aveda Scalp Benefits Balancing Shampoo 33.8 OZ - High Performance Plant Based Haircare",
+      "High performance plant based haircare shampoo by Aveda.",
+      "Aveda shampoo researched and developed under a rigorous set of environmental sustainability values.",
+      "Aveda products are widely known for their use of pure plant and flower essences.",
+      "AVEDA by Aveda SCALP BENEFITS BALANCING SHAMPOO 33.8 OZ",
+      "Aveda possesses a blend of High Performance Plant Based Haircare.",
+      "Scalp Benefits Balancing Shampoo 33.8 OZ from Manufacturer Aveda, Model 18084994054.",
+      "Design House Aveda balancing shampoo with pure plant and flower essences.",
+      "Plant-based haircare balancing shampoo formulated under environmental sustainability values."
+    ],
+    "30pct_paraphrased_feature_queries": [
+      "Looking for a scalp-balancing hair wash formulated with botanical and plant-derived cleansers.",
+      "Need a daily haircare cleanser featuring pure floral and plant extracts for healthy scalp balance.",
+      "Recommend a gentle balancing shampoo made from plant-based ingredients and botanical essences.",
+      "Searching for an eco-conscious scalp care shampoo infused with plant and flower oils.",
+      "Which shampoo uses natural plant-based haircare ingredients to keep the scalp balanced?",
+      "I want a botanical balancing hair cleanser crafted with pure flower and plant essences for scalp care."
+    ],
+    "20pct_buyer_intent_queries": [
+      "I want to buy shampoo with plant-based haircare ingredients and a balancing formula.",
+      "I would like to purchase shampoo featuring plant-based haircare ingredients and plant and flower essences.",
+      "Looking to buy shampoo with a balancing formula and scalp care.",
+      "Please help me buy shampoo featuring plant-based haircare ingredients and plant and flower essences."
+    ]
+  },
+  "instructions": [
+    "Aveda Scalp Benefits Balancing Shampoo 33.8 OZ",
+    "Aveda Scalp Benefits Balancing Shampoo 33.8 OZ - High Performance Plant Based Haircare",
+    "High performance plant based haircare shampoo by Aveda.",
+    "Aveda shampoo researched and developed under a rigorous set of environmental sustainability values.",
+    "Aveda products are widely known for their use of pure plant and flower essences.",
+    "AVEDA by Aveda SCALP BENEFITS BALANCING SHAMPOO 33.8 OZ",
+    "Aveda possesses a blend of High Performance Plant Based Haircare.",
+    "Scalp Benefits Balancing Shampoo 33.8 OZ from Manufacturer Aveda, Model 18084994054.",
+    "Design House Aveda balancing shampoo with pure plant and flower essences.",
+    "Plant-based haircare balancing shampoo formulated under environmental sustainability values.",
+    "Looking for a scalp-balancing hair wash formulated with botanical and plant-derived cleansers.",
+    "Need a daily haircare cleanser featuring pure floral and plant extracts for healthy scalp balance.",
+    "Recommend a gentle balancing shampoo made from plant-based ingredients and botanical essences.",
+    "Searching for an eco-conscious scalp care shampoo infused with plant and flower oils.",
+    "Which shampoo uses natural plant-based haircare ingredients to keep the scalp balanced?",
+    "I want a botanical balancing hair cleanser crafted with pure flower and plant essences for scalp care.",
+    "I want to buy shampoo with plant-based haircare ingredients and a balancing formula.",
+    "I would like to purchase shampoo featuring plant-based haircare ingredients and plant and flower essences.",
+    "Looking to buy shampoo with a balancing formula and scalp care.",
+    "Please help me buy shampoo featuring plant-based haircare ingredients and plant and flower essences."
+  ],
+  "instructions_sha256": "7e47e7aa9448f92237074fc98c1301d91b989490b5badfee2e4c4b83d70279c3",
+  "query_image_required": false,
+  "query_images_generated": false
+}

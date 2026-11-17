@@ -1,0 +1,27 @@
+=== [1/2] Evaluate Env 1 (pure feature text, none defense, ViT-g-14 held-out) at 2026-11-17T08:32:03Z ===
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 0/20
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+none clean: 前三 19/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 0/20
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 10/20；前五 18/20
+=== [2/2] Evaluate Env 1 (pure feature text, none defense, ViT-B-32 matched) at 2026-11-17T08:41:42Z ===
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 0/20
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+none clean: 前三 9/20；前五 14/20
+none modified: 前三 10/20；前五 19/20
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 0/20
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 0/20；前五 1/20
+=== ALL ENV 1 (PURE FEATURE TEXT) EVALUATIONS COMPLETED AND VERIFIED at 2026-11-17T08:45:35Z ===

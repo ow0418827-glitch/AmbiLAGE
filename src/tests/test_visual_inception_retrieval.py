@@ -392,6 +392,27 @@ def test_candidate_cache_rejects_vector_tampering_and_wrong_expected_encoder(tin
         validate_candidate_cache(record)
 
 
+def test_candidate_cache_handles_tuple_snapshot_metadata_across_json_roundtrip(tiny_pair, tmp_path):
+    from src.visual._visual_inception.retrieval_cache import encode_candidate_cache, validate_candidate_cache
+
+    class TupleSnapshotSurrogate(CachedColorSurrogate):
+        def snapshot(self):
+            return dict(super().snapshot(), loading=dict(mean=(0.481, 0.457, 0.408), std=(0.268, 0.261, 0.275)))
+
+    manifest, _, semantic = make_training_fixture(tmp_path / 'bundle', tiny_pair)
+    bundle = _load_fixture(manifest, tiny_pair, semantic)
+    model = TupleSnapshotSurrogate()
+    vectors, first = encode_candidate_cache(model, bundle['candidates'], tmp_path / 'cache',
+        bundle_sha256=bundle['bundle_sha256'], fixture=True)
+    again, second = encode_candidate_cache(model, bundle['candidates'], tmp_path / 'cache',
+        bundle_sha256=bundle['bundle_sha256'], fixture=True)
+    assert first['cache_hit'] is False and second['cache_hit'] is True
+    assert first['cache_key'] == second['cache_key'] and torch.equal(vectors, again)
+    raw_expected = copy.deepcopy(first['identity'])
+    raw_expected['model']['loading']['mean'] = tuple(raw_expected['model']['loading']['mean'])
+    assert torch.equal(validate_candidate_cache(second, raw_expected), vectors)
+
+
 def test_full_micro_generation_has_separate_target_queries_and_live_positive(tiny_pair, tmp_path):
     from src.visual._visual_inception.pipeline import generate_visual_inception
     from src.visual._visual_inception.evidence import validate_ready

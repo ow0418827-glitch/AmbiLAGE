@@ -16,6 +16,11 @@ from .targets import content_sha256
 CACHE_KIND = 'visual_inception_fixed_public_image_vectors_v1'
 
 
+def _canonical_json(value):
+    """Normalize container types (e.g. tuple -> list) to match JSON round-trip values."""
+    return json.loads(json.dumps(value, ensure_ascii=False, allow_nan=False))
+
+
 def _runtime_identity():
     return dict(torch_version=str(torch.__version__), numpy_version=np.__version__,
         python_version=platform.python_version(), cuda_version=torch.version.cuda,
@@ -25,13 +30,13 @@ def _runtime_identity():
 
 
 def candidate_cache_identity(model, candidates, *, bundle_sha256, fixture=False):
-    return dict(kind=CACHE_KIND, bundle_sha256=bundle_sha256,
+    return _canonical_json(dict(kind=CACHE_KIND, bundle_sha256=bundle_sha256,
         model=model.snapshot(), device=str(model.device), test_fixture=bool(fixture),
         candidates=[dict(id=row['id'], image_sha256=row['image_sha256']) for row in candidates],
         encoder_implementation_sha256=sha256_file(PROJECT / 'src/visual/encoders/backbone.py'),
         pixel_conversion_implementation_sha256=sha256_file(PROJECT / 'src/visual/io.py'),
         cache_implementation_sha256=sha256_file(Path(__file__)),
-        runtime=_runtime_identity())
+        runtime=_runtime_identity()))
 
 
 def validate_candidate_cache(record, expected_identity=None):
@@ -43,15 +48,16 @@ def validate_candidate_cache(record, expected_identity=None):
         raise ValueError('候选向量缓存元数据摘要改变')
     metadata = json.loads(metadata_path.read_text(encoding='utf-8'))
     identity = metadata.get('identity')
+    normalized_expected = _canonical_json(expected_identity) if expected_identity is not None else None
     if (not isinstance(identity, dict) or metadata.get('kind') != CACHE_KIND
             or record.get('cache_key') != content_sha256(identity)
             or metadata.get('cache_key') != record['cache_key']
             or metadata_path.parent.name != record['cache_key']
             or vector_path.resolve() != (metadata_path.parent / 'vectors.npy').resolve()):
         raise ValueError('候选向量缓存与模型、数据或路径绑定不一致')
-    if expected_identity is not None and identity != expected_identity:
+    if normalized_expected is not None and identity != normalized_expected:
         raise ValueError('候选缓存不能跨模型、文字、图片、预处理或数值运行时复用')
-    if identity != record.get('identity'):
+    if identity != _canonical_json(record.get('identity')):
         raise ValueError('记录中的候选缓存身份与落盘元数据不一致')
     if sha256_file(vector_path) != metadata.get('vector_sha256') or metadata['vector_sha256'] != record.get('vector_sha256'):
         raise ValueError('候选向量缓存文件摘要改变')

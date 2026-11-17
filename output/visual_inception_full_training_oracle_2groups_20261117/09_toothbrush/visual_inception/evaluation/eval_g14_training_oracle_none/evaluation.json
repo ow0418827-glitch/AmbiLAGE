@@ -1,0 +1,592 @@
+[
+  {
+    "condition": {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    },
+    "bank": "clean",
+    "bank_path": "/content/AmbiLAGE/output/visual_inception_full_training_oracle_2groups_20261117/shared_banks/visual_inception/eval_g14_training_oracle_none/banks/none/clean.json",
+    "bank_sha256": "bd76fcd4057fd63fa38e7ac2c2cad26b515baf5beee5f2a43d0f300825953145",
+    "queries": [
+      {
+        "task_id": "feature_01",
+        "rank": 7,
+        "score": 0.693829357624054
+      },
+      {
+        "task_id": "feature_02",
+        "rank": 6,
+        "score": 0.7083556652069092
+      },
+      {
+        "task_id": "feature_03",
+        "rank": 6,
+        "score": 0.6912711262702942
+      },
+      {
+        "task_id": "feature_04",
+        "rank": 11,
+        "score": 0.6389360427856445
+      },
+      {
+        "task_id": "feature_05",
+        "rank": 7,
+        "score": 0.7100242376327515
+      },
+      {
+        "task_id": "feature_06",
+        "rank": 11,
+        "score": 0.6321001052856445
+      },
+      {
+        "task_id": "feature_07",
+        "rank": 9,
+        "score": 0.6170027852058411
+      },
+      {
+        "task_id": "feature_08",
+        "rank": 11,
+        "score": 0.6219837069511414
+      },
+      {
+        "task_id": "feature_09",
+        "rank": 5,
+        "score": 0.7318264245986938
+      },
+      {
+        "task_id": "feature_10",
+        "rank": 9,
+        "score": 0.6768176555633545
+      },
+      {
+        "task_id": "feature_11",
+        "rank": 18,
+        "score": 0.5157849788665771
+      },
+      {
+        "task_id": "feature_12",
+        "rank": 9,
+        "score": 0.5815690755844116
+      },
+      {
+        "task_id": "feature_13",
+        "rank": 75,
+        "score": 0.2898554503917694
+      },
+      {
+        "task_id": "feature_14",
+        "rank": 17,
+        "score": 0.5437114238739014
+      },
+      {
+        "task_id": "feature_15",
+        "rank": 2,
+        "score": 0.5681017637252808
+      },
+      {
+        "task_id": "feature_16",
+        "rank": 15,
+        "score": 0.5021568536758423
+      },
+      {
+        "task_id": "feature_17",
+        "rank": 19,
+        "score": 0.4209154546260834
+      },
+      {
+        "task_id": "feature_18",
+        "rank": 18,
+        "score": 0.46731171011924744
+      },
+      {
+        "task_id": "feature_19",
+        "rank": 18,
+        "score": 0.4518030285835266
+      },
+      {
+        "task_id": "feature_20",
+        "rank": 15,
+        "score": 0.5361764430999756
+      }
+    ],
+    "top3": 1,
+    "top5": 2,
+    "query_count": 20,
+    "score_archive_index": 0,
+    "retrieval_protocol": {
+      "encoder": {
+        "provider": "clip",
+        "loader": "attack_surrogate",
+        "surrogate_number": 0,
+        "surrogate": {
+          "role": "attack_surrogate",
+          "name": "ViT-g-14",
+          "pretrained": "laion2b_s12b_b42k",
+          "hf_repo": "laion/CLIP-ViT-g-14-laion2B-s12B-b42K",
+          "tokenizer_path": "/content/AmbiLAGE/models/eval_g14",
+          "weight_path": "/content/AmbiLAGE/models/eval_g14/open_clip_pytorch_model.safetensors",
+          "weight_sha256": "11b3bb58ac0f84f8bce59c4551038a0b288372869e1666ff38224bb71ecc0870",
+          "weight_revision": null,
+          "device": "cuda",
+          "precision": "fp32",
+          "image_size": 224,
+          "preprocess": {
+            "resize": "bicubic_direct_square",
+            "align_corners": false,
+            "antialias": true,
+            "mean": [
+              0.48145466,
+              0.4578275,
+              0.40821073
+            ],
+            "std": [
+              0.26862954,
+              0.26130258,
+              0.27577711
+            ]
+          },
+          "open_clip_torch_version": "3.3.0",
+          "cache_identity": "1988654cef8482b34f04fd644382a20cbe88415172ee860fb17fd0bef99623a6",
+          "requires_true_local_tokens": true,
+          "loading": {
+            "architecture": {
+              "embed_dim": 1024,
+              "vision_cfg": {
+                "image_size": 224,
+                "layers": 40,
+                "width": 1408,
+                "head_width": 88,
+                "mlp_ratio": 4.3637,
+                "patch_size": 14
+              },
+              "text_cfg": {
+                "context_length": 77,
+                "vocab_size": 49408,
+                "width": 1024,
+                "heads": 16,
+                "layers": 24
+              }
+            },
+            "quick_gelu": false,
+            "activation": "native",
+            "mean": [
+              0.48145466,
+              0.4578275,
+              0.40821073
+            ],
+            "std": [
+              0.26862954,
+              0.26130258,
+              0.27577711
+            ],
+            "metadata_source": "registered_pretrained_tag",
+            "registered_preprocess": {
+              "interpolation": "bicubic",
+              "resize_mode": "shortest"
+            },
+            "strict_state_dict": true,
+            "actual_activation_modules": {
+              "QuickGELU": 0,
+              "GELU": 64
+            },
+            "loader_version": 3,
+            "loader_sha256": "bd95e02bd732616cdc4216349cae33a1581b29109611355f1aaa1e51004995b3"
+          },
+          "tokenizer": {
+            "type": "SimpleTokenizer",
+            "special_tokens": {
+              "sot_token_id": 49406,
+              "eot_token_id": 49407,
+              "pad_token_id": null,
+              "context_length": 77
+            },
+            "content_sha256": "4710f312ff5993f9721ddf2ff9d4d3c1b49ac86b646e95e32b0e3d1ac1abf7b8"
+          }
+        },
+        "fusion": "equal_unit_image_plus_unit_full_text",
+        "text_policy": {
+          "algorithm": "contiguous_nonoverlapping_raw_token_chunks_v1",
+          "context_length": 77,
+          "payload_tokens_per_chunk": 75,
+          "special_tokens_per_chunk": 2,
+          "coverage": "all_token_ids_no_truncation",
+          "aggregation": "unit_token_count_weighted_mean_then_unit",
+          "tokenizer": "SimpleTokenizer"
+        },
+        "weighted_fusion": {
+          "algorithm": "unit_alpha_image_plus_one_minus_alpha_full_text_v1",
+          "default_image_weight": 0.5,
+          "equal_weight_path": "exact_legacy_image_plus_text",
+          "empty_text": "image_only_except_text_only_weight_rejected"
+        },
+        "evaluation_protocol": {
+          "setting": "held_out_public_encoder",
+          "matches_training_surrogate": false,
+          "matching_training_surrogate_indices": [],
+          "black_box_transfer_claimed": true,
+          "tf32_enabled": false,
+          "precision": "float32"
+        }
+      },
+      "key_mode": "joint",
+      "query_mode": "text",
+      "index_text": "product_feature",
+      "index_text_policy": {
+        "version": 2,
+        "fields": [
+          "PrimaryImage.Title",
+          "Brand",
+          "Attributes",
+          "FeatureText"
+        ],
+        "coverage": "purchased_product_title_brand_and_features_only",
+        "purchase_binding": "primary_asin_must_match_final_asin",
+        "excluded": [
+          "Instruction",
+          "OriginalInstruction",
+          "Actions",
+          "FinalASIN",
+          "FinalOptions",
+          "FinalPrice",
+          "PolicyTrace",
+          "Reward",
+          "attack_metadata"
+        ]
+      },
+      "key_image_weight": 0.5,
+      "query_image_weight": 0.0,
+      "image_decoder": {
+        "schema_version": 1,
+        "scope": "local_encoder_process",
+        "library": "Pillow",
+        "verified": true,
+        "pillow_version": "12.3.0",
+        "jpeg_version": "6.2",
+        "libjpeg_turbo_enabled": true,
+        "libjpeg_turbo_version": "3.1.4.1"
+      },
+      "encoding_runtime": {
+        "torch": "2.14.1+cu126",
+        "numpy": "2.4.6",
+        "machine": "x86_64"
+      },
+      "cache_schema": 4,
+      "bank_sha256": "bd76fcd4057fd63fa38e7ac2c2cad26b515baf5beee5f2a43d0f300825953145",
+      "model_sha256": "11f3ccfa42ca84f1f8be5cb511a8d4f1a1880d0a126621e2cfa0c21d9da6f5c2",
+      "entries_sha256": "0c62e7e9f6e228c1d6d1380934a34c272602790e0626ffc5e71440fe10d542f5",
+      "query_encoding_audit": {
+        "text_sha256": "567507519a62f8586cb7d1ddf1098e660303844f0fa39862190899de235c88fa",
+        "input_tokens": 2,
+        "encoded_tokens": 2,
+        "chunks": 1,
+        "payload_tokens_per_chunk": 75,
+        "chunk_token_counts": [
+          2
+        ],
+        "truncated": false
+      },
+      "memory_vector_reuse": {
+        "hits": 189,
+        "misses": 0,
+        "writes": 0,
+        "rejected": 0
+      }
+    }
+  },
+  {
+    "condition": {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    },
+    "bank": "modified",
+    "bank_path": "/content/AmbiLAGE/output/visual_inception_full_training_oracle_2groups_20261117/shared_banks/visual_inception/eval_g14_training_oracle_none/banks/none/modified.json",
+    "bank_sha256": "225f1e53b8073d83860868d1edccf897a7e653008e44b122f4e780f4b17aa596",
+    "queries": [
+      {
+        "task_id": "feature_01",
+        "rank": 6,
+        "score": 0.702274739742279
+      },
+      {
+        "task_id": "feature_02",
+        "rank": 6,
+        "score": 0.7059465050697327
+      },
+      {
+        "task_id": "feature_03",
+        "rank": 6,
+        "score": 0.692168116569519
+      },
+      {
+        "task_id": "feature_04",
+        "rank": 11,
+        "score": 0.6424242854118347
+      },
+      {
+        "task_id": "feature_05",
+        "rank": 6,
+        "score": 0.7176579236984253
+      },
+      {
+        "task_id": "feature_06",
+        "rank": 11,
+        "score": 0.6268133521080017
+      },
+      {
+        "task_id": "feature_07",
+        "rank": 9,
+        "score": 0.6308472156524658
+      },
+      {
+        "task_id": "feature_08",
+        "rank": 10,
+        "score": 0.6374024152755737
+      },
+      {
+        "task_id": "feature_09",
+        "rank": 5,
+        "score": 0.7275686860084534
+      },
+      {
+        "task_id": "feature_10",
+        "rank": 10,
+        "score": 0.6602356433868408
+      },
+      {
+        "task_id": "feature_11",
+        "rank": 18,
+        "score": 0.5065701603889465
+      },
+      {
+        "task_id": "feature_12",
+        "rank": 10,
+        "score": 0.5657851696014404
+      },
+      {
+        "task_id": "feature_13",
+        "rank": 64,
+        "score": 0.3008764386177063
+      },
+      {
+        "task_id": "feature_14",
+        "rank": 17,
+        "score": 0.5302027463912964
+      },
+      {
+        "task_id": "feature_15",
+        "rank": 2,
+        "score": 0.5769319534301758
+      },
+      {
+        "task_id": "feature_16",
+        "rank": 19,
+        "score": 0.48158761858940125
+      },
+      {
+        "task_id": "feature_17",
+        "rank": 18,
+        "score": 0.43504202365875244
+      },
+      {
+        "task_id": "feature_18",
+        "rank": 18,
+        "score": 0.4718446135520935
+      },
+      {
+        "task_id": "feature_19",
+        "rank": 18,
+        "score": 0.4537193179130554
+      },
+      {
+        "task_id": "feature_20",
+        "rank": 15,
+        "score": 0.5478185415267944
+      }
+    ],
+    "top3": 1,
+    "top5": 2,
+    "query_count": 20,
+    "score_archive_index": 1,
+    "retrieval_protocol": {
+      "encoder": {
+        "provider": "clip",
+        "loader": "attack_surrogate",
+        "surrogate_number": 0,
+        "surrogate": {
+          "role": "attack_surrogate",
+          "name": "ViT-g-14",
+          "pretrained": "laion2b_s12b_b42k",
+          "hf_repo": "laion/CLIP-ViT-g-14-laion2B-s12B-b42K",
+          "tokenizer_path": "/content/AmbiLAGE/models/eval_g14",
+          "weight_path": "/content/AmbiLAGE/models/eval_g14/open_clip_pytorch_model.safetensors",
+          "weight_sha256": "11b3bb58ac0f84f8bce59c4551038a0b288372869e1666ff38224bb71ecc0870",
+          "weight_revision": null,
+          "device": "cuda",
+          "precision": "fp32",
+          "image_size": 224,
+          "preprocess": {
+            "resize": "bicubic_direct_square",
+            "align_corners": false,
+            "antialias": true,
+            "mean": [
+              0.48145466,
+              0.4578275,
+              0.40821073
+            ],
+            "std": [
+              0.26862954,
+              0.26130258,
+              0.27577711
+            ]
+          },
+          "open_clip_torch_version": "3.3.0",
+          "cache_identity": "1988654cef8482b34f04fd644382a20cbe88415172ee860fb17fd0bef99623a6",
+          "requires_true_local_tokens": true,
+          "loading": {
+            "architecture": {
+              "embed_dim": 1024,
+              "vision_cfg": {
+                "image_size": 224,
+                "layers": 40,
+                "width": 1408,
+                "head_width": 88,
+                "mlp_ratio": 4.3637,
+                "patch_size": 14
+              },
+              "text_cfg": {
+                "context_length": 77,
+                "vocab_size": 49408,
+                "width": 1024,
+                "heads": 16,
+                "layers": 24
+              }
+            },
+            "quick_gelu": false,
+            "activation": "native",
+            "mean": [
+              0.48145466,
+              0.4578275,
+              0.40821073
+            ],
+            "std": [
+              0.26862954,
+              0.26130258,
+              0.27577711
+            ],
+            "metadata_source": "registered_pretrained_tag",
+            "registered_preprocess": {
+              "interpolation": "bicubic",
+              "resize_mode": "shortest"
+            },
+            "strict_state_dict": true,
+            "actual_activation_modules": {
+              "QuickGELU": 0,
+              "GELU": 64
+            },
+            "loader_version": 3,
+            "loader_sha256": "bd95e02bd732616cdc4216349cae33a1581b29109611355f1aaa1e51004995b3"
+          },
+          "tokenizer": {
+            "type": "SimpleTokenizer",
+            "special_tokens": {
+              "sot_token_id": 49406,
+              "eot_token_id": 49407,
+              "pad_token_id": null,
+              "context_length": 77
+            },
+            "content_sha256": "4710f312ff5993f9721ddf2ff9d4d3c1b49ac86b646e95e32b0e3d1ac1abf7b8"
+          }
+        },
+        "fusion": "equal_unit_image_plus_unit_full_text",
+        "text_policy": {
+          "algorithm": "contiguous_nonoverlapping_raw_token_chunks_v1",
+          "context_length": 77,
+          "payload_tokens_per_chunk": 75,
+          "special_tokens_per_chunk": 2,
+          "coverage": "all_token_ids_no_truncation",
+          "aggregation": "unit_token_count_weighted_mean_then_unit",
+          "tokenizer": "SimpleTokenizer"
+        },
+        "weighted_fusion": {
+          "algorithm": "unit_alpha_image_plus_one_minus_alpha_full_text_v1",
+          "default_image_weight": 0.5,
+          "equal_weight_path": "exact_legacy_image_plus_text",
+          "empty_text": "image_only_except_text_only_weight_rejected"
+        },
+        "evaluation_protocol": {
+          "setting": "held_out_public_encoder",
+          "matches_training_surrogate": false,
+          "matching_training_surrogate_indices": [],
+          "black_box_transfer_claimed": true,
+          "tf32_enabled": false,
+          "precision": "float32"
+        }
+      },
+      "key_mode": "joint",
+      "query_mode": "text",
+      "index_text": "product_feature",
+      "index_text_policy": {
+        "version": 2,
+        "fields": [
+          "PrimaryImage.Title",
+          "Brand",
+          "Attributes",
+          "FeatureText"
+        ],
+        "coverage": "purchased_product_title_brand_and_features_only",
+        "purchase_binding": "primary_asin_must_match_final_asin",
+        "excluded": [
+          "Instruction",
+          "OriginalInstruction",
+          "Actions",
+          "FinalASIN",
+          "FinalOptions",
+          "FinalPrice",
+          "PolicyTrace",
+          "Reward",
+          "attack_metadata"
+        ]
+      },
+      "key_image_weight": 0.5,
+      "query_image_weight": 0.0,
+      "image_decoder": {
+        "schema_version": 1,
+        "scope": "local_encoder_process",
+        "library": "Pillow",
+        "verified": true,
+        "pillow_version": "12.3.0",
+        "jpeg_version": "6.2",
+        "libjpeg_turbo_enabled": true,
+        "libjpeg_turbo_version": "3.1.4.1"
+      },
+      "encoding_runtime": {
+        "torch": "2.14.1+cu126",
+        "numpy": "2.4.6",
+        "machine": "x86_64"
+      },
+      "cache_schema": 4,
+      "bank_sha256": "225f1e53b8073d83860868d1edccf897a7e653008e44b122f4e780f4b17aa596",
+      "model_sha256": "11f3ccfa42ca84f1f8be5cb511a8d4f1a1880d0a126621e2cfa0c21d9da6f5c2",
+      "entries_sha256": "d669ad545224000ef3ec4129fad64b8c514d289d44318bb7930de7069fa9c6be",
+      "query_encoding_audit": {
+        "text_sha256": "567507519a62f8586cb7d1ddf1098e660303844f0fa39862190899de235c88fa",
+        "input_tokens": 2,
+        "encoded_tokens": 2,
+        "chunks": 1,
+        "payload_tokens_per_chunk": 75,
+        "chunk_token_counts": [
+          2
+        ],
+        "truncated": false
+      },
+      "memory_vector_reuse": {
+        "hits": 189,
+        "misses": 0,
+        "writes": 0,
+        "rejected": 0
+      }
+    }
+  }
+]

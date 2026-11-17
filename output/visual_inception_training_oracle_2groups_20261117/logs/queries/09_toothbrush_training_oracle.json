@@ -1,0 +1,68 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "query_mode": "text",
+  "target_public_id": "B09J81RMLD",
+  "instruction_policy": "visual_inception_training_oracle_50_30_20_v1",
+  "category": "toothbrush",
+  "source_metadata": "resources/evaluation_base/public_metadata/product_metadata.json#B09J81RMLD",
+  "sampling_ratios": {
+    "public_description_and_metadata": "10/20 (50%)",
+    "paraphrased_feature_queries": "6/20 (30%)",
+    "buyer_intent_queries": "4/20 (20%)"
+  },
+  "paper_exact_log_source": false,
+  "breakdown": {
+    "50pct_public_description_and_metadata": [
+      "Baby U Shaped Toothbrush for Aged 2-12 with 360° Soft Silicone Brush Heads Handle Kids Cute Teeth Whitening Massage Tool",
+      "U-Shaped Design 360 Cleansing Method with U-shape brush head achieving three-sided fitting of teeth and gums.",
+      "Made of food grade silicone, safe material, no special smell, ergonomic shape and size for toddlers and kids.",
+      "Multi-layer bristles design give teeth full protection and can easily clean tongue coating.",
+      "Soft silicone brush head suitable for 2-12 toddlers with easy-to-grip handle for small hands.",
+      "Unique U-shaped brush head design to fit teeth better and clean teeth from all angles.",
+      "360 degree clean baby teeth with food grade silicone brush head resistant to high temperature up to 100 C.",
+      "Easy-to-grip cute handle kids toothbrush with 360 degree cleaning and teeth whitening massage tool.",
+      "Toddler manual toothbrush with U-shape silicone head, wash in warm water, applicable age 0-12 years old.",
+      "Kids oral teeth cleaning tool made of silicone and PP with three-sided fitting for effective brushing."
+    ],
+    "30pct_paraphrased_feature_queries": [
+      "Looking for a toddler oral brush shaped like a U with gentle silicone bristles for full-mouth cleaning.",
+      "Need a kid-friendly manual toothbrush that wraps around teeth 360 degrees using soft food-grade silicone.",
+      "Recommend a children's U-shape teeth cleaner with an easy-grip small handle and soft silicone head.",
+      "Searching for a safe silicone kids toothbrush offering 360-degree coverage and comfortable grip for little hands.",
+      "Which children's toothbrush combines a U-shaped silicone head with an ergonomic handle for small hands?",
+      "I want a gentle 360-degree cleaning toothbrush for toddlers featuring a U-shaped soft silicone brush head."
+    ],
+    "20pct_buyer_intent_queries": [
+      "I want to buy a toothbrush with a U-shaped design and soft silicone brush heads.",
+      "I would like to purchase a toothbrush featuring a U-shaped design and 360-degree cleaning.",
+      "Looking to buy a toothbrush with soft silicone brush heads and a handle designed for small hands.",
+      "Please help me buy a toothbrush featuring a U-shaped design and 360-degree cleaning."
+    ]
+  },
+  "instructions": [
+    "Baby U Shaped Toothbrush for Aged 2-12 with 360° Soft Silicone Brush Heads Handle Kids Cute Teeth Whitening Massage Tool",
+    "U-Shaped Design 360 Cleansing Method with U-shape brush head achieving three-sided fitting of teeth and gums.",
+    "Made of food grade silicone, safe material, no special smell, ergonomic shape and size for toddlers and kids.",
+    "Multi-layer bristles design give teeth full protection and can easily clean tongue coating.",
+    "Soft silicone brush head suitable for 2-12 toddlers with easy-to-grip handle for small hands.",
+    "Unique U-shaped brush head design to fit teeth better and clean teeth from all angles.",
+    "360 degree clean baby teeth with food grade silicone brush head resistant to high temperature up to 100 C.",
+    "Easy-to-grip cute handle kids toothbrush with 360 degree cleaning and teeth whitening massage tool.",
+    "Toddler manual toothbrush with U-shape silicone head, wash in warm water, applicable age 0-12 years old.",
+    "Kids oral teeth cleaning tool made of silicone and PP with three-sided fitting for effective brushing.",
+    "Looking for a toddler oral brush shaped like a U with gentle silicone bristles for full-mouth cleaning.",
+    "Need a kid-friendly manual toothbrush that wraps around teeth 360 degrees using soft food-grade silicone.",
+    "Recommend a children's U-shape teeth cleaner with an easy-grip small handle and soft silicone head.",
+    "Searching for a safe silicone kids toothbrush offering 360-degree coverage and comfortable grip for little hands.",
+    "Which children's toothbrush combines a U-shaped silicone head with an ergonomic handle for small hands?",
+    "I want a gentle 360-degree cleaning toothbrush for toddlers featuring a U-shaped soft silicone brush head.",
+    "I want to buy a toothbrush with a U-shaped design and soft silicone brush heads.",
+    "I would like to purchase a toothbrush featuring a U-shaped design and 360-degree cleaning.",
+    "Looking to buy a toothbrush with soft silicone brush heads and a handle designed for small hands.",
+    "Please help me buy a toothbrush featuring a U-shaped design and 360-degree cleaning."
+  ],
+  "instructions_sha256": "f4123a5698bbb4cae7ec21a018ac22cc975b41f0bb6f44652539b778a1b75fd5",
+  "query_image_required": false,
+  "query_images_generated": false
+}

@@ -1,0 +1,49 @@
+=== Evaluate frozen full visual_inception with DEFAULT key_mode=image (07_shampoo, 09_toothbrush) at 2026-11-17T09:11:00Z ===
+=== [EVAL key_mode=default(image)] 07_shampoo/visual_inception/eval_g14_training_oracle_none ===
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+none clean: 前三 4/20；前五 6/20
+none modified: 前三 8/20；前五 9/20
+DONE 07_shampoo/eval_g14 (key_mode=image): Clean Top-3=4/20 -> Mod Top-3=8/20 (mean 13.00 -> 9.40)
+=== [EVAL key_mode=default(image)] 09_toothbrush/visual_inception/eval_g14_training_oracle_none ===
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+none clean: 前三 4/20；前五 9/20
+none modified: 前三 2/20；前五 7/20
+DONE 09_toothbrush/eval_g14 (key_mode=image): Clean Top-3=4/20 -> Mod Top-3=2/20 (mean 7.85 -> 9.70)
+=== [EVAL key_mode=default(image)] 07_shampoo/visual_inception/clip_l14_training_oracle_none ===
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+none clean: 前三 1/20；前五 2/20
+none modified: 前三 20/20；前五 20/20
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+DONE 07_shampoo/clip_l14 (key_mode=image): Clean Top-3=1/20 -> Mod Top-3=20/20 (mean 20.75 -> 1.00)
+=== [EVAL key_mode=default(image)] 09_toothbrush/visual_inception/clip_l14_training_oracle_none ===
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 8/20；前五 8/20
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+DONE 09_toothbrush/clip_l14 (key_mode=image): Clean Top-3=1/20 -> Mod Top-3=8/20 (mean 17.20 -> 7.00)
+=== [EVAL key_mode=default(image)] 07_shampoo/visual_inception/siglip_so400m_training_oracle_none ===
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 18/20；前五 20/20
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+DONE 07_shampoo/siglip_so400m (key_mode=image): Clean Top-3=1/20 -> Mod Top-3=18/20 (mean 16.90 -> 1.60)
+=== [EVAL key_mode=default(image)] 09_toothbrush/visual_inception/siglip_so400m_training_oracle_none ===
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+none clean: 前三 9/20；前五 11/20
+none modified: 前三 14/20；前五 15/20
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+DONE 09_toothbrush/siglip_so400m (key_mode=image): Clean Top-3=9/20 -> Mod Top-3=14/20 (mean 8.40 -> 3.55)
+=== [EVAL key_mode=default(image)] 07_shampoo/visual_inception/clip_bigG14_training_oracle_none ===
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+none clean: 前三 2/20；前五 5/20
+none modified: 前三 5/20；前五 8/20
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+DONE 07_shampoo/clip_bigG14 (key_mode=image): Clean Top-3=2/20 -> Mod Top-3=5/20 (mean 11.65 -> 8.70)
+=== [EVAL key_mode=default(image)] 09_toothbrush/visual_inception/clip_bigG14_training_oracle_none ===
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+none clean: 前三 10/20；前五 13/20
+none modified: 前三 8/20；前五 11/20
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+DONE 09_toothbrush/clip_bigG14 (key_mode=image): Clean Top-3=10/20 -> Mod Top-3=8/20 (mean 9.20 -> 9.20)
+ALL IMAGE-KEY EVALUATIONS VERIFIED. Summary written to /content/AmbiLAGE/output/visual_inception_full_training_oracle_image_key_2groups_20261117/logs/SUMMARY_TRAINING_ORACLE_IMAGE_KEY.md
+=== ALL DONE at 2026-11-17T09:38:24Z ===

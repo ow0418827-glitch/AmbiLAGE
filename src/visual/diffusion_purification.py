@@ -91,7 +91,18 @@ class LatentDiffusionPurifier:
         self.forward_noise_calls=0
 
     def snapshot(self):
-        return {'kind':'sd15_latent_noise_then_ddim_purification_v1',
+        path_lower = str(self.config.model_path).replace('\\', '/').casefold()
+        local_lower = str(self.components.manifest.get('local_path', '')).replace('\\', '/').casefold()
+        is_sd21 = any(
+            tok in path_lower or tok in local_lower
+            for tok in ('eval_purifier_sd21', 'stable-diffusion-2-1', 'stable_diffusion_2_1')
+        )
+        kind = (
+            'sd21_base_cognitiveguard_system1_ddim_purification_v1'
+            if is_sd21
+            else 'sd15_latent_noise_then_ddim_purification_v1'
+        )
+        return {'kind':kind,
                 'config':asdict(self.config),'model':self.components.manifest,
                 'prompt':'','guidance_scale':1.0,'posterior':'mode','eta':0.0,
                 'resize':'aspect_long_edge_round8_min64_bicubic_antialias_back_to_native',

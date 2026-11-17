@@ -79,6 +79,24 @@
       "role": "held_out_evaluator_only",
       "scope": "evaluators"
     },
+    "eval_purifier_sd21": {
+      "repo_id": "sd2-community/stable-diffusion-2-1-base",
+      "role": "held_out_cognitiveguard_system1_purifier_only",
+      "scope": "evaluators",
+      "allow_patterns": [
+        "model_index.json",
+        "scheduler/*",
+        "text_encoder/config.json",
+        "text_encoder/model.safetensors",
+        "tokenizer/*",
+        "unet/config.json",
+        "unet/diffusion_pytorch_model.safetensors",
+        "vae/config.json",
+        "vae/diffusion_pytorch_model.safetensors",
+        "LICENSE*",
+        "README.md"
+      ]
+    },
     "selection": {
       "repo_id": "facebook/dinov2-small",
       "role": "frozen_public_grayscale_shape_gate",

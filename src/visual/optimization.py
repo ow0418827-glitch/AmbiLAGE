@@ -65,8 +65,8 @@ def generate_attack(source, target, output_dir, *, method='ambilage', steps=None
     method = normalize_method(method)
     if visual_inception_config is not None and method != 'visual_inception':
         raise ValueError('视觉记忆植入配置只能用于对应方法')
-    if training_manifest is not None and method != 'visual_inception':
-        raise ValueError('公开训练清单只能用于视觉记忆植入方法')
+    if training_manifest is not None and method not in ('visual_inception', 'ambilage'):
+        raise ValueError('公开训练清单仅用于环境光协同或视觉记忆植入方法')
     if method == 'lucid':
         if surrogate_set is not None or surrogate_config is not None:
             raise ValueError('训练代理选择参数用于新方法；原始像素方法使用自己的冻结配置')
@@ -122,6 +122,7 @@ def generate_attack(source, target, output_dir, *, method='ambilage', steps=None
             allow_tf32=allow_tf32,
             seed=seed,definition=definition,smoke_test=smoke_test,
             surrogate_set=surrogate_set,surrogate_config=surrogate_config,
+            training_manifest=training_manifest,
         )
         metadata=dict(metadata,status='success',source_image_sha256=metadata['source_sha256'],
                       target_image_sha256=metadata['target_sha256'],ambilage_ready=copy.deepcopy(metadata))

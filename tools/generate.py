@@ -106,7 +106,7 @@ def parse_args(argv=None) -> argparse.Namespace:
     )
     parser.add_argument('--definition',help='冻结公开图对定义及源商品完整公开检索键')
     parser.add_argument('--visual-inception-config', help='视觉记忆植入基线的配置文件路径')
-    parser.add_argument('--training-manifest', type=Path, help='视觉记忆植入的独立公开查询及候选库冻结清单')
+    parser.add_argument('--training-manifest', type=Path, help='环境光协同或视觉记忆植入的独立公开查询及候选库冻结清单')
     parser.add_argument('--smoke-test',action='store_true',help='显式微型夹具，仅中央处理器/六十四像素/至多三步，禁止作为正式实验输入')
     from src.visual.training_surrogates import add_surrogate_arguments
     add_surrogate_arguments(parser)
@@ -115,8 +115,8 @@ def parse_args(argv=None) -> argparse.Namespace:
         parser.error('训练代理选择参数仅用于新方法；固定原始像素方法使用自己的配置')
     if args.visual_inception_config and args.method != 'visual_inception':
         parser.error('视觉记忆植入配置只能用于对应方法')
-    if args.training_manifest and args.method != 'visual_inception':
-        parser.error('公开训练清单只能用于视觉记忆植入方法')
+    if args.training_manifest and args.method not in ('visual_inception', 'ambilage'):
+        parser.error('公开训练清单仅用于环境光协同或视觉记忆植入方法')
     if args.ambilage_config and args.method != 'ambilage':
         parser.error('环境光协同配置只能用于对应方法')
     return args

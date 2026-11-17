@@ -81,6 +81,68 @@ class AmbiLAGEVae:
 STAGE4_CHECKPOINT_FILENAME = "checkpoint_latest.pt"
 
 
+def build_spectral_envelope(
+    base_latent: torch.Tensor,
+    latent_limit: float = 6.0,
+) -> torch.Tensor | None:
+    """预计算十六通道潜空间的 1/f 自然频谱幅度参考包络（满足二维 Parseval 能量归一化）。"""
+    h_lat, w_lat = int(base_latent.shape[-2]), int(base_latent.shape[-1])
+    if h_lat < 4 or w_lat < 4:
+        return None
+    device = base_latent.device
+    fy = torch.fft.fftfreq(h_lat, device=device, dtype=torch.float32)
+    fx = torch.fft.rfftfreq(w_lat, device=device, dtype=torch.float32)
+    fx_full = torch.fft.fftfreq(w_lat, device=device, dtype=torch.float32)
+    norm_diag = math.sqrt(0.5)
+    rho = torch.sqrt(fy[:, None] ** 2 + fx[None, :] ** 2) / norm_diag
+    rho_full = torch.sqrt(fy[:, None] ** 2 + fx_full[None, :] ** 2) / norm_diag
+
+    pink_full = (1.0 + 6.0 * rho_full) ** (-1.35)
+    pink_rms = torch.sqrt((pink_full ** 2).mean().clamp_min(1e-12))
+    pink_rfft = (((1.0 + 6.0 * rho) ** (-1.35)) / pink_rms)[None, None]
+
+    base_f = base_latent.detach().float()
+    base_centered = base_f - base_f.mean(dim=(-2, -1), keepdim=True)
+    f_base = torch.fft.rfft2(base_centered, norm="ortho")
+    base_amp = torch.sqrt((f_base.abs() ** 2).mean(dim=1, keepdim=True) + 1e-12)
+    if min(base_amp.shape[-2], base_amp.shape[-1]) >= 3:
+        # 沿 fy 维采用圆周延拓以保持实信号共轭对称，沿 fx 维复制边界
+        pad_h = torch.cat([base_amp[:, :, -1:, :], base_amp, base_amp[:, :, :1, :]], dim=-2)
+        pad_hw = F.pad(pad_h, (1, 1, 0, 0), mode="replicate")
+        base_amp = F.avg_pool2d(pad_hw, 3, stride=1)
+
+    sigma_spatial = max(float(base_centered.std().item()), 0.50 * float(latent_limit))
+    envelope = torch.maximum(base_amp, sigma_spatial * pink_rfft)
+    dc_floor = float(latent_limit) * math.sqrt(float(h_lat * w_lat))
+    envelope = envelope.clone()
+    envelope[..., 0, 0] = torch.maximum(envelope[..., 0, 0], torch.full_like(envelope[..., 0, 0], dc_floor))
+    return envelope.detach()
+
+
+def spectral_manifold_project(
+    delta: torch.Tensor,
+    base_latent: torch.Tensor,
+    freq_budget_ratio: float = 0.35,
+    latent_limit: float = 6.0,
+    *,
+    precomputed_envelope: torch.Tensor | None = None,
+) -> torch.Tensor:
+    """将潜空间残差投影到 1/f 自然频谱流形球内，抑制棋盘格高频伪影并抵御扩散净化。"""
+    ratio = float(freq_budget_ratio)
+    h_lat, w_lat = int(delta.shape[-2]), int(delta.shape[-1])
+    if ratio <= 0.0 or h_lat < 4 or w_lat < 4:
+        return delta
+    envelope = precomputed_envelope if precomputed_envelope is not None else build_spectral_envelope(base_latent, latent_limit)
+    if envelope is None:
+        return delta
+    f_delta = torch.fft.rfft2(delta.float(), norm="ortho")
+    cap = ratio * envelope.to(device=delta.device, dtype=torch.float32)
+    mag = f_delta.abs()
+    scale = torch.clamp(cap / mag.clamp_min(1e-12), max=1.0)
+    projected = torch.fft.irfft2(f_delta * scale, s=(h_lat, w_lat), norm="ortho")
+    return projected.to(dtype=delta.dtype)
+
+
 class AdaptiveAnnealingController:
     """Stage 4 自适应退火调度器：余弦包络 + 约束回退降温 + 平台期降温与区间早停收敛。"""
 
@@ -329,6 +391,11 @@ def refine_ambient_coop_latent(
         ).clamp(0, 1)
         base_latent = vae.encode(work_img).detach()
         reference_decoded = vae.decode_raw(base_latent, shape).detach()
+        spectral_envelope = (
+            build_spectral_envelope(base_latent, config.latent_limit)
+            if bool(getattr(config, "spectral_manifold_projection", False))
+            else None
+        )
 
     # 4. 初始化可学习潜差分与优化器
     delta = nn.Parameter(torch.zeros_like(base_latent))
@@ -460,6 +527,7 @@ def refine_ambient_coop_latent(
         executed_steps = int(ckpt.get("executed_steps", saved_step))
         stop_reason = str(ckpt.get("stop_reason", "requested_steps_completed"))
         last_lr_scale = float(ckpt.get("last_lr_scale", annealer.lr_scale(max(1, saved_step))))
+        tangent_proj_calls = int(ckpt.get("tangent_projection_calls", 0))
         print(
             f"AmbiLAGE 断点续跑恢复 [step={saved_step}/{config.steps}] "
             f"(Accepted={accepted}, Rejected={rejected}, adaptive_scale={annealer.adaptive_scale:.4f})",
@@ -469,6 +537,7 @@ def refine_ambient_coop_latent(
         history = []
         accepted = 0
         rejected = 0
+        tangent_proj_calls = 0
         best_snap = snapshot_params()
         with torch.no_grad():
             initial_img = compose()
@@ -522,27 +591,75 @@ def refine_ambient_coop_latent(
             old_opt_state = copy.deepcopy(optimizer.state_dict())
             optimizer.zero_grad(set_to_none=True)
 
-            # 5.1/5.2 前向合成一次，并复用同一解码图计算法向量约束与切空间梯度反向传播
+            # 5.1/5.2 前向合成一次，并按需在边界邻域内触发法向量反向传播（节省 L4 24GB 双重 FLUX VAE 反传开销）
             decoded_img, raw_img = compose_with_raw()
-            image_eval = decoded_img.detach().requires_grad_(True)
             normals = []
             slacks = []
 
-            structure = source_ssim(image_eval, original_tensor, luma_only=False)
-            n_ssim, = torch.autograd.grad(structure, image_eval)
-            normals.append(n_ssim.detach())
-            slacks.append(float(structure.detach()) - config.source_ssim_floor)
+            with torch.no_grad():
+                img_det = decoded_img.detach()
+                rgb_ssim_val = float(source_ssim(img_det, original_tensor, luma_only=False))
+                luma_ssim_val = float(source_ssim(img_det, original_tensor, luma_only=True))
+                min_ssim_val = min(rgb_ssim_val, luma_ssim_val)
+                ssim_slack = min_ssim_val - float(config.source_ssim_floor)
 
-            mae_metric = (image_eval - original_tensor).abs().mean()
-            n_mae, = torch.autograd.grad(-mae_metric, image_eval)
-            normals.append(n_mae.detach())
-            slacks.append(config.source_mae_ceiling / 255.0 - float(mae_metric.detach()))
-            del image_eval, structure, mae_metric
+                diff_abs = (img_det - original_tensor).abs()
+                rgb_mae_norm = float(diff_abs.mean())
+                luma_mae_norm = float(source_luma_mae_levels(img_det, original_tensor)) / 255.0
+                eff_mae_norm = max(rgb_mae_norm, luma_mae_norm)
+                mae_ceiling_norm = float(config.source_mae_ceiling) / 255.0
+                mae_slack = mae_ceiling_norm - eff_mae_norm
+
+                fg_mae_ceiling = max(
+                    float(getattr(config, "fg_source_mae_ceiling", 10.0)),
+                    float(config.source_mae_ceiling) if config.source_mae_ceiling > 30.0 else 0.0,
+                )
+                fg_mae_ceiling_norm = fg_mae_ceiling / 255.0
+                fg_mae_norm = float(diff_abs[:, :, fg_bool].mean()) if fg_bool.any() else 0.0
+                fg_mae_slack = fg_mae_ceiling_norm - fg_mae_norm
+
+            if bool(getattr(config, "conditional_tangent_projection", False)):
+                ssim_margin = float(getattr(config, "tangent_ssim_slack_margin", 0.03))
+                mae_ratio = float(getattr(config, "tangent_mae_slack_ratio", 0.20))
+                need_ssim = ssim_slack < ssim_margin
+                need_mae = mae_slack < mae_ratio * mae_ceiling_norm
+                need_fg_mae = bool(fg_bool.any()) and (fg_mae_slack < mae_ratio * fg_mae_ceiling_norm)
+            else:
+                need_ssim = True
+                need_mae = True
+                need_fg_mae = False
+
+            if need_ssim or need_mae or need_fg_mae:
+                image_eval = decoded_img.detach().requires_grad_(True)
+                if need_ssim:
+                    use_luma_ssim = luma_ssim_val < rgb_ssim_val
+                    structure = source_ssim(image_eval, original_tensor, luma_only=use_luma_ssim)
+                    n_ssim, = torch.autograd.grad(structure, image_eval)
+                    normals.append(n_ssim.detach())
+                    slacks.append(ssim_slack)
+                    del structure
+                if need_mae:
+                    if luma_mae_norm > rgb_mae_norm:
+                        mae_metric = (extract_oklab_luma(image_eval) - extract_oklab_luma(original_tensor)).abs().mean()
+                    else:
+                        mae_metric = (image_eval - original_tensor).abs().mean()
+                    n_mae, = torch.autograd.grad(-mae_metric, image_eval)
+                    normals.append(n_mae.detach())
+                    slacks.append(mae_slack)
+                    del mae_metric
+                if need_fg_mae:
+                    fg_metric = (image_eval - original_tensor)[:, :, fg_bool].abs().mean()
+                    n_fg, = torch.autograd.grad(-fg_metric, image_eval)
+                    normals.append(n_fg.detach())
+                    slacks.append(fg_mae_slack)
+                    del fg_metric
+                del image_eval
 
             latent_normals = []
             for n_img in normals:
                 d_latent, = torch.autograd.grad(decoded_img, delta, grad_outputs=n_img, retain_graph=True)
                 latent_normals.append(d_latent.detach())
+                tangent_proj_calls += 1
 
             if hasattr(objective, "image_gradient"):
                 utility, scores, image_gradient, objective_metrics = objective.image_gradient(decoded_img.detach(), step)
@@ -577,6 +694,20 @@ def refine_ambient_coop_latent(
                 if config.latent_smoothing_mix > 0.0:
                     smooth = F.avg_pool2d(F.pad(delta, (1, 1, 1, 1), mode="reflect"), 3, stride=1)
                     delta.lerp_(smooth, config.latent_smoothing_mix)
+                if bool(getattr(config, "spectral_manifold_projection", False)):
+                    prog_spec = (step - 1) / max(1, config.steps - 1)
+                    b_start = float(getattr(config, "spectral_budget_start", 0.22))
+                    b_end = float(getattr(config, "spectral_budget_end", 0.45))
+                    freq_ratio = b_start + (b_end - b_start) * min(max(prog_spec, 0.0), 1.0)
+                    delta.copy_(
+                        spectral_manifold_project(
+                            delta,
+                            base_latent,
+                            freq_budget_ratio=freq_ratio,
+                            latent_limit=config.latent_limit,
+                            precomputed_envelope=spectral_envelope,
+                        )
+                    )
 
                 step_vector = delta - old_snap["delta"]
                 projected = tangent_projection(step_vector, latent_normals, slacks)
@@ -718,6 +849,7 @@ def refine_ambient_coop_latent(
                     "accumulated_elapsed_seconds": float(prior_elapsed + (time.perf_counter() - tick)),
                     "checkpoints_saved": int(checkpoints_saved),
                     "resume_count": int(resume_count),
+                    "tangent_projection_calls": int(tangent_proj_calls),
                 })
 
             if interrupt_requested["name"] is not None:
@@ -796,6 +928,9 @@ def refine_ambient_coop_latent(
         "elapsed_seconds": float(prior_elapsed + (time.perf_counter() - tick)),
         "zero_pixel_optimization": True,
         "vae": vae.identity,
+        "spectral_manifold_projection": bool(getattr(config, "spectral_manifold_projection", False)),
+        "conditional_tangent_projection": bool(getattr(config, "conditional_tangent_projection", False)),
+        "tangent_projection_calls": int(tangent_proj_calls),
         "adaptive_annealing": annealer.summary(executed_steps, stop_reason, last_lr_scale, best_row["step"]),
         "checkpoint_resume": {
             "checkpoint_every": int(config.checkpoint_every),

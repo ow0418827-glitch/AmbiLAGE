@@ -12,6 +12,29 @@ from src.visual.encoders.spec import BackboneConfig
 
 SURROGATE_SETS = ('lucid', 'heterogeneous4', 'visual_inception_paper', 'custom')
 HELD_OUT_MODELS = ('ViT-g-14', 'Alibaba-NLP/gme-Qwen2-VL-2B-Instruct')
+HELD_OUT_PURIFIERS = ('eval_purifier_sd21', 'sd2-community/stable-diffusion-2-1-base', 'stabilityai/stable-diffusion-2-1-base')
+
+
+def is_held_out_purifier_reference(value: str | Path | None) -> bool:
+    if value is None:
+        return False
+    lowered = str(value).replace('\\', '/').casefold()
+    return any(
+        token in lowered
+        for token in ('eval_purifier_sd21', 'stable-diffusion-2-1', 'stable_diffusion_2_1')
+    )
+
+
+def all_registered_training_specs() -> list[BackboneConfig]:
+    seen: set[tuple[str, str, str | None]] = set()
+    ordered: list[BackboneConfig] = []
+    for preset in ('lucid', 'heterogeneous4', 'visual_inception_paper'):
+        for spec in select_training_surrogates(preset).specs:
+            ident = spec_identity(spec)
+            if ident not in seen:
+                seen.add(ident)
+                ordered.append(spec)
+    return ordered
 
 
 def _digest(value):
@@ -32,7 +55,7 @@ def validate_training_specs(specs):
         # The registered ViT-bigG-14 architecture is distinct from the held-out
         # ViT-g-14. Never shorten or case-normalize bigG into the evaluator name.
         fields = ' '.join(str(v or '') for v in asdict(spec).values()).casefold()
-        if any(name in fields for name in ('vit-g-14', 'gme', 'eval_g14', 'eval_gme')):
+        if any(name in fields for name in ('vit-g-14', 'gme', 'eval_g14', 'eval_gme', 'eval_purifier_sd21', 'stable-diffusion-2-1')):
             raise ValueError('留出评估编码器禁止参与训练')
     return specs
 

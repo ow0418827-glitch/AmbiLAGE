@@ -58,8 +58,9 @@ def load_config(path):
         raise ValueError('正式查询模式只能是纯文字或图文联合')
     if config.get('evaluation', {}).get('key_mode') not in (None, 'image', 'joint'):
         raise ValueError('记忆库检索键模式只能为 image 或 joint')
-    if config.get('evaluation', {}).get('defense_mode', 'panel') not in ('none', 'panel'):
-        raise ValueError('防御范围只能为无防御或既有完整面板')
+    from src.experiments.defenses import DEFENSE_MODES
+    if config.get('evaluation', {}).get('defense_mode', 'panel') not in DEFENSE_MODES:
+        raise ValueError('防御范围只能为已登记的防御面板模式')
     return config
 
 
@@ -235,6 +236,8 @@ def generation_definition(selection, options, method='ambilage'):
         target_feature_text=feature_text,
         source_boxes=product_boxes(source), target_boxes=product_boxes(target),
         print_regions=source['text_regions'])
+    if selection.get('target_product_features') is not None:
+        definition['target_product_features'] = selection['target_product_features']
     return definition
 
 
@@ -293,8 +296,8 @@ def generate(config, root, selection, method, *, device='cuda', generator=None, 
         raise ValueError('生成设置只能使用当前登记的方法')
     options = copy.deepcopy(generation.get(method, {}))
     if training_manifest is not None:
-        if method != 'visual_inception':
-            raise ValueError('公开训练清单只能用于视觉记忆植入方法')
+        if method not in ('visual_inception', 'ambilage'):
+            raise ValueError('公开训练清单仅用于环境光协同或视觉记忆植入方法')
         options['training_manifest'] = str(project_path(training_manifest))
     feature_text = selected_feature_text(selection)
     if feature_text is None:
@@ -318,12 +321,14 @@ def generate(config, root, selection, method, *, device='cuda', generator=None, 
     private_paths = [project_path(evaluation.get('shared_pool', SHARED_MEMORY)),
                      project_path(evaluation.get('query_manifest', PRIVATE / 'query_image.json')),
                      project_path(evaluation.get('encoder_config', PRIVATE / 'evaluator.json'))]
-    data_roots = visual_inception_data_roots(options) if method == 'visual_inception' else []
+    data_roots = visual_inception_data_roots(options) if method in ('visual_inception', 'ambilage') else []
     with catalog_training_guard(allowed_output_roots=[output, Path(root) / 'selection',
             Path(source['image']).parent, Path(target['image']).parent, *data_roots], private_paths=private_paths) as audit:
         if method == 'visual_inception' and options.get('objective_mode') == 'retrieval_semantic_perceptual':
             if not options.get('training_manifest'):
                 raise ValueError('完整视觉记忆植入方法须先准备独立公开训练清单')
+            public_binding['training_manifest_sha256'] = sha256_file(project_path(options['training_manifest']))
+        elif method == 'ambilage' and options.get('training_manifest'):
             public_binding['training_manifest_sha256'] = sha256_file(project_path(options['training_manifest']))
         if method in (*NATURAL_METHODS, 'visual_inception'):
             from src.visual.training_surrogates import selection_from_config
@@ -419,14 +424,14 @@ def main(argv=None):
         config.setdefault('evaluation', {})['defense_mode'] = 'none'
     method = normalize_method(args.method or config.get('method', 'ambilage'))
     if args.training_manifest is not None:
-        if method != 'visual_inception' or args.stage not in ('generate', 'all'):
-            parser.error('公开训练清单仅用于视觉记忆植入的生成或全阶段命令')
+        if method not in ('visual_inception', 'ambilage') or args.stage not in ('generate', 'all'):
+            parser.error('公开训练清单仅用于环境光协同或视觉记忆植入的生成或全阶段命令')
     if args.visual_inception_config is not None:
         if method != 'visual_inception' or args.stage not in ('generate', 'all'):
             parser.error('视觉记忆植入配置仅用于该方法的生成或全阶段命令')
         config.setdefault('generation', {})['visual_inception'] = read_json(args.visual_inception_config)
     if args.training_manifest is not None:
-        config.setdefault('generation', {}).setdefault('visual_inception', {})['training_manifest'] = str(args.training_manifest.resolve())
+        config.setdefault('generation', {}).setdefault(method, {})['training_manifest'] = str(args.training_manifest.resolve())
     if args.surrogate_set is not None or args.surrogate_config is not None:
         if method=='lucid' or args.stage not in ('generate','all'):
             parser.error('训练代理选择参数仅用于新方法的生成或全阶段命令')
@@ -458,9 +463,9 @@ def main(argv=None):
             settings = config.get('evaluation', {})
             if set(settings) - {'shared_pool', 'query_manifest', 'query_mode', 'key_mode', 'defense_mode', 'source_memory_id', 'encoder_config'}:
                 raise ValueError('评估只接受共享池、正式查询图和评估端记忆标识')
-            from src.experiments.defenses import conditions
-            selected_conditions = ([c for c in conditions() if c['kind'] == 'none']
-                                   if settings.get('defense_mode') == 'none' else None)
+            from src.experiments.defenses import conditions_for_mode
+            def_mode = settings.get('defense_mode', 'panel')
+            selected_conditions = None if def_mode == 'panel' else conditions_for_mode(def_mode)
             evaluate(frozen, method_root / 'evaluation',
                      pool_path=project_path(settings.get('shared_pool', SHARED_MEMORY)),
                      query_manifest=project_path(settings.get('query_manifest', PRIVATE / 'query_image.json')),

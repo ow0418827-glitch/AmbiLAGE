@@ -14,7 +14,7 @@ from src.agent.memory.shared_pool import load_shared_pool, evaluation_banks
 from src.visual.audit import freeze_json, read_json, save_json, digest
 from src.visual.image_utils import sha256_file
 from src.visual.visual_retrieval import VisualMemoryRetriever, memory_index_text, resolve_image, detect_index_text_policy
-from src.experiments.defenses import Defender, conditions, table_groups
+from src.experiments.defenses import Defender, all_table_groups, conditions, conditions_for_mode, table_groups
 from src.experiments.query_contract import load_formal_queries, query_retriever_options, verify_query_input
 
 
@@ -217,7 +217,7 @@ def evaluate(frozen, output, *, pool_path=SHARED_MEMORY, query_manifest,
                                         frozen['image'], source_memory_id=source_memory_id,
                                         replacements=replacement_inputs)
     specs = list(selected_conditions if selected_conditions is not None else conditions())
-    expected_labels = {s['label']: s for s in conditions()}
+    expected_labels = {s['label']: s for s in conditions_for_mode('panel_with_sd21')}
     if not specs or len({s['label'] for s in specs}) != len(specs) or any(expected_labels.get(s['label']) != s for s in specs):
         raise ValueError('条件须来自固定防御面板，且不可重复')
     plan = dict(schema_version=1, scope='shared', pool_path=str(Path(pool_path).resolve()),
@@ -288,6 +288,8 @@ def evaluate(frozen, output, *, pool_path=SHARED_MEMORY, query_manifest,
         freeze_json(output / 'evaluation.json', rows)
     finally:
         encoder.close()
+        if callable(getattr(defender, 'close', None)):
+            defender.close()
     # 使用新建编码器重新计算每个条件、每个查询的名次及分数。
     if custom_encoder:
         verification = verify(output, encoder_factory=encoder_factory)
@@ -394,6 +396,14 @@ def make_eval_encoder(device='cuda', config_path=None, *, training_surrogates=No
         if weight is None:
             weight = next((path for filename in ('open_clip_model.safetensors', 'open_clip_pytorch_model.safetensors', 'open_clip_pytorch_model.bin')
                            if (path := resolve_hf_cached_weight(spec['hf_repo'], filename=filename)) is not None), None)
+        if weight is None and spec.get('hf_repo'):
+            try:
+                repo_dir = Path(resolve_model(spec['hf_repo']))
+            except (FileNotFoundError, KeyError, ValueError):
+                repo_dir = None
+            weight = next((repo_dir / filename for filename in ('open_clip_model.safetensors',
+                          'open_clip_pytorch_model.safetensors', 'open_clip_pytorch_model.bin')
+                          if repo_dir is not None and (repo_dir / filename).is_file()), None)
     if weight is None or not weight.is_file():
         raise FileNotFoundError('缺少评估检索器的本地权重，请先显式准备')
     if actual_context or setting == 'matched_public_encoder':
@@ -546,7 +556,7 @@ def report(output):
              '', query_description,
              '', '前三及前五表示检索命中，不表示购买成功。本轮没有购物或外部模型调用。', '',
              '| 条件 | 原图前三 | 修改图前三 | 原图前五 | 修改图前五 | 前三增量（百分点） | 平均名次改善 |', '|---|---:|---:|---:|---:|---:|---:|']
-    for title, labels in table_groups():
+    for title, labels in all_table_groups():
         if not all((lbl, b) in lookup for lbl in labels for b in ('clean', 'modified')):
             continue
         values = []

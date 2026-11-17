@@ -23,12 +23,13 @@ import unicodedata
 
 from src.experiments import shared_evaluation
 from src.experiments.base_workflow import public_group
-from src.experiments.defenses import conditions, table_groups
+from src.experiments.defenses import DEFENSE_MODES, all_table_groups, conditions, conditions_for_mode, table_groups
 from src.experiments.paired_metrics import paired_rank_metrics
 from src.paths import EVALUATION_BASE, OUTPUT, PROJECT, RESOURCES, ProjectPath as Path
 from src.visual.attack_completion import validate_attack_completion
 from src.visual.audit import freeze_json, read_json
 from src.visual.image_utils import sha256_file
+from src.visual.optimization import METHODS, normalize_method
 
 PROTOCOL = 'visual_inception_category_diversity_v1'
 ORACLE_PROTOCOL = 'visual_inception_training_oracle_v1'
@@ -127,31 +128,48 @@ def _resolve_relative_under(root, relative, label):
     return path
 
 
-def load_frozen_suite(images_root, *, base=EVALUATION_BASE):
-    """校验全部九组视觉记忆植入成图均已完成且冻结，不允许缺组、夹具或早期无检索版本。"""
+def load_frozen_suite(images_root, *, base=EVALUATION_BASE, method='visual_inception', selected_groups=None):
+    """校验已冻结成图集合，不允许缺组、测试夹具或过期未授权目标版本。"""
+    method = normalize_method(method)
     images_root = Path(images_root).resolve()
     base = Path(base).resolve()
     manifest = read_json(base / 'manifest.json')
-    groups = list(manifest.get('groups', {}))
-    _require(len(groups) == 9, '视觉记忆植入测试需要完整九组基础清单')
+    all_groups = list(manifest.get('groups', {}))
+    if selected_groups is None:
+        groups = all_groups
+        _require(len(groups) == 9, '视觉记忆植入测试需要完整九组基础清单')
+    else:
+        groups = [str(g).strip() for g in selected_groups if str(g).strip()]
+        _require(len(groups) >= 2 and len(set(groups)) == len(groups), '同时替库评估至少需要两个互不重复的已冻结分组')
+        unknown = [g for g in groups if g not in manifest.get('groups', {})]
+        _require(not unknown, '未知基础包分组：' + ', '.join(unknown))
     source_mapping = manifest.get('shared_memory', {}).get('source_mapping', {})
     suite = []
     for group in groups:
-        frozen_path = images_root / group / 'visual_inception' / 'FROZEN_IMAGE.json'
+        frozen_path = images_root / group / method / 'FROZEN_IMAGE.json'
         if not frozen_path.is_file():
-            raise FileNotFoundError('视觉记忆植入测试须先完成全部九组成图并冻结，尚缺：' + group)
+            raise FileNotFoundError(f'{method} 测试须先完成对应各组成图并冻结，尚缺：' + group)
         item = copy.deepcopy(read_json(frozen_path))
         _require(item.get('status') == 'frozen', '成图尚未冻结：' + group)
-        _require(item.get('method') == 'visual_inception',
-                 '专用评估仅用于 visual_inception 方法，拒绝方法：' + str(item.get('method')))
+        if method == 'visual_inception':
+            _require(item.get('method') == 'visual_inception',
+                     '专用评估仅用于 visual_inception 方法，拒绝方法：' + str(item.get('method')))
+        else:
+            _require(item.get('method') == method,
+                     f'冻结成图方法与指定评估方法 ({method}) 不一致：' + str(item.get('method')))
         metadata = item.get('metadata')
         _require(isinstance(metadata, dict)
-                 and metadata.get('test_fixture') is False
-                 and metadata.get('production_backend') is True,
+                 and metadata.get('test_fixture') is not True
+                 and metadata.get('production_backend', True) is True,
                  '测试夹具或非生产后端成图不能进入正式评估：' + group)
         objective_kind = metadata.get('training_objective', {}).get('kind')
-        _require(objective_kind in SUPPORTED_OBJECTIVE_KINDS,
-                 '早期无检索版本或未知目标版本不能用于完整版本评估：' + str(objective_kind))
+        if method == 'visual_inception':
+            _require(objective_kind in SUPPORTED_OBJECTIVE_KINDS,
+                     '早期无检索版本或未知目标版本不能用于完整版本评估：' + str(objective_kind))
+        elif method == 'ambilage':
+            from src.visual.training_objectives import SUPPORTED_TRAINING_OBJECTIVE_KINDS
+            _require(objective_kind in SUPPORTED_TRAINING_OBJECTIVE_KINDS,
+                     '旧版或未知环境光协同训练目标不能用于当前评估：' + str(objective_kind))
         image_value = item.get('image')
         _require(isinstance(image_value, str) and bool(image_value.strip()), '冻结成图缺少图片路径：' + group)
         image_path = Path(image_value)
@@ -168,7 +186,7 @@ def load_frozen_suite(images_root, *, base=EVALUATION_BASE):
             metadata,
             item.get('requested_steps'),
             dict(
-                method='visual_inception',
+                method=method,
                 source_image_sha256=public['source']['image_sha256'],
                 target_image_sha256=public['target']['image_sha256'],
             ),
@@ -179,8 +197,9 @@ def load_frozen_suite(images_root, *, base=EVALUATION_BASE):
         item['group'] = group
         item['source_memory_id'] = source_memory_id
         suite.append(item)
-    _require(len({item['metadata']['training_objective']['kind'] for item in suite}) == 1,
-             '同一次九组评估不能混用第二版与增强第三版成图')
+    if method in ('visual_inception', 'ambilage'):
+        _require(len({item['metadata']['training_objective']['kind'] for item in suite}) == 1,
+                 '同一次多组评估不能混用不同版本的训练目标成图')
     return suite
 
 
@@ -562,7 +581,7 @@ def build_category_summary(eval_root):
         for label in condition_labels
     }
     by_table_group = {}
-    for title, labels in table_groups():
+    for title, labels in all_table_groups():
         if all(lbl in condition_labels for lbl in labels):
             by_table_group[title] = _aggregate_condition_labels(
                 per_group, groups, labels, families=families, labels_zh=labels_zh
@@ -573,7 +592,7 @@ def build_category_summary(eval_root):
         protocol=protocol,
         query_suite=plan.get('query_suite', inferred_suite),
         training_overlap_mode=validation.get('training_overlap_mode'),
-        method='visual_inception',
+        method=plan.get('method', 'visual_inception'),
         query_mode='text',
         key_mode=key_mode,
         key_image_weight=key_image_weight,
@@ -617,7 +636,10 @@ def evaluate_category_suite(
     base=EVALUATION_BASE,
     query_root=None,
     query_suite=DEFAULT_QUERY_SUITE,
-    key_mode=DEFAULT_KEY_MODE,
+    method='visual_inception',
+    key_mode=None,
+    groups=None,
+    replacement_groups='all',
     device='cuda',
     defense_mode='none',
     encoder_config=None,
@@ -625,19 +647,41 @@ def evaluate_category_suite(
     defense_factory=None,
     verify_training_snapshots=True,
 ):
-    """在完整共享记忆库上执行视觉记忆植入九组检索评估（默认使用 training_oracle 与纯图片记忆键）。"""
-    if defense_mode not in ('none', 'panel'):
-        raise ValueError('防御范围只能为 none 或 panel')
-    if key_mode not in KEY_MODES:
+    """在完整共享记忆库上执行类别查询检索评估（支持 visual_inception、ambilage、lucid 跨方法公平同库对比）。"""
+    method = normalize_method(method)
+    if defense_mode not in DEFENSE_MODES:
+        raise ValueError('防御范围只能为已登记模式：' + ', '.join(DEFENSE_MODES))
+    if replacement_groups not in ('all', 'selected'):
+        raise ValueError('替换组范围只能为 all 或 selected')
+    effective_key_mode = shared_evaluation.default_key_mode_for_method(method) if key_mode is None else key_mode
+    if effective_key_mode not in KEY_MODES:
         raise ValueError('记忆库检索键模式只能为 image 或 joint')
-    key_image_weight = 1.0 if key_mode == 'image' else 0.5
+    key_image_weight = 1.0 if effective_key_mode == 'image' else 0.5
     base = Path(base).resolve()
     resolved_query_root = resolve_query_root(query_root, query_suite)
     output = Path(output).resolve()
     if not output.is_relative_to(Path(OUTPUT).resolve()):
         raise ValueError('评估结果必须保存在当前项目 output 目录内')
 
-    frozen_suite = load_frozen_suite(images_root, base=base)
+    if groups is not None:
+        requested_groups = [str(g).strip() for g in groups if str(g).strip()]
+    else:
+        requested_groups = None
+
+    if replacement_groups == 'selected':
+        if requested_groups is None:
+            raise ValueError('replacement_groups=selected 时必须显式指定至少两个分组')
+        frozen_suite = load_frozen_suite(images_root, base=base, method=method, selected_groups=requested_groups)
+        eval_items = frozen_suite
+    else:
+        frozen_suite = load_frozen_suite(images_root, base=base, method=method)
+        if requested_groups is None:
+            eval_items = frozen_suite
+        else:
+            suite_map = {it['group']: it for it in frozen_suite}
+            unknown = [g for g in requested_groups if g not in suite_map]
+            _require(not unknown, '未知评估分组：' + ', '.join(unknown))
+            eval_items = [suite_map[g] for g in requested_groups]
     validation = validate_category_query_suite(
         resolved_query_root, query_suite=query_suite, base=base,
         verify_training_snapshots=verify_training_snapshots,
@@ -664,7 +708,7 @@ def evaluate_category_suite(
     else:
         effective_encoder_config = None
 
-    selected_conditions = conditions()[:1] if defense_mode == 'none' else conditions()
+    selected_conditions = conditions_for_mode(defense_mode)
     output.mkdir(parents=True, exist_ok=True)
     validation_path = output / 'category_query_validation.json'
     freeze_json(validation_path, validation)
@@ -673,9 +717,9 @@ def evaluate_category_suite(
         schema_version=1,
         protocol=validation['protocol'],
         query_suite=validation['query_suite'],
-        method='visual_inception',
+        method=method,
         query_mode='text',
-        key_mode=key_mode,
+        key_mode=effective_key_mode,
         key_image_weight=key_image_weight,
         defense_mode=defense_mode,
         selected_conditions=selected_conditions,
@@ -689,9 +733,13 @@ def evaluate_category_suite(
         pool_count=pool_count,
         encoder_config=str(effective_encoder_config) if effective_encoder_config else None,
         encoder_config_sha256=sha256_file(effective_encoder_config) if effective_encoder_config else None,
-        groups=[item['group'] for item in frozen_suite],
+        groups=[item['group'] for item in eval_items],
         simultaneous_replacement_count=len(frozen_suite),
-        shared_pool_scope='all_entries_simultaneous_nine_group_replacement',
+        shared_pool_scope=(
+            'all_entries_simultaneous_nine_group_replacement'
+            if len(frozen_suite) == 9
+            else f'simultaneous_{len(frozen_suite)}_group_replacement'
+        ),
         shopping_allowed=False,
         recommendation_executed=False,
         frozen_images={
@@ -702,14 +750,14 @@ def evaluate_category_suite(
                 source_id=item['source']['id'],
                 target_id=item['target']['id'],
                 requested_steps=item['requested_steps'],
-                objective_kind=item['metadata']['training_objective']['kind'],
+                objective_kind=item.get('metadata', {}).get('training_objective', {}).get('kind'),
             )
-            for item in frozen_suite
+            for item in eval_items
         },
     )
     freeze_json(output / 'category_evaluation_plan.json', plan)
 
-    for item in frozen_suite:
+    for item in eval_items:
         group = item['group']
         group_eval_dir = output / 'groups' / group
         group_query_path = Path(validation['groups'][group]['query_manifest'])
@@ -725,7 +773,7 @@ def evaluate_category_suite(
             selected_conditions=selected_conditions,
             encoder_config=effective_encoder_config,
             query_mode='text',
-            key_mode=key_mode,
+            key_mode=effective_key_mode,
             replacement_frozens=frozen_suite,
             bank_root=output / 'shared_banks',
             memory_vector_cache_dir=output / 'memory_vectors',
@@ -963,10 +1011,13 @@ def main(argv=None):
     p_validate.add_argument('--query-root', type=Path, default=None, help='显式覆盖测试查询目录')
     p_validate.add_argument('--skip-training-snapshots', action='store_true')
 
-    p_eval = subparsers.add_parser('evaluate', help='对已冻结的九组视觉记忆植入成图执行检索评估')
-    p_eval.add_argument('--images-root', type=Path, required=True, help='包含九组 visual_inception/FROZEN_IMAGE.json 的根目录')
+    p_eval = subparsers.add_parser('evaluate', help='对已冻结的成图执行类别查询检索评估（支持 visual_inception / ambilage / lucid）')
+    p_eval.add_argument('--images-root', type=Path, required=True, help='包含各组 <method>/FROZEN_IMAGE.json 的根目录')
     p_eval.add_argument('--output', type=Path, required=True, help='评估输出目录（须位于 output/ 内）')
     p_eval.add_argument('--base', type=Path, default=EVALUATION_BASE)
+    p_eval.add_argument('--method', choices=METHODS, default='visual_inception', help='待评估冻结成图方法')
+    p_eval.add_argument('--group', default='all', help='all 为全部九组，或逗号分隔多组（如 02_chair,07_shampoo）')
+    p_eval.add_argument('--replacement-groups', choices=('all', 'selected'), default='all')
     p_eval.add_argument(
         '--query-suite',
         choices=tuple(QUERY_SUITE_ROOTS),
@@ -976,12 +1027,12 @@ def main(argv=None):
     p_eval.add_argument(
         '--key-mode',
         choices=KEY_MODES,
-        default=DEFAULT_KEY_MODE,
-        help='记忆库检索向量模式：image（默认，按原论文只编码记忆库图片）或 joint（图文各半融合）。',
+        default=None,
+        help='记忆库检索向量模式：未指定时 visual_inception 默认 image，其他方法默认 joint；也可显式强制指定同口径对比。',
     )
     p_eval.add_argument('--query-root', type=Path, default=None, help='显式覆盖测试查询目录')
     p_eval.add_argument('--device', choices=('cuda', 'cpu'), default='cuda')
-    p_eval.add_argument('--defense-mode', choices=('none', 'panel'), default='none')
+    p_eval.add_argument('--defense-mode', choices=DEFENSE_MODES, default='none')
     p_eval.add_argument('--encoder-config', type=Path)
 
     p_verify = subparsers.add_parser('verify', help='独立进程复算全部九组全库候选分数及汇总')
@@ -1009,13 +1060,17 @@ def main(argv=None):
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 0
     if args.command == 'evaluate':
+        selected_groups = None if args.group == 'all' else [g.strip() for g in str(args.group).split(',') if g.strip()]
         result = evaluate_category_suite(
             args.images_root,
             args.output,
             base=args.base,
             query_root=args.query_root,
             query_suite=args.query_suite,
+            method=args.method,
             key_mode=args.key_mode,
+            groups=selected_groups,
+            replacement_groups=args.replacement_groups,
             device=args.device,
             defense_mode=args.defense_mode,
             encoder_config=args.encoder_config,

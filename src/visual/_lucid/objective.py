@@ -39,6 +39,8 @@ def sinkhorn_plan(
     iterations: int = 100,
     tolerance: float = 1e-2,
     detach: bool = True,
+    row_weights: torch.Tensor | None = None,
+    col_weights: torch.Tensor | None = None,
 ) -> torch.Tensor:
     if cost.ndim != 3:
         raise ValueError("传输代价必须具有 [批, 行, 列] 形状。")
@@ -47,12 +49,30 @@ def sinkhorn_plan(
         raise ValueError("传输代价矩阵不能为空。")
     plan_cost = cost.detach() if detach else cost
     kernel = torch.exp(-plan_cost / max(float(regularization), 1e-6)).clamp_min(1e-12)
-    row_mass = torch.full(
-        (batch, rows, 1), 1.0 / rows, dtype=cost.dtype, device=cost.device
-    )
-    column_mass = torch.full(
-        (batch, columns, 1), 1.0 / columns, dtype=cost.dtype, device=cost.device
-    )
+    if row_weights is None:
+        row_mass = torch.full(
+            (batch, rows, 1), 1.0 / rows, dtype=cost.dtype, device=cost.device
+        )
+    else:
+        rw = row_weights.to(device=cost.device, dtype=cost.dtype)
+        if rw.ndim == 1:
+            rw = rw[None, :, None].expand(batch, rows, 1)
+        elif rw.ndim == 2:
+            rw = rw[:, :, None].expand(batch, rows, 1)
+        rw = rw.clamp_min(1e-8)
+        row_mass = rw / rw.sum(dim=1, keepdim=True).clamp_min(1e-12)
+    if col_weights is None:
+        column_mass = torch.full(
+            (batch, columns, 1), 1.0 / columns, dtype=cost.dtype, device=cost.device
+        )
+    else:
+        cw = col_weights.to(device=cost.device, dtype=cost.dtype)
+        if cw.ndim == 1:
+            cw = cw[None, :, None].expand(batch, columns, 1)
+        elif cw.ndim == 2:
+            cw = cw[:, :, None].expand(batch, columns, 1)
+        cw = cw.clamp_min(1e-8)
+        column_mass = cw / cw.sum(dim=1, keepdim=True).clamp_min(1e-12)
     left = torch.ones_like(row_mass)
     right = torch.ones_like(column_mass)
     for _ in range(max(1, int(iterations))):
@@ -73,6 +93,8 @@ def local_ot_similarity_from_centers(
     sinkhorn_regularization: float = 0.1,
     sinkhorn_tolerance: float = 1e-2,
     detach_transport_plan: bool = True,
+    row_weights: torch.Tensor | None = None,
+    col_weights: torch.Tensor | None = None,
 ) -> torch.Tensor:
     cosine = torch.einsum("bnd,bmd->bnm", source_centers, target_centers)
     plan = sinkhorn_plan(
@@ -81,6 +103,8 @@ def local_ot_similarity_from_centers(
         iterations=sinkhorn_iterations,
         tolerance=sinkhorn_tolerance,
         detach=detach_transport_plan,
+        row_weights=row_weights,
+        col_weights=col_weights,
     )
     return (plan * cosine).sum(dim=(1, 2))
 

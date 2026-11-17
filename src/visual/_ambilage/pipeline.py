@@ -12,6 +12,7 @@ import numpy as np
 from PIL import Image
 import torch
 
+from src.paths import PROJECT
 from src.visual.hardware import apply_hardware_profile
 from src.visual.image_utils import read_rgb, read_tensor, save_tensor_image, sha256_file, write_json
 from src.visual.training_surrogates import selection_from_config, validate_loaded_surrogates, apply_surrogate_overrides
@@ -37,6 +38,7 @@ def _stage3_signature(
     target_boxes: Any,
     print_regions: Any,
     surrogate_specs_sha256: str,
+    training_manifest_sha256: str | None = None,
 ) -> str:
     cfg_dict = config.to_dict()
     for runtime_key in ('log_every', 'checkpoint_every', 'resume_from_checkpoint', 'save_intermediate_pngs', 'device'):
@@ -53,6 +55,8 @@ def _stage3_signature(
         'config': cfg_dict,
         'surrogate_specs_sha256': surrogate_specs_sha256,
     }
+    if training_manifest_sha256 is not None:
+        payload['training_manifest_sha256'] = training_manifest_sha256
     raw = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(',', ':'), allow_nan=False).encode('utf-8')
     return hashlib.sha256(raw).hexdigest()
 
@@ -68,13 +72,29 @@ class AmbiLAGEPipeline:
 
     def execute(self,source,target,output_dir,*,target_text=None,source_title=None,
                 source_public_key=None,source_category=None,source_boxes=None,target_boxes=None,
-                print_regions=None,surrogate_encoder=None):
+                print_regions=None,surrogate_encoder=None,definition=None):
         source,target=Path(source).resolve(),Path(target).resolve()
         for path in (source,target):
             if not path.is_file():
                 raise FileNotFoundError(f'商品图片不存在: {path}')
         if not isinstance(target_text,str) or not target_text.strip():
             raise ValueError('必须显式提供冻结的目标特点训练正文，不能从文件名猜测')
+        training_bundle = None
+        manifest_sha = None
+        if self.config.training_manifest:
+            from src.visual._visual_inception.targets import prepare_semantic_targets
+            from src.visual._visual_inception.training_data import load_training_bundle
+            manifest_p = Path(self.config.training_manifest).expanduser()
+            manifest_p = (manifest_p if manifest_p.is_absolute() else PROJECT / manifest_p).resolve()
+            semantic_targets = prepare_semantic_targets(source, target, target_text=target_text, definition=definition)
+            training_bundle = load_training_bundle(
+                manifest_p,
+                source=source,
+                target=target,
+                public_semantic=semantic_targets,
+                require_production=not self.config.smoke_test,
+            )
+            manifest_sha = training_bundle['manifest_sha256']
         if self.config.smoke_test:
             from .smoke import SmokeStages
             backend=self.stage_backend or SmokeStages(self.config,self.device)
@@ -99,6 +119,7 @@ class AmbiLAGEPipeline:
         stage3_sig = _stage3_signature(
             source_sha, target_sha, target_text, source_public_key, source_category,
             self.config, source_boxes, target_boxes, print_regions, surrogate_specs_sha,
+            training_manifest_sha256=manifest_sha,
         )
         stage3_path = root / STAGE3_STATE_FILENAME
         ckpt4_path = root / STAGE4_CHECKPOINT_FILENAME
@@ -200,6 +221,13 @@ class AmbiLAGEPipeline:
                 vae = AmbiLAGEVae(self.device, custom_model_dir=vae_dir,
                     enable_checkpointing=self.config.enable_gradient_checkpointing)
                 effective = self.config
+            source_tensor = read_tensor(source, self.device)
+            resolved_cache_dir = None
+            if self.config.candidate_cache_dir:
+                c_path = Path(self.config.candidate_cache_dir).expanduser()
+                resolved_cache_dir = str((c_path if c_path.is_absolute() else PROJECT / c_path).resolve())
+            elif training_bundle is not None and self.config.smoke_test:
+                resolved_cache_dir = str((root / 'candidate_cache').resolve())
             objective = SequentialEnsembleObjective(
                 surrogates,
                 read_tensor(target, self.device),
@@ -210,6 +238,9 @@ class AmbiLAGEPipeline:
                 selection=self.surrogate_selection,
                 source_fg_mask=source_fg & (~roi),
                 target_fg_mask=target_fg,
+                source_tensor=source_tensor,
+                training_bundle=training_bundle,
+                candidate_cache_dir=resolved_cache_dir,
             )
             audit = objective.audit
             anchor_t = torch.tensor(anchor.transpose(2, 0, 1).copy(), device=self.device, dtype=torch.float32)[None] / 255.
@@ -218,7 +249,9 @@ class AmbiLAGEPipeline:
                 'source_public_key': source_public_key,
                 'surrogate_specs_sha256': surrogate_specs_sha,
             }
-            final, refinement = refine_ambient_coop_latent(anchor_t, read_tensor(source, self.device), envelopes,
+            if manifest_sha is not None:
+                checkpoint_binding['training_manifest_sha256'] = manifest_sha
+            final, refinement = refine_ambient_coop_latent(anchor_t, source_tensor, envelopes,
                 objective, None, vae, effective, output_dir=root, checkpoint_binding=checkpoint_binding)
             refinement_resume = dict(refinement.get('checkpoint_resume') or {})
             refinement_resume['stage3_resumed'] = resumed_stage3
@@ -261,6 +294,13 @@ class AmbiLAGEPipeline:
                 training_objective=audit,final_naturalness=gate,hardware_profile=self.hardware_profile,
                 victim_memory_used=False,formal_queries_used=False,shadow_pool_used=False,true_rank_used=False,
                 elapsed_seconds=prior_stage3_elapsed + (time.perf_counter() - started))
+            if training_bundle is not None:
+                metadata.update(
+                    training_bundle_manifest=training_bundle['manifest_path'],
+                    training_manifest_sha256=training_bundle['manifest_sha256'],
+                    training_bundle_sha256=training_bundle['bundle_sha256'],
+                    training_bundle_audit=training_bundle['audit'],
+                )
             write_json(root/'metadata.json',metadata)
             write_json(root/'ready.json',metadata)
             ckpt4_path.unlink(missing_ok=True)
@@ -277,13 +317,15 @@ class AmbiLAGEPipeline:
 
 def generate_ambilage(source,target,output_dir,*,definition=None,config=None,device='cuda',target_text=None,
                       steps=None,allow_tf32=True,seed=42,smoke_test=False,
-                      surrogate_set=None,surrogate_config=None,**kwargs):
+                      surrogate_set=None,surrogate_config=None,training_manifest=None,**kwargs):
     definition=definition or {}
     cfg=config or AmbiLAGEConfig()
     cfg=apply_surrogate_overrides(cfg,surrogate_set,surrogate_config)
     overrides=dict(allow_tf32=allow_tf32,seed=seed,device=device,smoke_test=smoke_test or cfg.smoke_test)
     if steps is not None:
         overrides['steps']=steps
+    if training_manifest is not None:
+        overrides['training_manifest']=str(training_manifest)
     cfg=replace(cfg,**overrides);cfg.validate()
     data=definition.get('data',{})
     explicit_print = list(definition.get('print_regions') or [])
@@ -297,7 +339,7 @@ def generate_ambilage(source,target,output_dir,*,definition=None,config=None,dev
         source_public_key=definition.get('source_public_key') or data.get('source_public_key'),
         source_title=data.get('source_title'),source_category=definition.get('source_category') or data.get('source_category'),
         source_boxes=definition.get('source_boxes'),target_boxes=definition.get('target_boxes'),
-        print_regions=explicit_print or None,**kwargs)
+        print_regions=explicit_print or None,definition=definition,**kwargs)
 
 
 def run_attack(source,target,output_dir,*,target_text=None,steps=None,device='cuda',ambilage_config=None,

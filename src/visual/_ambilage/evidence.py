@@ -65,15 +65,19 @@ def validate_ready(root,require_production=True):
        ready.get('refinement',{}).get('steps_completed')!=comp or \
        ready.get('refinement',{}).get('steps_requested',req)!=req:
         raise ValueError('配置或细化过程步数不一致')
-    from src.visual.training_objectives import TRAINING_OBJECTIVE_KIND
-    from src.visual.training_surrogates import validate_selection_audit, validate_loaded_surrogates
+    from src.visual.training_objectives import SUPPORTED_TRAINING_OBJECTIVE_KINDS
+    from src.visual.training_surrogates import (
+        is_held_out_purifier_reference,
+        validate_loaded_surrogates,
+        validate_selection_audit,
+    )
     training=ready.get('training_objective',{})
     selection_audit=training.get('surrogate_selection')
     selection=validate_selection_audit(selection_audit,ready.get('config',{}))
     if json.loads((root/'training_surrogates.json').read_text(encoding='utf-8'))!=selection_audit:
         raise ValueError('冻结训练代理文件与实际训练记录不一致')
     public_objectives=training.get('public_objectives',[])
-    if (training.get('kind')!=TRAINING_OBJECTIVE_KIND or len(public_objectives)!=len(selection.specs) or any(
+    if (training.get('kind') not in SUPPORTED_TRAINING_OBJECTIVE_KINDS or len(public_objectives)!=len(selection.specs) or any(
         'multimodal_equal_weight' not in p.get('query_modes', []) or
         'text_only' in p.get('query_modes', []) or
         p.get('query_image_weight')!=0.5 or p.get('query_text_weight')!=0.5 or
@@ -81,6 +85,17 @@ def validate_ready(root,require_production=True):
         float(p.get('local_ot_weight', -1.0)) != float(cfg.get('local_ot_weight', 0.0))
         for p in public_objectives)):
         raise ValueError('新版图文+独立文本+前景局部最优传输训练目标审计不完整；旧版产物不能作为当前成图复用')
+    purifier_snap=training.get('purifier',{}) or {}
+    if (is_held_out_purifier_reference(purifier_snap.get('config',{}).get('model_path')) or
+        purifier_snap.get('kind')=='sd21_base_cognitiveguard_system1_ddim_purification_v1'):
+        raise ValueError('留出评估净化器 SD 2.1-base 禁止用于训练阶段')
+    if cfg.get('training_manifest'):
+        bundle_sha = ready.get('training_bundle_sha256')
+        manifest_sha = ready.get('training_manifest_sha256')
+        if not bundle_sha or not manifest_sha:
+            raise ValueError('启用公开训练包时必须绑定训练包与清单摘要')
+        if float(cfg.get('public_retrieval_weight', 0.0)) > 0.0 and training.get('training_bundle_sha256') != bundle_sha:
+            raise ValueError('公开训练包摘要与训练目标记录不一致')
     validate_loaded_surrogates(training.get('surrogates',[]),selection,
         allow_fixture=not require_production and ready.get('test_fixture') is True)
     if require_production:

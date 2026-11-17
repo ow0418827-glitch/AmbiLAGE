@@ -313,6 +313,66 @@ class OpenCLIPSurrogate:
     def cache_identity(self) -> str:
         return self._cache_identity
 
+    def visual_parameter_bytes(self) -> int:
+        visual = getattr(self.model, "visual", None)
+        if visual is None or not hasattr(visual, "parameters"):
+            return 0
+        return sum(p.numel() * p.element_size() for p in visual.parameters())
+
+    def enable_visual_grad_checkpointing(self, enabled: bool = True) -> bool:
+        visual = getattr(self.model, "visual", None)
+        for module in (visual, self.model):
+            if module is not None and callable(getattr(module, "set_grad_checkpointing", None)):
+                try:
+                    module.set_grad_checkpointing(bool(enabled))
+                    return True
+                except Exception:
+                    continue
+        return False
+
+    def offload_text_tower(self) -> int:
+        """在文本特征全部预编码冻结后，将不参与图像前/反向传播的文本塔移至 CPU，释放 L4 显存。"""
+        if self.device.type != "cuda" or not hasattr(self.model, "named_children"):
+            return 0
+        freed = 0
+        for name, child in self.model.named_children():
+            if name == "visual":
+                continue
+            freed += sum(p.numel() * p.element_size() for p in child.parameters() if p.device.type == "cuda")
+            child.to("cpu")
+        for pname, param in self.model.named_parameters(recurse=False):
+            if param.device.type == "cuda":
+                freed += param.numel() * param.element_size()
+                param.data = param.data.to("cpu")
+        for bname, buf in self.model.named_buffers(recurse=False):
+            if buf is not None and buf.device.type == "cuda":
+                freed += buf.numel() * buf.element_size()
+                buf.data = buf.data.to("cpu")
+        self._text_offloaded = True
+        return freed
+
+    def restore_text_tower(self) -> None:
+        if not getattr(self, "_text_offloaded", False):
+            return
+        for name, child in self.model.named_children():
+            if name != "visual":
+                child.to(self.device)
+        for _, param in self.model.named_parameters(recurse=False):
+            param.data = param.data.to(self.device)
+        for _, buf in self.model.named_buffers(recurse=False):
+            if buf is not None:
+                buf.data = buf.data.to(self.device)
+        self._text_offloaded = False
+
+    def move_visual_to(self, target_device: torch.device | str) -> None:
+        dev = torch.device(target_device)
+        visual = getattr(self.model, "visual", None)
+        if visual is not None:
+            visual.to(dev)
+        self.mean = self.mean.to(dev)
+        self.std = self.std.to(dev)
+        self._active_visual_device = dev
+
     def snapshot(self) -> dict[str, Any]:
         return {
             "role": "attack_surrogate",
@@ -343,7 +403,8 @@ class OpenCLIPSurrogate:
     def preprocess(self, images: torch.Tensor) -> torch.Tensor:
         if images.ndim != 4 or images.shape[1] != 3:
             raise ValueError("代理模型输入必须具有 [批, 3, 高, 宽] 形状。")
-        image = images.to(self.device, dtype=torch.float32)
+        active_dev = getattr(self, "_active_visual_device", self.device)
+        image = images.to(active_dev, dtype=torch.float32)
         if image.shape[-2:] != (self.image_size, self.image_size):
             image = F.interpolate(
                 image,
@@ -352,7 +413,7 @@ class OpenCLIPSurrogate:
                 align_corners=False,
                 antialias=True,
             )
-        return (image - self.mean) / self.std
+        return (image - self.mean.to(active_dev)) / self.std.to(active_dev)
 
     def encode_image(self, images: torch.Tensor) -> ImageFeatures:
         normalized = self.preprocess(images)
@@ -396,6 +457,7 @@ class OpenCLIPSurrogate:
 
     @torch.no_grad()
     def encode_text(self, text: str | list[str]) -> torch.Tensor:
+        self.restore_text_tower()
         texts = [text] if isinstance(text, str) else text
         context = int(getattr(self.tokenizer, 'context_length', 77))
         encode = getattr(self.tokenizer, 'encode', None)

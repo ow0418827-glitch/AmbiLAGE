@@ -86,8 +86,8 @@ def generate_group(base, group, method, output, *, device='cuda', steps=None,
         raise ValueError('视觉记忆植入配置只能用于对应方法')
     if ambilage_config is not None and method != 'ambilage':
         raise ValueError('环境光协同配置只能用于对应方法')
-    if training_manifest is not None and method != 'visual_inception':
-        raise ValueError('公开训练清单只能用于视觉记忆植入方法')
+    if training_manifest is not None and method not in ('visual_inception', 'ambilage'):
+        raise ValueError('公开训练清单仅用于环境光协同或视觉记忆植入方法')
     base, root = Path(base).resolve(), Path(output).resolve()
     if not root.is_relative_to(OUTPUT.resolve()):
         raise ValueError('运行结果必须保存在当前项目输出目录')
@@ -160,6 +160,22 @@ def generate_group(base, group, method, output, *, device='cuda', steps=None,
         if training_manifest is not None:
             visual_inception_config = replace(visual_inception_config, training_manifest=str(project_path(training_manifest)))
         data_roots = visual_inception_data_roots(visual_inception_config.to_dict())
+    elif method == 'ambilage':
+        from src.visual._ambilage.config import AmbiLAGEConfig
+        raw = ambilage_config
+        if isinstance(raw, (str, Path)):
+            config_path = project_path(raw)
+            with catalog_training_guard(allowed_output_roots=[root, config_path.parent], private_paths=protected):
+                raw = read_json(config_path)
+        if raw is None:
+            ambilage_config = AmbiLAGEConfig()
+        elif isinstance(raw, AmbiLAGEConfig):
+            ambilage_config = raw
+        else:
+            ambilage_config = AmbiLAGEConfig.from_dict(raw)
+        if training_manifest is not None:
+            ambilage_config = replace(ambilage_config, training_manifest=str(project_path(training_manifest)))
+        data_roots = visual_inception_data_roots(ambilage_config.to_dict())
     with catalog_training_guard(allowed_output_roots=[root, base / 'groups', *data_roots], private_paths=protected):
         inputs = public_group(base, group)
         from src.visual.training_surrogates import apply_surrogate_overrides,selection_from_config
@@ -190,6 +206,8 @@ def generate_group(base, group, method, output, *, device='cuda', steps=None,
             if not effective_config.training_manifest:
                 raise ValueError('完整视觉记忆植入方法须先准备独立公开训练清单')
             binding['training_manifest_sha256'] = sha256_file(project_path(effective_config.training_manifest))
+        elif method == 'ambilage' and effective_config.training_manifest:
+            binding['training_manifest_sha256'] = sha256_file(project_path(effective_config.training_manifest))
         freeze_json(root / 'PUBLIC_RUN.json', binding)
         if frozen_path.exists():
             frozen = read_json(frozen_path)
@@ -202,10 +220,10 @@ def generate_group(base, group, method, output, *, device='cuda', steps=None,
         options = dict(method=method, device=device, target_text=inputs['target_text'])
         if steps is not None:
             options['steps'] = steps
+        definition = dict(inputs['definition'], target_product_features=inputs['target_features'])
         if method == 'ambilage':
-            options.update(ambilage_config=effective_config, definition=inputs['definition'])
+            options.update(ambilage_config=effective_config, definition=definition)
         else:
-            definition = dict(inputs['definition'], target_product_features=inputs['target_features'])
             options.update(visual_inception_config=effective_config, definition=definition)
         image, metadata = generate_attack(inputs['source']['image'], inputs['target']['image'],
                                          root / 'generation', **options)
@@ -249,7 +267,8 @@ def main(argv=None):
     parser.add_argument('--encoder-config', type=Path)
     parser.add_argument('--evaluation-name', default='default',
                         help='独立评估目录名；不同查询模式或留出编码器使用不同名称')
-    parser.add_argument('--defense-mode', choices=('none', 'panel'), default='panel')
+    from src.experiments.defenses import DEFENSE_MODES
+    parser.add_argument('--defense-mode', choices=DEFENSE_MODES, default='panel')
     parser.add_argument('--replacement-groups', choices=('all', 'selected'), default='all',
                         help='统一修改库同时替换范围：all 为全部九组，selected 为当前选定多组子集（至少两组）')
     parser.add_argument('--environments', choices=('single', 'standard3'), default='single',
@@ -260,10 +279,10 @@ def main(argv=None):
             parser.error('训练代理选择参数仅用于新方法的生成或全阶段命令')
     if args.visual_inception_config and args.method != 'visual_inception':
         parser.error('视觉记忆植入配置只能用于对应方法')
-    if args.training_manifest and (args.method != 'visual_inception' or args.group == 'all'):
-        parser.error('单份公开训练清单仅用于视觉记忆植入单组生成；多组请分别提供绑定本组的配置')
-    if args.training_bundles_root and (args.method != 'visual_inception' or args.training_manifest):
-        parser.error('公开训练包根目录仅用于视觉记忆植入，且与单份清单互斥')
+    if args.training_manifest and (args.method not in ('visual_inception', 'ambilage') or args.group == 'all'):
+        parser.error('单份公开训练清单仅用于环境光协同或视觉记忆植入单组生成；多组请分别提供绑定本组的配置')
+    if args.training_bundles_root and (args.method not in ('visual_inception', 'ambilage') or args.training_manifest):
+        parser.error('公开训练包根目录仅用于环境光协同或视觉记忆植入，且与单份清单互斥')
     if args.ambilage_config and args.method != 'ambilage':
         parser.error('环境光协同配置只能用于对应方法')
     if args.environments != 'single' and args.query_manifest is not None:
@@ -329,7 +348,7 @@ def main(argv=None):
         try:
             if args.stage in ('evaluate', 'all'):
                 from src.experiments.shared_evaluation import evaluate, report
-                from src.experiments.defenses import conditions
+                from src.experiments.defenses import conditions_for_mode
                 binding = manifest['groups'][group]
                 pool = base / manifest['shared_memory']['pool_file']
                 if sha256_file(pool) != manifest['shared_memory']['pool_sha256']:
@@ -350,7 +369,7 @@ def main(argv=None):
                     evaluate(read_json(root / 'FROZEN_IMAGE.json'), env_root, pool_path=pool,
                         query_manifest=query_path, query_mode=q_mode, key_mode=args.key_mode, device=args.device,
                         source_memory_id=manifest['shared_memory']['source_mapping'][group]['source_memory_id'],
-                        selected_conditions=conditions() if args.defense_mode == 'panel' else conditions()[:1],
+                        selected_conditions=conditions_for_mode(args.defense_mode),
                         encoder_config=args.encoder_config or base / 'evaluation_encoder.json',
                         replacement_frozens=replacement_frozens,
                         bank_root=output / 'shared_banks' / args.method / eval_label,

@@ -14,7 +14,7 @@ from typing import Any, Mapping
 
 
 METHOD = "ambilage"
-DEFINITION = "ambilage_native_4stage_ambient_coop_v1"
+DEFINITION = "ambilage_native_4stage_ambient_coop_psi_v4"
 MASK_POLICY = "ambilage_subject_micro_light_background_range_centered_ambient_smooth_v1"
 
 
@@ -160,6 +160,40 @@ class AmbiLAGEConfig:
     eot_enabled: bool = True
     diffusion_weight: float = 0.08          # 压低扩散净化梯度权重以消除潜空间棋盘格伪影
     purifier_steps: int = 10
+
+    # Stage 4 v4: PSI 渐进跨模态权重课程、三路文本对齐、球面查询增强、PCGrad 正交梯度与频域流形参数
+    psi_progressive_schedule: bool = True
+    psi_phase1_ratio: float = 0.24
+    psi_phase2_ratio: float = 0.72
+    psi_joint_end_scale: float = 0.45
+    psi_text_peak_multiplier: float = 2.40
+    psi_ot_peak_multiplier: float = 1.60
+    text_pure_image_mix: float = 0.25
+    text_phrase_decomposition: bool = True
+    max_text_phrases: int = 6
+    text_spherical_augmentation: bool = True
+    text_spherical_radius: float = 0.05
+    text_spherical_mix: float = 0.50
+    source_repulsion_weight: float = 0.15
+    source_repulsion_margin: float = 0.08
+    local_ot_text_weighted: bool = True
+    local_ot_text_temperature: float = 0.10
+    pcgrad_enabled: bool = True
+    spectral_manifold_projection: bool = True
+    spectral_budget_start: float = 0.22
+    spectral_budget_end: float = 0.45
+    conditional_tangent_projection: bool = True
+    tangent_ssim_slack_margin: float = 0.03
+    tangent_mae_slack_ratio: float = 0.20
+
+    # 可选同源公开训练包检索增强 (AmbiLAGE-Cat 模式) 与 L4 24GB 显存自适应管理
+    training_manifest: str | None = None
+    candidate_cache_dir: str | None = None
+    public_retrieval_weight: float = 0.60
+    public_retrieval_temperature: float = 0.07
+    public_query_batch_size: int = 16
+    public_contrastive_margin: float = 0.30
+    low_vram_offload_threshold_gb: float = 28.0
 
     def validate(self) -> None:
         """严格校验配置参数有效性，杜绝越界或无效数值。"""
@@ -324,6 +358,52 @@ class AmbiLAGEConfig:
             raise ValueError("正式方法须开启期望变换和正权重十步扩散净化")
         if self.joint_weight <= 0:
             raise ValueError("图文联合目标权重必须为正")
+        from src.visual.training_surrogates import is_held_out_purifier_reference
+        if is_held_out_purifier_reference(self.purifier_model_path):
+            raise ValueError("留出评估净化器 SD 2.1-base 禁止进入训练配置")
+        for bool_name in (
+            "psi_progressive_schedule",
+            "text_phrase_decomposition",
+            "text_spherical_augmentation",
+            "local_ot_text_weighted",
+            "pcgrad_enabled",
+            "spectral_manifold_projection",
+            "conditional_tangent_projection",
+        ):
+            if type(getattr(self, bool_name)) is not bool:
+                raise ValueError(f"配置开关 {bool_name} 必须为布尔值")
+        if not (0.05 <= self.psi_phase1_ratio < self.psi_phase2_ratio <= 0.95):
+            raise ValueError("PSI 渐进课程阶段比例 psi_phase1_ratio / psi_phase2_ratio 无效")
+        if not (0.10 <= self.psi_joint_end_scale <= 1.0):
+            raise ValueError("PSI 联合目标终端比例 psi_joint_end_scale 必须位于 [0.10, 1.0]")
+        if not (1.0 <= self.psi_text_peak_multiplier <= 5.0) or not (1.0 <= self.psi_ot_peak_multiplier <= 5.0):
+            raise ValueError("PSI 文本/局部 OT 峰值倍率必须位于 [1.0, 5.0]")
+        if not (0.0 <= self.text_pure_image_mix <= 0.80):
+            raise ValueError("纯图记忆键文本混合比例 text_pure_image_mix 必须位于 [0.0, 0.80]")
+        if type(self.max_text_phrases) is not int or not (1 <= self.max_text_phrases <= 16):
+            raise ValueError("公开文本子句上限 max_text_phrases 必须位于 [1, 16]")
+        if not (0.0 <= self.text_spherical_radius <= 0.50) or not (0.0 <= self.text_spherical_mix <= 1.0):
+            raise ValueError("球面查询增强参数 text_spherical_radius / text_spherical_mix 无效")
+        if not (0.0 <= self.source_repulsion_weight <= 2.0) or not (0.0 <= self.source_repulsion_margin <= 1.0):
+            raise ValueError("源锚点对比排斥参数 source_repulsion_weight / source_repulsion_margin 无效")
+        if not (0.01 <= self.local_ot_text_temperature <= 2.0):
+            raise ValueError("局部 OT 文本加权温度 local_ot_text_temperature 必须位于 [0.01, 2.0]")
+        if not (0.05 <= self.spectral_budget_start <= self.spectral_budget_end <= 2.0):
+            raise ValueError("潜空间 1/f 频域预算 spectral_budget_start / spectral_budget_end 无效")
+        if not (0.0 <= self.tangent_ssim_slack_margin <= 0.25) or not (0.0 <= self.tangent_mae_slack_ratio <= 1.0):
+            raise ValueError("按需切空间投影余量参数无效")
+        if self.training_manifest is not None and (not isinstance(self.training_manifest, str) or not self.training_manifest.strip()):
+            raise ValueError("公开训练清单路径 training_manifest 不能为空字符串")
+        if self.candidate_cache_dir is not None and (not isinstance(self.candidate_cache_dir, str) or not self.candidate_cache_dir.strip()):
+            raise ValueError("公开候选缓存目录 candidate_cache_dir 不能为空字符串")
+        if not (0.0 <= self.public_retrieval_weight <= 5.0) or not (0.01 <= self.public_retrieval_temperature <= 1.0):
+            raise ValueError("公开代理库检索权重或温度参数无效")
+        if type(self.public_query_batch_size) is not int or not (1 <= self.public_query_batch_size <= 100):
+            raise ValueError("公开查询小批量 public_query_batch_size 必须位于 [1, 100]")
+        if not (0.0 <= self.public_contrastive_margin <= 1.0):
+            raise ValueError("公开检索对比间隔 public_contrastive_margin 必须位于 [0.0, 1.0]")
+        if not (8.0 <= self.low_vram_offload_threshold_gb <= 128.0):
+            raise ValueError("显存自适应卸载阈值 low_vram_offload_threshold_gb 无效")
 
         # 检查有限实数
         for key, val in asdict(self).items():

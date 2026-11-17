@@ -1,4 +1,4 @@
-"""公开图对：类型兼容、灰度外形门槛、去重与固定种子均匀抽样。"""
+"""公开图对：类型兼容、灰度外形门槛、去重，以及中位数选取或均匀抽样。"""
 from dataclasses import asdict,dataclass
 import hashlib
 import math
@@ -14,7 +14,10 @@ from src.visual.product_types import type_compatibility,TYPE_RULES_SHA256
 from src.visual.shape_features import LocalShapeBackend as LocalSelectionBackend
 
 SELECTION_POLICY='public_shape_gate_uniform_v2'
+MEDIAN_SELECTION_POLICY='public_shape_gate_median_v3'
 DRAW_POLICY='sha256_rejection_uniform_index_v1'
+MEDIAN_DRAW_POLICY='shape_similarity_median_sorted_v1'
+VALID_SELECTION_STRATEGIES=('median','uniform')
 
 
 @dataclass(frozen=True)
@@ -22,12 +25,15 @@ class SelectionConfig:
     seed:int=42
     calibration_path:str|None=None
     min_image_side:int=64
+    strategy:str='median'
 
     def validate(self):
         if type(self.seed) is not int or type(self.min_image_side) is not int or self.min_image_side<16:
             raise ValueError('选图种子须为整数，最短边门槛须为不小于十六的整数')
         if not isinstance(self.calibration_path,str) or not self.calibration_path.strip():
             raise ValueError('新选图流程须提供真实公开开发集校准证书，不提供默认外形阈值')
+        if self.strategy not in VALID_SELECTION_STRATEGIES:
+            raise ValueError('选图策略仅支持中位数或均匀抽样：'+str(self.strategy))
 
 
 def unit_rows(value):
@@ -53,6 +59,28 @@ def uniform_draw(eligible_ids,target_id,seed):
         counter+=1
     index=value%len(ids)
     return dict(policy=DRAW_POLICY,seed=seed,eligible_ids=ids,index=index,selected_source_id=ids[index],counter=counter)
+
+
+def median_draw(eligible_rows):
+    if not eligible_rows:raise ValueError('中位数选取集合不能为空')
+    ordered=sorted(eligible_rows,key=lambda r:(float(r['shape_similarity']),r['source_id']))
+    ids=[r['source_id'] for r in ordered]
+    if len(ids)!=len(set(ids)):raise ValueError('选取集合须非空且编号唯一')
+    scores=[float(r['shape_similarity']) for r in ordered]
+    index=(len(ordered)-1)//2
+    chosen=ordered[index]
+    return dict(
+        policy=MEDIAN_DRAW_POLICY,
+        sort_key=['shape_similarity','source_id'],
+        rule='lower_middle_index_after_ascending_shape_sort',
+        eligible_count=len(ordered),
+        eligible_ids=ids,
+        ordered_scores=[dict(source_id=r['source_id'],shape_similarity=float(r['shape_similarity'])) for r in ordered],
+        median_shape_similarity=float(np.median(scores)),
+        index=index,
+        selected_source_id=chosen['source_id'],
+        selected_shape_similarity=float(chosen['shape_similarity']),
+    )
 
 
 def image_quality(product,minimum):
@@ -101,7 +129,7 @@ def matches_subtype_filter(title,subtype_filter):
 
 
 def score_pair(source,target,source_features,target_features,*,threshold,config=SelectionConfig(),subtype_filter=None):
-    """只判断合格与否；外形分数不参与最终抽样排序。"""
+    """判断公开候选是否合格；uniform 策略忽略分值排序，median 策略按合格外形分取中位数。"""
     subtype_filter=validate_subtype_filter(subtype_filter,allow_empty=False)
     compatibility=type_compatibility(source,target)
     quality=image_quality(source,config.min_image_side);target_quality=image_quality(target,config.min_image_side)
@@ -154,9 +182,14 @@ def choose_pair(target,candidates,backend,config=SelectionConfig(),*,excluded_so
             if p['image_sha256'] in seen_images:row['rejected_reasons'].append('duplicate_candidate_image')
             else:seen_images[p['image_sha256']]=p['id']
         row['eligible']=not row['rejected_reasons'];rows.append(row)
-    eligible=[r['source_id'] for r in rows if r['eligible']]
-    draw=uniform_draw(eligible,target['id'],config.seed) if eligible else None
-    result=dict(protocol=SELECTION_POLICY,status='selected' if eligible else 'no_eligible_pair',
+    eligible_rows=[r for r in rows if r['eligible']]
+    if config.strategy=='median':
+        draw=median_draw(eligible_rows) if eligible_rows else None
+        protocol=MEDIAN_SELECTION_POLICY
+    else:
+        draw=uniform_draw([r['source_id'] for r in eligible_rows],target['id'],config.seed) if eligible_rows else None
+        protocol=SELECTION_POLICY
+    result=dict(protocol=protocol,status='selected' if eligible_rows else 'no_eligible_pair',
         selected_source_id=draw['selected_source_id'] if draw else None,target_id=target['id'],candidates=rows,
         configuration=asdict(config),draw=draw,calibration=certificate,models=backend.snapshot,
         type_rules_sha256=TYPE_RULES_SHA256,excluded_source_ids=sorted(excluded),
@@ -166,12 +199,16 @@ def choose_pair(target,candidates,backend,config=SelectionConfig(),*,excluded_so
 
 
 def verify_selection(selection):
-    """验证新抽样；旧最高分记录仅作既有冻结图对的读取兼容。"""
+    """验证新中位数/随机选取及旧最高分兼容读取。"""
     if selection.get('status')!='selected' or not selection.get('source'):raise ValueError('只有已经确定的合格图对才能发布')
     eligible=[r for r in selection['candidates'] if r['eligible']]
-    if selection.get('protocol')==SELECTION_POLICY:
-        draw=uniform_draw([r['source_id'] for r in eligible],selection['target_id'],selection['configuration']['seed'])
-        if draw!=selection['draw']:raise ValueError('冻结抽样记录与合格集合或随机种子不一致')
+    protocol=selection.get('protocol')
+    if protocol in (SELECTION_POLICY,MEDIAN_SELECTION_POLICY):
+        if protocol==MEDIAN_SELECTION_POLICY:
+            draw=median_draw(eligible)
+        else:
+            draw=uniform_draw([r['source_id'] for r in eligible],selection['target_id'],selection['configuration']['seed'])
+        if draw!=selection['draw']:raise ValueError('冻结抽样记录与合格集合或选择策略不一致')
         expected=draw['selected_source_id']
         certificate=selection['calibration'];body={k:v for k,v in certificate.items() if k!='certificate_sha256'}
         if digest(body)!=certificate['certificate_sha256'] or digest(selection['models'])!=certificate['models_sha256']:

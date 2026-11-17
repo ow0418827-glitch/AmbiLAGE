@@ -1,0 +1,329 @@
+{
+  "schema_version": 2,
+  "identity": {
+    "index_manifest_sha256": "b4c090d78effd75b49648ae4eacccf4726cd0442f420c89434ec4b573b37d827",
+    "groups": [
+      {
+        "key": "01_camera",
+        "target_id": "B08V134QWR"
+      }
+    ],
+    "seed": 42,
+    "candidate_limit": 32,
+    "ownership_policy": "simulated_controlled_public_subset_sha256_even_v1",
+    "excluded_ids": [
+      "B01N4IMDJB",
+      "B07815DPW1",
+      "B07C26NR9T",
+      "B07P9WKGBD",
+      "B07QKNWG41",
+      "B07VLL8QH4",
+      "B082LNGNQY",
+      "B082PVMF5R",
+      "B0842Z8WP5",
+      "B0894WFH5V",
+      "B08BC6DM66",
+      "B08NDPFGDR",
+      "B08PVNZR97",
+      "B08R3PZ7XG",
+      "B08TBHHHJ6",
+      "B08TTXMKCN",
+      "B08XX7F1DZ",
+      "B08XX9CRWY",
+      "B08ZMJGSSR",
+      "B092CJB124",
+      "B093JXX82Z",
+      "B093VHSY5W",
+      "B095X9ZDW9",
+      "B0987HQSKY",
+      "B098DXCK4M",
+      "B098F1FM1Z",
+      "B09CT6ZQF7",
+      "B09CTF1PR3",
+      "B09D7L69T3",
+      "B09FY3X27Y",
+      "B09G318HQR",
+      "B09GXN689Q",
+      "B09J1R6P1Y",
+      "B09JBLQP5Y",
+      "B09JT3Z6JV",
+      "B09L17NKYD",
+      "B09LQCBN17",
+      "B09LVH3W9Q",
+      "B09M9Z8T8V",
+      "B09MC1BYDP",
+      "B09MDZJDZC",
+      "B09MLZJNJX",
+      "B09MMB2YW1",
+      "B09MPH64JN",
+      "B09N1H7F6Z",
+      "B09NBL7NDY",
+      "B09NRTFC3Z",
+      "B09P7SZTLS",
+      "B09PL6X5MZ",
+      "B09PL77NP9",
+      "B09PL7BTKQ",
+      "B09Q8B4BB5",
+      "B09QRKLC7P",
+      "B09S9VSKXW",
+      "B09SHH4RDN",
+      "B09SKWPGK6",
+      "B09SY58YBC"
+    ],
+    "type_reviews": {},
+    "subtype_filters": {
+      "01_camera": {
+        "policy": "camera_device_only_v1",
+        "include": "\\bcameras?\\b|相机|摄像",
+        "exclude": "\\b(?:case|bag|strap|tripod|charger|battery|protector|mount|bracket|housing\\s+only|replacement\\s+(?:lens|cable|adapter))\\b"
+      }
+    }
+  },
+  "index_path": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\datasets\\public\\public_products_v2.sqlite",
+  "index_manifest": {
+    "identity": {
+      "policy": "public_projection_json_or_normalized_sqlite_coarse_type_index_v3",
+      "source_kind": "normalized_catalog_sqlite",
+      "source_path": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\resources\\webshop\\catalog\\catalog.sqlite",
+      "source_bytes": 7136296960,
+      "source_mtime_ns": 1794599192500655300,
+      "type_rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+    },
+    "source_sha256": "cbfe10eb111814c7a45e82383173df4f601d08cc9f7d2fd3069429ee71ce42a2",
+    "scanned_products": 1181430,
+    "usable_public_products": 1180711,
+    "stored_fields": [
+      "id",
+      "title",
+      "image_url",
+      "source_url",
+      "category_derived_from_public_title"
+    ],
+    "private_fields_read": false,
+    "source_projection": "public_sql_fields_from_normalized_catalog",
+    "normalization_may_differ_from_original_raw_catalog": true
+  },
+  "scanned_products": 1181430,
+  "usable_public_products": 1180711,
+  "groups": [
+    {
+      "key": "01_camera",
+      "target": {
+        "id": "B08V134QWR",
+        "title": "PTZ Security Camera Outdoor 30X Optical Zoom Camera WiFi Wireless 5MP RTSP IP Camera 1000FT Night Vision Auto Tracking Emergency Strobe Light Alarm Human Detection 2-Way Audio IP66 Waterproof",
+        "image_url": "https://m.media-amazon.com/images/I/41Seqn3QaYL.jpg",
+        "source_url": "https://www.amazon.com/dp/B08V134QWR"
+      },
+      "candidates": [
+        {
+          "id": "B07K1M9CV8",
+          "title": "Canon EOS 80D DSLR Camera Body Only Memory Bundle (International Model)",
+          "image_url": "https://m.media-amazon.com/images/I/51NkfU-M7BL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07K1M9CV8"
+        },
+        {
+          "id": "B07WF1J6RH",
+          "title": "JOHURC Kids Camera for Girls, Gifts for 3 4 5 6 Year Old Girls, Toys for 5 6 Year Old Toddlers,Kids, 12MP HD Video Camera, Pink(32GB SD Card Included)…",
+          "image_url": "https://m.media-amazon.com/images/I/41bkh0p29FL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07WF1J6RH"
+        },
+        {
+          "id": "B09FPQB3R2",
+          "title": "Hidden Clothes Hook Camera，HD 1080P Mini Spy Camera /Video Recorder with Motion Detection, Home and Office Security Camera, Covert Nanny Cam, No Audio",
+          "image_url": "https://m.media-amazon.com/images/I/31BiU30mEeL.jpg",
+          "source_url": "https://www.amazon.com/dp/B09FPQB3R2"
+        },
+        {
+          "id": "B07KKM2FZN",
+          "title": "SanDisk 128GB SDXC SD Ultra Memory Card Works with Canon Powershot SX720 HS, SX730 HS, SX740 HS Camera UHS-I (SDSDUN4-128G-GN6IN) Bundle with (1) Everything But Stromboli Combo Card Reader",
+          "image_url": "https://m.media-amazon.com/images/I/41QOm6U2s9S.jpg",
+          "source_url": "https://www.amazon.com/dp/B07KKM2FZN"
+        },
+        {
+          "id": "B07RXVV9QY",
+          "title": "LTEFTLFL 4.3inch LCD Car Rear View Monitor Screen Reverse Camera Kit DVD VCR",
+          "image_url": "https://m.media-amazon.com/images/I/51OIo8tkvXL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07RXVV9QY"
+        },
+        {
+          "id": "B08HVXK2T3",
+          "title": "Swann Home Security Camera System 16 Channel 12 Cameras DVR CCTV, Wired Surveillance 1080p Full HD + 1TB HDD, Color Night Vision, Heat & Motion Sensing, Alexa + Google, SWDVK-16468012SL-US",
+          "image_url": "https://m.media-amazon.com/images/I/414gLGuqMrL.jpg",
+          "source_url": "https://www.amazon.com/dp/B08HVXK2T3"
+        },
+        {
+          "id": "B09PNHYBPP",
+          "title": "Artsxw Double Din Car Stereo 9\" HD Car MP5 Player Touch Multimedia for Skoda Octavia 3 A7 2013-2018 Support Mirror Link/Steering Wheel Control/WiFi/FM/Dual USB Backup Camera (Color : V3 2G+32G)",
+          "image_url": "https://m.media-amazon.com/images/I/31yLwI3VQ2L.jpg",
+          "source_url": "https://www.amazon.com/dp/B09PNHYBPP"
+        },
+        {
+          "id": "B09CY118HS",
+          "title": "4K WiFi Full HD Oil Diffuser Hidden Spy Camera Recording Motion Detection APP for Android and iOS, white",
+          "image_url": "https://m.media-amazon.com/images/I/51pQSNAYKoL.jpg",
+          "source_url": "https://www.amazon.com/dp/B09CY118HS"
+        },
+        {
+          "id": "B004HBB8SG",
+          "title": "Nikon N2000 F-301 SLR film camera (body only, lens is not included)",
+          "image_url": "https://m.media-amazon.com/images/I/41aGhHS4gJL.jpg",
+          "source_url": "https://www.amazon.com/dp/B004HBB8SG"
+        },
+        {
+          "id": "B00MPPPWPG",
+          "title": "Koolehaoda Professional 65-inch Camera Aluminium Monopod with Folding Three Feet Support Stand",
+          "image_url": "https://m.media-amazon.com/images/I/41in14vyz0S.jpg",
+          "source_url": "https://www.amazon.com/dp/B00MPPPWPG"
+        },
+        {
+          "id": "B07J9V84J8",
+          "title": "Tonton 8CH Full HD 1080P Expandable Security Camera System, 5-in-1 Surveillance DVR with 1TB Hard Drive and (4) 2.0MP Outdoor Indoor Dome Camera, Free APP Remote Viewing and Email Alert",
+          "image_url": "https://m.media-amazon.com/images/I/41+ilg1URsL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07J9V84J8"
+        },
+        {
+          "id": "B07D83K3TX",
+          "title": "Night Owl WM-861P-3MP 8 Channel 3MP Extreme HD Video Security DVR with 1 TB HDD and 6X 3MP Wired Infrared Cameras",
+          "image_url": "https://m.media-amazon.com/images/I/51OwFVv51kL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07D83K3TX"
+        },
+        {
+          "id": "B07673TWX2",
+          "title": "67mm Set of 2 Camera Lens Hoods and 1 Lens Cap - Rubber (Collapsible) + Tulip Flower - Sun Shade/Shield - Reduces Lens Flare and Glare - Blocks Excess Sunlight (67 mm, Rubber Hood + Tullip Hood + Cap)",
+          "image_url": "https://m.media-amazon.com/images/I/51GL5IfsJKL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07673TWX2"
+        },
+        {
+          "id": "B01LRXIPFA",
+          "title": "FolioGadgets CCTV Security Camera 2.1mm x 5.5mm DC Power Plug Pigtail Cable, 10 Male + 10 Female",
+          "image_url": "https://m.media-amazon.com/images/I/51AybCH807L.jpg",
+          "source_url": "https://www.amazon.com/dp/B01LRXIPFA"
+        },
+        {
+          "id": "B09KBSR61J",
+          "title": "Natuogo Tablet 8 Inch Android 10.0, Tablets with Octa-Core Processor, 4G Phone, 13MP Camera, Bluetooth, WiFi, GPS, Dual SIM Card Slot, HD Touchscreen",
+          "image_url": "https://m.media-amazon.com/images/I/41WTxwX--1L.jpg",
+          "source_url": "https://www.amazon.com/dp/B09KBSR61J"
+        },
+        {
+          "id": "B08XM8TQ1V",
+          "title": "Micro HDMI to HDMI Adapter, Capshi Micro HDMI Adapter Nylon Braided Male to Female Cable Supports Ethernet 1080P 4K/3D Compatible with GoPro Hero 7, Raspberry Pi 4, Sony A6000 Camera, Nikon B500 -Red",
+          "image_url": "https://m.media-amazon.com/images/I/51Bd4h20ATL.jpg",
+          "source_url": "https://www.amazon.com/dp/B08XM8TQ1V"
+        },
+        {
+          "id": "B098RR9VT5",
+          "title": "Vanxse 5Meters 15FT 2.1mm x 5.5mm DC 12V Power Extension Cable 12 Volt Power Supply Adapter Extension Cord Female to Male Plug for CCTV Security Camera IP Camera Standalone DVR LED Strip Lights",
+          "image_url": "https://m.media-amazon.com/images/I/41flXbrgGfS.jpg",
+          "source_url": "https://www.amazon.com/dp/B098RR9VT5"
+        },
+        {
+          "id": "B0011EA9FA",
+          "title": "Sony Cybershot DSCW120/P 7.2MP Digital Camera with 4x Optical Zoom with Super Steady Shot (Pink)",
+          "image_url": "https://m.media-amazon.com/images/I/51HV0HRlWNL.jpg",
+          "source_url": "https://www.amazon.com/dp/B0011EA9FA"
+        },
+        {
+          "id": "B09DYL75Y7",
+          "title": "Double Din Car Stereo with Carplay Android Auto for VW Jetta Passat Tiguan Golf Polo with 8’’ HD Touch Screen Car Radio Support Bluetooth Mirror Link FM Radio Head Unit with Backup Camera USB SWC",
+          "image_url": "https://m.media-amazon.com/images/I/51YE4Uauo3L.jpg",
+          "source_url": "https://www.amazon.com/dp/B09DYL75Y7"
+        },
+        {
+          "id": "B07NX1BN1B",
+          "title": "4D Magic - 135 Plus - Stereo Camera",
+          "image_url": "https://m.media-amazon.com/images/I/41Lhpd+vv4L.jpg",
+          "source_url": "https://www.amazon.com/dp/B07NX1BN1B"
+        },
+        {
+          "id": "B09R73FXJZ",
+          "title": "Hopeg Security Camera, 5G Wireless Camera WiFi Remote Monitor Mobile Phone Remote Home Smart Network High-Definition Surveillance Camera, Real-time Monitoring, 360° Panoramic View",
+          "image_url": "https://m.media-amazon.com/images/I/31fuOdXFz7L.jpg",
+          "source_url": "https://www.amazon.com/dp/B09R73FXJZ"
+        },
+        {
+          "id": "B07CJQ37NK",
+          "title": "PK Power DC Extension Power Cord Cable for Panasonic Cameras Camcorders VCR DC Out NV-GS10 NV-GS21 NV-GS22 NV-GS27 NV-GS28 NV-GS30 NV-GS33 NV-GS35EB NV-GS37 NV-GS38 NV-GS40 NV-GS50 NV-GS100",
+          "image_url": "https://m.media-amazon.com/images/I/516+LrwiE1L.jpg",
+          "source_url": "https://www.amazon.com/dp/B07CJQ37NK"
+        },
+        {
+          "id": "B09L89GPT1",
+          "title": "2 M pixels1080P Security Camera, Bulb 360 Degree Panoramic Wireless,Smart Motion Detection and Alarm,Two Way Audio, Night Vision, Remote Viewing.Compatible with Alexa Google Assistant",
+          "image_url": "https://m.media-amazon.com/images/I/41uK52CXzeL.jpg",
+          "source_url": "https://www.amazon.com/dp/B09L89GPT1"
+        },
+        {
+          "id": "B005OIB6XI",
+          "title": "Wireless Wifi Bridge Dongle Wireless Access Points Ap for Dreambox Xbox Ps3 Network Printer Router Adsl Ip Camera (Support Microsoft Windows Linux MAC Os)",
+          "image_url": "https://m.media-amazon.com/images/I/41d+HhQPeXL.jpg",
+          "source_url": "https://www.amazon.com/dp/B005OIB6XI"
+        },
+        {
+          "id": "B09QBZ3Z96",
+          "title": "Action Camera Action Camera 4k, Ultra 1080P HD 60fps 24MP Waterproof Camera,Shockproof Underwater Camera, 2.7inch Recording Cameras Sport Time Lapse (Color : Yellow, Size : Medium)",
+          "image_url": "https://m.media-amazon.com/images/I/41N+qtUlwgL.jpg",
+          "source_url": "https://www.amazon.com/dp/B09QBZ3Z96"
+        },
+        {
+          "id": "B000IVRJO6",
+          "title": "Nikon F65 35mm SLR Camera Body Only in Silver, (F65 = N65)",
+          "image_url": "https://m.media-amazon.com/images/I/513MVtFt9CL.jpg",
+          "source_url": "https://www.amazon.com/dp/B000IVRJO6"
+        },
+        {
+          "id": "B013DT8OIE",
+          "title": "Gosky Deluxe Telescope Camera Adapter Kit for Pentax K SLR/DSLR - Prime Focus and Adjustable Projection - Accepts 1.25\" Eyepieces",
+          "image_url": "https://m.media-amazon.com/images/I/413lc3J+m8L.jpg",
+          "source_url": "https://www.amazon.com/dp/B013DT8OIE"
+        },
+        {
+          "id": "B07Z8CQS3V",
+          "title": "2MP PoE IP Eyeball Dome Security Camera, 2.8mm Wide Angle, H.265, IP66 Waterproof, Compatible with Hik Vision DS-7608NI-Q2/8P, DS-7616NI-Q2/16P",
+          "image_url": "https://m.media-amazon.com/images/I/412J9EllTRL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07Z8CQS3V"
+        },
+        {
+          "id": "B06XJ314VM",
+          "title": "SHD 4Pack 165Feet BNC Vedio Power Cable Pre-Made Al-in-One Camera Video BNC Cable Wire Cord for Surveillance CCTV Security System with Connectors(BNC Female and BNC to RCA)",
+          "image_url": "https://m.media-amazon.com/images/I/51abGeHpHBL.jpg",
+          "source_url": "https://www.amazon.com/dp/B06XJ314VM"
+        },
+        {
+          "id": "B081SMGM3C",
+          "title": "Z-SHINE 288 Pockets Transparent Mini Film Photo Album for Fujifilm Instax Mini 9 8 7s 25 70 90 Camera Film Ticket Name Card Holder",
+          "image_url": "https://m.media-amazon.com/images/I/5119DtXf+kL.jpg",
+          "source_url": "https://www.amazon.com/dp/B081SMGM3C"
+        },
+        {
+          "id": "B096SKP7H6",
+          "title": "6 in Camera Sticker - Retro Digital Photo Vintage Photography Film - Vinyl Decal for Wall Car Home Bike Bottle Phone Laptop DWSV1652",
+          "image_url": "https://m.media-amazon.com/images/I/41RASqnRtJS.jpg",
+          "source_url": "https://www.amazon.com/dp/B096SKP7H6"
+        },
+        {
+          "id": "B0816TN233",
+          "title": "UNITOPSCI 7 Inch Android Car Stereo Double Din GPS Navigation Stereo Car Radio with WiFi Bluetooth HD Touch Screen 12 LEDs Backup Camera, FM Radio Receiver,Support Dual USB SWC Mirror Link MP5 Player",
+          "image_url": "https://m.media-amazon.com/images/I/51PS5Wq1pYL.jpg",
+          "source_url": "https://www.amazon.com/dp/B0816TN233"
+        }
+      ],
+      "counts": {
+        "type_compatible": 24324,
+        "simulated_controlled": 12300,
+        "development_excluded": 0,
+        "subtype_filtered": 21894,
+        "candidate_limit": 32,
+        "retained_for_images": 32
+      }
+    }
+  ],
+  "projected_fields": [
+    "asin",
+    "name",
+    "images[0]"
+  ],
+  "victim_memory_used": false,
+  "formal_queries_used": false,
+  "ownership_is_experimental_assumption": true
+}

@@ -112,12 +112,20 @@ def build_public_index(products_path,index_path,*,verify_source=False):
     return result
 
 
-def extract_public_candidates(products_path,groups,output,*,seed=42,lexical_limit=32,index_path=None,excluded_ids=(),type_reviews=None,verify_source=False,subtype_filters=None):
-    """从可复用公开索引均匀截取有限候选；参数旧名仅表示元数据候选预算。"""
+def extract_public_candidates(products_path,groups,output,*,seed=42,lexical_limit=32,candidate_limits=None,index_path=None,excluded_ids=(),type_reviews=None,verify_source=False,subtype_filters=None):
+    """从可复用公开索引均匀截取有限候选；支持按组指定候选上限，不计算语义相似度。"""
     from src.visual.pair_selection import matches_subtype_filter,validate_subtype_filter
     output=Path(output);source=Path(products_path).resolve();index=Path(index_path or output.parent/'public_products_v2.sqlite')
     target_ids={g['target_id'] for g in groups};group_keys={g['key'] for g in groups}
     if len(target_ids)!=len(groups) or len(group_keys)!=len(groups):raise ValueError('目标及组名须唯一')
+    resolved_limits={}
+    if candidate_limits is not None:
+        if not isinstance(candidate_limits,dict) or set(candidate_limits)-group_keys:
+            raise ValueError('按组候选预算只支持配置中的公开组名')
+        for k,limit in candidate_limits.items():
+            if type(limit) is not int or not 1<=limit<=256:
+                raise ValueError('按组候选预算须为一至二百五十六之间的整数：'+k)
+            resolved_limits[k]=limit
     if subtype_filters is not None:
         if not isinstance(subtype_filters,dict) or set(subtype_filters)-group_keys:
             raise ValueError('细分品类过滤只支持配置中的公开组名')
@@ -133,6 +141,7 @@ def extract_public_candidates(products_path,groups,output,*,seed=42,lexical_limi
     if target_ids&excluded:raise ValueError('正式目标与开发校准商品重叠')
     identity=dict(index_manifest_sha256=digest(manifest),groups=groups,seed=seed,candidate_limit=lexical_limit,
         ownership_policy=OWNERSHIP_POLICY,excluded_ids=sorted(excluded),type_reviews=type_reviews)
+    if resolved_limits:identity['candidate_limits']=resolved_limits
     if subtype_filters:identity['subtype_filters']=subtype_filters
     final=output/'public_extraction.json'
     if final.exists():
@@ -177,8 +186,9 @@ def extract_public_candidates(products_path,groups,output,*,seed=42,lexical_limi
                     if not simulated_controlled(p['id'],seed,target_ids):continue
                     counts['simulated_controlled']+=1
                     yield p
-            retained=heapq.nsmallest(lexical_limit,eligible(),key=lambda p:(digest(['public_candidate_uniform_v2',seed,target['id'],p['id']]),p['id']))
-            results.append(dict(key=group['key'],target=target,candidates=retained,counts=dict(counts,retained_for_images=len(retained))))
+            group_limit=resolved_limits.get(group['key'],lexical_limit)
+            retained=heapq.nsmallest(group_limit,eligible(),key=lambda p:(digest(['public_candidate_uniform_v2',seed,target['id'],p['id']]),p['id']))
+            results.append(dict(key=group['key'],target=target,candidates=retained,counts=dict(counts,candidate_limit=group_limit,retained_for_images=len(retained))))
     result=dict(schema_version=2,identity=identity,index_path=str(index.resolve()),index_manifest=manifest,
         scanned_products=manifest['scanned_products'],usable_public_products=manifest['usable_public_products'],
         groups=results,projected_fields=['asin','name','images[0]'],victim_memory_used=False,formal_queries_used=False,
@@ -227,10 +237,11 @@ def download_public_image(product,output,*,fetcher=None):
     raise RuntimeError(f'公开主图下载失败 {product["id"]}：{last}')
 
 
-def download_shortlist(shortlist,output,*,workers=6):
-    output=Path(output);products={p['id']:p for g in shortlist['groups'] for p in [g['target']]+g['candidates']};records={};failures={}
+def download_shortlist(shortlist,output,*,workers=6,asset_output=None):
+    output=Path(output);assets=Path(asset_output or output)
+    products={p['id']:p for g in shortlist['groups'] for p in [g['target']]+g['candidates']};records={};failures={}
     with ThreadPoolExecutor(max_workers=workers) as pool:
-        jobs={pool.submit(download_public_image,p,output):pid for pid,p in products.items()}
+        jobs={pool.submit(download_public_image,p,assets):pid for pid,p in products.items()}
         for future in as_completed(jobs):
             pid=jobs[future]
             try:records[pid]=future.result()

@@ -239,7 +239,7 @@ class VisualMemoryRetriever:
         if key_mode == "joint" and index_text not in ("title", "product_feature", "feature", "title_brand_feature"):
             raise ValueError("联合记忆检索只接受 title 或 product_feature 策略；完整历史仅可用于展示或审计")
         self.index_text = index_text
-        self.key_image_weight = validated_image_weight(key_image_weight)
+        self.key_image_weight = 1.0 if key_mode == 'image' else validated_image_weight(key_image_weight)
         self.query_image_weight = 0.0 if query_mode == 'text' else validated_image_weight(query_image_weight)
         # Default calls remain compatible with encoders exposing only the old
         # two positional arguments. A requested unsupported fusion must fail.

@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "strategy": "median",
+  "threshold_relaxed": false,
+  "resolved_limits": {
+    "01_camera": 256,
+    "02_chair": 64,
+    "03_cookies": 256,
+    "05_hair_extension": 32,
+    "06_jeans": 32,
+    "07_shampoo": 32,
+    "09_toothbrush": 32
+  },
+  "attempts_by_group": {
+    "01_camera": [
+      {
+        "candidate_limit": 32,
+        "extracted_candidates": 32,
+        "downloaded_candidates": 32,
+        "eligible_count": 0,
+        "status": "no_eligible_pair",
+        "selected_source_id": null,
+        "rejection_counts": {
+          "shape_below_calibrated_threshold": 32
+        }
+      },
+      {
+        "candidate_limit": 64,
+        "extracted_candidates": 64,
+        "downloaded_candidates": 64,
+        "eligible_count": 0,
+        "status": "no_eligible_pair",
+        "selected_source_id": null,
+        "rejection_counts": {
+          "shape_below_calibrated_threshold": 64
+        }
+      },
+      {
+        "candidate_limit": 128,
+        "extracted_candidates": 128,
+        "downloaded_candidates": 128,
+        "eligible_count": 0,
+        "status": "no_eligible_pair",
+        "selected_source_id": null,
+        "rejection_counts": {
+          "shape_below_calibrated_threshold": 128
+        }
+      },
+      {
+        "candidate_limit": 256,
+        "extracted_candidates": 256,
+        "downloaded_candidates": 256,
+        "eligible_count": 1,
+        "status": "selected",
+        "selected_source_id": "B09M6VTWK1",
+        "rejection_counts": {
+          "shape_below_calibrated_threshold": 255
+        }
+      }
+    ],
+    "02_chair": [
+      {
+        "candidate_limit": 32,
+        "extracted_candidates": 32,
+        "downloaded_candidates": 32,
+        "eligible_count": 0,
+        "status": "no_eligible_pair",
+        "selected_source_id": null,
+        "rejection_counts": {
+          "shape_below_calibrated_threshold": 32
+        }
+      },
+      {
+        "candidate_limit": 64,
+        "extracted_candidates": 64,
+        "downloaded_candidates": 64,
+        "eligible_count": 2,
+        "status": "selected",
+        "selected_source_id": "B076JC9M8C",
+        "rejection_counts": {
+          "shape_below_calibrated_threshold": 62
+        }
+      }
+    ],
+    "03_cookies": [
+      {
+        "candidate_limit": 32,
+        "extracted_candidates": 32,
+        "downloaded_candidates": 32,
+        "eligible_count": 0,
+        "status": "no_eligible_pair",
+        "selected_source_id": null,
+        "rejection_counts": {
+          "shape_below_calibrated_threshold": 32
+        }
+      },
+      {
+        "candidate_limit": 64,
+        "extracted_candidates": 64,
+        "downloaded_candidates": 64,
+        "eligible_count": 0,
+        "status": "no_eligible_pair",
+        "selected_source_id": null,
+        "rejection_counts": {
+          "shape_below_calibrated_threshold": 64
+        }
+      },
+      {
+        "candidate_limit": 128,
+        "extracted_candidates": 128,
+        "downloaded_candidates": 128,
+        "eligible_count": 0,
+        "status": "no_eligible_pair",
+        "selected_source_id": null,
+        "rejection_counts": {
+          "shape_below_calibrated_threshold": 128
+        }
+      },
+      {
+        "candidate_limit": 256,
+        "extracted_candidates": 256,
+        "downloaded_candidates": 255,
+        "eligible_count": 1,
+        "status": "selected",
+        "selected_source_id": "B07BBLWTLM",
+        "rejection_counts": {
+          "shape_below_calibrated_threshold": 254
+        }
+      }
+    ],
+    "05_hair_extension": [
+      {
+        "candidate_limit": 32,
+        "extracted_candidates": 32,
+        "downloaded_candidates": 32,
+        "eligible_count": 4,
+        "status": "selected",
+        "selected_source_id": "B085RPZGWZ",
+        "rejection_counts": {
+          "shape_below_calibrated_threshold": 28
+        }
+      }
+    ],
+    "06_jeans": [
+      {
+        "candidate_limit": 32,
+        "extracted_candidates": 32,
+        "downloaded_candidates": 32,
+        "eligible_count": 14,
+        "status": "selected",
+        "selected_source_id": "B09DNZ71Q1",
+        "rejection_counts": {
+          "shape_below_calibrated_threshold": 18
+        }
+      }
+    ],
+    "07_shampoo": [
+      {
+        "candidate_limit": 32,
+        "extracted_candidates": 32,
+        "downloaded_candidates": 32,
+        "eligible_count": 15,
+        "status": "selected",
+        "selected_source_id": "B07P48FLMK",
+        "rejection_counts": {
+          "shape_below_calibrated_threshold": 17
+        }
+      }
+    ],
+    "09_toothbrush": [
+      {
+        "candidate_limit": 32,
+        "extracted_candidates": 32,
+        "downloaded_candidates": 32,
+        "eligible_count": 6,
+        "status": "selected",
+        "selected_source_id": "B09Q895GX6",
+        "rejection_counts": {
+          "shape_below_calibrated_threshold": 26
+        }
+      }
+    ]
+  }
+}

@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-11-13T19:48:55.258305+00:00",
+  "checked_at": "2026-11-17T07:49:12.570481+00:00",
   "code": {
-    "python_files_parsed": 124,
-    "model_manifest_entries": 15,
+    "python_files_parsed": 157,
+    "model_manifest_entries": 16,
     "private_resources_read": false
   },
   "resources": {
@@ -25,75 +25,121 @@
       "torch": "2.11.0+cu128",
       "torchvision": "0.26.0+cu128",
       "transformers": "5.13.0",
-      "diffusers": "0.39.0",
-      "accelerate": "1.15.0",
+      "diffusers": null,
+      "accelerate": null,
       "open-clip-torch": "3.3.0",
+      "safetensors": "0.8.0",
+      "huggingface-hub": "1.22.0",
       "rapidocr-onnxruntime": "1.4.4",
-      "huggingface-hub": "1.22.0"
+      "scikit-image": "0.26.0",
+      "scipy": "1.17.1",
+      "sentence-transformers": "5.6.0"
     },
-    "disk_free_gib": 77.16
+    "disk_free_gib": 58.91
+  },
+  "training_surrogates": {
+    "schema_version": 1,
+    "profile": "lucid",
+    "config_source": "src/visual/config/optimization.json",
+    "config_sha256": "41bd088cfd50df5f92e033a04ab23060a2daf080811254bcf998f0f23c6876d9",
+    "specs": [
+      {
+        "name": "ViT-B-16",
+        "pretrained": "openai",
+        "hf_repo": "timm/vit_base_patch16_clip_224.openai",
+        "weight_path": null,
+        "tokenizer_path": null
+      },
+      {
+        "name": "ViT-B-32",
+        "pretrained": "openai",
+        "hf_repo": "timm/vit_base_patch32_clip_224.openai",
+        "weight_path": null,
+        "tokenizer_path": null
+      },
+      {
+        "name": "ViT-B-32",
+        "pretrained": "laion2b_s34b_b79k",
+        "hf_repo": "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
+        "weight_path": null,
+        "tokenizer_path": null
+      }
+    ],
+    "specs_sha256": "67e3e7ce158c094b1d414288bb08fcb8504aa5cd1bbcac469e90ff279bd29af6",
+    "comparison_reference": "current_lucid_configuration_and_loader",
+    "activation_policy": "pretrained_native",
+    "model_count": 3,
+    "held_out_models": [
+      "ViT-g-14",
+      "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+    ],
+    "downloads_during_training": false
   },
   "models": {
     "sam2": {
-      "present": false,
-      "repo_id": "facebook/sam2.1-hiera-large"
-    },
-    "planner": {
-      "present": false,
-      "repo_id": "Qwen/Qwen2.5-VL-32B-Instruct"
+      "present": true,
+      "repo_id": "facebook/sam2.1-hiera-large",
+      "role": "segmentation"
     },
     "editor": {
       "present": false,
-      "repo_id": "black-forest-labs/FLUX.1-Kontext-dev"
+      "repo_id": "black-forest-labs/FLUX.1-Kontext-dev",
+      "role": "stage4_16_channel_flux_vae",
+      "allow_patterns": [
+        "vae/*",
+        "model_index.json",
+        "*.md",
+        "LICENSE*"
+      ]
     },
     "purifier": {
       "present": false,
-      "repo_id": "stable-diffusion-v1-5/stable-diffusion-v1-5"
+      "repo_id": "stable-diffusion-v1-5/stable-diffusion-v1-5",
+      "role": "differentiable_ddim_purification"
     },
     "clip_b16": {
       "present": false,
-      "repo_id": "timm/vit_base_patch16_clip_224.openai"
+      "repo_id": "timm/vit_base_patch16_clip_224.openai",
+      "role": "training_surrogate"
     },
     "clip_b32": {
       "present": false,
-      "repo_id": "timm/vit_base_patch32_clip_224.openai"
+      "repo_id": "timm/vit_base_patch32_clip_224.openai",
+      "role": "lucid_surrogate"
     },
     "clip_b32_laion": {
       "present": false,
-      "repo_id": "laion/CLIP-ViT-B-32-laion2B-s34B-b79K"
-    },
-    "clip_l14": {
-      "present": false,
-      "repo_id": "timm/vit_large_patch14_clip_224.openai"
-    },
-    "siglip_so400m": {
-      "present": false,
-      "repo_id": "timm/ViT-SO400M-14-SigLIP-384"
-    },
-    "clip_h14": {
-      "present": false,
-      "repo_id": "laion/CLIP-ViT-H-14-laion2B-s32B-b79K"
+      "repo_id": "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
+      "role": "lucid_surrogate"
     },
     "eval_g14": {
       "present": false,
-      "repo_id": "laion/CLIP-ViT-g-14-laion2B-s12B-b42K"
+      "repo_id": "laion/CLIP-ViT-g-14-laion2B-s12B-b42K",
+      "role": "held_out_evaluator_only"
     },
     "eval_gme": {
       "present": false,
-      "repo_id": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+      "repo_id": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+      "role": "held_out_evaluator_only"
     },
     "selection": {
-      "present": false,
-      "repo_id": "facebook/dinov2-small"
+      "present": true,
+      "repo_id": "facebook/dinov2-small",
+      "role": "frozen_public_grayscale_shape_gate"
     }
   },
+  "optional_models_skipped": [
+    "planner",
+    "planner_7b",
+    "editor_qwen"
+  ],
   "webshop": {
     "source_files": 18,
     "catalog_files": 92,
     "products": 1181430,
     "raw_bytes": 8676866828,
     "stored_bytes": 2901882988,
-    "chunks": 127,
+    "chunks": 202,
     "materialized": true,
     "status": "ready",
     "large_file_hashes_checked": false,

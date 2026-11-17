@@ -1,0 +1,521 @@
+{
+  "schema_version": 2,
+  "identity": {
+    "index_manifest_sha256": "b4c090d78effd75b49648ae4eacccf4726cd0442f420c89434ec4b573b37d827",
+    "groups": [
+      {
+        "key": "03_cookies",
+        "target_id": "B08Z8MHWVS"
+      }
+    ],
+    "seed": 42,
+    "candidate_limit": 64,
+    "ownership_policy": "simulated_controlled_public_subset_sha256_even_v1",
+    "excluded_ids": [
+      "B01N4IMDJB",
+      "B07815DPW1",
+      "B07C26NR9T",
+      "B07P9WKGBD",
+      "B07QKNWG41",
+      "B07VLL8QH4",
+      "B082LNGNQY",
+      "B082PVMF5R",
+      "B0842Z8WP5",
+      "B0894WFH5V",
+      "B08BC6DM66",
+      "B08NDPFGDR",
+      "B08PVNZR97",
+      "B08R3PZ7XG",
+      "B08TBHHHJ6",
+      "B08TTXMKCN",
+      "B08XX7F1DZ",
+      "B08XX9CRWY",
+      "B08ZMJGSSR",
+      "B092CJB124",
+      "B093JXX82Z",
+      "B093VHSY5W",
+      "B095X9ZDW9",
+      "B0987HQSKY",
+      "B098DXCK4M",
+      "B098F1FM1Z",
+      "B09CT6ZQF7",
+      "B09CTF1PR3",
+      "B09D7L69T3",
+      "B09FY3X27Y",
+      "B09G318HQR",
+      "B09GXN689Q",
+      "B09J1R6P1Y",
+      "B09JBLQP5Y",
+      "B09JT3Z6JV",
+      "B09L17NKYD",
+      "B09LQCBN17",
+      "B09LVH3W9Q",
+      "B09M9Z8T8V",
+      "B09MC1BYDP",
+      "B09MDZJDZC",
+      "B09MLZJNJX",
+      "B09MMB2YW1",
+      "B09MPH64JN",
+      "B09N1H7F6Z",
+      "B09NBL7NDY",
+      "B09NRTFC3Z",
+      "B09P7SZTLS",
+      "B09PL6X5MZ",
+      "B09PL77NP9",
+      "B09PL7BTKQ",
+      "B09Q8B4BB5",
+      "B09QRKLC7P",
+      "B09S9VSKXW",
+      "B09SHH4RDN",
+      "B09SKWPGK6",
+      "B09SY58YBC"
+    ],
+    "type_reviews": {},
+    "subtype_filters": {
+      "03_cookies": {
+        "policy": "edible_cookies_not_icecream_v3",
+        "include": "\\b(?:cookies?|cookie\\s+dough|biscuits?|wafers?)\\b|饼干|曲奇",
+        "exclude": "\\b(?:cookie\\s+(?:cutter|jar|press|sheet|pan|stamp|mold|tin)s?|apron|ice\\s*cream|gelato|sorbet|sundae|frozen\\s+(?:dairy\\s+)?dessert|frozen\\s+treat|milkshake|cookies\\s*(?:&|and|n)\\s*cream)\\b"
+      }
+    }
+  },
+  "index_path": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\datasets\\public\\public_products_v2.sqlite",
+  "index_manifest": {
+    "identity": {
+      "policy": "public_projection_json_or_normalized_sqlite_coarse_type_index_v3",
+      "source_kind": "normalized_catalog_sqlite",
+      "source_path": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\resources\\webshop\\catalog\\catalog.sqlite",
+      "source_bytes": 7136296960,
+      "source_mtime_ns": 1794599192500655300,
+      "type_rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+    },
+    "source_sha256": "cbfe10eb111814c7a45e82383173df4f601d08cc9f7d2fd3069429ee71ce42a2",
+    "scanned_products": 1181430,
+    "usable_public_products": 1180711,
+    "stored_fields": [
+      "id",
+      "title",
+      "image_url",
+      "source_url",
+      "category_derived_from_public_title"
+    ],
+    "private_fields_read": false,
+    "source_projection": "public_sql_fields_from_normalized_catalog",
+    "normalization_may_differ_from_original_raw_catalog": true
+  },
+  "scanned_products": 1181430,
+  "usable_public_products": 1180711,
+  "groups": [
+    {
+      "key": "03_cookies",
+      "target": {
+        "id": "B08Z8MHWVS",
+        "title": "Eggless Raw Edible Cookie Dough, Edible Frozen Cookie Dough - Big Dipper Dough Co: (2 Pints-ChocoChip & CookienCream)",
+        "image_url": "https://m.media-amazon.com/images/I/51TpcBiI6aL.jpg",
+        "source_url": "https://www.amazon.com/dp/B08Z8MHWVS"
+      },
+      "candidates": [
+        {
+          "id": "B074FFC27H",
+          "title": "Little Debbie Star Crunch 12 Individually Wrapped Cookies, Chocolate, Caramel and Fudge, 13 Oz",
+          "image_url": "https://m.media-amazon.com/images/I/51jPfqWhfiL.jpg",
+          "source_url": "https://www.amazon.com/dp/B074FFC27H"
+        },
+        {
+          "id": "B07NK91WYG",
+          "title": "Yumbana Gluten Free Chocolate Chip Cookies - 2 Pack",
+          "image_url": "https://m.media-amazon.com/images/I/41qMwvbFJkL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07NK91WYG"
+        },
+        {
+          "id": "B089YCYWVH",
+          "title": "Foxy Fane 120 count Deluxe Gift Snack Box - Ultimate Care Package with Variety Assortment of Crackers, Cookies, Candy, Chips & other Snacks - Bundle of Delicious Treats (120 Snacks)",
+          "image_url": "https://m.media-amazon.com/images/I/61+WGXKPGLL.jpg",
+          "source_url": "https://www.amazon.com/dp/B089YCYWVH"
+        },
+        {
+          "id": "B072F7KYZ1",
+          "title": "Pepperidge Farm Milano Double Chocolate Cookies, 2Pack of 15 Ounce",
+          "image_url": "https://m.media-amazon.com/images/I/41jLE4Q65DL.jpg",
+          "source_url": "https://www.amazon.com/dp/B072F7KYZ1"
+        },
+        {
+          "id": "B018MRI1ZI",
+          "title": "No Bake Cookie Peanut Butter 32 Count Basket",
+          "image_url": "https://m.media-amazon.com/images/I/41otNVZnjdL.jpg",
+          "source_url": "https://www.amazon.com/dp/B018MRI1ZI"
+        },
+        {
+          "id": "B00G9U2O68",
+          "title": "Mrs. Fields Milk Chocolate Chip Cookies, 8 Ounce",
+          "image_url": "https://m.media-amazon.com/images/I/51VyHhUejiL.jpg",
+          "source_url": "https://www.amazon.com/dp/B00G9U2O68"
+        },
+        {
+          "id": "B00KO9IZ5E",
+          "title": "Jimmy Dean Sausage Egg and Cheese Biscuit Breakfast Sandwich 8 Count (Frozen)",
+          "image_url": "https://m.media-amazon.com/images/I/51Qx6p2KRML.jpg",
+          "source_url": "https://www.amazon.com/dp/B00KO9IZ5E"
+        },
+        {
+          "id": "B074N3M4VY",
+          "title": "Lotus Biscoff Non GMO European Biscuit Cookies, 8.8 Ounce (12 Count)",
+          "image_url": "https://m.media-amazon.com/images/I/51RbQvE+W5L.jpg",
+          "source_url": "https://www.amazon.com/dp/B074N3M4VY"
+        },
+        {
+          "id": "B0742KJTRQ",
+          "title": "Awesome Oat Cookies Birthday Gift Basket,12 Gourmet Cookies Large Size Assortment Cookies, 6 Walnut Chocolate Chip Oatmeal and 6 Peanut Butter Chip Chocolate Chip Pecan Oatmeal",
+          "image_url": "https://m.media-amazon.com/images/I/51-sKYunsXL.jpg",
+          "source_url": "https://www.amazon.com/dp/B0742KJTRQ"
+        },
+        {
+          "id": "B0882M7BDC",
+          "title": "Cocosette, Wafer Cookie Filled with Coconut Cream - 50g each (Pack of 36)",
+          "image_url": "https://m.media-amazon.com/images/I/41mD+Fry+XL.jpg",
+          "source_url": "https://www.amazon.com/dp/B0882M7BDC"
+        },
+        {
+          "id": "B088VRGYLS",
+          "title": "Father's Day Dad Assortment- Decorated Shortbread Cookies Individually Wrapped With Bow by BakersDozenToGo (6)",
+          "image_url": "https://m.media-amazon.com/images/I/51ggXhpFjtL.jpg",
+          "source_url": "https://www.amazon.com/dp/B088VRGYLS"
+        },
+        {
+          "id": "B07D6G7P76",
+          "title": "PALEO Diet Snacks Gift Basket: Mix of Whole Foods Protein Bars, Grain Free Granola, Cookies, Jerky Meat Sticks, Fruit & Nut Snacks Healthy Sampler Box",
+          "image_url": "https://m.media-amazon.com/images/I/510CPq3xyVL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07D6G7P76"
+        },
+        {
+          "id": "B08P48T4JZ",
+          "title": "SavorSouthEastAsia’s Pandan Coconut Biscotti - Pandan Flavoured Coconut Biscuits - Singapore-Inspired Gourmet Cookies - Delicious Coconut Snacks Healthy (80g) - Unique Gift",
+          "image_url": "https://m.media-amazon.com/images/I/51JeNLSm52L.jpg",
+          "source_url": "https://www.amazon.com/dp/B08P48T4JZ"
+        },
+        {
+          "id": "B06X6DC184",
+          "title": "CakeSupplyShop Item#061BSG Happy 61st Birthday Rainbow Thinking Of You Cookies, Candy & More Care Package Snack Gift Box Bundle Set",
+          "image_url": "https://m.media-amazon.com/images/I/51nuraJdqYL.jpg",
+          "source_url": "https://www.amazon.com/dp/B06X6DC184"
+        },
+        {
+          "id": "B008232WIA",
+          "title": "WOW Baking Company Gluten Free Cookies, Lemon Burst, 8 oz",
+          "image_url": "https://m.media-amazon.com/images/I/41cWyGEZIsL.jpg",
+          "source_url": "https://www.amazon.com/dp/B008232WIA"
+        },
+        {
+          "id": "B07V2RG2MM",
+          "title": "Rule Breakers Vegan Gluten Free Snacks | Chocolate Chip Brownie Cookie Bites | Plant-Based, Dairy, Nut, Soy, Allergen Free, Kosher | Soft-Baked School Snacks for Kids and Adults (Pack of 6)",
+          "image_url": "https://m.media-amazon.com/images/I/51X4ou2BvES.jpg",
+          "source_url": "https://www.amazon.com/dp/B07V2RG2MM"
+        },
+        {
+          "id": "B00BCUYBHU",
+          "title": "Balance Bar Cookie Dough Bar, 1.76 Ounce - 6 per case.",
+          "image_url": "https://m.media-amazon.com/images/I/41Od9cRz2JS.jpg",
+          "source_url": "https://www.amazon.com/dp/B00BCUYBHU"
+        },
+        {
+          "id": "B01NBW48TQ",
+          "title": "Christmas Holiday Gift Box | Gift Baskets Gluten Free with Gourmet Cookies Sweets Healthy Snacks and Nuts | Prime Food & Beverage Gifts for Girlfriend, Boyfriend, Husband and Wife (Large Box)",
+          "image_url": "https://m.media-amazon.com/images/I/510aZEHmIKL.jpg",
+          "source_url": "https://www.amazon.com/dp/B01NBW48TQ"
+        },
+        {
+          "id": "B07SH1DG3X",
+          "title": "Half Dipped Italian Cookies (2 lbs)",
+          "image_url": "https://m.media-amazon.com/images/I/51GHEOJIbhL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07SH1DG3X"
+        },
+        {
+          "id": "B08B8YFCPQ",
+          "title": "Fudge Covered Sandwich Cookies Variety Pack - Oreo Regular, Oreo Dark Chocolate and Oreo Mint Creme (27.7 oz Total) (3 Pack)",
+          "image_url": "https://m.media-amazon.com/images/I/51IQJvm56lL.jpg",
+          "source_url": "https://www.amazon.com/dp/B08B8YFCPQ"
+        },
+        {
+          "id": "B07MCNMG4H",
+          "title": "The Love Bug - Valentines Day Gift Loaded With Assorted Chocolates, Chocolate Covered Pretzels, Chocolate Chip Cookies, Chocolate Covered Oreos And More For Your Special Sweetie",
+          "image_url": "https://m.media-amazon.com/images/I/51a1vWhddrL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07MCNMG4H"
+        },
+        {
+          "id": "B087HF1CPT",
+          "title": "Nam's Bits Chocolate Chip Cookies -Beach Gallon Jar - LBB",
+          "image_url": "https://m.media-amazon.com/images/I/41PxB5sUVPL.jpg",
+          "source_url": "https://www.amazon.com/dp/B087HF1CPT"
+        },
+        {
+          "id": "B076PY12K1",
+          "title": "Strawberry Kirara Sandwich Cookie (15 Pieces)",
+          "image_url": "https://m.media-amazon.com/images/I/61XwiGZ0itL.jpg",
+          "source_url": "https://www.amazon.com/dp/B076PY12K1"
+        },
+        {
+          "id": "B093S4FV2J",
+          "title": "Diamond Bakery Hawaiian Coconut Cookies 4.5 oz",
+          "image_url": "https://m.media-amazon.com/images/I/51pFWNCmbzS.jpg",
+          "source_url": "https://www.amazon.com/dp/B093S4FV2J"
+        },
+        {
+          "id": "B07DD1R4ZM",
+          "title": "Grab The Gold Variety Pack 12 PBJ Baked Cookies and 12 Choc Peanut Butter Baked Cookies Protein Plant Based Gluten Free High Fiber",
+          "image_url": "https://m.media-amazon.com/images/I/61s1jK3U83L.jpg",
+          "source_url": "https://www.amazon.com/dp/B07DD1R4ZM"
+        },
+        {
+          "id": "B085DV3VT4",
+          "title": "OREO Thins Bites Fudge Dipped Sandwich Cookies, Latte Flavored Creme, 1 Pouch (6 oz.)",
+          "image_url": "https://m.media-amazon.com/images/I/51KvAwlJU-L.jpg",
+          "source_url": "https://www.amazon.com/dp/B085DV3VT4"
+        },
+        {
+          "id": "B0186VXC7M",
+          "title": "Newman's Own Organics Fat Free Fig Cookie Bar - 10 oz.",
+          "image_url": "https://m.media-amazon.com/images/I/41JNHHB0axL.jpg",
+          "source_url": "https://www.amazon.com/dp/B0186VXC7M"
+        },
+        {
+          "id": "B07MYMLXSR",
+          "title": "OREO Golden Sandwich Cookies, Vanilla Flavor, 1 Resealable Party Size Pack, 1.59 Pound",
+          "image_url": "https://m.media-amazon.com/images/I/51NBfeZbMXL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07MYMLXSR"
+        },
+        {
+          "id": "B00B4P50Z0",
+          "title": "Amaretti Di Saronno Cookies, 17.6 Ounce",
+          "image_url": "https://m.media-amazon.com/images/I/51AXWfJnZuL.jpg",
+          "source_url": "https://www.amazon.com/dp/B00B4P50Z0"
+        },
+        {
+          "id": "B004R9GJ3W",
+          "title": "Walkers Shortbread Pure Butter Traditional Assortment, Traditional Butter Shortbread Cookies, 17.6 Ounce, Assorted",
+          "image_url": "https://m.media-amazon.com/images/I/51bg8+-W+kL.jpg",
+          "source_url": "https://www.amazon.com/dp/B004R9GJ3W"
+        },
+        {
+          "id": "B07R1ZPYK9",
+          "title": "Nature Valley Crispy Creamy Wafer Bar, Peanut Butter Chocolate, 1.3 oz, 5 ct (Pack of 6)",
+          "image_url": "https://m.media-amazon.com/images/I/41JNSskwtvL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07R1ZPYK9"
+        },
+        {
+          "id": "B089Y5F4BC",
+          "title": "FDL Keto Friendly Protein Powder Cookie Butter (Oatmeal Cream Pie)",
+          "image_url": "https://m.media-amazon.com/images/I/51Ey0ekesYL.jpg",
+          "source_url": "https://www.amazon.com/dp/B089Y5F4BC"
+        },
+        {
+          "id": "B079567KVZ",
+          "title": "Happy Birthday Cookie Gift basket Tin filled with 21 individually hand decorated assorted colored black and whites. 7 bright colors Great Birthday Gift for HIM HER BOYS GIRLS MEN WOMEN PRIME DELIVERY",
+          "image_url": "https://m.media-amazon.com/images/I/510lYQdtFPL.jpg",
+          "source_url": "https://www.amazon.com/dp/B079567KVZ"
+        },
+        {
+          "id": "B00H46RS58",
+          "title": "OREO Chocolate Sandwich Cookies, Family Size, 12 - 19.1 Ounce Packs (Pack of 12)",
+          "image_url": "https://m.media-amazon.com/images/I/517lsfSAnAL.jpg",
+          "source_url": "https://www.amazon.com/dp/B00H46RS58"
+        },
+        {
+          "id": "B00EU79TNI",
+          "title": "MARUKORO sand cookie Tokyo Souvenir Gift in Japan Omiyage Cake 1 package of 15 pieces",
+          "image_url": "https://m.media-amazon.com/images/I/51iEgiIR1DL.jpg",
+          "source_url": "https://www.amazon.com/dp/B00EU79TNI"
+        },
+        {
+          "id": "B015HL27FM",
+          "title": "Trader Joe's Pumpkin Joe Joe’s Cookies 10.5 Ounces…",
+          "image_url": "https://m.media-amazon.com/images/I/51sZuJrbEXL.jpg",
+          "source_url": "https://www.amazon.com/dp/B015HL27FM"
+        },
+        {
+          "id": "B00MINXY3M",
+          "title": "Pozuelo Butter Cookies, 5.64 Ounce (Pack of 30)",
+          "image_url": "https://m.media-amazon.com/images/I/41NNIc8fCEL.jpg",
+          "source_url": "https://www.amazon.com/dp/B00MINXY3M"
+        },
+        {
+          "id": "B08QC2K145",
+          "title": "Oreo, Java Chip Flavored Creme Sandwich Cookies Family Size 17 Oz Pack 12, Chocolate, 12 Count",
+          "image_url": "https://m.media-amazon.com/images/I/51yD4BW5x5L.jpg",
+          "source_url": "https://www.amazon.com/dp/B08QC2K145"
+        },
+        {
+          "id": "B07MYMK6K1",
+          "title": "Festival Cookie Decor Kit - Enchanted Snowflake",
+          "image_url": "https://m.media-amazon.com/images/I/41o2FDoWB6L.jpg",
+          "source_url": "https://www.amazon.com/dp/B07MYMK6K1"
+        },
+        {
+          "id": "B00PT24IV6",
+          "title": "Simply Scrumptous Fat Free Carrot Cake and Low Fat Cookie",
+          "image_url": "https://m.media-amazon.com/images/I/51YaTfPTmFL.jpg",
+          "source_url": "https://www.amazon.com/dp/B00PT24IV6"
+        },
+        {
+          "id": "B07WXGBQSV",
+          "title": "VICTORIA Casino Galleta de Vainilla Sabor Fresa 258 grs. / Vanilla Cookies Filled with Strawberry Cream 10.1.",
+          "image_url": "https://m.media-amazon.com/images/I/51zGJssGvdL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07WXGBQSV"
+        },
+        {
+          "id": "B07KGHL3Y3",
+          "title": "Nibbles Gourmet Sinful Chocolate Lovers Gift Tray - Milk & Dark Chocolate Nuts, Cookies, Dried Fruit & More - Perfect for Birthdays, Parties, get well, Sympathy & all occasion Events",
+          "image_url": "https://m.media-amazon.com/images/I/51FiQqmQpdL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07KGHL3Y3"
+        },
+        {
+          "id": "B084XT44TP",
+          "title": "Back to Nature Non-GMO Cookies, Mini Golden Crème, 1 oz Grab & Go Bags, 6-count (Pack of 4)",
+          "image_url": "https://m.media-amazon.com/images/I/41Fo10vHXPL.jpg",
+          "source_url": "https://www.amazon.com/dp/B084XT44TP"
+        },
+        {
+          "id": "B08G5YM3TW",
+          "title": "Sweet Street Oreo Cookie Bash Pie (1 Count)",
+          "image_url": "https://m.media-amazon.com/images/I/51HMmTHpKZL.jpg",
+          "source_url": "https://www.amazon.com/dp/B08G5YM3TW"
+        },
+        {
+          "id": "B08637TCLJ",
+          "title": "Goya Maria Mini Bite Size Cookies (3 Pack, Total of 1050g)",
+          "image_url": "https://m.media-amazon.com/images/I/51sU37If18L.jpg",
+          "source_url": "https://www.amazon.com/dp/B08637TCLJ"
+        },
+        {
+          "id": "B00P9HO3B6",
+          "title": "Flathaus Fine Foods 92296 Maddys Sweet Shop 7 oz. - Raspberry Cookies - Pack of 6",
+          "image_url": "https://m.media-amazon.com/images/I/217v9B8J65L.jpg",
+          "source_url": "https://www.amazon.com/dp/B00P9HO3B6"
+        },
+        {
+          "id": "B08FRL4DJL",
+          "title": "Larabar, Fruit & Nut Bar, Chocolate Coconut Chew, Gluten Free, Vegan (16 Bars) & Gluten Free Bar, Peanut Butter Cookie, 1.7 oz Bars (16 Count), Whole Food, Dairy Free Snacks",
+          "image_url": "https://m.media-amazon.com/images/I/41ojbTUXUWL.jpg",
+          "source_url": "https://www.amazon.com/dp/B08FRL4DJL"
+        },
+        {
+          "id": "B004CVAV0C",
+          "title": "Lance Captain's Wafers Crackers Grilled Cheese - One Box of 8 Individual Packs",
+          "image_url": "https://m.media-amazon.com/images/I/51g0fuP74jL.jpg",
+          "source_url": "https://www.amazon.com/dp/B004CVAV0C"
+        },
+        {
+          "id": "B005P0JJ34",
+          "title": "Glutino Gluten Free Chocolate Vanilla Creme Cookies, 10.5 Ounce",
+          "image_url": "https://m.media-amazon.com/images/I/413CkVLrFwL.jpg",
+          "source_url": "https://www.amazon.com/dp/B005P0JJ34"
+        },
+        {
+          "id": "B07BQJYHW5",
+          "title": "7 Macarons Set - French Cookies Mix - Macaroons Made in USA by French Chefs - 12 Flavors Assortment",
+          "image_url": "https://m.media-amazon.com/images/I/41L6pb5fbAL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07BQJYHW5"
+        },
+        {
+          "id": "B07MDV8XB2",
+          "title": "Hammonds Cookie Dough Milk Chocolate Candy Bar Bundle - Three 2.25 Ounce Candy Bars",
+          "image_url": "https://m.media-amazon.com/images/I/51kAVJkzYvL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07MDV8XB2"
+        },
+        {
+          "id": "B00T77GUVA",
+          "title": "Betty Crocker Oatmeal Chocolate Chip Cookie Mix, 17.5 oz, 2 pk",
+          "image_url": "https://m.media-amazon.com/images/I/31DjmRQxR5L.jpg",
+          "source_url": "https://www.amazon.com/dp/B00T77GUVA"
+        },
+        {
+          "id": "B097D1X261",
+          "title": "Korean snack box variety pack assorted Individual Wrapped snacks - chips, cookies, candy, kimchi ramen noodle, cookies, pies, for kids, children, college, adult, birthday",
+          "image_url": "https://m.media-amazon.com/images/I/61fXTvdbI3L.jpg",
+          "source_url": "https://www.amazon.com/dp/B097D1X261"
+        },
+        {
+          "id": "B07YPTZ96T",
+          "title": "L'Orenta Stroopwafels Vanilla Wafer Cookies - 3 Bags, 24 Count Total | Great for Dunking In Coffee | Authentic Dutch Recipe, Non GMO, Made By Dutch Bakers , No Artificial Sweeteners",
+          "image_url": "https://m.media-amazon.com/images/I/51xyHElf+oS.jpg",
+          "source_url": "https://www.amazon.com/dp/B07YPTZ96T"
+        },
+        {
+          "id": "B0199CFEX2",
+          "title": "ZonePerfect Protein Bars, Chocolate Chip Cookie Dough, 10g of Protein, Nutrition Bars With Vitamins & Minerals, Great Taste Guaranteed, 20 Count (Pack of 2)",
+          "image_url": "https://m.media-amazon.com/images/I/419w8VhHsbL.jpg",
+          "source_url": "https://www.amazon.com/dp/B0199CFEX2"
+        },
+        {
+          "id": "B018T2T51A",
+          "title": "Low Carb Foods Country Biscuits | 100% All Natural Ingredients |Best Fresh Baked |No Sugar Diabetic Friendly | High Protein and Fiber | Artificial Sweetener Free | Tastes Great (6 Pack)",
+          "image_url": "https://m.media-amazon.com/images/I/51I10Oxz3CL.jpg",
+          "source_url": "https://www.amazon.com/dp/B018T2T51A"
+        },
+        {
+          "id": "B01M2Y5CB3",
+          "title": "Japanese Snacks Glico Pocky Chocolate Biscuit Stick, family 9 Packs Party Pack (3 packs)",
+          "image_url": "https://m.media-amazon.com/images/I/51MDAREDksL.jpg",
+          "source_url": "https://www.amazon.com/dp/B01M2Y5CB3"
+        },
+        {
+          "id": "B076ZXXKP4",
+          "title": "Goya, Sugar Free Maria Cookies, 200 Grams(gm)",
+          "image_url": "https://m.media-amazon.com/images/I/41IFPoTFijL.jpg",
+          "source_url": "https://www.amazon.com/dp/B076ZXXKP4"
+        },
+        {
+          "id": "B095M96YD7",
+          "title": "Trader Joe's Ube Tea Cookies Purple Yam Shortbread Cookies with Powdered Sugar, 10 oz (Pack of 1)",
+          "image_url": "https://m.media-amazon.com/images/I/51+KtPso-OS.jpg",
+          "source_url": "https://www.amazon.com/dp/B095M96YD7"
+        },
+        {
+          "id": "B00IV77P5C",
+          "title": "Jovial Einkorn Cookies | Crispy Cocoa Cookies | USDA Certified Organic | High Protein Cookies | Fair Trade Certified | All Natural Ingredients | Low Carb | Low Sugar | Palm Done Right | 8.8 oz",
+          "image_url": "https://m.media-amazon.com/images/I/51didqL51YL.jpg",
+          "source_url": "https://www.amazon.com/dp/B00IV77P5C"
+        },
+        {
+          "id": "B0085ILB52",
+          "title": "Doria Biscuits, Amaretti, 8.8-Ounce Bag",
+          "image_url": "https://m.media-amazon.com/images/I/5100UPNI0mL.jpg",
+          "source_url": "https://www.amazon.com/dp/B0085ILB52"
+        },
+        {
+          "id": "B08W9L25ZP",
+          "title": "Mello Marshmallow Party Pies Sandwich (Coconut) 6boxes, with 6 individually wrapped sandwich cookies 1 oz. 6 pies per box, 36 pies total!",
+          "image_url": "https://m.media-amazon.com/images/I/51nlJ5QO4qL.jpg",
+          "source_url": "https://www.amazon.com/dp/B08W9L25ZP"
+        },
+        {
+          "id": "B074P9L49P",
+          "title": "Circus Wagon Sprinkled Animal Cookies (24 Ct)",
+          "image_url": "https://m.media-amazon.com/images/I/51UEB0L-gML.jpg",
+          "source_url": "https://www.amazon.com/dp/B074P9L49P"
+        },
+        {
+          "id": "B009VHYIBA",
+          "title": "Dulcet Gift Baskets Favorite Wholesome Breakfast Oatmeal Raisin and Cranberry White Chip Cookie Gift Basket Great Gift for Friends, housewarmings and corporate business gifting events.",
+          "image_url": "https://m.media-amazon.com/images/I/51ujU9oDzNL.jpg",
+          "source_url": "https://www.amazon.com/dp/B009VHYIBA"
+        }
+      ],
+      "counts": {
+        "type_compatible": 8634,
+        "simulated_controlled": 4286,
+        "development_excluded": 0,
+        "subtype_filtered": 542,
+        "candidate_limit": 64,
+        "retained_for_images": 64
+      }
+    }
+  ],
+  "projected_fields": [
+    "asin",
+    "name",
+    "images[0]"
+  ],
+  "victim_memory_used": false,
+  "formal_queries_used": false,
+  "ownership_is_experimental_assumption": true
+}

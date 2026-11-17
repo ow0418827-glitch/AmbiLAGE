@@ -1,0 +1,61 @@
+{
+  "id": "B076JC9M8C",
+  "identity": {
+    "image_sha256": "8cd5d9125c6eeddbe2cd91e516b64f8a3c7b95b9df16e4e4bda3469076fa506c",
+    "annotation_models": {
+      "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+      "ocr_version": "1.4.4",
+      "ocr_weights": {
+        "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+        "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+        "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+      },
+      "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+      "segmentation_model_manifest_sha256": "a4f921331c3c6599a341f34269b2ae0123c6e5f77e6aa5bb249e92947309163c",
+      "code_sha256": "68d77a878d601a13fc4947b8f3d7fd228fda17b6090f14c778ba1b0bd290d734",
+      "device": "cuda",
+      "model_loaded_once": true
+    }
+  },
+  "image": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\images\\8cd5d9125c6eeddbe2cd91e516b64f8a3c7b95b9df16e4e4bda3469076fa506c.jpg",
+  "title": "BarberPub Classic Hydraulic Barber Chair Salon Styling Beauty Spa Chair 2065 (Black)",
+  "foreground_mask": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B076JC9M8C\\foreground.png",
+  "foreground_mask_sha256": "2021d751daa669fcfbfae2a29079386009841d446b4182e119f92da668ed955d",
+  "boxes": [
+    [
+      65,
+      5,
+      427,
+      491
+    ]
+  ],
+  "text_regions": [],
+  "ocr": [],
+  "segmentation_candidates": [
+    {
+      "index": 0,
+      "iou": 0.7282399535179138,
+      "foreground_ratio": 0.281784,
+      "rough_coverage": 0.658797820357709,
+      "accepted": true
+    },
+    {
+      "index": 1,
+      "iou": 0.9763620495796204,
+      "foreground_ratio": 0.422356,
+      "rough_coverage": 0.9766279320596869,
+      "accepted": true
+    },
+    {
+      "index": 2,
+      "iou": 0.9733957648277283,
+      "foreground_ratio": 0.380624,
+      "rough_coverage": 0.8878197011901747,
+      "accepted": true
+    }
+  ],
+  "selected_mask_index": 1,
+  "text_regions_reviewed": false,
+  "review_overlay": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B076JC9M8C\\review_overlay.png",
+  "observed_seconds": 0.6373916000011377
+}

@@ -158,15 +158,17 @@ python -B -X utf8 tools/run_experiment.py generate \
 
 1. 须先完成全部九组完整联合目标（`visual_inception_retrieval_semantic_perceptual_v2`）图片生成并冻结；缺组、测试夹具或早期无检索版本均会被拒绝。
 2. 沿用 `resources/evaluation_base/shared_memory/shared_memory.json` 一百八十九条完整共享长期记忆库，并将九组冻结源图同时替换进同一个修改库副本，不建按组隔离小库。
-3. 汇总输出写入 `category_retrieval_summary.json`（检索汇总）与 `REPORT.md`（评估报告），同时报告总体（一百八十条）、按协议分类（`training_oracle` 按 10/6/4 三类训练来源；`zero_overlap` 按五类问法各 4 条）及逐组（每组二十条）的原图与修改图 Top-1（首位）、Top-3（前三）、Top-5（前五）命中数、增量百分点与平均名次改善，并对每组全库候选分数执行独立复算。
-4. 明确区分检索覆盖与下游推荐：本接口仅反映检索阶段覆盖情况，不启动购物流程或策略模型；最终商品推荐或购买行为是否受到影响，须在下游推荐/购物阶段单独验证。
+3. 记忆库检索向量开关（`--key-mode {image,joint}`）：测试 `visual_inception`（视觉记忆植入方法）时默认使用 `image`（纯图片向量，`key_image_weight=1.0`，按原论文设定只编码记忆库图片）；测试其他方法（如 `lucid` 原始像素方法与 `ambilage` 环境光协同方法）时默认仍使用 `joint`（图文各半融合向量，`key_image_weight=0.5`）。两种模式均可通过 `--key-mode` 显式切换，以兼顾原论文口径与跨方法统一口径对照。
+4. 汇总输出写入 `category_retrieval_summary.json`（检索汇总）与 `REPORT.md`（评估报告），同时报告总体（一百八十条）、按协议分类（`training_oracle` 按 10/6/4 三类训练来源；`zero_overlap` 按五类问法各 4 条）及逐组（每组二十条）的原图与修改图 Top-1（首位）、Top-3（前三）、Top-5（前五）命中数、增量百分点与平均名次改善，并对每组全库候选分数执行独立复算。
+5. 明确区分检索覆盖与下游推荐：本接口仅反映检索阶段覆盖情况，不启动购物流程或策略模型；最终商品推荐或购买行为是否受到影响，须在下游推荐/购物阶段单独验证。
 
-常用命令示例（默认使用 `training_oracle`，传入 `--query-suite zero_overlap` 可切换零字面重合测试环境；评估器配置默认来自基础包 `evaluation_encoder.json`，也可通过 `--encoder-config` 显式指定）：
+常用命令示例（默认 `--query-suite training_oracle` 与 `--key-mode image`；传入 `--query-suite zero_overlap` 可切换零字面重合测试环境，传入 `--key-mode joint` 可切换图文联合记忆键；评估器配置默认来自基础包 `evaluation_encoder.json`，也可通过 `--encoder-config` 显式指定）：
 
 ```bash
 python -B -X utf8 tools/evaluate_visual_inception_category.py validate-queries
 python -B -X utf8 tools/evaluate_visual_inception_category.py validate-queries --query-suite zero_overlap
 python -B -X utf8 tools/evaluate_visual_inception_category.py evaluate --images-root output/visual_inception_full --output output/visual_inception_oracle_eval --device cuda --defense-mode none
+python -B -X utf8 tools/evaluate_visual_inception_category.py evaluate --key-mode joint --images-root output/visual_inception_full --output output/visual_inception_oracle_joint_eval --device cuda --defense-mode none
 python -B -X utf8 tools/evaluate_visual_inception_category.py evaluate --query-suite zero_overlap --images-root output/visual_inception_full --output output/visual_inception_category_eval --device cuda --defense-mode none
 python -B -X utf8 tools/evaluate_visual_inception_category.py verify --output output/visual_inception_oracle_eval --device cuda
 python -B -X utf8 tools/evaluate_visual_inception_category.py report --output output/visual_inception_oracle_eval

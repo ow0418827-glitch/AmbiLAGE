@@ -1,0 +1,145 @@
+{
+  "schema_version": 2,
+  "config": {
+    "schema_version": 2,
+    "strategy": "median",
+    "seed": 42,
+    "candidate_limit": 32,
+    "expand_candidate_limits": [
+      64,
+      128,
+      256
+    ],
+    "calibration_path": "output/datasets/public/calibration/shape_v2_verified/threshold.json",
+    "models": {
+      "batch_size": 16
+    },
+    "groups": [
+      {
+        "key": "01_camera",
+        "target_id": "B08V134QWR"
+      },
+      {
+        "key": "02_chair",
+        "target_id": "B09CYFD5BX"
+      },
+      {
+        "key": "03_cookies",
+        "target_id": "B08Z8MHWVS"
+      },
+      {
+        "key": "04_curtain",
+        "target_id": "B086PW7TWX"
+      },
+      {
+        "key": "05_hair_extension",
+        "target_id": "B01460C2I2"
+      },
+      {
+        "key": "06_jeans",
+        "target_id": "B09HH96NJY"
+      },
+      {
+        "key": "07_shampoo",
+        "target_id": "B00BDJODWI"
+      },
+      {
+        "key": "08_speaker",
+        "target_id": "B01N47U1VI"
+      },
+      {
+        "key": "09_toothbrush",
+        "target_id": "B09J81RMLD"
+      }
+    ],
+    "subtype_filters": {
+      "01_camera": {
+        "policy": "camera_device_only_v1",
+        "include": "\\bcameras?\\b|相机|摄像",
+        "exclude": "\\b(?:case|bag|strap|tripod|charger|battery|protector|mount|bracket|housing\\s+only|replacement\\s+(?:lens|cable|adapter))\\b"
+      },
+      "02_chair": {
+        "policy": "chair_seating_only_v1",
+        "include": "\\b(?:chairs?|stools?|armchairs?|recliners?)\\b|椅|凳",
+        "exclude": "\\b(?:seat\\s+cushion|chair\\s+(?:cover|mat|pad|protector|slipcover|wheels?|casters?)s?)\\b"
+      },
+      "03_cookies": {
+        "policy": "edible_cookies_only_v1",
+        "include": "\\b(?:cookies?|cookie\\s+dough|biscuits?|wafers?)\\b|饼干|曲奇",
+        "exclude": "\\b(?:cookie\\s+(?:cutter|jar|press|sheet|pan|stamp|mold|tin)s?|apron)\\b"
+      },
+      "04_curtain": {
+        "policy": "window_curtain_drapes_only_v1",
+        "include": "\\b(?:curtains?|drapes?)\\b|窗帘",
+        "exclude": "\\b(?:curtain\\s+(?:rod|ring|hook|clip|tieback|holdback|track|bracket|finial)s?|shower\\s+curtain\\s+(?:liner|hooks|rings))\\b"
+      },
+      "05_hair_extension": {
+        "policy": "hair_extensions_only_v1",
+        "include": "\\b(?:hair(?:\\s+\\w+){0,2}\\s+extensions?|wefts?|wigs?|hair\\s+bundles?)\\b|接发|假发",
+        "exclude": "\\b(?:shampoo|conditioner|lotion|body\\s+wash|wig\\s+(?:cap|stand|glue|brush|head)|adhesive|remover)\\b"
+      },
+      "06_jeans": {
+        "policy": "jeans_denim_pants_only_v1",
+        "include": "\\bjeans?\\b|\\bdenim\\s+(?:pants|trousers)\\b|牛仔裤",
+        "exclude": "\\b(?:jacket|shirt|skirt|dress|vest|purse|hat|doll|pet|dog|coat|hoodie|sweater)\\b|\\b(?:jeans?|denim)\\s+(?:shorts|jackets?|skirts?|belts?|bags?|caps?)\\b"
+      },
+      "07_shampoo": {
+        "policy": "shampoo_human_hair_only_v1",
+        "include": "\\bshampoos?\\b|洗发",
+        "exclude": "\\b(?:carpet|rug|upholstery|auto|car|pet|dog|cat|puppy|horse|equine|floor|machine|extracter|extractor|empty|wig|doll|cape|basin|station)\\b|\\bshampoo\\s+(?:brush|bowl|sink|mat|tray|cap|dispenser|bottles?\\s+set)s?\\b|\\brefillable\\b.*\\bbottles?\\b"
+      },
+      "08_speaker": {
+        "policy": "speakers_not_headphones_v1",
+        "include": "\\b(?:speakers?|soundbars?|loudspeakers?|subwoofers?)\\b|音箱|音响",
+        "exclude": "\\b(?:headphones?|earphones?|earbuds?|headsets?|speaker\\s+(?:wire|cable|stand|mount|grill|bracket|cover|case|bag)s?)\\b"
+      },
+      "09_toothbrush": {
+        "policy": "toothbrush_only_v1",
+        "include": "\\btoothbrush(?:es)?\\b|牙刷",
+        "exclude": "\\b(?:toothpaste|floss|teether|holder|organizer|sterilizer|travel\\s+case|wall\\s+mount)\\b"
+      }
+    },
+    "candidate_limits": {
+      "01_camera": 256,
+      "02_chair": 64,
+      "03_cookies": 128,
+      "04_curtain": 256,
+      "05_hair_extension": 32,
+      "06_jeans": 32,
+      "07_shampoo": 32,
+      "08_speaker": 256,
+      "09_toothbrush": 32
+    }
+  },
+  "selection": {
+    "seed": 42,
+    "calibration_path": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\datasets\\public\\calibration\\shape_v2_verified\\threshold.json",
+    "min_image_side": 64,
+    "strategy": "median"
+  },
+  "calibration_sha256": "22d3ce7cac1feaafa3058da8ac37cffb35781206d6f38c30f963ac0b78893cee",
+  "type_rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd",
+  "implementation_sha256": {
+    "src/visual/pair_selection.py": "075be248e7b56327b7f81b937bfb12d30ee4a491fdca7c8bf5fce798d917c336",
+    "src/visual/shape_calibration.py": "cba63f5963335bfb7b9e3127bdbb9f6a9ed40083cf1737df2bda7cfd3b292bb2",
+    "src/visual/selection/webshop_public.py": "08de07e660dc2dd29fbdf159b5284ffefadf964e5ff6899cb372f5f0c0bb6f22",
+    "src/experiments/public_pair_selection.py": "79c945f3aa3ea87bdc8dc2bf44774dc3f4ce6a28a58c28b7cbaea304574269b4"
+  },
+  "ownership_policy": "simulated_controlled_public_subset_sha256_even_v1",
+  "target_ids_fixed": [
+    "B08V134QWR",
+    "B09CYFD5BX",
+    "B08Z8MHWVS",
+    "B086PW7TWX",
+    "B01460C2I2",
+    "B09HH96NJY",
+    "B00BDJODWI",
+    "B01N47U1VI",
+    "B09J81RMLD"
+  ],
+  "formal_queries_used": false,
+  "victim_memory_used": false,
+  "shopping_allowed": false,
+  "annotation_scope": "drawn_source_and_target_only",
+  "empty_set_policy": "stop_without_relaxation"
+}

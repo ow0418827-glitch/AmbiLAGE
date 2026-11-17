@@ -1,0 +1,147 @@
+{
+  "id": "B09Q895GX6",
+  "identity": {
+    "image_sha256": "3b3a026d0bca7ffacface835b795c21ce445b57ceada232351646a7f4cacbd24",
+    "annotation_models": {
+      "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+      "ocr_version": "1.4.4",
+      "ocr_weights": {
+        "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+        "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+        "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+      },
+      "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+      "segmentation_model_manifest_sha256": "a4f921331c3c6599a341f34269b2ae0123c6e5f77e6aa5bb249e92947309163c",
+      "code_sha256": "68d77a878d601a13fc4947b8f3d7fd228fda17b6090f14c778ba1b0bd290d734",
+      "device": "cuda",
+      "model_loaded_once": true
+    }
+  },
+  "image": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\images\\3b3a026d0bca7ffacface835b795c21ce445b57ceada232351646a7f4cacbd24.jpg",
+  "title": "Kids U-Shaped Toothbrush, 360° Oral Teeth Cleaning Design for ChildrenToddler, Toothbrush with Food Grade Soft Silicone Brush Head, Manual Whole Mouth Toothbrush",
+  "foreground_mask": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B09Q895GX6\\foreground.png",
+  "foreground_mask_sha256": "08b7b677dc410096dff6630bc8c8d0e7c5fed0a61c7dc0bc6ca2555af43286f3",
+  "boxes": [
+    [
+      130,
+      24,
+      386,
+      471
+    ]
+  ],
+  "text_regions": [
+    [
+      0.582,
+      0.56,
+      0.716,
+      0.596
+    ],
+    [
+      0.576,
+      0.584,
+      0.722,
+      0.618
+    ],
+    [
+      0.588,
+      0.894,
+      0.708,
+      0.934
+    ]
+  ],
+  "ocr": [
+    {
+      "text": "儿证胶训练穿刷",
+      "confidence": 0.6307928221566337,
+      "polygon": [
+        [
+          294.0,
+          283.0
+        ],
+        [
+          355.0,
+          283.0
+        ],
+        [
+          355.0,
+          295.0
+        ],
+        [
+          294.0,
+          295.0
+        ]
+      ]
+    },
+    {
+      "text": "Training toothbrosh",
+      "confidence": 0.9232116341590881,
+      "polygon": [
+        [
+          291.0,
+          295.0
+        ],
+        [
+          358.0,
+          295.0
+        ],
+        [
+          358.0,
+          306.0
+        ],
+        [
+          291.0,
+          306.0
+        ]
+      ]
+    },
+    {
+      "text": "让金全号上制",
+      "confidence": 0.5618733068307241,
+      "polygon": [
+        [
+          298.0,
+          450.0
+        ],
+        [
+          351.0,
+          453.0
+        ],
+        [
+          350.0,
+          464.0
+        ],
+        [
+          297.0,
+          461.0
+        ]
+      ]
+    }
+  ],
+  "segmentation_candidates": [
+    {
+      "index": 0,
+      "iou": 0.6910008192062378,
+      "foreground_ratio": 0.169312,
+      "rough_coverage": 0.7241175055069137,
+      "accepted": true
+    },
+    {
+      "index": 1,
+      "iou": 0.9732258319854736,
+      "foreground_ratio": 0.227436,
+      "rough_coverage": 0.9794346852266628,
+      "accepted": true
+    },
+    {
+      "index": 2,
+      "iou": 0.9736320376396179,
+      "foreground_ratio": 0.223628,
+      "rough_coverage": 0.9630897950872777,
+      "accepted": true
+    }
+  ],
+  "selected_mask_index": 2,
+  "text_regions_reviewed": false,
+  "review_overlay": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B09Q895GX6\\review_overlay.png",
+  "observed_seconds": 0.884605899991584
+}

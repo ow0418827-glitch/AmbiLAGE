@@ -42,6 +42,8 @@ QUERY_SUITE_ROOTS = {
     'zero_overlap': ZERO_OVERLAP_QUERY_ROOT,
 }
 DEFAULT_QUERY_SUITE = 'training_oracle'
+KEY_MODES = ('image', 'joint')
+DEFAULT_KEY_MODE = 'image'
 
 QUERY_FAMILIES = (
     'category_direct',
@@ -398,6 +400,16 @@ def summarize_group_evaluation(eval_dir, group_query_manifest):
     rows = read_json(eval_dir / 'evaluation.json')
     q_doc = read_json(group_query_manifest)
     _require(eval_plan.get('query_mode') == 'text', '视觉记忆植入专用检索评估仅支持纯文字模式')
+    key_mode = eval_plan.get('key_mode') or ('image' if eval_plan.get('key_image_weight') == 1.0 else 'joint')
+    _require(key_mode in KEY_MODES, '评估计划中的记忆键模式无效')
+    expected_key_weight = 1.0 if key_mode == 'image' else 0.5
+    _require(eval_plan.get('key_image_weight') == expected_key_weight, '评估计划中的记忆键图像权重与模式不一致')
+    for row in rows:
+        proto = row.get('retrieval_protocol', {})
+        if 'key_mode' in proto:
+            _require(proto['key_mode'] == key_mode, '逐条件检索快照的记忆键模式与评估计划不一致')
+        if 'key_image_weight' in proto:
+            _require(proto['key_image_weight'] == expected_key_weight, '逐条件检索快照的记忆键图像权重与评估计划不一致')
     protocol = q_doc.get('evaluation_protocol')
     families, _, labels_zh, inferred_suite = _protocol_spec(protocol)
     records = q_doc.get('query_records', [])
@@ -467,6 +479,8 @@ def summarize_group_evaluation(eval_dir, group_query_manifest):
         group=q_doc['group'],
         protocol=protocol,
         query_suite=inferred_suite,
+        key_mode=key_mode,
+        key_image_weight=expected_key_weight,
         category=q_doc.get('category'),
         target_public_id=q_doc['target_public_id'],
         source_memory_id=eval_plan.get('source_memory_id'),
@@ -522,10 +536,20 @@ def build_category_summary(eval_root):
     protocol = plan.get('protocol') or validation['protocol']
     families, _, labels_zh, inferred_suite = _protocol_spec(protocol)
     groups = list(plan['groups'])
+    key_mode = plan.get('key_mode') or DEFAULT_KEY_MODE
+    _require(key_mode in KEY_MODES, '评估计划中的记忆键模式无效')
+    key_image_weight = 1.0 if key_mode == 'image' else 0.5
+    if 'key_image_weight' in plan:
+        _require(plan['key_image_weight'] == key_image_weight, '评估计划中的记忆键图像权重与模式不一致')
     per_group = {}
     for group in groups:
         group_query_path = Path(validation['groups'][group]['query_manifest'])
-        per_group[group] = summarize_group_evaluation(eval_root / 'groups' / group, group_query_path)
+        group_summary = summarize_group_evaluation(eval_root / 'groups' / group, group_query_path)
+        _require(
+            group_summary['key_mode'] == key_mode and group_summary['key_image_weight'] == key_image_weight,
+            f'组 {group} 记忆键编码模式与总计划不一致',
+        )
+        per_group[group] = group_summary
 
     condition_labels = [spec['label'] for spec in plan['selected_conditions']]
     primary_condition = 'none' if 'none' in condition_labels else condition_labels[0]
@@ -547,6 +571,8 @@ def build_category_summary(eval_root):
         training_overlap_mode=validation.get('training_overlap_mode'),
         method='visual_inception',
         query_mode='text',
+        key_mode=key_mode,
+        key_image_weight=key_image_weight,
         defense_mode=plan['defense_mode'],
         primary_condition=primary_condition,
         group_count=len(groups),
@@ -587,6 +613,7 @@ def evaluate_category_suite(
     base=EVALUATION_BASE,
     query_root=None,
     query_suite=DEFAULT_QUERY_SUITE,
+    key_mode=DEFAULT_KEY_MODE,
     device='cuda',
     defense_mode='none',
     encoder_config=None,
@@ -594,9 +621,12 @@ def evaluate_category_suite(
     defense_factory=None,
     verify_training_snapshots=True,
 ):
-    """在完整共享记忆库上执行视觉记忆植入九组检索评估（默认使用 training_oracle，可选 zero_overlap）。"""
+    """在完整共享记忆库上执行视觉记忆植入九组检索评估（默认使用 training_oracle 与纯图片记忆键）。"""
     if defense_mode not in ('none', 'panel'):
         raise ValueError('防御范围只能为 none 或 panel')
+    if key_mode not in KEY_MODES:
+        raise ValueError('记忆库检索键模式只能为 image 或 joint')
+    key_image_weight = 1.0 if key_mode == 'image' else 0.5
     base = Path(base).resolve()
     resolved_query_root = resolve_query_root(query_root, query_suite)
     output = Path(output).resolve()
@@ -641,6 +671,8 @@ def evaluate_category_suite(
         query_suite=validation['query_suite'],
         method='visual_inception',
         query_mode='text',
+        key_mode=key_mode,
+        key_image_weight=key_image_weight,
         defense_mode=defense_mode,
         selected_conditions=selected_conditions,
         base_path=str(base),
@@ -689,6 +721,7 @@ def evaluate_category_suite(
             selected_conditions=selected_conditions,
             encoder_config=effective_encoder_config,
             query_mode='text',
+            key_mode=key_mode,
             replacement_frozens=frozen_suite,
             bank_root=output / 'shared_banks',
             memory_vector_cache_dir=output / 'memory_vectors',
@@ -828,6 +861,13 @@ def report_category_suite(output):
     families = summary['query_families']
     labels_zh = summary['query_family_labels_zh']
     is_oracle = summary['protocol'] == ORACLE_PROTOCOL
+    key_mode = summary.get('key_mode', DEFAULT_KEY_MODE)
+    key_weight = summary.get('key_image_weight', 1.0 if key_mode == 'image' else 0.5)
+    key_mode_desc = (
+        f'纯图片向量 `image`（`key_image_weight={key_weight}`，按原论文只编码记忆库图片，不融合商品文字）'
+        if key_mode == 'image' else
+        f'图文各半融合向量 `joint`（`key_image_weight={key_weight}`，与本项目其他方法一致）'
+    )
 
     title = ('# 视觉记忆植入训练查询抽样（100% Oracle）检索评估报告'
              if is_oracle else '# 视觉记忆植入类别多样化（0% 重合）检索评估报告')
@@ -846,6 +886,7 @@ def report_category_suite(output):
         '## 实验口径与测试范围',
         '',
         f"- 评估协议：`{summary['protocol']}`（测试环境：`{summary.get('query_suite', 'training_oracle')}`，方法：`{summary['method']}`，查询模式：纯文字 `text`，主条件：`{primary}`）。",
+        f"- 记忆库检索键：{key_mode_desc}。",
         f"- 共享记忆库：{summary['pool_count']} 条完整共享库，全部 {summary['simultaneous_replacement_count']} 组冻结源图同时替换进入同一个修改库（不设按组隔离小库）。",
         query_desc,
         f"- 结果边界：{summary['scope_notice']['interpretation']}",
@@ -928,6 +969,12 @@ def main(argv=None):
         default=DEFAULT_QUERY_SUITE,
         help='测试查询环境：training_oracle（默认，每组从训练查询按 10/6/4 抽样）或 zero_overlap（0 字面重合五类问法）。',
     )
+    p_eval.add_argument(
+        '--key-mode',
+        choices=KEY_MODES,
+        default=DEFAULT_KEY_MODE,
+        help='记忆库检索向量模式：image（默认，按原论文只编码记忆库图片）或 joint（图文各半融合）。',
+    )
     p_eval.add_argument('--query-root', type=Path, default=None, help='显式覆盖测试查询目录')
     p_eval.add_argument('--device', choices=('cuda', 'cpu'), default='cuda')
     p_eval.add_argument('--defense-mode', choices=('none', 'panel'), default='none')
@@ -964,6 +1011,7 @@ def main(argv=None):
             base=args.base,
             query_root=args.query_root,
             query_suite=args.query_suite,
+            key_mode=args.key_mode,
             device=args.device,
             defense_mode=args.defense_mode,
             encoder_config=args.encoder_config,
@@ -971,6 +1019,8 @@ def main(argv=None):
         print(json.dumps(dict(
             output=result['output'],
             query_suite=result['summary']['query_suite'],
+            key_mode=result['summary']['key_mode'],
+            key_image_weight=result['summary']['key_image_weight'],
             protocol=result['summary']['protocol'],
             report_path=result['report_path'],
             summary_path=result['summary_path'],

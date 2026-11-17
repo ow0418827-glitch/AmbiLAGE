@@ -1,0 +1,329 @@
+{
+  "schema_version": 2,
+  "identity": {
+    "index_manifest_sha256": "b4c090d78effd75b49648ae4eacccf4726cd0442f420c89434ec4b573b37d827",
+    "groups": [
+      {
+        "key": "02_chair",
+        "target_id": "B09CYFD5BX"
+      }
+    ],
+    "seed": 42,
+    "candidate_limit": 32,
+    "ownership_policy": "simulated_controlled_public_subset_sha256_even_v1",
+    "excluded_ids": [
+      "B01N4IMDJB",
+      "B07815DPW1",
+      "B07C26NR9T",
+      "B07P9WKGBD",
+      "B07QKNWG41",
+      "B07VLL8QH4",
+      "B082LNGNQY",
+      "B082PVMF5R",
+      "B0842Z8WP5",
+      "B0894WFH5V",
+      "B08BC6DM66",
+      "B08NDPFGDR",
+      "B08PVNZR97",
+      "B08R3PZ7XG",
+      "B08TBHHHJ6",
+      "B08TTXMKCN",
+      "B08XX7F1DZ",
+      "B08XX9CRWY",
+      "B08ZMJGSSR",
+      "B092CJB124",
+      "B093JXX82Z",
+      "B093VHSY5W",
+      "B095X9ZDW9",
+      "B0987HQSKY",
+      "B098DXCK4M",
+      "B098F1FM1Z",
+      "B09CT6ZQF7",
+      "B09CTF1PR3",
+      "B09D7L69T3",
+      "B09FY3X27Y",
+      "B09G318HQR",
+      "B09GXN689Q",
+      "B09J1R6P1Y",
+      "B09JBLQP5Y",
+      "B09JT3Z6JV",
+      "B09L17NKYD",
+      "B09LQCBN17",
+      "B09LVH3W9Q",
+      "B09M9Z8T8V",
+      "B09MC1BYDP",
+      "B09MDZJDZC",
+      "B09MLZJNJX",
+      "B09MMB2YW1",
+      "B09MPH64JN",
+      "B09N1H7F6Z",
+      "B09NBL7NDY",
+      "B09NRTFC3Z",
+      "B09P7SZTLS",
+      "B09PL6X5MZ",
+      "B09PL77NP9",
+      "B09PL7BTKQ",
+      "B09Q8B4BB5",
+      "B09QRKLC7P",
+      "B09S9VSKXW",
+      "B09SHH4RDN",
+      "B09SKWPGK6",
+      "B09SY58YBC"
+    ],
+    "type_reviews": {},
+    "subtype_filters": {
+      "02_chair": {
+        "policy": "chair_seating_only_v1",
+        "include": "\\b(?:chairs?|stools?|armchairs?|recliners?)\\b|椅|凳",
+        "exclude": "\\b(?:seat\\s+cushion|chair\\s+(?:cover|mat|pad|protector|slipcover|wheels?|casters?)s?)\\b"
+      }
+    }
+  },
+  "index_path": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\datasets\\public\\public_products_v2.sqlite",
+  "index_manifest": {
+    "identity": {
+      "policy": "public_projection_json_or_normalized_sqlite_coarse_type_index_v3",
+      "source_kind": "normalized_catalog_sqlite",
+      "source_path": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\resources\\webshop\\catalog\\catalog.sqlite",
+      "source_bytes": 7136296960,
+      "source_mtime_ns": 1794599192500655300,
+      "type_rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+    },
+    "source_sha256": "cbfe10eb111814c7a45e82383173df4f601d08cc9f7d2fd3069429ee71ce42a2",
+    "scanned_products": 1181430,
+    "usable_public_products": 1180711,
+    "stored_fields": [
+      "id",
+      "title",
+      "image_url",
+      "source_url",
+      "category_derived_from_public_title"
+    ],
+    "private_fields_read": false,
+    "source_projection": "public_sql_fields_from_normalized_catalog",
+    "normalization_may_differ_from_original_raw_catalog": true
+  },
+  "scanned_products": 1181430,
+  "usable_public_products": 1180711,
+  "groups": [
+    {
+      "key": "02_chair",
+      "target": {
+        "id": "B09CYFD5BX",
+        "title": "LTHDD Bar Stool Swivel Barber Chair Hydraulic Barber Chairs Heavy Duty 360 Degrees Rolling Salon Chair for Hair Stylist Tattoo Chair Salon Equipment,Blue,1 (Color : Black, Size : 1)",
+        "image_url": "https://m.media-amazon.com/images/I/41pCHbsDbsS.jpg",
+        "source_url": "https://www.amazon.com/dp/B09CYFD5BX"
+      },
+      "candidates": [
+        {
+          "id": "B07MDKV69H",
+          "title": "Riverbay Furniture 30\" Backless Bar Stool in White Wash",
+          "image_url": "https://m.media-amazon.com/images/I/31UoYg6Cz2L.jpg",
+          "source_url": "https://www.amazon.com/dp/B07MDKV69H"
+        },
+        {
+          "id": "B07QF7YQ4K",
+          "title": "NauticalMart Modern Industrial Metal and Leather Aviation Accent Arm Chair Living Room Furniture",
+          "image_url": "https://m.media-amazon.com/images/I/41O-lXEgAeL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07QF7YQ4K"
+        },
+        {
+          "id": "B092DJ7CV2",
+          "title": "TOBBI Kids Desk and Chair Set, Height Adjustable, Ergonomic Student Workstation with Large Storage Book Stand, Blue (Blue)",
+          "image_url": "https://m.media-amazon.com/images/I/5115FHEIfyL.jpg",
+          "source_url": "https://www.amazon.com/dp/B092DJ7CV2"
+        },
+        {
+          "id": "B093C647GV",
+          "title": "mDesign Round Storage Ottoman Foot Rest Chair - Small Stool Furniture Organizer and Seat with Wood Legs for Dorm, Living Room, Office, Closet, Vanity, Bedroom, or Desk - Pink",
+          "image_url": "https://m.media-amazon.com/images/I/41Ax6ObNKyL.jpg",
+          "source_url": "https://www.amazon.com/dp/B093C647GV"
+        },
+        {
+          "id": "B00829YR1Y",
+          "title": "Acme 2-Piece All Star Set Chair and Ottoman, Baseball",
+          "image_url": "https://m.media-amazon.com/images/I/41gI1tXsfFL.jpg",
+          "source_url": "https://www.amazon.com/dp/B00829YR1Y"
+        },
+        {
+          "id": "B07YHCS9G7",
+          "title": "Topeakmart 24 Inches Counter Height Barstools w/Wood Seat Set of 4 Metal Counter Stool Kitchen Island Pub Dining Bar Chairs Rustic, 331Lb Black",
+          "image_url": "https://m.media-amazon.com/images/I/51USEwPN59L.jpg",
+          "source_url": "https://www.amazon.com/dp/B07YHCS9G7"
+        },
+        {
+          "id": "B08QRWLVJQ",
+          "title": "Shoe Bench Footstool and Pouffes Shoe Changing Stool at Home Entrance,Fabric Sofa Footrest,Balcony Comfortable Ottoman,Square Leisure Coffee Table Low Stool (Color : Yellow, Size : 585838cm)",
+          "image_url": "https://m.media-amazon.com/images/I/411hcHirzVL.jpg",
+          "source_url": "https://www.amazon.com/dp/B08QRWLVJQ"
+        },
+        {
+          "id": "B00QFWWZMI",
+          "title": "VERDUGO GIFT 10016180 Free As A Bird Stool, Multicolor",
+          "image_url": "https://m.media-amazon.com/images/I/41vbedXhcYS.jpg",
+          "source_url": "https://www.amazon.com/dp/B00QFWWZMI"
+        },
+        {
+          "id": "B091GBGMKM",
+          "title": "Chesterfield Sofa 2-Seater Modern Sectional Sofa Recliner Sofa Faux Leather Brown",
+          "image_url": "https://m.media-amazon.com/images/I/41LFyicVF1L.jpg",
+          "source_url": "https://www.amazon.com/dp/B091GBGMKM"
+        },
+        {
+          "id": "B09LCNG3CM",
+          "title": "Dungeons and Dragons Fleece Blanket Ultra-Soft Cozy Plush Blanket Throw Blankets Couch Chair,Living Room,Air Conditioning Cool Blankets 40\"x50\"",
+          "image_url": "https://m.media-amazon.com/images/I/41sqQX-QqsL.jpg",
+          "source_url": "https://www.amazon.com/dp/B09LCNG3CM"
+        },
+        {
+          "id": "B089D6T15H",
+          "title": "XMZDDZ Leather Square Tufted Footstool Ottoman,Foldable Storage Ottoman Cube Foot Rest Stool Seat,Square Toy Chest Padded with Memory Foam Lid White",
+          "image_url": "https://m.media-amazon.com/images/I/417aztewUIL.jpg",
+          "source_url": "https://www.amazon.com/dp/B089D6T15H"
+        },
+        {
+          "id": "B07C3J9615",
+          "title": "Christopher Knight Home Callie Fabric Dining Chair, Dark Blue",
+          "image_url": "https://m.media-amazon.com/images/I/31CClH7AhFL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07C3J9615"
+        },
+        {
+          "id": "B093C69YMF",
+          "title": "mDesign Natural Casual Ottoman Pouf Seat - Rustic Square Cube Poof Floor Chair for Living Room, Bedroom, Office, Playroom, and Nursery - Color Block - Black/Natural",
+          "image_url": "https://m.media-amazon.com/images/I/51O6HHlZ6NS.jpg",
+          "source_url": "https://www.amazon.com/dp/B093C69YMF"
+        },
+        {
+          "id": "B09BDFJPRG",
+          "title": "AYNEFY Vanity Table Set, 2‑Drawer Makeup Table Stool Set Large Storage Space Dressing Table with Flip Top Mirror for Bathroom, Bedroom",
+          "image_url": "https://m.media-amazon.com/images/I/315938OE1nS.jpg",
+          "source_url": "https://www.amazon.com/dp/B09BDFJPRG"
+        },
+        {
+          "id": "B09PDH68X8",
+          "title": "Hooseng Modern Mid-Century Accent Chair, PU Leather Single Sofa Armchair with Extra-Large Ergonomic Cushion and Sturdy Metal Frame for Living Room, Bedroom, Coffee",
+          "image_url": "https://m.media-amazon.com/images/I/418sLE-kmFL.jpg",
+          "source_url": "https://www.amazon.com/dp/B09PDH68X8"
+        },
+        {
+          "id": "B094Y2DRB9",
+          "title": "Kinsuite Children’s Sofa Rocking Chair, Cute PU Soft Leather Sofa, Crystal Embedded in The Sofa, High-Back Armrests, Suitable for Girls Kids Litter Princesses and Babies, Pink",
+          "image_url": "https://m.media-amazon.com/images/I/31WBIxLjo7L.jpg",
+          "source_url": "https://www.amazon.com/dp/B094Y2DRB9"
+        },
+        {
+          "id": "B09NRLNTGC",
+          "title": "QTQHOME Modern Pu Leather Storage Ottoman,Faux Leather Upholstered Footrest Stool Coffee Table for Living Bedroom Entryway,Rectangle Lift Top Storage Bench-White 80x40x40cm(31x16x16inch)",
+          "image_url": "https://m.media-amazon.com/images/I/31RfHupeQBL.jpg",
+          "source_url": "https://www.amazon.com/dp/B09NRLNTGC"
+        },
+        {
+          "id": "B075RF6D35",
+          "title": "Shiatsulogic Pedicure Chair Vibration Cover Cushion NEW 2-Tone Cappuccino & Sand",
+          "image_url": "https://m.media-amazon.com/images/I/41jx3FK5Z7L.jpg",
+          "source_url": "https://www.amazon.com/dp/B075RF6D35"
+        },
+        {
+          "id": "B08YFM598B",
+          "title": "Pingbo Student Desk and Chair Combo, Children Desk and Chairs Set, Height Adjustable Kids Desk Chair Set, Childs Art Writing Desk wih Drawer/Pencil Grooves/Hanging Hooks for Home School, Grey",
+          "image_url": "https://m.media-amazon.com/images/I/41ameU9cGDL.jpg",
+          "source_url": "https://www.amazon.com/dp/B08YFM598B"
+        },
+        {
+          "id": "B082KJLJWZ",
+          "title": "Modern Blue Velvet Gold Stool Ottoman Contemporary Solid Round Stainless Steel",
+          "image_url": "https://m.media-amazon.com/images/I/31bIXg60U3L.jpg",
+          "source_url": "https://www.amazon.com/dp/B082KJLJWZ"
+        },
+        {
+          "id": "B07QHD69LD",
+          "title": "GE&YOBBY Modern Plastic Stool,Transparent Colorful Footstool Acrylic Crystal Household Chair Fashion Creative bar Stool -A 26x46cm(10x18inch)",
+          "image_url": "https://m.media-amazon.com/images/I/31JQwu1ShiL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07QHD69LD"
+        },
+        {
+          "id": "B08NC3WVGP",
+          "title": "LIYANJJ Home Office Chair,Mid Back PC Swivel Lumbar Support Adjustable Desk Task Computer Ergonomic Comfortable Mesh Chair with Armrest",
+          "image_url": "https://m.media-amazon.com/images/I/41wGxjrpumL.jpg",
+          "source_url": "https://www.amazon.com/dp/B08NC3WVGP"
+        },
+        {
+          "id": "B07WTNXCNT",
+          "title": "Magshion 16 Color Changing LED Light Up Furniture Chair Bar Stool Barstool, Set of 1",
+          "image_url": "https://m.media-amazon.com/images/I/41sOYBG5nZL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07WTNXCNT"
+        },
+        {
+          "id": "B07CSZGFC6",
+          "title": "Humble Crew, Aqua Table & Green/Yellow Kids Lightweight Plastic Table and 2 Chairs Set, Square, Toddler",
+          "image_url": "https://m.media-amazon.com/images/I/41nFk6bUabL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07CSZGFC6"
+        },
+        {
+          "id": "B07VKLSZ4K",
+          "title": "GIA Tri-Fold Convertible Polyester Sofa Bed Chair with Removable Pillow and Legs, Yellow",
+          "image_url": "https://m.media-amazon.com/images/I/31ypCPOv3QL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07VKLSZ4K"
+        },
+        {
+          "id": "B09MTY957V",
+          "title": "Zrjyfw Kids/Adult Flannel Blanket 3D Printing Animation Game Throw Blanket Living Room Bedroom Sofa Chair Air Conditioning Blanket B-50\"x40\"",
+          "image_url": "https://m.media-amazon.com/images/I/51dNnVZmIFL.jpg",
+          "source_url": "https://www.amazon.com/dp/B09MTY957V"
+        },
+        {
+          "id": "B07BC9C9LD",
+          "title": "Best Choice Products Rocking Accent Chair, Tufted Upholstered Linen Wingback for Nursery, Living Room, Bedroom w/Wood Frame - Beige",
+          "image_url": "https://m.media-amazon.com/images/I/41u5AEns4yL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07BC9C9LD"
+        },
+        {
+          "id": "B09B237JXT",
+          "title": "Throw Pillow Covers,Decorative Boho Throw Pillow Covers Rose Gold Throw Pillow Covers Set of 4 Velvet Square Cushion Covers Pillow Case for Room Sofa Chair Bed Home Farmhouse(Pink 18X18 Inch)",
+          "image_url": "https://m.media-amazon.com/images/I/51Xs97f+I3L.jpg",
+          "source_url": "https://www.amazon.com/dp/B09B237JXT"
+        },
+        {
+          "id": "B08F3LZKSB",
+          "title": "YZZSJC Storage Stool Foot Stool Rest Ottoman Storage Boxes, Cloth Shoe Changing Stool Storage Box Minimalist Clothing Store Sofa Stool (Color : Light Blue, Size : 60x40x40cm)",
+          "image_url": "https://m.media-amazon.com/images/I/41DHDUi6WWL.jpg",
+          "source_url": "https://www.amazon.com/dp/B08F3LZKSB"
+        },
+        {
+          "id": "B07QR98VP7",
+          "title": "Velvet Pouf Ottoman Round, Foot Stool for Living Room, Floor Footrest Great for Bedroom and Kids Room Small Furniture 15.7\"x15.7\"x15.7\", Black",
+          "image_url": "https://m.media-amazon.com/images/I/41zVZSWC1sL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07QR98VP7"
+        },
+        {
+          "id": "B094ZNY7J8",
+          "title": "CAROMIO Boho Decorative Throw Pillow Covers 18 x18 Set of 4, Geometric Printing Pillow Cases Soft Farmhouse Home Decor Cushion Covers for Couch Sofa Bed Chair Car (Black and White)",
+          "image_url": "https://m.media-amazon.com/images/I/51wXSAXkEES.jpg",
+          "source_url": "https://www.amazon.com/dp/B094ZNY7J8"
+        },
+        {
+          "id": "B09339YNCR",
+          "title": "Zareas Soft Fluffy Faux Fur Throw Blanket, 50\" x 60\" Decorative Plush Fuzzy Throw, Warm Lightweight Furry Cozy Shaggy Fleece Blanket for Couch Bed Sofa Chair Travel Camping Home Decor Gift, Ice Blue",
+          "image_url": "https://m.media-amazon.com/images/I/510G10eYH2L.jpg",
+          "source_url": "https://www.amazon.com/dp/B09339YNCR"
+        }
+      ],
+      "counts": {
+        "type_compatible": 29983,
+        "simulated_controlled": 14946,
+        "development_excluded": 27,
+        "subtype_filtered": 6971,
+        "candidate_limit": 32,
+        "retained_for_images": 32
+      }
+    }
+  ],
+  "projected_fields": [
+    "asin",
+    "name",
+    "images[0]"
+  ],
+  "victim_memory_used": false,
+  "formal_queries_used": false,
+  "ownership_is_experimental_assumption": true
+}

@@ -1,0 +1,343 @@
+{
+  "id": "B07P48FLMK",
+  "identity": {
+    "image_sha256": "957de7c1803030d27e50576927d9afe6442438bb9b900d57f2a919f3bdb968f0",
+    "annotation_models": {
+      "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+      "ocr_version": "1.4.4",
+      "ocr_weights": {
+        "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+        "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+        "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+      },
+      "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+      "segmentation_model_manifest_sha256": "a4f921331c3c6599a341f34269b2ae0123c6e5f77e6aa5bb249e92947309163c",
+      "code_sha256": "68d77a878d601a13fc4947b8f3d7fd228fda17b6090f14c778ba1b0bd290d734",
+      "device": "cuda",
+      "model_loaded_once": true
+    }
+  },
+  "image": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\images\\957de7c1803030d27e50576927d9afe6442438bb9b900d57f2a919f3bdb968f0.jpg",
+  "title": "AQUAGE SeaExtend Volumizing Shampoo, Gentle, SeaExtend Thermal-V Technology Seals Heat Out, Luxurious Shampoo That Prevents Haircolor Fade and Thermal Styling Damage",
+  "foreground_mask": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B07P48FLMK\\foreground.png",
+  "foreground_mask_sha256": "598a4ea6a9f51300fb4ad4c33c609ac62fccabb62b0203a719d375ae930990e0",
+  "boxes": [
+    [
+      10,
+      6,
+      122,
+      491
+    ]
+  ],
+  "text_regions": [
+    [
+      0.2706766917293233,
+      0.186,
+      0.7293233082706767,
+      0.218
+    ],
+    [
+      0.17293233082706766,
+      0.208,
+      0.8195488721804511,
+      0.242
+    ],
+    [
+      0.21804511278195488,
+      0.232,
+      0.7819548872180451,
+      0.264
+    ],
+    [
+      0.2781954887218045,
+      0.268,
+      0.7218045112781954,
+      0.302
+    ],
+    [
+      0.3458646616541353,
+      0.32,
+      0.6390977443609023,
+      0.396
+    ],
+    [
+      0.21052631578947367,
+      0.752,
+      0.7969924812030075,
+      0.792
+    ],
+    [
+      0.24060150375939848,
+      0.78,
+      0.7669172932330827,
+      0.818
+    ],
+    [
+      0.14285714285714285,
+      0.814,
+      0.8646616541353384,
+      0.85
+    ],
+    [
+      0.22556390977443608,
+      0.838,
+      0.7744360902255639,
+      0.872
+    ],
+    [
+      0.2556390977443609,
+      0.882,
+      0.7669172932330827,
+      0.916
+    ]
+  ],
+  "ocr": [
+    {
+      "text": "SeaExtend\"",
+      "confidence": 0.9264714360237122,
+      "polygon": [
+        [
+          39.0,
+          96.0
+        ],
+        [
+          94.0,
+          96.0
+        ],
+        [
+          94.0,
+          106.0
+        ],
+        [
+          39.0,
+          106.0
+        ]
+      ]
+    },
+    {
+      "text": "Utimate ColorCare",
+      "confidence": 0.9189433771021226,
+      "polygon": [
+        [
+          26.0,
+          107.0
+        ],
+        [
+          106.0,
+          108.0
+        ],
+        [
+          106.0,
+          118.0
+        ],
+        [
+          26.0,
+          118.0
+        ]
+      ]
+    },
+    {
+      "text": "withThermal-Ve",
+      "confidence": 0.9162760760102954,
+      "polygon": [
+        [
+          32.0,
+          119.0
+        ],
+        [
+          101.0,
+          119.0
+        ],
+        [
+          101.0,
+          129.0
+        ],
+        [
+          32.0,
+          129.0
+        ]
+      ]
+    },
+    {
+      "text": "sulfate free",
+      "confidence": 0.9378402779499689,
+      "polygon": [
+        [
+          40.0,
+          137.0
+        ],
+        [
+          93.0,
+          138.0
+        ],
+        [
+          93.0,
+          148.0
+        ],
+        [
+          40.0,
+          147.0
+        ]
+      ]
+    },
+    {
+      "text": "e",
+      "confidence": 0.9384118318557739,
+      "polygon": [
+        [
+          49.0,
+          163.0
+        ],
+        [
+          82.0,
+          163.0
+        ],
+        [
+          82.0,
+          195.0
+        ],
+        [
+          49.0,
+          195.0
+        ]
+      ]
+    },
+    {
+      "text": "volumizing",
+      "confidence": 0.9954918086528778,
+      "polygon": [
+        [
+          32.0,
+          379.0
+        ],
+        [
+          103.0,
+          380.0
+        ],
+        [
+          102.0,
+          393.0
+        ],
+        [
+          31.0,
+          391.0
+        ]
+      ]
+    },
+    {
+      "text": "shampoo",
+      "confidence": 0.9919388379369464,
+      "polygon": [
+        [
+          35.0,
+          393.0
+        ],
+        [
+          99.0,
+          394.0
+        ],
+        [
+          99.0,
+          406.0
+        ],
+        [
+          35.0,
+          405.0
+        ]
+      ]
+    },
+    {
+      "text": "adds body and fuiness",
+      "confidence": 0.9180821918305897,
+      "polygon": [
+        [
+          22.0,
+          410.0
+        ],
+        [
+          112.0,
+          410.0
+        ],
+        [
+          112.0,
+          422.0
+        ],
+        [
+          22.0,
+          422.0
+        ]
+      ]
+    },
+    {
+      "text": "tofine,limp her",
+      "confidence": 0.8299266735712687,
+      "polygon": [
+        [
+          33.0,
+          422.0
+        ],
+        [
+          100.0,
+          422.0
+        ],
+        [
+          100.0,
+          433.0
+        ],
+        [
+          33.0,
+          433.0
+        ]
+      ]
+    },
+    {
+      "text": "DFL0Z/285.6ml",
+      "confidence": 0.7144496028239911,
+      "polygon": [
+        [
+          37.0,
+          444.0
+        ],
+        [
+          99.0,
+          444.0
+        ],
+        [
+          99.0,
+          455.0
+        ],
+        [
+          37.0,
+          455.0
+        ]
+      ]
+    }
+  ],
+  "segmentation_candidates": [
+    {
+      "index": 0,
+      "iou": 0.4603995680809021,
+      "foreground_ratio": 0.12398496240601503,
+      "rough_coverage": 0.14518554270545211,
+      "accepted": false
+    },
+    {
+      "index": 1,
+      "iou": 0.9926767349243164,
+      "foreground_ratio": 0.8013684210526316,
+      "rough_coverage": 0.9812508121554141,
+      "accepted": true
+    },
+    {
+      "index": 2,
+      "iou": 0.9934936165809631,
+      "foreground_ratio": 0.7971729323308271,
+      "rough_coverage": 0.9760901446100726,
+      "accepted": true
+    }
+  ],
+  "selected_mask_index": 2,
+  "text_regions_reviewed": false,
+  "review_overlay": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B07P48FLMK\\review_overlay.png",
+  "observed_seconds": 2.2812949000071967
+}

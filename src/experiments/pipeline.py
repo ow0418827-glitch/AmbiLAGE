@@ -56,6 +56,8 @@ def load_config(path):
         raise ValueError('完整流程不再接受按组记忆配置')
     if config.get('evaluation', {}).get('query_mode', 'joint') not in ('text', 'joint'):
         raise ValueError('正式查询模式只能是纯文字或图文联合')
+    if config.get('evaluation', {}).get('key_mode') not in (None, 'image', 'joint'):
+        raise ValueError('记忆库检索键模式只能为 image 或 joint')
     if config.get('evaluation', {}).get('defense_mode', 'panel') not in ('none', 'panel'):
         raise ValueError('防御范围只能为无防御或既有完整面板')
     return config
@@ -385,6 +387,8 @@ def main(argv=None):
     parser.add_argument('--method', choices=METHODS)
     parser.add_argument('--device', choices=('cpu', 'cuda'), default='cuda')
     parser.add_argument('--query-mode', choices=('text', 'joint'), help='正式询问采用纯文字或独立图文协议')
+    parser.add_argument('--key-mode', choices=('image', 'joint'), default=None,
+                        help='记忆库检索向量模式：未指定时 visual_inception 默认 image，其他方法默认 joint')
     parser.add_argument('--query-manifest', type=Path, help='显式复用已冻结的正式询问清单')
     parser.add_argument('--no-defense', action='store_true', help='仅运行无防御条件，不运行完整防御面板')
     parser.add_argument('--visual-inception-config', type=Path, help='视觉记忆植入基线的独立公开配置')
@@ -407,6 +411,8 @@ def main(argv=None):
     config = load_config(args.config)
     if args.query_mode is not None:
         config.setdefault('evaluation', {})['query_mode'] = args.query_mode
+    if args.key_mode is not None:
+        config.setdefault('evaluation', {})['key_mode'] = args.key_mode
     if args.query_manifest is not None:
         config.setdefault('evaluation', {})['query_manifest'] = str(args.query_manifest.resolve())
     if args.no_defense:
@@ -450,7 +456,7 @@ def main(argv=None):
             from src.experiments.shared_evaluation import evaluate, report
             frozen = load_frozen(method_root)
             settings = config.get('evaluation', {})
-            if set(settings) - {'shared_pool', 'query_manifest', 'query_mode', 'defense_mode', 'source_memory_id', 'encoder_config'}:
+            if set(settings) - {'shared_pool', 'query_manifest', 'query_mode', 'key_mode', 'defense_mode', 'source_memory_id', 'encoder_config'}:
                 raise ValueError('评估只接受共享池、正式查询图和评估端记忆标识')
             from src.experiments.defenses import conditions
             selected_conditions = ([c for c in conditions() if c['kind'] == 'none']
@@ -460,6 +466,7 @@ def main(argv=None):
                      query_manifest=project_path(settings.get('query_manifest', PRIVATE / 'query_image.json')),
                      source_memory_id=settings.get('source_memory_id'), device=args.device,
                      query_mode=settings.get('query_mode'),
+                     key_mode=settings.get('key_mode'),
                      selected_conditions=selected_conditions,
                      encoder_config=project_path(settings['encoder_config']) if settings.get('encoder_config') else None)
             report(method_root / 'evaluation')
@@ -471,6 +478,7 @@ def main(argv=None):
                 project_path(settings['encoder_config']) if settings.get('encoder_config') else None),
                 isolated_process=True,
                 query_mode=settings.get('query_mode'),
+                key_mode=settings.get('key_mode'),
                 query_manifest=project_path(settings['query_manifest']) if settings.get('query_manifest') else None)
         if args.stage == 'report':
             from src.experiments.shared_evaluation import report

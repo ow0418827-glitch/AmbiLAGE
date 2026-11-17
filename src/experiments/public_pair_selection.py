@@ -1,5 +1,6 @@
-"""轻量公开选图：公开索引→粗类型候选→灰度门槛抽样→仅选中图对标注→发布。"""
+"""轻量公开选图：公开索引→粗类型候选→灰度门槛取中位数（或均匀抽样）→仅选中图对标注→发布。"""
 import argparse
+from collections import Counter
 from dataclasses import asdict
 import os
 from src.paths import PUBLIC, PRIVATE, VISUAL_CONFIGS, EXPERIMENT_CONFIGS, public_root_for, ProjectPath as Path
@@ -8,7 +9,17 @@ import re
 from src.paths import DATA,OUTPUT,CONFIGS,PRIVATE,SHARED_MEMORY,PROJECT
 from src.visual.audit import digest,freeze_json,read_json,save_json
 from src.visual.image_utils import sha256_file
-from src.visual.pair_selection import SelectionConfig,LocalSelectionBackend,choose_pair,validate_product,verify_selection,validate_subtype_filter
+from src.visual.pair_selection import (
+    MEDIAN_SELECTION_POLICY,
+    SELECTION_POLICY,
+    VALID_SELECTION_STRATEGIES,
+    SelectionConfig,
+    LocalSelectionBackend,
+    choose_pair,
+    validate_product,
+    verify_selection,
+    validate_subtype_filter,
+)
 from src.visual.shape_calibration import calibrate,load_calibration
 from src.visual.catalog_training_guard import catalog_training_guard
 from src.visual.selection.webshop_public import extract_public_candidates,random_shortlist,download_shortlist,OWNERSHIP_POLICY
@@ -36,7 +47,8 @@ def public_path(value):
 
 def validate_config(config):
     required={'schema_version','seed','candidate_limit','calibration_path','groups'}
-    if not isinstance(config,dict) or not required<=set(config) or set(config)-required-{'models','type_reviews','subtype_filters'} or config['schema_version']!=2:
+    optional={'models','type_reviews','subtype_filters','strategy','expand_candidate_limits','candidate_limits'}
+    if not isinstance(config,dict) or not required<=set(config) or set(config)-required-optional or config['schema_version']!=2:
         raise ValueError('轻量选图须使用第二版配置；旧多指标配置只保留历史读取')
     if type(config['seed']) is not int or type(config['candidate_limit']) is not int or not 1<=config['candidate_limit']<=256:
         raise ValueError('种子须为整数，公开图片候选预算须在一至二百五十六之间')
@@ -48,8 +60,21 @@ def validate_config(config):
     if len({g['key'] for g in config['groups']})!=len(config['groups']) or len({g['target_id'] for g in config['groups']})!=len(config['groups']):
         raise ValueError('组名及公开目标编号须唯一')
     if set(config.get('models',{}))-{'dino_model','batch_size'}:raise ValueError('新选图阶段只使用单一冻结视觉模型')
+    strategy=config.get('strategy','median')
+    if strategy not in VALID_SELECTION_STRATEGIES:raise ValueError('选图策略只支持 median 或 uniform')
+    keys={g['key'] for g in config['groups']}
+    if 'candidate_limits' in config:
+        limits=config['candidate_limits']
+        if not isinstance(limits,dict) or set(limits)-keys:raise ValueError('按组候选预算只支持配置中的公开组名')
+        for value in limits.values():
+            if type(value) is not int or not 1<=value<=256:raise ValueError('按组候选预算须为一至二百五十六之间的整数')
+    if 'expand_candidate_limits' in config:
+        ladders=config['expand_candidate_limits']
+        if not isinstance(ladders,list) or not ladders or any(type(v) is not int or not config['candidate_limit']<=v<=256 for v in ladders):
+            raise ValueError('扩展候选预算阶梯须为不低于基础预算且不超过二百五十六的整数列表')
+        if any(b<=a for a,b in zip(ladders,ladders[1:])):raise ValueError('扩展候选预算阶梯须严格递增')
     if 'subtype_filters' in config:
-        filters=config['subtype_filters'];keys={g['key'] for g in config['groups']}
+        filters=config['subtype_filters']
         if not isinstance(filters,dict) or set(filters)-keys:raise ValueError('细分品类过滤只支持配置中的公开组名')
         for rule in filters.values():
             if rule is None:raise ValueError('细分品类过滤规则不能为空')
@@ -58,7 +83,11 @@ def validate_config(config):
 
 
 def selection_settings(config):
-    return SelectionConfig(seed=config['seed'],calibration_path=str(public_path(config['calibration_path'])))
+    return SelectionConfig(
+        seed=config['seed'],
+        calibration_path=str(public_path(config['calibration_path'])),
+        strategy=config.get('strategy','median'),
+    )
 
 
 def freeze_plan(config,root):
@@ -117,10 +146,73 @@ def select_groups(config,root,public,*,device='cuda',backend_factory=LocalSelect
             rows.append(dict(key=group['key'],status=result['status'],selection_path=str(path.resolve()),selection_sha256=sha256_file(path),
                 target=target,source=result.get('source'),candidate_count=len(candidates),eligible_count=sum(r['eligible'] for r in result['candidates'])))
     finally:backend.close()
+    scope='median_shape_after_public_shape_and_type_gates_v3' if settings.strategy=='median' else 'uniform_draw_after_public_shape_and_type_gates_v2'
     bundle=dict(schema_version=2,status='selected' if all(r['status']=='selected' for r in rows) else 'no_eligible_pair',
-        selection_scope='uniform_draw_after_public_shape_and_type_gates_v2',groups=rows,
+        selection_scope=scope,strategy=settings.strategy,groups=rows,
         public_plan_sha256=sha256_file(root/'PUBLIC_PLAN.json'),shared_memory_read=False,formal_queries_read=False,generation_runs=0)
     freeze_json(root/'PAIR_SELECTION_BUNDLE.json',bundle);return bundle
+
+
+def resolve_candidate_limits(config,products_path,index_path,root,public,*,device='cuda',verify_source=False,backend_factory=LocalSelectionBackend):
+    """按严格递增预算阶梯扩展合格数为零的组；不放宽外形门槛，并保留完整尝试记录。"""
+    root,public=Path(root),Path(public)
+    base_limits=dict(config.get('candidate_limits',{}))
+    ladders=list(config.get('expand_candidate_limits') or [])
+    if not ladders:
+        return dict(config),None
+    proof=read_json(public_path(config['calibration_path']))
+    reviews=read_json(public_path(config['type_reviews'])) if config.get('type_reviews') else {}
+    settings=selection_settings(config)
+    backend=backend_factory(config.get('models',{}),public/'selection_features',device)
+    resolved={};used=set();targets={g['target_id'] for g in config['groups']};history={}
+    try:
+        for group in config['groups']:
+            key=group['key']
+            start=base_limits.get(key,config['candidate_limit'])
+            steps=[start]+[v for v in ladders if v>start]
+            attempts=[];chosen_limit=steps[-1]
+            for limit in steps:
+                trial_dir=root/'expansion_rounds'/key/f'limit_{limit}'
+                extracted=extract_public_candidates(
+                    products_path,[group],trial_dir,seed=config['seed'],lexical_limit=limit,
+                    index_path=index_path,excluded_ids=proof['development_product_ids'],
+                    type_reviews=reviews,verify_source=verify_source,
+                    subtype_filters={key:config['subtype_filters'][key]} if key in config.get('subtype_filters',{}) else None,
+                )
+                short=random_shortlist(extracted,trial_dir)
+                downloads=download_shortlist(short,trial_dir,asset_output=public)
+                row_group=short['groups'][0]
+                target=downloaded_product(row_group['target'],downloads)
+                candidates=[downloaded_product(p,downloads,source=True) for p in row_group['candidates'] if p['id'] in downloads['records']]
+                reasons=Counter()
+                eligible_count=0;status='no_downloads';selected_id=None
+                if candidates:
+                    result=choose_pair(
+                        target,candidates,backend,settings,excluded_source_ids=used|targets,
+                        public_root=_public_root(public),
+                        calibration_public_root=(_public_root(settings.calibration_path),PUBLIC),
+                        subtype_filter=config.get('subtype_filters',{}).get(key),
+                    )
+                    status=result['status']
+                    selected_id=result.get('selected_source_id')
+                    for c in result['candidates']:
+                        if c['eligible']:eligible_count+=1
+                        else:reasons.update(c['rejected_reasons'])
+                attempts.append(dict(candidate_limit=limit,extracted_candidates=len(row_group['candidates']),
+                    downloaded_candidates=len(candidates),eligible_count=eligible_count,status=status,
+                    selected_source_id=selected_id,rejection_counts=dict(sorted(reasons.items()))))
+                chosen_limit=limit
+                if status=='selected':
+                    used.add(selected_id)
+                    break
+            resolved[key]=chosen_limit;history[key]=attempts
+    finally:
+        backend.close()
+    audit_log=dict(schema_version=1,strategy=settings.strategy,threshold_relaxed=False,
+        resolved_limits=resolved,attempts_by_group=history)
+    save_json(root/'EXPANSION_LOG.json',audit_log)
+    updated=dict(config);updated['candidate_limits']=resolved
+    return updated,audit_log
 
 
 def selected_inputs(root,public):
@@ -197,18 +289,31 @@ def publish_groups(root,public):
 def report(root,public):
     root=Path(root);bundle=read_json(root/'PAIR_SELECTION_BUNDLE.json')
     if bundle['public_plan_sha256']!=sha256_file(root/'PUBLIC_PLAN.json'):raise ValueError('公开报告与冻结计划不一致')
-    lines=['# 轻量公开图对抽样','',
-        '仅以类型兼容、灰度全局特征门槛及去重判断合格，使用冻结种子在合格集合均匀抽样。没有按最高相似分选图，也没有读取正式记忆或查询。','',
-        '|组别|目标编号|抽中原商品|图片候选数|合格数|单个合格候选抽中概率|','|---|---|---|---:|---:|---:|']
+    strategy=bundle.get('strategy','uniform')
+    title='# 轻量公开图对选取（中位数外形）' if strategy=='median' else '# 轻量公开图对抽样'
+    summary=('仅以类型兼容、灰度全局特征门槛及去重判断合格，并在合格集合中按灰度外形分数取中位数候选。没有读取正式记忆或查询。'
+             if strategy=='median' else '仅以类型兼容、灰度全局特征门槛及去重判断合格，使用冻结种子在合格集合均匀抽样。没有按最高相似分选图，也没有读取正式记忆或查询。')
+    lines=[title,'',summary,'',
+        '|组别|目标编号|选中原商品|图片候选数|合格数|选中外形分|合格外形中位数|',
+        '|---|---|---|---:|---:|---:|---:|']
     for row in bundle['groups']:
         if sha256_file(row['selection_path'])!=row['selection_sha256']:raise ValueError('公开抽样证据改变')
         selection=read_json(row['selection_path'])
         if row['status']=='selected':verify_selection(selection)
         source=row['source']['id'] if row['source'] else '未选出';n=row['eligible_count']
-        probability=f'1/{n}' if n else '无合格集合'
-        lines.append(f"|{row['key']}|{row['target']['id']}|{source}|{row['candidate_count']}|{n}|{probability}|")
+        draw=selection.get('draw') or {}
+        elig_scores=[c['shape_similarity'] for c in selection['candidates'] if c['eligible'] and c.get('shape_similarity') is not None]
+        if elig_scores:
+            sel_score=next((c['shape_similarity'] for c in selection['candidates'] if c['source_id']==source),None)
+            sorted_scores=sorted(elig_scores)
+            mid_score=sorted_scores[(len(sorted_scores)-1)//2]
+            sel_col=f'{sel_score:.4f}' if sel_score is not None else '-'
+            mid_col=f'{mid_score:.4f} (n={n})'
+        else:
+            sel_col='-';mid_col='无合格集合'
+        lines.append(f"|{row['key']}|{row['target']['id']}|{source}|{row['candidate_count']}|{n}|{sel_col}|{mid_col}|")
     lines+=['','选中图对才进行主体与印刷区标注；逐图视觉核对后发布到协议版本目录，每组继续使用 source、target 文件名。',
-        '外形分数是代理，不是攻击成功概率；此协议不保证原图在未知记忆库中位于前三之外。开发集商品与正式候选、目标不重叠。',
+        '外形分数是灰度代理，不等于正式图文检索排名或攻击成功概率。开发集商品与正式候选、目标不重叠。',
         '主体、品牌文字等公开核对不合格时停止发布，不根据正式结果重选。正式生成及购物不属于本次选图命令。','']
     path=root/'REPORT.md';path.write_text('\n'.join(lines),encoding='utf-8');return path
 
@@ -225,8 +330,13 @@ def main(argv=None):
     parser.add_argument('--verify-source',action='store_true')
     parser.add_argument('--root',type=Path,default=OUTPUT/'public_pair_selection/shape_v2')
     parser.add_argument('--public-root',type=Path,help='默认保存到本次结果目录的数据子目录')
+    parser.add_argument('--strategy',choices=VALID_SELECTION_STRATEGIES,help='覆盖配置中的合格集合选取方式（median 或 uniform）')
+    parser.add_argument('--expand-limits',nargs='+',type=int,help='当基础预算下某组合格数为零时逐步扩展到指定预算（不超过 256，不降门槛）')
     parser.add_argument('--device',choices=('cpu','cuda'),default='cuda')
-    args=parser.parse_args(argv);config=validate_config(read_json(args.config));root=args.root.resolve();public=public_path(args.public_root or root/'data')
+    args=parser.parse_args(argv);raw_config=read_json(args.config)
+    if args.strategy is not None:raw_config=dict(raw_config,strategy=args.strategy)
+    if args.expand_limits is not None:raw_config=dict(raw_config,expand_candidate_limits=list(args.expand_limits))
+    config=validate_config(raw_config);root=args.root.resolve();public=public_path(args.public_root or root/'data')
     if not root.is_relative_to(OUTPUT.resolve()):parser.error('运行输出须位于当前项目自己的输出目录')
     os.environ.update(HF_HUB_OFFLINE='1',TRANSFORMERS_OFFLINE='1',TOKENIZERS_PARALLELISM='false',PYTHONDONTWRITEBYTECODE='1')
     try:
@@ -240,16 +350,24 @@ def main(argv=None):
                 finally:backend.close()
                 save_json(root/'ACCESS_AUDIT_calibrate.json',{k:v for k,v in audit.items() if k!='active'})
                 print('公开开发集门槛已拟合并冻结。');return 0
-            if args.stage!='report':freeze_plan(config,root)
             if args.stage in ('prepare','all'):
                 if not args.products.is_file():
                     parser.error('未找到本项目已恢复商品库；请先恢复商城数据，或用 --products 指定公开商品文件')
+                if config.get('expand_candidate_limits'):
+                    config,_=resolve_candidate_limits(config,args.products,public_path(args.index),root,public,
+                        device=args.device,verify_source=args.verify_source)
+                freeze_plan(config,root)
                 proof=read_json(public_path(config['calibration_path']))
                 reviews=read_json(public_path(config['type_reviews'])) if config.get('type_reviews') else {}
                 extracted=extract_public_candidates(args.products,config['groups'],public,seed=config['seed'],
-                    lexical_limit=config['candidate_limit'],index_path=public_path(args.index),excluded_ids=proof['development_product_ids'],
+                    lexical_limit=config['candidate_limit'],candidate_limits=config.get('candidate_limits'),
+                    index_path=public_path(args.index),excluded_ids=proof['development_product_ids'],
                     type_reviews=reviews,verify_source=args.verify_source,subtype_filters=config.get('subtype_filters'))
                 download_shortlist(random_shortlist(extracted,public),public)
+            elif args.stage!='report':
+                if (root/'EXPANSION_LOG.json').is_file() and 'candidate_limits' not in config:
+                    config=dict(config,candidate_limits=read_json(root/'EXPANSION_LOG.json')['resolved_limits'])
+                freeze_plan(config,root)
             if args.stage in ('select','all'):
                 selected=select_groups(config,root,public,device=args.device)
                 if selected['status']!='selected':

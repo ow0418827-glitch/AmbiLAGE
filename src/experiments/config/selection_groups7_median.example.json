@@ -1,0 +1,55 @@
+{
+  "schema_version": 2,
+  "strategy": "median",
+  "seed": 42,
+  "candidate_limit": 32,
+  "expand_candidate_limits": [64, 128, 256],
+  "calibration_path": "output/datasets/public/calibration/shape_v2_verified/threshold.json",
+  "models": {"batch_size": 16},
+  "groups": [
+    {"key": "01_camera", "target_id": "B08V134QWR"},
+    {"key": "02_chair", "target_id": "B09CYFD5BX"},
+    {"key": "03_cookies", "target_id": "B08Z8MHWVS"},
+    {"key": "05_hair_extension", "target_id": "B01460C2I2"},
+    {"key": "06_jeans", "target_id": "B09HH96NJY"},
+    {"key": "07_shampoo", "target_id": "B00BDJODWI"},
+    {"key": "09_toothbrush", "target_id": "B09J81RMLD"}
+  ],
+  "subtype_filters": {
+    "01_camera": {
+      "policy": "camera_device_only_v1",
+      "include": "\\bcameras?\\b|相机|摄像",
+      "exclude": "\\b(?:case|bag|strap|tripod|charger|battery|protector|mount|bracket|housing\\s+only|replacement\\s+(?:lens|cable|adapter))\\b"
+    },
+    "02_chair": {
+      "policy": "chair_seating_only_v1",
+      "include": "\\b(?:chairs?|stools?|armchairs?|recliners?)\\b|椅|凳",
+      "exclude": "\\b(?:seat\\s+cushion|chair\\s+(?:cover|mat|pad|protector|slipcover|wheels?|casters?)s?)\\b"
+    },
+    "03_cookies": {
+      "policy": "edible_cookies_not_icecream_v3",
+      "include": "\\b(?:cookies?|cookie\\s+dough|biscuits?|wafers?)\\b|饼干|曲奇",
+      "exclude": "\\b(?:cookie\\s+(?:cutter|jar|press|sheet|pan|stamp|mold|tin)s?|apron|ice\\s*cream|gelato|sorbet|sundae|frozen\\s+(?:dairy\\s+)?dessert|frozen\\s+treat|milkshake|cookies\\s*(?:&|and|n)\\s*cream)\\b"
+    },
+    "05_hair_extension": {
+      "policy": "hair_extensions_only_no_wigs_v2",
+      "include": "\\b(?:hair(?:\\s+\\w+){0,2}\\s+extensions?|wefts?|hair\\s+bundles?|clip[ -]?in\\s+hair)\\b|接发",
+      "exclude": "\\b(?:wigs?|shampoo|conditioner|lotion|body\\s+wash|wig\\s+(?:cap|stand|glue|brush|head)|adhesive|remover)\\b"
+    },
+    "06_jeans": {
+      "policy": "jeans_denim_pants_only_v1",
+      "include": "\\bjeans?\\b|\\bdenim\\s+(?:pants|trousers)\\b|牛仔裤",
+      "exclude": "\\b(?:jacket|shirt|skirt|dress|vest|purse|hat|doll|pet|dog|coat|hoodie|sweater)\\b|\\b(?:jeans?|denim)\\s+(?:shorts|jackets?|skirts?|belts?|bags?|caps?)\\b"
+    },
+    "07_shampoo": {
+      "policy": "shampoo_human_hair_only_v1",
+      "include": "\\bshampoos?\\b|洗发",
+      "exclude": "\\b(?:carpet|rug|upholstery|auto|car|pet|dog|cat|puppy|horse|equine|floor|machine|extracter|extractor|empty|wig|doll|cape|basin|station)\\b|\\bshampoo\\s+(?:brush|bowl|sink|mat|tray|cap|dispenser|bottles?\\s+set)s?\\b|\\brefillable\\b.*\\bbottles?\\b"
+    },
+    "09_toothbrush": {
+      "policy": "toothbrush_only_v1",
+      "include": "\\btoothbrush(?:es)?\\b|牙刷",
+      "exclude": "\\b(?:toothpaste|floss|teether|holder|organizer|sterilizer|travel\\s+case|wall\\s+mount)\\b"
+    }
+  }
+}

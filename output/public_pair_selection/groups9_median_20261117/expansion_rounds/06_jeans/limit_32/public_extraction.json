@@ -1,0 +1,329 @@
+{
+  "schema_version": 2,
+  "identity": {
+    "index_manifest_sha256": "b4c090d78effd75b49648ae4eacccf4726cd0442f420c89434ec4b573b37d827",
+    "groups": [
+      {
+        "key": "06_jeans",
+        "target_id": "B09HH96NJY"
+      }
+    ],
+    "seed": 42,
+    "candidate_limit": 32,
+    "ownership_policy": "simulated_controlled_public_subset_sha256_even_v1",
+    "excluded_ids": [
+      "B01N4IMDJB",
+      "B07815DPW1",
+      "B07C26NR9T",
+      "B07P9WKGBD",
+      "B07QKNWG41",
+      "B07VLL8QH4",
+      "B082LNGNQY",
+      "B082PVMF5R",
+      "B0842Z8WP5",
+      "B0894WFH5V",
+      "B08BC6DM66",
+      "B08NDPFGDR",
+      "B08PVNZR97",
+      "B08R3PZ7XG",
+      "B08TBHHHJ6",
+      "B08TTXMKCN",
+      "B08XX7F1DZ",
+      "B08XX9CRWY",
+      "B08ZMJGSSR",
+      "B092CJB124",
+      "B093JXX82Z",
+      "B093VHSY5W",
+      "B095X9ZDW9",
+      "B0987HQSKY",
+      "B098DXCK4M",
+      "B098F1FM1Z",
+      "B09CT6ZQF7",
+      "B09CTF1PR3",
+      "B09D7L69T3",
+      "B09FY3X27Y",
+      "B09G318HQR",
+      "B09GXN689Q",
+      "B09J1R6P1Y",
+      "B09JBLQP5Y",
+      "B09JT3Z6JV",
+      "B09L17NKYD",
+      "B09LQCBN17",
+      "B09LVH3W9Q",
+      "B09M9Z8T8V",
+      "B09MC1BYDP",
+      "B09MDZJDZC",
+      "B09MLZJNJX",
+      "B09MMB2YW1",
+      "B09MPH64JN",
+      "B09N1H7F6Z",
+      "B09NBL7NDY",
+      "B09NRTFC3Z",
+      "B09P7SZTLS",
+      "B09PL6X5MZ",
+      "B09PL77NP9",
+      "B09PL7BTKQ",
+      "B09Q8B4BB5",
+      "B09QRKLC7P",
+      "B09S9VSKXW",
+      "B09SHH4RDN",
+      "B09SKWPGK6",
+      "B09SY58YBC"
+    ],
+    "type_reviews": {},
+    "subtype_filters": {
+      "06_jeans": {
+        "policy": "jeans_denim_pants_only_v1",
+        "include": "\\bjeans?\\b|\\bdenim\\s+(?:pants|trousers)\\b|牛仔裤",
+        "exclude": "\\b(?:jacket|shirt|skirt|dress|vest|purse|hat|doll|pet|dog|coat|hoodie|sweater)\\b|\\b(?:jeans?|denim)\\s+(?:shorts|jackets?|skirts?|belts?|bags?|caps?)\\b"
+      }
+    }
+  },
+  "index_path": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\datasets\\public\\public_products_v2.sqlite",
+  "index_manifest": {
+    "identity": {
+      "policy": "public_projection_json_or_normalized_sqlite_coarse_type_index_v3",
+      "source_kind": "normalized_catalog_sqlite",
+      "source_path": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\resources\\webshop\\catalog\\catalog.sqlite",
+      "source_bytes": 7136296960,
+      "source_mtime_ns": 1794599192500655300,
+      "type_rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+    },
+    "source_sha256": "cbfe10eb111814c7a45e82383173df4f601d08cc9f7d2fd3069429ee71ce42a2",
+    "scanned_products": 1181430,
+    "usable_public_products": 1180711,
+    "stored_fields": [
+      "id",
+      "title",
+      "image_url",
+      "source_url",
+      "category_derived_from_public_title"
+    ],
+    "private_fields_read": false,
+    "source_projection": "public_sql_fields_from_normalized_catalog",
+    "normalization_may_differ_from_original_raw_catalog": true
+  },
+  "scanned_products": 1181430,
+  "usable_public_products": 1180711,
+  "groups": [
+    {
+      "key": "06_jeans",
+      "target": {
+        "id": "B09HH96NJY",
+        "title": "Womens High Rise Jeans Wide Leg Pants Patchwork Straight Boyfriend Jeans Y2K 90s E-Girl Wild Baggy Trousers Denim Pants",
+        "image_url": "https://m.media-amazon.com/images/I/31l3Rj0rakL.jpg",
+        "source_url": "https://www.amazon.com/dp/B09HH96NJY"
+      },
+      "candidates": [
+        {
+          "id": "B07FRKQNFV",
+          "title": "Cinch Men's Bronze Label Tapered Slim Fit Jeans Dark Stone 29W x 32L",
+          "image_url": "https://m.media-amazon.com/images/I/41IqtDtmAuL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07FRKQNFV"
+        },
+        {
+          "id": "B09MCWH775",
+          "title": "Aoiuselh Women Patchwork Jeans High Waisted Straight Denim Pants Embroidered Bell Bottom Jeans Distressed Baggy Trouser",
+          "image_url": "https://m.media-amazon.com/images/I/416KvgK1RaL.jpg",
+          "source_url": "https://www.amazon.com/dp/B09MCWH775"
+        },
+        {
+          "id": "B078XR5157",
+          "title": "Boyland Mens Casual Night Club Metallic Moto Jeans Style Flat Front Suit Pants Straight Leg Trousers Disco",
+          "image_url": "https://m.media-amazon.com/images/I/41cx2MXi2vL.jpg",
+          "source_url": "https://www.amazon.com/dp/B078XR5157"
+        },
+        {
+          "id": "B01HIGTOPA",
+          "title": "PAIGE Men's Lennox Cellar Jeans",
+          "image_url": "https://m.media-amazon.com/images/I/31-mNE0ISqL.jpg",
+          "source_url": "https://www.amazon.com/dp/B01HIGTOPA"
+        },
+        {
+          "id": "B099DSB3X6",
+          "title": "Sexy Tops for Women Summer Lapel Cold Shoulder Denim Jean Shirts Button Down Blouse Casual Tee Shirts",
+          "image_url": "https://m.media-amazon.com/images/I/41yYlbUeYRS.jpg",
+          "source_url": "https://www.amazon.com/dp/B099DSB3X6"
+        },
+        {
+          "id": "B08Q3CLMQW",
+          "title": "Andongnywell Womens Mid Waisted Bell Bottom Jeans Bootcut Straight Wide Leg Jean Button Stretch Denim Pants Trousers",
+          "image_url": "https://m.media-amazon.com/images/I/41EiieDeLCL.jpg",
+          "source_url": "https://www.amazon.com/dp/B08Q3CLMQW"
+        },
+        {
+          "id": "B07TSNJCRV",
+          "title": "GOMYIE Trousers Wallet Key Chain Pant Jean Gothic Rock Hip Hop Punk(Silver color)",
+          "image_url": "https://m.media-amazon.com/images/I/51bDISxPubL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07TSNJCRV"
+        },
+        {
+          "id": "B09PTK89G4",
+          "title": "YDHWY Jeans Denim Men European and American Casual Long Four Season Black Jeans Large Size (Color : Black, Size : 30 Code)",
+          "image_url": "https://m.media-amazon.com/images/I/31jA2In1WZL.jpg",
+          "source_url": "https://www.amazon.com/dp/B09PTK89G4"
+        },
+        {
+          "id": "B094MQK4C9",
+          "title": "Women Ripped Jeans Loose Distressed Boyfriends Jeans Frayed Ankle Skinny Denim Pants Knees Hole Trousers",
+          "image_url": "https://m.media-amazon.com/images/I/41eaRutdamS.jpg",
+          "source_url": "https://www.amazon.com/dp/B094MQK4C9"
+        },
+        {
+          "id": "B07JYBC84P",
+          "title": "Pepe Jeans London Eau De Parfum Spray for Women, 2.7 Fluid Ounce",
+          "image_url": "https://m.media-amazon.com/images/I/41KnJdBXvnL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07JYBC84P"
+        },
+        {
+          "id": "B09B1YD16M",
+          "title": "Cekaso Men's Denim Jogger Pants Hip Hop Cargo Streetwear Overall Harem Sports Casual Jeans Trousers",
+          "image_url": "https://m.media-amazon.com/images/I/41TGoTdkxGL.jpg",
+          "source_url": "https://www.amazon.com/dp/B09B1YD16M"
+        },
+        {
+          "id": "B08WTDX8V2",
+          "title": "Joe's Jeans mens 4 Pack No Show - Solids Whites W/ Contrash Heel and Toe Socks, White, 9 1 US",
+          "image_url": "https://m.media-amazon.com/images/I/31W5WYl9+9L.jpg",
+          "source_url": "https://www.amazon.com/dp/B08WTDX8V2"
+        },
+        {
+          "id": "B09S3D3R53",
+          "title": "Women's Ripped Boyfriend Jeans High Waisted Skinny Destroyed Ripped Hole Denim Pants Long Stretch Pencil Jeans",
+          "image_url": "https://m.media-amazon.com/images/I/41+fp2MSgNL.jpg",
+          "source_url": "https://www.amazon.com/dp/B09S3D3R53"
+        },
+        {
+          "id": "B09J89KXRJ",
+          "title": "MOKINGTOP Women's Winter Sherpa Fleece Lined Jeans, Thick Cashmere Warm Pants High Waisted Warm Thermal Pants Leggings",
+          "image_url": "https://m.media-amazon.com/images/I/31G64s7+Y7L.jpg",
+          "source_url": "https://www.amazon.com/dp/B09J89KXRJ"
+        },
+        {
+          "id": "B08NV5452X",
+          "title": "Levi's Women's 721 Exposed Button High Rise Skinny Jeans",
+          "image_url": "https://m.media-amazon.com/images/I/313UNpOwGNL.jpg",
+          "source_url": "https://www.amazon.com/dp/B08NV5452X"
+        },
+        {
+          "id": "B07KGS4WP2",
+          "title": "Women's Jeans Skinny Ripped Holes Jeans Pants High Waist Stretch Slim Pencil Trousers Butt Lift Destroyed Denim Jeans",
+          "image_url": "https://m.media-amazon.com/images/I/41bHeIJ5rkL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07KGS4WP2"
+        },
+        {
+          "id": "B01BUABEPS",
+          "title": "Fourstar Skateboard Pants Koston Signature Jean Old Brick Size 32",
+          "image_url": "https://m.media-amazon.com/images/I/41P6WmC578L.jpg",
+          "source_url": "https://www.amazon.com/dp/B01BUABEPS"
+        },
+        {
+          "id": "B07W81NL4X",
+          "title": "ARIAT Women's Dark R.E.A.L. Bootcut Jeans",
+          "image_url": "https://m.media-amazon.com/images/I/41hKbxzGtTL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07W81NL4X"
+        },
+        {
+          "id": "B06Y5K8T34",
+          "title": "Level 7 Men's Relaxed Straight Premium Denim Jeans with Handcrafted Wash & Whiskering in Basic 5-Pocket Style",
+          "image_url": "https://m.media-amazon.com/images/I/4177xOtK6pL.jpg",
+          "source_url": "https://www.amazon.com/dp/B06Y5K8T34"
+        },
+        {
+          "id": "B07YQNY3XW",
+          "title": "Women's High Waisted Butt Lift Stretch Ripped Skinny Jeans Distressed Denim Pants",
+          "image_url": "https://m.media-amazon.com/images/I/31kjw9g8GQL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07YQNY3XW"
+        },
+        {
+          "id": "B0956BK98Z",
+          "title": "Canrulo Women Heart Shaped Cutout High Waist Jeans Y2K Fashion Baggy Denim Wide Leg Straight Pants Loose Trousers Streetwear",
+          "image_url": "https://m.media-amazon.com/images/I/31baUMWvchS.jpg",
+          "source_url": "https://www.amazon.com/dp/B0956BK98Z"
+        },
+        {
+          "id": "B09PV8LJJN",
+          "title": "siilsaa Jeans for Women High Waisted Distressed Denim Joggers Heart Embroidered Wide Leg Elastic Baggy Pants Boyfriend Jeans",
+          "image_url": "https://m.media-amazon.com/images/I/31rOj9uOv5L.jpg",
+          "source_url": "https://www.amazon.com/dp/B09PV8LJJN"
+        },
+        {
+          "id": "B09156CKZN",
+          "title": "Gloria Vanderbilt Women's Amanda Capri Jeans",
+          "image_url": "https://m.media-amazon.com/images/I/41WTw67YbZS.jpg",
+          "source_url": "https://www.amazon.com/dp/B09156CKZN"
+        },
+        {
+          "id": "B09RP2Z52L",
+          "title": "Mens Skinny Jeans Stretch Distressed Ripped Stylish Hiphop Denim Jogger Pants Tapered Leg Casual Solid Slim Pencil Jeans",
+          "image_url": "https://m.media-amazon.com/images/I/41XFMjBWHnL.jpg",
+          "source_url": "https://www.amazon.com/dp/B09RP2Z52L"
+        },
+        {
+          "id": "B08Z3QZ25R",
+          "title": "JEGGE Women's Stretchy Jeggings High Waist Tummy Control Jean Leggings with Pockets",
+          "image_url": "https://m.media-amazon.com/images/I/31eBo9jZV9L.jpg",
+          "source_url": "https://www.amazon.com/dp/B08Z3QZ25R"
+        },
+        {
+          "id": "B07T4M87RP",
+          "title": "Joe's Jeans Women's Callie High Rise Cropped Bootcut Jean",
+          "image_url": "https://m.media-amazon.com/images/I/41g8R517nGL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07T4M87RP"
+        },
+        {
+          "id": "B09DNZ71Q1",
+          "title": "Judy Blue Cropped Mid-Rise Skinny Light Wash Jeans!",
+          "image_url": "https://m.media-amazon.com/images/I/31PztIzoFML.jpg",
+          "source_url": "https://www.amazon.com/dp/B09DNZ71Q1"
+        },
+        {
+          "id": "B08T955561",
+          "title": "Floerns Women's Casual Skinny Ripped Jeans Destroyed Raw Hem Denim Pants",
+          "image_url": "https://m.media-amazon.com/images/I/410UnAne7-L.jpg",
+          "source_url": "https://www.amazon.com/dp/B08T955561"
+        },
+        {
+          "id": "B09S3GBPGF",
+          "title": "Women's Ripped Boyfriend Jeans,Women's High Waisted Skinny Destroyed Ripped Hole Denim Pants Long Stretch Pencil Jeans",
+          "image_url": "https://m.media-amazon.com/images/I/41+fp2MSgNL.jpg",
+          "source_url": "https://www.amazon.com/dp/B09S3GBPGF"
+        },
+        {
+          "id": "B07Y5RVBNR",
+          "title": "Levi's Women's Plus-Size 721 High Rise Skinny Ankle Jeans",
+          "image_url": "https://m.media-amazon.com/images/I/41+opqLbqBL.jpg",
+          "source_url": "https://www.amazon.com/dp/B07Y5RVBNR"
+        },
+        {
+          "id": "B09Q972ZXP",
+          "title": "Billionaire Boys Club Jeans Men’s Clothing Cotton Relaxed Regular Apollo Jean",
+          "image_url": "https://m.media-amazon.com/images/I/31tAVnhC3HL.jpg",
+          "source_url": "https://www.amazon.com/dp/B09Q972ZXP"
+        },
+        {
+          "id": "B081R19WGF",
+          "title": "Joe's Jeans Men's Rhys Athletic Slim",
+          "image_url": "https://m.media-amazon.com/images/I/31PtKsFL-BL.jpg",
+          "source_url": "https://www.amazon.com/dp/B081R19WGF"
+        }
+      ],
+      "counts": {
+        "type_compatible": 3803,
+        "simulated_controlled": 1969,
+        "development_excluded": 0,
+        "subtype_filtered": 80856,
+        "candidate_limit": 32,
+        "retained_for_images": 32
+      }
+    }
+  ],
+  "projected_fields": [
+    "asin",
+    "name",
+    "images[0]"
+  ],
+  "victim_memory_used": false,
+  "formal_queries_used": false,
+  "ownership_is_experimental_assumption": true
+}

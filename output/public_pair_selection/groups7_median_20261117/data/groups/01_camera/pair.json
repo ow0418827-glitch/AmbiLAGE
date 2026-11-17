@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "policy": "named_public_pair_v1",
+  "status": "selected",
+  "selection_record": "metadata/selection.json",
+  "selection_sha256": "cc9bf80b08c033fdf1d17b660255d88b197b722789ce09c7eb106e533ee4bf76",
+  "public_selection_only": true,
+  "victim_memory_used": false,
+  "source": {
+    "id": "B09M6VTWK1",
+    "title": "Security Camera Outdoor 1080 FHD 360°View Night Vision IP66 Waterproof WiFi Camera with Motion Detection, Body Tracking 2-Way Audio for Home Security",
+    "image": "source.jpg",
+    "source_url": "https://www.amazon.com/dp/B09M6VTWK1",
+    "boxes": [
+      [
+        4,
+        0,
+        490,
+        485
+      ]
+    ],
+    "foreground_mask": "metadata/source_foreground.png",
+    "text_regions": [],
+    "text_regions_reviewed": true,
+    "owned": true,
+    "source_note": "固定散列规则预先登记的实验模拟可控商品；不声明真实商家所有权",
+    "image_sha256": "0933ac3b7eaee7e6f8128f9098ddb2cb84b1dbaa950d3e5de51298cded6f0c16",
+    "foreground_mask_sha256": "a5ab44d6e65a9a7e581c4730d665073ba4f2914b0adcc8c92ba0a118295e9d5f"
+  },
+  "target": {
+    "id": "B08V134QWR",
+    "title": "PTZ Security Camera Outdoor 30X Optical Zoom Camera WiFi Wireless 5MP RTSP IP Camera 1000FT Night Vision Auto Tracking Emergency Strobe Light Alarm Human Detection 2-Way Audio IP66 Waterproof",
+    "image": "target.jpg",
+    "source_url": "https://www.amazon.com/dp/B08V134QWR",
+    "boxes": [
+      [
+        15,
+        65,
+        490,
+        465
+      ]
+    ],
+    "foreground_mask": "metadata/target_foreground.png",
+    "text_regions": [
+      [
+        0.466,
+        0.53,
+        0.634,
+        0.584
+      ]
+    ],
+    "text_regions_reviewed": true,
+    "image_sha256": "3e640007088747b83c734fe3a612c241f88b370490d99b3aca717f92f4dd0126",
+    "foreground_mask_sha256": "9208584557405a60aed3af57a253476ddf5f2f283f07d6c97811aa7c2b99d618",
+    "brand": "HXVIEW",
+    "attributes": [
+      "optical zoom",
+      "motion detection",
+      "night vision",
+      "waterproof construction",
+      "security camera",
+      "sd card",
+      "mobile phone"
+    ],
+    "feature_text": "I want to buy a security camera with optical zoom and motion detection.",
+    "training_queries": [
+      "I want to buy a security camera with optical zoom and motion detection.",
+      "I would like to purchase a security camera featuring optical zoom and night vision.",
+      "I am looking for a security camera with motion detection and waterproof construction."
+    ]
+  }
+}

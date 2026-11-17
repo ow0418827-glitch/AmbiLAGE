@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "method": "ambilage",
+  "run_dir": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\runs\\groups7_median_20261117\\06_jeans",
+  "selection": {
+    "seed": 42,
+    "calibration_path": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\datasets\\public\\calibration\\shape_v2_verified\\threshold.json",
+    "min_image_side": 64,
+    "strategy": "median"
+  },
+  "selection_models": {
+    "batch_size": 16
+  },
+  "generation": {
+    "lucid": {
+      "steps": 1000,
+      "epsilon_levels": 8,
+      "target_text": "I want to buy jeans with a high waist and a baggy straight-leg cut.",
+      "text_weight": 1.0
+    },
+    "ambilage": {}
+  },
+  "evaluation": {
+    "shared_pool": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\resources\\evaluation_base\\shared_memory\\shared_memory.json",
+    "query_manifest": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\datasets\\private\\query_images\\groups7_median_20261117\\06_jeans.json"
+  },
+  "public_pair": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\groups\\06_jeans\\pair.json"
+}

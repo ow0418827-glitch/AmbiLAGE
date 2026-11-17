@@ -570,11 +570,249 @@ def test_oracle_query_suite_is_default_in_evaluation(tmp_path, monkeypatch):
     summary = result['summary']
     assert summary['protocol'] == category.ORACLE_PROTOCOL
     assert summary['query_suite'] == 'training_oracle'
+    assert summary['key_mode'] == 'image'
+    assert summary['key_image_weight'] == 1.0
     assert summary['by_family']['category_description']['query_count'] == 90
     assert summary['by_family']['model_paraphrase']['query_count'] == 54
     assert summary['by_family']['heldout_search_query']['query_count'] == 36
     report_text = (eval_out / 'REPORT.md').read_text(encoding='utf-8')
     assert '100% Oracle' in report_text
     assert '同类商品公开描述(50%)' in report_text
+    assert '纯图片向量 `image`' in report_text
+
+
+def _micro_eval_pool(tmp_path, *, text_variant='original'):
+    entries = []
+    for index, color in enumerate([(200, 90, 30), (30, 180, 80), (40, 60, 190)]):
+        image = tmp_path / f'item{index}.png'
+        if not image.exists():
+            Image.new('RGB', (8, 8), color).save(image)
+        title = f'Fixture Product {index}' if index == 0 else f'Fixture Product {index} {text_variant}'
+        entries.append(dict(
+            Id=f'm{index}',
+            FinalASIN=f'P{index}',
+            RecordKind='simulated_gallery',
+            Completed=False,
+            PrimaryImage=dict(
+                ASIN=f'P{index}',
+                Title=title,
+                LocalPath=image.name,
+                SHA256=sha256_file(image),
+            ),
+            FeatureText=f'Product {index} description {text_variant}',
+            Attributes=[f'attr_{index}_{text_variant}'],
+        ))
+    pool = tmp_path / f'shared_memory_{text_variant}.json'
+    _write(pool, dict(schema_version=1, scope='shared', entries=entries))
+    return pool, entries
+
+
+def test_visual_inception_defaults_to_image_key_mode_and_supports_joint_switch(tmp_path, monkeypatch):
+    import numpy as np
+    from src.experiments import visual_inception_category_evaluation as category
+    from src.experiments.defenses import conditions
+    from src.experiments import shared_evaluation
+    from src.tests.test_evaluation_integrity import _DummyEncoder
+    import src.visual.attack_completion as completion
+
+    base, images, publics, _ = _tiny_frozen_suite(tmp_path)
+    entries = []
+    source_mapping = {}
+    for index, group in enumerate(GROUPS):
+        src = publics[group]['source']
+        mem_id = f'fixture_memory_{index}'
+        source_mapping[group] = {'source_asin': src['id'], 'source_memory_id': mem_id}
+        entries.append(dict(
+            Id=mem_id,
+            FinalASIN=src['id'],
+            RecordKind='simulated_gallery',
+            Completed=False,
+            PrimaryImage=dict(
+                ASIN=src['id'],
+                Title=src['title'],
+                LocalPath=src['image'],
+                SHA256=src['image_sha256'],
+            ),
+            FeatureText=f'Fixture feature alpha {index}',
+            Attributes=[f'attr_alpha_{index}'],
+        ))
+    pool_path = base / 'shared_memory/shared_memory.json'
+    _write(pool_path, dict(schema_version=1, scope='shared', entries=entries))
+    _write(base / 'manifest.json', dict(
+        groups={
+            group: dict(target_id=publics[group]['target']['id'], source_id=publics[group]['source']['id'])
+            for group in GROUPS
+        },
+        shared_memory=dict(
+            pool_file='shared_memory/shared_memory.json',
+            pool_sha256=sha256_file(pool_path),
+            source_mapping=source_mapping,
+        ),
+    ))
+    oracle_root = _tiny_oracle_query_root(tmp_path, base / 'manifest.json', publics)
+
+    monkeypatch.setattr(category, 'OUTPUT', tmp_path / 'output')
+    monkeypatch.setitem(category.QUERY_SUITE_ROOTS, 'training_oracle', oracle_root)
+    monkeypatch.setattr(category, 'public_group', lambda _base, group: publics[group])
+    monkeypatch.setattr(completion, 'validate_attack_completion', lambda *args, **kwargs: None)
+    monkeypatch.setattr(category, 'validate_attack_completion', lambda *args, **kwargs: None)
+
+    out_img = tmp_path / 'output/vi_default_image'
+    res_img = category.evaluate_category_suite(
+        images, out_img, base=base, device='cpu', defense_mode='none',
+        encoder_factory=_DummyEncoder, verify_training_snapshots=False,
+    )
+    assert res_img['summary']['key_mode'] == 'image'
+    assert res_img['summary']['key_image_weight'] == 1.0
+    g0_plan = json.loads((out_img / 'groups' / GROUPS[0] / 'evaluation_plan.json').read_text(encoding='utf-8'))
+    assert g0_plan['key_mode'] == 'image'
+    assert g0_plan['key_image_weight'] == 1.0
+    with np.load(out_img / 'groups' / GROUPS[0] / 'scores.npz', allow_pickle=False) as saved:
+        img_scores_alpha = saved['scores'].copy()
+
+    # Alter memory text only while keeping identical images: image-only scores must remain identical.
+    entries_beta = copy.deepcopy(entries)
+    for idx, item in enumerate(entries_beta):
+        item['FeatureText'] = f'Completely rewritten feature beta wording {idx}'
+        item['Attributes'] = [f'attr_beta_variant_{idx}']
+    pool_beta = base / 'shared_memory/shared_memory_beta.json'
+    _write(pool_beta, dict(schema_version=1, scope='shared', entries=entries_beta))
+    _write(base / 'manifest.json', dict(
+        groups={
+            group: dict(target_id=publics[group]['target']['id'], source_id=publics[group]['source']['id'])
+            for group in GROUPS
+        },
+        shared_memory=dict(
+            pool_file='shared_memory/shared_memory_beta.json',
+            pool_sha256=sha256_file(pool_beta),
+            source_mapping=source_mapping,
+        ),
+    ))
+    oracle_manifest = json.loads((oracle_root / 'manifest.json').read_text(encoding='utf-8'))
+    oracle_manifest['base_manifest_sha256'] = sha256_file(base / 'manifest.json')
+    _write(oracle_root / 'manifest.json', oracle_manifest)
+    out_img_beta = tmp_path / 'output/vi_default_image_beta'
+    category.evaluate_category_suite(
+        images, out_img_beta, base=base, device='cpu', defense_mode='none',
+        encoder_factory=_DummyEncoder, verify_training_snapshots=False,
+    )
+    with np.load(out_img_beta / 'groups' / GROUPS[0] / 'scores.npz', allow_pickle=False) as saved:
+        img_scores_beta = saved['scores'].copy()
+    assert np.allclose(img_scores_alpha, img_scores_beta, atol=1e-12)
+
+    # Explicit switch to joint must change scores when text changes and record key_mode=joint.
+    out_joint_beta = tmp_path / 'output/vi_explicit_joint_beta'
+    res_joint = category.evaluate_category_suite(
+        images, out_joint_beta, base=base, key_mode='joint', device='cpu', defense_mode='none',
+        encoder_factory=_DummyEncoder, verify_training_snapshots=False,
+    )
+    assert res_joint['summary']['key_mode'] == 'joint'
+    assert res_joint['summary']['key_image_weight'] == 0.5
+    with np.load(out_joint_beta / 'groups' / GROUPS[0] / 'scores.npz', allow_pickle=False) as saved:
+        joint_scores_beta = saved['scores'].copy()
+    assert not np.allclose(img_scores_beta, joint_scores_beta, atol=1e-6)
+    assert '图文各半融合向量 `joint`' in (out_joint_beta / 'REPORT.md').read_text(encoding='utf-8')
+    verified = category.verify_category_suite(
+        out_joint_beta, device='cpu', encoder_factory=_DummyEncoder, isolated_process=False,
+    )
+    assert verified['status'] == 'passed'
+    with pytest.raises(ValueError, match='记忆键模式与冻结评估不一致'):
+        shared_evaluation.verify(
+            out_joint_beta / 'groups' / GROUPS[0],
+            encoder_factory=_DummyEncoder,
+            key_mode='image',
+            isolated_process=False,
+        )
+    assert conditions()[0]['kind'] == 'none'
+
+
+@pytest.mark.parametrize('method,expected_default_key_mode,expected_weight', [
+    ('lucid', 'joint', 0.5),
+    ('ambilage', 'joint', 0.5),
+    ('visual_inception', 'image', 1.0),
+])
+def test_default_key_mode_by_method_in_shared_evaluation(
+    tmp_path, monkeypatch, method, expected_default_key_mode, expected_weight
+):
+    from src.experiments import shared_evaluation
+    from src.experiments.defenses import conditions
+    from src.tests.test_evaluation_integrity import _DummyEncoder
+    import src.visual.attack_completion as completion
+
+    pool_alpha, entries_alpha = _micro_eval_pool(tmp_path, text_variant='alpha')
+    pool_beta, _ = _micro_eval_pool(tmp_path, text_variant='beta')
+    queries = [
+        dict(task_id=f'q{i}', instruction=t, query_mode='text', query_image=None, query_image_sha256=None)
+        for i, t in enumerate(['Find similar product', 'Smooth color option'])
+    ]
+    manifest = tmp_path / 'queries.json'
+    _write(manifest, dict(explicit_test_fixture=True, queries=queries))
+    modified = tmp_path / 'modified.png'
+    Image.new('RGB', (8, 8), (120, 120, 40)).save(modified)
+    frozen = dict(
+        status='frozen',
+        method=method,
+        image=str(modified),
+        image_sha256=sha256_file(modified),
+        source=dict(
+            id='P0',
+            title='Fixture Product 0',
+            image=str(tmp_path / 'item0.png'),
+            image_sha256=entries_alpha[0]['PrimaryImage']['SHA256'],
+        ),
+        target=dict(id='T', image_sha256='offline_fixture'),
+        metadata=dict(offline_test_only=True),
+        requested_steps=1,
+    )
+    monkeypatch.setattr(completion, 'validate_attack_completion', lambda *args, **kwargs: None)
+    monkeypatch.setattr(shared_evaluation, 'load_formal_queries', lambda *args, **kwargs: queries)
+
+    out_default = tmp_path / f'eval_{method}_default'
+    res = shared_evaluation.evaluate(
+        frozen, out_default, pool_path=pool_alpha, query_manifest=manifest,
+        device='cpu', encoder_factory=_DummyEncoder, selected_conditions=conditions()[:1],
+    )
+    assert res['verification']['status'] == 'passed'
+    plan = json.loads((out_default / 'evaluation_plan.json').read_text(encoding='utf-8'))
+    rows = json.loads((out_default / 'evaluation.json').read_text(encoding='utf-8'))
+    assert plan['key_mode'] == expected_default_key_mode
+    assert plan['key_image_weight'] == expected_weight
+    assert all(r['retrieval_protocol']['key_mode'] == expected_default_key_mode for r in rows)
+    assert all(r['retrieval_protocol']['key_image_weight'] == expected_weight for r in rows)
+
+    alt_mode = 'image' if expected_default_key_mode == 'joint' else 'joint'
+    out_alt = tmp_path / f'eval_{method}_alt'
+    shared_evaluation.evaluate(
+        frozen, out_alt, pool_path=pool_beta, query_manifest=manifest,
+        device='cpu', key_mode=alt_mode, encoder_factory=_DummyEncoder, selected_conditions=conditions()[:1],
+    )
+    alt_plan = json.loads((out_alt / 'evaluation_plan.json').read_text(encoding='utf-8'))
+    assert alt_plan['key_mode'] == alt_mode
+    assert alt_plan['key_image_weight'] == (1.0 if alt_mode == 'image' else 0.5)
+
+    with pytest.raises(ValueError, match='记忆键模式与冻结评估不一致'):
+        shared_evaluation.verify(out_alt, encoder_factory=_DummyEncoder, key_mode=expected_default_key_mode)
+
+
+def test_pipeline_load_config_validates_key_mode(tmp_path):
+    from src.experiments import pipeline
+
+    cfg_path = tmp_path / 'pipeline.json'
+    cfg = dict(
+        schema_version=1,
+        method='visual_inception',
+        public_pair='data/public/example_pair.json',
+        evaluation=dict(query_mode='text', key_mode='image'),
+    )
+    _write(cfg_path, cfg)
+    loaded = pipeline.load_config(cfg_path)
+    assert loaded['evaluation']['key_mode'] == 'image'
+
+    bad_cfg = copy.deepcopy(cfg)
+    bad_cfg['evaluation']['key_mode'] = 'text'
+    _write(cfg_path, bad_cfg)
+    with pytest.raises(ValueError, match='记忆库检索键模式'):
+        pipeline.load_config(cfg_path)
+
 
 

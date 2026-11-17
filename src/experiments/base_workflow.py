@@ -97,15 +97,53 @@ def generate_group(base, group, method, output, *, device='cuda', steps=None,
             raise ValueError('训练代理选择参数用于新方法；固定原始像素对照按原记录复用')
         if steps not in (None, 1000) or epsilon_levels not in (None, 8):
             raise ValueError('冻结对照只复用八除以二百五十五、完整千步的原始像素成图')
-        from src.experiments.lucid_baseline_import import load_imported_baseline
-        inputs = public_group(base, group)
-        frozen = load_imported_baseline(group, inputs=inputs)
-        freeze_json(root / 'PUBLIC_RUN.json', dict(method='lucid', group=group,
-            execution='historical_frozen_image_reuse', public=inputs['public_binding'],
-            target_text=inputs['target_text'], parameters=dict(steps=1000, epsilon_levels=8),
-            image_sha256=frozen['image_sha256'], provenance=frozen.get('historical_reuse')))
-        freeze_json(frozen_path, frozen)
-        return frozen
+        if base == EVALUATION_BASE.resolve():
+            from src.experiments.lucid_baseline_import import load_imported_baseline
+            inputs = public_group(base, group)
+            frozen = load_imported_baseline(group, inputs=inputs)
+            freeze_json(root / 'PUBLIC_RUN.json', dict(method='lucid', group=group,
+                execution='historical_frozen_image_reuse', public=inputs['public_binding'],
+                target_text=inputs['target_text'], parameters=dict(steps=1000, epsilon_levels=8),
+                image_sha256=frozen['image_sha256'], provenance=frozen.get('historical_reuse')))
+            freeze_json(frozen_path, frozen)
+            return frozen
+        protected = [base / 'shared_memory', base / 'evaluation_inputs',
+                     base / 'evaluation_inputs_joint', base / 'evaluation_inputs_vague_joint',
+                     base / 'query_images', base / 'evaluation_encoder.json',
+                     base.parent / 'visual_inception_evaluation']
+        with catalog_training_guard(allowed_output_roots=[root, base / 'groups'], private_paths=protected):
+            inputs = public_group(base, group)
+            from src.visual.training_surrogates import select_training_surrogates
+            step_count = 1000 if steps is None else steps
+            eps_levels = 8 if epsilon_levels is None else epsilon_levels
+            binding = dict(method='lucid', group=group, public=inputs['public_binding'],
+                           target_text=inputs['target_text'], steps=step_count, epsilon_levels=eps_levels,
+                           text_weight=1.0, training_surrogates=select_training_surrogates('lucid').audit(),
+                           source_files=source_snapshot())
+            freeze_json(root / 'PUBLIC_RUN.json', binding)
+            if frozen_path.exists():
+                frozen = read_json(frozen_path)
+                if frozen['public_binding_sha256'] != digest(binding):
+                    raise ValueError('成图已经冻结，不能更改输入或设置')
+                if sha256_file(frozen['image']) != frozen['image_sha256']:
+                    raise ValueError('冻结图片摘要改变')
+                validate_attack_completion(frozen['metadata'], frozen['requested_steps'])
+                return frozen
+            image, metadata = generate_attack(inputs['source']['image'], inputs['target']['image'],
+                                              root / 'generation', method='lucid', steps=step_count,
+                                              epsilon_levels=eps_levels, device=device,
+                                              target_text=inputs['target_text'], text_weight=1.0)
+            validate_attack_completion(metadata, step_count, dict(method='lucid',
+                source_image_sha256=inputs['source']['image_sha256'],
+                target_image_sha256=inputs['target']['image_sha256']))
+            final = root / 'frozen.png'
+            shutil.copyfile(image, final)
+            frozen = dict(schema_version=1, status='frozen', method='lucid', group=group,
+                          image=str(final), image_sha256=sha256_file(final), metadata=metadata,
+                          requested_steps=step_count, source=inputs['source'], target=inputs['target'],
+                          selection=inputs['selection'], public_binding_sha256=digest(binding))
+            freeze_json(frozen_path, frozen)
+            return frozen
     protected = [base / 'shared_memory', base / 'evaluation_inputs',
                  base / 'evaluation_inputs_joint', base / 'evaluation_inputs_vague_joint',
                  base / 'query_images', base / 'evaluation_encoder.json',
@@ -205,6 +243,8 @@ def main(argv=None):
     from src.visual.training_surrogates import add_surrogate_arguments
     add_surrogate_arguments(parser)
     parser.add_argument('--query-mode', choices=('text', 'joint'), default='text')
+    parser.add_argument('--key-mode', choices=('image', 'joint'), default=None,
+                        help='记忆库检索向量模式：未指定时 visual_inception 默认 image，其他方法默认 joint')
     parser.add_argument('--query-manifest', type=Path)
     parser.add_argument('--encoder-config', type=Path)
     parser.add_argument('--evaluation-name', default='default',
@@ -308,7 +348,7 @@ def main(argv=None):
                         raise ValueError('基础包正式询问清单摘要不符')
                     env_root = root / 'evaluation' / eval_label
                     evaluate(read_json(root / 'FROZEN_IMAGE.json'), env_root, pool_path=pool,
-                        query_manifest=query_path, query_mode=q_mode, device=args.device,
+                        query_manifest=query_path, query_mode=q_mode, key_mode=args.key_mode, device=args.device,
                         source_memory_id=manifest['shared_memory']['source_mapping'][group]['source_memory_id'],
                         selected_conditions=conditions() if args.defense_mode == 'panel' else conditions()[:1],
                         encoder_config=args.encoder_config or base / 'evaluation_encoder.json',
@@ -318,7 +358,7 @@ def main(argv=None):
                     report(env_root)
             elif args.stage == 'verify':
                 from src.experiments.shared_evaluation import verify
-                verify(evaluation_root, device=args.device, isolated_process=True)
+                verify(evaluation_root, device=args.device, isolated_process=True, key_mode=args.key_mode)
             elif args.stage == 'report':
                 from src.experiments.shared_evaluation import report
                 report(evaluation_root)

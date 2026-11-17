@@ -1,0 +1,61 @@
+{
+  "id": "B09J81RMLD",
+  "identity": {
+    "image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2",
+    "annotation_models": {
+      "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+      "ocr_version": "1.4.4",
+      "ocr_weights": {
+        "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+        "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+        "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+      },
+      "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+      "segmentation_model_manifest_sha256": "a4f921331c3c6599a341f34269b2ae0123c6e5f77e6aa5bb249e92947309163c",
+      "code_sha256": "68d77a878d601a13fc4947b8f3d7fd228fda17b6090f14c778ba1b0bd290d734",
+      "device": "cuda",
+      "model_loaded_once": true
+    }
+  },
+  "image": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\images\\48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2.jpg",
+  "title": "Baby U Shaped Toothbrush for Aged 2-12 with 360° Soft Silicone Brush Heads Handle Kids Cute Teeth Whitening Massage Tool",
+  "foreground_mask": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B09J81RMLD\\foreground.png",
+  "foreground_mask_sha256": "c18292182d4b6edfc9ee7aae2957d55178bf68f8b3bc5293d2d27b4041578f41",
+  "boxes": [
+    [
+      135,
+      51,
+      349,
+      446
+    ]
+  ],
+  "text_regions": [],
+  "ocr": [],
+  "segmentation_candidates": [
+    {
+      "index": 0,
+      "iou": 0.7877020835876465,
+      "foreground_ratio": 0.092352,
+      "rough_coverage": 0.6192320103259116,
+      "accepted": true
+    },
+    {
+      "index": 1,
+      "iou": 0.9656689763069153,
+      "foreground_ratio": 0.151848,
+      "rough_coverage": 0.9650155964289556,
+      "accepted": true
+    },
+    {
+      "index": 2,
+      "iou": 0.9666442275047302,
+      "foreground_ratio": 0.149832,
+      "rough_coverage": 0.9530224803700118,
+      "accepted": true
+    }
+  ],
+  "selected_mask_index": 2,
+  "text_regions_reviewed": false,
+  "review_overlay": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B09J81RMLD\\review_overlay.png",
+  "observed_seconds": 0.8344786999950884
+}

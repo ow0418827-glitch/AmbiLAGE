@@ -18,6 +18,14 @@ from src.experiments.query_contract import load_formal_queries, query_retriever_
 
 
 SCORE_TOLERANCE = 1e-7
+KEY_MODES = ('image', 'joint')
+
+
+def default_key_mode_for_method(method: str | None) -> str:
+    """按方法选择默认记忆键编码模式：visual_inception 仅编码图片，其他方法使用图文联合。"""
+    if isinstance(method, str) and method.strip().lower() == 'visual_inception':
+        return 'image'
+    return 'joint'
 
 
 def _score_vector(ranking, ids):
@@ -51,9 +59,13 @@ def _save_scores(output, values, ids, queries, rows, source_id):
 def evaluate(frozen, output, *, pool_path=SHARED_MEMORY, query_manifest,
              source_memory_id=None, device='cuda', encoder_factory=None,
              defense_factory=None, selected_conditions=None, encoder_config=None, query_mode=None,
-             replacement_frozens=None, bank_root=None, memory_vector_cache_dir=None):
+             key_mode=None, replacement_frozens=None, bank_root=None, memory_vector_cache_dir=None):
     """只有此模块读取共享库；对照和修改图始终面对同一个完整共享池。"""
     output = Path(output)
+    effective_key_mode = default_key_mode_for_method(frozen.get('method')) if key_mode is None else key_mode
+    if effective_key_mode not in KEY_MODES:
+        raise ValueError('记忆库检索键模式只能为 image 或 joint')
+    effective_key_image_weight = 1.0 if effective_key_mode == 'image' else 0.5
     from src.visual.attack_completion import validate_attack_completion
     if frozen.get('status') != 'frozen':
         raise ValueError('只能评估完成且已经冻结的最终图片')
@@ -97,7 +109,8 @@ def evaluate(frozen, output, *, pool_path=SHARED_MEMORY, query_manifest,
                 memory_vector_cache_policy='content_model_decoder_text_fusion_bound_v1' if memory_vector_cache_dir else 'disabled',
                 encoder_config=str(Path(encoder_config).resolve()) if encoder_config else None,
                 encoder_config_sha256=sha256_file(encoder_config) if encoder_config else None,
-                key_image_weight=0.5, query_image_weight=query_options.get('query_image_weight', 0.5),
+                key_mode=effective_key_mode,
+                key_image_weight=effective_key_image_weight, query_image_weight=query_options.get('query_image_weight', 0.5),
                 query_mode=query_options.get('query_mode', 'joint'),
                 query_manifest=str(Path(query_manifest).resolve()), query_manifest_sha256=sha256_file(query_manifest),
                 index_text=detect_index_text_policy(entries),
@@ -125,7 +138,7 @@ def evaluate(frozen, output, *, pool_path=SHARED_MEMORY, query_manifest,
                         entry['RetrievalImage'] = dict(ASIN=entry['FinalASIN'], LocalPath=str(image.resolve()), SHA256=sha256_file(image))
                 bank_file = bank_root / 'banks' / spec['label'] / (name + '.json')
                 freeze_json(bank_file, bank)
-                ranker = VisualMemoryRetriever(encoder, bank_file, cache_dir=None,
+                ranker = VisualMemoryRetriever(encoder, bank_file, key_mode=effective_key_mode, cache_dir=None,
                                                entry_cache_dir=memory_vector_cache_dir,
                                                image_base_path=pool_path, **query_options)
                 observations, candidate_scores = [], []
@@ -281,7 +294,7 @@ def make_eval_encoder(device='cuda', config_path=None):
 
 
 def verify(output, *, encoder_factory=None, device='cuda', query_mode=None, query_manifest=None,
-           isolated_process=False):
+           key_mode=None, isolated_process=False):
     output = Path(output)
     plan = read_json(output / 'evaluation_plan.json')
     if plan.get('query_manifest') and sha256_file(plan['query_manifest']) != plan['query_manifest_sha256']:
@@ -289,6 +302,11 @@ def verify(output, *, encoder_factory=None, device='cuda', query_mode=None, quer
     query_options = query_retriever_options(plan['queries'])
     if query_mode is not None and query_mode != query_options.get('query_mode', 'joint'):
         raise ValueError('复算指定的正式查询模式与冻结评估不一致')
+    effective_key_mode = plan.get('key_mode') or ('image' if plan.get('key_image_weight') == 1.0 else 'joint')
+    if effective_key_mode not in KEY_MODES:
+        raise ValueError('冻结评估计划中的记忆键模式无效')
+    if key_mode is not None and key_mode != effective_key_mode:
+        raise ValueError('复算指定的记忆键模式与冻结评估不一致')
     if query_manifest is not None and (not plan.get('query_manifest_sha256')
             or sha256_file(query_manifest) != plan['query_manifest_sha256']):
         raise ValueError('复算指定的正式询问清单与冻结评估不一致')
@@ -327,8 +345,10 @@ def verify(output, *, encoder_factory=None, device='cuda', query_mode=None, quer
             bank = read_json(row['bank_path'])
             if len(bank) != plan['pool_count'] or [e['Id'] for e in bank] != ids:
                 raise ValueError('评估缩减了共享池')
-            ranker = VisualMemoryRetriever(encoder, row['bank_path'], cache_dir=None,
+            ranker = VisualMemoryRetriever(encoder, row['bank_path'], key_mode=effective_key_mode, cache_dir=None,
                                            image_base_path=plan['pool_path'], **query_options)
+            if 'key_mode' in row['retrieval_protocol'] and row['retrieval_protocol']['key_mode'] != effective_key_mode:
+                raise ValueError('独立复算的记忆键模式与评估结果不一致')
             if digest(encoder.snapshot) != row['retrieval_protocol']['model_sha256']:
                 raise ValueError('独立复算编码器的权重或实现身份改变')
             if len(row['queries']) != len(plan['queries']):
@@ -420,8 +440,9 @@ if __name__ == '__main__':
     parser.add_argument('stage', choices=('verify', 'report'))
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--device', choices=('cuda', 'cpu'), default='cuda')
+    parser.add_argument('--key-mode', choices=KEY_MODES, default=None)
     args = parser.parse_args()
     if args.stage == 'verify':
-        print(verify(args.output, device=args.device, isolated_process=True))
+        print(verify(args.output, device=args.device, key_mode=args.key_mode, isolated_process=True))
     else:
         print(report(args.output))

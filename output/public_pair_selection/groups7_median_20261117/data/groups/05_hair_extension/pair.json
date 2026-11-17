@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "policy": "named_public_pair_v1",
+  "status": "selected",
+  "selection_record": "metadata/selection.json",
+  "selection_sha256": "534f0d57d78c773f77ca289b1ae629892c4852d8eb4aad72d80961eff22a646c",
+  "public_selection_only": true,
+  "victim_memory_used": false,
+  "source": {
+    "id": "B085RPZGWZ",
+    "title": "14\" Clip in Hair Extensions Real Human Hair for Women - Silky Straight Human Hair Clip on 50grams 4pieces Bleach Blonde #613 Color",
+    "image": "source.jpg",
+    "source_url": "https://www.amazon.com/dp/B085RPZGWZ",
+    "boxes": [
+      [
+        0,
+        27,
+        465,
+        499
+      ]
+    ],
+    "foreground_mask": "metadata/source_foreground.png",
+    "text_regions": [],
+    "text_regions_reviewed": true,
+    "owned": true,
+    "source_note": "固定散列规则预先登记的实验模拟可控商品；不声明真实商家所有权",
+    "image_sha256": "ed1e3edf018fca64de831dd4de5dacd2b9cb9da788d485c801c72f02c37d67f0",
+    "foreground_mask_sha256": "184f21388bdcfd949a0ef0a736b539d85ab35f2fe349c1cc006fb2a595c235be"
+  },
+  "target": {
+    "id": "B01460C2I2",
+    "title": "S-noilite Clip in Hair Extension Human Hair Double Weft 8pcs 150g 20 Inch Jet Black Clip in Real Human Hair Extension for Women Adding Natural Volume Thick Clip in Extension #1",
+    "image": "target.jpg",
+    "source_url": "https://www.amazon.com/dp/B01460C2I2",
+    "boxes": [
+      [
+        10,
+        13,
+        482,
+        499
+      ]
+    ],
+    "foreground_mask": "metadata/target_foreground.png",
+    "text_regions": [],
+    "text_regions_reviewed": true,
+    "image_sha256": "f1606cc72284b26cc9d055eb58b784b46c17a72561f452b1704a0e9f0970f9a4",
+    "foreground_mask_sha256": "9baa0897d77c00d0cf575ece26e1fa665416cdec78157e41f30134552874930a",
+    "brand": "S-noilite",
+    "attributes": [
+      "real human hair",
+      "double wefts",
+      "a clip-in design",
+      "rubber-lined clips",
+      "hair extensions",
+      "hair styling",
+      "hair cutting"
+    ],
+    "feature_text": "I want to buy hair extensions with real human hair and double wefts.",
+    "training_queries": [
+      "I want to buy hair extensions with real human hair and double wefts.",
+      "I would like to purchase hair extensions featuring real human hair and a clip-in design.",
+      "I am looking for hair extensions with double wefts and rubber-lined clips."
+    ]
+  }
+}

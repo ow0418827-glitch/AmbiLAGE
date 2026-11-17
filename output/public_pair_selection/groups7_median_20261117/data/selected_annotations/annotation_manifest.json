@@ -1,0 +1,2372 @@
+{
+  "downloads_sha256": "fd7ecd81244695c5e5a1916e3d46c9c1a6cc00282eac4beaa78df0cf8e519e19",
+  "proposals": {
+    "B00BDJODWI": {
+      "id": "B00BDJODWI",
+      "identity": {
+        "image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "a4f921331c3c6599a341f34269b2ae0123c6e5f77e6aa5bb249e92947309163c",
+          "code_sha256": "68d77a878d601a13fc4947b8f3d7fd228fda17b6090f14c778ba1b0bd290d734",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\images\\636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e.jpg",
+      "title": "Aveda Scalp Benefits Balancing Shampoo 33.8 OZ",
+      "foreground_mask": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B00BDJODWI\\foreground.png",
+      "foreground_mask_sha256": "eaa4b22e7cb364bbd16505057de50cbd525e82f387ee80e54b813d5d2770f0a9",
+      "boxes": [
+        [
+          2,
+          6,
+          157,
+          493
+        ]
+      ],
+      "text_regions": [
+        [
+          0.275,
+          0.314,
+          0.68125,
+          0.356
+        ],
+        [
+          0.20625,
+          0.352,
+          0.675,
+          0.38
+        ],
+        [
+          0.21875,
+          0.344,
+          0.70625,
+          0.37
+        ],
+        [
+          0.1375,
+          0.454,
+          0.8375,
+          0.502
+        ],
+        [
+          0.2,
+          0.528,
+          0.78125,
+          0.562
+        ],
+        [
+          0.1375,
+          0.554,
+          0.84375,
+          0.588
+        ],
+        [
+          0.20625,
+          0.818,
+          0.75,
+          0.852
+        ],
+        [
+          0.24375,
+          0.856,
+          0.7,
+          0.882
+        ],
+        [
+          0.25,
+          0.842,
+          0.7,
+          0.87
+        ],
+        [
+          0.2,
+          0.9,
+          0.75625,
+          0.94
+        ]
+      ],
+      "ocr": [
+        {
+          "text": "AVEDA",
+          "confidence": 0.9924866795539856,
+          "polygon": [
+            [
+              48.0,
+              160.0
+            ],
+            [
+              106.0,
+              161.0
+            ],
+            [
+              106.0,
+              175.0
+            ],
+            [
+              47.0,
+              174.0
+            ]
+          ]
+        },
+        {
+          "text": "FIOR AG FEASTESSA",
+          "confidence": 0.6235985203700907,
+          "polygon": [
+            [
+              36.0,
+              179.0
+            ],
+            [
+              105.0,
+              181.0
+            ],
+            [
+              105.0,
+              187.0
+            ],
+            [
+              36.0,
+              186.0
+            ]
+          ]
+        },
+        {
+          "text": "NHTANOSCESCLOE",
+          "confidence": 0.5575981470091003,
+          "polygon": [
+            [
+              38.0,
+              175.0
+            ],
+            [
+              110.0,
+              175.0
+            ],
+            [
+              110.0,
+              182.0
+            ],
+            [
+              38.0,
+              181.0
+            ]
+          ]
+        },
+        {
+          "text": "scalp benefits",
+          "confidence": 0.9585095047950745,
+          "polygon": [
+            [
+              25.0,
+              231.0
+            ],
+            [
+              131.0,
+              230.0
+            ],
+            [
+              131.0,
+              247.0
+            ],
+            [
+              25.0,
+              248.0
+            ]
+          ]
+        },
+        {
+          "text": "BALANCING SHAMPOO",
+          "confidence": 0.9776413440704346,
+          "polygon": [
+            [
+              35.0,
+              267.0
+            ],
+            [
+              122.0,
+              268.0
+            ],
+            [
+              122.0,
+              278.0
+            ],
+            [
+              35.0,
+              277.0
+            ]
+          ]
+        },
+        {
+          "text": "SHAMPOOINGEQUILIBRANT",
+          "confidence": 0.9846582554635548,
+          "polygon": [
+            [
+              25.0,
+              280.0
+            ],
+            [
+              132.0,
+              280.0
+            ],
+            [
+              132.0,
+              291.0
+            ],
+            [
+              25.0,
+              291.0
+            ]
+          ]
+        },
+        {
+          "text": "e-cines hor  ",
+          "confidence": 0.6666152202166044,
+          "polygon": [
+            [
+              36.0,
+              413.0
+            ],
+            [
+              117.0,
+              412.0
+            ],
+            [
+              117.0,
+              422.0
+            ],
+            [
+              36.0,
+              423.0
+            ]
+          ]
+        },
+        {
+          "text": "hwetecce",
+          "confidence": 0.5766648910939693,
+          "polygon": [
+            [
+              42.0,
+              431.0
+            ],
+            [
+              109.0,
+              431.0
+            ],
+            [
+              109.0,
+              438.0
+            ],
+            [
+              42.0,
+              438.0
+            ]
+          ]
+        },
+        {
+          "text": "eltesescuee",
+          "confidence": 0.5601743920282884,
+          "polygon": [
+            [
+              43.0,
+              424.0
+            ],
+            [
+              109.0,
+              424.0
+            ],
+            [
+              109.0,
+              432.0
+            ],
+            [
+              43.0,
+              432.0
+            ]
+          ]
+        },
+        {
+          "text": "33.8oz/ozlig/1L",
+          "confidence": 0.79696178038915,
+          "polygon": [
+            [
+              35.0,
+              453.0
+            ],
+            [
+              118.0,
+              454.0
+            ],
+            [
+              118.0,
+              467.0
+            ],
+            [
+              35.0,
+              466.0
+            ]
+          ]
+        }
+      ],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.4443906545639038,
+          "foreground_ratio": 0.310575,
+          "rough_coverage": 0.3813543713163065,
+          "accepted": true
+        },
+        {
+          "index": 1,
+          "iou": 0.9841013550758362,
+          "foreground_ratio": 0.80175,
+          "rough_coverage": 0.984436394891945,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.9815704226493835,
+          "foreground_ratio": 0.7987875,
+          "rough_coverage": 0.9808294449901768,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 1,
+      "text_regions_reviewed": false,
+      "review_overlay": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B00BDJODWI\\review_overlay.png",
+      "observed_seconds": 10.067585700002383
+    },
+    "B01460C2I2": {
+      "id": "B01460C2I2",
+      "identity": {
+        "image_sha256": "f1606cc72284b26cc9d055eb58b784b46c17a72561f452b1704a0e9f0970f9a4",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "a4f921331c3c6599a341f34269b2ae0123c6e5f77e6aa5bb249e92947309163c",
+          "code_sha256": "68d77a878d601a13fc4947b8f3d7fd228fda17b6090f14c778ba1b0bd290d734",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\images\\f1606cc72284b26cc9d055eb58b784b46c17a72561f452b1704a0e9f0970f9a4.jpg",
+      "title": "S-noilite Clip in Hair Extension Human Hair Double Weft 8pcs 150g 20 Inch Jet Black Clip in Real Human Hair Extension for Women Adding Natural Volume Thick Clip in Extension #1",
+      "foreground_mask": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B01460C2I2\\foreground.png",
+      "foreground_mask_sha256": "9baa0897d77c00d0cf575ece26e1fa665416cdec78157e41f30134552874930a",
+      "boxes": [
+        [
+          10,
+          13,
+          482,
+          499
+        ]
+      ],
+      "text_regions": [],
+      "ocr": [],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.4475438594818115,
+          "foreground_ratio": 0.088992,
+          "rough_coverage": 0.14206156597266573,
+          "accepted": false
+        },
+        {
+          "index": 1,
+          "iou": 0.8746557235717773,
+          "foreground_ratio": 0.611764,
+          "rough_coverage": 0.9754821816323924,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.7915923595428467,
+          "foreground_ratio": 0.586308,
+          "rough_coverage": 0.9358283305658449,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 1,
+      "text_regions_reviewed": false,
+      "review_overlay": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B01460C2I2\\review_overlay.png",
+      "observed_seconds": 0.7790873999911128
+    },
+    "B076JC9M8C": {
+      "id": "B076JC9M8C",
+      "identity": {
+        "image_sha256": "8cd5d9125c6eeddbe2cd91e516b64f8a3c7b95b9df16e4e4bda3469076fa506c",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "a4f921331c3c6599a341f34269b2ae0123c6e5f77e6aa5bb249e92947309163c",
+          "code_sha256": "68d77a878d601a13fc4947b8f3d7fd228fda17b6090f14c778ba1b0bd290d734",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\images\\8cd5d9125c6eeddbe2cd91e516b64f8a3c7b95b9df16e4e4bda3469076fa506c.jpg",
+      "title": "BarberPub Classic Hydraulic Barber Chair Salon Styling Beauty Spa Chair 2065 (Black)",
+      "foreground_mask": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B076JC9M8C\\foreground.png",
+      "foreground_mask_sha256": "2021d751daa669fcfbfae2a29079386009841d446b4182e119f92da668ed955d",
+      "boxes": [
+        [
+          65,
+          5,
+          427,
+          491
+        ]
+      ],
+      "text_regions": [],
+      "ocr": [],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.7282399535179138,
+          "foreground_ratio": 0.281784,
+          "rough_coverage": 0.658797820357709,
+          "accepted": true
+        },
+        {
+          "index": 1,
+          "iou": 0.9763620495796204,
+          "foreground_ratio": 0.422356,
+          "rough_coverage": 0.9766279320596869,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.9733957648277283,
+          "foreground_ratio": 0.380624,
+          "rough_coverage": 0.8878197011901747,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 1,
+      "text_regions_reviewed": false,
+      "review_overlay": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B076JC9M8C\\review_overlay.png",
+      "observed_seconds": 0.6373916000011377
+    },
+    "B07BBLWTLM": {
+      "id": "B07BBLWTLM",
+      "identity": {
+        "image_sha256": "a1bb85bf4b8c4bbace4d1099142c0c7925c7b9f0d2e878fa43830e140fffbd28",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "a4f921331c3c6599a341f34269b2ae0123c6e5f77e6aa5bb249e92947309163c",
+          "code_sha256": "68d77a878d601a13fc4947b8f3d7fd228fda17b6090f14c778ba1b0bd290d734",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\images\\a1bb85bf4b8c4bbace4d1099142c0c7925c7b9f0d2e878fa43830e140fffbd28.jpg",
+      "title": "Natural Decadence, Cookie Dough Chocolate Chip, 14 Ounce",
+      "foreground_mask": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B07BBLWTLM\\foreground.png",
+      "foreground_mask_sha256": "c6ec5fa126a765701155fc8813e93749a9c25252aff9d44120986aea824f332d",
+      "boxes": [
+        [
+          2,
+          5,
+          463,
+          499
+        ]
+      ],
+      "text_regions": [
+        [
+          0.10967741935483871,
+          0.382,
+          0.17204301075268819,
+          0.432
+        ],
+        [
+          0.1032258064516129,
+          0.402,
+          0.18494623655913978,
+          0.46
+        ],
+        [
+          0.09462365591397849,
+          0.526,
+          0.210752688172043,
+          0.596
+        ],
+        [
+          0.3333333333333333,
+          0.53,
+          0.6774193548387096,
+          0.614
+        ],
+        [
+          0.11397849462365592,
+          0.554,
+          0.1956989247311828,
+          0.614
+        ],
+        [
+          0.28817204301075267,
+          0.592,
+          0.7225806451612903,
+          0.67
+        ],
+        [
+          0.12688172043010754,
+          0.684,
+          0.1978494623655914,
+          0.738
+        ],
+        [
+          0.12903225806451613,
+          0.706,
+          0.2,
+          0.756
+        ],
+        [
+          0.35698924731182796,
+          0.714,
+          0.6559139784946236,
+          0.774
+        ],
+        [
+          0.2924731182795699,
+          0.746,
+          0.7096774193548387,
+          0.818
+        ],
+        [
+          0.13548387096774195,
+          0.826,
+          0.2064516129032258,
+          0.878
+        ],
+        [
+          0.13548387096774195,
+          0.844,
+          0.2129032258064516,
+          0.898
+        ],
+        [
+          0.3247311827956989,
+          0.858,
+          0.6774193548387096,
+          0.918
+        ],
+        [
+          0.3032258064516129,
+          0.956,
+          0.46236559139784944,
+          1.0
+        ],
+        [
+          0.4645161290322581,
+          0.954,
+          0.7075268817204301,
+          1.0
+        ]
+      ],
+      "ocr": [
+        {
+          "text": "SOY",
+          "confidence": 0.9104728698730469,
+          "polygon": [
+            [
+              59.0,
+              194.0
+            ],
+            [
+              77.0,
+              200.0
+            ],
+            [
+              73.0,
+              213.0
+            ],
+            [
+              54.0,
+              207.0
+            ]
+          ]
+        },
+        {
+          "text": "FREE",
+          "confidence": 0.9151323437690735,
+          "polygon": [
+            [
+              56.0,
+              204.0
+            ],
+            [
+              83.0,
+              214.0
+            ],
+            [
+              79.0,
+              227.0
+            ],
+            [
+              51.0,
+              217.0
+            ]
+          ]
+        },
+        {
+          "text": "GLUTEN",
+          "confidence": 0.9806092083454132,
+          "polygon": [
+            [
+              52.0,
+              266.0
+            ],
+            [
+              95.0,
+              280.0
+            ],
+            [
+              89.0,
+              295.0
+            ],
+            [
+              47.0,
+              281.0
+            ]
+          ]
+        },
+        {
+          "text": "RaIseD",
+          "confidence": 0.8468123376369476,
+          "polygon": [
+            [
+              158.0,
+              268.0
+            ],
+            [
+              312.0,
+              268.0
+            ],
+            [
+              312.0,
+              304.0
+            ],
+            [
+              158.0,
+              304.0
+            ]
+          ]
+        },
+        {
+          "text": "FREE",
+          "confidence": 0.9948384165763855,
+          "polygon": [
+            [
+              61.0,
+              280.0
+            ],
+            [
+              88.0,
+              290.0
+            ],
+            [
+              83.0,
+              304.0
+            ],
+            [
+              56.0,
+              294.0
+            ]
+          ]
+        },
+        {
+          "text": "GLuTen Free",
+          "confidence": 0.9511430155147206,
+          "polygon": [
+            [
+              137.0,
+              300.0
+            ],
+            [
+              333.0,
+              299.0
+            ],
+            [
+              333.0,
+              331.0
+            ],
+            [
+              137.0,
+              332.0
+            ]
+          ]
+        },
+        {
+          "text": "NUT",
+          "confidence": 0.9628743926684061,
+          "polygon": [
+            [
+              67.0,
+              345.0
+            ],
+            [
+              89.0,
+              353.0
+            ],
+            [
+              84.0,
+              366.0
+            ],
+            [
+              62.0,
+              358.0
+            ]
+          ]
+        },
+        {
+          "text": "FREE",
+          "confidence": 0.8201868757605553,
+          "polygon": [
+            [
+              67.0,
+              356.0
+            ],
+            [
+              90.0,
+              364.0
+            ],
+            [
+              86.0,
+              375.0
+            ],
+            [
+              63.0,
+              367.0
+            ]
+          ]
+        },
+        {
+          "text": "ChocolateChip",
+          "confidence": 0.9874628598873432,
+          "polygon": [
+            [
+              169.0,
+              360.0
+            ],
+            [
+              302.0,
+              363.0
+            ],
+            [
+              301.0,
+              384.0
+            ],
+            [
+              169.0,
+              381.0
+            ]
+          ]
+        },
+        {
+          "text": "COOKIEDOUGH",
+          "confidence": 0.9836995113979686,
+          "polygon": [
+            [
+              139.0,
+              376.0
+            ],
+            [
+              327.0,
+              376.0
+            ],
+            [
+              327.0,
+              406.0
+            ],
+            [
+              139.0,
+              406.0
+            ]
+          ]
+        },
+        {
+          "text": "EGG",
+          "confidence": 0.6948245962460836,
+          "polygon": [
+            [
+              71.0,
+              416.0
+            ],
+            [
+              93.0,
+              424.0
+            ],
+            [
+              89.0,
+              436.0
+            ],
+            [
+              66.0,
+              429.0
+            ]
+          ]
+        },
+        {
+          "text": "FREE",
+          "confidence": 0.8572888672351837,
+          "polygon": [
+            [
+              71.0,
+              425.0
+            ],
+            [
+              96.0,
+              435.0
+            ],
+            [
+              91.0,
+              446.0
+            ],
+            [
+              66.0,
+              436.0
+            ]
+          ]
+        },
+        {
+          "text": "filled withchocolate chips",
+          "confidence": 0.9579234467102931,
+          "polygon": [
+            [
+              154.0,
+              432.0
+            ],
+            [
+              312.0,
+              435.0
+            ],
+            [
+              311.0,
+              456.0
+            ],
+            [
+              154.0,
+              453.0
+            ]
+          ]
+        },
+        {
+          "text": "14oZ(3929)",
+          "confidence": 0.802140885591507,
+          "polygon": [
+            [
+              145.0,
+              481.0
+            ],
+            [
+              212.0,
+              486.0
+            ],
+            [
+              211.0,
+              499.0
+            ],
+            [
+              144.0,
+              496.0
+            ]
+          ]
+        },
+        {
+          "text": "KeepRefrigerated",
+          "confidence": 0.9248644076287746,
+          "polygon": [
+            [
+              219.0,
+              487.0
+            ],
+            [
+              325.0,
+              480.0
+            ],
+            [
+              326.0,
+              497.0
+            ],
+            [
+              220.0,
+              499.0
+            ]
+          ]
+        }
+      ],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.4547259509563446,
+          "foreground_ratio": 0.2574236559139785,
+          "rough_coverage": 0.25178607305018685,
+          "accepted": false
+        },
+        {
+          "index": 1,
+          "iou": 0.9820640087127686,
+          "foreground_ratio": 0.824331182795699,
+          "rough_coverage": 0.9895367059107164,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.9731088280677795,
+          "foreground_ratio": 0.7506967741935484,
+          "rough_coverage": 0.8538996263109254,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 1,
+      "text_regions_reviewed": false,
+      "review_overlay": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B07BBLWTLM\\review_overlay.png",
+      "observed_seconds": 1.7054184000007808
+    },
+    "B07P48FLMK": {
+      "id": "B07P48FLMK",
+      "identity": {
+        "image_sha256": "957de7c1803030d27e50576927d9afe6442438bb9b900d57f2a919f3bdb968f0",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "a4f921331c3c6599a341f34269b2ae0123c6e5f77e6aa5bb249e92947309163c",
+          "code_sha256": "68d77a878d601a13fc4947b8f3d7fd228fda17b6090f14c778ba1b0bd290d734",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\images\\957de7c1803030d27e50576927d9afe6442438bb9b900d57f2a919f3bdb968f0.jpg",
+      "title": "AQUAGE SeaExtend Volumizing Shampoo, Gentle, SeaExtend Thermal-V Technology Seals Heat Out, Luxurious Shampoo That Prevents Haircolor Fade and Thermal Styling Damage",
+      "foreground_mask": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B07P48FLMK\\foreground.png",
+      "foreground_mask_sha256": "598a4ea6a9f51300fb4ad4c33c609ac62fccabb62b0203a719d375ae930990e0",
+      "boxes": [
+        [
+          10,
+          6,
+          122,
+          491
+        ]
+      ],
+      "text_regions": [
+        [
+          0.2706766917293233,
+          0.186,
+          0.7293233082706767,
+          0.218
+        ],
+        [
+          0.17293233082706766,
+          0.208,
+          0.8195488721804511,
+          0.242
+        ],
+        [
+          0.21804511278195488,
+          0.232,
+          0.7819548872180451,
+          0.264
+        ],
+        [
+          0.2781954887218045,
+          0.268,
+          0.7218045112781954,
+          0.302
+        ],
+        [
+          0.3458646616541353,
+          0.32,
+          0.6390977443609023,
+          0.396
+        ],
+        [
+          0.21052631578947367,
+          0.752,
+          0.7969924812030075,
+          0.792
+        ],
+        [
+          0.24060150375939848,
+          0.78,
+          0.7669172932330827,
+          0.818
+        ],
+        [
+          0.14285714285714285,
+          0.814,
+          0.8646616541353384,
+          0.85
+        ],
+        [
+          0.22556390977443608,
+          0.838,
+          0.7744360902255639,
+          0.872
+        ],
+        [
+          0.2556390977443609,
+          0.882,
+          0.7669172932330827,
+          0.916
+        ]
+      ],
+      "ocr": [
+        {
+          "text": "SeaExtend\"",
+          "confidence": 0.9264714360237122,
+          "polygon": [
+            [
+              39.0,
+              96.0
+            ],
+            [
+              94.0,
+              96.0
+            ],
+            [
+              94.0,
+              106.0
+            ],
+            [
+              39.0,
+              106.0
+            ]
+          ]
+        },
+        {
+          "text": "Utimate ColorCare",
+          "confidence": 0.9189433771021226,
+          "polygon": [
+            [
+              26.0,
+              107.0
+            ],
+            [
+              106.0,
+              108.0
+            ],
+            [
+              106.0,
+              118.0
+            ],
+            [
+              26.0,
+              118.0
+            ]
+          ]
+        },
+        {
+          "text": "withThermal-Ve",
+          "confidence": 0.9162760760102954,
+          "polygon": [
+            [
+              32.0,
+              119.0
+            ],
+            [
+              101.0,
+              119.0
+            ],
+            [
+              101.0,
+              129.0
+            ],
+            [
+              32.0,
+              129.0
+            ]
+          ]
+        },
+        {
+          "text": "sulfate free",
+          "confidence": 0.9378402779499689,
+          "polygon": [
+            [
+              40.0,
+              137.0
+            ],
+            [
+              93.0,
+              138.0
+            ],
+            [
+              93.0,
+              148.0
+            ],
+            [
+              40.0,
+              147.0
+            ]
+          ]
+        },
+        {
+          "text": "e",
+          "confidence": 0.9384118318557739,
+          "polygon": [
+            [
+              49.0,
+              163.0
+            ],
+            [
+              82.0,
+              163.0
+            ],
+            [
+              82.0,
+              195.0
+            ],
+            [
+              49.0,
+              195.0
+            ]
+          ]
+        },
+        {
+          "text": "volumizing",
+          "confidence": 0.9954918086528778,
+          "polygon": [
+            [
+              32.0,
+              379.0
+            ],
+            [
+              103.0,
+              380.0
+            ],
+            [
+              102.0,
+              393.0
+            ],
+            [
+              31.0,
+              391.0
+            ]
+          ]
+        },
+        {
+          "text": "shampoo",
+          "confidence": 0.9919388379369464,
+          "polygon": [
+            [
+              35.0,
+              393.0
+            ],
+            [
+              99.0,
+              394.0
+            ],
+            [
+              99.0,
+              406.0
+            ],
+            [
+              35.0,
+              405.0
+            ]
+          ]
+        },
+        {
+          "text": "adds body and fuiness",
+          "confidence": 0.9180821918305897,
+          "polygon": [
+            [
+              22.0,
+              410.0
+            ],
+            [
+              112.0,
+              410.0
+            ],
+            [
+              112.0,
+              422.0
+            ],
+            [
+              22.0,
+              422.0
+            ]
+          ]
+        },
+        {
+          "text": "tofine,limp her",
+          "confidence": 0.8299266735712687,
+          "polygon": [
+            [
+              33.0,
+              422.0
+            ],
+            [
+              100.0,
+              422.0
+            ],
+            [
+              100.0,
+              433.0
+            ],
+            [
+              33.0,
+              433.0
+            ]
+          ]
+        },
+        {
+          "text": "DFL0Z/285.6ml",
+          "confidence": 0.7144496028239911,
+          "polygon": [
+            [
+              37.0,
+              444.0
+            ],
+            [
+              99.0,
+              444.0
+            ],
+            [
+              99.0,
+              455.0
+            ],
+            [
+              37.0,
+              455.0
+            ]
+          ]
+        }
+      ],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.4603995680809021,
+          "foreground_ratio": 0.12398496240601503,
+          "rough_coverage": 0.14518554270545211,
+          "accepted": false
+        },
+        {
+          "index": 1,
+          "iou": 0.9926767349243164,
+          "foreground_ratio": 0.8013684210526316,
+          "rough_coverage": 0.9812508121554141,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.9934936165809631,
+          "foreground_ratio": 0.7971729323308271,
+          "rough_coverage": 0.9760901446100726,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 2,
+      "text_regions_reviewed": false,
+      "review_overlay": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B07P48FLMK\\review_overlay.png",
+      "observed_seconds": 2.2812949000071967
+    },
+    "B085RPZGWZ": {
+      "id": "B085RPZGWZ",
+      "identity": {
+        "image_sha256": "ed1e3edf018fca64de831dd4de5dacd2b9cb9da788d485c801c72f02c37d67f0",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "a4f921331c3c6599a341f34269b2ae0123c6e5f77e6aa5bb249e92947309163c",
+          "code_sha256": "68d77a878d601a13fc4947b8f3d7fd228fda17b6090f14c778ba1b0bd290d734",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\images\\ed1e3edf018fca64de831dd4de5dacd2b9cb9da788d485c801c72f02c37d67f0.jpg",
+      "title": "14\" Clip in Hair Extensions Real Human Hair for Women - Silky Straight Human Hair Clip on 50grams 4pieces Bleach Blonde #613 Color",
+      "foreground_mask": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B085RPZGWZ\\foreground.png",
+      "foreground_mask_sha256": "184f21388bdcfd949a0ef0a736b539d85ab35f2fe349c1cc006fb2a595c235be",
+      "boxes": [
+        [
+          0,
+          27,
+          465,
+          499
+        ]
+      ],
+      "text_regions": [],
+      "ocr": [],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.8733964562416077,
+          "foreground_ratio": 0.082092,
+          "rough_coverage": 0.14437602164477764,
+          "accepted": false
+        },
+        {
+          "index": 1,
+          "iou": 0.4028123617172241,
+          "foreground_ratio": 0.3683,
+          "rough_coverage": 0.6458133701595175,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.984365701675415,
+          "foreground_ratio": 0.38968,
+          "rough_coverage": 0.6843751761456514,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 2,
+      "text_regions_reviewed": false,
+      "review_overlay": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B085RPZGWZ\\review_overlay.png",
+      "observed_seconds": 0.6414916999929119
+    },
+    "B08V134QWR": {
+      "id": "B08V134QWR",
+      "identity": {
+        "image_sha256": "3e640007088747b83c734fe3a612c241f88b370490d99b3aca717f92f4dd0126",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "a4f921331c3c6599a341f34269b2ae0123c6e5f77e6aa5bb249e92947309163c",
+          "code_sha256": "68d77a878d601a13fc4947b8f3d7fd228fda17b6090f14c778ba1b0bd290d734",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\images\\3e640007088747b83c734fe3a612c241f88b370490d99b3aca717f92f4dd0126.jpg",
+      "title": "PTZ Security Camera Outdoor 30X Optical Zoom Camera WiFi Wireless 5MP RTSP IP Camera 1000FT Night Vision Auto Tracking Emergency Strobe Light Alarm Human Detection 2-Way Audio IP66 Waterproof",
+      "foreground_mask": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B08V134QWR\\foreground.png",
+      "foreground_mask_sha256": "9208584557405a60aed3af57a253476ddf5f2f283f07d6c97811aa7c2b99d618",
+      "boxes": [
+        [
+          15,
+          65,
+          490,
+          465
+        ]
+      ],
+      "text_regions": [
+        [
+          0.466,
+          0.53,
+          0.634,
+          0.584
+        ]
+      ],
+      "ocr": [
+        {
+          "text": "HXVIEW",
+          "confidence": 0.9936249454816183,
+          "polygon": [
+            [
+              236.0,
+              268.0
+            ],
+            [
+              314.0,
+              268.0
+            ],
+            [
+              314.0,
+              289.0
+            ],
+            [
+              236.0,
+              289.0
+            ]
+          ]
+        }
+      ],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.837375819683075,
+          "foreground_ratio": 0.216064,
+          "rough_coverage": 0.49263735683749404,
+          "accepted": true
+        },
+        {
+          "index": 1,
+          "iou": 0.9566907286643982,
+          "foreground_ratio": 0.395252,
+          "rough_coverage": 0.9553913548318995,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.9567666053771973,
+          "foreground_ratio": 0.351516,
+          "rough_coverage": 0.8445664221248746,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 2,
+      "text_regions_reviewed": false,
+      "review_overlay": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B08V134QWR\\review_overlay.png",
+      "observed_seconds": 0.6477632999885827
+    },
+    "B08Z8MHWVS": {
+      "id": "B08Z8MHWVS",
+      "identity": {
+        "image_sha256": "656132deaca60f9f6f1a34668699fe96289c3c1812dddde5b1cfe9685b317e71",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "a4f921331c3c6599a341f34269b2ae0123c6e5f77e6aa5bb249e92947309163c",
+          "code_sha256": "68d77a878d601a13fc4947b8f3d7fd228fda17b6090f14c778ba1b0bd290d734",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\images\\656132deaca60f9f6f1a34668699fe96289c3c1812dddde5b1cfe9685b317e71.jpg",
+      "title": "Eggless Raw Edible Cookie Dough, Edible Frozen Cookie Dough - Big Dipper Dough Co: (2 Pints-ChocoChip & CookienCream)",
+      "foreground_mask": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B08Z8MHWVS\\foreground.png",
+      "foreground_mask_sha256": "81c8739af9aa1c2ab90f55d102c896cf5e05c4b118d4c856620ac21a3e46a004",
+      "boxes": [
+        [
+          58,
+          28,
+          453,
+          463
+        ]
+      ],
+      "text_regions": [
+        [
+          0.432,
+          0.078,
+          0.576,
+          0.264
+        ],
+        [
+          0.412,
+          0.256,
+          0.598,
+          0.33
+        ],
+        [
+          0.146,
+          0.502,
+          0.362,
+          0.58
+        ],
+        [
+          0.398,
+          0.534,
+          0.488,
+          0.608
+        ],
+        [
+          0.674,
+          0.546,
+          0.752,
+          0.594
+        ],
+        [
+          0.742,
+          0.536,
+          0.784,
+          0.578
+        ],
+        [
+          0.146,
+          0.572,
+          0.258,
+          0.642
+        ],
+        [
+          0.544,
+          0.582,
+          0.598,
+          0.618
+        ],
+        [
+          0.756,
+          0.568,
+          0.84,
+          0.69
+        ],
+        [
+          0.538,
+          0.786,
+          0.846,
+          0.852
+        ],
+        [
+          0.22,
+          0.824,
+          0.488,
+          0.886
+        ],
+        [
+          0.606,
+          0.826,
+          0.786,
+          0.868
+        ],
+        [
+          0.228,
+          0.856,
+          0.478,
+          0.91
+        ]
+      ],
+      "ocr": [
+        {
+          "text": "2",
+          "confidence": 0.9997227787971497,
+          "polygon": [
+            [
+              219.0,
+              42.0
+            ],
+            [
+              285.0,
+              42.0
+            ],
+            [
+              285.0,
+              129.0
+            ],
+            [
+              219.0,
+              129.0
+            ]
+          ]
+        },
+        {
+          "text": "PINTS",
+          "confidence": 0.9286351084709168,
+          "polygon": [
+            [
+              209.0,
+              131.0
+            ],
+            [
+              296.0,
+              131.0
+            ],
+            [
+              296.0,
+              162.0
+            ],
+            [
+              209.0,
+              162.0
+            ]
+          ]
+        },
+        {
+          "text": "Binipper",
+          "confidence": 0.8286685943603516,
+          "polygon": [
+            [
+              77.0,
+              254.0
+            ],
+            [
+              178.0,
+              257.0
+            ],
+            [
+              177.0,
+              287.0
+            ],
+            [
+              76.0,
+              284.0
+            ]
+          ]
+        },
+        {
+          "text": "EDIBL",
+          "confidence": 0.9740824818611145,
+          "polygon": [
+            [
+              209.0,
+              270.0
+            ],
+            [
+              241.0,
+              286.0
+            ],
+            [
+              234.0,
+              301.0
+            ],
+            [
+              202.0,
+              285.0
+            ]
+          ]
+        },
+        {
+          "text": "cOO",
+          "confidence": 0.5796540975570679,
+          "polygon": [
+            [
+              341.0,
+              276.0
+            ],
+            [
+              373.0,
+              279.0
+            ],
+            [
+              371.0,
+              294.0
+            ],
+            [
+              340.0,
+              291.0
+            ]
+          ]
+        },
+        {
+          "text": "ED",
+          "confidence": 0.9760159552097321,
+          "polygon": [
+            [
+              374.0,
+              271.0
+            ],
+            [
+              389.0,
+              271.0
+            ],
+            [
+              389.0,
+              286.0
+            ],
+            [
+              374.0,
+              286.0
+            ]
+          ]
+        },
+        {
+          "text": "OONCO",
+          "confidence": 0.6785581588745118,
+          "polygon": [
+            [
+              79.0,
+              289.0
+            ],
+            [
+              126.0,
+              294.0
+            ],
+            [
+              124.0,
+              318.0
+            ],
+            [
+              76.0,
+              312.0
+            ]
+          ]
+        },
+        {
+          "text": "HCO.",
+          "confidence": 0.8850615322589874,
+          "polygon": [
+            [
+              276.0,
+              294.0
+            ],
+            [
+              296.0,
+              296.0
+            ],
+            [
+              296.0,
+              306.0
+            ],
+            [
+              275.0,
+              304.0
+            ]
+          ]
+        },
+        {
+          "text": "DOUGH",
+          "confidence": 0.9768646836280823,
+          "polygon": [
+            [
+              398.0,
+              287.0
+            ],
+            [
+              417.0,
+              336.0
+            ],
+            [
+              400.0,
+              342.0
+            ],
+            [
+              381.0,
+              293.0
+            ]
+          ]
+        },
+        {
+          "text": "GALACTIC FUSION",
+          "confidence": 0.9221944292386373,
+          "polygon": [
+            [
+              272.0,
+              397.0
+            ],
+            [
+              420.0,
+              396.0
+            ],
+            [
+              420.0,
+              421.0
+            ],
+            [
+              273.0,
+              423.0
+            ]
+          ]
+        },
+        {
+          "text": "ROCKET CHIP",
+          "confidence": 0.9685127247463573,
+          "polygon": [
+            [
+              113.0,
+              416.0
+            ],
+            [
+              241.0,
+              415.0
+            ],
+            [
+              241.0,
+              439.0
+            ],
+            [
+              114.0,
+              440.0
+            ]
+          ]
+        },
+        {
+          "text": "COOKIESN'CREAN",
+          "confidence": 0.924864126103265,
+          "polygon": [
+            [
+              306.0,
+              417.0
+            ],
+            [
+              390.0,
+              416.0
+            ],
+            [
+              390.0,
+              430.0
+            ],
+            [
+              306.0,
+              431.0
+            ]
+          ]
+        },
+        {
+          "text": "CHOCOLATECHIPCOOKIE",
+          "confidence": 0.9916264006966039,
+          "polygon": [
+            [
+              117.0,
+              434.0
+            ],
+            [
+              235.0,
+              431.0
+            ],
+            [
+              236.0,
+              450.0
+            ],
+            [
+              118.0,
+              452.0
+            ]
+          ]
+        }
+      ],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.6996430158615112,
+          "foreground_ratio": 0.19688,
+          "rough_coverage": 0.39762392326250423,
+          "accepted": true
+        },
+        {
+          "index": 1,
+          "iou": 0.9688027501106262,
+          "foreground_ratio": 0.479636,
+          "rough_coverage": 0.9723592468848191,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.9517123699188232,
+          "foreground_ratio": 0.45394,
+          "rough_coverage": 0.9228313947222245,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 1,
+      "text_regions_reviewed": false,
+      "review_overlay": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B08Z8MHWVS\\review_overlay.png",
+      "observed_seconds": 0.9490210999938427
+    },
+    "B09CYFD5BX": {
+      "id": "B09CYFD5BX",
+      "identity": {
+        "image_sha256": "bec16e84034aa0a44b09f41298c795bdc087b0d008fce09cf67022c573e64e54",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "a4f921331c3c6599a341f34269b2ae0123c6e5f77e6aa5bb249e92947309163c",
+          "code_sha256": "68d77a878d601a13fc4947b8f3d7fd228fda17b6090f14c778ba1b0bd290d734",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\images\\bec16e84034aa0a44b09f41298c795bdc087b0d008fce09cf67022c573e64e54.jpg",
+      "title": "LTHDD Bar Stool Swivel Barber Chair Hydraulic Barber Chairs Heavy Duty 360 Degrees Rolling Salon Chair for Hair Stylist Tattoo Chair Salon Equipment,Blue,1 (Color : Black, Size : 1)",
+      "foreground_mask": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B09CYFD5BX\\foreground.png",
+      "foreground_mask_sha256": "db10c3f81515662bd20b0602a9f3d0e79746ba8c6af46174df4d18372f8eaea1",
+      "boxes": [
+        [
+          5,
+          5,
+          399,
+          496
+        ]
+      ],
+      "text_regions": [],
+      "ocr": [],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.7870936989784241,
+          "foreground_ratio": 0.34382716049382717,
+          "rough_coverage": 0.6923782639378969,
+          "accepted": true
+        },
+        {
+          "index": 1,
+          "iou": 0.965149998664856,
+          "foreground_ratio": 0.45457283950617283,
+          "rough_coverage": 0.9101320697650973,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.9572312235832214,
+          "foreground_ratio": 0.43610864197530863,
+          "rough_coverage": 0.878969654199012,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 1,
+      "text_regions_reviewed": false,
+      "review_overlay": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B09CYFD5BX\\review_overlay.png",
+      "observed_seconds": 0.8094381000119029
+    },
+    "B09DNZ71Q1": {
+      "id": "B09DNZ71Q1",
+      "identity": {
+        "image_sha256": "4419723d63c405e1daad8785ed3abd53052a87c49cd5e1834a882886d8863612",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "a4f921331c3c6599a341f34269b2ae0123c6e5f77e6aa5bb249e92947309163c",
+          "code_sha256": "68d77a878d601a13fc4947b8f3d7fd228fda17b6090f14c778ba1b0bd290d734",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\images\\4419723d63c405e1daad8785ed3abd53052a87c49cd5e1834a882886d8863612.jpg",
+      "title": "Judy Blue Cropped Mid-Rise Skinny Light Wash Jeans!",
+      "foreground_mask": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B09DNZ71Q1\\foreground.png",
+      "foreground_mask_sha256": "00d3754fdff51b8fe08aa446bfa2a3422113ce5f0a4433e3891f1fb2f0b8c185",
+      "boxes": [
+        [
+          88,
+          0,
+          253,
+          487
+        ]
+      ],
+      "text_regions": [
+        [
+          0.3153153153153153,
+          0.852,
+          0.46546546546546547,
+          0.968
+        ]
+      ],
+      "ocr": [
+        {
+          "text": "1",
+          "confidence": 0.7042546272277832,
+          "polygon": [
+            [
+              113.0,
+              429.0
+            ],
+            [
+              152.0,
+              432.0
+            ],
+            [
+              147.0,
+              481.0
+            ],
+            [
+              108.0,
+              477.0
+            ]
+          ]
+        }
+      ],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.8413724899291992,
+          "foreground_ratio": 0.2198978978978979,
+          "rough_coverage": 0.7779501455681408,
+          "accepted": true
+        },
+        {
+          "index": 1,
+          "iou": 0.9798747897148132,
+          "foreground_ratio": 0.2767867867867868,
+          "rough_coverage": 0.9790679388826317,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.9823012351989746,
+          "foreground_ratio": 0.2753753753753754,
+          "rough_coverage": 0.9741802494846675,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 2,
+      "text_regions_reviewed": false,
+      "review_overlay": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B09DNZ71Q1\\review_overlay.png",
+      "observed_seconds": 1.0069547000020975
+    },
+    "B09HH96NJY": {
+      "id": "B09HH96NJY",
+      "identity": {
+        "image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "a4f921331c3c6599a341f34269b2ae0123c6e5f77e6aa5bb249e92947309163c",
+          "code_sha256": "68d77a878d601a13fc4947b8f3d7fd228fda17b6090f14c778ba1b0bd290d734",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\images\\a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241.jpg",
+      "title": "Womens High Rise Jeans Wide Leg Pants Patchwork Straight Boyfriend Jeans Y2K 90s E-Girl Wild Baggy Trousers Denim Pants",
+      "foreground_mask": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B09HH96NJY\\foreground.png",
+      "foreground_mask_sha256": "ab540abe7d5014e586c7a4b13697903e7b8c62fb3bbeaf4c779b8e9d5e7b6bc2",
+      "boxes": [
+        [
+          157,
+          14,
+          326,
+          489
+        ]
+      ],
+      "text_regions": [],
+      "ocr": [],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.8469589352607727,
+          "foreground_ratio": 0.146088,
+          "rough_coverage": 0.7901729593827214,
+          "accepted": true
+        },
+        {
+          "index": 1,
+          "iou": 0.980236828327179,
+          "foreground_ratio": 0.182656,
+          "rough_coverage": 0.9864970306471889,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.9805395603179932,
+          "foreground_ratio": 0.1816,
+          "rough_coverage": 0.9809484589709133,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 2,
+      "text_regions_reviewed": false,
+      "review_overlay": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B09HH96NJY\\review_overlay.png",
+      "observed_seconds": 0.6235459999879822
+    },
+    "B09J81RMLD": {
+      "id": "B09J81RMLD",
+      "identity": {
+        "image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "a4f921331c3c6599a341f34269b2ae0123c6e5f77e6aa5bb249e92947309163c",
+          "code_sha256": "68d77a878d601a13fc4947b8f3d7fd228fda17b6090f14c778ba1b0bd290d734",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\images\\48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2.jpg",
+      "title": "Baby U Shaped Toothbrush for Aged 2-12 with 360° Soft Silicone Brush Heads Handle Kids Cute Teeth Whitening Massage Tool",
+      "foreground_mask": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B09J81RMLD\\foreground.png",
+      "foreground_mask_sha256": "c18292182d4b6edfc9ee7aae2957d55178bf68f8b3bc5293d2d27b4041578f41",
+      "boxes": [
+        [
+          135,
+          51,
+          349,
+          446
+        ]
+      ],
+      "text_regions": [],
+      "ocr": [],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.7877020835876465,
+          "foreground_ratio": 0.092352,
+          "rough_coverage": 0.6192320103259116,
+          "accepted": true
+        },
+        {
+          "index": 1,
+          "iou": 0.9656689763069153,
+          "foreground_ratio": 0.151848,
+          "rough_coverage": 0.9650155964289556,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.9666442275047302,
+          "foreground_ratio": 0.149832,
+          "rough_coverage": 0.9530224803700118,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 2,
+      "text_regions_reviewed": false,
+      "review_overlay": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B09J81RMLD\\review_overlay.png",
+      "observed_seconds": 0.8344786999950884
+    },
+    "B09M6VTWK1": {
+      "id": "B09M6VTWK1",
+      "identity": {
+        "image_sha256": "0933ac3b7eaee7e6f8128f9098ddb2cb84b1dbaa950d3e5de51298cded6f0c16",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "a4f921331c3c6599a341f34269b2ae0123c6e5f77e6aa5bb249e92947309163c",
+          "code_sha256": "68d77a878d601a13fc4947b8f3d7fd228fda17b6090f14c778ba1b0bd290d734",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\images\\0933ac3b7eaee7e6f8128f9098ddb2cb84b1dbaa950d3e5de51298cded6f0c16.jpg",
+      "title": "Security Camera Outdoor 1080 FHD 360°View Night Vision IP66 Waterproof WiFi Camera with Motion Detection, Body Tracking 2-Way Audio for Home Security",
+      "foreground_mask": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B09M6VTWK1\\foreground.png",
+      "foreground_mask_sha256": "a5ab44d6e65a9a7e581c4730d665073ba4f2914b0adcc8c92ba0a118295e9d5f",
+      "boxes": [
+        [
+          4,
+          0,
+          490,
+          485
+        ]
+      ],
+      "text_regions": [],
+      "ocr": [],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.04930686950683594,
+          "foreground_ratio": 0.002756,
+          "rough_coverage": 0.005292959133431807,
+          "accepted": false
+        },
+        {
+          "index": 1,
+          "iou": 0.9294868111610413,
+          "foreground_ratio": 0.432916,
+          "rough_coverage": 0.7892575789547724,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.9100748896598816,
+          "foreground_ratio": 0.424496,
+          "rough_coverage": 0.7719455581346275,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 1,
+      "text_regions_reviewed": false,
+      "review_overlay": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B09M6VTWK1\\review_overlay.png",
+      "observed_seconds": 0.5978442000050563
+    },
+    "B09Q895GX6": {
+      "id": "B09Q895GX6",
+      "identity": {
+        "image_sha256": "3b3a026d0bca7ffacface835b795c21ce445b57ceada232351646a7f4cacbd24",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "a4f921331c3c6599a341f34269b2ae0123c6e5f77e6aa5bb249e92947309163c",
+          "code_sha256": "68d77a878d601a13fc4947b8f3d7fd228fda17b6090f14c778ba1b0bd290d734",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\images\\3b3a026d0bca7ffacface835b795c21ce445b57ceada232351646a7f4cacbd24.jpg",
+      "title": "Kids U-Shaped Toothbrush, 360° Oral Teeth Cleaning Design for ChildrenToddler, Toothbrush with Food Grade Soft Silicone Brush Head, Manual Whole Mouth Toothbrush",
+      "foreground_mask": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B09Q895GX6\\foreground.png",
+      "foreground_mask_sha256": "08b7b677dc410096dff6630bc8c8d0e7c5fed0a61c7dc0bc6ca2555af43286f3",
+      "boxes": [
+        [
+          130,
+          24,
+          386,
+          471
+        ]
+      ],
+      "text_regions": [
+        [
+          0.582,
+          0.56,
+          0.716,
+          0.596
+        ],
+        [
+          0.576,
+          0.584,
+          0.722,
+          0.618
+        ],
+        [
+          0.588,
+          0.894,
+          0.708,
+          0.934
+        ]
+      ],
+      "ocr": [
+        {
+          "text": "儿证胶训练穿刷",
+          "confidence": 0.6307928221566337,
+          "polygon": [
+            [
+              294.0,
+              283.0
+            ],
+            [
+              355.0,
+              283.0
+            ],
+            [
+              355.0,
+              295.0
+            ],
+            [
+              294.0,
+              295.0
+            ]
+          ]
+        },
+        {
+          "text": "Training toothbrosh",
+          "confidence": 0.9232116341590881,
+          "polygon": [
+            [
+              291.0,
+              295.0
+            ],
+            [
+              358.0,
+              295.0
+            ],
+            [
+              358.0,
+              306.0
+            ],
+            [
+              291.0,
+              306.0
+            ]
+          ]
+        },
+        {
+          "text": "让金全号上制",
+          "confidence": 0.5618733068307241,
+          "polygon": [
+            [
+              298.0,
+              450.0
+            ],
+            [
+              351.0,
+              453.0
+            ],
+            [
+              350.0,
+              464.0
+            ],
+            [
+              297.0,
+              461.0
+            ]
+          ]
+        }
+      ],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.6910008192062378,
+          "foreground_ratio": 0.169312,
+          "rough_coverage": 0.7241175055069137,
+          "accepted": true
+        },
+        {
+          "index": 1,
+          "iou": 0.9732258319854736,
+          "foreground_ratio": 0.227436,
+          "rough_coverage": 0.9794346852266628,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.9736320376396179,
+          "foreground_ratio": 0.223628,
+          "rough_coverage": 0.9630897950872777,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 2,
+      "text_regions_reviewed": false,
+      "review_overlay": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\output\\public_pair_selection\\groups7_median_20261117\\data\\selected_annotations\\annotations\\B09Q895GX6\\review_overlay.png",
+      "observed_seconds": 0.884605899991584
+    }
+  },
+  "failures": {},
+  "models": {
+    "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+    "ocr_version": "1.4.4",
+    "ocr_weights": {
+      "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+      "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+      "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+    },
+    "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+    "segmentation_model_manifest_sha256": "a4f921331c3c6599a341f34269b2ae0123c6e5f77e6aa5bb249e92947309163c",
+    "code_sha256": "68d77a878d601a13fc4947b8f3d7fd228fda17b6090f14c778ba1b0bd290d734",
+    "device": "cuda",
+    "model_loaded_once": true
+  }
+}

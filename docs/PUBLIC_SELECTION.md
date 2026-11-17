@@ -1,6 +1,15 @@
 # 轻量公开商品选图入口
 
-当前入口为 `tools/select_public_pairs.py`（公开选图工具），配置使用第二版。默认保留两组公开目标，粗类型候选预算32张，使用公开开发集门槛和固定种子均匀抽样。完整数学定义见[选图协议](PAIR_SELECTION.md)。以下命令均在项目根目录、已激活项目运行环境后执行，同样适用于远程类优尼克斯系统；复用现有九组图对不会启动重新选图。
+当前入口为 `tools/select_public_pairs.py`（公开选图工具），配置使用第二版，默认在公开外形门槛合格集合中按 `DINOv2` 灰度外形相似度取中位数（可通过 `--strategy uniform` 保留均匀抽样兼容）。九组默认选图配置为 `src/experiments/config/selection_groups9_median.example.json`（含细分品类过滤与 `64 -> 128 -> 256` 空集合扩展阶梯，但不降低外形门槛）。完整数学定义见[选图协议](PAIR_SELECTION.md)。以下命令均在项目根目录、已激活项目运行环境后执行，复用既有九组 [`resources/evaluation_base`](../resources/evaluation_base) 不会启动重新选图，也不会被新选图覆盖。
+
+### 将新选图构建为独立 `--base` 评测目录
+
+完成 `annotate` 与 `publish`（生成 `NAMED_PAIRS.json`）后，可使用 `tools/build_derived_evaluation_base.py` 另建独立基础包（保留原始 180 条正常背景记忆、9 组目标及正式询问，仅替换 9 条源商品参考），不覆盖原始 `resources/evaluation_base`：
+
+```bash
+python -X utf8 -B tools/build_derived_evaluation_base.py --selection-root output/public_pair_selection/groups9_median_20261117 --output-base resources/evaluation_base_median
+python -X utf8 -B tools/run_experiment.py generate --base resources/evaluation_base_median --group all --method ambilage --output output/remote_median_groups9 --device cuda
+```
 
 ## 准备本地模型与真实开发标签
 

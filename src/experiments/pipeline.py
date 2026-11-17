@@ -267,10 +267,22 @@ def load_frozen(method_root):
              target_image_sha256=frozen['target']['image_sha256']))
     if frozen['method'] in ('ambilage', 'visual_inception') and frozen['metadata'].get('training_objective',{}).get('surrogate_selection')!=binding.get('training_surrogates'):
         raise ValueError('冻结图片的训练代理与公开运行配置不一致')
+    if binding.get('training_manifest_sha256') is not None and frozen['metadata'].get('training_objective', {}).get('training_manifest_sha256') != binding['training_manifest_sha256']:
+        raise ValueError('冻结图片的训练清单与公开运行配置不一致')
     return frozen
 
 
-def generate(config, root, selection, method, *, device='cuda', generator=None):
+def visual_inception_data_roots(options):
+    """仅授权本次显式训练包及缓存；私有输入黑名单继续生效。"""
+    roots = []
+    for key in ('training_manifest', 'candidate_cache_dir'):
+        if options.get(key):
+            path = project_path(options[key])
+            roots.append(path.parent if key == 'training_manifest' else path)
+    return roots
+
+
+def generate(config, root, selection, method, *, device='cuda', generator=None, training_manifest=None):
     from src.visual.optimization import generate_attack
     from src.visual.attack_completion import validate_attack_completion
     method = normalize_method(method)
@@ -278,6 +290,10 @@ def generate(config, root, selection, method, *, device='cuda', generator=None):
     if set(generation) - set(METHODS):
         raise ValueError('生成设置只能使用当前登记的方法')
     options = copy.deepcopy(generation.get(method, {}))
+    if training_manifest is not None:
+        if method != 'visual_inception':
+            raise ValueError('公开训练清单只能用于视觉记忆植入方法')
+        options['training_manifest'] = str(project_path(training_manifest))
     feature_text = selected_feature_text(selection)
     if feature_text is None:
         raise ValueError('正式生成前须先在选图阶段提取并冻结目标商品特点文字')
@@ -300,8 +316,13 @@ def generate(config, root, selection, method, *, device='cuda', generator=None):
     private_paths = [project_path(evaluation.get('shared_pool', SHARED_MEMORY)),
                      project_path(evaluation.get('query_manifest', PRIVATE / 'query_image.json')),
                      project_path(evaluation.get('encoder_config', PRIVATE / 'evaluator.json'))]
+    data_roots = visual_inception_data_roots(options) if method == 'visual_inception' else []
     with catalog_training_guard(allowed_output_roots=[output, Path(root) / 'selection',
-            Path(source['image']).parent, Path(target['image']).parent], private_paths=private_paths) as audit:
+            Path(source['image']).parent, Path(target['image']).parent, *data_roots], private_paths=private_paths) as audit:
+        if method == 'visual_inception' and options.get('objective_mode') == 'retrieval_semantic_perceptual':
+            if not options.get('training_manifest'):
+                raise ValueError('完整视觉记忆植入方法须先准备独立公开训练清单')
+            public_binding['training_manifest_sha256'] = sha256_file(project_path(options['training_manifest']))
         if method in (*NATURAL_METHODS, 'visual_inception'):
             from src.visual.training_surrogates import selection_from_config
             if method == 'visual_inception':
@@ -342,6 +363,8 @@ def generate(config, root, selection, method, *, device='cuda', generator=None):
             source_image_sha256=source['image_sha256'], target_image_sha256=target['image_sha256']))
         if method in (*NATURAL_METHODS, 'visual_inception') and metadata.get('training_objective',{}).get('surrogate_selection')!=public_binding['training_surrogates']:
             raise ValueError('实际训练代理与本次冻结选择不一致')
+        if public_binding.get('training_manifest_sha256') is not None and metadata.get('training_objective', {}).get('training_manifest_sha256') != public_binding['training_manifest_sha256']:
+            raise ValueError('实际训练清单与本次冻结公开输入不一致')
         final = output / 'frozen.png'
         final.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(image, final)
@@ -365,6 +388,7 @@ def main(argv=None):
     parser.add_argument('--query-manifest', type=Path, help='显式复用已冻结的正式询问清单')
     parser.add_argument('--no-defense', action='store_true', help='仅运行无防御条件，不运行完整防御面板')
     parser.add_argument('--visual-inception-config', type=Path, help='视觉记忆植入基线的独立公开配置')
+    parser.add_argument('--training-manifest', type=Path, help='视觉记忆植入的独立公开训练包清单')
     from src.visual.training_surrogates import add_surrogate_arguments,apply_surrogate_overrides
     add_surrogate_arguments(parser)
     args = parser.parse_args(argv)
@@ -388,10 +412,15 @@ def main(argv=None):
     if args.no_defense:
         config.setdefault('evaluation', {})['defense_mode'] = 'none'
     method = normalize_method(args.method or config.get('method', 'ambilage'))
+    if args.training_manifest is not None:
+        if method != 'visual_inception' or args.stage not in ('generate', 'all'):
+            parser.error('公开训练清单仅用于视觉记忆植入的生成或全阶段命令')
     if args.visual_inception_config is not None:
         if method != 'visual_inception' or args.stage not in ('generate', 'all'):
             parser.error('视觉记忆植入配置仅用于该方法的生成或全阶段命令')
         config.setdefault('generation', {})['visual_inception'] = read_json(args.visual_inception_config)
+    if args.training_manifest is not None:
+        config.setdefault('generation', {}).setdefault('visual_inception', {})['training_manifest'] = str(args.training_manifest.resolve())
     if args.surrogate_set is not None or args.surrogate_config is not None:
         if method=='lucid' or args.stage not in ('generate','all'):
             parser.error('训练代理选择参数仅用于新方法的生成或全阶段命令')

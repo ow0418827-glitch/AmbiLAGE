@@ -1,0 +1,22 @@
+{
+  "kind": "heldout_search_query",
+  "split": "query_reserve",
+  "test_fixture": false,
+  "is_synthetic": false,
+  "origin_type": "public_real_search_queries",
+  "upstream": {
+    "dataset": "Amazon Science Shopping Queries Dataset / ESCI",
+    "revision": "7916cdf6ab75a462e77f20ab40428a10923998d5",
+    "url": "https://github.com/amazon-science/esci-data"
+  },
+  "original_snapshot_url": "https://media.githubusercontent.com/media/amazon-science/esci-data/7916cdf6ab75a462e77f20ab40428a10923998d5/shopping_queries_dataset/shopping_queries_dataset_examples.parquet",
+  "original_snapshot_sha256": "4a735b693b4a424a6fc67f5be6e4c811495c488bbf66d02a602d308b2744263a",
+  "original_partition": "train/us",
+  "selection_policy": "independent_public_esci_orcas_product_intent_hash_reserve_v5",
+  "category_rule": [
+    "\\b(?:curtains?|drapes?|draperies)\\b",
+    "\\b(?:rod|rods|hook|hooks|ring|rings|clip|clips|tieback|tiebacks|holdback|holdbacks|bracket|brackets|track|tracks|shower|bathroom|bead|beaded|led|light|lights)\\b"
+  ],
+  "product_intent_exclude_regex": "\\b(?:recipe|recipes|how|why|can|should|does|do|is|are|was|were|what|when|where|ingredients|salmonella|eating|making|make|homemade|salons?|business|start|freeze|freezing|baking|diy|methods?|restoration|rentals?|rent|tax|agreement|near me)\\b",
+  "scope": "Original public product-related search strings; ORCAS is general web search, not shopping logs"
+}

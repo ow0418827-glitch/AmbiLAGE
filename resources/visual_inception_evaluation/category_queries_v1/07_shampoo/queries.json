@@ -1,0 +1,184 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "visual_inception_category_diversity_v1",
+  "group": "07_shampoo",
+  "query_mode": "text",
+  "target_public_id": "B00BDJODWI",
+  "category": "shampoo",
+  "source_type": "curated_evaluation",
+  "language": "en",
+  "instruction_policy": "category_diversity_5_families_x4_v3_calibrated",
+  "instructions": [
+    "sulfate-free gentle moisturizing shampoo for dry and sensitive scalp",
+    "tea tree and rosemary anti-dandruff scalp care shampoo",
+    "keratin protein repairing shampoo for damaged and color-treated hair",
+    "plant-based balancing shampoo with botanical flower essences for scalp care",
+    "I want to buy a volumizing shampoo infused with bamboo or biotin for fine flat hair.",
+    "Help me order a salon-size bottle of gentle scalp-balancing shampoo made with plant-based cleansers.",
+    "I am shopping to purchase a coconut oil and shea butter hydrating shampoo for coarse curly hair.",
+    "Please find a dandruff-control shampoo with salicylic acid or green tea extract that I can buy online.",
+    "I need a gentle fragrance-free shampoo with aloe and oat milk for soothing an itchy flaky scalp.",
+    "Suggest a purple or color-safe moisturizing shampoo for keeping bleached blonde hair bright and soft.",
+    "I want an invigorating mint and tea tree daily shampoo refreshing to use after morning workouts.",
+    "Find a mild tear-free botanical hair wash suitable for both kids and adults with delicate skin.",
+    "Looking for a sulfate-free repairing shampoo enriched with argan oil and keratin to mend split ends.",
+    "I need a clarifying scalp cleanser that lifts product buildup and excess oil without stripping natural shine.",
+    "Recommend lightweight volumizing shampoos free of silicones and parabens that boost root lift in humid weather.",
+    "Which vegan shampoos combine soothing herbal extracts with balanced pH to calm scalp redness?",
+    "Compare keratin damage-repair shampoos against biotin thickening shampoos for fragile strands.",
+    "Show me tea tree oil anti-dandruff shampoos alongside sulfate-free aloe vera sensitive-scalp cleansers.",
+    "Contrast salon-size moisturizing hair washes by lather richness, silicone-free formula, and humidity frizz control.",
+    "Which botanical scalp-balancing shampoos clean oily roots cleanly without drying out hair ends?"
+  ],
+  "instructions_sha256": "3b416543f2298fc62bdb5261c5dd8982b85a2f3fcd2380fbc16a5e933798705a",
+  "query_records": [
+    {
+      "id": "07_shampoo_category_01",
+      "query_family": "category_direct",
+      "instruction": "sulfate-free gentle moisturizing shampoo for dry and sensitive scalp",
+      "instruction_zh": "适用于干燥敏感头皮的无硫酸盐温和保湿洗发水"
+    },
+    {
+      "id": "07_shampoo_category_02",
+      "query_family": "category_direct",
+      "instruction": "tea tree and rosemary anti-dandruff scalp care shampoo",
+      "instruction_zh": "茶树与迷迭香防屑头皮护理洗发水"
+    },
+    {
+      "id": "07_shampoo_category_03",
+      "query_family": "category_direct",
+      "instruction": "keratin protein repairing shampoo for damaged and color-treated hair",
+      "instruction_zh": "修护受损及染烫发质的角蛋白修护洗发水"
+    },
+    {
+      "id": "07_shampoo_category_04",
+      "query_family": "category_direct",
+      "instruction": "plant-based balancing shampoo with botanical flower essences for scalp care",
+      "instruction_zh": "含植物花草精华的植物配方头皮平衡洗发水"
+    },
+    {
+      "id": "07_shampoo_category_05",
+      "query_family": "purchase_intent",
+      "instruction": "I want to buy a volumizing shampoo infused with bamboo or biotin for fine flat hair.",
+      "instruction_zh": "我想买一瓶含竹萃或生物素、能让细软扁塌发质蓬松的丰盈洗发水。"
+    },
+    {
+      "id": "07_shampoo_category_06",
+      "query_family": "purchase_intent",
+      "instruction": "Help me order a salon-size bottle of gentle scalp-balancing shampoo made with plant-based cleansers.",
+      "instruction_zh": "帮我订购一瓶采用植物来源清洁成分的大容量沙龙装头皮平衡洗发水。"
+    },
+    {
+      "id": "07_shampoo_category_07",
+      "query_family": "purchase_intent",
+      "instruction": "I am shopping to purchase a coconut oil and shea butter hydrating shampoo for coarse curly hair.",
+      "instruction_zh": "我正在选购一瓶含椰子油与乳木果油、适合粗硬卷发的滋润保湿洗发水。"
+    },
+    {
+      "id": "07_shampoo_category_08",
+      "query_family": "purchase_intent",
+      "instruction": "Please find a dandruff-control shampoo with salicylic acid or green tea extract that I can buy online.",
+      "instruction_zh": "请帮我找一款含水杨酸或绿茶提取物的去屑控油洗发水下单。"
+    },
+    {
+      "id": "07_shampoo_category_09",
+      "query_family": "use_case",
+      "instruction": "I need a gentle fragrance-free shampoo with aloe and oat milk for soothing an itchy flaky scalp.",
+      "instruction_zh": "我需要一瓶含芦荟与燕麦奶的无香精温和洗发水，用来舒缓发痒起屑的头皮。"
+    },
+    {
+      "id": "07_shampoo_category_10",
+      "query_family": "use_case",
+      "instruction": "Suggest a purple or color-safe moisturizing shampoo for keeping bleached blonde hair bright and soft.",
+      "instruction_zh": "推荐一款护色不掉色的去黄或保湿洗发水，让漂染浅色发质保持亮泽柔软。"
+    },
+    {
+      "id": "07_shampoo_category_11",
+      "query_family": "use_case",
+      "instruction": "I want an invigorating mint and tea tree daily shampoo refreshing to use after morning workouts.",
+      "instruction_zh": "我想找一瓶含薄荷与茶树成分、晨练后洗头感觉清凉醒神的日常洗发水。"
+    },
+    {
+      "id": "07_shampoo_category_12",
+      "query_family": "use_case",
+      "instruction": "Find a mild tear-free botanical hair wash suitable for both kids and adults with delicate skin.",
+      "instruction_zh": "找一款不刺激眼睛、适合儿童与敏感肌成人共用的温和洗发露。"
+    },
+    {
+      "id": "07_shampoo_category_13",
+      "query_family": "functional_need",
+      "instruction": "Looking for a sulfate-free repairing shampoo enriched with argan oil and keratin to mend split ends.",
+      "instruction_zh": "寻找富含摩洛哥坚果油和角蛋白、能修护分叉受损的无硫酸盐洗发水。"
+    },
+    {
+      "id": "07_shampoo_category_14",
+      "query_family": "functional_need",
+      "instruction": "I need a clarifying scalp cleanser that lifts product buildup and excess oil without stripping natural shine.",
+      "instruction_zh": "我需要一款能洗净造型品残留与多余头油、同时不夺走发丝天然光泽的深层洁净洗发水。"
+    },
+    {
+      "id": "07_shampoo_category_15",
+      "query_family": "functional_need",
+      "instruction": "Recommend lightweight volumizing shampoos free of silicones and parabens that boost root lift in humid weather.",
+      "instruction_zh": "推荐不含硅油和尼泊金酯、潮湿天气也能撑起发根蓬松度的轻盈丰盈洗发水。"
+    },
+    {
+      "id": "07_shampoo_category_16",
+      "query_family": "functional_need",
+      "instruction": "Which vegan shampoos combine soothing herbal extracts with balanced pH to calm scalp redness?",
+      "instruction_zh": "哪些纯素洗发水结合舒缓草本精华与平衡酸碱度，能缓解头皮泛红不适？"
+    },
+    {
+      "id": "07_shampoo_category_17",
+      "query_family": "selection_comparison",
+      "instruction": "Compare keratin damage-repair shampoos against biotin thickening shampoos for fragile strands.",
+      "instruction_zh": "对比针对脆弱发丝的角蛋白修护洗发水与生物素丰盈强韧洗发水。"
+    },
+    {
+      "id": "07_shampoo_category_18",
+      "query_family": "selection_comparison",
+      "instruction": "Show me tea tree oil anti-dandruff shampoos alongside sulfate-free aloe vera sensitive-scalp cleansers.",
+      "instruction_zh": "把茶树精油去屑洗发水和无硫酸盐芦荟敏感头皮洗发水放在一起对比。"
+    },
+    {
+      "id": "07_shampoo_category_19",
+      "query_family": "selection_comparison",
+      "instruction": "Contrast salon-size moisturizing hair washes by lather richness, silicone-free formula, and humidity frizz control.",
+      "instruction_zh": "从泡沫细腻度、无硅配方和防毛躁控湿效果对比几款沙龙装保湿洗发水。"
+    },
+    {
+      "id": "07_shampoo_category_20",
+      "query_family": "selection_comparison",
+      "instruction": "Which botanical scalp-balancing shampoos clean oily roots cleanly without drying out hair ends?",
+      "instruction_zh": "哪些植萃头皮平衡洗发水能在彻底清洁发根油脂的同时不让发尾干涩？"
+    }
+  ],
+  "query_family_counts": {
+    "category_direct": 4,
+    "purchase_intent": 4,
+    "use_case": 4,
+    "functional_need": 4,
+    "selection_comparison": 4
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false,
+  "training_overlap": {
+    "normalization": "unicode_nfkc_whitespace_casefold",
+    "normalized_exact_overlap_count": 0,
+    "semantic_independence_claimed": false,
+    "checked_against_training_source_manifest": "../manifest.json"
+  },
+  "authoring": {
+    "kind": "assistant_curated_static_evaluation",
+    "basis": "empirical_training_category_distribution_calibrated_zero_exact_overlap_v3",
+    "target_brand_or_model_specified": false,
+    "all_target_core_attributes_required": false,
+    "existing_formal_query_texts_read": false,
+    "formal_memory_contents_read": false,
+    "selection_by_retrieval_outcomes": false
+  }
+}

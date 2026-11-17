@@ -1,0 +1,184 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "visual_inception_category_diversity_v1",
+  "group": "06_jeans",
+  "query_mode": "text",
+  "target_public_id": "B09HH96NJY",
+  "category": "jeans",
+  "source_type": "curated_evaluation",
+  "language": "en",
+  "instruction_policy": "category_diversity_5_families_x4_v3_calibrated",
+  "instructions": [
+    "womens high-waisted stretch straight-leg denim jeans",
+    "Y2K 90s baggy wide-leg boyfriend jeans for women and teen girls",
+    "high-rise flare bell-bottom distressed denim pants with classic pockets",
+    "baggy straight-leg high waist jeans with flap pockets and zipper fly",
+    "I want to buy comfortable stretch cotton-blend womens jeans in a mid-rise or high-rise straight fit.",
+    "Help me order relaxed-fit wide-leg denim trousers suitable for casual streetwear and school.",
+    "I am shopping to purchase vintage wash Y2K baggy jeans with patchwork or subtle distressing.",
+    "Please find curve-flattering high-waisted bootcut or skinny denim pants with a zip-and-button fly to buy.",
+    "I need breathable lightweight denim jeans made with cotton and spandex comfortable for travel and office Fridays.",
+    "Suggest loose baggy boyfriend jeans with deep practical pockets easy to pair with sneakers on weekends.",
+    "I want high-rise flare jeans that elongate the legs when worn with heeled boots for evening outings.",
+    "Find durable relaxed-fit jeans in petite and plus-size inseams made for everyday walking and errands.",
+    "Looking for womens jeans with four-way stretch recovery so knees never bag out after all-day sitting.",
+    "I need high-waisted baggy straight-leg jeans featuring functional flap cargo pockets and sturdy zipper closure.",
+    "Recommend soft breathable denim pants tailored with a gap-free contoured waistband and deep front pockets.",
+    "Which cotton-rich Y2K wide-leg jeans keep their crisp vintage wash and seam stitching after machine washing?",
+    "Compare high-waisted baggy wide-leg jeans against mid-rise straight-leg stretch denim pants.",
+    "Show me 90s loose boyfriend jeans side by side with high-rise bell-bottom flare denim.",
+    "Contrast womens denim jeans by cotton-spandex stretch ratio, pocket depth, and rise height.",
+    "Which baggy straight-leg jeans drape cleaner over shoes without feeling stiff at the waist?"
+  ],
+  "instructions_sha256": "31e668aea2db9d8e408b67fdb85ef17328b27ca804e52092d5bf6ea8203fcf42",
+  "query_records": [
+    {
+      "id": "06_jeans_category_01",
+      "query_family": "category_direct",
+      "instruction": "womens high-waisted stretch straight-leg denim jeans",
+      "instruction_zh": "女式高腰弹力直筒牛仔长裤"
+    },
+    {
+      "id": "06_jeans_category_02",
+      "query_family": "category_direct",
+      "instruction": "Y2K 90s baggy wide-leg boyfriend jeans for women and teen girls",
+      "instruction_zh": "女式与少女千禧复古 90 年代宽松阔腿男友牛仔裤"
+    },
+    {
+      "id": "06_jeans_category_03",
+      "query_family": "category_direct",
+      "instruction": "high-rise flare bell-bottom distressed denim pants with classic pockets",
+      "instruction_zh": "高腰做旧磨破微喇喇叭裤脚牛仔裤"
+    },
+    {
+      "id": "06_jeans_category_04",
+      "query_family": "category_direct",
+      "instruction": "baggy straight-leg high waist jeans with flap pockets and zipper fly",
+      "instruction_zh": "带翻盖口袋和拉链门襟的高腰宽松直筒牛仔裤"
+    },
+    {
+      "id": "06_jeans_category_05",
+      "query_family": "purchase_intent",
+      "instruction": "I want to buy comfortable stretch cotton-blend womens jeans in a mid-rise or high-rise straight fit.",
+      "instruction_zh": "我想买一条采用舒适弹力棉混纺面料的中高腰直筒女式牛仔裤。"
+    },
+    {
+      "id": "06_jeans_category_06",
+      "query_family": "purchase_intent",
+      "instruction": "Help me order relaxed-fit wide-leg denim trousers suitable for casual streetwear and school.",
+      "instruction_zh": "帮我订购一条适合日常街头穿搭与校园通勤的宽松阔腿牛仔长裤。"
+    },
+    {
+      "id": "06_jeans_category_07",
+      "query_family": "purchase_intent",
+      "instruction": "I am shopping to purchase vintage wash Y2K baggy jeans with patchwork or subtle distressing.",
+      "instruction_zh": "我正在选购一条带有拼接或轻度做旧水洗风格的千禧复古宽松牛仔裤。"
+    },
+    {
+      "id": "06_jeans_category_08",
+      "query_family": "purchase_intent",
+      "instruction": "Please find curve-flattering high-waisted bootcut or skinny denim pants with a zip-and-button fly to buy.",
+      "instruction_zh": "请帮我找一条修身显曲线、带拉链纽扣门襟的高腰微喇或修身牛仔裤下单。"
+    },
+    {
+      "id": "06_jeans_category_09",
+      "query_family": "use_case",
+      "instruction": "I need breathable lightweight denim jeans made with cotton and spandex comfortable for travel and office Fridays.",
+      "instruction_zh": "我需要一条棉与氨纶混纺的透气轻盈牛仔裤，适合旅行和休闲办公日穿着。"
+    },
+    {
+      "id": "06_jeans_category_10",
+      "query_family": "use_case",
+      "instruction": "Suggest loose baggy boyfriend jeans with deep practical pockets easy to pair with sneakers on weekends.",
+      "instruction_zh": "推荐一条带实用深口袋、周末搭配运动鞋很随性的宽松男友风牛仔裤。"
+    },
+    {
+      "id": "06_jeans_category_11",
+      "query_family": "use_case",
+      "instruction": "I want high-rise flare jeans that elongate the legs when worn with heeled boots for evening outings.",
+      "instruction_zh": "我想找一条晚上搭配高跟短靴能拉长腿部线条的高腰微喇牛仔裤。"
+    },
+    {
+      "id": "06_jeans_category_12",
+      "query_family": "use_case",
+      "instruction": "Find durable relaxed-fit jeans in petite and plus-size inseams made for everyday walking and errands.",
+      "instruction_zh": "找一款兼顾娇小和大码裤长、耐穿舒适适合日常逛街步行的宽松牛仔裤。"
+    },
+    {
+      "id": "06_jeans_category_13",
+      "query_family": "functional_need",
+      "instruction": "Looking for womens jeans with four-way stretch recovery so knees never bag out after all-day sitting.",
+      "instruction_zh": "寻找具有高回弹四面弹力的女式牛仔裤，久坐一整天膝盖也不易鼓包变形。"
+    },
+    {
+      "id": "06_jeans_category_14",
+      "query_family": "functional_need",
+      "instruction": "I need high-waisted baggy straight-leg jeans featuring functional flap cargo pockets and sturdy zipper closure.",
+      "instruction_zh": "我需要一条带实用翻盖工装口袋和耐用拉链门襟的高腰宽松直筒牛仔裤。"
+    },
+    {
+      "id": "06_jeans_category_15",
+      "query_family": "functional_need",
+      "instruction": "Recommend soft breathable denim pants tailored with a gap-free contoured waistband and deep front pockets.",
+      "instruction_zh": "推荐后腰贴合不空档且前插袋够深的柔软透气牛仔长裤。"
+    },
+    {
+      "id": "06_jeans_category_16",
+      "query_family": "functional_need",
+      "instruction": "Which cotton-rich Y2K wide-leg jeans keep their crisp vintage wash and seam stitching after machine washing?",
+      "instruction_zh": "哪些高含棉量千禧复古阔腿牛仔裤机洗后依然保持清晰水洗纹理与走线？"
+    },
+    {
+      "id": "06_jeans_category_17",
+      "query_family": "selection_comparison",
+      "instruction": "Compare high-waisted baggy wide-leg jeans against mid-rise straight-leg stretch denim pants.",
+      "instruction_zh": "对比高腰宽松阔腿牛仔裤与中腰直筒弹力牛仔裤。"
+    },
+    {
+      "id": "06_jeans_category_18",
+      "query_family": "selection_comparison",
+      "instruction": "Show me 90s loose boyfriend jeans side by side with high-rise bell-bottom flare denim.",
+      "instruction_zh": "把 90 年代宽松男友牛仔裤和高腰喇叭微喇牛仔裤放在一起对比。"
+    },
+    {
+      "id": "06_jeans_category_19",
+      "query_family": "selection_comparison",
+      "instruction": "Contrast womens denim jeans by cotton-spandex stretch ratio, pocket depth, and rise height.",
+      "instruction_zh": "从棉氨纶弹力比例、口袋深度与腰高对比几款女式牛仔裤。"
+    },
+    {
+      "id": "06_jeans_category_20",
+      "query_family": "selection_comparison",
+      "instruction": "Which baggy straight-leg jeans drape cleaner over shoes without feeling stiff at the waist?",
+      "instruction_zh": "哪些宽松直筒牛仔裤垂坠在鞋面上更有型且腰部不紧勒？"
+    }
+  ],
+  "query_family_counts": {
+    "category_direct": 4,
+    "purchase_intent": 4,
+    "use_case": 4,
+    "functional_need": 4,
+    "selection_comparison": 4
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false,
+  "training_overlap": {
+    "normalization": "unicode_nfkc_whitespace_casefold",
+    "normalized_exact_overlap_count": 0,
+    "semantic_independence_claimed": false,
+    "checked_against_training_source_manifest": "../manifest.json"
+  },
+  "authoring": {
+    "kind": "assistant_curated_static_evaluation",
+    "basis": "empirical_training_category_distribution_calibrated_zero_exact_overlap_v3",
+    "target_brand_or_model_specified": false,
+    "all_target_core_attributes_required": false,
+    "existing_formal_query_texts_read": false,
+    "formal_memory_contents_read": false,
+    "selection_by_retrieval_outcomes": false
+  }
+}

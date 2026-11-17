@@ -1,0 +1,49 @@
+{
+  "group": "07_shampoo",
+  "source_id": "B09B63YYCW",
+  "target_id": "B00BDJODWI",
+  "category": "shampoo",
+  "subtype": "shampoo",
+  "positive_title_pattern": "\\bshampoos?\\b",
+  "negative_title_pattern": "\\b(?:dry shampoo|brush|scrubber|massager|shampoo bowl|shampoo sink|shampoo cap|shampoo chair|dogs?|cats?|pets?|horses?|empty|refillable|dispensers?|containers?|travel bottles|replacement|wigs?|universal pump)\\b",
+  "positive_title_scope_first_characters": 160,
+  "target_public_category_label": "scalp treatments",
+  "public_category_labels": [
+    "scalp treatments",
+    "shampoo & conditioner"
+  ],
+  "indexed_category_bucket_counts": {
+    "scalp treatments": 3078,
+    "shampoo & conditioner": 6861
+  },
+  "indexed_category_bucket_size": 9939,
+  "catalog_public_projections_read": 100,
+  "max_read_per_group": 5000,
+  "requested_candidate_count": 10,
+  "description_count": 50,
+  "reserve_count": 40,
+  "candidate_reserve_count": 50,
+  "seed": 42,
+  "group_order_seed_sha256": "3fa9d65eedf733739999d0e6b0624381784662167f0c902eca2dac924dc869e8",
+  "rejection_counts": {
+    "public_title_subtype_mismatch": 40,
+    "missing_public_image_or_description": 10,
+    "explicit_public_title_category_rejection": 3
+  },
+  "gallery_downloaded": false,
+  "gallery_finalized": false,
+  "suggested_gallery_description_overlap": 10,
+  "fallback_policy": "first_successful_images_in_frozen_sampling_rank_order_without_model_scores",
+  "catalog_identity": {
+    "file_name": "catalog.sqlite",
+    "byte_size": 7136296960,
+    "mtime_ns": 1794599192500655300,
+    "public_schema_sha256": "05a2a7867fd1deffd0bea991032103cff8a586a05084d8d09c87ca1e149b595c",
+    "sha256": "cbfe10eb111814c7a45e82383173df4f601d08cc9f7d2fd3069429ee71ce42a2",
+    "sha256_verification": "caller_supplied_preverified_source_manifest",
+    "snapshot_id": "7e26cbd71bd0afde12da34d559864ee74c0fb1896881c362671cc7dea75ec29b"
+  },
+  "descriptions_sha256": "d517b98ff726dcbd2551ca60b2272a11410c5631646e13ca3d3b19ab2e3d2c56",
+  "candidate_reserve_sha256": "67af56de803ca83ef76f183083b4b1b085150d9bc5fb03fe845d8519c2df7550",
+  "excluded_ids_sha256": "397c24c5e9780749987695dea3be6c035fefef9896141fcf7bbc87de2420541d"
+}

@@ -1,0 +1,49 @@
+{
+  "group": "09_toothbrush",
+  "source_id": "B09PNNXYJ4",
+  "target_id": "B09J81RMLD",
+  "category": "toothbrush",
+  "subtype": "toothbrush",
+  "positive_title_pattern": "\\btooth\\s?brush(?:es)?\\b",
+  "negative_title_pattern": "\\b(?:replacement|spare|refills?|holders?|cases?|covers?|chargers?|stands?|containers?|sanitizer|accessory kit|storage|wall[ -]?mount|caps?|bags?|pouches?|oral irrigator|tartar remover|plaque remover|scaler|battery cell|solder tabs|ni-mh)\\b",
+  "positive_title_scope_first_characters": 160,
+  "target_public_category_label": "children's dental care",
+  "public_category_labels": [
+    "children's dental care",
+    "toothbrushes & accessories"
+  ],
+  "indexed_category_bucket_counts": {
+    "children's dental care": 5887,
+    "toothbrushes & accessories": 3016
+  },
+  "indexed_category_bucket_size": 8903,
+  "catalog_public_projections_read": 90,
+  "max_read_per_group": 5000,
+  "requested_candidate_count": 10,
+  "description_count": 50,
+  "reserve_count": 40,
+  "candidate_reserve_count": 50,
+  "seed": 42,
+  "group_order_seed_sha256": "724a670d1e7429501aaafe3f04ebbcf78e50a40a0c0a1e65370ba709a56ab30c",
+  "rejection_counts": {
+    "public_title_subtype_mismatch": 40,
+    "excluded_or_previously_selected": 1,
+    "explicit_public_title_category_rejection": 1
+  },
+  "gallery_downloaded": false,
+  "gallery_finalized": false,
+  "suggested_gallery_description_overlap": 10,
+  "fallback_policy": "first_successful_images_in_frozen_sampling_rank_order_without_model_scores",
+  "catalog_identity": {
+    "file_name": "catalog.sqlite",
+    "byte_size": 7136296960,
+    "mtime_ns": 1794599192500655300,
+    "public_schema_sha256": "05a2a7867fd1deffd0bea991032103cff8a586a05084d8d09c87ca1e149b595c",
+    "sha256": "cbfe10eb111814c7a45e82383173df4f601d08cc9f7d2fd3069429ee71ce42a2",
+    "sha256_verification": "caller_supplied_preverified_source_manifest",
+    "snapshot_id": "7e26cbd71bd0afde12da34d559864ee74c0fb1896881c362671cc7dea75ec29b"
+  },
+  "descriptions_sha256": "e44f20af016fa2b5d50689f48402dc37cddb872c606cf975b43d10f69afa3e05",
+  "candidate_reserve_sha256": "9e966328b4f386d86a1bb95910b4c4006aa66036d36f59560543e9f414e3c508",
+  "excluded_ids_sha256": "397c24c5e9780749987695dea3be6c035fefef9896141fcf7bbc87de2420541d"
+}

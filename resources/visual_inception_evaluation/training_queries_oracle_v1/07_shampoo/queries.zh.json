@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "language": "zh",
+  "purpose": "仅供人工阅读，不传给检索编码器",
+  "group": "07_shampoo",
+  "category": "shampoo",
+  "query_records": [
+    {
+      "id": "07_shampoo_oracle_01",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B08GLB5W72）：OKAY Shampoo & Conditioner Coconut & Hibiscus Hair Care Set Deep Moisturizing | Helps Restore, Hydrate & Strengthen Hair | Sulfate, Silicone, Paraben Free For All Hair Types |Set of 2 x 12oz"
+    },
+    {
+      "id": "07_shampoo_oracle_02",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B08HYBPD5Q）：Pantene Advanced Care Shampoo 5 in 1 Pro-vitamin B5 Complex 38.2 Oz"
+    },
+    {
+      "id": "07_shampoo_oracle_03",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B004D9DKVA）：Affirm: KeraCare Dry & Itchy Scalp Moisturizing Shampoo, 8 oz"
+    },
+    {
+      "id": "07_shampoo_oracle_04",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B08Q77XBC7）：Luxliss Argan Oil Shampoo and Conditioner Set Sulfate Free, Natural Brightening Shampoo & Conditioner for Blonde Hair/Color Treated Hair/Curly Hair/Frizzy Hair/ Dry Scalp Treatment, 2 x16.9Oz"
+    },
+    {
+      "id": "07_shampoo_oracle_05",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B0791Y9749）：GLISS Hair Repair Shampoo Fiber Therapy, 13.6 Ounces (Pack of 3)"
+    },
+    {
+      "id": "07_shampoo_oracle_06",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B01LLT790C）：SALT SULFATE FREE SHAMPOO for Color Treated Hair (17 Fl Oz / 500ml) Best Hair Aftercare for Extensions (Unisex) Hair Color and Keratin Kit Treatment Straightening Fix Damaged After Care Paraben Free"
+    },
+    {
+      "id": "07_shampoo_oracle_07",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B00VAIO8XG）：Macadamia Professional Hair Care Sulfate & Paraben Free Natural Organic Cruelty-Free Vegan Hair Products Ultra Rich Hair Repair Shampoo, 10oz (packaging may vary)"
+    },
+    {
+      "id": "07_shampoo_oracle_08",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B00G6JFV6M）：Maria Nila Luminous Colour Shampoo 1000ml"
+    },
+    {
+      "id": "07_shampoo_oracle_09",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B07KFPMP18）：CocoMagic Nourishing Shampoo | Coconut Oil and Botanical Extracts | Strengthen, Restore Softness and Shine | Paraben Free, Cruelty Free, Made in USA (32 oz)"
+    },
+    {
+      "id": "07_shampoo_oracle_10",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B086M9RW2X）：Axe Anarchy 3-in-1 Shampoo, Conditioner & Body Wash, Dark Pomegranate & Sandalwood Scent, 12 Ounce (Pack of 3)"
+    },
+    {
+      "id": "07_shampoo_oracle_11",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_021，输入商品 B08P9HG48G）"
+    },
+    {
+      "id": "07_shampoo_oracle_12",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_028，输入商品 B01MYU55QJ）"
+    },
+    {
+      "id": "07_shampoo_oracle_13",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_016，输入商品 B00VAIO8XG）"
+    },
+    {
+      "id": "07_shampoo_oracle_14",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_009，输入商品 B00YMZAJDW）"
+    },
+    {
+      "id": "07_shampoo_oracle_15",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_013，输入商品 B00HVKAYL2）"
+    },
+    {
+      "id": "07_shampoo_oracle_16",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_019，输入商品 B01LLT790C）"
+    },
+    {
+      "id": "07_shampoo_oracle_17",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_11876）：baby curly hair shampoo and conditioner"
+    },
+    {
+      "id": "07_shampoo_oracle_18",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_92234）：shampoo for oily hair women"
+    },
+    {
+      "id": "07_shampoo_oracle_19",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_62060）：lice shampoo that kills eggs and lice"
+    },
+    {
+      "id": "07_shampoo_oracle_20",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_62059）：lice shampoo"
+    }
+  ]
+}

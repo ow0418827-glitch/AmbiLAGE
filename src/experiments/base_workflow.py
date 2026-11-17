@@ -75,17 +75,19 @@ def public_group(base, group):
 
 def generate_group(base, group, method, output, *, device='cuda', steps=None,
                    epsilon_levels=None, ambilage_config=None,visual_inception_config=None,
-                   surrogate_set=None,surrogate_config=None):
+                   surrogate_set=None,surrogate_config=None,training_manifest=None):
     from src.visual.catalog_training_guard import catalog_training_guard
     from src.visual.optimization import generate_attack
     from src.visual.attack_completion import validate_attack_completion
-    from src.experiments.pipeline import source_snapshot
+    from src.experiments.pipeline import source_snapshot, visual_inception_data_roots, project_path
     from src.visual.optimization import normalize_method
     method = normalize_method(method)
     if visual_inception_config is not None and method != 'visual_inception':
         raise ValueError('视觉记忆植入配置只能用于对应方法')
     if ambilage_config is not None and method != 'ambilage':
         raise ValueError('环境光协同配置只能用于对应方法')
+    if training_manifest is not None and method != 'visual_inception':
+        raise ValueError('公开训练清单只能用于视觉记忆植入方法')
     base, root = Path(base).resolve(), Path(output).resolve()
     if not root.is_relative_to(OUTPUT.resolve()):
         raise ValueError('运行结果必须保存在当前项目输出目录')
@@ -106,8 +108,21 @@ def generate_group(base, group, method, output, *, device='cuda', steps=None,
         return frozen
     protected = [base / 'shared_memory', base / 'evaluation_inputs',
                  base / 'evaluation_inputs_joint', base / 'evaluation_inputs_vague_joint',
-                 base / 'query_images', base / 'evaluation_encoder.json']
-    with catalog_training_guard(allowed_output_roots=[root, base / 'groups'], private_paths=protected):
+                 base / 'query_images', base / 'evaluation_encoder.json',
+                 base.parent / 'visual_inception_evaluation']
+    data_roots = []
+    if method == 'visual_inception':
+        from src.visual._visual_inception.config import VisualInceptionConfig
+        raw = visual_inception_config
+        if isinstance(raw, (str, Path)):
+            config_path = project_path(raw)
+            with catalog_training_guard(allowed_output_roots=[root, config_path.parent], private_paths=protected):
+                raw = read_json(config_path)
+        visual_inception_config = raw if isinstance(raw, VisualInceptionConfig) else VisualInceptionConfig.from_dict(raw)
+        if training_manifest is not None:
+            visual_inception_config = replace(visual_inception_config, training_manifest=str(project_path(training_manifest)))
+        data_roots = visual_inception_data_roots(visual_inception_config.to_dict())
+    with catalog_training_guard(allowed_output_roots=[root, base / 'groups', *data_roots], private_paths=protected):
         inputs = public_group(base, group)
         from src.visual.training_surrogates import apply_surrogate_overrides,selection_from_config
         if method == 'visual_inception':
@@ -133,6 +148,10 @@ def generate_group(base, group, method, output, *, device='cuda', steps=None,
                        epsilon_levels=effective_config.epsilon_levels if method == 'visual_inception' else None,
                        config=effective_config.to_dict(),training_surrogates=selection_from_config(effective_config).audit())
         binding['source_files'] = source_snapshot()
+        if method == 'visual_inception' and effective_config.objective_mode == 'retrieval_semantic_perceptual':
+            if not effective_config.training_manifest:
+                raise ValueError('完整视觉记忆植入方法须先准备独立公开训练清单')
+            binding['training_manifest_sha256'] = sha256_file(project_path(effective_config.training_manifest))
         freeze_json(root / 'PUBLIC_RUN.json', binding)
         if frozen_path.exists():
             frozen = read_json(frozen_path)
@@ -155,6 +174,8 @@ def generate_group(base, group, method, output, *, device='cuda', steps=None,
         count = metadata.get('steps_requested', metadata.get('attack', {}).get('steps_requested'))
         if metadata.get('training_objective',{}).get('surrogate_selection')!=binding['training_surrogates']:
             raise ValueError('实际训练代理与本次冻结选择不一致')
+        if binding.get('training_manifest_sha256') is not None and metadata.get('training_objective', {}).get('training_manifest_sha256') != binding['training_manifest_sha256']:
+            raise ValueError('实际训练清单与本次冻结公开输入不一致')
         validate_attack_completion(metadata, count, dict(method=method,
             source_image_sha256=inputs['source']['image_sha256'], target_image_sha256=inputs['target']['image_sha256']))
         final = root / 'frozen.png'
@@ -179,6 +200,8 @@ def main(argv=None):
     parser.add_argument('--epsilon-levels', type=int, default=None)
     parser.add_argument('--ambilage-config', type=Path)
     parser.add_argument('--visual-inception-config', type=Path)
+    parser.add_argument('--training-manifest', type=Path)
+    parser.add_argument('--training-bundles-root', type=Path, help='每组子目录保存独立训练包清单的公开根目录')
     from src.visual.training_surrogates import add_surrogate_arguments
     add_surrogate_arguments(parser)
     parser.add_argument('--query-mode', choices=('text', 'joint'), default='text')
@@ -197,6 +220,10 @@ def main(argv=None):
             parser.error('训练代理选择参数仅用于新方法的生成或全阶段命令')
     if args.visual_inception_config and args.method != 'visual_inception':
         parser.error('视觉记忆植入配置只能用于对应方法')
+    if args.training_manifest and (args.method != 'visual_inception' or args.group == 'all'):
+        parser.error('单份公开训练清单仅用于视觉记忆植入单组生成；多组请分别提供绑定本组的配置')
+    if args.training_bundles_root and (args.method != 'visual_inception' or args.training_manifest):
+        parser.error('公开训练包根目录仅用于视觉记忆植入，且与单份清单互斥')
     if args.ambilage_config and args.method != 'ambilage':
         parser.error('环境光协同配置只能用于对应方法')
     if args.environments != 'single' and args.query_manifest is not None:
@@ -223,9 +250,12 @@ def main(argv=None):
     # 所有生成先完成并冻结，随后才进入任何一组正式评估。
     if args.stage in ('generate', 'all'):
         for group in groups:
+            group_manifest = ((args.training_bundles_root / group / 'training_bundle.json')
+                              if args.training_bundles_root else args.training_manifest)
             generate_group(base, group, args.method, output / group / args.method, device=args.device,
                            steps=args.steps, epsilon_levels=args.epsilon_levels, ambilage_config=config,
                            visual_inception_config=inception_config,
+                           training_manifest=group_manifest,
                            surrogate_set=args.surrogate_set,surrogate_config=args.surrogate_config)
     replacement_frozens = None
     if args.stage in ('evaluate', 'all'):

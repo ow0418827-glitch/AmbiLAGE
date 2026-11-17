@@ -1,0 +1,184 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "visual_inception_category_diversity_v1",
+  "group": "04_curtain",
+  "query_mode": "text",
+  "target_public_id": "B086PW7TWX",
+  "category": "curtains",
+  "source_type": "curated_evaluation",
+  "language": "en",
+  "instruction_policy": "category_diversity_5_families_x4_v3_calibrated",
+  "instructions": [
+    "blackout thermal insulated polyester curtain panels for bedroom",
+    "rod pocket window drapes with light filtering and privacy protection",
+    "decorative printed window curtains with matte grommet top",
+    "blackout grommet curtains with vintage wood board texture print",
+    "I want to buy a pair of room-darkening blackout curtains that keep summer heat and winter drafts out.",
+    "Help me order machine-washable microfiber or polyester window curtains for a living room.",
+    "I am shopping to purchase soft cotton velvet drapes with a rod pocket header for an elegant bedroom.",
+    "Please find extra-long 108-inch or 118-inch noise-reducing privacy curtains I can buy online.",
+    "I need heavy triple-weave blackout panels to darken a bedroom completely for daytime sleeping and shift work.",
+    "Suggest sheer or semi-sheer window curtains that soften bright afternoon glare while maintaining daytime privacy.",
+    "I want cute printed kids bedroom curtains featuring a rustic wood plank design and easy-glide grommets.",
+    "Find stain-resistant short kitchen or dining room curtains with a tidy valance and matching side panels.",
+    "Looking for thermal insulated window curtains engineered to block UV rays, reduce street noise, and save energy.",
+    "I need fade-resistant printed satin polyester drapes that stay smooth and wrinkle-free after machine washing.",
+    "Recommend blackout curtains fitted with sturdy rust-proof metal grommets and dense light-blocking backing.",
+    "Which cotton-linen blend curtains provide natural drape texture while still offering reliable evening privacy?",
+    "Compare triple-weave blackout curtain panels against double-layer thermal velvet drapes.",
+    "Show me rod pocket waterfall curtains side by side with metal grommet room-darkening panels.",
+    "Contrast decorative printed polyester curtains and solid blackout panels by light blocking and noise reduction.",
+    "Which energy-efficient insulated window curtains drape cleaner and resist creasing after laundry?"
+  ],
+  "instructions_sha256": "adc38fa283b99f6fd37414f4b048d2ecd6b9441da273c008686f9c1245af83a8",
+  "query_records": [
+    {
+      "id": "04_curtain_category_01",
+      "query_family": "category_direct",
+      "instruction": "blackout thermal insulated polyester curtain panels for bedroom",
+      "instruction_zh": "卧室用涤纶隔热遮光窗帘布片"
+    },
+    {
+      "id": "04_curtain_category_02",
+      "query_family": "category_direct",
+      "instruction": "rod pocket window drapes with light filtering and privacy protection",
+      "instruction_zh": "兼顾透光柔和与隐私保护的穿杆式窗帘"
+    },
+    {
+      "id": "04_curtain_category_03",
+      "query_family": "category_direct",
+      "instruction": "decorative printed window curtains with matte grommet top",
+      "instruction_zh": "配哑光金属孔眼的装饰印花窗帘"
+    },
+    {
+      "id": "04_curtain_category_04",
+      "query_family": "category_direct",
+      "instruction": "blackout grommet curtains with vintage wood board texture print",
+      "instruction_zh": "带复古木纹板印花的金属扣眼遮光窗帘"
+    },
+    {
+      "id": "04_curtain_category_05",
+      "query_family": "purchase_intent",
+      "instruction": "I want to buy a pair of room-darkening blackout curtains that keep summer heat and winter drafts out.",
+      "instruction_zh": "我想买一对能隔绝夏日热浪与冬季冷风的强遮光窗帘。"
+    },
+    {
+      "id": "04_curtain_category_06",
+      "query_family": "purchase_intent",
+      "instruction": "Help me order machine-washable microfiber or polyester window curtains for a living room.",
+      "instruction_zh": "帮我订购一套适合客厅使用的可机洗超细纤维或涤纶窗帘。"
+    },
+    {
+      "id": "04_curtain_category_07",
+      "query_family": "purchase_intent",
+      "instruction": "I am shopping to purchase soft cotton velvet drapes with a rod pocket header for an elegant bedroom.",
+      "instruction_zh": "我正在选购带穿杆帘头的柔软棉绒质感卧室窗帘。"
+    },
+    {
+      "id": "04_curtain_category_08",
+      "query_family": "purchase_intent",
+      "instruction": "Please find extra-long 108-inch or 118-inch noise-reducing privacy curtains I can buy online.",
+      "instruction_zh": "请帮我找一款网购可得的 108 英寸或 118 英寸加长降噪隐私窗帘。"
+    },
+    {
+      "id": "04_curtain_category_09",
+      "query_family": "use_case",
+      "instruction": "I need heavy triple-weave blackout panels to darken a bedroom completely for daytime sleeping and shift work.",
+      "instruction_zh": "我需要厚实三层梭织遮光窗帘，让需要白天补觉的卧室彻底暗下来。"
+    },
+    {
+      "id": "04_curtain_category_10",
+      "query_family": "use_case",
+      "instruction": "Suggest sheer or semi-sheer window curtains that soften bright afternoon glare while maintaining daytime privacy.",
+      "instruction_zh": "推荐能柔和午后强光同时保障白天隐私的轻纱或半透光窗帘。"
+    },
+    {
+      "id": "04_curtain_category_11",
+      "query_family": "use_case",
+      "instruction": "I want cute printed kids bedroom curtains featuring a rustic wood plank design and easy-glide grommets.",
+      "instruction_zh": "我想找一套带乡村木板印花和顺滑扣眼的可爱儿童房窗帘。"
+    },
+    {
+      "id": "04_curtain_category_12",
+      "query_family": "use_case",
+      "instruction": "Find stain-resistant short kitchen or dining room curtains with a tidy valance and matching side panels.",
+      "instruction_zh": "找一套防污耐脏、带窗幔和配对侧帘的餐厅或厨房短款窗帘。"
+    },
+    {
+      "id": "04_curtain_category_13",
+      "query_family": "functional_need",
+      "instruction": "Looking for thermal insulated window curtains engineered to block UV rays, reduce street noise, and save energy.",
+      "instruction_zh": "寻找能够阻挡紫外线、降低街道噪音并节能保温的隔热窗帘。"
+    },
+    {
+      "id": "04_curtain_category_14",
+      "query_family": "functional_need",
+      "instruction": "I need fade-resistant printed satin polyester drapes that stay smooth and wrinkle-free after machine washing.",
+      "instruction_zh": "我需要经机洗后依然垂顺少皱、不易褪色的印花缎面涤纶窗帘。"
+    },
+    {
+      "id": "04_curtain_category_15",
+      "query_family": "functional_need",
+      "instruction": "Recommend blackout curtains fitted with sturdy rust-proof metal grommets and dense light-blocking backing.",
+      "instruction_zh": "推荐配有坚固防锈金属环与致密遮光背衬的遮光窗帘。"
+    },
+    {
+      "id": "04_curtain_category_16",
+      "query_family": "functional_need",
+      "instruction": "Which cotton-linen blend curtains provide natural drape texture while still offering reliable evening privacy?",
+      "instruction_zh": "哪些棉麻混纺窗帘既有自然垂感纹理，又能在夜晚提供可靠的遮挡隐私效果？"
+    },
+    {
+      "id": "04_curtain_category_17",
+      "query_family": "selection_comparison",
+      "instruction": "Compare triple-weave blackout curtain panels against double-layer thermal velvet drapes.",
+      "instruction_zh": "对比三层梭织遮光窗帘布片与双层隔热丝绒窗帘。"
+    },
+    {
+      "id": "04_curtain_category_18",
+      "query_family": "selection_comparison",
+      "instruction": "Show me rod pocket waterfall curtains side by side with metal grommet room-darkening panels.",
+      "instruction_zh": "把穿杆瀑布帘头窗帘和金属孔眼遮光窗帘放在一起对比。"
+    },
+    {
+      "id": "04_curtain_category_19",
+      "query_family": "selection_comparison",
+      "instruction": "Contrast decorative printed polyester curtains and solid blackout panels by light blocking and noise reduction.",
+      "instruction_zh": "从遮光率与降噪表现对比装饰印花涤纶窗帘和纯色遮光窗帘。"
+    },
+    {
+      "id": "04_curtain_category_20",
+      "query_family": "selection_comparison",
+      "instruction": "Which energy-efficient insulated window curtains drape cleaner and resist creasing after laundry?",
+      "instruction_zh": "哪些节能隔热窗帘洗后更不易留折痕、整体垂顺感更好？"
+    }
+  ],
+  "query_family_counts": {
+    "category_direct": 4,
+    "purchase_intent": 4,
+    "use_case": 4,
+    "functional_need": 4,
+    "selection_comparison": 4
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false,
+  "training_overlap": {
+    "normalization": "unicode_nfkc_whitespace_casefold",
+    "normalized_exact_overlap_count": 0,
+    "semantic_independence_claimed": false,
+    "checked_against_training_source_manifest": "../manifest.json"
+  },
+  "authoring": {
+    "kind": "assistant_curated_static_evaluation",
+    "basis": "empirical_training_category_distribution_calibrated_zero_exact_overlap_v3",
+    "target_brand_or_model_specified": false,
+    "all_target_core_attributes_required": false,
+    "existing_formal_query_texts_read": false,
+    "formal_memory_contents_read": false,
+    "selection_by_retrieval_outcomes": false
+  }
+}

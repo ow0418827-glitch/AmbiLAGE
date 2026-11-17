@@ -1,0 +1,49 @@
+{
+  "group": "05_hair_extension",
+  "source_id": "B07Z7MQSM1",
+  "target_id": "B01460C2I2",
+  "category": "hair extensions",
+  "subtype": "hair_extension",
+  "positive_title_pattern": "\\b(?:hair extensions?|clip[ -]?in(?:\\s+\\w+){0,4}\\s+hair|hair wefts?|hair bundles?)\\b",
+  "negative_title_pattern": "\\b(?:wigs?|bangs|hairpieces?|hair pieces?|pony[ -]?tails?|buns?|headbands?|tools?|kits?|pliers?|glue|extension tape|mannequin|practice head|tinsel|feathers?|clippers?|scissors?|needles?|rings?|beads?|device|storage|bags?|hangers?|caps?|guards?|pads?|separator|protectors?|wires?|accessor(?:y|ies)|tassles?|tassels?|paranda|parandi|tape tabs?|replacement tape|adhesive tape|tape roll|stands?|holders?|racks?|cadd(?:y|ies)|dolls?|remover|connector|fusion gun|duckbill|alligator|pin curl)\\b",
+  "positive_title_scope_first_characters": 160,
+  "target_public_category_label": "hair cutting tools",
+  "public_category_labels": [
+    "hair cutting tools",
+    "hair extensions, wigs & accessories"
+  ],
+  "indexed_category_bucket_counts": {
+    "hair cutting tools": 6515,
+    "hair extensions, wigs & accessories": 7541
+  },
+  "indexed_category_bucket_size": 14056,
+  "catalog_public_projections_read": 1569,
+  "max_read_per_group": 5000,
+  "requested_candidate_count": 10,
+  "description_count": 50,
+  "reserve_count": 40,
+  "candidate_reserve_count": 50,
+  "seed": 42,
+  "group_order_seed_sha256": "8dbf34c2e43e535f25fbe7aa8d17ce648a32da418fb3d97d31ac2690c323202f",
+  "rejection_counts": {
+    "public_title_subtype_mismatch": 1519,
+    "excluded_or_previously_selected": 2,
+    "explicit_public_title_category_rejection": 2
+  },
+  "gallery_downloaded": false,
+  "gallery_finalized": false,
+  "suggested_gallery_description_overlap": 10,
+  "fallback_policy": "first_successful_images_in_frozen_sampling_rank_order_without_model_scores",
+  "catalog_identity": {
+    "file_name": "catalog.sqlite",
+    "byte_size": 7136296960,
+    "mtime_ns": 1794599192500655300,
+    "public_schema_sha256": "05a2a7867fd1deffd0bea991032103cff8a586a05084d8d09c87ca1e149b595c",
+    "sha256": "cbfe10eb111814c7a45e82383173df4f601d08cc9f7d2fd3069429ee71ce42a2",
+    "sha256_verification": "caller_supplied_preverified_source_manifest",
+    "snapshot_id": "7e26cbd71bd0afde12da34d559864ee74c0fb1896881c362671cc7dea75ec29b"
+  },
+  "descriptions_sha256": "a7e988527c325d77e40d3ea723a38162661140e20f3bcb296ef52832ef71430b",
+  "candidate_reserve_sha256": "2ca35c033a815b46ba8bd1653dbed61a1c458f066b01d1b9ba82a9ea6fc3fed3",
+  "excluded_ids_sha256": "397c24c5e9780749987695dea3be6c035fefef9896141fcf7bbc87de2420541d"
+}

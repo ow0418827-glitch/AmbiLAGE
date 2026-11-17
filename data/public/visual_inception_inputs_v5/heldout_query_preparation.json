@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "selection_policy": "independent_public_esci_orcas_product_intent_hash_reserve_v5",
+  "seed": 42,
+  "source": {
+    "dataset": "Amazon Science Shopping Queries Dataset / ESCI",
+    "repository": "https://github.com/amazon-science/esci-data",
+    "revision": "7916cdf6ab75a462e77f20ab40428a10923998d5",
+    "url": "https://media.githubusercontent.com/media/amazon-science/esci-data/7916cdf6ab75a462e77f20ab40428a10923998d5/shopping_queries_dataset/shopping_queries_dataset_examples.parquet",
+    "sha256": "4a735b693b4a424a6fc67f5be6e4c811495c488bbf66d02a602d308b2744263a"
+  },
+  "source_partition": "English US / original train",
+  "query_use_partition": "query_reserve",
+  "formal_queries_read": false,
+  "victim_memory_read": false,
+  "test_fixture": false,
+  "is_synthetic": false,
+  "excluded_product_ids_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "scanning": {
+    "rows_seen": 2621288,
+    "public_us_train_rows": 1393063
+  },
+  "orcas_scanning": {
+    "rows_seen": 10405342
+  },
+  "groups": {
+    "01_camera": {
+      "category": "security camera",
+      "eligible_distinct_queries": 59,
+      "source_dataset": "esci",
+      "requested_count": 20,
+      "selected_count": 20,
+      "complete": true,
+      "path": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\data\\public\\visual_inception_inputs_v5\\01_camera\\heldout_queries.jsonl",
+      "sha256": "fd124e0131a2273554d12826b51f5afbf854e842dc99562863e85ccebfeb7ea9"
+    },
+    "02_chair": {
+      "category": "barber chair",
+      "eligible_distinct_queries": 12,
+      "source_dataset": "independent_public_multisource_union",
+      "requested_count": 20,
+      "selected_count": 12,
+      "complete": false,
+      "path": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\data\\public\\visual_inception_inputs_v5\\02_chair\\heldout_queries.jsonl",
+      "sha256": "f6dfdf54b743079cb12800c8dcb7daa3450f22cb4bc6f787624433815228e436"
+    },
+    "03_cookies": {
+      "category": "cookie dough",
+      "eligible_distinct_queries": 32,
+      "source_dataset": "orcas",
+      "requested_count": 20,
+      "selected_count": 20,
+      "complete": true,
+      "path": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\data\\public\\visual_inception_inputs_v5\\03_cookies\\heldout_queries.jsonl",
+      "sha256": "f55bad975140aaff14914e8e084c434139eee91f0a38850ef0145298f469053f"
+    },
+    "04_curtain": {
+      "category": "curtains",
+      "eligible_distinct_queries": 172,
+      "source_dataset": "esci",
+      "requested_count": 20,
+      "selected_count": 20,
+      "complete": true,
+      "path": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\data\\public\\visual_inception_inputs_v5\\04_curtain\\heldout_queries.jsonl",
+      "sha256": "a97ba4d200abb42e03e31ca6160739c1a0ed242bdc51409c1854af954dacdb82"
+    },
+    "05_hair_extension": {
+      "category": "hair extensions",
+      "eligible_distinct_queries": 86,
+      "source_dataset": "orcas",
+      "requested_count": 20,
+      "selected_count": 20,
+      "complete": true,
+      "path": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\data\\public\\visual_inception_inputs_v5\\05_hair_extension\\heldout_queries.jsonl",
+      "sha256": "19534455996abb9cbbc440ea970e68387d927198645a1fa084f15ce298b0ebc9"
+    },
+    "06_jeans": {
+      "category": "jeans",
+      "eligible_distinct_queries": 180,
+      "source_dataset": "esci",
+      "requested_count": 20,
+      "selected_count": 20,
+      "complete": true,
+      "path": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\data\\public\\visual_inception_inputs_v5\\06_jeans\\heldout_queries.jsonl",
+      "sha256": "1aa07813abc2f5b30994727063a5f1e88445b0c1c58b18d7db56ec9c8b038cdf"
+    },
+    "07_shampoo": {
+      "category": "shampoo",
+      "eligible_distinct_queries": 139,
+      "source_dataset": "esci",
+      "requested_count": 20,
+      "selected_count": 20,
+      "complete": true,
+      "path": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\data\\public\\visual_inception_inputs_v5\\07_shampoo\\heldout_queries.jsonl",
+      "sha256": "4c2472cd9d1a4c70dab23eca8a02ec53d5229b97314e9faf75e1d9e8cdf042a9"
+    },
+    "08_speaker": {
+      "category": "Bluetooth speaker",
+      "eligible_distinct_queries": 49,
+      "source_dataset": "esci",
+      "requested_count": 20,
+      "selected_count": 20,
+      "complete": true,
+      "path": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\data\\public\\visual_inception_inputs_v5\\08_speaker\\heldout_queries.jsonl",
+      "sha256": "6ec3bea3776c3abf97e6271607289a0536c0960564f051848dd849dfba399209"
+    },
+    "09_toothbrush": {
+      "category": "toothbrush",
+      "eligible_distinct_queries": 51,
+      "source_dataset": "esci",
+      "requested_count": 20,
+      "selected_count": 20,
+      "complete": true,
+      "path": "D:\\Material\\Literature Reading\\code\\AmbiLAGE\\data\\public\\visual_inception_inputs_v5\\09_toothbrush\\heldout_queries.jsonl",
+      "sha256": "a6d275317ae8e7b9353d9c7b3eeff92204a118f416f569ef6bf070424b4093e2"
+    }
+  },
+  "complete": false,
+  "final_category_review": {
+    "01_camera": {
+      "previous_sha256": "bf44cd6ee9bbb6e49d883c0243e66b0e0b907d04b42dd5325c6a8db3bc00700c",
+      "final_sha256": "fd124e0131a2273554d12826b51f5afbf854e842dc99562863e85ccebfeb7ea9",
+      "query_files_archive": "data\\public\\visual_inception_query_diagnostics\\inputs_v5_pre_review\\01_camera",
+      "count": 20
+    },
+    "02_chair": {
+      "previous_sha256": "71a004e19b297d62defde948f311d91bcd1c943ae3a06371ff608d16e910a5fe",
+      "final_sha256": "f6dfdf54b743079cb12800c8dcb7daa3450f22cb4bc6f787624433815228e436",
+      "query_files_archive": "data\\public\\visual_inception_query_diagnostics\\inputs_v5_pre_review\\02_chair",
+      "count": 12
+    }
+  },
+  "final_review_outcome": "8 complete groups / 160 genuine queries; chair partial 12 / 20; STOP chair group"
+}

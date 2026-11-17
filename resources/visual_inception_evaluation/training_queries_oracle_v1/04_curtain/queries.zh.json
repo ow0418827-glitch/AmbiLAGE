@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "language": "zh",
+  "purpose": "仅供人工阅读，不传给检索编码器",
+  "group": "04_curtain",
+  "category": "curtains",
+  "query_records": [
+    {
+      "id": "04_curtain_oracle_01",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B09KRNCBJJ）：Sheer Curtains 2 Panels Sheer Window Covering Rod Pocket, Soccer Basketball Baseball Football Voile Window Treatment Drapes for Bedroom Living Room Kitchen Vintage Wooden Board 52x108 inch,"
+    },
+    {
+      "id": "04_curtain_oracle_02",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B086PX13GL）：Arts Language Windows Treatment Blackout Curtains Grommet Drapes for Boys/Girls Kids Bedroom Green Purple Scale Sequined Mermaid Printed Room Darkening Curtains for Livingroom/Office, 1 Panel 52x84in"
+    },
+    {
+      "id": "04_curtain_oracle_03",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B06VWM2BX7）：Duck River Textile Blair Floral Insulated Blackout Room Darkening Window Curtain Set of 2 Panels, 36 X 84 Inch, Purple, 2 Piece"
+    },
+    {
+      "id": "04_curtain_oracle_04",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B074FSM89X）：Moroccan Valance Curtain Short Window Treatment for for Kitchen Living Dining Room Bathroom Kids Girl Baby Nursery Bedroom (Teal - 52\" x 18\")"
+    },
+    {
+      "id": "04_curtain_oracle_05",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B0819SK9M3）：Dreamlike Color Xmas Reindeer and Snowflake Painted on Wooden Board Kitchen Blackout Curtains Window Drapes Treatment, 2 Panels Set for Kitchen Cafe Office Window Coverings Treatments, 104W x 90L inch"
+    },
+    {
+      "id": "04_curtain_oracle_06",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B08CRV4ZB5）：HOMEIDEAS Blackout Patio Door Curtain Panel Wide 100 x 84 Inch Long Light Grey Thermal Sliding Door Darkening Curtain Extra Wide Window Grommet Curtain/Drape for Living Room, 1 Panel"
+    },
+    {
+      "id": "04_curtain_oracle_07",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B083GNLLGD）：WARM TOUR Window Curtains Abstract Figures and Buildings Printing Decor 2 Panels Durable Drapes for Bedroom Kitchen Living Room Decor Minimalistic Style 27.5x39inch x2"
+    },
+    {
+      "id": "04_curtain_oracle_08",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B09CDF77ZB）：Farm Purple Black Bufalo Plaid Window Drapes Semi Sheer Privacy Covering 2 Panels,Halloween Truck Horror Ghost Pumpkin Crow Skull Light Filtering Curtains for Kitchen/Living Room/Bedroom Decor"
+    },
+    {
+      "id": "04_curtain_oracle_09",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B08CKQPP7K）：Navy Blue Velvet Curtains Blackout Curtains for Living Room, Rod Pocket Thermal Insulated Window Treatment Super Thick Soft Velvet Luxury Privacy Window Covering Decoration, 2 Panels, 52 x 63 Inch"
+    },
+    {
+      "id": "04_curtain_oracle_10",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B07WF9RJD3）：NICETOWN Navy Curtains Blackout Draperies - Modern Design Thermal Insulated Rod Pocket Blackout Drapes for Kid's Bedroom, Window Covering (1 Pair, 52 x 63 inches)"
+    },
+    {
+      "id": "04_curtain_oracle_11",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_013，输入商品 B09LCNFGX6）"
+    },
+    {
+      "id": "04_curtain_oracle_12",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_004，输入商品 B09FYZPTLB）"
+    },
+    {
+      "id": "04_curtain_oracle_13",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_025，输入商品 B09P1GMRQX）"
+    },
+    {
+      "id": "04_curtain_oracle_14",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_005，输入商品 B071QYD6TV）"
+    },
+    {
+      "id": "04_curtain_oracle_15",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_002，输入商品 B074FSM89X）"
+    },
+    {
+      "id": "04_curtain_oracle_16",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_015，输入商品 B07Q33HMW2）"
+    },
+    {
+      "id": "04_curtain_oracle_17",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_31005）：cute curtains for bedroom"
+    },
+    {
+      "id": "04_curtain_oracle_18",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_9986）：aqua and gray curtains"
+    },
+    {
+      "id": "04_curtain_oracle_19",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_30861）：curtains 40 inch length"
+    },
+    {
+      "id": "04_curtain_oracle_20",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_71537）：multicolored curtains"
+    }
+  ]
+}

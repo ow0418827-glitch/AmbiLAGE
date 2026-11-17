@@ -1,0 +1,184 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "visual_inception_category_diversity_v1",
+  "group": "08_speaker",
+  "query_mode": "text",
+  "target_public_id": "B01N47U1VI",
+  "category": "Bluetooth speaker",
+  "source_type": "curated_evaluation",
+  "language": "en",
+  "instruction_policy": "category_diversity_5_families_x4_v3_calibrated",
+  "instructions": [
+    "portable waterproof Bluetooth 5.0 speaker with 12 hour battery life",
+    "compact wireless stereo speaker with deep bass and built-in microphone",
+    "rugged outdoor Bluetooth speaker with FM radio and microSD card slot",
+    "splashproof solar rechargeable portable Bluetooth speaker for outdoor trips",
+    "I want to buy a compact portable Bluetooth speaker offering at least 10 hours of continuous playback.",
+    "Help me order a waterproof outdoor wireless speaker with dual full-range drivers and stereo pairing.",
+    "I am shopping to purchase a Bluetooth speaker with hands-free calling mic and auxiliary audio input.",
+    "Please find a durable splashproof Bluetooth speaker featuring both battery and solar charging to buy.",
+    "I need a waterproof wireless speaker loud enough for pool parties and beach gatherings without distortion.",
+    "Suggest a compact lightweight Bluetooth speaker with 100-foot wireless range for moving around the yard.",
+    "I want a desk wireless speaker with rich bass and dual-device multipoint pairing for work calls and music.",
+    "Find a rugged travel speaker with FM tuner and TF card MP3 playback useful on long camping weekends.",
+    "Looking for a portable Bluetooth speaker engineered with passive bass radiators and crisp stereo separation.",
+    "I need an IPX7 waterproof wireless speaker featuring shock-resistant silicone casing and fast USB-C charging.",
+    "Recommend compact Bluetooth speakers offering voice-assistant support, clear built-in mic audio, and multi-speaker sync.",
+    "Which outdoor wireless speakers maintain stable Bluetooth 5.0 connection and strong punchy bass at high volume?",
+    "Compare pocket-sized travel Bluetooth speakers against larger stereo boombox wireless speakers.",
+    "Show me rugged IPX7 waterproof speakers side by side with multi-room 360-degree party speakers.",
+    "Contrast wireless Bluetooth speakers by playback hours, wireless range distance, and bass depth.",
+    "Which portable Bluetooth speakers offer clearer hands-free call quality and richer stereo sound?"
+  ],
+  "instructions_sha256": "e6443a7891b925e34b2db9ea543e353245523b70c90819190107750173696ac0",
+  "query_records": [
+    {
+      "id": "08_speaker_category_01",
+      "query_family": "category_direct",
+      "instruction": "portable waterproof Bluetooth 5.0 speaker with 12 hour battery life",
+      "instruction_zh": "12 小时续航的便携防水蓝牙 5.0 音箱"
+    },
+    {
+      "id": "08_speaker_category_02",
+      "query_family": "category_direct",
+      "instruction": "compact wireless stereo speaker with deep bass and built-in microphone",
+      "instruction_zh": "带重低音与内置麦克风的便携无线立体声音箱"
+    },
+    {
+      "id": "08_speaker_category_03",
+      "query_family": "category_direct",
+      "instruction": "rugged outdoor Bluetooth speaker with FM radio and microSD card slot",
+      "instruction_zh": "支持 FM 收音机与插卡播放的耐用户外蓝牙音箱"
+    },
+    {
+      "id": "08_speaker_category_04",
+      "query_family": "category_direct",
+      "instruction": "splashproof solar rechargeable portable Bluetooth speaker for outdoor trips",
+      "instruction_zh": "适合户外旅行的防泼溅太阳能充电便携蓝牙音箱"
+    },
+    {
+      "id": "08_speaker_category_05",
+      "query_family": "purchase_intent",
+      "instruction": "I want to buy a compact portable Bluetooth speaker offering at least 10 hours of continuous playback.",
+      "instruction_zh": "我想买一台单次续航至少 10 小时的便携蓝牙音箱。"
+    },
+    {
+      "id": "08_speaker_category_06",
+      "query_family": "purchase_intent",
+      "instruction": "Help me order a waterproof outdoor wireless speaker with dual full-range drivers and stereo pairing.",
+      "instruction_zh": "帮我订购一款带双全频单元、支持立体声配对的防水户外无线音箱。"
+    },
+    {
+      "id": "08_speaker_category_07",
+      "query_family": "purchase_intent",
+      "instruction": "I am shopping to purchase a Bluetooth speaker with hands-free calling mic and auxiliary audio input.",
+      "instruction_zh": "我正在选购一台支持免提通话麦克风与有线音频输入的蓝牙音箱。"
+    },
+    {
+      "id": "08_speaker_category_08",
+      "query_family": "purchase_intent",
+      "instruction": "Please find a durable splashproof Bluetooth speaker featuring both battery and solar charging to buy.",
+      "instruction_zh": "请帮我找一款兼具电池与太阳能补电功能的耐用防泼溅蓝牙音箱下单。"
+    },
+    {
+      "id": "08_speaker_category_09",
+      "query_family": "use_case",
+      "instruction": "I need a waterproof wireless speaker loud enough for pool parties and beach gatherings without distortion.",
+      "instruction_zh": "我需要一台在泳池派对和海滩聚会上音量够大且不破音的防水无线音箱。"
+    },
+    {
+      "id": "08_speaker_category_10",
+      "query_family": "use_case",
+      "instruction": "Suggest a compact lightweight Bluetooth speaker with 100-foot wireless range for moving around the yard.",
+      "instruction_zh": "推荐一款无线连接距离可达 100 英尺、在院子里走动不断连的轻巧蓝牙音箱。"
+    },
+    {
+      "id": "08_speaker_category_11",
+      "query_family": "use_case",
+      "instruction": "I want a desk wireless speaker with rich bass and dual-device multipoint pairing for work calls and music.",
+      "instruction_zh": "我想找一款适合放书桌、兼具饱满低音与双设备连接切换的办公通话与音乐音箱。"
+    },
+    {
+      "id": "08_speaker_category_12",
+      "query_family": "use_case",
+      "instruction": "Find a rugged travel speaker with FM tuner and TF card MP3 playback useful on long camping weekends.",
+      "instruction_zh": "找一款带 FM 收音和 TF 卡 MP3 播放、周末露营很实用的耐用旅行音箱。"
+    },
+    {
+      "id": "08_speaker_category_13",
+      "query_family": "functional_need",
+      "instruction": "Looking for a portable Bluetooth speaker engineered with passive bass radiators and crisp stereo separation.",
+      "instruction_zh": "寻找配有被动低音辐射器、立体声分离度清晰的便携蓝牙音箱。"
+    },
+    {
+      "id": "08_speaker_category_14",
+      "query_family": "functional_need",
+      "instruction": "I need an IPX7 waterproof wireless speaker featuring shock-resistant silicone casing and fast USB-C charging.",
+      "instruction_zh": "我需要一台具备 IPX7 级防水、防摔硅胶机身和快充接口的无线音箱。"
+    },
+    {
+      "id": "08_speaker_category_15",
+      "query_family": "functional_need",
+      "instruction": "Recommend compact Bluetooth speakers offering voice-assistant support, clear built-in mic audio, and multi-speaker sync.",
+      "instruction_zh": "推荐支持语音助手、内置麦克风通话清晰且能多机无线串联的便携蓝牙音箱。"
+    },
+    {
+      "id": "08_speaker_category_16",
+      "query_family": "functional_need",
+      "instruction": "Which outdoor wireless speakers maintain stable Bluetooth 5.0 connection and strong punchy bass at high volume?",
+      "instruction_zh": "哪些户外无线音箱在高音量下依然能保持蓝牙 5.0 稳定连接与扎实低音？"
+    },
+    {
+      "id": "08_speaker_category_17",
+      "query_family": "selection_comparison",
+      "instruction": "Compare pocket-sized travel Bluetooth speakers against larger stereo boombox wireless speakers.",
+      "instruction_zh": "对比口袋便携旅行蓝牙音箱与大体积立体声手提无线音箱。"
+    },
+    {
+      "id": "08_speaker_category_18",
+      "query_family": "selection_comparison",
+      "instruction": "Show me rugged IPX7 waterproof speakers side by side with multi-room 360-degree party speakers.",
+      "instruction_zh": "把 IPX7 三防户外音箱与 360 度环绕派对蓝牙音箱放在一起对比。"
+    },
+    {
+      "id": "08_speaker_category_19",
+      "query_family": "selection_comparison",
+      "instruction": "Contrast wireless Bluetooth speakers by playback hours, wireless range distance, and bass depth.",
+      "instruction_zh": "从续航小时数、有效无线距离与低音下潜深度对比几款无线蓝牙音箱。"
+    },
+    {
+      "id": "08_speaker_category_20",
+      "query_family": "selection_comparison",
+      "instruction": "Which portable Bluetooth speakers offer clearer hands-free call quality and richer stereo sound?",
+      "instruction_zh": "哪些便携蓝牙音箱在免提通话清晰度和立体声音质上表现更出色？"
+    }
+  ],
+  "query_family_counts": {
+    "category_direct": 4,
+    "purchase_intent": 4,
+    "use_case": 4,
+    "functional_need": 4,
+    "selection_comparison": 4
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false,
+  "training_overlap": {
+    "normalization": "unicode_nfkc_whitespace_casefold",
+    "normalized_exact_overlap_count": 0,
+    "semantic_independence_claimed": false,
+    "checked_against_training_source_manifest": "../manifest.json"
+  },
+  "authoring": {
+    "kind": "assistant_curated_static_evaluation",
+    "basis": "empirical_training_category_distribution_calibrated_zero_exact_overlap_v3",
+    "target_brand_or_model_specified": false,
+    "all_target_core_attributes_required": false,
+    "existing_formal_query_texts_read": false,
+    "formal_memory_contents_read": false,
+    "selection_by_retrieval_outcomes": false
+  }
+}

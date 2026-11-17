@@ -61,10 +61,12 @@ def generate_attack(source, target, output_dir, *, method='ambilage', steps=None
                     epsilon_levels=None, device='cuda', optimization_config=None,
                     ambilage_config=None, visual_inception_config=None, target_text=None, text_weight=1.0,
                     allow_tf32=True, seed=42, definition=None, smoke_test=False,
-                    surrogate_set=None,surrogate_config=None):
+                    surrogate_set=None,surrogate_config=None,training_manifest=None):
     method = normalize_method(method)
     if visual_inception_config is not None and method != 'visual_inception':
         raise ValueError('视觉记忆植入配置只能用于对应方法')
+    if training_manifest is not None and method != 'visual_inception':
+        raise ValueError('公开训练清单只能用于视觉记忆植入方法')
     if method == 'lucid':
         if surrogate_set is not None or surrogate_config is not None:
             raise ValueError('训练代理选择参数用于新方法；原始像素方法使用自己的冻结配置')
@@ -98,7 +100,8 @@ def generate_attack(source, target, output_dir, *, method='ambilage', steps=None
             config=visual_inception_config, steps=steps, epsilon_levels=epsilon_levels,
             device=device, target_text=target_text, definition=definition,
             allow_tf32=allow_tf32, seed=seed, smoke_test=smoke_test,
-            surrogate_set=surrogate_set, surrogate_config=surrogate_config)
+            surrogate_set=surrogate_set, surrogate_config=surrogate_config,
+            training_manifest=training_manifest)
     elif method == 'ambilage':
         from src.visual._ambilage.pipeline import run_attack as run_ambilage_attack
         frozen_text = _adjacent_feature_text(target)

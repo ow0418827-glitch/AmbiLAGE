@@ -40,3 +40,9 @@ id_rsa
 id_ed25519
 credentials.json
 secrets.json
+# Re-downloadable upstream query archives; selected source rows and provenance stay public.
+/data/public/visual_inception_corpus/esci/shopping_queries_dataset_examples.parquet
+/data/public/visual_inception_corpus/orcas/orcas-doctrain-queries.tsv.gz
+/data/public/visual_inception_corpus/**/*.part
+/data/public/visual_inception_inputs/catalog_v5/.pending_public_title_review/
+/data/public/visual_inception_inputs/catalog_v5/review_archive/

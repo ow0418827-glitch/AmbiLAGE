@@ -129,7 +129,7 @@ def test_runtime_check_marks_paper_encoders_required_and_lucid_encoders_optional
 
 
 def test_explicit_previous_profile_keeps_frozen_identity_and_cannot_be_relabelled(tiny_pair, tmp_path):
-    cfg = VisualInceptionConfig(steps=1, gradient_restarts=2, smoke_test=True, surrogate_set='lucid')
+    cfg = VisualInceptionConfig(objective_mode='semantic_perceptual', steps=1, gradient_restarts=2, smoke_test=True, surrogate_set='lucid')
     output, metadata = generate_visual_inception(*tiny_pair, tmp_path / 'old_profile', config=cfg,
         device='cpu', definition=public_definition())
     frozen = validate_ready(output.parent, require_production=False)
@@ -152,12 +152,12 @@ def test_explicit_previous_profile_keeps_frozen_identity_and_cannot_be_relabelle
 
 
 def test_changing_proxy_profile_never_overwrites_existing_generated_image(tiny_pair, tmp_path):
-    previous = VisualInceptionConfig(steps=1, gradient_restarts=2, smoke_test=True, surrogate_set='lucid')
+    previous = VisualInceptionConfig(objective_mode='semantic_perceptual', steps=1, gradient_restarts=2, smoke_test=True, surrogate_set='lucid')
     root = tmp_path / 'frozen_before_switch'
     output, _ = generate_visual_inception(*tiny_pair, root, config=previous,
         device='cpu', definition=public_definition())
     before = {name: (root / name).read_bytes() for name in ('adversarial.png', 'metadata.json', 'ready.json')}
-    current = VisualInceptionConfig(steps=1, gradient_restarts=2, smoke_test=True)
+    current = VisualInceptionConfig(objective_mode='semantic_perceptual', steps=1, gradient_restarts=2, smoke_test=True)
     assert current.surrogate_set == PAPER_PROFILE
     with pytest.raises(FileExistsError, match='禁止覆盖'):
         generate_visual_inception(*tiny_pair, root, config=current, device='cpu', definition=public_definition())

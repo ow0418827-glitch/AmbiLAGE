@@ -1,0 +1,184 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "visual_inception_category_diversity_v1",
+  "group": "02_chair",
+  "query_mode": "text",
+  "target_public_id": "B09CYFD5BX",
+  "category": "barber chair",
+  "source_type": "curated_evaluation",
+  "language": "en",
+  "instruction_policy": "category_diversity_5_families_x4_v3_calibrated",
+  "instructions": [
+    "classic hydraulic barber chair with 360 degree swivel and steel base",
+    "reclining salon hair styling chair with waterproof PU leather and footrest",
+    "heavy duty beauty salon and tattoo chair with high-density sponge seat",
+    "vintage style barbershop chair with adjustable height and chrome round base",
+    "I want to purchase a heavy-duty hydraulic barber chair with faux leather upholstery for my shop.",
+    "Help me order a 360-degree swivel salon styling chair that includes an adjustable footrest.",
+    "I am shopping to buy a reclining barbershop and tattoo chair with a sturdy chrome steel base.",
+    "Please find an ergonomic height-adjustable barber stool or chair with thick foam padding to buy.",
+    "I need a reclining barber chair with headrest support for comfortable beard shaves and facials.",
+    "Suggest a swivel salon chair with waterproof PVC leather easy to wipe hair and dye off between clients.",
+    "I am equipping a tattoo and haircutting studio and want a heavy-duty steel-frame chair rated over 330 pounds.",
+    "Find a retro cushioned styling chair that fits neatly into a compact single-station barbershop.",
+    "Looking for a barber chair built with a smooth foot-pump hydraulic lift and lockable 360-degree rotation.",
+    "I need a salon chair featuring high-density memory foam cushions, curved armrests, and a stainless steel base.",
+    "Recommend reclining barber chairs with dual-side control levers and a 135-degree backrest tilt.",
+    "Which heavy-duty salon chairs offer sturdy T-shaped footrests and wear-resistant leather seams?",
+    "Compare reclining all-purpose barber chairs against compact round-base salon styling chairs.",
+    "Show me retro solid-wood armrest barber chairs side by side with modern chrome steel models.",
+    "Contrast salon barber chairs by hydraulic height range, weight capacity, and cushion sponge thickness.",
+    "Which swivel barber chairs provide smoother hydraulic lifting and stronger locking stability?"
+  ],
+  "instructions_sha256": "6c09d08b7b3a2f3ab65bf7f8f6a79bf6f199720747ab09000b9b58322d5352ed",
+  "query_records": [
+    {
+      "id": "02_chair_category_01",
+      "query_family": "category_direct",
+      "instruction": "classic hydraulic barber chair with 360 degree swivel and steel base",
+      "instruction_zh": "配钢制底座的经典 360 度旋转液压理发椅"
+    },
+    {
+      "id": "02_chair_category_02",
+      "query_family": "category_direct",
+      "instruction": "reclining salon hair styling chair with waterproof PU leather and footrest",
+      "instruction_zh": "配防水仿皮与脚踏的可放倒沙龙造型椅"
+    },
+    {
+      "id": "02_chair_category_03",
+      "query_family": "category_direct",
+      "instruction": "heavy duty beauty salon and tattoo chair with high-density sponge seat",
+      "instruction_zh": "带高密度海绵坐垫的重型美容沙龙及纹身椅"
+    },
+    {
+      "id": "02_chair_category_04",
+      "query_family": "category_direct",
+      "instruction": "vintage style barbershop chair with adjustable height and chrome round base",
+      "instruction_zh": "配镀铬圆盘底座的可调高度复古理发店椅"
+    },
+    {
+      "id": "02_chair_category_05",
+      "query_family": "purchase_intent",
+      "instruction": "I want to purchase a heavy-duty hydraulic barber chair with faux leather upholstery for my shop.",
+      "instruction_zh": "我想为理发店购买一把仿皮面重型液压理发椅。"
+    },
+    {
+      "id": "02_chair_category_06",
+      "query_family": "purchase_intent",
+      "instruction": "Help me order a 360-degree swivel salon styling chair that includes an adjustable footrest.",
+      "instruction_zh": "帮我订购一把带可调节脚踏的 360 度旋转沙龙造型椅。"
+    },
+    {
+      "id": "02_chair_category_07",
+      "query_family": "purchase_intent",
+      "instruction": "I am shopping to buy a reclining barbershop and tattoo chair with a sturdy chrome steel base.",
+      "instruction_zh": "我正在选购一把带稳固镀铬钢底座的可躺式理发及纹身椅。"
+    },
+    {
+      "id": "02_chair_category_08",
+      "query_family": "purchase_intent",
+      "instruction": "Please find an ergonomic height-adjustable barber stool or chair with thick foam padding to buy.",
+      "instruction_zh": "请帮我找一款带加厚海绵垫、高度可调的人体工学理发椅下单。"
+    },
+    {
+      "id": "02_chair_category_09",
+      "query_family": "use_case",
+      "instruction": "I need a reclining barber chair with headrest support for comfortable beard shaves and facials.",
+      "instruction_zh": "我需要一把带头枕支撑的可倾斜理发椅，方便顾客舒适剃须和做面部护理。"
+    },
+    {
+      "id": "02_chair_category_10",
+      "query_family": "use_case",
+      "instruction": "Suggest a swivel salon chair with waterproof PVC leather easy to wipe hair and dye off between clients.",
+      "instruction_zh": "推荐一款采用防水 PVC 皮革、接待间隙方便擦洗碎发和染膏的旋转沙龙椅。"
+    },
+    {
+      "id": "02_chair_category_11",
+      "query_family": "use_case",
+      "instruction": "I am equipping a tattoo and haircutting studio and want a heavy-duty steel-frame chair rated over 330 pounds.",
+      "instruction_zh": "我在装修纹身及美发工作室，想要承重超过 330 磅的重型钢架椅子。"
+    },
+    {
+      "id": "02_chair_category_12",
+      "query_family": "use_case",
+      "instruction": "Find a retro cushioned styling chair that fits neatly into a compact single-station barbershop.",
+      "instruction_zh": "找一款能轻松放进紧凑单工位理发店的复古软垫造型椅。"
+    },
+    {
+      "id": "02_chair_category_13",
+      "query_family": "functional_need",
+      "instruction": "Looking for a barber chair built with a smooth foot-pump hydraulic lift and lockable 360-degree rotation.",
+      "instruction_zh": "寻找配备顺滑脚踏液压升降和可锁止 360 度旋转功能的理发椅。"
+    },
+    {
+      "id": "02_chair_category_14",
+      "query_family": "functional_need",
+      "instruction": "I need a salon chair featuring high-density memory foam cushions, curved armrests, and a stainless steel base.",
+      "instruction_zh": "我需要一把配高密度记忆海绵坐垫、弧形扶手与不锈钢底座的沙龙椅。"
+    },
+    {
+      "id": "02_chair_category_15",
+      "query_family": "functional_need",
+      "instruction": "Recommend reclining barber chairs with dual-side control levers and a 135-degree backrest tilt.",
+      "instruction_zh": "推荐带双侧控制杆、靠背可倾斜 135 度的可躺式理发椅。"
+    },
+    {
+      "id": "02_chair_category_16",
+      "query_family": "functional_need",
+      "instruction": "Which heavy-duty salon chairs offer sturdy T-shaped footrests and wear-resistant leather seams?",
+      "instruction_zh": "哪些重型沙龙椅的 T 型脚踏更稳固且皮革缝线更耐磨？"
+    },
+    {
+      "id": "02_chair_category_17",
+      "query_family": "selection_comparison",
+      "instruction": "Compare reclining all-purpose barber chairs against compact round-base salon styling chairs.",
+      "instruction_zh": "对比全功能可躺理发椅与紧凑型圆盘底座沙龙造型椅。"
+    },
+    {
+      "id": "02_chair_category_18",
+      "query_family": "selection_comparison",
+      "instruction": "Show me retro solid-wood armrest barber chairs side by side with modern chrome steel models.",
+      "instruction_zh": "把复古木扶手理发椅和现代镀铬钢架理发椅放在一起对比。"
+    },
+    {
+      "id": "02_chair_category_19",
+      "query_family": "selection_comparison",
+      "instruction": "Contrast salon barber chairs by hydraulic height range, weight capacity, and cushion sponge thickness.",
+      "instruction_zh": "从液压升降幅度、最大承重和海绵坐垫厚度对比几款沙龙理发椅。"
+    },
+    {
+      "id": "02_chair_category_20",
+      "query_family": "selection_comparison",
+      "instruction": "Which swivel barber chairs provide smoother hydraulic lifting and stronger locking stability?",
+      "instruction_zh": "哪些旋转理发椅在液压升降平稳度和旋转锁止稳定性上表现更好？"
+    }
+  ],
+  "query_family_counts": {
+    "category_direct": 4,
+    "purchase_intent": 4,
+    "use_case": 4,
+    "functional_need": 4,
+    "selection_comparison": 4
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false,
+  "training_overlap": {
+    "normalization": "unicode_nfkc_whitespace_casefold",
+    "normalized_exact_overlap_count": 0,
+    "semantic_independence_claimed": false,
+    "checked_against_training_source_manifest": "../manifest.json"
+  },
+  "authoring": {
+    "kind": "assistant_curated_static_evaluation",
+    "basis": "empirical_training_category_distribution_calibrated_zero_exact_overlap_v3",
+    "target_brand_or_model_specified": false,
+    "all_target_core_attributes_required": false,
+    "existing_formal_query_texts_read": false,
+    "formal_memory_contents_read": false,
+    "selection_by_retrieval_outcomes": false
+  }
+}

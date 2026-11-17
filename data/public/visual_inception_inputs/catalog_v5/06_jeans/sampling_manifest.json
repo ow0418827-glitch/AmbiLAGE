@@ -1,0 +1,49 @@
+{
+  "group": "06_jeans",
+  "source_id": "B07FRKQNFV",
+  "target_id": "B09HH96NJY",
+  "category": "jeans",
+  "subtype": "jeans",
+  "positive_title_pattern": "\\b(?:jeans|denim pants|denim trousers)\\b",
+  "negative_title_pattern": "\\b(?:jeans button|jeans patch|jeans repair|jeans buckle|imitation|jeans print|jeggings|leggings|sweatpants)\\b",
+  "positive_title_scope_first_characters": 160,
+  "target_public_category_label": "women's pants",
+  "public_category_labels": [
+    "women's pants"
+  ],
+  "indexed_category_bucket_counts": {
+    "women's pants": 6173
+  },
+  "indexed_category_bucket_size": 6173,
+  "catalog_public_projections_read": 1848,
+  "max_read_per_group": 5000,
+  "requested_candidate_count": 10,
+  "description_count": 50,
+  "reserve_count": 40,
+  "candidate_reserve_count": 50,
+  "seed": 42,
+  "group_order_seed_sha256": "8744f79f70e47ddea16acb2886de445973e324e3c21b8e0a4a2d36529b220fa8",
+  "rejection_counts": {
+    "public_title_subtype_mismatch": 1793,
+    "excluded_or_previously_selected": 1,
+    "duplicate_description": 4,
+    "explicit_public_title_category_rejection": 3,
+    "missing_public_image_or_description": 1
+  },
+  "gallery_downloaded": false,
+  "gallery_finalized": false,
+  "suggested_gallery_description_overlap": 10,
+  "fallback_policy": "first_successful_images_in_frozen_sampling_rank_order_without_model_scores",
+  "catalog_identity": {
+    "file_name": "catalog.sqlite",
+    "byte_size": 7136296960,
+    "mtime_ns": 1794599192500655300,
+    "public_schema_sha256": "05a2a7867fd1deffd0bea991032103cff8a586a05084d8d09c87ca1e149b595c",
+    "sha256": "cbfe10eb111814c7a45e82383173df4f601d08cc9f7d2fd3069429ee71ce42a2",
+    "sha256_verification": "caller_supplied_preverified_source_manifest",
+    "snapshot_id": "7e26cbd71bd0afde12da34d559864ee74c0fb1896881c362671cc7dea75ec29b"
+  },
+  "descriptions_sha256": "3599c61dab6c493945818b4fb1b93b57c9affb85c2e3ebce63aeba393091544d",
+  "candidate_reserve_sha256": "d5169ac94353582d90b3642ea05890e6c6eb016f11bfd17a268647bf2c13acdb",
+  "excluded_ids_sha256": "397c24c5e9780749987695dea3be6c035fefef9896141fcf7bbc87de2420541d"
+}

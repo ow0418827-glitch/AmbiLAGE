@@ -1,0 +1,46 @@
+{
+  "group": "01_camera",
+  "source_id": "B071ZFHTZN",
+  "target_id": "B08V134QWR",
+  "category": "security camera",
+  "subtype": "camera",
+  "positive_title_pattern": "\\b(?:security|surveillance|ptz|ip|wifi|wireless|outdoor|indoor)\\b.*\\bcameras?\\b|\\bcameras?\\b.*\\b(?:security|surveillance|ptz|ip|wifi|wireless|outdoor|indoor)\\b",
+  "negative_title_pattern": "\\b(?:dummy|fake|mounts?|brackets?|housing|covers?|cables?|adapters?|connectors?|cords?|junction|enclosure|monitors?|screens?|chargers?|protective case|rain shield|hard drive|hdd|dvr|nvr|systems?|recorders?|drones?|power supply|illuminators?|infrared led lights?)\\b",
+  "positive_title_scope_first_characters": 160,
+  "target_public_category_label": "video surveillance",
+  "public_category_labels": [
+    "video surveillance"
+  ],
+  "indexed_category_bucket_counts": {
+    "video surveillance": 7403
+  },
+  "indexed_category_bucket_size": 7403,
+  "catalog_public_projections_read": 142,
+  "max_read_per_group": 5000,
+  "requested_candidate_count": 10,
+  "description_count": 50,
+  "reserve_count": 40,
+  "candidate_reserve_count": 50,
+  "seed": 42,
+  "group_order_seed_sha256": "827f6ac9d7a4672e3cc033411ee2fab5442c64921e3c1d5414b92035b99002df",
+  "rejection_counts": {
+    "public_title_subtype_mismatch": 92,
+    "explicit_public_title_category_rejection": 2
+  },
+  "gallery_downloaded": false,
+  "gallery_finalized": false,
+  "suggested_gallery_description_overlap": 10,
+  "fallback_policy": "first_successful_images_in_frozen_sampling_rank_order_without_model_scores",
+  "catalog_identity": {
+    "file_name": "catalog.sqlite",
+    "byte_size": 7136296960,
+    "mtime_ns": 1794599192500655300,
+    "public_schema_sha256": "05a2a7867fd1deffd0bea991032103cff8a586a05084d8d09c87ca1e149b595c",
+    "sha256": "cbfe10eb111814c7a45e82383173df4f601d08cc9f7d2fd3069429ee71ce42a2",
+    "sha256_verification": "caller_supplied_preverified_source_manifest",
+    "snapshot_id": "7e26cbd71bd0afde12da34d559864ee74c0fb1896881c362671cc7dea75ec29b"
+  },
+  "descriptions_sha256": "01430951e86c6588540c08e7a8d49d8c61937d333710acb57393bad78b853e26",
+  "candidate_reserve_sha256": "d73dd57428565887dd12e7faae4c94ef017074e9ce907f4f027d9d77480f17ff",
+  "excluded_ids_sha256": "397c24c5e9780749987695dea3be6c035fefef9896141fcf7bbc87de2420541d"
+}

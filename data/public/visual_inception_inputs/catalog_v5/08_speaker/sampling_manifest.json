@@ -1,0 +1,51 @@
+{
+  "group": "08_speaker",
+  "source_id": "B01590FHS0",
+  "target_id": "B01N47U1VI",
+  "category": "Bluetooth speaker",
+  "subtype": "speaker",
+  "positive_title_pattern": "\\bbluetooth\\b.*\\b(?:speakers?|loudspeakers?)\\b|\\b(?:speakers?|loudspeakers?)\\b.*\\bbluetooth\\b",
+  "negative_title_pattern": "\\b(?:stands?|mounts?|brackets?|cables?|wires?|covers?|cases?|bags?|grilles?|grills?|adapters?|chargers?|cords?|holders?|replacement|power supply|soundbars?|coaxial|car speakers?|car stereo|marine|boats?|atv|utv|golf cart|mini-amp|accessory kit|subwoofer|transmitter|receiver|motherboard)\\b",
+  "positive_title_scope_first_characters": 160,
+  "target_public_category_label": "bluetooth speakers",
+  "public_category_labels": [
+    "bluetooth speakers",
+    "speaker",
+    "speakers"
+  ],
+  "indexed_category_bucket_counts": {
+    "bluetooth speakers": 4225,
+    "speaker": 3992,
+    "speakers": 1507
+  },
+  "indexed_category_bucket_size": 9724,
+  "catalog_public_projections_read": 133,
+  "max_read_per_group": 5000,
+  "requested_candidate_count": 10,
+  "description_count": 50,
+  "reserve_count": 40,
+  "candidate_reserve_count": 50,
+  "seed": 42,
+  "group_order_seed_sha256": "98fd2c881086b64ef7fc49781431a0198933242f3582c7cc7739623abb456cd0",
+  "rejection_counts": {
+    "public_title_subtype_mismatch": 81,
+    "explicit_public_title_category_rejection": 4,
+    "missing_public_image_or_description": 2
+  },
+  "gallery_downloaded": false,
+  "gallery_finalized": false,
+  "suggested_gallery_description_overlap": 10,
+  "fallback_policy": "first_successful_images_in_frozen_sampling_rank_order_without_model_scores",
+  "catalog_identity": {
+    "file_name": "catalog.sqlite",
+    "byte_size": 7136296960,
+    "mtime_ns": 1794599192500655300,
+    "public_schema_sha256": "05a2a7867fd1deffd0bea991032103cff8a586a05084d8d09c87ca1e149b595c",
+    "sha256": "cbfe10eb111814c7a45e82383173df4f601d08cc9f7d2fd3069429ee71ce42a2",
+    "sha256_verification": "caller_supplied_preverified_source_manifest",
+    "snapshot_id": "7e26cbd71bd0afde12da34d559864ee74c0fb1896881c362671cc7dea75ec29b"
+  },
+  "descriptions_sha256": "d472b563a2bf034a8dd686370fa3ccdb6940d841f11bf1cd0d4073b1e817cee7",
+  "candidate_reserve_sha256": "9355fc4baf81dece0898c51f98dc691ad89a7a27b6dec54ed403783a2b0b7c14",
+  "excluded_ids_sha256": "397c24c5e9780749987695dea3be6c035fefef9896141fcf7bbc87de2420541d"
+}

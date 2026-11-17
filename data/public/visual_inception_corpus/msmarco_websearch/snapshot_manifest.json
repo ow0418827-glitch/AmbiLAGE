@@ -1,0 +1,24 @@
+{
+  "dataset": "Microsoft MS MARCO Web Search",
+  "repository": "https://github.com/microsoft/MS-MARCO-Web-Search",
+  "revision": "7b5a408c5b8b3edd30f21acd7e126996759994fa",
+  "documentation_url": "https://github.com/microsoft/MS-MARCO-Web-Search/blob/7b5a408c5b8b3edd30f21acd7e126996759994fa/README.md",
+  "documentation_sha256": "122647ff9788126cc6b975a37674a317d7e0d37917166b3d6da445c02554d45b",
+  "url": "https://msmarco.z22.web.core.windows.net/msmarcowebsearch/100M_queries/queries_train.tsv",
+  "original_sha256": "abeab999bb73dec9445706f240e37d8b3c6dc39bcfafd6b3409622e48520b024",
+  "original_bytes": 711316457,
+  "original_rows": 9206475,
+  "headers": {
+    "ETag": "\"0x8DBE6AE913B5AF1\"",
+    "Last-Modified": "Thu, 16 Nov 2023 14:16:03 GMT",
+    "Content-Length": "711316457"
+  },
+  "original_split": "train",
+  "subset_path": "english_salon_chair_candidate_records.jsonl",
+  "subset_sha256": "2b431c4c85827b334a816d5df93b6e8f4e0232e4f37b6703025e000f3434669b",
+  "subset_records": 18,
+  "selection_rule": "Original English-source query contains chair and barber/salon/styling/hydraulic; final category selector applied separately",
+  "test_fixture": false,
+  "is_synthetic": false,
+  "origin_type": "public_real_search_queries"
+}

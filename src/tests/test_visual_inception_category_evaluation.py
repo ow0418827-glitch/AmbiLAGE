@@ -1,0 +1,580 @@
+"""Dedicated category evaluation uses tiny explicit fixtures, never real ranks."""
+from __future__ import annotations
+
+import copy
+import json
+from pathlib import Path
+
+import pytest
+from PIL import Image
+
+from src.visual.image_utils import sha256_file
+
+
+GROUPS = ('01_camera', '02_chair', '03_cookies', '04_curtain',
+          '05_hair_extension', '06_jeans', '07_shampoo', '08_speaker', '09_toothbrush')
+
+
+def _write(path, value):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, ensure_ascii=False), encoding='utf-8')
+
+
+def _tiny_frozen_suite(tmp_path):
+    base = tmp_path / 'fixture_base'
+    images = tmp_path / 'fixture_images'
+    publics, documents = {}, {}
+    for index, group in enumerate(GROUPS):
+        pair = {}
+        for role, offset in (('source', 0), ('target', 1)):
+            path = base / 'groups' / group / (role + '.png')
+            path.parent.mkdir(parents=True, exist_ok=True)
+            Image.new('RGB', (8, 8), (20 + index * 9 + offset, 30, 40)).save(path)
+            pair[role] = dict(id=f'fixture_{role}_{index}', title=f'Fixture {role} {index}',
+                              image=str(path), image_sha256=sha256_file(path))
+        publics[group] = copy.deepcopy(pair)
+        image = images / group / 'visual_inception' / 'frozen.png'
+        image.parent.mkdir(parents=True, exist_ok=True)
+        Image.new('RGB', (8, 8), (150 + index, 60, 70)).save(image)
+        documents[group] = dict(status='frozen', method='visual_inception', requested_steps=100,
+            source=pair['source'], target=pair['target'], image=str(image), image_sha256=sha256_file(image),
+            metadata=dict(test_fixture=False, production_backend=True,
+                training_objective=dict(kind='visual_inception_retrieval_semantic_perceptual_v2')))
+        _write(images / group / 'visual_inception' / 'FROZEN_IMAGE.json', documents[group])
+    _write(base / 'manifest.json', dict(groups=dict.fromkeys(GROUPS, {}), shared_memory=dict(
+        source_mapping={group: {'source_memory_id': f'fixture_memory_{index}'}
+                        for index, group in enumerate(GROUPS)})))
+    return base, images, publics, documents
+
+
+def test_frozen_suite_requires_all_nine_before_evaluation(tmp_path, monkeypatch):
+    from src.experiments import visual_inception_category_evaluation as category
+    import src.visual.attack_completion as completion
+    base, images, publics, _ = _tiny_frozen_suite(tmp_path)
+    monkeypatch.setattr(category, 'public_group', lambda _base, group: publics[group])
+    monkeypatch.setattr(completion, 'validate_attack_completion', lambda *args, **kwargs: None)
+    if hasattr(category, 'validate_attack_completion'):
+        monkeypatch.setattr(category, 'validate_attack_completion', lambda *args, **kwargs: None)
+    (images / GROUPS[-1] / 'visual_inception/FROZEN_IMAGE.json').unlink()
+    with pytest.raises((ValueError, FileNotFoundError), match='冻结|成图|尚缺|FROZEN'):
+        category.load_frozen_suite(images, base=base)
+
+
+@pytest.mark.parametrize('change', ('method', 'fixture', 'early_mode', 'image_bytes', 'source_binding'))
+def test_frozen_suite_rejects_wrong_identity_or_changed_image(tmp_path, monkeypatch, change):
+    from src.experiments import visual_inception_category_evaluation as category
+    import src.visual.attack_completion as completion
+    base, images, publics, documents = _tiny_frozen_suite(tmp_path)
+    monkeypatch.setattr(category, 'public_group', lambda _base, group: publics[group])
+    monkeypatch.setattr(completion, 'validate_attack_completion', lambda *args, **kwargs: None)
+    if hasattr(category, 'validate_attack_completion'):
+        monkeypatch.setattr(category, 'validate_attack_completion', lambda *args, **kwargs: None)
+    group = GROUPS[0]
+    item = documents[group]
+    if change == 'method':
+        item['method'] = 'lucid'
+    elif change == 'fixture':
+        item['metadata']['test_fixture'] = True
+    elif change == 'early_mode':
+        item['metadata']['training_objective']['kind'] = 'visual_inception_semantic_perceptual_no_retrieval_v1'
+    elif change == 'image_bytes':
+        Image.new('RGB', (8, 8), 'white').save(item['image'])
+    else:
+        item['source']['id'] = 'different_fixture_source'
+    _write(images / group / 'visual_inception/FROZEN_IMAGE.json', item)
+    with pytest.raises(ValueError):
+        category.load_frozen_suite(images, base=base)
+
+
+def test_frozen_category_query_suite_v1_integrity():
+    from src.experiments import visual_inception_category_evaluation as category
+    from src.paths import EVALUATION_BASE
+
+    result = category.validate_category_query_suite(
+        category.CATEGORY_QUERY_ROOT, base=EVALUATION_BASE, verify_training_snapshots=True
+    )
+    assert result['status'] == 'passed'
+    assert result['group_count'] == 9
+    assert result['queries_per_group'] == 20
+    assert result['total_queries'] == 180
+    assert result['queries_per_family'] == 4
+    assert result['training_overlap_checked'] is True
+    assert result['training_snapshot_count'] == 27
+    assert result['unique_training_text_count'] == 891
+    assert result['training_normalized_exact_overlap_count'] == 0
+    assert result['existing_formal_query_overlap_count'] == 0
+
+    semantic_anchors = {
+        '01_camera': ('zoom', 'motion', 'night', 'waterproof', 'weather-resistant', 'ip66', 'outdoor', '1080p', '2k', 'audio', 'voice', 'sd', 'wifi', 'battery', 'mini', 'dome'),
+        '02_chair': ('hydraulic', '360', 'swivel', 'height', 'foam', 'sponge', 'cushion', 'steel', 'heavy-duty', 'heavy duty', 'leather', 'pvc', 'reclining', 'footrest'),
+        '03_cookies': ('chocolate', 'butter', 'sugar', 'oatmeal', 'frozen', 'refrigerated', 'bake', 'egg', 'gluten', 'vegan', 'edible', 'natural', 'ready-to-eat'),
+        '04_curtain': ('blackout', 'darkening', 'thermal', 'insulated', 'privacy', 'noise', 'polyester', 'velvet', 'cotton-linen', 'grommet', 'rod pocket', 'valance', 'wood'),
+        '05_hair_extension': ('human hair', 'real hair', 'synthetic', 'crochet', 'kanekalon', 'clip-in', 'tape-in', 'wig', 'weft', 'ponytail', 'halo', 'wavy', 'curly'),
+        '06_jeans': ('high waist', 'high-waist', 'high-waisted', 'high-rise', 'mid-rise', 'wide-leg', 'straight-leg', 'straight', 'baggy', 'boyfriend', 'flare', 'bootcut', 'stretch', 'spandex', 'relaxed-fit', 'y2k', 'pocket'),
+        '07_shampoo': ('scalp', 'moisturizing', 'hydrating', 'repairing', 'volumizing', 'thickening', 'dandruff', 'sulfate-free', 'tea tree', 'botanical', 'plant', 'aloe', 'purple', 'vegan'),
+        '08_speaker': ('waterproof', 'splashproof', 'ipx7', 'portable', 'stereo', 'bass', 'battery', 'playback', 'hour', 'mic', 'hands-free', 'fm', 'microsd', 'tf card', 'solar', 'bluetooth 5.0', 'range'),
+        '09_toothbrush': ('u-shaped', 'u-shape', 'silicone', 'soft', 'ultra-soft', 'nano-bristle', 'electric', 'sonic', 'manual', 'kids', 'toddler', 'gum', 'whitening'),
+    }
+    rare_niche_ceilings = {
+        '01_camera': (('optical zoom', 3),),
+        '03_cookies': (('egg', 4),),
+        '04_curtain': (('wood', 3),),
+        '05_hair_extension': (('double weft', 3), ('double-weft', 3)),
+        '06_jeans': (('flap', 3),),
+        '07_shampoo': (('plant', 3),),
+        '08_speaker': (('solar', 3),),
+        '09_toothbrush': (('u-shape', 9),),
+    }
+    banned_meta = ('what should i consider', 'how should i choose', 'how do i choose',
+                   'worth putting on a shortlist', 'worth adding to', 'useful shopping shortlist', 'first purchase')
+    banned_brands = ('hxview', 'lthdd', 'big dipper', 's-noilite', 'aveda', 'touch of eco', 'buytvproducts4less')
+
+    for group in GROUPS:
+        assert result['groups'][group]['query_family_counts'] == {
+            family: 4 for family in category.QUERY_FAMILIES
+        }
+        q_doc = json.loads((category.CATEGORY_QUERY_ROOT / group / 'queries.json').read_text(encoding='utf-8'))
+        anchors = semantic_anchors[group]
+        lows = [category.normalize_query_text(text) for text in q_doc['instructions']]
+        for text, low in zip(q_doc['instructions'], lows):
+            assert any(anchor in low for anchor in anchors), (group, text)
+            assert not any(meta in low for meta in banned_meta), (group, text)
+            assert not any(brand in low for brand in banned_brands), (group, text)
+        for token, max_hits in rare_niche_ceilings.get(group, ()):
+            assert sum(token in low for low in lows) <= max_hits, (group, token)
+
+
+def _tiny_category_query_root(tmp_path, base_manifest, publics):
+    import hashlib
+    from src.experiments import visual_inception_category_evaluation as category
+
+    qroot = tmp_path / 'fixture_category_queries'
+    groups_meta = {}
+    for index, group in enumerate(GROUPS):
+        target_id = publics[group]['target']['id']
+        instructions, records, zh_records = [], [], []
+        q_num = 0
+        for family in category.QUERY_FAMILIES:
+            for item_idx in range(4):
+                q_num += 1
+                qid = f'{group}_category_{q_num:02d}'
+                text = f'Fixture {group} {family} query {item_idx + 1} for target {index}'
+                text_zh = f'夹具 {group} {family} 第{item_idx + 1}条'
+                instructions.append(text)
+                records.append(dict(id=qid, query_family=family, instruction=text, instruction_zh=text_zh))
+                zh_records.append(dict(
+                    id=qid,
+                    query_family=family,
+                    query_family_zh=category.QUERY_FAMILY_LABELS_ZH[family],
+                    instruction=text_zh,
+                ))
+        instr_sha = hashlib.sha256(
+            json.dumps(instructions, ensure_ascii=False, separators=(',', ':')).encode('utf-8')
+        ).hexdigest()
+        q_rel = f'{group}/queries.json'
+        zh_rel = f'{group}/queries.zh.json'
+        q_doc = dict(
+            schema_version=2,
+            status='ready',
+            method='visual_inception',
+            evaluation_protocol=category.PROTOCOL,
+            group=group,
+            query_mode='text',
+            target_public_id=target_id,
+            category=f'fixture_category_{index}',
+            source_type='curated_evaluation',
+            language='en',
+            instruction_policy='category_diversity_5_families_x4_v1',
+            instructions=instructions,
+            instructions_sha256=instr_sha,
+            query_records=records,
+            query_family_counts={f: 4 for f in category.QUERY_FAMILIES},
+            query_image_required=False,
+            query_images_generated=False,
+            is_real_search_log=False,
+            training_use_allowed=False,
+        )
+        zh_doc = dict(
+            schema_version=1,
+            language='zh',
+            purpose='仅供人工阅读，不传给检索编码器',
+            group=group,
+            category=f'fixture_category_{index}',
+            query_records=zh_records,
+        )
+        _write(qroot / q_rel, q_doc)
+        _write(qroot / zh_rel, zh_doc)
+        groups_meta[group] = dict(
+            path=q_rel,
+            sha256=sha256_file(qroot / q_rel),
+            chinese_review_path=zh_rel,
+            chinese_review_sha256=sha256_file(qroot / zh_rel),
+            target_public_id=target_id,
+            category=f'fixture_category_{index}',
+            query_count=20,
+            instructions_sha256=instr_sha,
+            query_family_counts={f: 4 for f in category.QUERY_FAMILIES},
+        )
+    _write(qroot / 'manifest.json', dict(
+        schema_version=1,
+        protocol=category.PROTOCOL,
+        method='visual_inception',
+        query_mode='text',
+        source_type='curated_evaluation',
+        language='en',
+        group_count=9,
+        queries_per_group=20,
+        total_queries=180,
+        query_families=list(category.QUERY_FAMILIES),
+        queries_per_family=4,
+        optimization_may_read=False,
+        is_real_search_log=False,
+        outcome_selection_used=False,
+        base_manifest_sha256=sha256_file(base_manifest),
+        groups=groups_meta,
+    ))
+    return qroot
+
+
+def test_category_evaluation_end_to_end_micro_suite(tmp_path, monkeypatch):
+    from src.experiments import visual_inception_category_evaluation as category
+    from src.tests.test_evaluation_integrity import _DummyEncoder
+    import src.visual.attack_completion as completion
+
+    base, images, publics, _ = _tiny_frozen_suite(tmp_path)
+    entries = []
+    source_mapping = {}
+    for index, group in enumerate(GROUPS):
+        src = publics[group]['source']
+        mem_id = f'fixture_memory_{index}'
+        source_mapping[group] = {'source_asin': src['id'], 'source_memory_id': mem_id}
+        entries.append(dict(
+            Id=mem_id,
+            FinalASIN=src['id'],
+            RecordKind='simulated_gallery',
+            Completed=False,
+            PrimaryImage=dict(
+                ASIN=src['id'],
+                Title=src['title'],
+                LocalPath=src['image'],
+                SHA256=src['image_sha256'],
+            ),
+            FeatureText=f'Fixture feature {index}',
+            Attributes=[f'attr_{index}'],
+        ))
+    for bg in range(2):
+        bg_path = base / 'shared_memory' / f'bg_{bg}.png'
+        bg_path.parent.mkdir(parents=True, exist_ok=True)
+        Image.new('RGB', (8, 8), (5 + bg * 30, 120 + bg * 20, 200 - bg * 30)).save(bg_path)
+        entries.append(dict(
+            Id=f'fixture_bg_{bg}',
+            FinalASIN=f'BG_{bg}',
+            RecordKind='purchase_memory',
+            Completed=True,
+            PrimaryImage=dict(
+                ASIN=f'BG_{bg}',
+                Title=f'Background product {bg}',
+                LocalPath=f'bg_{bg}.png',
+                SHA256=sha256_file(bg_path),
+            ),
+            FeatureText=f'Background feature {bg}',
+            Attributes=[f'bg_attr_{bg}'],
+        ))
+
+    pool_path = base / 'shared_memory/shared_memory.json'
+    _write(pool_path, dict(schema_version=1, scope='shared', entries=entries))
+    pool_before = pool_path.read_bytes()
+
+    base_manifest = dict(
+        groups={
+            group: dict(target_id=publics[group]['target']['id'], source_id=publics[group]['source']['id'])
+            for group in GROUPS
+        },
+        shared_memory=dict(
+            pool_file='shared_memory/shared_memory.json',
+            pool_sha256=sha256_file(pool_path),
+            source_mapping=source_mapping,
+        ),
+    )
+    _write(base / 'manifest.json', base_manifest)
+    qroot = _tiny_category_query_root(tmp_path, base / 'manifest.json', publics)
+
+    eval_out = tmp_path / 'output/vi_category_eval'
+    monkeypatch.setattr(category, 'OUTPUT', tmp_path / 'output')
+    monkeypatch.setattr(category, 'public_group', lambda _base, group: publics[group])
+    monkeypatch.setattr(completion, 'validate_attack_completion', lambda *args, **kwargs: None)
+    monkeypatch.setattr(category, 'validate_attack_completion', lambda *args, **kwargs: None)
+
+    result = category.evaluate_category_suite(
+        images,
+        eval_out,
+        base=base,
+        query_root=qroot,
+        device='cpu',
+        defense_mode='none',
+        encoder_factory=_DummyEncoder,
+        verify_training_snapshots=False,
+    )
+    assert pool_path.read_bytes() == pool_before
+    for name in (
+        'category_evaluation_plan.json',
+        'category_query_validation.json',
+        'category_retrieval_summary.json',
+        'REPORT.md',
+    ):
+        assert (eval_out / name).is_file()
+
+    verified = category.verify_category_suite(
+        eval_out, device='cpu', encoder_factory=_DummyEncoder, isolated_process=False
+    )
+    assert verified['status'] == 'passed'
+    assert verified['groups_verified'] == 9
+    assert verified['rankings_recomputed'] == 360
+    assert verified['candidate_scores_recomputed'] == 360 * len(entries)
+    assert (eval_out / 'category_independent_verification.json').is_file()
+
+    # Verify all nine groups evaluated against the same simultaneously replaced modified bank.
+    mod_bank_hashes = set()
+    for group in GROUPS:
+        rows = json.loads((eval_out / 'groups' / group / 'evaluation.json').read_text(encoding='utf-8'))
+        mod_row = next(r for r in rows if r['bank'] == 'modified')
+        mod_bank_hashes.add(mod_row['bank_sha256'])
+    assert len(mod_bank_hashes) == 1
+    shared_mod_bank = json.loads((eval_out / 'shared_banks/banks/none/modified.json').read_text(encoding='utf-8'))
+    assert len(shared_mod_bank) == len(entries)
+    assert sum('RetrievalImage' in e for e in shared_mod_bank) == 9
+    assert [{k: v for k, v in e.items() if k != 'RetrievalImage'} for e in shared_mod_bank] == entries
+
+    summary = result['summary']
+    assert summary['total_queries'] == 180
+    assert summary['overall']['query_count'] == 180
+    for family in category.QUERY_FAMILIES:
+        assert summary['by_family'][family]['query_count'] == 36
+
+    # Reconstruct top1/top3/top5 counts directly from per-group query ranks.
+    all_details = [
+        q
+        for group in GROUPS
+        for q in summary['groups'][group]['by_condition']['none']['queries']
+    ]
+    assert len(all_details) == 180
+    for k in (1, 3, 5):
+        assert summary['overall'][f'top{k}']['clean_hits'] == sum(q['clean_rank'] <= k for q in all_details)
+        assert summary['overall'][f'top{k}']['modified_hits'] == sum(q['modified_rank'] <= k for q in all_details)
+    for family in category.QUERY_FAMILIES:
+        fam_details = [q for q in all_details if q['query_family'] == family]
+        for k in (1, 3, 5):
+            assert summary['by_family'][family][f'top{k}']['clean_hits'] == sum(q['clean_rank'] <= k for q in fam_details)
+            assert summary['by_family'][family][f'top{k}']['modified_hits'] == sum(q['modified_rank'] <= k for q in fam_details)
+
+    assert summary['scope_notice']['retrieval_coverage_only'] is True
+    assert summary['scope_notice']['recommendation_or_shopping_executed'] is False
+
+    report_text = (eval_out / 'REPORT.md').read_text(encoding='utf-8')
+    assert '按问法类别汇总' in report_text
+    assert '类别直接询问' in report_text
+    assert '检索覆盖与下游推荐区分' in report_text
+    assert 'shopping_allowed=false' in report_text
+
+
+def test_frozen_training_oracle_query_suite_v1_integrity():
+    from src.experiments import visual_inception_category_evaluation as category
+    from src.paths import EVALUATION_BASE
+
+    assert category.DEFAULT_QUERY_SUITE == 'training_oracle'
+    result = category.validate_category_query_suite(base=EVALUATION_BASE, verify_training_snapshots=True)
+    assert result['status'] == 'passed'
+    assert result['protocol'] == category.ORACLE_PROTOCOL
+    assert result['query_suite'] == 'training_oracle'
+    assert result['training_overlap_mode'] == 'oracle_100pct'
+    assert result['group_count'] == 9
+    assert result['queries_per_group'] == 20
+    assert result['total_queries'] == 180
+    assert result['queries_per_family'] == {'category_description': 10, 'model_paraphrase': 6, 'heldout_search_query': 4}
+    assert result['training_overlap_checked'] is True
+    assert result['training_snapshot_count'] == 27
+    assert result['unique_training_text_count'] == 891
+    assert result['training_normalized_exact_overlap_count'] == 180
+    for group in GROUPS:
+        assert result['groups'][group]['query_family_counts'] == {
+            'category_description': 10,
+            'model_paraphrase': 6,
+            'heldout_search_query': 4,
+        }
+
+    zero_res = category.validate_category_query_suite(
+        query_suite='zero_overlap', base=EVALUATION_BASE, verify_training_snapshots=True
+    )
+    assert zero_res['protocol'] == category.PROTOCOL
+    assert zero_res['query_suite'] == 'zero_overlap'
+    assert zero_res['training_normalized_exact_overlap_count'] == 0
+
+
+def _tiny_oracle_query_root(tmp_path, base_manifest, publics):
+    import hashlib
+    from src.experiments import visual_inception_category_evaluation as category
+
+    qroot = tmp_path / 'fixture_oracle_queries'
+    groups_meta = {}
+    quotas = {'category_description': 10, 'model_paraphrase': 6, 'heldout_search_query': 4}
+    for index, group in enumerate(GROUPS):
+        target_id = publics[group]['target']['id']
+        instructions, records, zh_records = [], [], []
+        q_num = 0
+        for family, quota in quotas.items():
+            for item_idx in range(quota):
+                q_num += 1
+                qid = f'{group}_oracle_{q_num:02d}'
+                text = f'Oracle fixture {group} {family} item {item_idx + 1} target {index}'
+                text_zh = f'训练抽样夹具 {group} {family} 第{item_idx + 1}条'
+                instructions.append(text)
+                records.append(dict(
+                    id=qid,
+                    query_family=family,
+                    instruction=text,
+                    instruction_zh=text_zh,
+                    source_row_id=f'row_{q_num:02d}',
+                    source_file=f'fixture/{group}/{family}.jsonl',
+                ))
+                zh_records.append(dict(
+                    id=qid,
+                    query_family=family,
+                    query_family_zh=category.ORACLE_FAMILY_LABELS_ZH[family],
+                    instruction=text_zh,
+                ))
+        instr_sha = hashlib.sha256(
+            json.dumps(instructions, ensure_ascii=False, separators=(',', ':')).encode('utf-8')
+        ).hexdigest()
+        q_rel = f'{group}/queries.json'
+        zh_rel = f'{group}/queries.zh.json'
+        q_doc = dict(
+            schema_version=2,
+            status='ready',
+            method='visual_inception',
+            evaluation_protocol=category.ORACLE_PROTOCOL,
+            group=group,
+            query_mode='text',
+            target_public_id=target_id,
+            category=f'fixture_category_{index}',
+            source_type='training_oracle_stratified_sample',
+            language='en',
+            instruction_policy='training_oracle_50_30_20_stratified_20_v1',
+            instructions=instructions,
+            instructions_sha256=instr_sha,
+            query_records=records,
+            query_family_counts=dict(quotas),
+            query_image_required=False,
+            query_images_generated=False,
+            is_real_search_log=False,
+            training_use_allowed=False,
+        )
+        zh_doc = dict(
+            schema_version=1,
+            language='zh',
+            purpose='仅供人工阅读，不传给检索编码器',
+            group=group,
+            category=f'fixture_category_{index}',
+            query_records=zh_records,
+        )
+        _write(qroot / q_rel, q_doc)
+        _write(qroot / zh_rel, zh_doc)
+        groups_meta[group] = dict(
+            path=q_rel,
+            sha256=sha256_file(qroot / q_rel),
+            chinese_review_path=zh_rel,
+            chinese_review_sha256=sha256_file(qroot / zh_rel),
+            target_public_id=target_id,
+            category=f'fixture_category_{index}',
+            query_count=20,
+            instructions_sha256=instr_sha,
+            query_family_counts=dict(quotas),
+        )
+    _write(qroot / 'manifest.json', dict(
+        schema_version=1,
+        protocol=category.ORACLE_PROTOCOL,
+        method='visual_inception',
+        query_mode='text',
+        source_type='training_oracle_stratified_sample',
+        language='en',
+        group_count=9,
+        queries_per_group=20,
+        total_queries=180,
+        query_families=list(category.ORACLE_FAMILIES),
+        queries_per_family=dict(quotas),
+        optimization_may_read=False,
+        is_real_search_log=False,
+        outcome_selection_used=False,
+        base_manifest_sha256=sha256_file(base_manifest),
+        groups=groups_meta,
+    ))
+    return qroot
+
+
+def test_oracle_query_suite_is_default_in_evaluation(tmp_path, monkeypatch):
+    from src.experiments import visual_inception_category_evaluation as category
+    from src.tests.test_evaluation_integrity import _DummyEncoder
+    import src.visual.attack_completion as completion
+
+    base, images, publics, _ = _tiny_frozen_suite(tmp_path)
+    entries = []
+    source_mapping = {}
+    for index, group in enumerate(GROUPS):
+        src = publics[group]['source']
+        mem_id = f'fixture_memory_{index}'
+        source_mapping[group] = {'source_asin': src['id'], 'source_memory_id': mem_id}
+        entries.append(dict(
+            Id=mem_id,
+            FinalASIN=src['id'],
+            RecordKind='simulated_gallery',
+            Completed=False,
+            PrimaryImage=dict(
+                ASIN=src['id'],
+                Title=src['title'],
+                LocalPath=src['image'],
+                SHA256=src['image_sha256'],
+            ),
+            FeatureText=f'Fixture feature {index}',
+            Attributes=[f'attr_{index}'],
+        ))
+    pool_path = base / 'shared_memory/shared_memory.json'
+    _write(pool_path, dict(schema_version=1, scope='shared', entries=entries))
+    _write(base / 'manifest.json', dict(
+        groups={
+            group: dict(target_id=publics[group]['target']['id'], source_id=publics[group]['source']['id'])
+            for group in GROUPS
+        },
+        shared_memory=dict(
+            pool_file='shared_memory/shared_memory.json',
+            pool_sha256=sha256_file(pool_path),
+            source_mapping=source_mapping,
+        ),
+    ))
+    oracle_root = _tiny_oracle_query_root(tmp_path, base / 'manifest.json', publics)
+
+    eval_out = tmp_path / 'output/vi_oracle_eval'
+    monkeypatch.setattr(category, 'OUTPUT', tmp_path / 'output')
+    monkeypatch.setitem(category.QUERY_SUITE_ROOTS, 'training_oracle', oracle_root)
+    monkeypatch.setattr(category, 'public_group', lambda _base, group: publics[group])
+    monkeypatch.setattr(completion, 'validate_attack_completion', lambda *args, **kwargs: None)
+    monkeypatch.setattr(category, 'validate_attack_completion', lambda *args, **kwargs: None)
+
+    result = category.evaluate_category_suite(
+        images,
+        eval_out,
+        base=base,
+        device='cpu',
+        defense_mode='none',
+        encoder_factory=_DummyEncoder,
+        verify_training_snapshots=False,
+    )
+    summary = result['summary']
+    assert summary['protocol'] == category.ORACLE_PROTOCOL
+    assert summary['query_suite'] == 'training_oracle'
+    assert summary['by_family']['category_description']['query_count'] == 90
+    assert summary['by_family']['model_paraphrase']['query_count'] == 54
+    assert summary['by_family']['heldout_search_query']['query_count'] == 36
+    report_text = (eval_out / 'REPORT.md').read_text(encoding='utf-8')
+    assert '100% Oracle' in report_text
+    assert '同类商品公开描述(50%)' in report_text
+
+

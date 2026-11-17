@@ -1,0 +1,68 @@
+{
+  "kind": "heldout_search_query",
+  "split": "query_reserve",
+  "test_fixture": false,
+  "is_synthetic": false,
+  "origin_type": "public_real_search_queries",
+  "upstream": {
+    "dataset": "Microsoft MS MARCO Web Search (primary preserved rows of independent three-source union)",
+    "revision": "7b5a408c5b8b3edd30f21acd7e126996759994fa",
+    "url": "https://github.com/microsoft/MS-MARCO-Web-Search"
+  },
+  "original_snapshot_url": "https://msmarco.z22.web.core.windows.net/msmarcowebsearch/100M_queries/queries_train.tsv",
+  "original_snapshot_sha256": "abeab999bb73dec9445706f240e37d8b3c6dc39bcfafd6b3409622e48520b024",
+  "original_partition": "Independent public train sources; actual partition per evidence row",
+  "selection_policy": "independent_public_esci_orcas_product_intent_hash_reserve_v5",
+  "category_rule": [
+    "\\b(?:(?:barber(?:'s)?|salon|styling|hairdresser|hairdressing|hair\\s+dressing)\\s+(?:\\w+\\s+){0,2}chairs?|chairs?\\s+(?:\\w+\\s+){0,2}(?:salon|barber|hairdressing))\\b",
+    "\\b(?:cover|covers|mat|mats|pump|pumps|base|bases|parts|replacement|cushion|cushions|booster|boosters)\\b"
+  ],
+  "product_intent_exclude_regex": "\\b(?:recipe|recipes|how|why|can|should|does|do|is|are|was|were|what|when|where|ingredients|salmonella|eating|making|make|homemade|business|start|freeze|freezing|baking|diy|methods?|restoration|rentals?|rent|tax|agreement|near me)\\b",
+  "scope": "Original public product-related search strings; ORCAS is general web search, not shopping logs",
+  "reviewed_against_original_category": true,
+  "requested_count": 20,
+  "actual_count": 12,
+  "complete": false,
+  "upstream_sources": [
+    {
+      "dataset": "Amazon Science ESCI",
+      "url": "https://media.githubusercontent.com/media/amazon-science/esci-data/7916cdf6ab75a462e77f20ab40428a10923998d5/shopping_queries_dataset/shopping_queries_dataset_examples.parquet",
+      "revision": "7916cdf6ab75a462e77f20ab40428a10923998d5",
+      "sha256": "4a735b693b4a424a6fc67f5be6e4c811495c488bbf66d02a602d308b2744263a",
+      "original_split": "train/us",
+      "full_source_saved": true
+    },
+    {
+      "dataset": "Microsoft ORCAS",
+      "url": "https://msmarco.z22.web.core.windows.net/msmarcoranking/orcas-doctrain-queries.tsv.gz",
+      "revision": "21b4ece9f4fc10fa4cec2028bb74287629945df6",
+      "sha256": "8e69679a83f2d9767916e377f142e7c3fe110fa1cca9f52dc644c705ad975692",
+      "original_split": "orcas-doctrain",
+      "full_source_saved": true
+    },
+    {
+      "dataset": "Microsoft MS MARCO Web Search",
+      "url": "https://msmarco.z22.web.core.windows.net/msmarcowebsearch/100M_queries/queries_train.tsv",
+      "revision": "7b5a408c5b8b3edd30f21acd7e126996759994fa",
+      "sha256": "abeab999bb73dec9445706f240e37d8b3c6dc39bcfafd6b3409622e48520b024",
+      "original_split": "train/English-source locales",
+      "full_source_saved": false
+    }
+  ],
+  "source_merge_policy": "Union exact normalized original English queries; duplicate queries count once and retain multiple source evidence.",
+  "original_full_stream_saved": false,
+  "offline_full_source_verification_available": false,
+  "original_record_excerpt_path": "data\\public\\visual_inception_corpus\\msmarco_websearch_v2\\english_salon_chair_candidate_records.jsonl",
+  "original_record_excerpt_sha256": "885b66208bc0fad8b0ea422f7904b0402b5d4cdd8e1553adec03ea262e1599a6",
+  "rebuild_command": "python tools/prepare_visual_inception_queries.py --rebuild-websearch-subset <new-project-directory>",
+  "shortfall_action": "STOP_GROUP: only 12 genuine distinct English barber/salon chair queries; 20 required; never pad, synthesize or substitute shampoo/general chairs",
+  "additional_category_exclusions": [
+    "shampoo",
+    "washing",
+    "dental",
+    "office"
+  ],
+  "category_additional_exclude_regex": "\\b(?:shampoo|washing|dental|office)\\b",
+  "accepted_count": 12,
+  "rejected_candidate_count": 8
+}

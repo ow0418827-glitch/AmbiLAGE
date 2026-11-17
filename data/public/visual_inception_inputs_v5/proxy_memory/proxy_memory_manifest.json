@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "policy": "shared_independent_public_nine_categories_v1",
+  "candidate_count": 90,
+  "count_per_category": 10,
+  "category_groups": [
+    "01_camera",
+    "02_chair",
+    "03_cookies",
+    "04_curtain",
+    "05_hair_extension",
+    "06_jeans",
+    "07_shampoo",
+    "08_speaker",
+    "09_toothbrush"
+  ],
+  "input_binding": {
+    "01_camera": {
+      "images": {
+        "sampling_manifest_sha256": "fa652d477db8bc22ef6d830e8ec2826c8463888890695ca680014afbd86f048f",
+        "candidate_reserve_sha256": "d73dd57428565887dd12e7faae4c94ef017074e9ce907f4f027d9d77480f17ff",
+        "source_image_sha256": "eb5f729dbce74e5ea97f9b3af6eb902f947c9c8442b74acbf450bce12d1104cd",
+        "target_image_sha256": "3e640007088747b83c734fe3a612c241f88b370490d99b3aca717f92f4dd0126",
+        "candidate_count": 10
+      },
+      "candidates_sha256": "63fddffbe4ce880ab887b1530a0db2ccc2c78f6cb1d029ba7b36934e2749b5bc"
+    },
+    "02_chair": {
+      "images": {
+        "sampling_manifest_sha256": "ae556ad5991c72be56a56777167b258a7ff6d4da2d1257e9ab53dc8b93b3ffb0",
+        "candidate_reserve_sha256": "6e2b56396801eea3b8dacdaf5f8d904d4b097069a019d63ba8f2074e18fc37da",
+        "source_image_sha256": "7a06ed70b92dc60b6cf37d29631bcfe52f8735adba0253b791350f464ca56d6b",
+        "target_image_sha256": "bec16e84034aa0a44b09f41298c795bdc087b0d008fce09cf67022c573e64e54",
+        "candidate_count": 10
+      },
+      "candidates_sha256": "f5f7a80a45cebcdedc71b100178948c026c7da93dc081e5b561a2ffdde32050e"
+    },
+    "03_cookies": {
+      "images": {
+        "sampling_manifest_sha256": "25ee512abc0c3c1dec87d9a8ebd664f31157c183a0153d3b0651238dd66ae5ea",
+        "candidate_reserve_sha256": "d374fc987817687359e83bfc7befed5b807818944286a08b93cce00b98c9c0be",
+        "source_image_sha256": "a1bb85bf4b8c4bbace4d1099142c0c7925c7b9f0d2e878fa43830e140fffbd28",
+        "target_image_sha256": "656132deaca60f9f6f1a34668699fe96289c3c1812dddde5b1cfe9685b317e71",
+        "candidate_count": 10
+      },
+      "candidates_sha256": "14f751006196ade54d181dbfcb603ae807c82174cdaed1d312e4611007900053"
+    },
+    "04_curtain": {
+      "images": {
+        "sampling_manifest_sha256": "8f2ff3b510ab069a503c9cb3922f4c129fa82959700b46dc389c7d2a574c40b8",
+        "candidate_reserve_sha256": "21e7e0ca7784660bfcfcc8a9ef93a017926b46da27527530c1813f480976968a",
+        "source_image_sha256": "2eaea983aa4b1ab928567e1aeb57a255fa133f0b9fa2b9a4a6eeccd43d62d967",
+        "target_image_sha256": "5b91d14a4cd7f994eee97a58e55cf82ebfa8725d3a28d982bc695a7208e5e098",
+        "candidate_count": 10
+      },
+      "candidates_sha256": "f82c65fdd6df842cba992ca454fbd5e091f5bac263273f802f7520a511f19913"
+    },
+    "05_hair_extension": {
+      "images": {
+        "sampling_manifest_sha256": "aa764ec81fa890f08668246c05911594024d196351415ac803c8f54dd7de7a0f",
+        "candidate_reserve_sha256": "2ca35c033a815b46ba8bd1653dbed61a1c458f066b01d1b9ba82a9ea6fc3fed3",
+        "source_image_sha256": "0cdc1d80aaf88e4bb1e4e6919e468afe4716b741a890ce03a8c9368317ae36fe",
+        "target_image_sha256": "f1606cc72284b26cc9d055eb58b784b46c17a72561f452b1704a0e9f0970f9a4",
+        "candidate_count": 10
+      },
+      "candidates_sha256": "f7dc61feace275cc1e884b4b4bd43ef3bb98c7eb6f3f97aa83f46eb9a0fec9f6"
+    },
+    "06_jeans": {
+      "images": {
+        "sampling_manifest_sha256": "7cc5e066d1c089eb2a93b6696eec80fc68692f948d128becfbb2cab1fc087197",
+        "candidate_reserve_sha256": "d5169ac94353582d90b3642ea05890e6c6eb016f11bfd17a268647bf2c13acdb",
+        "source_image_sha256": "a945795bc33a1f094f2bae77742393c692e05e22917184f635f302756e9a2b8d",
+        "target_image_sha256": "a64dbac4b78d2062f4bd84eade0de023dc4d17162a455b1244f221fb7dea9241",
+        "candidate_count": 10
+      },
+      "candidates_sha256": "932f2c53f12c04160f98487a007c9830703faff2d134b066938d11500ee2cea4"
+    },
+    "07_shampoo": {
+      "images": {
+        "sampling_manifest_sha256": "e5a673e90f892be7c0179fe5768beb18cbe35b3c3df19cab013a4a4debc61244",
+        "candidate_reserve_sha256": "67af56de803ca83ef76f183083b4b1b085150d9bc5fb03fe845d8519c2df7550",
+        "source_image_sha256": "b69cef9d597c09a1dd74baa2dc3a24343443d80fea3030c8994268c4f21b9c72",
+        "target_image_sha256": "636bd5bb489e4043c22f4eb2886ae85f2d27d5b4cbe6be74bbac25d57bb2ae5e",
+        "candidate_count": 10
+      },
+      "candidates_sha256": "b7c34a727a4e6ba5f488e848e80eee0acb5ef04339a7f6a72d2baf9dd021ebad"
+    },
+    "08_speaker": {
+      "images": {
+        "sampling_manifest_sha256": "5325356d13944d817865ea02251f2c444c0aaae367390c13321536eb62487245",
+        "candidate_reserve_sha256": "9355fc4baf81dece0898c51f98dc691ad89a7a27b6dec54ed403783a2b0b7c14",
+        "source_image_sha256": "ead324b33b443daba5e0abe9c6ed59157e164d67b302f65a7661d53810be6390",
+        "target_image_sha256": "808882d53dd322b2a319a83f9ec29ec406cae6b93558ea98f60a5444b4eed928",
+        "candidate_count": 10
+      },
+      "candidates_sha256": "3481545e233373ed98526359ccb4c8de692fb6511ab364a734e134fda4d6b521"
+    },
+    "09_toothbrush": {
+      "images": {
+        "sampling_manifest_sha256": "ef4d804544fe35443d5e9fb88a25db082cdd2e4c7a692cb04b4314945eb10411",
+        "candidate_reserve_sha256": "9e966328b4f386d86a1bb95910b4c4006aa66036d36f59560543e9f414e3c508",
+        "source_image_sha256": "74e0c705bd248dbec29190d33f7ecd38ef9a17e8853dd58ddb13c78fff4eae0f",
+        "target_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2",
+        "candidate_count": 10
+      },
+      "candidates_sha256": "f8562417f4e2276a4fb6a5c7eda84b6cb38bb48f6cc451febe5c945b726b9177"
+    }
+  },
+  "candidates_sha256": "4786123b95695b9274bcf63691eeef2f1ce6f59d07404e60651b4564476f67d7",
+  "representation": "frozen_image_only_candidates_shared_across_all_training_groups",
+  "formal_memory_contents_read": false,
+  "formal_queries_read": false,
+  "test_fixture": false
+}

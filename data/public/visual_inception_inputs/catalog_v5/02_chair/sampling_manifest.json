@@ -1,0 +1,48 @@
+{
+  "group": "02_chair",
+  "source_id": "B08GCSRXKS",
+  "target_id": "B09CYFD5BX",
+  "category": "barber chair",
+  "subtype": "chair",
+  "positive_title_pattern": "\\b(?:barber|hair\\s?styling|stylist)\\b.*\\bchairs?\\b|\\bchairs?\\b.*\\b(?:barber|hair\\s?styling|stylist)\\b",
+  "negative_title_pattern": "\\b(?:covers?|mats?|pads?|beds?|stools?|backwash|bowl|sink|station|boosters?|cushions?|hair dryer|footrest|replacement|parts?|pump only|chair base only)\\b",
+  "positive_title_scope_first_characters": 160,
+  "target_public_category_label": "salon & spa equipment",
+  "public_category_labels": [
+    "salon & spa equipment"
+  ],
+  "indexed_category_bucket_counts": {
+    "salon & spa equipment": 7479
+  },
+  "indexed_category_bucket_size": 7479,
+  "catalog_public_projections_read": 238,
+  "max_read_per_group": 5000,
+  "requested_candidate_count": 10,
+  "description_count": 50,
+  "reserve_count": 40,
+  "candidate_reserve_count": 50,
+  "seed": 42,
+  "group_order_seed_sha256": "96e5079438bd261f28708337622896a5a052229f20745f92913ef633acbc2826",
+  "rejection_counts": {
+    "public_title_subtype_mismatch": 183,
+    "excluded_or_previously_selected": 1,
+    "explicit_public_title_category_rejection": 2,
+    "duplicate_description": 5
+  },
+  "gallery_downloaded": false,
+  "gallery_finalized": false,
+  "suggested_gallery_description_overlap": 10,
+  "fallback_policy": "first_successful_images_in_frozen_sampling_rank_order_without_model_scores",
+  "catalog_identity": {
+    "file_name": "catalog.sqlite",
+    "byte_size": 7136296960,
+    "mtime_ns": 1794599192500655300,
+    "public_schema_sha256": "05a2a7867fd1deffd0bea991032103cff8a586a05084d8d09c87ca1e149b595c",
+    "sha256": "cbfe10eb111814c7a45e82383173df4f601d08cc9f7d2fd3069429ee71ce42a2",
+    "sha256_verification": "caller_supplied_preverified_source_manifest",
+    "snapshot_id": "7e26cbd71bd0afde12da34d559864ee74c0fb1896881c362671cc7dea75ec29b"
+  },
+  "descriptions_sha256": "f7cf701008ec2bd843e6e945cb9dfeed9521b773970cdc8fe2b22e78b81b92ee",
+  "candidate_reserve_sha256": "6e2b56396801eea3b8dacdaf5f8d904d4b097069a019d63ba8f2074e18fc37da",
+  "excluded_ids_sha256": "397c24c5e9780749987695dea3be6c035fefef9896141fcf7bbc87de2420541d"
+}

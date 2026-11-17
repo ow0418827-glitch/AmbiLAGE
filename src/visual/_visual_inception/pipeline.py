@@ -8,7 +8,7 @@ from types import SimpleNamespace
 import torch
 import torch.nn.functional as F
 
-from src.paths import ProjectPath as Path
+from src.paths import ProjectPath as Path, PROJECT
 from src.visual.catalog_training_guard import catalog_training_guard
 from src.visual.hardware import apply_hardware_profile
 from src.visual.io import load_image, pil_to_tensor, save_tensor_png, save_json, sha256_file, decoded_image_audit
@@ -16,11 +16,14 @@ from src.visual.training_surrogates import (
     selection_from_config, apply_surrogate_overrides, validate_loaded_surrogates,
 )
 from .config import VisualInceptionConfig
-from .targets import prepare_semantic_targets, content_sha256
-from .objective import semantic_loss, inverse_variance_weights, estimate_gradient_variances, gradient_variance_floor
+from .targets import prepare_semantic_targets, content_sha256, text_sha256
+from .objective import (semantic_loss, inverse_variance_weights, estimate_gradient_variances,
+    gradient_variance_floor, retrieval_semantic_losses, sample_query_indices)
 from .perceptual import load_perceptual, resolve_lpips_weights
 
 OBJECTIVE_KIND = 'visual_inception_semantic_perceptual_no_retrieval_v1'
+RETRIEVAL_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_v2'
+QUERY_SAMPLING_KIND = 'fixed_pool_per_step_without_replacement_cross_step_reuse_v1'
 
 
 def _prepare_text_features(models, texts, *, fixture):
@@ -39,32 +42,76 @@ def _prepare_text_features(models, texts, *, fixture):
     return vectors, audits
 
 
-def _gradient(image, source, models, text_features, weights, perceptual, config):
+def _proxy_components(model, image, target, *, retrieval_state=None, model_index=0,
+                      query_indices=None, temperature=.07):
+    if retrieval_state is None:
+        return semantic_loss(model, image, target), image.new_zeros(())
+    if query_indices is None:
+        raise ValueError('检索优化必须显式指定冻结查询池中的批次索引')
+    feature = model.encode_image(image).global_embedding
+    queries = retrieval_state['query_features'][model_index][query_indices]
+    return retrieval_semantic_losses(feature, target, queries,
+        retrieval_state['negative_features'][model_index], temperature)
+
+
+def _gradient(image, source, models, text_features, weights, perceptual, config, *,
+              retrieval_state=None, query_indices=None):
+    if config.objective_mode == 'retrieval_semantic_perceptual' and retrieval_state is None:
+        raise ValueError('完整三项训练目标缺少独立查询与公开代理库向量')
     total_gradient = torch.zeros_like(image)
-    similarities = []
-    for model, targets, weight in zip(models, text_features, weights):
+    similarities, retrieval_values = [], []
+    for index, (model, targets, weight) in enumerate(zip(models, text_features, weights)):
         leaf = image.detach().requires_grad_(True)
-        loss = semantic_loss(model, leaf, targets)
+        semantic, retrieval = _proxy_components(model, leaf, targets,
+            retrieval_state=retrieval_state, model_index=index, query_indices=query_indices,
+            temperature=config.retrieval_temperature)
+        loss = config.semantic_weight * semantic + config.retrieval_weight * retrieval
         gradient, = torch.autograd.grad(loss, leaf)
-        total_gradient.add_(gradient.detach(), alpha=config.semantic_weight * weight)
-        similarities.append(float(loss.detach()))
-        del leaf, loss, gradient
+        total_gradient.add_(gradient.detach(), alpha=weight)
+        similarities.append(float(semantic.detach()))
+        retrieval_values.append(float(retrieval.detach()))
+        del leaf, loss, gradient, semantic, retrieval
     leaf = image.detach().requires_grad_(True)
     distance = perceptual(source, leaf)
     gradient, = torch.autograd.grad(distance, leaf)
     total_gradient.add_(gradient.detach(), alpha=config.perceptual_weight)
-    record = dict(semantic_losses=similarities,
+    record = dict(semantic_losses=similarities, retrieval_losses=retrieval_values,
         semantic_loss=sum(w * v for w, v in zip(weights, similarities)),
+        retrieval_loss=sum(w * v for w, v in zip(weights, retrieval_values)),
         perceptual_loss=float(distance.detach()))
-    record['loss'] = config.semantic_weight * record['semantic_loss'] + config.perceptual_weight * record['perceptual_loss']
+    record['loss'] = (config.semantic_weight * record['semantic_loss']
+        + config.retrieval_weight * record['retrieval_loss'] + config.perceptual_weight * record['perceptual_loss'])
     if not torch.isfinite(total_gradient).all():
         raise FloatingPointError('图片梯度含非有限值')
     return total_gradient, record
 
 
+def _project_path(value):
+    path = Path(value).expanduser()
+    return (path if path.is_absolute() else PROJECT / path).resolve()
+
+
+def _load_bundle(config, source, target, public_semantic):
+    if config.objective_mode == 'semantic_perceptual':
+        return None
+    if not config.training_manifest:
+        raise ValueError('完整检索训练须提供冻结的独立查询与公开代理库清单 training_manifest')
+    from .training_data import load_training_bundle
+    bundle = load_training_bundle(_project_path(config.training_manifest), source=source,
+        target=target, public_semantic=public_semantic, require_production=not config.smoke_test)
+    source_digest = sha256_file(source)
+    if any(row['image_sha256'] == source_digest for row in bundle['candidates']):
+        raise ValueError('固定负例库不能同时保留干净源图片；动态正例槽位只能出现一次')
+    if len(bundle['queries']) != 100 or len(bundle['candidates']) < 2:
+        raise ValueError('完整训练需要一百条独立查询及至少两个公开固定候选')
+    return bundle
+
+
 def _run(source, target, root, config, *, device, target_text, definition, allow_tf32):
     source, target = Path(source).resolve(), Path(target).resolve()
     semantic = prepare_semantic_targets(source, target, target_text=target_text, definition=definition)
+    bundle = _load_bundle(config, source, target, semantic)
+    retrieval_enabled = bundle is not None
     source_pil, target_pil = load_image(source), load_image(target)
     requested_device = torch.device(device)
     if config.smoke_test:
@@ -90,13 +137,34 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
     if any(torch.device(model.device) != requested_device for model in models):
         raise ValueError('实际训练代理设备与请求设备不一致')
     perceptual = load_perceptual(config, requested_device)
-    text_features, text_encoding = _prepare_text_features(models, semantic['semantic_texts'], fixture=config.smoke_test)
+    target_texts = [bundle['target_concept_text']] if retrieval_enabled else semantic['semantic_texts']
+    text_features, text_encoding = _prepare_text_features(models, target_texts, fixture=config.smoke_test)
+    retrieval_state, query_encoding, cache_records, sampling = None, [], [], None
+    if retrieval_enabled:
+        from .retrieval_cache import encode_candidate_cache
+        query_features, query_encoding = _prepare_text_features(models, bundle['queries'], fixture=config.smoke_test)
+        negatives = []
+        cache_root = _project_path(config.candidate_cache_dir) if config.candidate_cache_dir else root / 'candidate_cache'
+        for model, concept in zip(models, text_features):
+            vectors, record = encode_candidate_cache(model, bundle['candidates'], cache_root,
+                bundle_sha256=bundle['bundle_sha256'], fixture=config.smoke_test)
+            if vectors.shape[1] != concept.shape[1]:
+                raise ValueError('固定公开候选向量与当前模型文字维度不一致')
+            negatives.append(vectors.detach()); cache_records.append(record)
+        retrieval_state = dict(concept_features=text_features, query_features=query_features, negative_features=negatives)
+        sampling = dict(algorithm=QUERY_SAMPLING_KIND, pool_size=100, batch_size=config.query_batch_size,
+            calibration_indices=sample_query_indices(100, config.query_batch_size, config.seed, 0),
+            step_indices=[sample_query_indices(100, config.query_batch_size, config.seed, step)
+                          for step in range(1, config.steps + 1)], seed=config.seed)
     source_tensor = pil_to_tensor(source_pil, requested_device)
     started = time.perf_counter()
     epsilon = config.epsilon_levels / 255.0
     step_size = config.step_size_levels / 255.0
     variances = estimate_gradient_variances(source_tensor, models, text_features,
-        epsilon=epsilon, restarts=config.gradient_restarts, seed=config.seed)
+        epsilon=epsilon, restarts=config.gradient_restarts, seed=config.seed,
+        retrieval_state=retrieval_state, calibration_indices=sampling['calibration_indices'] if sampling else None,
+        retrieval_weight=config.retrieval_weight, semantic_weight=config.semantic_weight,
+        temperature=config.retrieval_temperature)
     weights = inverse_variance_weights(variances)
     lower, upper = (source_tensor - epsilon).clamp(0, 1), (source_tensor + epsilon).clamp(0, 1)
     # Clean-image initialization is an explicit reproduction assumption; random
@@ -104,20 +172,28 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
     image = source_tensor.clone()
     history = []
     for step in range(1, config.steps + 1):
-        gradient, record = _gradient(image, source_tensor, models, text_features, weights, perceptual, config)
+        indices = sampling['step_indices'][step - 1] if sampling else None
+        gradient, record = _gradient(image, source_tensor, models, text_features, weights, perceptual, config,
+            retrieval_state=retrieval_state, query_indices=indices)
         image = torch.maximum(lower, torch.minimum(upper, image - step_size * gradient.sign())).detach()
         if step == 1 or step == config.steps or step % 10 == 0:
-            history.append(dict(step=step, **record,
+            history.append(dict(step=step, **record, query_indices=indices,
                                 linf_after_update=float((image - source_tensor).abs().max())))
             print(f'视觉记忆植入优化 {step}/{config.steps}，目标值 {record["loss"]:.6f}', flush=True)
     with torch.no_grad():
-        final_semantic = [float(semantic_loss(model, image, targets)) for model, targets in zip(models, text_features)]
+        final_semantic, final_retrieval = [], []
+        for index, (model, targets) in enumerate(zip(models, text_features)):
+            sem, ret = _proxy_components(model, image, targets, retrieval_state=retrieval_state,
+                model_index=index, query_indices=list(range(100)) if retrieval_enabled else None,
+                temperature=config.retrieval_temperature)
+            final_semantic.append(float(sem)); final_retrieval.append(float(ret))
         final_distance = float(perceptual(source_tensor, image))
     output = save_tensor_png(root / 'adversarial.png', image)
     decoded = decoded_image_audit(source_pil, output, maximum_levels=config.epsilon_levels)
     if not decoded['within_budget']:
         raise AssertionError('实际解码图片超过冻结像素预算')
-    semantic_definition = dict(kind=OBJECTIVE_KIND, semantic_weight=config.semantic_weight,
+    semantic_definition = dict(kind=RETRIEVAL_OBJECTIVE_KIND if retrieval_enabled else OBJECTIVE_KIND,
+        semantic_weight=config.semantic_weight,
         perceptual_weight=config.perceptual_weight,
         semantic_reduction='mean_one_minus_cosine_across_three_public_text_templates',
         retrieval_loss_omitted=True, retrieval_loss_weight=0.0,
@@ -126,32 +202,52 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
         semantic_targets_sha256=semantic['semantic_targets_sha256'],
         paper_query_distribution_reproduced=False, query_count=len(semantic['semantic_texts']),
         query_template_adaptation=semantic['adaptation'])
+    if retrieval_enabled:
+        semantic_definition.update(semantic_reduction='one_minus_cosine_single_independent_target_concept',
+            retrieval_loss_omitted=False, retrieval_loss_weight=config.retrieval_weight,
+            memory_denominator_implemented=True, target_concept_text=bundle['target_concept_text'],
+            semantic_targets=target_texts, semantic_targets_sha256=content_sha256(target_texts), query_count=100,
+            training_manifest_sha256=sha256_file(_project_path(config.training_manifest)),
+            training_bundle_sha256=bundle['bundle_sha256'], retrieval_temperature=config.retrieval_temperature,
+            retrieval_denominator='one_dynamic_adversarial_positive_plus_fixed_public_image_negatives',
+            retrieval_positive_count=1, negative_candidate_count=len(bundle['candidates']),
+            proxy_memory_scope='independent_public_proxy_images', memory_key='image_only',
+            clean_source_duplicate_excluded=True, query_roles_separated=True,
+            target_concept_text_sha256=text_sha256(bundle['target_concept_text']),
+            future_queries_sha256=content_sha256(bundle['queries']),
+            paper_query_source_proportions_reproduced=True,
+            paper_query_generator_reproduced=bundle['audit'].get('paper_query_generator_reproduced', False),
+            query_template_adaptation='target_concept_and_future_queries_are_separate')
     attack = dict(steps_requested=config.steps, steps_completed=config.steps, selected_step=config.steps,
         stop_reason='requested_steps_completed', epsilon=epsilon, epsilon_levels=config.epsilon_levels,
         step_size=step_size, step_size_levels=config.step_size_levels, norm='linf',
         optimizer='projected_sign_gradient_descent', initialization='clean_source_zero_delta',
         gradient_execution='sequential_surrogate_graphs_plus_separate_perceptual_graph',
         gradient_restarts=config.gradient_restarts, gradient_variances=variances,
-        variance_definition='mean_elementwise_population_variance_of_semantic_input_gradient_over_random_projected_starts',
+        variance_definition=('mean_elementwise_population_variance_of_retrieval_plus_semantic_input_gradient_over_random_projected_starts'
+            if retrieval_enabled else 'mean_elementwise_population_variance_of_semantic_input_gradient_over_random_projected_starts'),
         variance_floor=gradient_variance_floor(variances),
         variance_floor_policy='max(max_model_variance*1e-12,float64_tiny)',
         ensemble_weight_formula='normalize(max(variance,relative_floor)^-2)',
         ensemble_weights=weights, weights_frozen_before_optimization=True)
-    metadata = dict(schema_version=1, method='visual_inception', status='success',
+    metadata = dict(schema_version=2 if retrieval_enabled else 1, method='visual_inception', status='success',
         test_fixture=config.smoke_test, production_backend=not config.smoke_test,
         config=config.to_dict(), config_sha256=content_sha256(config.to_dict()), seed=config.seed,
         source_image=str(source), source_image_sha256=semantic['source_image']['sha256'],
         target_image=str(target), target_image_sha256=semantic['target_image']['sha256'],
         output_image=str(output), output_image_sha256=sha256_file(output),
         training_objective=dict(semantic_definition, surrogate_selection=selection.audit()), semantic_target_audit=semantic,
+        semantic_target_audit_usage='public_feature_identity_only' if retrieval_enabled else 'training_templates',
         surrogate_selection=selection.audit(), surrogates=snapshots,
         text_encoding_audits=text_encoding, perceptual=perceptual.snapshot(),
         attack=attack, history=history, decoded_image_audit=decoded,
-        final_objective=dict(semantic_losses=final_semantic, perceptual_loss=final_distance,
-            loss=config.semantic_weight * sum(w*v for w,v in zip(weights,final_semantic)) + config.perceptual_weight * final_distance),
+        final_objective=dict(semantic_losses=final_semantic, retrieval_losses=final_retrieval, perceptual_loss=final_distance,
+            retrieval_query_scope='entire_frozen_pool' if retrieval_enabled else 'unused',
+            loss=sum(w*(config.semantic_weight*s+config.retrieval_weight*r)
+                     for w,s,r in zip(weights,final_semantic,final_retrieval)) + config.perceptual_weight * final_distance),
         hardware=hardware, runtime=dict(torch_version=str(torch.__version__), device=str(requested_device)),
         optimization_seconds=time.perf_counter() - started,
-        retrieval_loss_omitted=True, victim_memory_used=False, formal_queries_used=False,
+        retrieval_loss_omitted=not retrieval_enabled, victim_memory_used=False, formal_queries_used=False,
         formal_ranking_used=False, primary_evaluator_used_during_attack=False,
         paper_encoder_profile_selected=selection.profile == 'visual_inception_paper',
         paper_encoder_architectures_aligned=not config.smoke_test and selection.profile == 'visual_inception_paper',
@@ -159,10 +255,15 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
         paper_encoder_ensemble_reproduced=False, paper_full_attack_reproduced=False,
         assumptions=['linf_projection', 'clean_source_initialization',
             'random_start_semantic_gradient_population_variance_mean', 'fixed_uncertainty_weights',
-            'three_public_templates_are_semantic_targets_without_retrieval_loss'])
+            'dynamic_positive_in_denominator' if retrieval_enabled else 'three_public_templates_are_semantic_targets_without_retrieval_loss'])
+    if retrieval_enabled:
+        metadata.update(training_bundle_manifest=str(_project_path(config.training_manifest)),
+            training_bundle_sha256=bundle['bundle_sha256'], training_bundle_audit=bundle['audit'],
+            training_data_audit=bundle['audit'], future_queries=bundle['queries'],
+            query_text_encoding_audits=query_encoding, query_sampling=sampling, negative_candidate_caches=cache_records)
     for name in ('metadata.json', 'attack_metrics.json'):
         save_json(root / name, metadata)
-    ready = dict(schema_version=1, method='visual_inception', status='completed',
+    ready = dict(schema_version=metadata['schema_version'], method='visual_inception', status='completed',
         test_fixture=config.smoke_test, production_backend=not config.smoke_test,
         output_image=str(output), output_image_sha256=metadata['output_image_sha256'],
         source_image=str(source), source_image_sha256=metadata['source_image_sha256'],
@@ -170,10 +271,13 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
         metadata_sha256=sha256_file(root / 'metadata.json'), attack_metrics_sha256=sha256_file(root / 'attack_metrics.json'),
         config_sha256=metadata['config_sha256'], steps_requested=config.steps,
         steps_completed=config.steps, epsilon=epsilon, epsilon_levels=config.epsilon_levels,
-        training_objective_kind=OBJECTIVE_KIND, retrieval_loss_omitted=True,
+        training_objective_kind=semantic_definition['kind'], retrieval_loss_omitted=not retrieval_enabled,
         candidates=dict(final=dict(image=str(output), sha256=metadata['output_image_sha256'])))
+    if retrieval_enabled:
+        ready.update(training_bundle_sha256=bundle['bundle_sha256'],
+            training_manifest_sha256=semantic_definition['training_manifest_sha256'])
     save_json(root / 'ready.json', ready)
-    del models, perceptual, text_features, image
+    del models, perceptual, text_features, image, retrieval_state
     gc.collect()
     if requested_device.type == 'cuda':
         torch.cuda.empty_cache()
@@ -182,13 +286,16 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
 
 def generate_visual_inception(source, target, output_dir, *, config=None, steps=None,
         epsilon_levels=None, device='cuda', target_text=None, definition=None,
-        allow_tf32=True, seed=42, smoke_test=False, surrogate_set=None, surrogate_config=None):
+        allow_tf32=True, seed=42, smoke_test=False, surrogate_set=None, surrogate_config=None,
+        training_manifest=None):
     root = Path(output_dir).resolve()
-    with catalog_training_guard(allowed_output_roots=[root, Path(source).resolve().parent,
-                                                     Path(target).resolve().parent]) as guard:
+    roots = [root, Path(source).resolve().parent, Path(target).resolve().parent]
+    if isinstance(config, (str, Path)):
+        roots.append(_project_path(config).parent)
+    with catalog_training_guard(allowed_output_roots=roots):
         raw = config
         if isinstance(config, (str, Path)):
-            raw = json.loads(Path(config).read_text(encoding='utf-8'))
+            raw = json.loads(_project_path(config).read_text(encoding='utf-8'))
         cfg = raw if isinstance(raw, VisualInceptionConfig) else VisualInceptionConfig.from_dict(raw)
         changes = {}
         if steps is not None:
@@ -199,8 +306,20 @@ def generate_visual_inception(source, target, output_dir, *, config=None, steps=
             changes['seed'] = seed
         if smoke_test:
             changes['smoke_test'] = True
+        if training_manifest is not None:
+            changes['training_manifest'] = str(training_manifest)
         cfg = apply_surrogate_overrides(replace(cfg, **changes), surrogate_set, surrogate_config)
         cfg.validate()
+    if cfg.objective_mode == 'retrieval_semantic_perceptual' and not cfg.training_manifest:
+        raise ValueError('完整检索训练须提供冻结的独立查询与公开代理库清单 training_manifest')
+    if cfg.training_manifest:
+        roots.append(_project_path(cfg.training_manifest).parent)
+    if cfg.candidate_cache_dir:
+        cache_root = _project_path(cfg.candidate_cache_dir)
+        if not cache_root.is_relative_to(PROJECT):
+            raise ValueError('候选向量缓存只能写入当前项目目录')
+        roots.append(cache_root)
+    with catalog_training_guard(allowed_output_roots=roots) as guard:
         if any((root / name).exists() for name in ('ready.json', 'metadata.json', 'attack_metrics.json', 'adversarial.png')):
             raise FileExistsError('结果目录已有冻结图片或证据，禁止覆盖；请使用新的输出目录')
         root.mkdir(parents=True, exist_ok=True)

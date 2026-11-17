@@ -1,0 +1,52 @@
+{
+  "category_description": {
+    "kind": "category_description",
+    "split": "public_training",
+    "test_fixture": false,
+    "is_synthetic": false,
+    "upstream": {
+      "dataset": "填入公开商品描述语料名称",
+      "revision": "填入实际版本或提交摘要",
+      "url": "https://example.org/replace-public-descriptions"
+    }
+  },
+  "model_paraphrase": {
+    "kind": "model_paraphrase",
+    "split": "public_training",
+    "test_fixture": false,
+    "is_synthetic": true,
+    "provider": "minimax",
+    "model": "MiniMax-M3",
+    "effective_temperature": 1.0,
+    "temperature_supported": false,
+    "temperature_parameter_sent": false,
+    "upstream": {
+      "dataset": "填入本次公开描述改写批次名称",
+      "revision": "填入生成来源记录摘要或版本",
+      "url": "https://platform.minimax.cn/docs/api-reference/text-openai-api"
+    }
+  },
+  "heldout_search_query": {
+    "kind": "heldout_search_query",
+    "split": "query_reserve",
+    "test_fixture": false,
+    "is_synthetic": false,
+    "origin_type": "public_real_search_queries",
+    "upstream": {
+      "dataset": "填入独立公开真实搜索查询语料名称",
+      "revision": "填入实际版本或提交摘要",
+      "url": "https://example.org/replace-public-search-queries"
+    }
+  },
+  "candidate_catalog": {
+    "kind": "candidate_catalog",
+    "split": "public_training",
+    "test_fixture": false,
+    "is_synthetic": false,
+    "upstream": {
+      "dataset": "填入独立公开候选商品目录名称",
+      "revision": "填入实际版本或提交摘要",
+      "url": "https://example.org/replace-public-candidate-catalog"
+    }
+  }
+}

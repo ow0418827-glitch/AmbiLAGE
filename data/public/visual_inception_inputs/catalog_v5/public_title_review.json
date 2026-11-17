@@ -1,0 +1,244 @@
+{
+  "policy": "independent_public_title_semantic_review_and_seeded_replacement_v1",
+  "private_fields_read": false,
+  "model_scores_used": false,
+  "independent_review_completed": true,
+  "reviewers": [
+    "preparation_assistant",
+    "independent_public_preparation_tests_assistant"
+  ],
+  "groups": {
+    "01_camera": {
+      "removed": [
+        {
+          "id": "B071V8HPTM",
+          "title": "2-Pack 5V 2A Power Supply with Plug Micro USB for Security Camera IPC",
+          "reason": "security_camera_power_supply_not_a_camera",
+          "decision": "explicit_category_rejection"
+        },
+        {
+          "id": "B01GZYS3C6",
+          "title": "ICAMI IR Illuminators 96pcs,High Power Infrared LED Lights for Security Camera",
+          "reason": "infrared_illuminator_not_a_camera",
+          "decision": "explicit_category_rejection"
+        }
+      ],
+      "added": [
+        {
+          "id": "B09DG44LCS",
+          "title": "Wireless Security Camera,Home Camera 1080P HD,WiFi Indoor Camera for Pet, Motion Detection,Night Vision"
+        },
+        {
+          "id": "B010DC7TQW",
+          "title": "ZOSI 2.0MP HD 1080p 1920TVL Bullet Outdoor/Indoor Security Camera (Hybrid 4-in-1 HD-CVI/TVI/AHD/960H Analog CVBS),36PCS LEDs,100ft IR Night Vision,Weatherproof Surveillance Camera"
+        }
+      ],
+      "all_new_titles_independently_reviewed": true,
+      "final_candidate_reserve_count": 50
+    },
+    "02_chair": {
+      "removed": [
+        {
+          "id": "B09L7KTZXK",
+          "title": "Hydraulic Recliner Barber Chair for Hair Salon, Barber Chair for Stations Hydraulic Hair Salon Styling Barber Chair Booster Classic Recliner,Barber Chairs Hair Salon Spa Equipment (Color : B)",
+          "reason": "conservative_public_title_exclusion_pattern",
+          "decision": "conservative_rule_exclusion"
+        },
+        {
+          "id": "B01EXPVKMY",
+          "title": "Salon Hair Dryer Chair BLACK EDISON Salon Barber Shop Beauty Salon Furniture & Equipment",
+          "reason": "hair_dryer_waiting_chair_not_barber_styling_chair",
+          "decision": "explicit_category_rejection"
+        },
+        {
+          "id": "B09CQBDSDH",
+          "title": "Salon Barber Spa Beauty Equipment,U Shape Baby Salon Booster Cushion for Child Hair Cutting Styling Chair,Barber Shop Hair Dressing Equipment for Kid",
+          "reason": "salon_booster_cushion_not_a_chair",
+          "decision": "explicit_category_rejection"
+        },
+        {
+          "id": "B09FY428VK",
+          "title": "FMOGG Hydraulic Salon Recliner Barber Chair Hydraulic Hair Salon Styling Booster for Kids Classic Recliner Heavy Duty Hair Spa Tattoo Chair for Salon Beauty Equipment (Color : A)",
+          "reason": "conservative_public_title_exclusion_pattern",
+          "decision": "conservative_rule_exclusion"
+        }
+      ],
+      "added": [
+        {
+          "id": "B09L7KJQXD",
+          "title": "Hydraulic Recliner Barber Chair for Hair Salon, Heavy Duty Hair Spa Salon Styling Beauty Barber Chair Heavy Duty Barber Chair Salon Chair for Tattoo,Barber Chairs Hair Salon Spa Equipment"
+        },
+        {
+          "id": "B09N33LGK1",
+          "title": "Hair Salon Chair Beauty Shampoo Barbering Chair Hydraulic Barber Chair for Hair Salon with Wider Seat & Heavy Duty Hydraulic Pump, Beauty Salon Spa Shampoo Equipment"
+        },
+        {
+          "id": "B09DFGC6J3",
+          "title": "Barber Chair Salon Beauty Spa Styling Equipment Barber Chairs Heavy Duty Reclining Hydraulic Hair Styling Chair Modern Hairdressing Lift Chair, Max Load Weight 400 Lbs"
+        },
+        {
+          "id": "B084KKKSQK",
+          "title": "BarberPub All Purpose Heavy Duty Vintage Hydraulic Recline Barber Chair Salon Beauty Spa Styling Equipment 2008"
+        }
+      ],
+      "all_new_titles_independently_reviewed": true,
+      "final_candidate_reserve_count": 50
+    },
+    "04_curtain": {
+      "removed": [
+        {
+          "id": "B09KV76H32",
+          "title": "Blackout Window Curtain Panel Halloween 1 Pcs Curtain Coverings Haunted House Castle Grommet Top Window Drape for Bedroom Dining Living Room 52x96in",
+          "reason": "conservative_public_title_exclusion_pattern",
+          "decision": "conservative_rule_exclusion"
+        },
+        {
+          "id": "B08CTVH54N",
+          "title": "Bloody Halloween Creepy Cloth 2 Pack Halloween Door Decorations Window Decorations, Bloody Handprints Halloween Doorway Curtain Halloween Party Decorations, Haunted House Decorations Halloween Decorations Outdoor",
+          "reason": "halloween_creepy_cloth_prop_not_window_curtains",
+          "decision": "explicit_category_rejection"
+        }
+      ],
+      "added": [
+        {
+          "id": "B08MQP8CKK",
+          "title": "BONZER Room Divider Curtain Total Privacy Wall Noise Reducing Wide Blackout Curtains for Patio Sliding Glass Door, 9ft Wide x 7ft Tall, 1 Panel, Khaki"
+        },
+        {
+          "id": "B095218D8J",
+          "title": "ZOE GARDEN Sheer Window Curtains Panels Treatment with Hooks Summer Green Watermelon Farm Buffalo Lattice Door Window Covering Privacy for Kitchen Corner Bedroom Living Room Bathroom, 55\"x39\""
+        }
+      ],
+      "all_new_titles_independently_reviewed": true,
+      "final_candidate_reserve_count": 50
+    },
+    "05_hair_extension": {
+      "removed": [],
+      "added": [],
+      "all_new_titles_independently_reviewed": true,
+      "final_candidate_reserve_count": 50
+    },
+    "06_jeans": {
+      "removed": [
+        {
+          "id": "B081DZHHXB",
+          "title": "Jag Jeans Women's Alicia Wide Leg Crop Pant",
+          "reason": "brand_contains_jeans_but_product_is_twill_crop_pants",
+          "decision": "explicit_category_rejection"
+        },
+        {
+          "id": "B097S59H5P",
+          "title": "Tommy Hilfiger Tommy Jeans Women's Jogger Logo Pant",
+          "reason": "brand_contains_jeans_but_product_is_athleisure_jogger",
+          "decision": "explicit_category_rejection"
+        }
+      ],
+      "added": [
+        {
+          "id": "B0163PCIZK",
+          "title": "NYDJ Women's Amira Fitted Ankle Jeans in Bull Denim with Rhinestone Hem Detail"
+        },
+        {
+          "id": "B09FSLHTT2",
+          "title": "Women High Waisted Jeans Retro Straight Leg Loose Jeans Pants Y2K Trousers E-Girl 80s Jeans Streetwear"
+        }
+      ],
+      "all_new_titles_independently_reviewed": true,
+      "final_candidate_reserve_count": 50
+    },
+    "07_shampoo": {
+      "removed": [
+        {
+          "id": "B07JZDR6HR",
+          "title": "Bar5F Pump Dispensers | Metal-Free Pumping Caps | Match with 1 Liter Plastic Bottles | Leak Proof, Clear for Dispensing Shampoo, Hair Conditioner, Lotion, Oils | Set of 2",
+          "reason": "pump_dispenser_caps_not_shampoo",
+          "decision": "explicit_category_rejection"
+        },
+        {
+          "id": "B082W5MR8V",
+          "title": "Travel Container for Toiletries Tsa Approved Travel Bottles Travel Accessories Toiletry Bottles Travel Bottles for Shampoo and Conditioner Pack of 12",
+          "reason": "travel_refill_bottles_not_shampoo",
+          "decision": "explicit_category_rejection"
+        },
+        {
+          "id": "B09DKWRYBX",
+          "title": "2 PCS Head Brush Scalp,Soft Silicone Bristles Care Scalp Massager Comfortable Wet & Dry Hair Shampoo Scrubber for Exfoliate & Remove Dandruff",
+          "reason": "scalp_massager_brush_not_shampoo",
+          "decision": "explicit_category_rejection"
+        }
+      ],
+      "added": [
+        {
+          "id": "B07S8Z32JT",
+          "title": "KYREN Moisturizing Natural Shampoo and Treatment Set Daily Pure 98% All-Natural Deep Cleansing Ingredients Soothing Treatment for Dry, Damaged, Color Treated Curly Hair (1000mL / 35.27oz)"
+        },
+        {
+          "id": "B014MHIYW2",
+          "title": "Hempz Hempz Moisturizing Shampoo, Pearl Pink, Pomegranate, 33.8 Fluid Ounce, 33.8 Ounce"
+        },
+        {
+          "id": "B07KFPMP18",
+          "title": "CocoMagic Nourishing Shampoo | Coconut Oil and Botanical Extracts | Strengthen, Restore Softness and Shine | Paraben Free, Cruelty Free, Made in USA (32 oz)"
+        }
+      ],
+      "all_new_titles_independently_reviewed": true,
+      "final_candidate_reserve_count": 50
+    },
+    "08_speaker": {
+      "removed": [
+        {
+          "id": "B00H28SFBO",
+          "title": "Ematic EP205 Accessory Kit for Tablets and iPad with Bluetooth Speaker",
+          "reason": "tablet_accessory_bundle_not_standalone_bluetooth_speaker",
+          "decision": "explicit_category_rejection"
+        },
+        {
+          "id": "B07Z2KDT26",
+          "title": "Performance Plus Carts Innova 2 Cone Speakers and 2-Channel Mini-Amp with Bluetooth - Universal Fit",
+          "reason": "vehicle_cone_speakers_with_amplifier_not_portable_bluetooth_speaker",
+          "decision": "explicit_category_rejection"
+        },
+        {
+          "id": "B09K3ZJMSC",
+          "title": "Speakers Bluetooth Wireless 4 Inch 120 Watts Waterproof Marine Boat Speakers for ATV UTV SPA Bath Golf Cart Motorcycle UV-Proof Outdoor Music Speaker Portable Bluetooth Speaker",
+          "reason": "mounted_marine_vehicle_speakers_not_portable_bluetooth_speaker",
+          "decision": "explicit_category_rejection"
+        }
+      ],
+      "added": [
+        {
+          "id": "B0967T22YR",
+          "title": "DOSS SoundBox Pro+ Wireless Bluetooth Speaker Bundle with DOSS SoundBox Extreme- Black"
+        },
+        {
+          "id": "B07CVVY2HH",
+          "title": "Sangean WR-7WL Wood Cabinet Mini Bluetooth Speaker with FM Tuner and Aux-in Walnut/Wood"
+        },
+        {
+          "id": "B08D2JB6XC",
+          "title": "Wireless Portable Bluetooth Speakers with Enhanced Stereo Bass, Metal Enclosure, 5-Hour Playtime, Built-in Mic, AUX, Micro SD, Perfect Travel Speaker"
+        }
+      ],
+      "all_new_titles_independently_reviewed": true,
+      "final_candidate_reserve_count": 50
+    },
+    "09_toothbrush": {
+      "removed": [
+        {
+          "id": "B09KP9CVH8",
+          "title": "Ni-Mh 1.2V AAA Rechargeable Battery Cell, 1800mah, with Solder Tabs for Electric Shaver, Razor, Toothbrush",
+          "reason": "nickel_hydride_battery_cell_not_a_toothbrush",
+          "decision": "explicit_category_rejection"
+        }
+      ],
+      "added": [
+        {
+          "id": "B085HR5MBF",
+          "title": "Arm & Hammer Kid's Spinbrush Battery Powered Toothbrush (Pack of 2)"
+        }
+      ],
+      "all_new_titles_independently_reviewed": true,
+      "final_candidate_reserve_count": 50
+    }
+  }
+}

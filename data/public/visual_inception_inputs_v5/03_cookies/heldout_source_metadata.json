@@ -1,0 +1,22 @@
+{
+  "kind": "heldout_search_query",
+  "split": "query_reserve",
+  "test_fixture": false,
+  "is_synthetic": false,
+  "origin_type": "public_real_search_queries",
+  "upstream": {
+    "dataset": "Microsoft ORCAS query-only",
+    "revision": "21b4ece9f4fc10fa4cec2028bb74287629945df6",
+    "url": "https://github.com/microsoft/msmarco"
+  },
+  "original_snapshot_url": "https://msmarco.z22.web.core.windows.net/msmarcoranking/orcas-doctrain-queries.tsv.gz",
+  "original_snapshot_sha256": "8e69679a83f2d9767916e377f142e7c3fe110fa1cca9f52dc644c705ad975692",
+  "original_partition": "orcas-doctrain",
+  "selection_policy": "independent_public_esci_orcas_product_intent_hash_reserve_v5",
+  "category_rule": [
+    "\\b(?:cookie\\s+dough|edible\\s+(?:cookie\\s+)?dough)\\b",
+    "\\b(?:scoop|scoops|cutter|cutters|roller|rollers|perfume|candle|candles|soap|protein|bars?|halo top|ice cream|icecream|dispenser|mixer|mixers)\\b"
+  ],
+  "product_intent_exclude_regex": "\\b(?:recipe|recipes|how|why|can|should|does|do|is|are|was|were|what|when|where|ingredients|salmonella|eating|making|make|homemade|salons?|business|start|freeze|freezing|baking|diy|methods?|restoration|rentals?|rent|tax|agreement|near me)\\b",
+  "scope": "Original public product-related search strings; ORCAS is general web search, not shopping logs"
+}

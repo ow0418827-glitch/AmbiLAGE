@@ -40,6 +40,7 @@ def generate(
     optimization_config: Any = None,
     surrogate_set: str | None = None,
     surrogate_config: str | Path | None = None,
+    training_manifest: str | Path | None = None,
     **kwargs: Any,
 ) -> GenerationResult:
     """统一视觉生成接口。
@@ -84,6 +85,7 @@ def generate(
         allow_tf32=allow_tf32,
         seed=seed,**kwargs,
         surrogate_set=surrogate_set,surrogate_config=surrogate_config,
+        training_manifest=training_manifest,
     )
 
     img_p = Path(img_path).resolve()

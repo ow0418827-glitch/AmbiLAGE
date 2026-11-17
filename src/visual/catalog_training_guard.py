@@ -14,8 +14,11 @@ def catalog_training_guard(*, allowed_output_roots, private_paths=()):
                (PROJECT / 'resources/evaluation_base/evaluation_inputs_joint').resolve(),
                (PROJECT / 'resources/evaluation_base/evaluation_inputs_vague_joint').resolve(),
                (PROJECT / 'resources/evaluation_base/query_images').resolve(),
+               (PROJECT / 'resources/visual_inception_evaluation').resolve(),
                (PROJECT / 'src/experiments/formal_queries.py').resolve()) + tuple(Path(p).resolve() for p in private_paths)
-    forbidden_names = {'queries.json', 'evaluation.json', 'results.json', 'test_results.json'}
+    forbidden_names = {'queries.json', 'evaluation.json', 'results.json', 'test_results.json',
+                       'category_evaluation_plan.json', 'category_query_validation.json',
+                       'category_retrieval_summary.json'}
     state = {'active': True, 'checked_accesses': 0, 'blocked_accesses': []}
 
     def audit(event, args):

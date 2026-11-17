@@ -1,0 +1,336 @@
+{
+  "schema_version": 1,
+  "protocol": "visual_inception_training_oracle_v1",
+  "method": "visual_inception",
+  "query_mode": "text",
+  "source_type": "training_oracle_stratified_sample",
+  "language": "en",
+  "instruction_policy": "training_oracle_50_30_20_stratified_20_v1",
+  "group_count": 9,
+  "queries_per_group": 20,
+  "total_queries": 180,
+  "query_families": [
+    "category_description",
+    "model_paraphrase",
+    "heldout_search_query"
+  ],
+  "queries_per_family": {
+    "category_description": 10,
+    "model_paraphrase": 6,
+    "heldout_search_query": 4
+  },
+  "sampling": {
+    "algorithm": "stratified_sha256_hash_order_v1",
+    "seed": 42,
+    "quotas": {
+      "category_description": 10,
+      "model_paraphrase": 6,
+      "heldout_search_query": 4
+    }
+  },
+  "is_real_search_log": false,
+  "optimization_may_read": false,
+  "formal_memory_contents_used_for_authoring": false,
+  "existing_formal_queries_used_for_authoring": false,
+  "outcome_selection_used": false,
+  "base_manifest_sha256": "ad8370e3e32ab4fa85a079adc1980586c5e0e4b664ea652a166d5b54472283a1",
+  "training_overlap_audit": {
+    "normalization": "unicode_nfkc_whitespace_casefold",
+    "normalized_exact_overlap_count": 180,
+    "expected_overlap_ratio": 1.0,
+    "semantic_independence_claimed": false,
+    "unique_training_text_count": 891,
+    "training_source_snapshots": [
+      {
+        "path": "data/public/visual_inception_inputs/catalog_v5/01_camera/descriptions.jsonl",
+        "sha256": "01430951e86c6588540c08e7a8d49d8c61937d333710acb57393bad78b853e26",
+        "row_count": 50
+      },
+      {
+        "path": "data/public/visual_inception_inputs_v5/01_camera/paraphrases/model_paraphrases.jsonl",
+        "sha256": "1ac96b3b2cfbfb9cc2a088b3939992da94cb8bff6714487b14b76c876f216ded",
+        "row_count": 30
+      },
+      {
+        "path": "data/public/visual_inception_inputs_v5/01_camera/heldout_queries.jsonl",
+        "sha256": "fd124e0131a2273554d12826b51f5afbf854e842dc99562863e85ccebfeb7ea9",
+        "row_count": 20
+      },
+      {
+        "path": "data/public/visual_inception_inputs/catalog_v5/02_chair/descriptions.jsonl",
+        "sha256": "f7cf701008ec2bd843e6e945cb9dfeed9521b773970cdc8fe2b22e78b81b92ee",
+        "row_count": 50
+      },
+      {
+        "path": "data/public/visual_inception_inputs_v5/02_chair/paraphrases/model_paraphrases.jsonl",
+        "sha256": "abad24fa0eef61bc3fa9ae9c88f7dcb5e68c5a01014ce0e6d205b53d4a932c99",
+        "row_count": 30
+      },
+      {
+        "path": "data/public/visual_inception_inputs_v5/02_chair/heldout_queries.jsonl",
+        "sha256": "f6dfdf54b743079cb12800c8dcb7daa3450f22cb4bc6f787624433815228e436",
+        "row_count": 12
+      },
+      {
+        "path": "data/public/visual_inception_inputs/catalog_v5/03_cookies/descriptions.jsonl",
+        "sha256": "acdccd455be32b388822a6e0b948734d07b5816d66f01c237e2595bf72ab7f2f",
+        "row_count": 50
+      },
+      {
+        "path": "data/public/visual_inception_inputs_v5/03_cookies/paraphrases/model_paraphrases.jsonl",
+        "sha256": "1ff7f68c3cc7a5f8929aff257c209747e06631e3855f3be668b67d6ef35ef232",
+        "row_count": 30
+      },
+      {
+        "path": "data/public/visual_inception_inputs_v5/03_cookies/heldout_queries.jsonl",
+        "sha256": "f55bad975140aaff14914e8e084c434139eee91f0a38850ef0145298f469053f",
+        "row_count": 20
+      },
+      {
+        "path": "data/public/visual_inception_inputs/catalog_v5/04_curtain/descriptions.jsonl",
+        "sha256": "0ecd0cc96ee9d5adc9fda507f38ed1148c92442880ea88c06737c32f0c556b34",
+        "row_count": 50
+      },
+      {
+        "path": "data/public/visual_inception_inputs_v5/04_curtain/paraphrases/model_paraphrases.jsonl",
+        "sha256": "c833b99f5251d519c5e675676cc54b7d6ae52a13d521ea636cd545db540ce072",
+        "row_count": 30
+      },
+      {
+        "path": "data/public/visual_inception_inputs_v5/04_curtain/heldout_queries.jsonl",
+        "sha256": "a97ba4d200abb42e03e31ca6160739c1a0ed242bdc51409c1854af954dacdb82",
+        "row_count": 20
+      },
+      {
+        "path": "data/public/visual_inception_inputs/catalog_v5/05_hair_extension/descriptions.jsonl",
+        "sha256": "a7e988527c325d77e40d3ea723a38162661140e20f3bcb296ef52832ef71430b",
+        "row_count": 50
+      },
+      {
+        "path": "data/public/visual_inception_inputs_v5/05_hair_extension/paraphrases/model_paraphrases.jsonl",
+        "sha256": "73c9031c3e2bdf192546b242db2122cf8aeee5cae3e26dde43dd34e10367b748",
+        "row_count": 30
+      },
+      {
+        "path": "data/public/visual_inception_inputs_v5/05_hair_extension/heldout_queries.jsonl",
+        "sha256": "19534455996abb9cbbc440ea970e68387d927198645a1fa084f15ce298b0ebc9",
+        "row_count": 20
+      },
+      {
+        "path": "data/public/visual_inception_inputs/catalog_v5/06_jeans/descriptions.jsonl",
+        "sha256": "3599c61dab6c493945818b4fb1b93b57c9affb85c2e3ebce63aeba393091544d",
+        "row_count": 50
+      },
+      {
+        "path": "data/public/visual_inception_inputs_v5/06_jeans/paraphrases/model_paraphrases.jsonl",
+        "sha256": "819b7bcc6f88b6cacbb244a3c3c560ebcaa3dd63125333ef9dd50e6ae8e69e23",
+        "row_count": 30
+      },
+      {
+        "path": "data/public/visual_inception_inputs_v5/06_jeans/heldout_queries.jsonl",
+        "sha256": "1aa07813abc2f5b30994727063a5f1e88445b0c1c58b18d7db56ec9c8b038cdf",
+        "row_count": 20
+      },
+      {
+        "path": "data/public/visual_inception_inputs/catalog_v5/07_shampoo/descriptions.jsonl",
+        "sha256": "d517b98ff726dcbd2551ca60b2272a11410c5631646e13ca3d3b19ab2e3d2c56",
+        "row_count": 50
+      },
+      {
+        "path": "data/public/visual_inception_inputs_v5/07_shampoo/paraphrases/model_paraphrases.jsonl",
+        "sha256": "ec6ede3158337215d538d299610f4e325b8700ee4c63e3812f9d8f4491aec5d8",
+        "row_count": 30
+      },
+      {
+        "path": "data/public/visual_inception_inputs_v5/07_shampoo/heldout_queries.jsonl",
+        "sha256": "4c2472cd9d1a4c70dab23eca8a02ec53d5229b97314e9faf75e1d9e8cdf042a9",
+        "row_count": 20
+      },
+      {
+        "path": "data/public/visual_inception_inputs/catalog_v5/08_speaker/descriptions.jsonl",
+        "sha256": "d472b563a2bf034a8dd686370fa3ccdb6940d841f11bf1cd0d4073b1e817cee7",
+        "row_count": 50
+      },
+      {
+        "path": "data/public/visual_inception_inputs_v5/08_speaker/paraphrases/model_paraphrases.jsonl",
+        "sha256": "9be8e1996f5d1995a945e6bfa49f23505a765686887e96c39f15356b9273b18c",
+        "row_count": 30
+      },
+      {
+        "path": "data/public/visual_inception_inputs_v5/08_speaker/heldout_queries.jsonl",
+        "sha256": "6ec3bea3776c3abf97e6271607289a0536c0960564f051848dd849dfba399209",
+        "row_count": 20
+      },
+      {
+        "path": "data/public/visual_inception_inputs/catalog_v5/09_toothbrush/descriptions.jsonl",
+        "sha256": "e44f20af016fa2b5d50689f48402dc37cddb872c606cf975b43d10f69afa3e05",
+        "row_count": 50
+      },
+      {
+        "path": "data/public/visual_inception_inputs_v5/09_toothbrush/paraphrases/model_paraphrases.jsonl",
+        "sha256": "a0513ba7aecbe5a3848390021eb9bb4d4011b6b333ee4dff96879173288e9443",
+        "row_count": 30
+      },
+      {
+        "path": "data/public/visual_inception_inputs_v5/09_toothbrush/heldout_queries.jsonl",
+        "sha256": "a6d275317ae8e7b9353d9c7b3eeff92204a118f416f569ef6bf070424b4093e2",
+        "row_count": 20
+      }
+    ]
+  },
+  "groups": {
+    "01_camera": {
+      "path": "01_camera/queries.json",
+      "sha256": "4b9a7646d9d8cc2484063e61e5d7e9e0a032635cb740169f2dfea4b3120518b1",
+      "chinese_review_path": "01_camera/queries.zh.json",
+      "chinese_review_sha256": "21a3bd7e1960370491d08334c00f7f877795b23524178e7d054a459ee92aca5f",
+      "target_public_id": "B08V134QWR",
+      "category": "security camera",
+      "query_count": 20,
+      "instructions_sha256": "22f885dcb9379c1caca5f064b90626774d913a04570d69a41ef5ee74f221f317",
+      "query_family_counts": {
+        "category_description": 10,
+        "model_paraphrase": 6,
+        "heldout_search_query": 4
+      },
+      "public_features_sha256": "3641b0af266efb482993d3e51251c58d7e20565d9f12c39edaaab6698eb01cd9",
+      "frozen_training_bundle_available": true
+    },
+    "02_chair": {
+      "path": "02_chair/queries.json",
+      "sha256": "cee8134ff12c165dadea7a7cc366d11f98392c4dac234f6b3a0b710a51a8f57a",
+      "chinese_review_path": "02_chair/queries.zh.json",
+      "chinese_review_sha256": "87e766b70e510228d0f58d8ec2258d53b4d3ad3b769b8204970e81e71441fc3f",
+      "target_public_id": "B09CYFD5BX",
+      "category": "barber chair",
+      "query_count": 20,
+      "instructions_sha256": "01422b7574baa8617eb58abb4c6ab07a367896b839d5e899f3571f0445bf1d85",
+      "query_family_counts": {
+        "category_description": 10,
+        "model_paraphrase": 6,
+        "heldout_search_query": 4
+      },
+      "public_features_sha256": "93774e8633569631a443a6e0ba61591831d13668c9560d555c5008a57d26d4b5",
+      "frozen_training_bundle_available": false
+    },
+    "03_cookies": {
+      "path": "03_cookies/queries.json",
+      "sha256": "9dac20456cecb34abde8a5b61fa67c6056757b5be7dff7472f49d71ce4097ae8",
+      "chinese_review_path": "03_cookies/queries.zh.json",
+      "chinese_review_sha256": "346e5cda640f469a907da100c0bf63bdb8aaa43981be973526adb1370a6ba1fc",
+      "target_public_id": "B08Z8MHWVS",
+      "category": "cookie dough",
+      "query_count": 20,
+      "instructions_sha256": "b31f2ebee93c4da9e5569f7c18548c8ead84ad8bb19e26f4f12a8594f9d919f5",
+      "query_family_counts": {
+        "category_description": 10,
+        "model_paraphrase": 6,
+        "heldout_search_query": 4
+      },
+      "public_features_sha256": "cc5c69c45f1c5e93c6b5729df8c842fd6082dc62482f712aef9808a2f7929047",
+      "frozen_training_bundle_available": true
+    },
+    "04_curtain": {
+      "path": "04_curtain/queries.json",
+      "sha256": "ea88ff1c6746d122c358f5a6b825c9dd6cd949fe563118b2171ac848e52c5d1a",
+      "chinese_review_path": "04_curtain/queries.zh.json",
+      "chinese_review_sha256": "a6a3c484838a7500547c0f0572ed82faa4399dbd1bb01fbddff17a7eb83c9108",
+      "target_public_id": "B086PW7TWX",
+      "category": "curtains",
+      "query_count": 20,
+      "instructions_sha256": "99bbc32ed9aa05a4607127c529508c910e168e391263b7f3e6116b7bb10c1a6f",
+      "query_family_counts": {
+        "category_description": 10,
+        "model_paraphrase": 6,
+        "heldout_search_query": 4
+      },
+      "public_features_sha256": "9386d5b3a56366ad0c96162ff1ffb009bb34a8320d104a303adfc8cb6708b6f3",
+      "frozen_training_bundle_available": true
+    },
+    "05_hair_extension": {
+      "path": "05_hair_extension/queries.json",
+      "sha256": "dd46621668d3ea495fbd15bfa32d2bfa79f09ef38026ffff6260feb5fdc06dc4",
+      "chinese_review_path": "05_hair_extension/queries.zh.json",
+      "chinese_review_sha256": "ff54124c412f4a88d7c48ec09b43f120f3baf678feef6d8df9a614f2d8a8efb3",
+      "target_public_id": "B01460C2I2",
+      "category": "hair extensions",
+      "query_count": 20,
+      "instructions_sha256": "ac099b6dd8df7906f48b1f6f5ffd7647610fcabe62f8579fe87b385633995781",
+      "query_family_counts": {
+        "category_description": 10,
+        "model_paraphrase": 6,
+        "heldout_search_query": 4
+      },
+      "public_features_sha256": "31f6cd86e314683a61aa4ea0d47ed63e5be17993330041a000e0855577c686f2",
+      "frozen_training_bundle_available": true
+    },
+    "06_jeans": {
+      "path": "06_jeans/queries.json",
+      "sha256": "87d738cac710efeaffc87f4788090c9b093010471f82ae74805b5c3da6604003",
+      "chinese_review_path": "06_jeans/queries.zh.json",
+      "chinese_review_sha256": "4f0e76ccfec1710642eebfdc89b92db7f68b20e82d207acd1a4917187be250af",
+      "target_public_id": "B09HH96NJY",
+      "category": "jeans",
+      "query_count": 20,
+      "instructions_sha256": "8916f7e586346e14e2a240f2ac604d02990ea3fd6f9f744a989c653430509af5",
+      "query_family_counts": {
+        "category_description": 10,
+        "model_paraphrase": 6,
+        "heldout_search_query": 4
+      },
+      "public_features_sha256": "ddf42c95370fe5170a07591f1f14fca3ee4128d65ed93c245ec6e285d99f0b23",
+      "frozen_training_bundle_available": true
+    },
+    "07_shampoo": {
+      "path": "07_shampoo/queries.json",
+      "sha256": "f3a34b77024ff2e6e1d0c058256451ba24eb05496f42eb7f41e0280bf240094d",
+      "chinese_review_path": "07_shampoo/queries.zh.json",
+      "chinese_review_sha256": "4d232081f9ddaaf4b7cecdb8241dea78f1544f8b1f9ded4fffa125ec310c0af3",
+      "target_public_id": "B00BDJODWI",
+      "category": "shampoo",
+      "query_count": 20,
+      "instructions_sha256": "81a2e87e737f2ad07ca052ce29aff5aae84ef118c9c798811d9a805bf99778c4",
+      "query_family_counts": {
+        "category_description": 10,
+        "model_paraphrase": 6,
+        "heldout_search_query": 4
+      },
+      "public_features_sha256": "dfc0f2e579c61c7f581dc3ee1a3e8462e660160bc8c21f7f0d5de728b68a20a4",
+      "frozen_training_bundle_available": true
+    },
+    "08_speaker": {
+      "path": "08_speaker/queries.json",
+      "sha256": "cc97aea610a1d6095ecc0bb8e153b8bf885c36478515c8e21abe62bb661b42b5",
+      "chinese_review_path": "08_speaker/queries.zh.json",
+      "chinese_review_sha256": "100a8913216fc6448a44b4245e96c94c1d047f02bd2f17391616affa861ba143",
+      "target_public_id": "B01N47U1VI",
+      "category": "Bluetooth speaker",
+      "query_count": 20,
+      "instructions_sha256": "ccb49ccdf93c8b1a35e70f5c14aa6ad823b44f8e6df2f0e54745b7b7bcfffc31",
+      "query_family_counts": {
+        "category_description": 10,
+        "model_paraphrase": 6,
+        "heldout_search_query": 4
+      },
+      "public_features_sha256": "a14a4c52c137639e02fe3121a156089375344dc971fc7b04441f45af0dab8678",
+      "frozen_training_bundle_available": true
+    },
+    "09_toothbrush": {
+      "path": "09_toothbrush/queries.json",
+      "sha256": "f5e04fb2120e584213de542ccb8619b2f12a9aee1b660ccbcbacf8511e8a60b6",
+      "chinese_review_path": "09_toothbrush/queries.zh.json",
+      "chinese_review_sha256": "d4ec39983fde52e4ce15dfd58453d88fe94542e784b4f2dc864667d154588246",
+      "target_public_id": "B09J81RMLD",
+      "category": "toothbrush",
+      "query_count": 20,
+      "instructions_sha256": "26d1b7c45b1c180b3a30f93dcd1a73b88239e1e78616951002b4775f14ab5fc4",
+      "query_family_counts": {
+        "category_description": 10,
+        "model_paraphrase": 6,
+        "heldout_search_query": 4
+      },
+      "public_features_sha256": "17fe7492f81fbb5a3eb4ea4bb3cb954d5fb2cf35862045ef948c3881c936f94c",
+      "frozen_training_bundle_available": true
+    }
+  }
+}

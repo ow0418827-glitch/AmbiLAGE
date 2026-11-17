@@ -45,12 +45,13 @@ def tiny_pair(tmp_path):
 
 def run_tiny(tiny_pair, output, **kwargs):
     source, target = tiny_pair
-    options = dict(steps=2, device='cpu', smoke_test=True, definition=public_definition())
+    options = dict(steps=2, device='cpu', smoke_test=True, definition=public_definition(),
+        config=VisualInceptionConfig(objective_mode='semantic_perceptual'))
     options.update(kwargs)
     return generate_visual_inception(source, target, output, **options)
 
 
-def test_default_configuration_is_the_declared_reduced_baseline():
+def test_default_configuration_is_the_declared_retrieval_baseline():
     cfg = VisualInceptionConfig()
     assert cfg.steps == 100
     assert cfg.epsilon_levels == 8
@@ -59,6 +60,9 @@ def test_default_configuration_is_the_declared_reduced_baseline():
     assert cfg.gradient_restarts == 10
     assert cfg.seed == 42 and cfg.surrogate_set == 'visual_inception_paper'
     assert cfg.smoke_test is False
+    assert cfg.objective_mode == 'retrieval_semantic_perceptual'
+    assert cfg.retrieval_weight == 1 and cfg.retrieval_temperature == .07
+    assert cfg.query_batch_size == 16 and cfg.training_manifest is None
     cfg.validate()
 
 
@@ -158,7 +162,7 @@ def test_sequential_gradient_equals_joint_semantic_and_perceptual_gradient():
     source = image * .8
     targets = [torch.eye(3), torch.tensor([[1., 1., 0.], [0., 1., 1.], [1., 0., 1.]])]
     weights = [.25, .75]
-    config = VisualInceptionConfig(semantic_weight=1.7, perceptual_weight=.3)
+    config = VisualInceptionConfig(objective_mode='semantic_perceptual', semantic_weight=1.7, perceptual_weight=.3)
     distance = lambda origin, changed: (origin - changed).square().mean()
     gradient, record = _gradient(image, source, [ColorSurrogate(), ColorSurrogate()],
         targets, weights, distance, config)
@@ -279,7 +283,7 @@ def test_missing_real_perceptual_weights_stops_before_loading_surrogates(tiny_pa
     for path in tiny_pair:
         with Image.open(path) as image:
             image.resize((32, 32)).save(path)
-    config = VisualInceptionConfig(lpips_backbone_weights=str(tmp_path / 'missing_backbone.pth'),
+    config = VisualInceptionConfig(objective_mode='semantic_perceptual', lpips_backbone_weights=str(tmp_path / 'missing_backbone.pth'),
         lpips_linear_weights=str(tmp_path / 'missing_linear.pth'))
     with pytest.raises(FileNotFoundError):
         generate_visual_inception(*tiny_pair, tmp_path / 'production_missing_weights',
@@ -313,11 +317,16 @@ def test_nine_group_dispatch_binds_baseline_defaults_and_real_public_category(tm
 
     monkeypatch.setattr(optimization, 'generate_attack', capture)
     root = output / group
+    training_manifest = tmp_path / 'training_bundle.json'
+    training_manifest.write_text('{}', encoding='utf-8')
     with pytest.raises(StoppedBeforeWeights):
-        base_workflow.generate_group(EVALUATION_BASE, group, 'visual_inception', root, device='cpu')
+        base_workflow.generate_group(EVALUATION_BASE, group, 'visual_inception', root, device='cpu',
+            visual_inception_config={'training_manifest': str(training_manifest)})
     config = seen['visual_inception_config']
     assert isinstance(config, VisualInceptionConfig)
     assert (config.steps, config.epsilon_levels, config.step_size_levels) == (100, 8, 2)
+    assert config.objective_mode == 'retrieval_semantic_perceptual'
+    assert config.training_manifest == str(training_manifest)
     assert 'ambilage_config' not in seen and seen['method'] == 'visual_inception'
     assert seen['target_text'] == expected['target_text']
     assert seen['definition']['target_product_features'] == expected['target_features']
@@ -356,7 +365,10 @@ def test_full_pipeline_uses_independent_baseline_configuration(tiny_pair, tmp_pa
         seen.update(kwargs)
         raise StoppedBeforeWeights()
 
-    config = {'generation': {'visual_inception': options}, 'evaluation': {'query_mode': 'text'}}
+    training_manifest = tmp_path / 'training_bundle.json'
+    training_manifest.write_text('{}', encoding='utf-8')
+    config = {'generation': {'visual_inception': dict(options, training_manifest=str(training_manifest))},
+        'evaluation': {'query_mode': 'text'}}
     with pytest.raises(StoppedBeforeWeights):
         pipeline.generate(config, root, selection, 'visual_inception', device='cpu', generator=capture)
     actual = seen['visual_inception_config']
@@ -370,7 +382,8 @@ def test_full_pipeline_uses_independent_baseline_configuration(tiny_pair, tmp_pa
 def test_unified_generation_preserves_method_identity(tiny_pair, tmp_path):
     from src.visual.pipeline import generate
     result = generate('visual_inception', *tiny_pair, tmp_path / 'unified', steps=1,
-        device='cpu', smoke_test=True, definition=public_definition())
+        device='cpu', smoke_test=True, definition=public_definition(),
+        visual_inception_config={'objective_mode': 'semantic_perceptual'})
     assert result.method == 'visual_inception'
     assert result.image_path.is_file() and result.ready_path.is_file() and result.metadata_path.is_file()
     assert result.sha256 == sha256_file(result.image_path)
@@ -380,11 +393,14 @@ def test_unified_cli_runs_explicit_micro_baseline(tiny_pair, tmp_path):
     from src.paths import PROJECT
     definition_path = tmp_path / 'definition.json'
     definition_path.write_text(json.dumps(public_definition()), encoding='utf-8')
+    configuration = tmp_path / 'legacy_configuration.json'
+    configuration.write_text(json.dumps({'objective_mode': 'semantic_perceptual'}), encoding='utf-8')
     output = tmp_path / 'cli_output'
     result = subprocess.run([
         sys.executable, '-B', '-X', 'utf8', str(PROJECT / 'tools/generate.py'),
         '--method', 'visual_inception', '--source', str(tiny_pair[0]), '--target', str(tiny_pair[1]),
         '--definition', str(definition_path), '--output', str(output),
+        '--visual-inception-config', str(configuration),
         '--device', 'cpu', '--steps', '1', '--smoke-test',
     ], cwd=PROJECT, capture_output=True, text=True, encoding='utf-8', timeout=45)
     assert result.returncode == 0, result.stderr + '\n' + result.stdout

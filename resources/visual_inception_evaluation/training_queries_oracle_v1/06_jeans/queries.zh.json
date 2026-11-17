@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "language": "zh",
+  "purpose": "仅供人工阅读，不传给检索编码器",
+  "group": "06_jeans",
+  "category": "jeans",
+  "query_records": [
+    {
+      "id": "06_jeans_oracle_01",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B07JMZQT4B）：NYDJ Women's Pull-On Marilyn Straight Jeans | Slimming & Flattering Fit"
+    },
+    {
+      "id": "06_jeans_oracle_02",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B08PS1XYS9）：Andongnywell Women's Plus Size mid-Rise Wide Leg Flared Jeans Trousers Mid Waist Fitted Bell Bottom Denim Pants"
+    },
+    {
+      "id": "06_jeans_oracle_03",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B094FVGLXQ）：utcoco Women's Casual Loose Fit Mid Waisted Belted Flare Bell Bottom Palazzo Lounge Denim Jeans Pants"
+    },
+    {
+      "id": "06_jeans_oracle_04",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B07N95CH33）：Black Diamond W Forged Denim Pants"
+    },
+    {
+      "id": "06_jeans_oracle_05",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B08TH8SFQW）：Women High Waisted Pants Vintage Loose Bell Denim Pants 90s Casual Flare Trousers Hipster Streetwear"
+    },
+    {
+      "id": "06_jeans_oracle_06",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B09MZCG7JD）：Women High Waisted Baggy Jeans Vintage Wide Straight Leg Boyfriend Denim Cargo Pants with Pockets Y2K Grunge Streetwear"
+    },
+    {
+      "id": "06_jeans_oracle_07",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B09MQTFP11）：High Waist Baggy Cargo Jeans for Women Flap Pocket Relaxed Fit Straight Wide Leg Y2K Fashion Jeans"
+    },
+    {
+      "id": "06_jeans_oracle_08",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B09Q2QW66Q）：Skateboard Frog Women Goth Bandage Denim Jeans Low Waist Punk Straight Pants Grunge Printed Y2K Streetwear"
+    },
+    {
+      "id": "06_jeans_oracle_09",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B07PQYS7SY）：Stetson Women's 818 Southwestern Embroidered Bootcut Jeans"
+    },
+    {
+      "id": "06_jeans_oracle_10",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "训练公开描述原句（商品 B08VDLC82P）：Fudule Y2K Pants for Women High Waisted Jeans Cute Tie-Dye Print Jeans Streetwear Denim Pants Slim Straight-Leg Trousers"
+    },
+    {
+      "id": "06_jeans_oracle_11",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_018，输入商品 B093QZKT2R）"
+    },
+    {
+      "id": "06_jeans_oracle_12",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_022，输入商品 B09J8FXZ9X）"
+    },
+    {
+      "id": "06_jeans_oracle_13",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_014，输入商品 B09PGYQPG4）"
+    },
+    {
+      "id": "06_jeans_oracle_14",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_010，输入商品 B098K2BWPH）"
+    },
+    {
+      "id": "06_jeans_oracle_15",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_003，输入商品 B08RZ58HLZ）"
+    },
+    {
+      "id": "06_jeans_oracle_16",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_013，输入商品 B07RTQG35B）"
+    },
+    {
+      "id": "06_jeans_oracle_17",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_67658）：mens high waisted jeans"
+    },
+    {
+      "id": "06_jeans_oracle_18",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_108474）：vibrant jeans for girls"
+    },
+    {
+      "id": "06_jeans_oracle_19",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_112922）：womens columbian jeans"
+    },
+    {
+      "id": "06_jeans_oracle_20",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_57220）：keneth cole jeans for men"
+    }
+  ]
+}

@@ -193,6 +193,27 @@ def compute_recolor_attenuation_mask(
     return (sat_gain * hi_att * lo_att * fg_non_roi).astype(np.float32)
 
 
+def _select_valid_sam_masks(
+    masks: np.ndarray,
+    scores: np.ndarray,
+    *,
+    min_ratio: float = 0.01,
+    max_ratio: float = 0.99,
+) -> tuple[np.ndarray, list[int], list[float]]:
+    """按有效前景面积区间过滤 SAM2 多候选掩膜，避免极小高分碎片触发面积异常。"""
+    selected: list[np.ndarray] = []
+    selected_indices: list[int] = []
+    selected_scores: list[float] = []
+    num_boxes, num_cands = int(masks.shape[0]), int(masks.shape[1])
+    for i in range(num_boxes):
+        valid = [k for k in range(num_cands) if min_ratio < float(masks[i, k].mean()) < max_ratio]
+        chosen_k = max(valid, key=lambda k: float(scores[i, k])) if valid else int(np.argmax(scores[i]))
+        selected.append(masks[i, chosen_k])
+        selected_indices.append(int(chosen_k))
+        selected_scores.append(float(scores[i, chosen_k]))
+    return np.logical_or.reduce(selected), selected_indices, selected_scores
+
+
 def segment_image(
     image_path: Path | str,
     boxes: Sequence[Sequence[float]] | None = None,
@@ -218,8 +239,7 @@ def segment_image(
             pred = model(**inputs, multimask_output=True)
         masks = processor.post_process_masks(pred.pred_masks.cpu(), inputs["original_sizes"])[0].numpy().astype(bool)
         scores = pred.iou_scores[0].detach().cpu().numpy()
-        selected = [masks[i, int(np.argmax(scores[i]))] for i in range(len(pixels))]
-        mask = np.logical_or.reduce(selected)
+        mask, selected_indices, selected_scores = _select_valid_sam_masks(masks, scores)
         ratio = float(mask.mean())
         if not .01 < ratio < .99:
             raise ValueError(f"主体分割面积异常，停止生成: {ratio:.4f}")
@@ -229,7 +249,8 @@ def segment_image(
         )
         record = dict(image_path=str(image_path), image_sha256=sha256_file(image_path),
                       boxes=normalized, pixel_boxes=pixels, segmenter="sam2.1-hiera-large", model=str(path),
-                      scores=scores.tolist(), foreground_ratio=ratio,
+                      scores=scores.tolist(), selected_indices=selected_indices,
+                      selected_scores=selected_scores, foreground_ratio=ratio,
                       label_region_pixels=int(rect_roi.sum()),
                       ink_core_pixels=int(ink_core.sum()),
                       substrate_pixels=int(substrate.sum()))

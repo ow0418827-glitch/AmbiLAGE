@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "natural": true,
+  "text_preserved": true,
+  "artifact_free": true,
+  "reasons": [
+    "strict_mathematical_naturalness_gate_passed"
+  ],
+  "category": "cookie dough",
+  "metrics": {
+    "source_ssim": 0.9150933996222833,
+    "rgb_source_ssim": 0.9150933996222833,
+    "luma_source_ssim": 0.9539427359225222,
+    "source_mae_levels": 6.943417072296143,
+    "rgb_source_mae_levels": 6.943417072296143,
+    "luma_source_mae_levels": 4.757375240325928,
+    "fg_rgb_source_mae_levels": 9.621146202087402,
+    "fg_chroma_tv_levels": 0.9738596677780151,
+    "halo_error": 4.929048538208008,
+    "roi_max_abs_diff": 0.0
+  },
+  "thresholds": {
+    "source_ssim_floor": 0.85,
+    "source_mae_ceiling": 22.0,
+    "fg_source_mae_ceiling": 10.0,
+    "fg_chroma_tv_ceiling": 2.5,
+    "halo_ceiling": 10.0,
+    "roi_max_abs_diff": 0.0
+  },
+  "model": "mathematical_rgb_oklab_dual_gate_v2",
+  "precision": "float32",
+  "candidate_sha256": "6d5b2a68a373d8144dab432ba86f9a9a086479abd3627e256bef77bbab00a265"
+}

@@ -10,6 +10,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 from PIL import Image
+import numpy as np
 import pytest
 import torch
 import torch.nn.functional as F
@@ -574,3 +575,76 @@ def test_evaluate_transfer_panel_runs_three_encoders_sequentially(tmp_path, monk
     assert panel['encoders']['03_siglip_so400m']['role'] == 'black_box_heldout'
     assert (panel_out / 'transfer_panel_summary.json').is_file()
     assert (panel_out / 'TRANSFER_PANEL_REPORT.md').is_file()
+
+
+def test_select_valid_sam_masks_filters_degenerate_fragments():
+    from src.visual._ambilage.segmentation import _select_valid_sam_masks
+
+    h, w = 100, 100
+    masks = np.zeros((1, 3, h, w), dtype=bool)
+    masks[0, 0, :14, :14] = True      # ratio = 0.0196, low score
+    masks[0, 1, 0, 0] = True          # ratio = 0.0001 <= 0.01 (degenerate high score)
+    masks[0, 2, :54, :55] = True      # ratio = 0.2970 (valid foreground)
+    scores = np.array([[0.0052, 0.5380, 0.2574]], dtype=np.float32)
+
+    mask, indices, chosen_scores = _select_valid_sam_masks(masks, scores)
+    assert indices == [2]
+    assert chosen_scores == pytest.approx([0.2574], abs=1e-6)
+    assert np.isclose(float(mask.mean()), 0.2970, atol=1e-4)
+
+    # When every candidate is outside (0.01, 0.99), preserve argmax(scores) so caller raises ValueError.
+    tiny_masks = np.zeros((1, 3, h, w), dtype=bool)
+    tiny_masks[0, 1, 0, 0] = True
+    tiny_scores = np.array([[0.10, 0.5380, 0.20]], dtype=np.float32)
+    mask_deg, idx_deg, scores_deg = _select_valid_sam_masks(tiny_masks, tiny_scores)
+    assert idx_deg == [1]
+    assert scores_deg == pytest.approx([0.5380], abs=1e-6)
+    assert float(mask_deg.mean()) <= 0.01
+
+
+def test_maybe_fallback_public_foreground_mask_respects_confidence_and_smoke(tmp_path):
+    from src.visual._ambilage.pipeline import (
+        _maybe_fallback_public_foreground_mask,
+        _segment_with_public_fallback,
+    )
+
+    src_path = tmp_path / 'source.jpg'
+    Image.new('RGB', (50, 50), (240, 240, 240)).save(src_path)
+    pub_mask_arr = np.zeros((50, 50), dtype=np.uint8)
+    pub_mask_arr[5:45, 5:45] = 255  # ratio = 0.64
+    pub_mask_path = tmp_path / 'source_foreground.png'
+    Image.fromarray(pub_mask_arr).save(pub_mask_path)
+
+    sam_mask = np.zeros((50, 50), dtype=bool)
+    sam_mask[10:25, 30:45] = True  # partial panel only
+    definition = {'source': {'foreground_mask': 'source_foreground.png'}}
+
+    low_rec = {'selected_scores': [0.2574], 'foreground_ratio': float(sam_mask.mean())}
+    fb = _maybe_fallback_public_foreground_mask(
+        src_path, sam_mask, low_rec, definition, 'source', smoke_test=False,
+    )
+    assert fb is not None
+    fb_mask, fb_rec = fb
+    assert fb_rec['public_mask_fallback'] is True
+    assert fb_rec['public_mask_reason'] == 'low_sam2_iou_confidence_below_0.65'
+    assert np.isclose(float(fb_mask.mean()), 0.64, atol=1e-4)
+
+    high_rec = {'selected_scores': [0.9656], 'foreground_ratio': float(sam_mask.mean())}
+    assert _maybe_fallback_public_foreground_mask(
+        src_path, sam_mask, high_rec, definition, 'source', smoke_test=False,
+    ) is None
+
+    assert _maybe_fallback_public_foreground_mask(
+        src_path, sam_mask, low_rec, definition, 'source', smoke_test=True,
+    ) is None
+
+    class _DegenerateBackend:
+        def segment(self, *_args, **_kwargs):
+            raise ValueError('主体分割面积异常，停止生成: 0.0001')
+
+    deg_mask, deg_rec = _segment_with_public_fallback(
+        _DegenerateBackend(), src_path, [[0, 0, 50, 50]], definition, 'source', smoke_test=False,
+    )
+    assert deg_rec['public_mask_fallback'] is True
+    assert deg_rec['public_mask_reason'] == 'sam2_degenerate_ratio'
+    assert np.isclose(float(deg_mask.mean()), 0.64, atol=1e-4)

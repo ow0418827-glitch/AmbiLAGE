@@ -61,6 +61,93 @@ def _stage3_signature(
     return hashlib.sha256(raw).hexdigest()
 
 
+def _maybe_fallback_public_foreground_mask(
+    image_path: Path,
+    seg_mask: np.ndarray | None,
+    seg_record: dict[str, Any] | None,
+    definition: dict[str, Any] | None,
+    role: str,
+    *,
+    smoke_test: bool = False,
+    min_confidence: float = 0.65,
+) -> tuple[np.ndarray, dict[str, Any]] | None:
+    if smoke_test or not isinstance(definition, dict):
+        return None
+    if seg_mask is not None:
+        raw_record = seg_record or {}
+        selected_scores = raw_record.get('selected_scores')
+        if not selected_scores:
+            selected_scores = [
+                max(float(v) for v in row)
+                for row in (raw_record.get('scores') or [])
+                if row
+            ]
+        if not selected_scores or min(float(s) for s in selected_scores) >= min_confidence:
+            return None
+    role_meta = definition.get(role)
+    rel_mask = role_meta.get('foreground_mask') if isinstance(role_meta, dict) else None
+    if not isinstance(rel_mask, str) or not rel_mask.strip():
+        return None
+    parent_dir = Path(image_path).resolve().parent
+    mask_path = (parent_dir / rel_mask).resolve()
+    if not mask_path.is_relative_to(parent_dir):
+        raise ValueError(f'公开前景掩码路径越界: {mask_path}')
+    if not mask_path.is_file():
+        return None
+    with Image.open(mask_path) as mask_img:
+        pub_mask = np.asarray(mask_img.convert('L')) > 127
+    if pub_mask.ndim != 2:
+        raise ValueError(f'公开前景掩码维度无效: {pub_mask.shape}')
+    if seg_mask is not None:
+        expected_shape = seg_mask.shape
+    else:
+        with Image.open(image_path) as src_img:
+            expected_shape = (src_img.height, src_img.width)
+    if pub_mask.shape != expected_shape:
+        raise ValueError(f'公开前景掩码尺寸 {pub_mask.shape} 与原图 {expected_shape} 不一致')
+    ratio = float(pub_mask.mean())
+    if not 0.01 < ratio < 0.99:
+        raise ValueError(f'公开前景掩码面积异常，停止生成: {ratio:.4f}')
+    record = dict(seg_record or {})
+    record.update(
+        sam2_foreground_ratio=None if seg_record is None else seg_record.get('foreground_ratio'),
+        foreground_ratio=ratio,
+        public_mask_fallback=True,
+        public_mask_reason=(
+            'sam2_degenerate_ratio'
+            if seg_mask is None
+            else f'low_sam2_iou_confidence_below_{min_confidence}'
+        ),
+        public_mask_path=str(mask_path),
+        public_mask_sha256=sha256_file(mask_path),
+    )
+    return pub_mask, record
+
+
+def _segment_with_public_fallback(
+    backend: Any,
+    image_path: Path,
+    boxes: Any,
+    definition: dict[str, Any] | None,
+    role: str,
+    *,
+    smoke_test: bool,
+) -> tuple[np.ndarray, dict[str, Any]]:
+    try:
+        seg_mask, seg_record = backend.segment(image_path, boxes)
+    except ValueError:
+        fb = _maybe_fallback_public_foreground_mask(
+            image_path, None, None, definition, role, smoke_test=smoke_test,
+        )
+        if fb is None:
+            raise
+        return fb
+    fb = _maybe_fallback_public_foreground_mask(
+        image_path, seg_mask, seg_record, definition, role, smoke_test=smoke_test,
+    )
+    return fb if fb is not None else (seg_mask, seg_record)
+
+
 class AmbiLAGEPipeline:
     def __init__(self, config=None, device='cuda', *, stage_backend=None):
         self.config=config or AmbiLAGEConfig()
@@ -167,8 +254,14 @@ class AmbiLAGEPipeline:
                 backend.close()
                 detected,ocr=backend.detect_print(source)
                 regions=list(plan.get('print_regions',[]))+list(detected)+list(print_regions or [])
-                source_fg,source_seg=backend.segment(source,source_boxes or plan['source_boxes'])
-                target_fg,target_seg=backend.segment(target,target_boxes)
+                source_fg,source_seg=_segment_with_public_fallback(
+                    backend, source, source_boxes or plan['source_boxes'],
+                    definition, 'source', smoke_test=self.config.smoke_test,
+                )
+                target_fg,target_seg=_segment_with_public_fallback(
+                    backend, target, target_boxes,
+                    definition, 'target', smoke_test=self.config.smoke_test,
+                )
                 backend.close()
                 rect_roi = print_region_mask(source_fg.shape, regions)
                 source_rgb = read_rgb(source)

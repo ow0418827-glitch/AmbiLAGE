@@ -1,0 +1,256 @@
+=== [Exp3 Step 1/2] Generating remaining 3 groups (reusing frozen 01_camera..04_curtain,07_shampoo,09_toothbrush) ===
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  63%|██████▎   | 466/741 [00:00<00:00, 4657.13it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 5065.15it/s]
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  50%|█████     | 372/741 [00:00<00:00, 3670.58it/s]Loading weights: 100%|█████████▉| 740/741 [00:00<00:00, 3654.07it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 3654.15it/s]
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+Loading weights:   0%|          | 0/196 [00:00<?, ?it/s]Loading weights: 100%|██████████| 196/196 [00:00<00:00, 2712.48it/s]
+The config attributes {'skip_prk_steps': True} were passed to DDIMInverseScheduler, but are not expected and will be ignored. Please verify your scheduler_config.json configuration file.
+AmbiLAGE 细化 [10/250] Utility=0.4904 SSIM=0.9055 MAE=8.20 LR=1.000 (Accepted=10, Rejected=0)
+AmbiLAGE 细化 [20/250] Utility=0.5196 SSIM=0.9131 MAE=7.54 LR=0.996 (Accepted=20, Rejected=0)
+AmbiLAGE 细化 [30/250] Utility=0.5410 SSIM=0.9070 MAE=8.10 LR=0.984 (Accepted=30, Rejected=0)
+AmbiLAGE 细化 [40/250] Utility=0.5577 SSIM=0.9102 MAE=7.66 LR=0.965 (Accepted=40, Rejected=0)
+AmbiLAGE 细化 [50/250] Utility=0.5716 SSIM=0.9088 MAE=7.78 LR=0.938 (Accepted=50, Rejected=0)
+AmbiLAGE 细化 [60/250] Utility=0.5764 SSIM=0.9082 MAE=7.77 LR=0.905 (Accepted=60, Rejected=0)
+AmbiLAGE 细化 [70/250] Utility=0.5708 SSIM=0.9017 MAE=8.06 LR=0.865 (Accepted=70, Rejected=0)
+AmbiLAGE 细化 [80/250] Utility=0.5646 SSIM=0.9037 MAE=7.77 LR=0.820 (Accepted=80, Rejected=0)
+AmbiLAGE 细化 [90/250] Utility=0.5692 SSIM=0.9028 MAE=7.71 LR=0.578 (Accepted=90, Rejected=0)
+AmbiLAGE 细化 [100/250] Utility=0.5720 SSIM=0.9014 MAE=7.85 LR=0.537 (Accepted=100, Rejected=0)
+AmbiLAGE 细化 [110/250] Utility=0.5757 SSIM=0.9032 MAE=7.61 LR=0.371 (Accepted=110, Rejected=0)
+AmbiLAGE 细化 [120/250] Utility=0.5785 SSIM=0.9014 MAE=7.82 LR=0.338 (Accepted=120, Rejected=0)
+AmbiLAGE 细化 [130/250] Utility=0.5799 SSIM=0.9022 MAE=7.70 LR=0.304 (Accepted=130, Rejected=0)
+AmbiLAGE 细化 [140/250] Utility=0.5803 SSIM=0.9010 MAE=7.81 LR=0.270 (Accepted=140, Rejected=0)
+AmbiLAGE 细化 [150/250] Utility=0.5810 SSIM=0.9014 MAE=7.74 LR=0.237 (Accepted=150, Rejected=0)
+AmbiLAGE 细化 [160/250] Utility=0.5830 SSIM=0.9010 MAE=7.78 LR=0.205 (Accepted=160, Rejected=0)
+AmbiLAGE 细化 [170/250] Utility=0.5822 SSIM=0.9022 MAE=7.63 LR=0.174 (Accepted=170, Rejected=0)
+AmbiLAGE 细化 [180/250] Utility=0.5838 SSIM=0.9013 MAE=7.73 LR=0.146 (Accepted=180, Rejected=0)
+AmbiLAGE 细化 [190/250] Utility=0.5848 SSIM=0.9000 MAE=7.86 LR=0.121 (Accepted=190, Rejected=0)
+AmbiLAGE 细化 [200/250] Utility=0.5833 SSIM=0.9005 MAE=7.78 LR=0.098 (Accepted=200, Rejected=0)
+AmbiLAGE 细化 [210/250] Utility=0.5840 SSIM=0.9008 MAE=7.75 LR=0.080 (Accepted=210, Rejected=0)
+AmbiLAGE 自适应退火收敛早停 [210/250] (min_steps=180, lr_scale=0.0800, best_step=190, best_sel_utility=0.5707)
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  57%|█████▋    | 422/741 [00:00<00:00, 4210.51it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 6190.49it/s]
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  50%|████▉     | 370/741 [00:00<00:00, 3690.30it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 3706.55it/s]
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+Loading weights:   0%|          | 0/196 [00:00<?, ?it/s]Loading weights: 100%|██████████| 196/196 [00:00<00:00, 2628.25it/s]
+The config attributes {'skip_prk_steps': True} were passed to DDIMInverseScheduler, but are not expected and will be ignored. Please verify your scheduler_config.json configuration file.
+AmbiLAGE 细化 [10/250] Utility=0.4653 SSIM=0.9764 MAE=11.86 LR=1.000 (Accepted=10, Rejected=0)
+AmbiLAGE 细化 [20/250] Utility=0.4967 SSIM=0.9735 MAE=12.86 LR=0.996 (Accepted=20, Rejected=0)
+AmbiLAGE 细化 [30/250] Utility=0.5127 SSIM=0.9728 MAE=11.91 LR=0.984 (Accepted=30, Rejected=0)
+AmbiLAGE 细化 [40/250] Utility=0.5230 SSIM=0.9719 MAE=12.47 LR=0.965 (Accepted=40, Rejected=0)
+AmbiLAGE 细化 [50/250] Utility=0.5302 SSIM=0.9715 MAE=12.63 LR=0.938 (Accepted=50, Rejected=0)
+AmbiLAGE 细化 [60/250] Utility=0.5255 SSIM=0.9714 MAE=11.77 LR=0.905 (Accepted=60, Rejected=0)
+AmbiLAGE 细化 [70/250] Utility=0.5257 SSIM=0.9712 MAE=11.85 LR=0.865 (Accepted=70, Rejected=0)
+AmbiLAGE 细化 [80/250] Utility=0.5270 SSIM=0.9711 MAE=12.03 LR=0.615 (Accepted=80, Rejected=0)
+AmbiLAGE 细化 [90/250] Utility=0.5274 SSIM=0.9713 MAE=11.40 LR=0.578 (Accepted=90, Rejected=0)
+AmbiLAGE 细化 [100/250] Utility=0.5319 SSIM=0.9712 MAE=11.74 LR=0.403 (Accepted=100, Rejected=0)
+AmbiLAGE 细化 [110/250] Utility=0.5343 SSIM=0.9714 MAE=11.21 LR=0.371 (Accepted=110, Rejected=0)
+AmbiLAGE 细化 [120/250] Utility=0.5327 SSIM=0.9710 MAE=12.07 LR=0.338 (Accepted=120, Rejected=0)
+AmbiLAGE 细化 [130/250] Utility=0.5338 SSIM=0.9710 MAE=12.08 LR=0.304 (Accepted=130, Rejected=0)
+AmbiLAGE 细化 [140/250] Utility=0.5374 SSIM=0.9710 MAE=11.91 LR=0.202 (Accepted=140, Rejected=0)
+AmbiLAGE 细化 [150/250] Utility=0.5374 SSIM=0.9711 MAE=11.98 LR=0.178 (Accepted=150, Rejected=0)
+AmbiLAGE 细化 [160/250] Utility=0.5365 SSIM=0.9710 MAE=12.08 LR=0.154 (Accepted=160, Rejected=0)
+AmbiLAGE 细化 [170/250] Utility=0.5377 SSIM=0.9710 MAE=11.95 LR=0.131 (Accepted=170, Rejected=0)
+AmbiLAGE 细化 [180/250] Utility=0.5364 SSIM=0.9711 MAE=11.84 LR=0.082 (Accepted=180, Rejected=0)
+AmbiLAGE 自适应退火收敛早停 [180/250] (min_steps=180, lr_scale=0.0823, best_step=150, best_sel_utility=0.5272)
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  57%|█████▋    | 419/741 [00:00<00:00, 4185.03it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 5493.46it/s]
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  51%|█████▏    | 380/741 [00:00<00:00, 3794.65it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 3972.74it/s]
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+Loading weights:   0%|          | 0/196 [00:00<?, ?it/s]Loading weights: 100%|██████████| 196/196 [00:00<00:00, 2863.15it/s]
+The config attributes {'skip_prk_steps': True} were passed to DDIMInverseScheduler, but are not expected and will be ignored. Please verify your scheduler_config.json configuration file.
+AmbiLAGE 细化 [10/250] Utility=0.4756 SSIM=0.9506 MAE=5.86 LR=1.000 (Accepted=10, Rejected=0)
+AmbiLAGE 细化 [20/250] Utility=0.5113 SSIM=0.9484 MAE=6.28 LR=0.996 (Accepted=20, Rejected=0)
+AmbiLAGE 细化 [30/250] Utility=0.5320 SSIM=0.9492 MAE=5.70 LR=0.984 (Accepted=30, Rejected=0)
+AmbiLAGE 细化 [40/250] Utility=0.5541 SSIM=0.9486 MAE=5.93 LR=0.965 (Accepted=40, Rejected=0)
+AmbiLAGE 细化 [50/250] Utility=0.5738 SSIM=0.9486 MAE=5.91 LR=0.938 (Accepted=50, Rejected=0)
+AmbiLAGE 细化 [60/250] Utility=0.5814 SSIM=0.9484 MAE=6.04 LR=0.905 (Accepted=60, Rejected=0)
+AmbiLAGE 细化 [70/250] Utility=0.5921 SSIM=0.9487 MAE=5.76 LR=0.865 (Accepted=70, Rejected=0)
+AmbiLAGE 细化 [80/250] Utility=0.6057 SSIM=0.9482 MAE=6.00 LR=0.820 (Accepted=80, Rejected=0)
+AmbiLAGE 细化 [90/250] Utility=0.6074 SSIM=0.9488 MAE=5.71 LR=0.770 (Accepted=90, Rejected=0)
+AmbiLAGE 细化 [100/250] Utility=0.6163 SSIM=0.9482 MAE=6.24 LR=0.716 (Accepted=100, Rejected=0)
+AmbiLAGE 细化 [110/250] Utility=0.6197 SSIM=0.9491 MAE=5.72 LR=0.659 (Accepted=110, Rejected=0)
+AmbiLAGE 细化 [120/250] Utility=0.6298 SSIM=0.9485 MAE=6.06 LR=0.600 (Accepted=120, Rejected=0)
+AmbiLAGE 细化 [130/250] Utility=0.6416 SSIM=0.9481 MAE=6.15 LR=0.540 (Accepted=130, Rejected=0)
+AmbiLAGE 细化 [140/250] Utility=0.6435 SSIM=0.9486 MAE=5.81 LR=0.480 (Accepted=140, Rejected=0)
+AmbiLAGE 细化 [150/250] Utility=0.6454 SSIM=0.9486 MAE=5.77 LR=0.421 (Accepted=150, Rejected=0)
+AmbiLAGE 细化 [160/250] Utility=0.6488 SSIM=0.9484 MAE=5.73 LR=0.364 (Accepted=160, Rejected=0)
+AmbiLAGE 细化 [170/250] Utility=0.6581 SSIM=0.9484 MAE=5.81 LR=0.310 (Accepted=170, Rejected=0)
+AmbiLAGE 细化 [180/250] Utility=0.6619 SSIM=0.9484 MAE=5.80 LR=0.260 (Accepted=180, Rejected=0)
+AmbiLAGE 细化 [190/250] Utility=0.6696 SSIM=0.9483 MAE=5.81 LR=0.215 (Accepted=190, Rejected=0)
+AmbiLAGE 细化 [200/250] Utility=0.6706 SSIM=0.9483 MAE=5.83 LR=0.175 (Accepted=200, Rejected=0)
+AmbiLAGE 细化 [210/250] Utility=0.6745 SSIM=0.9483 MAE=5.76 LR=0.142 (Accepted=210, Rejected=0)
+AmbiLAGE 细化 [220/250] Utility=0.6763 SSIM=0.9483 MAE=5.75 LR=0.115 (Accepted=220, Rejected=0)
+AmbiLAGE 细化 [230/250] Utility=0.6779 SSIM=0.9484 MAE=5.68 LR=0.096 (Accepted=230, Rejected=0)
+AmbiLAGE 细化 [240/250] Utility=0.6785 SSIM=0.9484 MAE=5.72 LR=0.084 (Accepted=240, Rejected=0)
+AmbiLAGE 细化 [250/250] Utility=0.6795 SSIM=0.9483 MAE=5.71 LR=0.080 (Accepted=250, Rejected=0)
+=== [Exp3 Step 2/2] Evaluating 9-group 3-encoder transfer panel ===
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+none clean: 前三 3/20；前五 9/20
+none modified: 前三 19/20；前五 19/20
+none clean: 前三 11/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 17/20；前五 19/20
+none modified: 前三 19/20；前五 19/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 4/20；前五 9/20
+none modified: 前三 19/20；前五 19/20
+none clean: 前三 2/20；前五 2/20
+none modified: 前三 17/20；前五 18/20
+none clean: 前三 1/20；前五 2/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 18/20；前五 19/20
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+none clean: 前三 0/20；前五 9/20
+none modified: 前三 10/20；前五 12/20
+none clean: 前三 4/20；前五 20/20
+none modified: 前三 11/20；前五 20/20
+none clean: 前三 15/20；前五 16/20
+none modified: 前三 16/20；前五 17/20
+none clean: 前三 3/20；前五 6/20
+none modified: 前三 6/20；前五 9/20
+none clean: 前三 4/20；前五 7/20
+none modified: 前三 11/20；前五 15/20
+none clean: 前三 0/20；前五 2/20
+none modified: 前三 6/20；前五 11/20
+none clean: 前三 2/20；前五 5/20
+none modified: 前三 6/20；前五 8/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 2/20；前五 5/20
+none clean: 前三 10/20；前五 13/20
+none modified: 前三 8/20；前五 11/20
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+none clean: 前三 4/20；前五 9/20
+none modified: 前三 7/20；前五 12/20
+none clean: 前三 5/20；前五 19/20
+none modified: 前三 18/20；前五 20/20
+none clean: 前三 16/20；前五 17/20
+none modified: 前三 17/20；前五 19/20
+none clean: 前三 3/20；前五 7/20
+none modified: 前三 8/20；前五 8/20
+none clean: 前三 1/20；前五 4/20
+none modified: 前三 10/20；前五 15/20
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 2/20；前五 3/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 3/20；前五 5/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 1/20；前五 2/20
+none clean: 前三 9/20；前五 11/20
+none modified: 前三 10/20；前五 12/20
+{
+  "output": "output/ambilage_single_clip_l14_9groups_20261118/transfer_panel_9groups",
+  "method": "ambilage",
+  "key_mode": "image",
+  "query_suite": "training_oracle",
+  "encoders": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 14.083333333333334,
+      "mean_rank_modified": 1.4833333333333334,
+      "mean_rank_gain": 12.6,
+      "top1": {
+        "clean_hits": 16,
+        "modified_hits": 167,
+        "clean_rate": 0.08888888888888889,
+        "modified_rate": 0.9277777777777778,
+        "gain": 0.8388888888888889,
+        "new_hits": 152,
+        "lost_hits": 1
+      },
+      "top3": {
+        "clean_hits": 39,
+        "modified_hits": 172,
+        "clean_rate": 0.21666666666666667,
+        "modified_rate": 0.9555555555555556,
+        "gain": 0.7388888888888889,
+        "new_hits": 135,
+        "lost_hits": 2
+      },
+      "top5": {
+        "clean_hits": 63,
+        "modified_hits": 174,
+        "clean_rate": 0.35,
+        "modified_rate": 0.9666666666666667,
+        "gain": 0.6166666666666667,
+        "new_hits": 113,
+        "lost_hits": 2
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 12.46111111111111,
+      "mean_rank_modified": 7.083333333333333,
+      "mean_rank_gain": 5.377777777777778,
+      "top1": {
+        "clean_hits": 21,
+        "modified_hits": 33,
+        "clean_rate": 0.11666666666666667,
+        "modified_rate": 0.18333333333333332,
+        "gain": 0.06666666666666667,
+        "new_hits": 15,
+        "lost_hits": 3
+      },
+      "top3": {
+        "clean_hits": 39,
+        "modified_hits": 76,
+        "clean_rate": 0.21666666666666667,
+        "modified_rate": 0.4222222222222222,
+        "gain": 0.20555555555555555,
+        "new_hits": 40,
+        "lost_hits": 3
+      },
+      "top5": {
+        "clean_hits": 79,
+        "modified_hits": 108,
+        "clean_rate": 0.4388888888888889,
+        "modified_rate": 0.6,
+        "gain": 0.16111111111111112,
+        "new_hits": 32,
+        "lost_hits": 3
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 13.744444444444444,
+      "mean_rank_modified": 7.9944444444444445,
+      "mean_rank_gain": 5.75,
+      "top1": {
+        "clean_hits": 21,
+        "modified_hits": 48,
+        "clean_rate": 0.11666666666666667,
+        "modified_rate": 0.26666666666666666,
+        "gain": 0.15,
+        "new_hits": 27,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 39,
+        "modified_hits": 76,
+        "clean_rate": 0.21666666666666667,
+        "modified_rate": 0.4222222222222222,
+        "gain": 0.20555555555555555,
+        "new_hits": 39,
+        "lost_hits": 2
+      },
+      "top5": {
+        "clean_hits": 71,
+        "modified_hits": 96,
+        "clean_rate": 0.39444444444444443,
+        "modified_rate": 0.5333333333333333,
+        "gain": 0.1388888888888889,
+        "new_hits": 26,
+        "lost_hits": 1
+      }
+    }
+  },
+  "report_path": "/content/AmbiLAGE/output/ambilage_single_clip_l14_9groups_20261118/transfer_panel_9groups/TRANSFER_PANEL_REPORT.md"
+}
+=== [Exp3 Final] Syncing outputs to Google Drive ===
+=== Exp3 COMPLETE ===

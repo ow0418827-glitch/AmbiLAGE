@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "natural": true,
+  "text_preserved": true,
+  "artifact_free": true,
+  "reasons": [
+    "strict_mathematical_naturalness_gate_passed"
+  ],
+  "category": "hair extensions",
+  "metrics": {
+    "source_ssim": 0.8999644105964889,
+    "rgb_source_ssim": 0.8999644105964889,
+    "luma_source_ssim": 0.9232069658381806,
+    "source_mae_levels": 7.855255603790283,
+    "rgb_source_mae_levels": 7.855255603790283,
+    "luma_source_mae_levels": 7.682003021240234,
+    "fg_rgb_source_mae_levels": 7.522510051727295,
+    "fg_chroma_tv_levels": 1.9612504243850708,
+    "halo_error": 2.844442129135132,
+    "roi_max_abs_diff": 0.0
+  },
+  "thresholds": {
+    "source_ssim_floor": 0.85,
+    "source_mae_ceiling": 22.0,
+    "fg_source_mae_ceiling": 10.0,
+    "fg_chroma_tv_ceiling": 2.5,
+    "halo_ceiling": 10.0,
+    "roi_max_abs_diff": 0.0
+  },
+  "model": "mathematical_rgb_oklab_dual_gate_v2",
+  "precision": "float32",
+  "candidate_sha256": "dba13c7141b0f54d3d4f659b82c0c7f0cd91c68c80b84193d7030002f6781329"
+}

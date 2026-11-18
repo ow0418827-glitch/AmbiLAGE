@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "natural": true,
+  "text_preserved": true,
+  "artifact_free": true,
+  "reasons": [
+    "strict_mathematical_naturalness_gate_passed"
+  ],
+  "category": "security camera",
+  "metrics": {
+    "source_ssim": 0.9656990643266259,
+    "rgb_source_ssim": 0.9656990643266259,
+    "luma_source_ssim": 0.9734052113786764,
+    "source_mae_levels": 9.939018249511719,
+    "rgb_source_mae_levels": 9.939018249511719,
+    "luma_source_mae_levels": 8.11093807220459,
+    "fg_rgb_source_mae_levels": 5.315140724182129,
+    "fg_chroma_tv_levels": 0.9295387268066406,
+    "halo_error": 2.287775993347168,
+    "roi_max_abs_diff": 0.0
+  },
+  "thresholds": {
+    "source_ssim_floor": 0.85,
+    "source_mae_ceiling": 22.0,
+    "fg_source_mae_ceiling": 10.0,
+    "fg_chroma_tv_ceiling": 2.5,
+    "halo_ceiling": 10.0,
+    "roi_max_abs_diff": 0.0
+  },
+  "model": "mathematical_rgb_oklab_dual_gate_v2",
+  "precision": "float32",
+  "candidate_sha256": "5d31f6ee75c38b65d7c391fc4e43334c6557fcca69c49e2f6e1b37819e415a45"
+}

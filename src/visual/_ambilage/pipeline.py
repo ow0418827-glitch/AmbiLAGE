@@ -226,7 +226,7 @@ class AmbiLAGEPipeline:
             if self.config.candidate_cache_dir:
                 c_path = Path(self.config.candidate_cache_dir).expanduser()
                 resolved_cache_dir = str((c_path if c_path.is_absolute() else PROJECT / c_path).resolve())
-            elif training_bundle is not None and self.config.smoke_test:
+            elif training_bundle is not None:
                 resolved_cache_dir = str((root / 'candidate_cache').resolve())
             objective = SequentialEnsembleObjective(
                 surrogates,

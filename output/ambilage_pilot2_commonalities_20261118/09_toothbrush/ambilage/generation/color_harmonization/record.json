@@ -1,0 +1,41 @@
+{
+  "status": "completed",
+  "stage": "illumination_harmonization",
+  "blend_mode": "matte",
+  "selected_rgb": [
+    175,
+    212,
+    221
+  ],
+  "bg_studio_target_rgb": [
+    237,
+    240,
+    238
+  ],
+  "bg_strength": 0.85,
+  "strength": 1.0,
+  "selected_color_mix": 0.12,
+  "smoothing_sigma": 12.0,
+  "chosen_fraction": 1.0,
+  "line_search_steps": 32,
+  "source_ssim": 0.9898195111576019,
+  "source_mae_levels": 11.404269218444824,
+  "fg_rgb_source_mae_levels": 5.917657852172852,
+  "halo_error": 3.272005796432495,
+  "ink_core_pixels": 2833,
+  "substrate_pixels": 99,
+  "max_body_change_levels": 60,
+  "mean_body_change_levels": 5.917657933019279,
+  "max_bg_change_levels": 15,
+  "mean_bg_change_levels": 13.271221454394045,
+  "roi_change_levels": 0,
+  "zero_pixel_residual": true,
+  "generator": {
+    "model": "perceptual_illumination_line_search_v1",
+    "chosen_fraction": 1.0,
+    "line_search_steps": 32
+  },
+  "trials_evaluated": 1,
+  "anchor_path": "/content/AmbiLAGE/output/ambilage_pilot2_commonalities_20261118/09_toothbrush/ambilage/generation/color_harmonization/generative_anchor.png",
+  "anchor_sha256": "7bea2fc017ad98af4017b034e079e0cc83cf05acd92356e21e544c3bc53f1f1a"
+}

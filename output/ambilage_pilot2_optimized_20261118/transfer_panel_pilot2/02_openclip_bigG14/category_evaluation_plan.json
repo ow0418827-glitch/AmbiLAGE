@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "protocol": "visual_inception_training_oracle_v1",
+  "query_suite": "training_oracle",
+  "method": "ambilage",
+  "query_mode": "text",
+  "key_mode": "image",
+  "key_image_weight": 1.0,
+  "defense_mode": "none",
+  "selected_conditions": [
+    {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    }
+  ],
+  "base_path": "/content/AmbiLAGE/resources/evaluation_base",
+  "base_manifest_sha256": "ad8370e3e32ab4fa85a079adc1980586c5e0e4b664ea652a166d5b54472283a1",
+  "query_root": "/content/AmbiLAGE/resources/visual_inception_evaluation/training_queries_oracle_v1",
+  "query_root_manifest_sha256": "2a9a0b3f6625c35f716fd67c2c71767e60a73507aab0f05b879aa670e78be2cf",
+  "query_validation_sha256": "a6ec09e87a1130fccc190d03ed781a78217b8863d3f91c6add83f1ffa57cc23f",
+  "pool_path": "/content/AmbiLAGE/resources/evaluation_base/shared_memory/shared_memory.json",
+  "pool_sha256": "bfd8964a4477b694796787ffe2fc746c5eb19a389c23c904ebccc81975cd77a8",
+  "pool_count": 189,
+  "encoder_config": "/content/AmbiLAGE/src/visual/config/evaluator.clip_bigG14.heldout.json",
+  "encoder_config_sha256": "a7a7da0b205e7f814af790bf6227a055e35795a6e3a3248c1b0f1c07b1eae1ac",
+  "groups": [
+    "07_shampoo",
+    "09_toothbrush"
+  ],
+  "simultaneous_replacement_count": 2,
+  "shared_pool_scope": "simultaneous_2_group_replacement",
+  "shopping_allowed": false,
+  "recommendation_executed": false,
+  "frozen_images": {
+    "07_shampoo": {
+      "image": "/content/AmbiLAGE/output/ambilage_pilot2_optimized_20261118/07_shampoo/ambilage/frozen.png",
+      "image_sha256": "5f97239ab3394681f93ab3948c118547f8832090d78ef182b026d80475906af8",
+      "source_memory_id": "groups9_reference_07_shampoo_B09B63YYCW",
+      "source_id": "B09B63YYCW",
+      "target_id": "B00BDJODWI",
+      "requested_steps": 250,
+      "objective_kind": "sequential_public_joint_text_fg_ot_psi_v4"
+    },
+    "09_toothbrush": {
+      "image": "/content/AmbiLAGE/output/ambilage_pilot2_optimized_20261118/09_toothbrush/ambilage/frozen.png",
+      "image_sha256": "1d89e569b904f7b69e75890f2db7ba3aa054f338d7610e6cc967b527a937b711",
+      "source_memory_id": "groups9_reference_09_toothbrush_B09PNNXYJ4",
+      "source_id": "B09PNNXYJ4",
+      "target_id": "B09J81RMLD",
+      "requested_steps": 250,
+      "objective_kind": "sequential_public_joint_text_fg_ot_psi_v4"
+    }
+  }
+}

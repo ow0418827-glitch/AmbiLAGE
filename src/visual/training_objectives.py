@@ -179,7 +179,7 @@ def pcgrad_merge_gradients(
 def resolve_effective_category_mode(config, training_bundle) -> str:
     raw = str(getattr(config, 'category_data_mode', 'auto') or 'auto')
     if raw == 'auto':
-        return 'category_subspace_hybrid' if training_bundle is not None else 'legacy_target_product'
+        return 'category_commonalities_abstraction' if training_bundle is not None else 'legacy_target_product'
     return raw
 
 

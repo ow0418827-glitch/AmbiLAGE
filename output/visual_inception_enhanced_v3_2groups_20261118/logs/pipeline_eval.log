@@ -1,0 +1,101 @@
+=== Phase 1/4: Generate Visual Inception enhanced_v3 (07_shampoo, 09_toothbrush) at 2026-11-18T02:10:44Z ===
+=== SKIP generate (both FROZEN_IMAGE.json already exist) ===
+VERIFIED frozen 07_shampoo kind=visual_inception_retrieval_semantic_perceptual_hardneg_advquery_v3 max_linf=8 secs=52.17
+VERIFIED frozen 09_toothbrush kind=visual_inception_retrieval_semantic_perceptual_hardneg_advquery_v3 max_linf=8 secs=51.36
+=== Phase 2/4: Official category eval + verify on held-out eval_g14 (key_mode=image, training_oracle) at 2026-11-18T02:10:57Z ===
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+none clean: 前三 4/20；前五 6/20
+none modified: 前三 5/20；前五 6/20
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+none clean: 前三 4/20；前五 9/20
+none modified: 前三 6/20；前五 8/20
+{
+  "output": "/content/AmbiLAGE/output/visual_inception_enhanced_v3_2groups_20261118/eval_training_oracle_image_key/g14_image_key",
+  "query_suite": "training_oracle",
+  "key_mode": "image",
+  "key_image_weight": 1.0,
+  "protocol": "visual_inception_training_oracle_v1",
+  "report_path": "/content/AmbiLAGE/output/visual_inception_enhanced_v3_2groups_20261118/eval_training_oracle_image_key/g14_image_key/REPORT.md",
+  "summary_path": "/content/AmbiLAGE/output/visual_inception_enhanced_v3_2groups_20261118/eval_training_oracle_image_key/g14_image_key/category_retrieval_summary.json",
+  "overall": {
+    "query_count": 40,
+    "mean_rank_clean": 10.425,
+    "mean_rank_modified": 9.8,
+    "mean_rank_gain": 0.625,
+    "top1": {
+      "clean_hits": 3,
+      "modified_hits": 4,
+      "clean_rate": 0.075,
+      "modified_rate": 0.1,
+      "gain": 0.025,
+      "new_hits": 2,
+      "lost_hits": 1
+    },
+    "top3": {
+      "clean_hits": 8,
+      "modified_hits": 11,
+      "clean_rate": 0.2,
+      "modified_rate": 0.275,
+      "gain": 0.075,
+      "new_hits": 4,
+      "lost_hits": 1
+    },
+    "top5": {
+      "clean_hits": 15,
+      "modified_hits": 14,
+      "clean_rate": 0.375,
+      "modified_rate": 0.35,
+      "gain": -0.025,
+      "new_hits": 3,
+      "lost_hits": 4
+    }
+  }
+}
+{
+  "schema_version": 1,
+  "protocol": "visual_inception_training_oracle_v1",
+  "query_suite": "training_oracle",
+  "status": "passed",
+  "groups_verified": 2,
+  "rankings_recomputed": 80,
+  "candidate_scores_recomputed": 15120,
+  "max_score_error": 0.0,
+  "all_candidate_scores_checked": true,
+  "summary_sha256": "a9fb84d49f954afcd6653dc0f78db9221dbd9af21bb021588c8c80a7afd89c92",
+  "groups": {
+    "07_shampoo": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "87ccfd8f710c11e986433a7918b0f31d25dcfa6c5b66468ab1727392496e4b28",
+      "scores_sha256": "af51cdede1ca47b11ca92cf6712865a3257f23f262d6c369c9fc51e74a9d809d"
+    },
+    "09_toothbrush": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "9b5c68ecaa282366c9dc0f9ab3f5869bddb866405dba17e7e0938a6a216cf0da",
+      "scores_sha256": "b3eee2690273ed36acae5397a91f7928b7669ac5776aeb5cf143159ed5516b68"
+    }
+  }
+}
+=== Phase 3/4: Official category eval + verify on held-out ViT-B-32 (key_mode=image, training_oracle) at 2026-11-18T02:20:51Z ===
+Traceback (most recent call last):
+  File "/content/AmbiLAGE/tools/evaluate_visual_inception_category.py", line 9, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/content/AmbiLAGE/src/experiments/visual_inception_category_evaluation.py", line 1064, in main
+    result = evaluate_category_suite(
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/content/AmbiLAGE/src/experiments/visual_inception_category_evaluation.py", line 764, in evaluate_category_suite
+    shared_evaluation.evaluate(
+  File "/content/AmbiLAGE/src/experiments/shared_evaluation.py", line 249, in evaluate
+    encoder = encoder_factory()
+              ^^^^^^^^^^^^^^^^^
+  File "/content/AmbiLAGE/src/experiments/shared_evaluation.py", line 247, in <lambda>
+    encoder_factory = lambda: make_eval_encoder(device, encoder_config,
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/content/AmbiLAGE/src/experiments/shared_evaluation.py", line 376, in make_eval_encoder
+    spec = settings['surrogate']
+           ~~~~~~~~^^^^^^^^^^^^^
+KeyError: 'surrogate'

@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-11-14T06:16:25.425915+00:00",
+  "checked_at": "2026-11-18T00:42:34.536222+00:00",
   "code": {
-    "python_files_parsed": 131,
-    "model_manifest_entries": 15,
+    "python_files_parsed": 164,
+    "model_manifest_entries": 17,
     "private_resources_read": false
   },
   "resources": {
@@ -26,16 +26,22 @@
       "torchvision": "0.29.1+cu126",
       "transformers": "5.23.0",
       "diffusers": "0.43.0",
-      "accelerate": "1.15.0",
+      "accelerate": "1.16.0",
       "open-clip-torch": "3.3.0",
+      "safetensors": "0.8.0",
+      "huggingface-hub": "1.33.0",
       "rapidocr-onnxruntime": "1.4.4",
-      "huggingface-hub": "1.33.0"
+      "scikit-image": "0.26.0",
+      "scipy": "1.17.1",
+      "sentence-transformers": "5.7.0"
     },
-    "disk_free_gib": 98.73,
+    "disk_free_gib": 192.52,
     "cuda_available": true,
-    "cuda_device": "NVIDIA A100-SXM4-80GB",
-    "vram_gib": 79.25,
-    "bf16_supported": true
+    "cuda_device": "NVIDIA L4",
+    "vram_gib": 22.03,
+    "bf16_supported": true,
+    "recommended_dtype": "bfloat16",
+    "fp32_fallback_compatible": true
   },
   "training_surrogates": {
     "schema_version": 1,
@@ -78,44 +84,94 @@
   "models": {
     "sam2": {
       "present": true,
-      "repo_id": "facebook/sam2.1-hiera-large"
-    },
-    "planner": {
-      "present": true,
-      "repo_id": "Qwen/Qwen2.5-VL-32B-Instruct"
+      "repo_id": "facebook/sam2.1-hiera-large",
+      "role": "segmentation",
+      "snapshot_files_verified": 7,
+      "content_hashes_verified": true
     },
     "editor": {
       "present": true,
-      "repo_id": "black-forest-labs/FLUX.1-Kontext-dev"
+      "repo_id": "black-forest-labs/FLUX.1-Kontext-dev",
+      "role": "stage4_16_channel_flux_vae",
+      "allow_patterns": [
+        "vae/*",
+        "model_index.json",
+        "*.md",
+        "LICENSE*"
+      ],
+      "snapshot_files_verified": 5,
+      "content_hashes_verified": true
     },
     "purifier": {
       "present": true,
-      "repo_id": "stable-diffusion-v1-5/stable-diffusion-v1-5"
+      "repo_id": "stable-diffusion-v1-5/stable-diffusion-v1-5",
+      "role": "differentiable_ddim_purification",
+      "snapshot_files_verified": 20,
+      "content_hashes_verified": true
     },
     "clip_b16": {
       "present": true,
-      "repo_id": "timm/vit_base_patch16_clip_224.openai"
+      "repo_id": "timm/vit_base_patch16_clip_224.openai",
+      "role": "training_surrogate",
+      "snapshot_files_verified": 9,
+      "content_hashes_verified": true
     },
     "clip_b32": {
       "present": true,
-      "repo_id": "timm/vit_base_patch32_clip_224.openai"
+      "repo_id": "timm/vit_base_patch32_clip_224.openai",
+      "role": "lucid_surrogate",
+      "snapshot_files_verified": 9,
+      "content_hashes_verified": true
     },
     "clip_b32_laion": {
       "present": true,
-      "repo_id": "laion/CLIP-ViT-B-32-laion2B-s34B-b79K"
+      "repo_id": "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
+      "role": "lucid_surrogate",
+      "snapshot_files_verified": 10,
+      "content_hashes_verified": true
     },
     "eval_g14": {
       "present": true,
-      "repo_id": "laion/CLIP-ViT-g-14-laion2B-s12B-b42K"
+      "repo_id": "laion/CLIP-ViT-g-14-laion2B-s12B-b42K",
+      "role": "held_out_evaluator_only",
+      "snapshot_files_verified": 10,
+      "content_hashes_verified": true
     },
     "eval_gme": {
       "present": false,
-      "repo_id": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+      "repo_id": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+      "role": "held_out_evaluator_only"
+    },
+    "eval_purifier_sd21": {
+      "present": false,
+      "repo_id": "sd2-community/stable-diffusion-2-1-base",
+      "role": "held_out_cognitiveguard_system1_purifier_only",
+      "allow_patterns": [
+        "model_index.json",
+        "scheduler/*",
+        "text_encoder/config.json",
+        "text_encoder/model.safetensors",
+        "tokenizer/*",
+        "unet/config.json",
+        "unet/diffusion_pytorch_model.safetensors",
+        "vae/config.json",
+        "vae/diffusion_pytorch_model.safetensors",
+        "LICENSE*",
+        "README.md"
+      ]
     },
     "selection": {
       "present": true,
-      "repo_id": "facebook/dinov2-small"
+      "repo_id": "facebook/dinov2-small",
+      "role": "frozen_public_grayscale_shape_gate",
+      "snapshot_files_verified": 4,
+      "content_hashes_verified": true
     }
   },
+  "optional_models_skipped": [
+    "planner",
+    "planner_7b",
+    "editor_qwen"
+  ],
   "remote_model_execution_verified": false
 }

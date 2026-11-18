@@ -1,0 +1,157 @@
+=== [1/4] AmbiLAGE v3 training_oracle key_mode=image (ViT-g-14) at 2026-11-18T00:44:51Z ===
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+none clean: 前三 4/20；前五 6/20
+none modified: 前三 8/20；前五 8/20
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+none clean: 前三 4/20；前五 9/20
+none modified: 前三 9/20；前五 14/20
+{
+  "output": "/content/AmbiLAGE/output/ambilage_v3_20261116_training_oracle_image_key_eval/g14_image_key",
+  "query_suite": "training_oracle",
+  "key_mode": "image",
+  "key_image_weight": 1.0,
+  "protocol": "visual_inception_training_oracle_v1",
+  "report_path": "/content/AmbiLAGE/output/ambilage_v3_20261116_training_oracle_image_key_eval/g14_image_key/REPORT.md",
+  "summary_path": "/content/AmbiLAGE/output/ambilage_v3_20261116_training_oracle_image_key_eval/g14_image_key/category_retrieval_summary.json",
+  "overall": {
+    "query_count": 40,
+    "mean_rank_clean": 10.425,
+    "mean_rank_modified": 7.35,
+    "mean_rank_gain": 3.075,
+    "top1": {
+      "clean_hits": 3,
+      "modified_hits": 9,
+      "clean_rate": 0.075,
+      "modified_rate": 0.225,
+      "gain": 0.15,
+      "new_hits": 6,
+      "lost_hits": 0
+    },
+    "top3": {
+      "clean_hits": 8,
+      "modified_hits": 17,
+      "clean_rate": 0.2,
+      "modified_rate": 0.425,
+      "gain": 0.225,
+      "new_hits": 9,
+      "lost_hits": 0
+    },
+    "top5": {
+      "clean_hits": 15,
+      "modified_hits": 22,
+      "clean_rate": 0.375,
+      "modified_rate": 0.55,
+      "gain": 0.175,
+      "new_hits": 7,
+      "lost_hits": 0
+    }
+  }
+}
+=== [2/4] Verify AmbiLAGE v3 (ViT-g-14) at 2026-11-18T00:50:42Z ===
+{
+  "schema_version": 1,
+  "protocol": "visual_inception_training_oracle_v1",
+  "query_suite": "training_oracle",
+  "status": "passed",
+  "groups_verified": 2,
+  "rankings_recomputed": 80,
+  "candidate_scores_recomputed": 15120,
+  "max_score_error": 0.0,
+  "all_candidate_scores_checked": true,
+  "summary_sha256": "dd653f3a01fd4d9c1cf0fea556aea8b0d55c9370871f07091cd15e53b145a59c",
+  "groups": {
+    "07_shampoo": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "6d3708c5ba4b98ef2a05b35ab7c3cddb7982e78669b7479a21cf5a2338a35d33",
+      "scores_sha256": "87426a3fb51512dd8ed3d1813911b8f6b89331d671e5e48747de6085953a75e8"
+    },
+    "09_toothbrush": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "a6aa69b2bd142eb61b2a000e04a2207f719049cdce99c55143817e2afffb60f7",
+      "scores_sha256": "7648a4484974e62e3234849d867516aed25f5446915c25ceb82b54cbf9d8f33b"
+    }
+  }
+}
+=== [3/4] AmbiLAGE v3 training_oracle key_mode=image (ViT-B-32 matched) at 2026-11-18T00:54:15Z ===
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 1/20
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+none clean: 前三 5/20；前五 5/20
+none modified: 前三 1/20；前五 2/20
+{
+  "output": "/content/AmbiLAGE/output/ambilage_v3_20261116_training_oracle_image_key_eval/b32_image_key",
+  "query_suite": "training_oracle",
+  "key_mode": "image",
+  "key_image_weight": 1.0,
+  "protocol": "visual_inception_training_oracle_v1",
+  "report_path": "/content/AmbiLAGE/output/ambilage_v3_20261116_training_oracle_image_key_eval/b32_image_key/REPORT.md",
+  "summary_path": "/content/AmbiLAGE/output/ambilage_v3_20261116_training_oracle_image_key_eval/b32_image_key/category_retrieval_summary.json",
+  "overall": {
+    "query_count": 40,
+    "mean_rank_clean": 16.6,
+    "mean_rank_modified": 17.1,
+    "mean_rank_gain": -0.5,
+    "top1": {
+      "clean_hits": 0,
+      "modified_hits": 0,
+      "clean_rate": 0.0,
+      "modified_rate": 0.0,
+      "gain": 0.0,
+      "new_hits": 0,
+      "lost_hits": 0
+    },
+    "top3": {
+      "clean_hits": 5,
+      "modified_hits": 1,
+      "clean_rate": 0.125,
+      "modified_rate": 0.025,
+      "gain": -0.1,
+      "new_hits": 0,
+      "lost_hits": 4
+    },
+    "top5": {
+      "clean_hits": 5,
+      "modified_hits": 3,
+      "clean_rate": 0.125,
+      "modified_rate": 0.075,
+      "gain": -0.05,
+      "new_hits": 1,
+      "lost_hits": 3
+    }
+  }
+}
+=== [4/4] Verify AmbiLAGE v3 (ViT-B-32 matched) at 2026-11-18T00:56:04Z ===
+{
+  "schema_version": 1,
+  "protocol": "visual_inception_training_oracle_v1",
+  "query_suite": "training_oracle",
+  "status": "passed",
+  "groups_verified": 2,
+  "rankings_recomputed": 80,
+  "candidate_scores_recomputed": 15120,
+  "max_score_error": 0.0,
+  "all_candidate_scores_checked": true,
+  "summary_sha256": "cffbe8273af56d518844abe2bd046496cd06979041fad456cc9fc0a50f473510",
+  "groups": {
+    "07_shampoo": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "28c27f0768e7aefc70a170cc0695a235de7290065187acbc5d25f8ff3beac3e5",
+      "scores_sha256": "5a06edb2ea81737e09cd4018a9fd723584265f77dd22e3016391a676fb454941"
+    },
+    "09_toothbrush": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "0778b2944b9f7b0e1802ce3061a26d36bf0fdfbc2ac76b7dc80445042a60e17d",
+      "scores_sha256": "7ba852aa5e37741789391c6d59d7e82db0db30ab47ac0554b6e2c2664a8793ea"
+    }
+  }
+}
+=== ALL V3 IMAGE-KEY EVALUATIONS COMPLETED at 2026-11-18T00:57:05Z ===

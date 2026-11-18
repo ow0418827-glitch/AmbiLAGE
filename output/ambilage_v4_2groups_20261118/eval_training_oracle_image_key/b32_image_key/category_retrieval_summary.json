@@ -1,0 +1,1566 @@
+{
+  "schema_version": 1,
+  "protocol": "visual_inception_training_oracle_v1",
+  "query_suite": "training_oracle",
+  "training_overlap_mode": "oracle_100pct",
+  "method": "ambilage",
+  "query_mode": "text",
+  "key_mode": "image",
+  "key_image_weight": 1.0,
+  "defense_mode": "none",
+  "primary_condition": "none",
+  "group_count": 2,
+  "queries_per_group": 20,
+  "total_queries": 40,
+  "pool_count": 189,
+  "simultaneous_replacement_count": 2,
+  "query_families": [
+    "category_description",
+    "model_paraphrase",
+    "heldout_search_query"
+  ],
+  "query_family_labels_zh": {
+    "category_description": "同类商品公开描述(50%)",
+    "model_paraphrase": "模型改写查询(30%)",
+    "heldout_search_query": "独立真实搜索查询(20%)"
+  },
+  "overall": {
+    "query_count": 40,
+    "mean_rank_clean": 16.6,
+    "mean_rank_modified": 16.725,
+    "mean_rank_gain": -0.125,
+    "top1": {
+      "clean_hits": 0,
+      "modified_hits": 0,
+      "clean_rate": 0.0,
+      "modified_rate": 0.0,
+      "gain": 0.0,
+      "new_hits": 0,
+      "lost_hits": 0
+    },
+    "top3": {
+      "clean_hits": 5,
+      "modified_hits": 2,
+      "clean_rate": 0.125,
+      "modified_rate": 0.05,
+      "gain": -0.075,
+      "new_hits": 0,
+      "lost_hits": 3
+    },
+    "top5": {
+      "clean_hits": 5,
+      "modified_hits": 5,
+      "clean_rate": 0.125,
+      "modified_rate": 0.125,
+      "gain": 0.0,
+      "new_hits": 1,
+      "lost_hits": 1
+    }
+  },
+  "by_family": {
+    "category_description": {
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "query_count": 20,
+      "mean_rank_clean": 12.75,
+      "mean_rank_modified": 12.5,
+      "mean_rank_gain": 0.25,
+      "top1": {
+        "clean_hits": 0,
+        "modified_hits": 0,
+        "clean_rate": 0.0,
+        "modified_rate": 0.0,
+        "gain": 0.0,
+        "new_hits": 0,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 4,
+        "modified_hits": 2,
+        "clean_rate": 0.2,
+        "modified_rate": 0.1,
+        "gain": -0.1,
+        "new_hits": 0,
+        "lost_hits": 2
+      },
+      "top5": {
+        "clean_hits": 4,
+        "modified_hits": 5,
+        "clean_rate": 0.2,
+        "modified_rate": 0.25,
+        "gain": 0.05,
+        "new_hits": 1,
+        "lost_hits": 0
+      }
+    },
+    "model_paraphrase": {
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "query_count": 12,
+      "mean_rank_clean": 22.916666666666668,
+      "mean_rank_modified": 22.416666666666668,
+      "mean_rank_gain": 0.5,
+      "top1": {
+        "clean_hits": 0,
+        "modified_hits": 0,
+        "clean_rate": 0.0,
+        "modified_rate": 0.0,
+        "gain": 0.0,
+        "new_hits": 0,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 1,
+        "modified_hits": 0,
+        "clean_rate": 0.08333333333333333,
+        "modified_rate": 0.0,
+        "gain": -0.08333333333333333,
+        "new_hits": 0,
+        "lost_hits": 1
+      },
+      "top5": {
+        "clean_hits": 1,
+        "modified_hits": 0,
+        "clean_rate": 0.08333333333333333,
+        "modified_rate": 0.0,
+        "gain": -0.08333333333333333,
+        "new_hits": 0,
+        "lost_hits": 1
+      }
+    },
+    "heldout_search_query": {
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "query_count": 8,
+      "mean_rank_clean": 16.75,
+      "mean_rank_modified": 18.75,
+      "mean_rank_gain": -2.0,
+      "top1": {
+        "clean_hits": 0,
+        "modified_hits": 0,
+        "clean_rate": 0.0,
+        "modified_rate": 0.0,
+        "gain": 0.0,
+        "new_hits": 0,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 0,
+        "modified_hits": 0,
+        "clean_rate": 0.0,
+        "modified_rate": 0.0,
+        "gain": 0.0,
+        "new_hits": 0,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 0,
+        "modified_hits": 0,
+        "clean_rate": 0.0,
+        "modified_rate": 0.0,
+        "gain": 0.0,
+        "new_hits": 0,
+        "lost_hits": 0
+      }
+    }
+  },
+  "by_condition": {
+    "none": {
+      "overall": {
+        "query_count": 40,
+        "mean_rank_clean": 16.6,
+        "mean_rank_modified": 16.725,
+        "mean_rank_gain": -0.125,
+        "top1": {
+          "clean_hits": 0,
+          "modified_hits": 0,
+          "clean_rate": 0.0,
+          "modified_rate": 0.0,
+          "gain": 0.0,
+          "new_hits": 0,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 5,
+          "modified_hits": 2,
+          "clean_rate": 0.125,
+          "modified_rate": 0.05,
+          "gain": -0.075,
+          "new_hits": 0,
+          "lost_hits": 3
+        },
+        "top5": {
+          "clean_hits": 5,
+          "modified_hits": 5,
+          "clean_rate": 0.125,
+          "modified_rate": 0.125,
+          "gain": 0.0,
+          "new_hits": 1,
+          "lost_hits": 1
+        }
+      },
+      "by_family": {
+        "category_description": {
+          "query_family": "category_description",
+          "query_family_zh": "同类商品公开描述(50%)",
+          "query_count": 20,
+          "mean_rank_clean": 12.75,
+          "mean_rank_modified": 12.5,
+          "mean_rank_gain": 0.25,
+          "top1": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 4,
+            "modified_hits": 2,
+            "clean_rate": 0.2,
+            "modified_rate": 0.1,
+            "gain": -0.1,
+            "new_hits": 0,
+            "lost_hits": 2
+          },
+          "top5": {
+            "clean_hits": 4,
+            "modified_hits": 5,
+            "clean_rate": 0.2,
+            "modified_rate": 0.25,
+            "gain": 0.05,
+            "new_hits": 1,
+            "lost_hits": 0
+          }
+        },
+        "model_paraphrase": {
+          "query_family": "model_paraphrase",
+          "query_family_zh": "模型改写查询(30%)",
+          "query_count": 12,
+          "mean_rank_clean": 22.916666666666668,
+          "mean_rank_modified": 22.416666666666668,
+          "mean_rank_gain": 0.5,
+          "top1": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 1,
+            "modified_hits": 0,
+            "clean_rate": 0.08333333333333333,
+            "modified_rate": 0.0,
+            "gain": -0.08333333333333333,
+            "new_hits": 0,
+            "lost_hits": 1
+          },
+          "top5": {
+            "clean_hits": 1,
+            "modified_hits": 0,
+            "clean_rate": 0.08333333333333333,
+            "modified_rate": 0.0,
+            "gain": -0.08333333333333333,
+            "new_hits": 0,
+            "lost_hits": 1
+          }
+        },
+        "heldout_search_query": {
+          "query_family": "heldout_search_query",
+          "query_family_zh": "独立真实搜索查询(20%)",
+          "query_count": 8,
+          "mean_rank_clean": 16.75,
+          "mean_rank_modified": 18.75,
+          "mean_rank_gain": -2.0,
+          "top1": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          },
+          "top5": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          }
+        }
+      }
+    }
+  },
+  "by_table_group": {
+    "无防御": {
+      "overall": {
+        "query_count": 40,
+        "mean_rank_clean": 16.6,
+        "mean_rank_modified": 16.725,
+        "mean_rank_gain": -0.125,
+        "top1": {
+          "clean_hits": 0,
+          "modified_hits": 0,
+          "clean_rate": 0.0,
+          "modified_rate": 0.0,
+          "gain": 0.0,
+          "new_hits": 0,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 5,
+          "modified_hits": 2,
+          "clean_rate": 0.125,
+          "modified_rate": 0.05,
+          "gain": -0.075,
+          "new_hits": 0,
+          "lost_hits": 3
+        },
+        "top5": {
+          "clean_hits": 5,
+          "modified_hits": 5,
+          "clean_rate": 0.125,
+          "modified_rate": 0.125,
+          "gain": 0.0,
+          "new_hits": 1,
+          "lost_hits": 1
+        }
+      },
+      "by_family": {
+        "category_description": {
+          "query_family": "category_description",
+          "query_family_zh": "同类商品公开描述(50%)",
+          "query_count": 20,
+          "mean_rank_clean": 12.75,
+          "mean_rank_modified": 12.5,
+          "mean_rank_gain": 0.25,
+          "top1": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 4,
+            "modified_hits": 2,
+            "clean_rate": 0.2,
+            "modified_rate": 0.1,
+            "gain": -0.1,
+            "new_hits": 0,
+            "lost_hits": 2
+          },
+          "top5": {
+            "clean_hits": 4,
+            "modified_hits": 5,
+            "clean_rate": 0.2,
+            "modified_rate": 0.25,
+            "gain": 0.05,
+            "new_hits": 1,
+            "lost_hits": 0
+          }
+        },
+        "model_paraphrase": {
+          "query_family": "model_paraphrase",
+          "query_family_zh": "模型改写查询(30%)",
+          "query_count": 12,
+          "mean_rank_clean": 22.916666666666668,
+          "mean_rank_modified": 22.416666666666668,
+          "mean_rank_gain": 0.5,
+          "top1": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 1,
+            "modified_hits": 0,
+            "clean_rate": 0.08333333333333333,
+            "modified_rate": 0.0,
+            "gain": -0.08333333333333333,
+            "new_hits": 0,
+            "lost_hits": 1
+          },
+          "top5": {
+            "clean_hits": 1,
+            "modified_hits": 0,
+            "clean_rate": 0.08333333333333333,
+            "modified_rate": 0.0,
+            "gain": -0.08333333333333333,
+            "new_hits": 0,
+            "lost_hits": 1
+          }
+        },
+        "heldout_search_query": {
+          "query_family": "heldout_search_query",
+          "query_family_zh": "独立真实搜索查询(20%)",
+          "query_count": 8,
+          "mean_rank_clean": 16.75,
+          "mean_rank_modified": 18.75,
+          "mean_rank_gain": -2.0,
+          "top1": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          },
+          "top5": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          }
+        }
+      }
+    }
+  },
+  "groups": {
+    "07_shampoo": {
+      "group": "07_shampoo",
+      "category": "shampoo",
+      "target_public_id": "B00BDJODWI",
+      "source_memory_id": "groups9_reference_07_shampoo_B09B63YYCW",
+      "overall": {
+        "query_count": 20,
+        "mean_rank_clean": 20.85,
+        "mean_rank_modified": 17.6,
+        "mean_rank_gain": 3.25,
+        "top1": {
+          "clean_hits": 0,
+          "modified_hits": 0,
+          "clean_rate": 0.0,
+          "modified_rate": 0.0,
+          "gain": 0.0,
+          "new_hits": 0,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 0,
+          "modified_hits": 0,
+          "clean_rate": 0.0,
+          "modified_rate": 0.0,
+          "gain": 0.0,
+          "new_hits": 0,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 0,
+          "modified_hits": 1,
+          "clean_rate": 0.0,
+          "modified_rate": 0.05,
+          "gain": 0.05,
+          "new_hits": 1,
+          "lost_hits": 0
+        }
+      },
+      "by_family": {
+        "category_description": {
+          "query_family": "category_description",
+          "query_family_zh": "同类商品公开描述(50%)",
+          "query_count": 10,
+          "mean_rank_clean": 20.5,
+          "mean_rank_modified": 17.2,
+          "mean_rank_gain": 3.3,
+          "top1": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          },
+          "top5": {
+            "clean_hits": 0,
+            "modified_hits": 1,
+            "clean_rate": 0.0,
+            "modified_rate": 0.1,
+            "gain": 0.1,
+            "new_hits": 1,
+            "lost_hits": 0
+          }
+        },
+        "model_paraphrase": {
+          "query_family": "model_paraphrase",
+          "query_family_zh": "模型改写查询(30%)",
+          "query_count": 6,
+          "mean_rank_clean": 22.5,
+          "mean_rank_modified": 19.0,
+          "mean_rank_gain": 3.5,
+          "top1": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          },
+          "top5": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          }
+        },
+        "heldout_search_query": {
+          "query_family": "heldout_search_query",
+          "query_family_zh": "独立真实搜索查询(20%)",
+          "query_count": 4,
+          "mean_rank_clean": 19.25,
+          "mean_rank_modified": 16.5,
+          "mean_rank_gain": 2.75,
+          "top1": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          },
+          "top5": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          }
+        }
+      },
+      "by_condition": {
+        "none": {
+          "overall": {
+            "query_count": 20,
+            "mean_rank_clean": 20.85,
+            "mean_rank_modified": 17.6,
+            "mean_rank_gain": 3.25,
+            "top1": {
+              "clean_hits": 0,
+              "modified_hits": 0,
+              "clean_rate": 0.0,
+              "modified_rate": 0.0,
+              "gain": 0.0,
+              "new_hits": 0,
+              "lost_hits": 0
+            },
+            "top3": {
+              "clean_hits": 0,
+              "modified_hits": 0,
+              "clean_rate": 0.0,
+              "modified_rate": 0.0,
+              "gain": 0.0,
+              "new_hits": 0,
+              "lost_hits": 0
+            },
+            "top5": {
+              "clean_hits": 0,
+              "modified_hits": 1,
+              "clean_rate": 0.0,
+              "modified_rate": 0.05,
+              "gain": 0.05,
+              "new_hits": 1,
+              "lost_hits": 0
+            }
+          },
+          "by_family": {
+            "category_description": {
+              "query_family": "category_description",
+              "query_family_zh": "同类商品公开描述(50%)",
+              "query_count": 10,
+              "mean_rank_clean": 20.5,
+              "mean_rank_modified": 17.2,
+              "mean_rank_gain": 3.3,
+              "top1": {
+                "clean_hits": 0,
+                "modified_hits": 0,
+                "clean_rate": 0.0,
+                "modified_rate": 0.0,
+                "gain": 0.0,
+                "new_hits": 0,
+                "lost_hits": 0
+              },
+              "top3": {
+                "clean_hits": 0,
+                "modified_hits": 0,
+                "clean_rate": 0.0,
+                "modified_rate": 0.0,
+                "gain": 0.0,
+                "new_hits": 0,
+                "lost_hits": 0
+              },
+              "top5": {
+                "clean_hits": 0,
+                "modified_hits": 1,
+                "clean_rate": 0.0,
+                "modified_rate": 0.1,
+                "gain": 0.1,
+                "new_hits": 1,
+                "lost_hits": 0
+              }
+            },
+            "model_paraphrase": {
+              "query_family": "model_paraphrase",
+              "query_family_zh": "模型改写查询(30%)",
+              "query_count": 6,
+              "mean_rank_clean": 22.5,
+              "mean_rank_modified": 19.0,
+              "mean_rank_gain": 3.5,
+              "top1": {
+                "clean_hits": 0,
+                "modified_hits": 0,
+                "clean_rate": 0.0,
+                "modified_rate": 0.0,
+                "gain": 0.0,
+                "new_hits": 0,
+                "lost_hits": 0
+              },
+              "top3": {
+                "clean_hits": 0,
+                "modified_hits": 0,
+                "clean_rate": 0.0,
+                "modified_rate": 0.0,
+                "gain": 0.0,
+                "new_hits": 0,
+                "lost_hits": 0
+              },
+              "top5": {
+                "clean_hits": 0,
+                "modified_hits": 0,
+                "clean_rate": 0.0,
+                "modified_rate": 0.0,
+                "gain": 0.0,
+                "new_hits": 0,
+                "lost_hits": 0
+              }
+            },
+            "heldout_search_query": {
+              "query_family": "heldout_search_query",
+              "query_family_zh": "独立真实搜索查询(20%)",
+              "query_count": 4,
+              "mean_rank_clean": 19.25,
+              "mean_rank_modified": 16.5,
+              "mean_rank_gain": 2.75,
+              "top1": {
+                "clean_hits": 0,
+                "modified_hits": 0,
+                "clean_rate": 0.0,
+                "modified_rate": 0.0,
+                "gain": 0.0,
+                "new_hits": 0,
+                "lost_hits": 0
+              },
+              "top3": {
+                "clean_hits": 0,
+                "modified_hits": 0,
+                "clean_rate": 0.0,
+                "modified_rate": 0.0,
+                "gain": 0.0,
+                "new_hits": 0,
+                "lost_hits": 0
+              },
+              "top5": {
+                "clean_hits": 0,
+                "modified_hits": 0,
+                "clean_rate": 0.0,
+                "modified_rate": 0.0,
+                "gain": 0.0,
+                "new_hits": 0,
+                "lost_hits": 0
+              }
+            }
+          },
+          "queries": [
+            {
+              "task_id": "feature_01",
+              "query_id": "07_shampoo_oracle_01",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品公开描述(50%)",
+              "instruction": "OKAY Coconut Hibiscus shampoo is formulated to gently cleanse the scalp while promoting healthy hair growth and strength. This shampoo moisturizes while leaving hair feeling healthy, nourished, and revitalized. OKAY Coconut Hibiscus conditioner provides hydration, and strength to dry, brittle hair. This conditioner restores luster and can help prevent split ends and frizz, leaving hair looking beautiful, strong, soft and healthy with a natural shine.",
+              "instruction_zh": "训练公开描述原句（商品 B08GLB5W72）：OKAY Shampoo & Conditioner Coconut & Hibiscus Hair Care Set Deep Moisturizing | Helps Restore, Hydrate & Strengthen Hair | Sulfate, Silicone, Paraben Free For All Hair Types |Set of 2 x 12oz",
+              "clean_rank": 26,
+              "modified_rank": 19,
+              "rank_gain": 7,
+              "clean_score": 0.24663621187210083,
+              "modified_score": 0.2558279037475586
+            },
+            {
+              "task_id": "feature_02",
+              "query_id": "07_shampoo_oracle_02",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品公开描述(50%)",
+              "instruction": "Pantene�s Advanced Care Moisturizing Shampoo is a powerful, yet gentle hair care product for any hair type � even color treated hair. Formulated with five benefits in one, this shampoo provides moisture, strength against damage, smoothness, lightweight protections and color vibrancy. Plus, it�s gluten free and free from parabens, phthalates, dyes, and mineral oils.",
+              "instruction_zh": "训练公开描述原句（商品 B08HYBPD5Q）：Pantene Advanced Care Shampoo 5 in 1 Pro-vitamin B5 Complex 38.2 Oz",
+              "clean_rank": 6,
+              "modified_rank": 5,
+              "rank_gain": 1,
+              "clean_score": 0.2330555021762848,
+              "modified_score": 0.24436406791210175
+            },
+            {
+              "task_id": "feature_03",
+              "query_id": "07_shampoo_oracle_03",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品公开描述(50%)",
+              "instruction": "KeraCare Dry & Itchy Scalp Moisturizing Shampoo is a superb treatment specifically formulated to alleviate dry and itchy scalp conditions while it cleans hair and scalp. Dry & Itchy Scalp Moisturizing Shampoo eliminates flakiness. With superb moisturizers that help protect the hair and scalp, this shampoo decreases interfiber friction. It's excellent for both natural and chemically treated hair.",
+              "instruction_zh": "训练公开描述原句（商品 B004D9DKVA）：Affirm: KeraCare Dry & Itchy Scalp Moisturizing Shampoo, 8 oz",
+              "clean_rank": 24,
+              "modified_rank": 18,
+              "rank_gain": 6,
+              "clean_score": 0.22065860033035278,
+              "modified_score": 0.2332402914762497
+            },
+            {
+              "task_id": "feature_04",
+              "query_id": "07_shampoo_oracle_04",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品公开描述(50%)",
+              "instruction": "REDEFINING HAIR CARE WITH NATURE AND SCIENCE: Infused with 11 natural ingredients instead of 11 chemicals, Luxliss shampoo and conditioner set cleanses and repairs hair & scalp altogether; with more advanced hydrolyzed proteins, this set will also help to renew health and natural softness for your hair & scalp.\nESPECIALLY FOR BLONDE/SILVER HAIR: This shampoo and conditioner is based on violet color, which can ‘wash away’ unwanted orange, yellow and brass colors of the tangled hair, restore the beautiful shine of your hair, and make it maintain the blonde /sliver-gray/blue-green color after bleaching.\nREPAIR DAMAGED HAIR FROM INSIDE OUT: Contains a variety of natural ingredients such as lavender and blue chamomile essence, soothes scalp pressure furthest, strengthens hair roots, hydrates dry hair, overall balances the hair environments and prevents hair damage.\nWEAKLY ACIDIC FOR HEALTHIER HAIR CARE: The Shampoo and Conditioner is developed with weakly acidic formula, very close to the healthy scalp pH, effortlessly restores the natural protective barrier for your scalp, greatly promotes the deep conditioning treatment for damaged scalp environment.\n100% SATISFACTION GUARANTEED: As the original factory with certificates of GMPC and ISO, customer satisfaction is the top priority for us, hence we are offering 30 day money-back services for our new customers, if you are not satisfied with our products for any reason in the 30 days after shipping, please contact us directly, we will give you a full refund without hesitation.",
+              "instruction_zh": "训练公开描述原句（商品 B08Q77XBC7）：Luxliss Argan Oil Shampoo and Conditioner Set Sulfate Free, Natural Brightening Shampoo & Conditioner for Blonde Hair/Color Treated Hair/Curly Hair/Frizzy Hair/ Dry Scalp Treatment, 2 x16.9Oz",
+              "clean_rank": 6,
+              "modified_rank": 9,
+              "rank_gain": -3,
+              "clean_score": 0.2669011950492859,
+              "modified_score": 0.264242559671402
+            },
+            {
+              "task_id": "feature_05",
+              "query_id": "07_shampoo_oracle_05",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品公开描述(50%)",
+              "instruction": "Straight-from-salon technology to reinforce and repair hair fibers",
+              "instruction_zh": "训练公开描述原句（商品 B0791Y9749）：GLISS Hair Repair Shampoo Fiber Therapy, 13.6 Ounces (Pack of 3)",
+              "clean_rank": 8,
+              "modified_rank": 8,
+              "rank_gain": 0,
+              "clean_score": 0.2834928333759308,
+              "modified_score": 0.2836221158504486
+            },
+            {
+              "task_id": "feature_06",
+              "query_id": "07_shampoo_oracle_06",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品公开描述(50%)",
+              "instruction": "★ THE PERFECT SHAMPOO - NYK1 No Salt or Sulfate, Paraben FREE Shampoo was created to be very gentle but thoroughly cleansing on ALL HAIR TYPES. It is essential, Hair Treatments can't survive long without it! Contains Oil of Coconut to withhold moisture and deep condition to give super soft shiny hair. PROLONG the life of your Hair Protein Smoothing and STRAIGHTENING mask treatments including Brazilian Blow Dry Blowout Keratin Straightener.\n★ USE FOR KERATIN TREATMENTS - This is a Must have Salt, Sodium and Sulfate FREE Shampoo. ALL regular Shampoos contain Salts which will strip the Keratin Treatment from your hair within just a few washes. To reach the 3-4 month lasting potential, protect your treatment with NYK1 Shampoo & Conditioner. Provides great results making you say WOW from your first use. Brilliant Brazilian blowout shampoo sulfate free.\n★ USE FOR COLORED HAIR - Just a few washes with regular Shampoos and Conditioners on Color Treatments will very quickly fade your desired shade to a much paler duller color. Such a waste of time and money. Prolong your treatment with this Salt and Sulfate free Shampoo to avoid stripping the color from your hair! Ideal for blonde, brunette, red, ginger, gray, white and even blue & purple hair colors on both men and women.\n★ USE FOR HAIR EXTENSIONS - To preserve the HAIR, Hair Extensions are put through a process of treatments to coat the natural hair. Regular Shampoos and Conditioners are far too harsh and will disintegrate that coating very quickly, leaving your extensions very dry, itchy, dull and faded. You'll notice that they tangle easily and won't hold their curl for as long as they once did when new. Made to protect your adhesive bonds and prevent them from perishing, becoming loose and falling out.\n★ SULFATE and PARABEN FREE reduces the chances of developing irritation or inflammation that cause itchy scalp and also increases moisture retention by retaining the hair’s natural oils as it is gentle enough not to strip them out. Retain your Keratin, your Hair Bonds, your Permanent Waves & Hair Color in dyed hair for longer periods of time. Proven to prevent the scalp from absorbing harmful chemicals.",
+              "instruction_zh": "训练公开描述原句（商品 B01LLT790C）：SALT SULFATE FREE SHAMPOO for Color Treated Hair (17 Fl Oz / 500ml) Best Hair Aftercare for Extensions (Unisex) Hair Color and Keratin Kit Treatment Straightening Fix Damaged After Care Paraben Free",
+              "clean_rank": 21,
+              "modified_rank": 20,
+              "rank_gain": 1,
+              "clean_score": 0.27319496870040894,
+              "modified_score": 0.2741647958755493
+            },
+            {
+              "task_id": "feature_07",
+              "query_id": "07_shampoo_oracle_07",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品公开描述(50%)",
+              "instruction": "hair care\nparaben free\ncruelty free",
+              "instruction_zh": "训练公开描述原句（商品 B00VAIO8XG）：Macadamia Professional Hair Care Sulfate & Paraben Free Natural Organic Cruelty-Free Vegan Hair Products Ultra Rich Hair Repair Shampoo, 10oz (packaging may vary)",
+              "clean_rank": 33,
+              "modified_rank": 25,
+              "rank_gain": 8,
+              "clean_score": 0.2495034784078598,
+              "modified_score": 0.2605459690093994
+            },
+            {
+              "task_id": "feature_08",
+              "query_id": "07_shampoo_oracle_08",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品公开描述(50%)",
+              "instruction": "Maria Nila Luminous Colour Shampoo 1000ml",
+              "instruction_zh": "训练公开描述原句（商品 B00G6JFV6M）：Maria Nila Luminous Colour Shampoo 1000ml",
+              "clean_rank": 11,
+              "modified_rank": 14,
+              "rank_gain": -3,
+              "clean_score": 0.26245343685150146,
+              "modified_score": 0.2574535310268402
+            },
+            {
+              "task_id": "feature_09",
+              "query_id": "07_shampoo_oracle_09",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品公开描述(50%)",
+              "instruction": "CocoMagic Shampoo, 32 oz. Nourishing Shampoo for All Hair Types | Shine, Volume, and Silky-Smooth Hair Everyday| Large 32 oz Liter Size Infused with hair-strengthening Coconut Oil & Botanical Extracts to deeply moisturize and restore hair’s softness and shine. Free from parabens and gentle enough to use daily. Coconut Oil: multi-tasking, miracle ingredient Contains botanical extracts: Bamboo, Chamomile, Green Tea and Ginseng For all hair types. Paraben-Free. Cruelty-Free Proudly Made in the USA",
+              "instruction_zh": "训练公开描述原句（商品 B07KFPMP18）：CocoMagic Nourishing Shampoo | Coconut Oil and Botanical Extracts | Strengthen, Restore Softness and Shine | Paraben Free, Cruelty Free, Made in USA (32 oz)",
+              "clean_rank": 22,
+              "modified_rank": 18,
+              "rank_gain": 4,
+              "clean_score": 0.26324498653411865,
+              "modified_score": 0.27692335844039917
+            },
+            {
+              "task_id": "feature_10",
+              "query_id": "07_shampoo_oracle_10",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品公开描述(50%)",
+              "instruction": "The combination of fresh and fruity notes, Dark Pomegranate & sandalwood make AXE Anarchy 3-in-1 Shampoo, Conditioner and Body Wash a luxurious addition to your daily shower routine. Let the lather wash and rejuvenate you, keeping you smelling clean all day. To protect against odors no matter what your day brings.",
+              "instruction_zh": "训练公开描述原句（商品 B086M9RW2X）：Axe Anarchy 3-in-1 Shampoo, Conditioner & Body Wash, Dark Pomegranate & Sandalwood Scent, 12 Ounce (Pack of 3)",
+              "clean_rank": 48,
+              "modified_rank": 36,
+              "rank_gain": 12,
+              "clean_score": 0.19345438480377197,
+              "modified_score": 0.20065352320671082
+            },
+            {
+              "task_id": "feature_11",
+              "query_id": "07_shampoo_oracle_11",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "模型改写查询(30%)",
+              "instruction": "Find a pack of six plastic-free, biodegradable shampoo and conditioner bars in lemon, coconut, purple, and orange scents for travel and the whole family.",
+              "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_021，输入商品 B08P9HG48G）",
+              "clean_rank": 39,
+              "modified_rank": 29,
+              "rank_gain": 10,
+              "clean_score": 0.2018028050661087,
+              "modified_score": 0.2129705399274826
+            },
+            {
+              "task_id": "feature_12",
+              "query_id": "07_shampoo_oracle_12",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "模型改写查询(30%)",
+              "instruction": "Find a vegan, cruelty-free shampoo and conditioner set for all hair types with hydrolyzed whey protein, amino acids, panthenol, coconut, and avocado.",
+              "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_028，输入商品 B01MYU55QJ）",
+              "clean_rank": 17,
+              "modified_rank": 17,
+              "rank_gain": 0,
+              "clean_score": 0.26286160945892334,
+              "modified_score": 0.268147736787796
+            },
+            {
+              "task_id": "feature_13",
+              "query_id": "07_shampoo_oracle_13",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "模型改写查询(30%)",
+              "instruction": "Find a paraben-free and cruelty-free hair care shampoo.",
+              "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_016，输入商品 B00VAIO8XG）",
+              "clean_rank": 20,
+              "modified_rank": 19,
+              "rank_gain": 1,
+              "clean_score": 0.2640611529350281,
+              "modified_score": 0.2738882005214691
+            },
+            {
+              "task_id": "feature_14",
+              "query_id": "07_shampoo_oracle_14",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "模型改写查询(30%)",
+              "instruction": "Find a natural, vegan, cruelty-free shampoo for normal to oily hair made with organic lemon, tea tree oil, and SLS-free formula.",
+              "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_009，输入商品 B00YMZAJDW）",
+              "clean_rank": 22,
+              "modified_rank": 19,
+              "rank_gain": 3,
+              "clean_score": 0.23558440804481506,
+              "modified_score": 0.24845626950263977
+            },
+            {
+              "task_id": "feature_15",
+              "query_id": "07_shampoo_oracle_15",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "模型改写查询(30%)",
+              "instruction": "Find a lightweight, sulfate-free and paraben-free hydrating shampoo for dry, fine hair with coconut water, nutrient electrolytes, and coconut oil.",
+              "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_013，输入商品 B00HVKAYL2）",
+              "clean_rank": 20,
+              "modified_rank": 16,
+              "rank_gain": 4,
+              "clean_score": 0.25138241052627563,
+              "modified_score": 0.26822352409362793
+            },
+            {
+              "task_id": "feature_16",
+              "query_id": "07_shampoo_oracle_16",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "模型改写查询(30%)",
+              "instruction": "Find a salt-, sodium-, sulfate-, and paraben-free shampoo for all hair types that helps preserve keratin treatments, hair bonds, color, permanent waves, and extensions.",
+              "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_019，输入商品 B01LLT790C）",
+              "clean_rank": 17,
+              "modified_rank": 14,
+              "rank_gain": 3,
+              "clean_score": 0.27063822746276855,
+              "modified_score": 0.27874237298965454
+            },
+            {
+              "task_id": "feature_17",
+              "query_id": "07_shampoo_oracle_17",
+              "query_family": "heldout_search_query",
+              "query_family_zh": "独立真实搜索查询(20%)",
+              "instruction": "baby curly hair shampoo and conditioner",
+              "instruction_zh": "训练真实搜索原句（esci / esci_train_11876）：baby curly hair shampoo and conditioner",
+              "clean_rank": 29,
+              "modified_rank": 29,
+              "rank_gain": 0,
+              "clean_score": 0.2414284199476242,
+              "modified_score": 0.2410334199666977
+            },
+            {
+              "task_id": "feature_18",
+              "query_id": "07_shampoo_oracle_18",
+              "query_family": "heldout_search_query",
+              "query_family_zh": "独立真实搜索查询(20%)",
+              "instruction": "shampoo for oily hair women",
+              "instruction_zh": "训练真实搜索原句（esci / esci_train_92234）：shampoo for oily hair women",
+              "clean_rank": 12,
+              "modified_rank": 12,
+              "rank_gain": 0,
+              "clean_score": 0.2844865322113037,
+              "modified_score": 0.2842792868614197
+            },
+            {
+              "task_id": "feature_19",
+              "query_id": "07_shampoo_oracle_19",
+              "query_family": "heldout_search_query",
+              "query_family_zh": "独立真实搜索查询(20%)",
+              "instruction": "lice shampoo that kills eggs and lice",
+              "instruction_zh": "训练真实搜索原句（esci / esci_train_62060）：lice shampoo that kills eggs and lice",
+              "clean_rank": 22,
+              "modified_rank": 13,
+              "rank_gain": 9,
+              "clean_score": 0.2266576588153839,
+              "modified_score": 0.24296866357326508
+            },
+            {
+              "task_id": "feature_20",
+              "query_id": "07_shampoo_oracle_20",
+              "query_family": "heldout_search_query",
+              "query_family_zh": "独立真实搜索查询(20%)",
+              "instruction": "lice shampoo",
+              "instruction_zh": "训练真实搜索原句（esci / esci_train_62059）：lice shampoo",
+              "clean_rank": 14,
+              "modified_rank": 12,
+              "rank_gain": 2,
+              "clean_score": 0.2531140148639679,
+              "modified_score": 0.2642199695110321
+            }
+          ]
+        }
+      }
+    },
+    "09_toothbrush": {
+      "group": "09_toothbrush",
+      "category": "toothbrush",
+      "target_public_id": "B09J81RMLD",
+      "source_memory_id": "groups9_reference_09_toothbrush_B09PNNXYJ4",
+      "overall": {
+        "query_count": 20,
+        "mean_rank_clean": 12.35,
+        "mean_rank_modified": 15.85,
+        "mean_rank_gain": -3.5,
+        "top1": {
+          "clean_hits": 0,
+          "modified_hits": 0,
+          "clean_rate": 0.0,
+          "modified_rate": 0.0,
+          "gain": 0.0,
+          "new_hits": 0,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 5,
+          "modified_hits": 2,
+          "clean_rate": 0.25,
+          "modified_rate": 0.1,
+          "gain": -0.15,
+          "new_hits": 0,
+          "lost_hits": 3
+        },
+        "top5": {
+          "clean_hits": 5,
+          "modified_hits": 4,
+          "clean_rate": 0.25,
+          "modified_rate": 0.2,
+          "gain": -0.05,
+          "new_hits": 0,
+          "lost_hits": 1
+        }
+      },
+      "by_family": {
+        "category_description": {
+          "query_family": "category_description",
+          "query_family_zh": "同类商品公开描述(50%)",
+          "query_count": 10,
+          "mean_rank_clean": 5.0,
+          "mean_rank_modified": 7.8,
+          "mean_rank_gain": -2.8,
+          "top1": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 4,
+            "modified_hits": 2,
+            "clean_rate": 0.4,
+            "modified_rate": 0.2,
+            "gain": -0.2,
+            "new_hits": 0,
+            "lost_hits": 2
+          },
+          "top5": {
+            "clean_hits": 4,
+            "modified_hits": 4,
+            "clean_rate": 0.4,
+            "modified_rate": 0.4,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          }
+        },
+        "model_paraphrase": {
+          "query_family": "model_paraphrase",
+          "query_family_zh": "模型改写查询(30%)",
+          "query_count": 6,
+          "mean_rank_clean": 23.333333333333332,
+          "mean_rank_modified": 25.833333333333332,
+          "mean_rank_gain": -2.5,
+          "top1": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 1,
+            "modified_hits": 0,
+            "clean_rate": 0.16666666666666666,
+            "modified_rate": 0.0,
+            "gain": -0.16666666666666666,
+            "new_hits": 0,
+            "lost_hits": 1
+          },
+          "top5": {
+            "clean_hits": 1,
+            "modified_hits": 0,
+            "clean_rate": 0.16666666666666666,
+            "modified_rate": 0.0,
+            "gain": -0.16666666666666666,
+            "new_hits": 0,
+            "lost_hits": 1
+          }
+        },
+        "heldout_search_query": {
+          "query_family": "heldout_search_query",
+          "query_family_zh": "独立真实搜索查询(20%)",
+          "query_count": 4,
+          "mean_rank_clean": 14.25,
+          "mean_rank_modified": 21.0,
+          "mean_rank_gain": -6.75,
+          "top1": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          },
+          "top5": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          }
+        }
+      },
+      "by_condition": {
+        "none": {
+          "overall": {
+            "query_count": 20,
+            "mean_rank_clean": 12.35,
+            "mean_rank_modified": 15.85,
+            "mean_rank_gain": -3.5,
+            "top1": {
+              "clean_hits": 0,
+              "modified_hits": 0,
+              "clean_rate": 0.0,
+              "modified_rate": 0.0,
+              "gain": 0.0,
+              "new_hits": 0,
+              "lost_hits": 0
+            },
+            "top3": {
+              "clean_hits": 5,
+              "modified_hits": 2,
+              "clean_rate": 0.25,
+              "modified_rate": 0.1,
+              "gain": -0.15,
+              "new_hits": 0,
+              "lost_hits": 3
+            },
+            "top5": {
+              "clean_hits": 5,
+              "modified_hits": 4,
+              "clean_rate": 0.25,
+              "modified_rate": 0.2,
+              "gain": -0.05,
+              "new_hits": 0,
+              "lost_hits": 1
+            }
+          },
+          "by_family": {
+            "category_description": {
+              "query_family": "category_description",
+              "query_family_zh": "同类商品公开描述(50%)",
+              "query_count": 10,
+              "mean_rank_clean": 5.0,
+              "mean_rank_modified": 7.8,
+              "mean_rank_gain": -2.8,
+              "top1": {
+                "clean_hits": 0,
+                "modified_hits": 0,
+                "clean_rate": 0.0,
+                "modified_rate": 0.0,
+                "gain": 0.0,
+                "new_hits": 0,
+                "lost_hits": 0
+              },
+              "top3": {
+                "clean_hits": 4,
+                "modified_hits": 2,
+                "clean_rate": 0.4,
+                "modified_rate": 0.2,
+                "gain": -0.2,
+                "new_hits": 0,
+                "lost_hits": 2
+              },
+              "top5": {
+                "clean_hits": 4,
+                "modified_hits": 4,
+                "clean_rate": 0.4,
+                "modified_rate": 0.4,
+                "gain": 0.0,
+                "new_hits": 0,
+                "lost_hits": 0
+              }
+            },
+            "model_paraphrase": {
+              "query_family": "model_paraphrase",
+              "query_family_zh": "模型改写查询(30%)",
+              "query_count": 6,
+              "mean_rank_clean": 23.333333333333332,
+              "mean_rank_modified": 25.833333333333332,
+              "mean_rank_gain": -2.5,
+              "top1": {
+                "clean_hits": 0,
+                "modified_hits": 0,
+                "clean_rate": 0.0,
+                "modified_rate": 0.0,
+                "gain": 0.0,
+                "new_hits": 0,
+                "lost_hits": 0
+              },
+              "top3": {
+                "clean_hits": 1,
+                "modified_hits": 0,
+                "clean_rate": 0.16666666666666666,
+                "modified_rate": 0.0,
+                "gain": -0.16666666666666666,
+                "new_hits": 0,
+                "lost_hits": 1
+              },
+              "top5": {
+                "clean_hits": 1,
+                "modified_hits": 0,
+                "clean_rate": 0.16666666666666666,
+                "modified_rate": 0.0,
+                "gain": -0.16666666666666666,
+                "new_hits": 0,
+                "lost_hits": 1
+              }
+            },
+            "heldout_search_query": {
+              "query_family": "heldout_search_query",
+              "query_family_zh": "独立真实搜索查询(20%)",
+              "query_count": 4,
+              "mean_rank_clean": 14.25,
+              "mean_rank_modified": 21.0,
+              "mean_rank_gain": -6.75,
+              "top1": {
+                "clean_hits": 0,
+                "modified_hits": 0,
+                "clean_rate": 0.0,
+                "modified_rate": 0.0,
+                "gain": 0.0,
+                "new_hits": 0,
+                "lost_hits": 0
+              },
+              "top3": {
+                "clean_hits": 0,
+                "modified_hits": 0,
+                "clean_rate": 0.0,
+                "modified_rate": 0.0,
+                "gain": 0.0,
+                "new_hits": 0,
+                "lost_hits": 0
+              },
+              "top5": {
+                "clean_hits": 0,
+                "modified_hits": 0,
+                "clean_rate": 0.0,
+                "modified_rate": 0.0,
+                "gain": 0.0,
+                "new_hits": 0,
+                "lost_hits": 0
+              }
+            }
+          },
+          "queries": [
+            {
+              "task_id": "feature_01",
+              "query_id": "09_toothbrush_oracle_01",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品公开描述(50%)",
+              "instruction": "DescriptionThis is a children toothbrush, made of high-grade silicone material, safe and durable. Cleaning the surface of the teeth and the internal direction, each brushing can bring a quick and comfortable cleaning experience to the mouth. Features the cartoon donut modeling design, making it attractive for kids.Features-Material: Silicone-High-grade silicone materials, safe and secure, can be used with confidence. -Supple brush head design, does not hurt the mouth, comfortable to use. -Comfortable to hold, the colors are eye-catching, and the baby loves them. -Lovely and unique shape toothbrush, which can attract the attention of your kids.-Compact size and lightweight, and this toothbrush is very convenient to carry.Package Including1 x Kids Toothbrush",
+              "instruction_zh": "训练公开描述原句（商品 B09QKHK4NP）：Healifty Children Toothbrush Soft-bristles Toothbrush Lovely Cartoon Toothbrush Small Head Toothbrush",
+              "clean_rank": 7,
+              "modified_rank": 10,
+              "rank_gain": -3,
+              "clean_score": 0.3107917606830597,
+              "modified_score": 0.2929275333881378
+            },
+            {
+              "task_id": "feature_02",
+              "query_id": "09_toothbrush_oracle_02",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品公开描述(50%)",
+              "instruction": "Features:1. The unique U-shaped brush head is made of food-grade silica gel, which is soft and durable and safe for children.2. The ergonomic U-shaped brush head is suitable for the shape and mechanics of children's tooth structure. Designed for children's delicate gums and sensitive teeth.3. 360-degree soft edges surround the teeth, providing a comfortable brushing feeling, effective deep cleaning, will not harm the gums, and protect children's tooth enamel.4. The interesting design makes it easy and fun for children aged 2 and above to brush their teeth. Attract children to fall in love with brushing their teeth.5. Easy to use. Squeeze the toothpaste and shake it in the mouth to clean the teeth. easy and convenient.   Notice:1.Actual color may be slightly different from the image due to different monitor and light effect2.Please allow 1-3cm deviation due to manual measurement              Description:Material: SiliconeSize: As shownInclude:1 x U-Shaped Toothbrush",
+              "instruction_zh": "训练公开描述原句（商品 B09Q5MBQK3）：Kids Toothbrushes U Shape, Manual Training Tooth Brush, 360 Toothbrush Kids, Extra Soft Toothbrush, Toddler Tooth Brush, Cartoon Teeth Cleaning Tool",
+              "clean_rank": 2,
+              "modified_rank": 3,
+              "rank_gain": -1,
+              "clean_score": 0.33426329493522644,
+              "modified_score": 0.327237069606781
+            },
+            {
+              "task_id": "feature_03",
+              "query_id": "09_toothbrush_oracle_03",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品公开描述(50%)",
+              "instruction": "Let your baby fall in love with brushing!    The front and back of the toothpaste.    Shake the U-shaped toothbrush from side to side.    Just rinse the toothbrush after use.    Material: Silicone+PP    Disinfection method: wash with warm water    Heat resistance temperature: 100°C    Applicable age: 0-12 years old    Type & Size: Small (2~6 years old), Large (6~12 years old)   4 U-shaped toothbrush",
+              "instruction_zh": "训练公开描述原句（商品 B09R1HJWSY）：WSVVMQY 4PC Children’s U-Shape Toothbrush for 360° Thorough Cleansing (A, S)",
+              "clean_rank": 6,
+              "modified_rank": 10,
+              "rank_gain": -4,
+              "clean_score": 0.3050554394721985,
+              "modified_score": 0.2881726622581482
+            },
+            {
+              "task_id": "feature_04",
+              "query_id": "09_toothbrush_oracle_04",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品公开描述(50%)",
+              "instruction": "Description As a parent, what you should do is help your baby develop good oral hygiene habits from an early age. This baby toothbrush can help children develop the habit of brushing their teeth. We use safe materials, and healthy materials reduce the risk of oral injuries. Features- Material: Silicone, PP- Size ( S ): About 12. 00X4. 50X1. 00cm/ 4. 72X1. 77X0. 39inch; ( Suitable age ): 2- 6 years old- Size ( L ): About 12. 00X6. 50X1. 00cm/ 4. 72X2. 55X0. 39inch; ( Suitable age ): 6- 12 years old- Portable and lightweight, this ergonomic toothbrush is easy to carry to where you need.- Waterproof and washable, this toothbrush can be washed with water, keep clean and hygienic.- The size of the toothbrush is appropriate, so your child can easily brush their teeth themselves.- Simple design with beautiful color, ensure its popularity among lovely kids.- It can be used as a practical and thoughtful gift to friends who have children at home. They will definitely be very happy.- Color: Assorted Color- Size: 12X6. 5CM Package Including 2 x Toothbrushes",
+              "instruction_zh": "训练公开描述原句（商品 B09R9T6WYC）：EXCEART 2Pcs Kids Handheld Toothbrush U- Shaped Silicone Toothbrush Children Whitening Waterproof Toothbrush for Toothbrush Training Cleaning",
+              "clean_rank": 2,
+              "modified_rank": 5,
+              "rank_gain": -3,
+              "clean_score": 0.3322048783302307,
+              "modified_score": 0.32178622484207153
+            },
+            {
+              "task_id": "feature_05",
+              "query_id": "09_toothbrush_oracle_05",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品公开描述(50%)",
+              "instruction": "2pcs Children U Shape Toothbrush, Whole Mouth Teeth Brush, All Rounded Oral Cleaning U-Shaped Toothbrush for Kids 2-14 Years, Silicone Bristles Massage Gums2PCS Children U Shape Toothbrush All Rounded U-Shaped Toothbrush Oral Cleaning Toothbrush Great for Children Kids Toddler 2-14 Years OldChildren Toothbrush 360 Degree Teeth Clean Soft Fur Food Grade Material Baby U Shape Toothbrush for Home Description:Cute cartoon shape and ergonomic handle design, the toothbrush is can well attract kids attentions to lead them to love brushing teeth and is effortless to grip, at the same time it can develop their habit of brushing teeth.With the characteristics of U-type head and soft bristles, the toothbrush can be 360 degrees deeply cleaning teeth and gum caring, so it is a perfect gift for your kids.Made of high quality soft glue and PP material, the toothbrush is eco-friendly, BPA free and is harmless to kids' health.Our toothbrush has food grade material and 360 degree teeth clean feature, you don't need to worry about whether our toothbrush will damage your children' health and it can deeply clean your children' teeth.Featuring soft fur and round shape handle design, our toothbrush is easy to use and it can make your children love the feeling of cleaning teeth.This toothbrush is made of silicone.It can cultivate baby's tooth brushing habit and is suitable for kids from 2-14 years old.Item Name: Kids ToothbrushMaterial: PP(Polypropylene),Soft GlueColor: Blue, PinkSuitable Age: 2-14 Years OldFeatures: Non-slip, Gum Care, U-shapedSize:Length Peach Heart : 9cm/3.54\" (Approx.)Length Handle: 12cm/4.72\" (Approx.)Package Includes:2 x Kids Toothbrush",
+              "instruction_zh": "训练公开描述原句（商品 B09JB4K18P）：Kids U-Shaped Whole Mouth Teeth Brush, Silicone Bristles Massage Gums, All-Round Cleaning, 2pcs Children U Shape Toothbrush Oral Cleaning Toothbrush for Children Kids Toddler 2-14 Years Pink+Pink",
+              "clean_rank": 7,
+              "modified_rank": 10,
+              "rank_gain": -3,
+              "clean_score": 0.3272661566734314,
+              "modified_score": 0.3065999746322632
+            },
+            {
+              "task_id": "feature_06",
+              "query_id": "09_toothbrush_oracle_06",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品公开描述(50%)",
+              "instruction": "CUTE AND UNIQUE DESIGN: Octopus design let your children enjoy tooth brushing everyday thus develop good habits when she is young. DIKLA electric toothbrush accompanies the child in a good play at the same time allowing them to clean the teeth and keep oral health.\nCONSIDERATE FEATURES: The Children's Electric Toothbrushes head and handle is covered by food-grade silicone which is soft and totally free of sharp corner, specially designed for child. The 3D bristles is soft enough to fit kids’ gum and teeth.\nTWO MODES FOR DIFFERENT AGES: Gentle mode can clean sensitive teeth and gums in 2 minutes for 3-6 years old; Cleaning mode is suitable for children who are 7-12 year old.\nLONG BATTERY LIFE: The Kids Electric Toothbrush Set is fully charged in 2 hours and can last for 25-30 days. When the battery is running out, the LED light will flash to indicate it is time to charge the electric toothbrush.\nIPX7 WATERPROOF: The children’s toothbrush is capable of IPX7 which makes it possible to be used when bathing. The Sonic Rechargeable Kids Electric Toothbrush works even immersed in water.",
+              "instruction_zh": "训练公开描述原句（商品 B08RD8Z9QV）：Children's Electric Toothbrushes with Octopus Design for Kids Aged from 3 to 12 Years Old, 2 Modes with Memory & 20000 to 31000 SPM, IPX7 Waterproof, Fun & Easy Cleaning Design (Blue)",
+              "clean_rank": 8,
+              "modified_rank": 10,
+              "rank_gain": -2,
+              "clean_score": 0.30295243859291077,
+              "modified_score": 0.29126250743865967
+            },
+            {
+              "task_id": "feature_07",
+              "query_id": "09_toothbrush_oracle_07",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品公开描述(50%)",
+              "instruction": "100% brand new and high qualityFeatures:High quality of materials.Suitable for kids,which is great for them teeth cleaning training.Soft brush will not hurt baby's teeth.Made of safe and no toxic materials,you can let your baby use it at ease.Specially design for kids,it will comfortable and fit for them.Anti-slip handle will be convenient for baby to hold.Cartoon style will be definitely popular with babies.Small size will be absolutely suitable for baby's hands.1 Piece of baby toothbrush only,other accessories demo in the picture are not included!Specification:Material: Bamboo Fiber/Wheat StrawType: CartoonColor: Random delivery(if you buy more than one,then the type you received will be different or the same)Size: One Size15x1.8cm(5.91x0.71in)For Age: 3-12YQuantity: 1 PieceNote:1.Please allow 1-3cm error due to manual measurement. pls make sure you do not mind before you bid. 2.Due to the difference between different monitors, the picture may not reflect the actual color of the item. Thank you!Package includes(without retail package):1 x Baby Toothbrush",
+              "instruction_zh": "训练公开描述原句（商品 B08TBDTHS1）：caralin Baby Toothbrush Natural Wheat Straw Cartoon Toddler Kid Newborn Dental Oral Care Bamboo Fiber/Wheat Straw Baby Toothbrush",
+              "clean_rank": 2,
+              "modified_rank": 2,
+              "rank_gain": 0,
+              "clean_score": 0.31416940689086914,
+              "modified_score": 0.30658644437789917
+            },
+            {
+              "task_id": "feature_08",
+              "query_id": "09_toothbrush_oracle_08",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品公开描述(50%)",
+              "instruction": "Description:Item Name: Children ToothbrushMaterial: SiliconeFeatures: Eye-catching, Dental Care, Eco-friendly Using Type: Reusable  Applicable Temperature Range: Minus 20 Degrees Celsius to 120 Degrees CelsiusSize Details: Style A/C Toothbrush Size: 9.7cm x 5cm/3.82\" x 1.97\" (Approx.) Style B/D Toothbrush Size: 9.7cm x 6cm/3.82\" x 2.36\" (Approx.)Notes:Due to the light and screen setting difference, the item's color may be slightly different from the pictures.Please allow slight dimension difference due to different manual measurement.Package Includes:1 x Children Toothbrush",
+              "instruction_zh": "训练公开描述原句（商品 B09QCT8FS6）：Baby Manual Silicone Soft Bristle Brushing U-Shape Children Toothbrush Cow Design Silicone Bright Colored Newborn Toothbrush for Home Yellow A",
+              "clean_rank": 8,
+              "modified_rank": 13,
+              "rank_gain": -5,
+              "clean_score": 0.3014933466911316,
+              "modified_score": 0.2852867841720581
+            },
+            {
+              "task_id": "feature_09",
+              "query_id": "09_toothbrush_oracle_09",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品公开描述(50%)",
+              "instruction": "FEATURES:  ✿【Premium Materials】Made of food grade silicone. Safe material, no special smell, baby use more Health. The silicone brush head is resist to high temperature and can be disinfected at ordinary times. ✿【Special U-shaped Design】Different from the traditional toothbrush, we use a unique U-shaped brush head design to fit the teeth better. U-shaped design, more fit the mouth, so that the baby can accept. The baby can brush teeth while playing. ✿【Healthier Care】U-shaped brush head design, 360 °Clean your baby's teeth. It's easier for baby to clean teeth. It can clean teeth from all angles and make oral cavity healthier. ✿【Make Baby Love Brushing】It's easy to use. the toothpaste and shake it in your mouth to clean teeth. Brush head can clean to all angles, so that brushing teeth becomes a simple thing. HOW TO USE:  Shake the toothpaste before use to ensure squeezing even toothpaste.toothpaste to the front and back sides. Shake the U-shape toothbrush to the left and right. Just rinse the toothbrush after use. SPECIFICATIONS: Material: Silicone + PP Disinfection Method: Wash in warm water Heat-resisting Temperature: 100°C Applicable Age：1-8,8-12 years old  PACKAGE INCLUDED:1PC U-shape Toothbrush",
+              "instruction_zh": "训练公开描述原句（商品 B09NRP8DSH）：Lroveb Childrens U-shaped Toothbrush 360° Oral Teeth All-Round Cleaning Toothbrush Cute Cartoon Modeling Design Toothbrush for Kids - Soft Silica Gel Brush Head(Pink)",
+              "clean_rank": 2,
+              "modified_rank": 5,
+              "rank_gain": -3,
+              "clean_score": 0.3442097008228302,
+              "modified_score": 0.33050256967544556
+            },
+            {
+              "task_id": "feature_10",
+              "query_id": "09_toothbrush_oracle_10",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品公开描述(50%)",
+              "instruction": "【Kids Hate Brushing?】AUITRONCARE kids electric toothbrushes is super cute and fun, helps encourage your little one to brush his/her teeth, smart timers help kids develop good brushing habits. 3 ultrasonic cleaning modes (soft 2-6, standard 6+, clean 6+) are suitable for sensitive gums\n【Kids Can't Use Toothbrush】 3.5oz light weight and easily-gripped silicone body make it easy to use for little hands, good size u shaped toothbrush kids heads fit kids little mouth well, help clean all teeth at once\n【Kids Don't Brush Well】The toddler electric toothbrush come with 3 kids toothbrush heads: Mouth-shaped brushing head gets kids excited to use kids electric toothbrush , super soft silicone bristle is good for sensitive teeth and gums; Standard brushing head help kids get thorough cleaning against cavities and plaques. Two brush heads is replaceable\n【Why Choose us?】AUITRONCARE u shaped toothbrush kids adopt ultrasonic bearingless motor instead of pretened coreless motor, it comes with 3 toothbrush heads, equipped with wireless chargering base and dust-free cup, the whole handle is IPX7 waterproof, one 2-hours charge for kids toothbrushes can last 20 days\n【Help Kids Get Easy and Fun Brushing 】 AUITRONCARE kids toothbrushes is super lovely and popular, so you can reduce quarrels with children about brushing teeth, make kids teeth clean and save expensive dentist fees. It is a good choice as a gift for sons/daughters/grandchildren about our kids electric toothbrushes",
+              "instruction_zh": "训练公开描述原句（商品 B088TL63PW）：Kids Electric Toothbrush, Toddler Electric Toothbrush Ultrasonic Toothbrush Come with 3 Brushing Heads and Cup IPX7 Waterproof U Shaped Kids Toothbrushes (Blue)",
+              "clean_rank": 6,
+              "modified_rank": 10,
+              "rank_gain": -4,
+              "clean_score": 0.317297101020813,
+              "modified_score": 0.2986360788345337
+            },
+            {
+              "task_id": "feature_11",
+              "query_id": "09_toothbrush_oracle_11",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "模型改写查询(30%)",
+              "instruction": "Find a 10-piece set of manual plastic toothbrushes with ultra-fine floss-tapered angled bristles for adults, students, and children.",
+              "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_029，输入商品 B08PVNNFMR）",
+              "clean_rank": 12,
+              "modified_rank": 12,
+              "rank_gain": 0,
+              "clean_score": 0.2680360674858093,
+              "modified_score": 0.2611897587776184
+            },
+            {
+              "task_id": "feature_12",
+              "query_id": "09_toothbrush_oracle_12",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "模型改写查询(30%)",
+              "instruction": "Find a waterproof electric U-shaped toothbrush with soft bristles, three brushing modes, a disinfecting chamber, and a wall-mountable handle.",
+              "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_003，输入商品 B09NMBRQS1）",
+              "clean_rank": 13,
+              "modified_rank": 13,
+              "rank_gain": 0,
+              "clean_score": 0.2676050662994385,
+              "modified_score": 0.2657226622104645
+            },
+            {
+              "task_id": "feature_13",
+              "query_id": "09_toothbrush_oracle_13",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "模型改写查询(30%)",
+              "instruction": "Find a bundle made with licensed products.",
+              "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_004，输入商品 B07DLZ34W9）",
+              "clean_rank": 77,
+              "modified_rank": 85,
+              "rank_gain": -8,
+              "clean_score": 0.22765934467315674,
+              "modified_score": 0.22453294694423676
+            },
+            {
+              "task_id": "feature_14",
+              "query_id": "09_toothbrush_oracle_14",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "模型改写查询(30%)",
+              "instruction": "Find a charcoal-infused soft-bristle toothbrush with a tapered brush head and stand-up base, suitable for kids, teens, and adults and available in four colors.",
+              "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_021，输入商品 B09PZVV7TZ）",
+              "clean_rank": 21,
+              "modified_rank": 24,
+              "rank_gain": -3,
+              "clean_score": 0.24738547205924988,
+              "modified_score": 0.23663949966430664
+            },
+            {
+              "task_id": "feature_15",
+              "query_id": "09_toothbrush_oracle_15",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "模型改写查询(30%)",
+              "instruction": "Find a 4-piece set of silicone and PP U-shaped toothbrushes with pink and blue heart and oval styles for ages 0-6 and 6-12.",
+              "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_019，输入商品 B09SBHHJQ2）",
+              "clean_rank": 3,
+              "modified_rank": 7,
+              "rank_gain": -4,
+              "clean_score": 0.3232845067977905,
+              "modified_score": 0.3063677251338959
+            },
+            {
+              "task_id": "feature_16",
+              "query_id": "09_toothbrush_oracle_16",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "模型改写查询(30%)",
+              "instruction": "Find a slim sonic electric toothbrush with IPX7 waterproofing, a non-slip design, a changeable brush head and battery base, and two interchangeable heads.",
+              "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_030，输入商品 B07PS9JDNX）",
+              "clean_rank": 14,
+              "modified_rank": 14,
+              "rank_gain": 0,
+              "clean_score": 0.2623092532157898,
+              "modified_score": 0.25669896602630615
+            },
+            {
+              "task_id": "feature_17",
+              "query_id": "09_toothbrush_oracle_17",
+              "query_family": "heldout_search_query",
+              "query_family_zh": "独立真实搜索查询(20%)",
+              "instruction": "bamboo toothbrush",
+              "instruction_zh": "训练真实搜索原句（esci / esci_train_12893）：bamboo toothbrush",
+              "clean_rank": 18,
+              "modified_rank": 41,
+              "rank_gain": -23,
+              "clean_score": 0.21693606674671173,
+              "modified_score": 0.19344185292720795
+            },
+            {
+              "task_id": "feature_18",
+              "query_id": "09_toothbrush_oracle_18",
+              "query_family": "heldout_search_query",
+              "query_family_zh": "独立真实搜索查询(20%)",
+              "instruction": "disposable toothbrushes without paste",
+              "instruction_zh": "训练真实搜索原句（esci / esci_train_33935）：disposable toothbrushes without paste",
+              "clean_rank": 15,
+              "modified_rank": 15,
+              "rank_gain": 0,
+              "clean_score": 0.2531265914440155,
+              "modified_score": 0.24481630325317383
+            },
+            {
+              "task_id": "feature_19",
+              "query_id": "09_toothbrush_oracle_19",
+              "query_family": "heldout_search_query",
+              "query_family_zh": "独立真实搜索查询(20%)",
+              "instruction": "life without plastic toothbrush",
+              "instruction_zh": "训练真实搜索原句（esci / esci_train_62154）：life without plastic toothbrush",
+              "clean_rank": 15,
+              "modified_rank": 15,
+              "rank_gain": 0,
+              "clean_score": 0.22849221527576447,
+              "modified_score": 0.22899675369262695
+            },
+            {
+              "task_id": "feature_20",
+              "query_id": "09_toothbrush_oracle_20",
+              "query_family": "heldout_search_query",
+              "query_family_zh": "独立真实搜索查询(20%)",
+              "instruction": "kids toothbrush",
+              "instruction_zh": "训练真实搜索原句（esci / esci_train_58043）：kids toothbrush",
+              "clean_rank": 9,
+              "modified_rank": 13,
+              "rank_gain": -4,
+              "clean_score": 0.275005578994751,
+              "modified_score": 0.2616269588470459
+            }
+          ]
+        }
+      }
+    }
+  },
+  "scope_notice": {
+    "retrieval_coverage_only": true,
+    "recommendation_or_shopping_executed": false,
+    "interpretation": "本结果仅反映不同测试查询下的记忆检索覆盖情况（Top-1/Top-3/Top-5 召回与名次变化）；最终推荐或购买决策是否受到影响，须在下游推荐/购物阶段单独验证。"
+  }
+}

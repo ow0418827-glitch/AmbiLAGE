@@ -346,6 +346,43 @@ def load_training_surrogates(device='cuda', config_path=None, *, surrogate_set=N
     return models
 
 
+def _project_centers_to_text_space(
+    surrogate,
+    centers: torch.Tensor,
+    target_dim: int,
+) -> torch.Tensor | None:
+    """将尚未经过视觉线性投影层的前景聚类中心映射至图文联合嵌入空间；不兼容时返回 None。"""
+    if centers.shape[-1] == target_dim:
+        return F.normalize(centers.float(), dim=-1)
+    visual = getattr(getattr(surrogate, 'model', None), 'visual', None)
+    if visual is None:
+        visual = getattr(surrogate, 'visual', None)
+    if visual is None:
+        return None
+    proj = getattr(visual, 'proj', None)
+    if proj is None:
+        return None
+    ln_post = getattr(visual, 'ln_post', None)
+    with torch.no_grad():
+        if isinstance(proj, torch.Tensor):
+            if proj.ndim != 2 or tuple(proj.shape) != (int(centers.shape[-1]), int(target_dim)):
+                return None
+            x = centers.to(device=proj.device, dtype=proj.dtype)
+            if callable(ln_post):
+                x = ln_post(x)
+            projected = x @ proj
+            return F.normalize(projected.to(device=centers.device, dtype=torch.float32), dim=-1)
+        if callable(proj):
+            ref_param = next(proj.parameters(), None) if hasattr(proj, 'parameters') else None
+            x = centers.to(device=ref_param.device, dtype=ref_param.dtype) if ref_param is not None else centers.float()
+            if callable(ln_post):
+                x = ln_post(x)
+            projected = proj(x)
+            if torch.is_tensor(projected) and int(projected.shape[-1]) == int(target_dim):
+                return F.normalize(projected.to(device=centers.device, dtype=torch.float32), dim=-1)
+    return None
+
+
 class PublicFullKeyObjective:
     """匹配源商品公开图文全键至联合目标，并融合三路多粒度文本对齐、球面查询增强与文本加权前景局部 OT。"""
     def __init__(
@@ -452,11 +489,15 @@ class PublicFullKeyObjective:
                     tgt_fg, clusters=self.local_ot_clusters, iterations=self.local_ot_iterations
                 ).detach()
                 if self.local_ot_text_weighted:
-                    center_text_logits = (
-                        (self.target_fg_centers[0] @ self.target_text.T).squeeze(-1)
-                        / max(self.local_ot_text_temperature, 1e-4)
+                    proj_centers = _project_centers_to_text_space(
+                        surrogate, self.target_fg_centers[0], int(self.target_text.shape[-1])
                     )
-                    self.target_fg_center_weights = torch.softmax(center_text_logits, dim=0).detach()
+                    if proj_centers is not None:
+                        center_text_logits = (
+                            (proj_centers @ self.target_text.to(device=proj_centers.device, dtype=proj_centers.dtype).T).squeeze(-1)
+                            / max(self.local_ot_text_temperature, 1e-4)
+                        )
+                        self.target_fg_center_weights = torch.softmax(center_text_logits, dim=0).detach()
 
         self.public_retrieval_state = public_retrieval_state
         self.public_retrieval_weight = (

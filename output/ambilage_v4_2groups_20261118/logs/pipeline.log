@@ -1,0 +1,233 @@
+=== [1/6] Generate AmbiLAGE v4: 07_shampoo at 2026-11-18T01:02:59Z ===
+AmbiLAGE 检测到有效 Stage 3 断点，跳过分割与锚点生成直接恢复 Stage 4
+WARNING:root:No pretrained weights loaded for model 'ViT-B-16'. Model initialized randomly.
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+Loading weights:   0%|          | 0/196 [00:00<?, ?it/s]Loading weights: 100%|██████████| 196/196 [00:00<00:00, 2741.24it/s]
+The config attributes {'skip_prk_steps': True} were passed to DDIMInverseScheduler, but are not expected and will be ignored. Please verify your scheduler_config.json configuration file.
+AmbiLAGE 细化 [10/250] Utility=0.7571 SSIM=0.9646 MAE=6.54 LR=1.000 (Accepted=10, Rejected=0)
+AmbiLAGE 细化 [20/250] Utility=0.7608 SSIM=0.9633 MAE=6.49 LR=0.996 (Accepted=20, Rejected=0)
+AmbiLAGE 细化 [30/250] Utility=0.7634 SSIM=0.9625 MAE=6.47 LR=0.984 (Accepted=30, Rejected=0)
+AmbiLAGE 细化 [40/250] Utility=0.7655 SSIM=0.9622 MAE=6.45 LR=0.965 (Accepted=40, Rejected=0)
+AmbiLAGE 细化 [50/250] Utility=0.7661 SSIM=0.9618 MAE=6.40 LR=0.938 (Accepted=50, Rejected=0)
+AmbiLAGE 细化 [60/250] Utility=0.7655 SSIM=0.9616 MAE=6.42 LR=0.905 (Accepted=60, Rejected=0)
+AmbiLAGE 细化 [70/250] Utility=0.7661 SSIM=0.9618 MAE=6.39 LR=0.649 (Accepted=70, Rejected=0)
+AmbiLAGE 细化 [80/250] Utility=0.7649 SSIM=0.9618 MAE=6.40 LR=0.615 (Accepted=80, Rejected=0)
+AmbiLAGE 细化 [90/250] Utility=0.7648 SSIM=0.9621 MAE=6.39 LR=0.433 (Accepted=90, Rejected=0)
+AmbiLAGE 细化 [100/250] Utility=0.7648 SSIM=0.9623 MAE=6.38 LR=0.403 (Accepted=100, Rejected=0)
+AmbiLAGE 细化 [110/250] Utility=0.7639 SSIM=0.9627 MAE=6.38 LR=0.278 (Accepted=110, Rejected=0)
+AmbiLAGE 细化 [120/250] Utility=0.7625 SSIM=0.9630 MAE=6.37 LR=0.253 (Accepted=120, Rejected=0)
+AmbiLAGE 细化 [130/250] Utility=0.7621 SSIM=0.9635 MAE=6.36 LR=0.171 (Accepted=130, Rejected=0)
+AmbiLAGE 细化 [140/250] Utility=0.7616 SSIM=0.9638 MAE=6.36 LR=0.152 (Accepted=140, Rejected=0)
+AmbiLAGE 细化 [150/250] Utility=0.7604 SSIM=0.9642 MAE=6.36 LR=0.100 (Accepted=150, Rejected=0)
+AmbiLAGE 细化 [160/250] Utility=0.7594 SSIM=0.9645 MAE=6.37 LR=0.086 (Accepted=160, Rejected=0)
+AmbiLAGE 细化 [170/250] Utility=0.7590 SSIM=0.9647 MAE=6.37 LR=0.080 (Accepted=170, Rejected=0)
+AmbiLAGE 细化 [180/250] Utility=0.7581 SSIM=0.9649 MAE=6.37 LR=0.080 (Accepted=180, Rejected=0)
+AmbiLAGE 自适应退火收敛早停 [180/250] (min_steps=180, lr_scale=0.0800, best_step=40, best_sel_utility=0.7612)
+[SYNC] Incremental rsync to /content/drive/MyDrive/AmbiLAGE_backup/output/ambilage_v4_2groups_20261118 at 2026-11-18T01:11:37Z
+=== [2/6] Generate AmbiLAGE v4: 09_toothbrush at 2026-11-18T01:11:37Z ===
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  50%|█████     | 372/741 [00:00<00:00, 3716.11it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 3710.59it/s]
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  63%|██████▎   | 467/741 [00:00<00:00, 4655.29it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 5413.50it/s]
+WARNING:root:No pretrained weights loaded for model 'ViT-B-16'. Model initialized randomly.
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+Loading weights:   0%|          | 0/196 [00:00<?, ?it/s]Loading weights: 100%|██████████| 196/196 [00:00<00:00, 2905.94it/s]
+The config attributes {'skip_prk_steps': True} were passed to DDIMInverseScheduler, but are not expected and will be ignored. Please verify your scheduler_config.json configuration file.
+AmbiLAGE 细化 [10/250] Utility=0.8807 SSIM=0.9898 MAE=11.15 LR=1.000 (Accepted=10, Rejected=0)
+AmbiLAGE 细化 [20/250] Utility=0.8871 SSIM=0.9891 MAE=11.66 LR=0.996 (Accepted=20, Rejected=0)
+AmbiLAGE 细化 [30/250] Utility=0.8912 SSIM=0.9889 MAE=11.44 LR=0.984 (Accepted=30, Rejected=0)
+AmbiLAGE 细化 [40/250] Utility=0.8934 SSIM=0.9884 MAE=11.60 LR=0.965 (Accepted=40, Rejected=0)
+AmbiLAGE 细化 [50/250] Utility=0.8961 SSIM=0.9880 MAE=11.64 LR=0.938 (Accepted=50, Rejected=0)
+AmbiLAGE 细化 [60/250] Utility=0.8964 SSIM=0.9879 MAE=11.70 LR=0.905 (Accepted=60, Rejected=0)
+AmbiLAGE 细化 [70/250] Utility=0.8984 SSIM=0.9879 MAE=11.80 LR=0.865 (Accepted=70, Rejected=0)
+AmbiLAGE 细化 [80/250] Utility=0.8985 SSIM=0.9879 MAE=11.58 LR=0.820 (Accepted=80, Rejected=0)
+AmbiLAGE 细化 [90/250] Utility=0.8975 SSIM=0.9880 MAE=11.39 LR=0.770 (Accepted=90, Rejected=0)
+AmbiLAGE 细化 [100/250] Utility=0.8985 SSIM=0.9879 MAE=11.36 LR=0.537 (Accepted=100, Rejected=0)
+AmbiLAGE 细化 [110/250] Utility=0.8965 SSIM=0.9879 MAE=11.39 LR=0.494 (Accepted=110, Rejected=0)
+AmbiLAGE 细化 [120/250] Utility=0.8976 SSIM=0.9881 MAE=11.37 LR=0.338 (Accepted=120, Rejected=0)
+AmbiLAGE 细化 [130/250] Utility=0.8972 SSIM=0.9882 MAE=11.35 LR=0.304 (Accepted=130, Rejected=0)
+AmbiLAGE 细化 [140/250] Utility=0.8976 SSIM=0.9883 MAE=11.32 LR=0.202 (Accepted=140, Rejected=0)
+AmbiLAGE 细化 [150/250] Utility=0.8946 SSIM=0.9884 MAE=11.30 LR=0.178 (Accepted=150, Rejected=0)
+AmbiLAGE 细化 [160/250] Utility=0.8941 SSIM=0.9885 MAE=11.26 LR=0.115 (Accepted=160, Rejected=0)
+AmbiLAGE 细化 [170/250] Utility=0.8931 SSIM=0.9885 MAE=11.23 LR=0.098 (Accepted=170, Rejected=0)
+AmbiLAGE 细化 [180/250] Utility=0.8923 SSIM=0.9886 MAE=11.22 LR=0.080 (Accepted=180, Rejected=0)
+AmbiLAGE 自适应退火收敛早停 [180/250] (min_steps=180, lr_scale=0.0800, best_step=80, best_sel_utility=0.8928)
+[SYNC] Incremental rsync to /content/drive/MyDrive/AmbiLAGE_backup/output/ambilage_v4_2groups_20261118 at 2026-11-18T01:22:01Z
+=== [3/6] Evaluate AmbiLAGE v4: training_oracle + key_mode=image (ViT-g-14) at 2026-11-18T01:22:01Z ===
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+none clean: 前三 4/20；前五 6/20
+none modified: 前三 8/20；前五 8/20
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+none clean: 前三 4/20；前五 9/20
+none modified: 前三 8/20；前五 11/20
+{
+  "output": "/content/AmbiLAGE/output/ambilage_v4_2groups_20261118/eval_training_oracle_image_key/g14_image_key",
+  "query_suite": "training_oracle",
+  "key_mode": "image",
+  "key_image_weight": 1.0,
+  "protocol": "visual_inception_training_oracle_v1",
+  "report_path": "/content/AmbiLAGE/output/ambilage_v4_2groups_20261118/eval_training_oracle_image_key/g14_image_key/REPORT.md",
+  "summary_path": "/content/AmbiLAGE/output/ambilage_v4_2groups_20261118/eval_training_oracle_image_key/g14_image_key/category_retrieval_summary.json",
+  "overall": {
+    "query_count": 40,
+    "mean_rank_clean": 10.425,
+    "mean_rank_modified": 8.75,
+    "mean_rank_gain": 1.675,
+    "top1": {
+      "clean_hits": 3,
+      "modified_hits": 5,
+      "clean_rate": 0.075,
+      "modified_rate": 0.125,
+      "gain": 0.05,
+      "new_hits": 2,
+      "lost_hits": 0
+    },
+    "top3": {
+      "clean_hits": 8,
+      "modified_hits": 16,
+      "clean_rate": 0.2,
+      "modified_rate": 0.4,
+      "gain": 0.2,
+      "new_hits": 8,
+      "lost_hits": 0
+    },
+    "top5": {
+      "clean_hits": 15,
+      "modified_hits": 19,
+      "clean_rate": 0.375,
+      "modified_rate": 0.475,
+      "gain": 0.1,
+      "new_hits": 5,
+      "lost_hits": 1
+    }
+  }
+}
+{
+  "schema_version": 1,
+  "protocol": "visual_inception_training_oracle_v1",
+  "query_suite": "training_oracle",
+  "status": "passed",
+  "groups_verified": 2,
+  "rankings_recomputed": 80,
+  "candidate_scores_recomputed": 15120,
+  "max_score_error": 0.0,
+  "all_candidate_scores_checked": true,
+  "summary_sha256": "76fbdcd76add1c75b140304c544376c997c25aa8e676b5947f8ceb31a8c75076",
+  "groups": {
+    "07_shampoo": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "7c37470c99dd19dbaa288415965f26f30cbbc2e3c9f86791d9d4fa6e4e836d88",
+      "scores_sha256": "e4d8e6663373887eb6e0aac62270ffbe8e5a40d7a46d879ae96626ca6eec8ea7"
+    },
+    "09_toothbrush": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "5c8f6beba4ecdeef3c1bd778d713e4e5f10ccc05739b9285cabbcf8df2335a03",
+      "scores_sha256": "592e42a0cf65855ad814e83378a840e7d7a929fbb1b8bac7fc2f1cd6ffde1667"
+    }
+  }
+}
+[SYNC] Incremental rsync to /content/drive/MyDrive/AmbiLAGE_backup/output/ambilage_v4_2groups_20261118 at 2026-11-18T01:31:17Z
+=== [4/6] Evaluate AmbiLAGE v4: training_oracle + key_mode=image (ViT-B-32 matched) at 2026-11-18T01:31:17Z ===
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 1/20
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+none clean: 前三 5/20；前五 5/20
+none modified: 前三 2/20；前五 4/20
+{
+  "output": "/content/AmbiLAGE/output/ambilage_v4_2groups_20261118/eval_training_oracle_image_key/b32_image_key",
+  "query_suite": "training_oracle",
+  "key_mode": "image",
+  "key_image_weight": 1.0,
+  "protocol": "visual_inception_training_oracle_v1",
+  "report_path": "/content/AmbiLAGE/output/ambilage_v4_2groups_20261118/eval_training_oracle_image_key/b32_image_key/REPORT.md",
+  "summary_path": "/content/AmbiLAGE/output/ambilage_v4_2groups_20261118/eval_training_oracle_image_key/b32_image_key/category_retrieval_summary.json",
+  "overall": {
+    "query_count": 40,
+    "mean_rank_clean": 16.6,
+    "mean_rank_modified": 16.725,
+    "mean_rank_gain": -0.125,
+    "top1": {
+      "clean_hits": 0,
+      "modified_hits": 0,
+      "clean_rate": 0.0,
+      "modified_rate": 0.0,
+      "gain": 0.0,
+      "new_hits": 0,
+      "lost_hits": 0
+    },
+    "top3": {
+      "clean_hits": 5,
+      "modified_hits": 2,
+      "clean_rate": 0.125,
+      "modified_rate": 0.05,
+      "gain": -0.075,
+      "new_hits": 0,
+      "lost_hits": 3
+    },
+    "top5": {
+      "clean_hits": 5,
+      "modified_hits": 5,
+      "clean_rate": 0.125,
+      "modified_rate": 0.125,
+      "gain": 0.0,
+      "new_hits": 1,
+      "lost_hits": 1
+    }
+  }
+}
+{
+  "schema_version": 1,
+  "protocol": "visual_inception_training_oracle_v1",
+  "query_suite": "training_oracle",
+  "status": "passed",
+  "groups_verified": 2,
+  "rankings_recomputed": 80,
+  "candidate_scores_recomputed": 15120,
+  "max_score_error": 0.0,
+  "all_candidate_scores_checked": true,
+  "summary_sha256": "7c6f0152c08e25b5566326eaa7bcd2dc361a63c21bf298e6fd710506d0b39fac",
+  "groups": {
+    "07_shampoo": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "f9790c01247ef41cb392dffd8a849fb2e6239ca9f5cf67b4fbf39433ceacf1f8",
+      "scores_sha256": "cfd5415f160604e192c0fce540af333a8a69bbcc677d432b1b1a708be7eb6f3e"
+    },
+    "09_toothbrush": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "fa576551923ca697238e22b543472339d7d0b4a242b083fa6688b53b6a735ff2",
+      "scores_sha256": "3cc764947c70fe064db496d449f572abb809cec484e2315ab04d131247aa9666"
+    }
+  }
+}
+[SYNC] Incremental rsync to /content/drive/MyDrive/AmbiLAGE_backup/output/ambilage_v4_2groups_20261118 at 2026-11-18T01:34:04Z
+=== [5/6] Evaluate AmbiLAGE v4: Env 4 (none_target_joint) on ViT-g-14 & ViT-B-32 at 2026-11-18T01:34:04Z ===
+=== [EVAL] 07_shampoo/ambilage/g14_none_target_joint ===
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+07_shampoo env4 none clean: Top-3=20/20, Top-5=20/20, mean=2.80, ranks=[3, 3, 2, 3, 2, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+07_shampoo env4 none modified: Top-3=20/20, Top-5=20/20, mean=2.45, ranks=[3, 3, 1, 3, 2, 3, 3, 2, 1, 3, 2, 2, 3, 3, 2, 3, 3, 2, 2, 3]
+=== [EVAL] 07_shampoo/ambilage/b32_none_target_joint ===
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+07_shampoo env4 none clean: Top-3=19/20, Top-5=20/20, mean=2.25, ranks=[2, 2, 2, 2, 3, 2, 2, 3, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 3]
+07_shampoo env4 none modified: Top-3=20/20, Top-5=20/20, mean=1.20, ranks=[1, 1, 2, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1]
+=== [EVAL] 09_toothbrush/ambilage/g14_none_target_joint ===
+WARNING:root:No pretrained weights loaded for model 'ViT-g-14'. Model initialized randomly.
+09_toothbrush env4 none clean: Top-3=0/20, Top-5=18/20, mean=5.10, ranks=[5, 5, 5, 5, 5, 5, 5, 5, 6, 5, 5, 4, 5, 5, 7, 5, 5, 5, 5, 5]
+09_toothbrush env4 none modified: Top-3=0/20, Top-5=20/20, mean=4.85, ranks=[5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 5, 5, 4, 5, 5, 4, 5, 5]
+=== [EVAL] 09_toothbrush/ambilage/b32_none_target_joint ===
+WARNING:root:No pretrained weights loaded for model 'ViT-B-32'. Model initialized randomly.
+09_toothbrush env4 none clean: Top-3=5/20, Top-5=18/20, mean=4.05, ranks=[3, 4, 5, 4, 4, 4, 3, 4, 4, 3, 4, 6, 3, 4, 6, 3, 4, 5, 4, 4]
+09_toothbrush env4 none modified: Top-3=20/20, Top-5=20/20, mean=2.80, ranks=[2, 3, 3, 3, 3, 3, 2, 3, 3, 2, 3, 3, 3, 3, 3, 3, 3, 3, 2, 3]
+ENV4 EVALUATION COMPLETED AND VERIFIED: {'07_shampoo': {'g14': {'clean_top1': 0, 'mod_top1': 2, 'clean_top3': 20, 'mod_top3': 20, 'clean_top5': 20, 'mod_top5': 20, 'n_queries': 20, 'clean_mean_rank': 2.8, 'mod_mean_rank': 2.45, 'top3_gain_pp': 0.0, 'mean_rank_gain': 0.35, 'clean_range': [2, 3], 'mod_range': [1, 3], 'clean_mean_score': 0.6274527072906494, 'mod_mean_score': 0.6331331402063369, 'score_delta': 0.005680432915687539, 'clean_ranks': [3, 3, 2, 3, 2, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3], 'mod_ranks': [3, 3, 1, 3, 2, 3, 3, 2, 1, 3, 2, 2, 3, 3, 2, 3, 3, 2, 2, 3]}, 'b32': {'clean_top1': 0, 'mod_top1': 16, 'clean_top3': 19, 'mod_top3': 20, 'clean_top5': 20, 'mod_top5': 20, 'n_queries': 20, 'clean_mean_rank': 2.25, 'mod_mean_rank': 1.2, 'top3_gain_pp': 5.0, 'mean_rank_gain': 1.05, 'clean_range': [2, 4], 'mod_range': [1, 2], 'clean_mean_score': 0.7483224630355835, 'mod_mean_score': 0.7629153162240982, 'score_delta': 0.014592853188514776, 'clean_ranks': [2, 2, 2, 2, 3, 2, 2, 3, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 3], 'mod_ranks': [1, 1, 2, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1]}}, '09_toothbrush': {'g14': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 0, 'mod_top3': 0, 'clean_top5': 18, 'mod_top5': 20, 'n_queries': 20, 'clean_mean_rank': 5.1, 'mod_mean_rank': 4.85, 'top3_gain_pp': 0.0, 'mean_rank_gain': 0.25, 'clean_range': [4, 7], 'mod_range': [4, 5], 'clean_mean_score': 0.7830134272575379, 'mod_mean_score': 0.7894829005002976, 'score_delta': 0.006469473242759705, 'clean_ranks': [5, 5, 5, 5, 5, 5, 5, 5, 6, 5, 5, 4, 5, 5, 7, 5, 5, 5, 5, 5], 'mod_ranks': [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 5, 5, 4, 5, 5, 4, 5, 5]}, 'b32': {'clean_top1': 0, 'mod_top1': 0, 'clean_top3': 5, 'mod_top3': 20, 'clean_top5': 18, 'mod_top5': 20, 'n_queries': 20, 'clean_mean_rank': 4.05, 'mod_mean_rank': 2.8, 'top3_gain_pp': 75.0, 'mean_rank_gain': 1.25, 'clean_range': [3, 6], 'mod_range': [2, 3], 'clean_mean_score': 0.8112514197826386, 'mod_mean_score': 0.8232362896203995, 'score_delta': 0.011984869837760925, 'clean_ranks': [3, 4, 5, 4, 4, 4, 3, 4, 4, 3, 4, 6, 3, 4, 6, 3, 4, 5, 4, 4], 'mod_ranks': [2, 3, 3, 3, 3, 3, 2, 3, 3, 2, 3, 3, 3, 3, 3, 3, 3, 3, 2, 3]}}}
+[SYNC] Incremental rsync to /content/drive/MyDrive/AmbiLAGE_backup/output/ambilage_v4_2groups_20261118 at 2026-11-18T01:41:23Z
+=== [6/6] ALL AmbiLAGE v4 GENERATION & DUAL-ENV EVALUATIONS COMPLETED AND SYNCED at 2026-11-18T01:41:23Z ===

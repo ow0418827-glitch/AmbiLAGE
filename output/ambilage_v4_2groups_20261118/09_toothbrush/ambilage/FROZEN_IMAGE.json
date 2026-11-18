@@ -1,0 +1,3647 @@
+{
+  "schema_version": 1,
+  "status": "frozen",
+  "method": "ambilage",
+  "group": "09_toothbrush",
+  "image": "/content/AmbiLAGE/output/ambilage_v4_2groups_20261118/09_toothbrush/ambilage/frozen.png",
+  "image_sha256": "b688058f249bc42034909fd7adf08f68af8620253141d76b45dff055e6d08c52",
+  "metadata": {
+    "schema_version": 3,
+    "status": "success",
+    "method": "ambilage",
+    "definition": "ambilage_native_4stage_ambient_coop_psi_v4",
+    "test_fixture": false,
+    "production_backend": true,
+    "source_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/source.jpg",
+    "source_sha256": "74e0c705bd248dbec29190d33f7ecd38ef9a17e8853dd58ddb13c78fff4eae0f",
+    "target_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+    "target_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2",
+    "output_image": "/content/AmbiLAGE/output/ambilage_v4_2groups_20261118/09_toothbrush/ambilage/generation/adversarial.png",
+    "output_image_sha256": "b688058f249bc42034909fd7adf08f68af8620253141d76b45dff055e6d08c52",
+    "candidates": {
+      "final": {
+        "image": "/content/AmbiLAGE/output/ambilage_v4_2groups_20261118/09_toothbrush/ambilage/generation/adversarial.png",
+        "sha256": "b688058f249bc42034909fd7adf08f68af8620253141d76b45dff055e6d08c52"
+      }
+    },
+    "pipeline": "ambilage_native_4stage_single_pass",
+    "stages": {
+      "foreground_segmentation": {
+        "status": "completed"
+      },
+      "foreground_statistics": {
+        "status": "completed"
+      },
+      "color_harmonization": {
+        "status": "completed"
+      },
+      "latent_generation_refinement": {
+        "status": "completed",
+        "steps_requested": 250,
+        "steps_completed": 180,
+        "stop_reason": "adaptive_annealing_converged"
+      }
+    },
+    "artifacts": {
+      "adversarial.png": "b688058f249bc42034909fd7adf08f68af8620253141d76b45dff055e6d08c52",
+      "generative_anchor.png": "7bea2fc017ad98af4017b034e079e0cc83cf05acd92356e21e544c3bc53f1f1a",
+      "print_core.png": "df9b4462545f0dbdeb485144050ddc3ad1a7a549dffc52d6deb5800eb026c2b1",
+      "source_foreground.png": "3a0b7e169a6e19407efbda4f76056ce1108bbae0bda0f14a2697d57ae8a1d7d2",
+      "target_foreground.png": "a5dd8b069cf4593cf2994acf87cab63543c1954c9eb18e494ceddb5128bb8f4c",
+      "latent_edit_mask.png": "0ec7828ebf67581415016d535b69c87ad2934040df3d798c3c7c4a93c5e12c8b",
+      "naturalness_gate.json": "f43ece2358d3e164ad2d373961106ee57b11e74a9902fae3715359ab8052f254",
+      "naturalness_candidate.png": "b688058f249bc42034909fd7adf08f68af8620253141d76b45dff055e6d08c52",
+      "training_surrogates.json": "08d7c89f57203416b1ecee691c327f4612fb3bac2e0e411f78e1ed0c9790403c"
+    },
+    "pixel_optimization": false,
+    "auxiliary_max_levels": 0,
+    "optimization_mode": "ambient_coop_latent_only",
+    "steps": 250,
+    "steps_requested": 250,
+    "steps_completed": 180,
+    "stop_reason": "adaptive_annealing_converged",
+    "quality": {
+      "source_ssim": 0.9878672945963699,
+      "rgb_source_ssim": 0.9878672945963699,
+      "luma_source_ssim": 0.9957942677101678,
+      "source_mae_levels": 11.578103065490723,
+      "luma_source_mae_levels": 8.10225772857666,
+      "fg_source_mae_levels": 2.3391125202178955,
+      "bg_source_mae_levels": 10.063305854797363,
+      "rgb_source_mae_levels": 11.578103065490723,
+      "fg_rgb_source_mae_levels": 5.90177583694458,
+      "bg_rgb_source_mae_levels": 13.509610176086426,
+      "fg_chroma_tv_levels": 0.1832900494337082,
+      "anchor_mae_levels": 1.09935462474823,
+      "quality_ok": true,
+      "step": 80,
+      "training_utility": 0.8984636068344116,
+      "selection_utility": 0.892763540148735,
+      "regularization": 0.005700066685676575,
+      "joint_scores": [
+        [
+          0.7541006803512573
+        ],
+        [
+          0.7399592399597168
+        ],
+        [
+          0.6893511414527893
+        ]
+      ],
+      "accepted": 80,
+      "rejected": 0,
+      "lr_scale": 0.8200302573440115,
+      "adaptive_scale": 1.0,
+      "stagnation_checks": 1
+    },
+    "refinement": {
+      "status": "completed",
+      "stage": "latent_generation_refinement",
+      "steps_requested": 250,
+      "steps_completed": 180,
+      "stop_reason": "adaptive_annealing_converged",
+      "best_step": 80,
+      "accepted_updates": 180,
+      "rejected_updates": 0,
+      "final_quality": {
+        "source_ssim": 0.9878672945963699,
+        "rgb_source_ssim": 0.9878672945963699,
+        "luma_source_ssim": 0.9957942677101678,
+        "source_mae_levels": 11.578103065490723,
+        "luma_source_mae_levels": 8.10225772857666,
+        "fg_source_mae_levels": 2.3391125202178955,
+        "bg_source_mae_levels": 10.063305854797363,
+        "rgb_source_mae_levels": 11.578103065490723,
+        "fg_rgb_source_mae_levels": 5.90177583694458,
+        "bg_rgb_source_mae_levels": 13.509610176086426,
+        "fg_chroma_tv_levels": 0.1832900494337082,
+        "anchor_mae_levels": 1.09935462474823,
+        "quality_ok": true,
+        "step": 80,
+        "training_utility": 0.8984636068344116,
+        "selection_utility": 0.892763540148735,
+        "regularization": 0.005700066685676575,
+        "joint_scores": [
+          [
+            0.7541006803512573
+          ],
+          [
+            0.7399592399597168
+          ],
+          [
+            0.6893511414527893
+          ]
+        ],
+        "accepted": 80,
+        "rejected": 0,
+        "lr_scale": 0.8200302573440115,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 1
+      },
+      "fg_latent_max_levels": 6,
+      "fg_chroma_max_levels": 1.6641701459884644,
+      "fg_rgb_max_levels": 6,
+      "bg_latent_max_levels": 1,
+      "roi_max_levels": 0,
+      "elapsed_seconds": 569.2158888299996,
+      "zero_pixel_optimization": true,
+      "vae": {
+        "kind": "flux_16_channel_vae",
+        "precision": "float32",
+        "posterior": "mode",
+        "latent_channels": 16,
+        "gradient_checkpointing": true
+      },
+      "spectral_manifold_projection": true,
+      "conditional_tangent_projection": true,
+      "tangent_projection_calls": 0,
+      "adaptive_annealing": {
+        "enabled": true,
+        "schedule": "cosine_with_backtrack_and_plateau_cooling",
+        "min_steps": 180,
+        "max_steps": 250,
+        "steps_executed": 180,
+        "stop_reason": "adaptive_annealing_converged",
+        "early_stopped": true,
+        "final_lr_scale": 0.08,
+        "final_adaptive_scale": 0.2373046875,
+        "stagnation_checks": 11,
+        "cool_events": 5,
+        "backtrack_events": 0,
+        "reject_events": 0,
+        "best_step": 80
+      },
+      "checkpoint_resume": {
+        "checkpoint_every": 5,
+        "checkpoints_saved": 36,
+        "resumed": false,
+        "resumed_from_step": null,
+        "resume_count": 0,
+        "stage3_resumed": false
+      },
+      "history": [
+        {
+          "source_ssim": 0.9898195160896618,
+          "rgb_source_ssim": 0.9898195160896618,
+          "luma_source_ssim": 0.997264514330225,
+          "source_mae_levels": 11.404258728027344,
+          "luma_source_mae_levels": 7.257118225097656,
+          "fg_source_mae_levels": 0.4220845103263855,
+          "bg_source_mae_levels": 9.582902908325195,
+          "rgb_source_mae_levels": 11.404258728027344,
+          "fg_rgb_source_mae_levels": 5.917657852172852,
+          "bg_rgb_source_mae_levels": 13.27120590209961,
+          "fg_chroma_tv_levels": 0.0,
+          "anchor_mae_levels": 0.0,
+          "quality_ok": true,
+          "step": 0,
+          "training_utility": 0.8713034391403198,
+          "selection_utility": 0.871298734586162,
+          "joint_scores": [
+            [
+              0.72309410572052
+            ],
+            [
+              0.7197239398956299
+            ],
+            [
+              0.6648380160331726
+            ]
+          ],
+          "lr_scale": 0.415,
+          "adaptive_scale": 1.0,
+          "stagnation_checks": 0
+        },
+        {
+          "source_ssim": 0.9898348877597944,
+          "rgb_source_ssim": 0.9898348877597944,
+          "luma_source_ssim": 0.9969495773663282,
+          "source_mae_levels": 11.150078773498535,
+          "luma_source_mae_levels": 7.674758434295654,
+          "fg_source_mae_levels": 1.011154294013977,
+          "bg_source_mae_levels": 9.94221019744873,
+          "rgb_source_mae_levels": 11.150078773498535,
+          "fg_rgb_source_mae_levels": 5.873311519622803,
+          "bg_rgb_source_mae_levels": 12.945626258850098,
+          "fg_chroma_tv_levels": 0.04837653785943985,
+          "anchor_mae_levels": 0.996999979019165,
+          "quality_ok": true,
+          "step": 10,
+          "training_utility": 0.8806914687156677,
+          "selection_utility": 0.8784746900200844,
+          "regularization": 0.0022167786955833435,
+          "joint_scores": [
+            [
+              0.7309387922286987
+            ],
+            [
+              0.7305654287338257
+            ],
+            [
+              0.671406626701355
+            ]
+          ],
+          "accepted": 10,
+          "rejected": 0,
+          "lr_scale": 1.0,
+          "adaptive_scale": 1.0,
+          "stagnation_checks": 0
+        },
+        {
+          "source_ssim": 0.989095669647229,
+          "rgb_source_ssim": 0.989095669647229,
+          "luma_source_ssim": 0.9964710738906125,
+          "source_mae_levels": 11.659469604492188,
+          "luma_source_mae_levels": 8.032266616821289,
+          "fg_source_mae_levels": 1.6602473258972168,
+          "bg_source_mae_levels": 10.200501441955566,
+          "rgb_source_mae_levels": 11.659469604492188,
+          "fg_rgb_source_mae_levels": 5.968788146972656,
+          "bg_rgb_source_mae_levels": 13.59585952758789,
+          "fg_chroma_tv_levels": 0.08865733444690704,
+          "anchor_mae_levels": 1.218010663986206,
+          "quality_ok": true,
+          "step": 20,
+          "training_utility": 0.8870819807052612,
+          "selection_utility": 0.8836251699831337,
+          "regularization": 0.003456810722127557,
+          "joint_scores": [
+            [
+              0.7381628751754761
+            ],
+            [
+              0.7287067174911499
+            ],
+            [
+              0.6828852891921997
+            ]
+          ],
+          "accepted": 20,
+          "rejected": 0,
+          "lr_scale": 0.9960646362319528,
+          "adaptive_scale": 1.0,
+          "stagnation_checks": 0
+        },
+        {
+          "source_ssim": 0.9889398231428816,
+          "rgb_source_ssim": 0.9889398231428816,
+          "luma_source_ssim": 0.9962671494454528,
+          "source_mae_levels": 11.44018840789795,
+          "luma_source_mae_levels": 7.9732232093811035,
+          "fg_source_mae_levels": 1.9677293300628662,
+          "bg_source_mae_levels": 10.016738891601562,
+          "rgb_source_mae_levels": 11.44018840789795,
+          "fg_rgb_source_mae_levels": 6.024814128875732,
+          "bg_rgb_source_mae_levels": 13.282899856567383,
+          "fg_chroma_tv_levels": 0.12692375481128693,
+          "anchor_mae_levels": 1.078984022140503,
+          "quality_ok": true,
+          "step": 30,
+          "training_utility": 0.8912255764007568,
+          "selection_utility": 0.8869085875339806,
+          "regularization": 0.004316988866776228,
+          "joint_scores": [
+            [
+              0.7422230243682861
+            ],
+            [
+              0.7376899719238281
+            ],
+            [
+              0.683357834815979
+            ]
+          ],
+          "accepted": 30,
+          "rejected": 0,
+          "lr_scale": 0.9843258800929714,
+          "adaptive_scale": 1.0,
+          "stagnation_checks": 0
+        },
+        {
+          "source_ssim": 0.9883647573316782,
+          "rgb_source_ssim": 0.9883647573316782,
+          "luma_source_ssim": 0.9958035539848735,
+          "source_mae_levels": 11.596597671508789,
+          "luma_source_mae_levels": 8.25654125213623,
+          "fg_source_mae_levels": 2.133087635040283,
+          "bg_source_mae_levels": 10.340193748474121,
+          "rgb_source_mae_levels": 11.596597671508789,
+          "fg_rgb_source_mae_levels": 6.032817840576172,
+          "bg_rgb_source_mae_levels": 13.489806175231934,
+          "fg_chroma_tv_levels": 0.15898019075393677,
+          "anchor_mae_levels": 1.3046826124191284,
+          "quality_ok": true,
+          "step": 40,
+          "training_utility": 0.893425464630127,
+          "selection_utility": 0.888240325730294,
+          "regularization": 0.005185138899832964,
+          "joint_scores": [
+            [
+              0.7473564147949219
+            ],
+            [
+              0.7386656403541565
+            ],
+            [
+              0.685053288936615
+            ]
+          ],
+          "accepted": 40,
+          "rejected": 0,
+          "lr_scale": 0.9649845849551919,
+          "adaptive_scale": 1.0,
+          "stagnation_checks": 0
+        },
+        {
+          "source_ssim": 0.9879805775873085,
+          "rgb_source_ssim": 0.9879805775873085,
+          "luma_source_ssim": 0.9957816006005249,
+          "source_mae_levels": 11.643082618713379,
+          "luma_source_mae_levels": 8.19460678100586,
+          "fg_source_mae_levels": 2.239492893218994,
+          "bg_source_mae_levels": 10.220977783203125,
+          "rgb_source_mae_levels": 11.643082618713379,
+          "fg_rgb_source_mae_levels": 5.997473239898682,
+          "bg_rgb_source_mae_levels": 13.564135551452637,
+          "fg_chroma_tv_levels": 0.18014973402023315,
+          "anchor_mae_levels": 1.4071813821792603,
+          "quality_ok": true,
+          "step": 50,
+          "training_utility": 0.8961398601531982,
+          "selection_utility": 0.8902772897854447,
+          "regularization": 0.005862570367753506,
+          "joint_scores": [
+            [
+              0.7496516704559326
+            ],
+            [
+              0.7399629354476929
+            ],
+            [
+              0.6870532035827637
+            ]
+          ],
+          "accepted": 50,
+          "rejected": 0,
+          "lr_scale": 0.9383716857408418,
+          "adaptive_scale": 1.0,
+          "stagnation_checks": 0
+        },
+        {
+          "source_ssim": 0.987945184213302,
+          "rgb_source_ssim": 0.987945184213302,
+          "luma_source_ssim": 0.9957185535833636,
+          "source_mae_levels": 11.695213317871094,
+          "luma_source_mae_levels": 8.239782333374023,
+          "fg_source_mae_levels": 2.2755661010742188,
+          "bg_source_mae_levels": 10.269251823425293,
+          "rgb_source_mae_levels": 11.695213317871094,
+          "fg_rgb_source_mae_levels": 5.998876094818115,
+          "bg_rgb_source_mae_levels": 13.633528709411621,
+          "fg_chroma_tv_levels": 0.18752411007881165,
+          "anchor_mae_levels": 1.4674586057662964,
+          "quality_ok": true,
+          "step": 60,
+          "training_utility": 0.8963878154754639,
+          "selection_utility": 0.8903781962580979,
+          "regularization": 0.00600961921736598,
+          "joint_scores": [
+            [
+              0.7482147216796875
+            ],
+            [
+              0.7390282154083252
+            ],
+            [
+              0.6877337694168091
+            ]
+          ],
+          "accepted": 60,
+          "rejected": 0,
+          "lr_scale": 0.9049425365339682,
+          "adaptive_scale": 1.0,
+          "stagnation_checks": 1
+        },
+        {
+          "source_ssim": 0.9878642702548875,
+          "rgb_source_ssim": 0.9878642702548875,
+          "luma_source_ssim": 0.9957880921067473,
+          "source_mae_levels": 11.803922653198242,
+          "luma_source_mae_levels": 8.222794532775879,
+          "fg_source_mae_levels": 2.287635326385498,
+          "bg_source_mae_levels": 10.242376327514648,
+          "rgb_source_mae_levels": 11.803922653198242,
+          "fg_rgb_source_mae_levels": 5.955385684967041,
+          "bg_rgb_source_mae_levels": 13.794027328491211,
+          "fg_chroma_tv_levels": 0.18879477679729462,
+          "anchor_mae_levels": 1.2996799945831299,
+          "quality_ok": true,
+          "step": 70,
+          "training_utility": 0.8984259963035583,
+          "selection_utility": 0.8925352492369711,
+          "regularization": 0.00589074706658721,
+          "joint_scores": [
+            [
+              0.7508292198181152
+            ],
+            [
+              0.740523099899292
+            ],
+            [
+              0.6913719177246094
+            ]
+          ],
+          "accepted": 70,
+          "rejected": 0,
+          "lr_scale": 0.8652691193458119,
+          "adaptive_scale": 1.0,
+          "stagnation_checks": 0
+        },
+        {
+          "source_ssim": 0.9878672945963699,
+          "rgb_source_ssim": 0.9878672945963699,
+          "luma_source_ssim": 0.9957942677101678,
+          "source_mae_levels": 11.578103065490723,
+          "luma_source_mae_levels": 8.10225772857666,
+          "fg_source_mae_levels": 2.3391125202178955,
+          "bg_source_mae_levels": 10.063305854797363,
+          "rgb_source_mae_levels": 11.578103065490723,
+          "fg_rgb_source_mae_levels": 5.90177583694458,
+          "bg_rgb_source_mae_levels": 13.509610176086426,
+          "fg_chroma_tv_levels": 0.1832900494337082,
+          "anchor_mae_levels": 1.09935462474823,
+          "quality_ok": true,
+          "step": 80,
+          "training_utility": 0.8984636068344116,
+          "selection_utility": 0.892763540148735,
+          "regularization": 0.005700066685676575,
+          "joint_scores": [
+            [
+              0.7541006803512573
+            ],
+            [
+              0.7399592399597168
+            ],
+            [
+              0.6893511414527893
+            ]
+          ],
+          "accepted": 80,
+          "rejected": 0,
+          "lr_scale": 0.8200302573440115,
+          "adaptive_scale": 1.0,
+          "stagnation_checks": 1
+        },
+        {
+          "source_ssim": 0.9879761890839357,
+          "rgb_source_ssim": 0.9879761890839357,
+          "luma_source_ssim": 0.9958021648660328,
+          "source_mae_levels": 11.385637283325195,
+          "luma_source_mae_levels": 8.070892333984375,
+          "fg_source_mae_levels": 2.384140729904175,
+          "bg_source_mae_levels": 10.005946159362793,
+          "rgb_source_mae_levels": 11.385637283325195,
+          "fg_rgb_source_mae_levels": 5.889549732208252,
+          "bg_rgb_source_mae_levels": 13.255813598632812,
+          "fg_chroma_tv_levels": 0.1836036890745163,
+          "anchor_mae_levels": 1.2687586545944214,
+          "quality_ok": true,
+          "step": 90,
+          "training_utility": 0.8975368738174438,
+          "selection_utility": 0.8917281543835998,
+          "regularization": 0.0058087194338440895,
+          "joint_scores": [
+            [
+              0.754309892654419
+            ],
+            [
+              0.7402166128158569
+            ],
+            [
+              0.686356246471405
+            ]
+          ],
+          "accepted": 90,
+          "rejected": 0,
+          "lr_scale": 0.77,
+          "adaptive_scale": 0.75,
+          "stagnation_checks": 2
+        },
+        {
+          "source_ssim": 0.987894664444886,
+          "rgb_source_ssim": 0.987894664444886,
+          "luma_source_ssim": 0.9958312852901597,
+          "source_mae_levels": 11.364407539367676,
+          "luma_source_mae_levels": 7.921864032745361,
+          "fg_source_mae_levels": 2.3887791633605957,
+          "bg_source_mae_levels": 9.8046293258667,
+          "rgb_source_mae_levels": 11.364407539367676,
+          "fg_rgb_source_mae_levels": 5.847525119781494,
+          "bg_rgb_source_mae_levels": 13.241661071777344,
+          "fg_chroma_tv_levels": 0.18293514847755432,
+          "anchor_mae_levels": 1.1857106685638428,
+          "quality_ok": true,
+          "step": 100,
+          "training_utility": 0.89845210313797,
+          "selection_utility": 0.8926368267275393,
+          "regularization": 0.00581527641043067,
+          "joint_scores": [
+            [
+              0.7564685344696045
+            ],
+            [
+              0.7396684885025024
+            ],
+            [
+              0.6905398964881897
+            ]
+          ],
+          "accepted": 100,
+          "rejected": 0,
+          "lr_scale": 0.537025784165956,
+          "adaptive_scale": 0.75,
+          "stagnation_checks": 3
+        },
+        {
+          "source_ssim": 0.9879128156551693,
+          "rgb_source_ssim": 0.9879128156551693,
+          "luma_source_ssim": 0.9958945481490993,
+          "source_mae_levels": 11.394211769104004,
+          "luma_source_mae_levels": 7.917559623718262,
+          "fg_source_mae_levels": 2.432077646255493,
+          "bg_source_mae_levels": 9.784127235412598,
+          "rgb_source_mae_levels": 11.394211769104004,
+          "fg_rgb_source_mae_levels": 5.838497638702393,
+          "bg_rgb_source_mae_levels": 13.28467845916748,
+          "fg_chroma_tv_levels": 0.18317744135856628,
+          "anchor_mae_levels": 1.3391599655151367,
+          "quality_ok": true,
+          "step": 110,
+          "training_utility": 0.8965377807617188,
+          "selection_utility": 0.8906316785141826,
+          "regularization": 0.005906102247536182,
+          "joint_scores": [
+            [
+              0.7546228766441345
+            ],
+            [
+              0.7353270053863525
+            ],
+            [
+              0.6879613995552063
+            ]
+          ],
+          "accepted": 110,
+          "rejected": 0,
+          "lr_scale": 0.4942925705603697,
+          "adaptive_scale": 0.5625,
+          "stagnation_checks": 4
+        },
+        {
+          "source_ssim": 0.9880633720322591,
+          "rgb_source_ssim": 0.9880633720322591,
+          "luma_source_ssim": 0.996040607563432,
+          "source_mae_levels": 11.370643615722656,
+          "luma_source_mae_levels": 7.882174491882324,
+          "fg_source_mae_levels": 2.4534571170806885,
+          "bg_source_mae_levels": 9.729426383972168,
+          "rgb_source_mae_levels": 11.370643615722656,
+          "fg_rgb_source_mae_levels": 5.8061628341674805,
+          "bg_rgb_source_mae_levels": 13.264093399047852,
+          "fg_chroma_tv_levels": 0.1797548234462738,
+          "anchor_mae_levels": 1.309997320175171,
+          "quality_ok": true,
+          "step": 120,
+          "training_utility": 0.8975721597671509,
+          "selection_utility": 0.8917913185432553,
+          "regularization": 0.00578084122389555,
+          "joint_scores": [
+            [
+              0.7544957399368286
+            ],
+            [
+              0.7370802164077759
+            ],
+            [
+              0.6880768537521362
+            ]
+          ],
+          "accepted": 120,
+          "rejected": 0,
+          "lr_scale": 0.33752365223693837,
+          "adaptive_scale": 0.5625,
+          "stagnation_checks": 5
+        },
+        {
+          "source_ssim": 0.9882183548399489,
+          "rgb_source_ssim": 0.9882183548399489,
+          "luma_source_ssim": 0.9961644026037445,
+          "source_mae_levels": 11.346006393432617,
+          "luma_source_mae_levels": 7.86121940612793,
+          "fg_source_mae_levels": 2.497220277786255,
+          "bg_source_mae_levels": 9.68644905090332,
+          "rgb_source_mae_levels": 11.346006393432617,
+          "fg_rgb_source_mae_levels": 5.789194107055664,
+          "bg_rgb_source_mae_levels": 13.236845970153809,
+          "fg_chroma_tv_levels": 0.173646941781044,
+          "anchor_mae_levels": 1.307802677154541,
+          "quality_ok": true,
+          "step": 130,
+          "training_utility": 0.8971835374832153,
+          "selection_utility": 0.8915595733560622,
+          "regularization": 0.005623964127153158,
+          "joint_scores": [
+            [
+              0.7524470090866089
+            ],
+            [
+              0.7365820407867432
+            ],
+            [
+              0.6884481310844421
+            ]
+          ],
+          "accepted": 130,
+          "rejected": 0,
+          "lr_scale": 0.30375,
+          "adaptive_scale": 0.421875,
+          "stagnation_checks": 6
+        },
+        {
+          "source_ssim": 0.9883408472172343,
+          "rgb_source_ssim": 0.9883408472172343,
+          "luma_source_ssim": 0.9962777927164729,
+          "source_mae_levels": 11.317312240600586,
+          "luma_source_mae_levels": 7.853401184082031,
+          "fg_source_mae_levels": 2.5259883403778076,
+          "bg_source_mae_levels": 9.666181564331055,
+          "rgb_source_mae_levels": 11.317312240600586,
+          "fg_rgb_source_mae_levels": 5.763460159301758,
+          "bg_rgb_source_mae_levels": 13.207143783569336,
+          "fg_chroma_tv_levels": 0.1671217978000641,
+          "anchor_mae_levels": 1.3275400400161743,
+          "quality_ok": true,
+          "step": 140,
+          "training_utility": 0.8976081013679504,
+          "selection_utility": 0.8921366250142455,
+          "regularization": 0.005471476353704929,
+          "joint_scores": [
+            [
+              0.7541515827178955
+            ],
+            [
+              0.735684871673584
+            ],
+            [
+              0.6891645193099976
+            ]
+          ],
+          "accepted": 140,
+          "rejected": 0,
+          "lr_scale": 0.2024822608222963,
+          "adaptive_scale": 0.421875,
+          "stagnation_checks": 7
+        },
+        {
+          "source_ssim": 0.9884144476212823,
+          "rgb_source_ssim": 0.9884144476212823,
+          "luma_source_ssim": 0.9963329338537809,
+          "source_mae_levels": 11.298858642578125,
+          "luma_source_mae_levels": 7.8446149826049805,
+          "fg_source_mae_levels": 2.5614395141601562,
+          "bg_source_mae_levels": 9.642342567443848,
+          "rgb_source_mae_levels": 11.298858642578125,
+          "fg_rgb_source_mae_levels": 5.751790523529053,
+          "bg_rgb_source_mae_levels": 13.186382293701172,
+          "fg_chroma_tv_levels": 0.16272422671318054,
+          "anchor_mae_levels": 1.3564146757125854,
+          "quality_ok": true,
+          "step": 150,
+          "training_utility": 0.8946436047554016,
+          "selection_utility": 0.8892580671235919,
+          "regularization": 0.0053855376318097115,
+          "joint_scores": [
+            [
+              0.7504315972328186
+            ],
+            [
+              0.7324697971343994
+            ],
+            [
+              0.6878189444541931
+            ]
+          ],
+          "accepted": 150,
+          "rejected": 0,
+          "lr_scale": 0.17758542905979205,
+          "adaptive_scale": 0.31640625,
+          "stagnation_checks": 8
+        },
+        {
+          "source_ssim": 0.988487644059939,
+          "rgb_source_ssim": 0.988487644059939,
+          "luma_source_ssim": 0.99640048403248,
+          "source_mae_levels": 11.261810302734375,
+          "luma_source_mae_levels": 7.833179473876953,
+          "fg_source_mae_levels": 2.5699970722198486,
+          "bg_source_mae_levels": 9.624103546142578,
+          "rgb_source_mae_levels": 11.261810302734375,
+          "fg_rgb_source_mae_levels": 5.717711925506592,
+          "bg_rgb_source_mae_levels": 13.148324012756348,
+          "fg_chroma_tv_levels": 0.15756937861442566,
+          "anchor_mae_levels": 1.3475079536437988,
+          "quality_ok": true,
+          "step": 160,
+          "training_utility": 0.8940683603286743,
+          "selection_utility": 0.8887732778675854,
+          "regularization": 0.005295082461088896,
+          "joint_scores": [
+            [
+              0.7514085173606873
+            ],
+            [
+              0.733159601688385
+            ],
+            [
+              0.684563398361206
+            ]
+          ],
+          "accepted": 160,
+          "rejected": 0,
+          "lr_scale": 0.11516099730498734,
+          "adaptive_scale": 0.31640625,
+          "stagnation_checks": 9
+        },
+        {
+          "source_ssim": 0.9885351771516112,
+          "rgb_source_ssim": 0.9885351771516112,
+          "luma_source_ssim": 0.9964390335623468,
+          "source_mae_levels": 11.234952926635742,
+          "luma_source_mae_levels": 7.825418949127197,
+          "fg_source_mae_levels": 2.5831005573272705,
+          "bg_source_mae_levels": 9.609245300292969,
+          "rgb_source_mae_levels": 11.234952926635742,
+          "fg_rgb_source_mae_levels": 5.694819927215576,
+          "bg_rgb_source_mae_levels": 13.1201171875,
+          "fg_chroma_tv_levels": 0.15370842814445496,
+          "anchor_mae_levels": 1.3469386100769043,
+          "quality_ok": true,
+          "step": 170,
+          "training_utility": 0.8930705189704895,
+          "selection_utility": 0.8878605803474784,
+          "regularization": 0.005209938623011112,
+          "joint_scores": [
+            [
+              0.7496073842048645
+            ],
+            [
+              0.7324031591415405
+            ],
+            [
+              0.6838586926460266
+            ]
+          ],
+          "accepted": 170,
+          "rejected": 0,
+          "lr_scale": 0.09808593750000004,
+          "adaptive_scale": 0.2373046875,
+          "stagnation_checks": 10
+        },
+        {
+          "source_ssim": 0.9885874114070771,
+          "rgb_source_ssim": 0.9885874114070771,
+          "luma_source_ssim": 0.9964764249213963,
+          "source_mae_levels": 11.215797424316406,
+          "luma_source_mae_levels": 7.821123123168945,
+          "fg_source_mae_levels": 2.5889692306518555,
+          "bg_source_mae_levels": 9.601490020751953,
+          "rgb_source_mae_levels": 11.215797424316406,
+          "fg_rgb_source_mae_levels": 5.667973041534424,
+          "bg_rgb_source_mae_levels": 13.103578567504883,
+          "fg_chroma_tv_levels": 0.14886724948883057,
+          "anchor_mae_levels": 1.3496760129928589,
+          "quality_ok": true,
+          "step": 180,
+          "training_utility": 0.892274022102356,
+          "selection_utility": 0.8871806995011866,
+          "regularization": 0.005093322601169348,
+          "joint_scores": [
+            [
+              0.7476812601089478
+            ],
+            [
+              0.7324541807174683
+            ],
+            [
+              0.6835533380508423
+            ]
+          ],
+          "accepted": 180,
+          "rejected": 0,
+          "lr_scale": 0.08,
+          "adaptive_scale": 0.2373046875,
+          "stagnation_checks": 11
+        }
+      ],
+      "auxiliary_levels": 0
+    },
+    "config": {
+      "steps": 250,
+      "check_every": 10,
+      "log_every": 10,
+      "adaptive_annealing": true,
+      "anneal_min_steps": 180,
+      "anneal_min_lr_ratio": 0.08,
+      "anneal_warmup_steps": 10,
+      "anneal_plateau_factor": 0.75,
+      "anneal_plateau_patience": 2,
+      "anneal_backtrack_factor": 0.9,
+      "anneal_improve_tol": 0.0005,
+      "anneal_early_stop_patience": 4,
+      "checkpoint_every": 5,
+      "resume_from_checkpoint": true,
+      "latent_levels": 6,
+      "background_levels": 28,
+      "auxiliary_levels": 0,
+      "pixel_optimization": false,
+      "fg_edge_feather_pixels": 8.0,
+      "edge_feather_pixels": 12.0,
+      "ambient_feather_pixels": 3.0,
+      "roi_feather_pixels": 6.0,
+      "edge_feather_mode": "cosine",
+      "fg_luma_smooth_sigma": 5.0,
+      "fg_chroma_smooth_sigma": 9.0,
+      "fg_chroma_keep": 0.15,
+      "bg_luma_smooth_sigma": 12.0,
+      "bg_chroma_smooth_sigma": 16.0,
+      "bg_chroma_keep": 0.1,
+      "ambient_smooth_sigma": 14.0,
+      "ambient_grid_size": 8,
+      "ambient_init_bias": 0.0,
+      "tau_scale": 0.75,
+      "tau_fg": 0.2,
+      "tau_bg": 0.35,
+      "latent_working_size": 512,
+      "latent_limit": 6.0,
+      "latent_learning_rate": 0.06,
+      "ambient_learning_rate": 0.004,
+      "ambient_limit": 0.15,
+      "latent_smoothing_mix": 0.05,
+      "temperature": 0.04,
+      "joint_weight": 1.0,
+      "compensation_weight": 0.35,
+      "text_weight": 0.35,
+      "text_key_mix": 0.6,
+      "local_ot_weight": 0.1,
+      "local_ot_clusters": 4,
+      "local_ot_iterations": 50,
+      "local_ot_sinkhorn_regularization": 0.1,
+      "local_ot_fg_threshold": 0.5,
+      "ensemble_temperature": 0.2,
+      "ensemble_uniform_mix": 0.45,
+      "surrogate_set": "lucid",
+      "surrogate_config": null,
+      "compensated_weight": 0.5,
+      "fg_l2_weight": 0.0001,
+      "fg_tv_weight": 0.0004,
+      "fg_chroma_tv_weight": 0.15,
+      "bg_l2_weight": 0.005,
+      "bg_tv_weight": 0.02,
+      "bg_chroma_tv_weight": 0.08,
+      "overflow_weight": 0.05,
+      "halo_weight": 0.002,
+      "halo_soft_weight": 0.0001,
+      "halo_floor": 12.0,
+      "halo_ceiling": 10.0,
+      "fg_chroma_tv_ceiling": 2.5,
+      "halo_parent_multiplier": 1.0,
+      "guard_backtracks": 8,
+      "fg_chroma_levels": 0,
+      "fg_chroma_limit": 0.04,
+      "fg_luma_scale": 0.4,
+      "fg_neutral_recolor_base": 0.05,
+      "fg_highlight_luma_knee": 0.88,
+      "fg_shadow_luma_knee": 0.25,
+      "bg_radial_vignette_scale": 0.05,
+      "source_ssim_floor": 0.85,
+      "source_mae_ceiling": 22.0,
+      "fg_source_mae_ceiling": 10.0,
+      "anchor_ssim_floor": 0.85,
+      "anchor_mae_ceiling": 22.0,
+      "harmonization_smoothing_sigma": 12.0,
+      "harmonization_print_ring_sigma": 7.0,
+      "harmonization_selected_color_mix": 0.12,
+      "harmonization_chroma_transfer_strength": 0.0,
+      "harmonization_strength": 1.0,
+      "harmonization_blend_mode": "matte",
+      "harmonization_fg_feather_pixels": 4.0,
+      "harmonization_bg_strength": 0.85,
+      "harmonization_bg_luma_target": 238.0,
+      "harmonization_bg_warmth": 3.0,
+      "harmonization_bg_tint_mix": 0.2,
+      "harmonization_bg_feather_pixels": 6.0,
+      "ink_margin_pixels": 2,
+      "ink_closing_pixels": 9,
+      "ink_local_contrast": 3.0,
+      "ink_dark_luminance": 180.0,
+      "ink_colored_chroma": 12.0,
+      "allow_tf32": true,
+      "enable_gradient_checkpointing": null,
+      "save_intermediate_pngs": false,
+      "device": "cuda",
+      "seed": 42,
+      "smoke_test": false,
+      "sam_model_dir": null,
+      "planner_model_dir": null,
+      "editor_model_dir": null,
+      "vae_model_dir": null,
+      "vae_model_path": null,
+      "purifier_model_path": null,
+      "purifier_working_size": 256,
+      "purifier_gradient_checkpointing": true,
+      "editor_kind": "flux",
+      "anchor_steps": 32,
+      "anchor_guidance_scale": 2.5,
+      "planner_max_new_tokens": 768,
+      "eot_enabled": true,
+      "diffusion_weight": 0.08,
+      "purifier_steps": 10,
+      "psi_progressive_schedule": true,
+      "psi_phase1_ratio": 0.24,
+      "psi_phase2_ratio": 0.72,
+      "psi_joint_end_scale": 0.45,
+      "psi_text_peak_multiplier": 2.4,
+      "psi_ot_peak_multiplier": 1.6,
+      "text_pure_image_mix": 0.25,
+      "text_phrase_decomposition": true,
+      "max_text_phrases": 6,
+      "text_spherical_augmentation": true,
+      "text_spherical_radius": 0.05,
+      "text_spherical_mix": 0.5,
+      "source_repulsion_weight": 0.15,
+      "source_repulsion_margin": 0.08,
+      "local_ot_text_weighted": true,
+      "local_ot_text_temperature": 0.1,
+      "pcgrad_enabled": true,
+      "spectral_manifold_projection": true,
+      "spectral_budget_start": 0.22,
+      "spectral_budget_end": 0.45,
+      "conditional_tangent_projection": true,
+      "tangent_ssim_slack_margin": 0.03,
+      "tangent_mae_slack_ratio": 0.2,
+      "training_manifest": null,
+      "candidate_cache_dir": null,
+      "public_retrieval_weight": 0.6,
+      "public_retrieval_temperature": 0.07,
+      "public_query_batch_size": 16,
+      "public_contrastive_margin": 0.3,
+      "low_vram_offload_threshold_gb": 28.0
+    },
+    "planning": {
+      "source_boxes": [
+        [
+          0.22,
+          0.056,
+          0.806,
+          0.954
+        ]
+      ],
+      "print_regions": [],
+      "edit_prompt": "Explicit studio lighting recipe for public category 'toothbrush': apply smooth matte studio ambient harmonization across editable product body while preserving exact geometry, framing, and morphological printed ink core pixels unchanged.",
+      "lighting_note": "studio_softbox_relighting_for_toothbrush",
+      "model": "explicit_public_category_recipe_v1",
+      "planner_model": "explicit_public_category_recipe_v1",
+      "precision": "deterministic_geometry",
+      "inputs": [
+        "source_public_image",
+        "source_public_category"
+      ]
+    },
+    "ocr": {
+      "backend": "rapidocr-onnxruntime",
+      "regions": [
+        [
+          0.492,
+          0.595,
+          0.538,
+          0.622
+        ],
+        [
+          0.625,
+          0.194,
+          0.728,
+          0.301
+        ]
+      ],
+      "confidence": [
+        0.8591862320899963,
+        0.6351231932640076
+      ],
+      "passes": [
+        "native",
+        "upscale_2x",
+        "upscale_2x_inverted"
+      ]
+    },
+    "segmentation": {
+      "source": {
+        "image_path": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/source.jpg",
+        "image_sha256": "74e0c705bd248dbec29190d33f7ecd38ef9a17e8853dd58ddb13c78fff4eae0f",
+        "boxes": [
+          [
+            0.242,
+            0.08,
+            0.782,
+            0.93
+          ]
+        ],
+        "pixel_boxes": [
+          [
+            121.0,
+            40.0,
+            391.0,
+            465.0
+          ]
+        ],
+        "segmenter": "sam2.1-hiera-large",
+        "model": "/content/AmbiLAGE/models/sam2",
+        "scores": [
+          [
+            0.8446841239929199,
+            0.9776866436004639,
+            0.9770573377609253
+          ]
+        ],
+        "foreground_ratio": 0.253884,
+        "label_region_pixels": 0,
+        "ink_core_pixels": 0,
+        "substrate_pixels": 0
+      },
+      "target": {
+        "image_path": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+        "image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2",
+        "boxes": [
+          [
+            0.27,
+            0.102,
+            0.7,
+            0.892
+          ]
+        ],
+        "pixel_boxes": [
+          [
+            135.0,
+            51.0,
+            350.0,
+            446.0
+          ]
+        ],
+        "segmenter": "sam2.1-hiera-large",
+        "model": "/content/AmbiLAGE/models/sam2",
+        "scores": [
+          [
+            0.7816389203071594,
+            0.9652423858642578,
+            0.9641913175582886
+          ]
+        ],
+        "foreground_ratio": 0.151604,
+        "label_region_pixels": 0,
+        "ink_core_pixels": 0,
+        "substrate_pixels": 0
+      }
+    },
+    "color_statistics": {
+      "color_scheme": "statistics",
+      "rgb": [
+        175,
+        212,
+        221
+      ],
+      "lab_mean": [
+        82.70592498779297,
+        -10.15125560760498,
+        -8.44670581817627
+      ],
+      "lab_covariance": [
+        [
+          20.069811689955788,
+          29.377427383300336,
+          23.817214700029336
+        ],
+        [
+          29.377427383300336,
+          71.29985375102768,
+          54.91059816164111
+        ],
+        [
+          23.817214700029336,
+          54.91059816164111,
+          45.43537131405087
+        ]
+      ],
+      "luminance_quantiles": [
+        75.58142852783203,
+        91.99589538574219
+      ],
+      "target_foreground_pixels": 34812,
+      "body_pixels": 24539,
+      "photo_border_background_rgb": [
+        255.0,
+        255.0,
+        255.0
+      ],
+      "border_connected_background_pixels": 205336,
+      "covariance_diagnostic_only": true
+    },
+    "harmonization": {
+      "status": "completed",
+      "stage": "illumination_harmonization",
+      "blend_mode": "matte",
+      "selected_rgb": [
+        175,
+        212,
+        221
+      ],
+      "bg_studio_target_rgb": [
+        237,
+        240,
+        238
+      ],
+      "bg_strength": 0.85,
+      "strength": 1.0,
+      "selected_color_mix": 0.12,
+      "smoothing_sigma": 12.0,
+      "chosen_fraction": 1.0,
+      "line_search_steps": 32,
+      "source_ssim": 0.9898195111576019,
+      "source_mae_levels": 11.404269218444824,
+      "fg_rgb_source_mae_levels": 5.917657852172852,
+      "halo_error": 3.272005796432495,
+      "ink_core_pixels": 2833,
+      "substrate_pixels": 99,
+      "max_body_change_levels": 60,
+      "mean_body_change_levels": 5.917657933019279,
+      "max_bg_change_levels": 15,
+      "mean_bg_change_levels": 13.271221454394045,
+      "roi_change_levels": 0,
+      "zero_pixel_residual": true,
+      "generator": {
+        "model": "perceptual_illumination_line_search_v1",
+        "chosen_fraction": 1.0,
+        "line_search_steps": 32
+      },
+      "trials_evaluated": 1,
+      "anchor_path": "/content/AmbiLAGE/output/ambilage_v4_2groups_20261118/09_toothbrush/ambilage/generation/color_harmonization/generative_anchor.png",
+      "anchor_sha256": "7bea2fc017ad98af4017b034e079e0cc83cf05acd92356e21e544c3bc53f1f1a"
+    },
+    "anchor_generation": {
+      "backend": "perceptual_illumination_line_search_v1",
+      "model": "perceptual_illumination_line_search_v1",
+      "precision": "float32",
+      "steps": 32,
+      "prompt": "Explicit studio lighting recipe for public category 'toothbrush': apply smooth matte studio ambient harmonization across editable product body while preserving exact geometry, framing, and morphological printed ink core pixels unchanged.",
+      "seed": 42,
+      "alignment_mode": "perceptual_line_search"
+    },
+    "training_objective": {
+      "kind": "sequential_public_joint_text_fg_ot_psi_v4",
+      "surrogates": [
+        {
+          "role": "attack_surrogate",
+          "name": "ViT-B-16",
+          "pretrained": "openai",
+          "hf_repo": "timm/vit_base_patch16_clip_224.openai",
+          "tokenizer_path": null,
+          "weight_path": "/content/AmbiLAGE/models/clip_b16/open_clip_model.safetensors",
+          "weight_sha256": "4b8699299b1e8997753c64b052ba32031449d5d853f55a039148560ee02b820f",
+          "weight_revision": null,
+          "device": "cuda",
+          "precision": "fp32",
+          "image_size": 224,
+          "preprocess": {
+            "resize": "bicubic_direct_square",
+            "align_corners": false,
+            "antialias": true,
+            "mean": [
+              0.48145466,
+              0.4578275,
+              0.40821073
+            ],
+            "std": [
+              0.26862954,
+              0.26130258,
+              0.27577711
+            ]
+          },
+          "open_clip_torch_version": "3.3.0",
+          "cache_identity": "72b05708ed8ae468d8c2aa0085aae8d7765aed6bfca89a514c29cd9e8059db20",
+          "requires_true_local_tokens": true,
+          "loading": {
+            "architecture": {
+              "embed_dim": 512,
+              "vision_cfg": {
+                "image_size": 224,
+                "layers": 12,
+                "width": 768,
+                "patch_size": 16
+              },
+              "text_cfg": {
+                "context_length": 77,
+                "vocab_size": 49408,
+                "width": 512,
+                "heads": 8,
+                "layers": 12
+              }
+            },
+            "quick_gelu": true,
+            "activation": "QuickGELU",
+            "mean": [
+              0.48145466,
+              0.4578275,
+              0.40821073
+            ],
+            "std": [
+              0.26862954,
+              0.26130258,
+              0.27577711
+            ],
+            "metadata_source": "registered_pretrained_tag",
+            "registered_preprocess": {
+              "interpolation": "bicubic",
+              "resize_mode": "shortest"
+            },
+            "strict_state_dict": true,
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            },
+            "loader_version": 3,
+            "loader_sha256": "562966bba1620c5b352d9f092bee56ce10fce48afa68cb91575094bd7ad47731"
+          },
+          "tokenizer": {
+            "type": "SimpleTokenizer",
+            "special_tokens": {
+              "sot_token_id": 49406,
+              "eot_token_id": 49407,
+              "pad_token_id": null,
+              "context_length": 77
+            },
+            "content_sha256": "4710f312ff5993f9721ddf2ff9d4d3c1b49ac86b646e95e32b0e3d1ac1abf7b8"
+          }
+        },
+        {
+          "role": "attack_surrogate",
+          "name": "ViT-B-32",
+          "pretrained": "openai",
+          "hf_repo": "timm/vit_base_patch32_clip_224.openai",
+          "tokenizer_path": null,
+          "weight_path": "/content/AmbiLAGE/models/clip_b32/open_clip_model.safetensors",
+          "weight_sha256": "e6d1bd7789aa45192b3bf90570a789b478bae1b74ebcce7eddd908e83a2b7c31",
+          "weight_revision": null,
+          "device": "cuda",
+          "precision": "fp32",
+          "image_size": 224,
+          "preprocess": {
+            "resize": "bicubic_direct_square",
+            "align_corners": false,
+            "antialias": true,
+            "mean": [
+              0.48145466,
+              0.4578275,
+              0.40821073
+            ],
+            "std": [
+              0.26862954,
+              0.26130258,
+              0.27577711
+            ]
+          },
+          "open_clip_torch_version": "3.3.0",
+          "cache_identity": "d96ab268fdfbb3a2cd19299e35b25296181613e7f82c20a85c2308105764f282",
+          "requires_true_local_tokens": true,
+          "loading": {
+            "architecture": {
+              "embed_dim": 512,
+              "vision_cfg": {
+                "image_size": 224,
+                "layers": 12,
+                "width": 768,
+                "patch_size": 32
+              },
+              "text_cfg": {
+                "context_length": 77,
+                "vocab_size": 49408,
+                "width": 512,
+                "heads": 8,
+                "layers": 12
+              }
+            },
+            "quick_gelu": true,
+            "activation": "QuickGELU",
+            "mean": [
+              0.48145466,
+              0.4578275,
+              0.40821073
+            ],
+            "std": [
+              0.26862954,
+              0.26130258,
+              0.27577711
+            ],
+            "metadata_source": "registered_pretrained_tag",
+            "registered_preprocess": {
+              "interpolation": "bicubic",
+              "resize_mode": "shortest"
+            },
+            "strict_state_dict": true,
+            "actual_activation_modules": {
+              "QuickGELU": 24,
+              "GELU": 0
+            },
+            "loader_version": 3,
+            "loader_sha256": "562966bba1620c5b352d9f092bee56ce10fce48afa68cb91575094bd7ad47731"
+          },
+          "tokenizer": {
+            "type": "SimpleTokenizer",
+            "special_tokens": {
+              "sot_token_id": 49406,
+              "eot_token_id": 49407,
+              "pad_token_id": null,
+              "context_length": 77
+            },
+            "content_sha256": "4710f312ff5993f9721ddf2ff9d4d3c1b49ac86b646e95e32b0e3d1ac1abf7b8"
+          }
+        },
+        {
+          "role": "attack_surrogate",
+          "name": "ViT-B-32",
+          "pretrained": "laion2b_s34b_b79k",
+          "hf_repo": "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
+          "tokenizer_path": null,
+          "weight_path": "/content/AmbiLAGE/models/clip_b32_laion/open_clip_model.safetensors",
+          "weight_sha256": "ac4f8c4b88af6d963118cbf40ad93176d092abbedfcb752601ae1866352656e6",
+          "weight_revision": null,
+          "device": "cuda",
+          "precision": "fp32",
+          "image_size": 224,
+          "preprocess": {
+            "resize": "bicubic_direct_square",
+            "align_corners": false,
+            "antialias": true,
+            "mean": [
+              0.48145466,
+              0.4578275,
+              0.40821073
+            ],
+            "std": [
+              0.26862954,
+              0.26130258,
+              0.27577711
+            ]
+          },
+          "open_clip_torch_version": "3.3.0",
+          "cache_identity": "ef7d6d64e5ee1c7ae19b90e623e2beb10ce34fc380e3ae0254e7c8e95c745c77",
+          "requires_true_local_tokens": true,
+          "loading": {
+            "architecture": {
+              "embed_dim": 512,
+              "vision_cfg": {
+                "image_size": 224,
+                "layers": 12,
+                "width": 768,
+                "patch_size": 32
+              },
+              "text_cfg": {
+                "context_length": 77,
+                "vocab_size": 49408,
+                "width": 512,
+                "heads": 8,
+                "layers": 12
+              }
+            },
+            "quick_gelu": false,
+            "activation": "native",
+            "mean": [
+              0.48145466,
+              0.4578275,
+              0.40821073
+            ],
+            "std": [
+              0.26862954,
+              0.26130258,
+              0.27577711
+            ],
+            "metadata_source": "registered_pretrained_tag",
+            "registered_preprocess": {
+              "interpolation": "bicubic",
+              "resize_mode": "shortest"
+            },
+            "strict_state_dict": true,
+            "actual_activation_modules": {
+              "QuickGELU": 0,
+              "GELU": 24
+            },
+            "loader_version": 3,
+            "loader_sha256": "562966bba1620c5b352d9f092bee56ce10fce48afa68cb91575094bd7ad47731"
+          },
+          "tokenizer": {
+            "type": "SimpleTokenizer",
+            "special_tokens": {
+              "sot_token_id": 49406,
+              "eot_token_id": 49407,
+              "pad_token_id": null,
+              "context_length": 77
+            },
+            "content_sha256": "4710f312ff5993f9721ddf2ff9d4d3c1b49ac86b646e95e32b0e3d1ac1abf7b8"
+          }
+        }
+      ],
+      "surrogate_selection": {
+        "schema_version": 1,
+        "profile": "lucid",
+        "config_source": "src/visual/config/optimization.json",
+        "config_sha256": "41bd088cfd50df5f92e033a04ab23060a2daf080811254bcf998f0f23c6876d9",
+        "specs": [
+          {
+            "name": "ViT-B-16",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_base_patch16_clip_224.openai",
+            "weight_path": null,
+            "tokenizer_path": null
+          },
+          {
+            "name": "ViT-B-32",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_base_patch32_clip_224.openai",
+            "weight_path": null,
+            "tokenizer_path": null
+          },
+          {
+            "name": "ViT-B-32",
+            "pretrained": "laion2b_s34b_b79k",
+            "hf_repo": "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
+            "weight_path": null,
+            "tokenizer_path": null
+          }
+        ],
+        "specs_sha256": "67e3e7ce158c094b1d414288bb08fcb8504aa5cd1bbcac469e90ff279bd29af6",
+        "comparison_reference": "current_lucid_configuration_and_loader",
+        "activation_policy": "pretrained_native",
+        "model_count": 3,
+        "held_out_models": [
+          "ViT-g-14",
+          "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+        ],
+        "downloads_during_training": false
+      },
+      "public_objectives": [
+        {
+          "source_public_key_sha256": "7a9d1b9bb1fc81c4dc16871e4906690c647a1d5eda87a5f1c93fcbceee6ccdb8",
+          "training_text_sha256": "26774577d537636d47e2575be221c779ae5c3047468c0f8563e94a0fa92d9636",
+          "source_text_encoding": {
+            "text_sha256": "7a9d1b9bb1fc81c4dc16871e4906690c647a1d5eda87a5f1c93fcbceee6ccdb8",
+            "input_tokens": 98,
+            "encoded_tokens": 98,
+            "chunks": 2,
+            "payload_tokens_per_chunk": 75,
+            "chunk_token_counts": [
+              75,
+              23
+            ],
+            "truncated": false
+          },
+          "target_text_encoding": {
+            "text_sha256": "26774577d537636d47e2575be221c779ae5c3047468c0f8563e94a0fa92d9636",
+            "input_tokens": 18,
+            "encoded_tokens": 18,
+            "chunks": 1,
+            "payload_tokens_per_chunk": 75,
+            "chunk_token_counts": [
+              18
+            ],
+            "truncated": false
+          },
+          "query_modes": [
+            "multimodal_equal_weight",
+            "independent_target_text"
+          ],
+          "query_image_weight": 0.5,
+          "query_text_weight": 0.5,
+          "memory_key_image_weight": 0.5,
+          "compensated_target_enabled": true,
+          "compensated_valid": true,
+          "compensation_weight": 0.35,
+          "text_weight": 0.35,
+          "text_key_mix": 0.6,
+          "text_pure_image_mix": 0.25,
+          "text_compensated_valid": true,
+          "phrase_decomposition_enabled": true,
+          "phrase_count": 6,
+          "spherical_query_augmentation": true,
+          "local_ot_weight": 0.1,
+          "local_ot_clusters": 4,
+          "local_ot_fg_threshold": 0.5,
+          "local_ot_text_weighted": true,
+          "local_ot_active": true,
+          "public_bundle_retrieval_active": false,
+          "victim_memory_used": false,
+          "formal_queries_used": false,
+          "formal_ranking_used": false
+        },
+        {
+          "source_public_key_sha256": "7a9d1b9bb1fc81c4dc16871e4906690c647a1d5eda87a5f1c93fcbceee6ccdb8",
+          "training_text_sha256": "26774577d537636d47e2575be221c779ae5c3047468c0f8563e94a0fa92d9636",
+          "source_text_encoding": {
+            "text_sha256": "7a9d1b9bb1fc81c4dc16871e4906690c647a1d5eda87a5f1c93fcbceee6ccdb8",
+            "input_tokens": 98,
+            "encoded_tokens": 98,
+            "chunks": 2,
+            "payload_tokens_per_chunk": 75,
+            "chunk_token_counts": [
+              75,
+              23
+            ],
+            "truncated": false
+          },
+          "target_text_encoding": {
+            "text_sha256": "26774577d537636d47e2575be221c779ae5c3047468c0f8563e94a0fa92d9636",
+            "input_tokens": 18,
+            "encoded_tokens": 18,
+            "chunks": 1,
+            "payload_tokens_per_chunk": 75,
+            "chunk_token_counts": [
+              18
+            ],
+            "truncated": false
+          },
+          "query_modes": [
+            "multimodal_equal_weight",
+            "independent_target_text"
+          ],
+          "query_image_weight": 0.5,
+          "query_text_weight": 0.5,
+          "memory_key_image_weight": 0.5,
+          "compensated_target_enabled": true,
+          "compensated_valid": true,
+          "compensation_weight": 0.35,
+          "text_weight": 0.35,
+          "text_key_mix": 0.6,
+          "text_pure_image_mix": 0.25,
+          "text_compensated_valid": true,
+          "phrase_decomposition_enabled": true,
+          "phrase_count": 6,
+          "spherical_query_augmentation": true,
+          "local_ot_weight": 0.1,
+          "local_ot_clusters": 4,
+          "local_ot_fg_threshold": 0.5,
+          "local_ot_text_weighted": true,
+          "local_ot_active": true,
+          "public_bundle_retrieval_active": false,
+          "victim_memory_used": false,
+          "formal_queries_used": false,
+          "formal_ranking_used": false
+        },
+        {
+          "source_public_key_sha256": "7a9d1b9bb1fc81c4dc16871e4906690c647a1d5eda87a5f1c93fcbceee6ccdb8",
+          "training_text_sha256": "26774577d537636d47e2575be221c779ae5c3047468c0f8563e94a0fa92d9636",
+          "source_text_encoding": {
+            "text_sha256": "7a9d1b9bb1fc81c4dc16871e4906690c647a1d5eda87a5f1c93fcbceee6ccdb8",
+            "input_tokens": 98,
+            "encoded_tokens": 98,
+            "chunks": 2,
+            "payload_tokens_per_chunk": 75,
+            "chunk_token_counts": [
+              75,
+              23
+            ],
+            "truncated": false
+          },
+          "target_text_encoding": {
+            "text_sha256": "26774577d537636d47e2575be221c779ae5c3047468c0f8563e94a0fa92d9636",
+            "input_tokens": 18,
+            "encoded_tokens": 18,
+            "chunks": 1,
+            "payload_tokens_per_chunk": 75,
+            "chunk_token_counts": [
+              18
+            ],
+            "truncated": false
+          },
+          "query_modes": [
+            "multimodal_equal_weight",
+            "independent_target_text"
+          ],
+          "query_image_weight": 0.5,
+          "query_text_weight": 0.5,
+          "memory_key_image_weight": 0.5,
+          "compensated_target_enabled": true,
+          "compensated_valid": true,
+          "compensation_weight": 0.35,
+          "text_weight": 0.35,
+          "text_key_mix": 0.6,
+          "text_pure_image_mix": 0.25,
+          "text_compensated_valid": true,
+          "phrase_decomposition_enabled": true,
+          "phrase_count": 6,
+          "spherical_query_augmentation": true,
+          "local_ot_weight": 0.1,
+          "local_ot_clusters": 4,
+          "local_ot_fg_threshold": 0.5,
+          "local_ot_text_weighted": true,
+          "local_ot_active": true,
+          "public_bundle_retrieval_active": false,
+          "victim_memory_used": false,
+          "formal_queries_used": false,
+          "formal_ranking_used": false
+        }
+      ],
+      "held_out_models": [
+        "ViT-g-14",
+        "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+      ],
+      "held_out_purifiers": [
+        "eval_purifier_sd21",
+        "sd2-community/stable-diffusion-2-1-base",
+        "stabilityai/stable-diffusion-2-1-base"
+      ],
+      "gradient_execution": "shared_views_and_purified_pcgrad_single_backward",
+      "pcgrad_enabled": true,
+      "psi_progressive_schedule": true,
+      "weak_proxy_weighting": "baseline_calibrated_relative_gain_softmin_with_uniform_floor",
+      "ensemble_temperature": 0.2,
+      "ensemble_uniform_mix": 0.45,
+      "eot_enabled": true,
+      "eot_paths": [
+        "identity",
+        "pillow_blur_bpda",
+        "jpeg_exact_forward_ste",
+        "resize"
+      ],
+      "diffusion_weight": 0.08,
+      "diffusion_gradient": "full",
+      "purifier": {
+        "kind": "sd15_latent_noise_then_ddim_purification_v1",
+        "config": {
+          "model_path": "/content/AmbiLAGE/models/purifier",
+          "working_size": 256,
+          "reverse_steps": 10,
+          "start_timestep": 99,
+          "gradient_checkpointing": true
+        },
+        "model": {
+          "local_path": "/content/AmbiLAGE/models/purifier",
+          "local_files_only": true,
+          "variant": null,
+          "files": {
+            "unet/config.json": {
+              "sha256": "78f474de6bab3d893868f37be97b636ae65c0df3073ed3256ca458ff599b5f96",
+              "bytes": 743
+            },
+            "unet/diffusion_pytorch_model.non_ema.safetensors": {
+              "sha256": "cd1b6db09a81cb1d39fbd245a89c1e3db9da9fe8eba5e8f9098ea6c4994221d3",
+              "bytes": 3438167536
+            },
+            "unet/diffusion_pytorch_model.safetensors": {
+              "sha256": "19da7aaa4b880e59d56843f1fcb4dd9b599c28a1d9d9af7c1143057c8ffae9f1",
+              "bytes": 3438167540
+            },
+            "vae/config.json": {
+              "sha256": "786a7d21647ddea6a04b9675c03d3cb45e90a2f3c6da5fbda2c54ade040036de",
+              "bytes": 547
+            },
+            "vae/diffusion_pytorch_model.safetensors": {
+              "sha256": "a2b5134f4dbc140d9c11f11cba3233099e00af40f262f136c691fb7d38d2194c",
+              "bytes": 334643276
+            },
+            "text_encoder/config.json": {
+              "sha256": "845df614cb9327ae7bbea027316246fae917827407da6df13572e41b5f93b4cc",
+              "bytes": 617
+            },
+            "text_encoder/model.safetensors": {
+              "sha256": "d008943c017f0092921106440254dbbe00b6a285f7883ec8ba160c3faad88334",
+              "bytes": 492265874
+            },
+            "tokenizer/merges.txt": {
+              "sha256": "9fd691f7c8039210e0fced15865466c65820d09b63988b0174bfe25de299051a",
+              "bytes": 524619
+            },
+            "tokenizer/special_tokens_map.json": {
+              "sha256": "c4864a9376a8401918425bed71fc14fc0e81f9b59ec45c1cf96cccb2df508eac",
+              "bytes": 472
+            },
+            "tokenizer/tokenizer_config.json": {
+              "sha256": "00439066fcba73de57644cf41e4e3b9f2dbb09d7f3fc2005898ba52399045882",
+              "bytes": 806
+            },
+            "tokenizer/vocab.json": {
+              "sha256": "e089ad92ba36837a0d31433e555c8f45fe601ab5c221d4f607ded32d9f7a4349",
+              "bytes": 1059962
+            },
+            "scheduler/scheduler_config.json": {
+              "sha256": "699cce92eb7c122e2eb7dfdea78e6187fda76a5ed4a8e42319b85610e620e091",
+              "bytes": 308
+            }
+          }
+        },
+        "prompt": "",
+        "guidance_scale": 1.0,
+        "posterior": "mode",
+        "eta": 0.0,
+        "resize": "aspect_long_edge_round8_min64_bicubic_antialias_back_to_native",
+        "output_range": [
+          0.0,
+          1.0
+        ],
+        "quantization": "external_eight_bit_save_or_ste",
+        "implementation_sha256": "048b8b2a75056a2f0dac5208175d6937b110618d775cf8d3ffb01f5ff9c3ee87",
+        "not_original_diffpure": true,
+        "not_full_cognitiveguard": true
+      },
+      "vram_governance": {
+        "low_vram_mode": true,
+        "offloaded_text_bytes": 761208312,
+        "visual_grad_checkpointing_models": 3,
+        "sequential_gpu_streaming": false
+      },
+      "victim_memory_used": false,
+      "formal_queries_used": false
+    },
+    "final_naturalness": {
+      "passed": true,
+      "natural": true,
+      "text_preserved": true,
+      "artifact_free": true,
+      "reasons": [
+        "strict_mathematical_naturalness_gate_passed"
+      ],
+      "category": "toothbrush",
+      "metrics": {
+        "source_ssim": 0.9878672899109511,
+        "rgb_source_ssim": 0.9878672899109511,
+        "luma_source_ssim": 0.9957942578009477,
+        "source_mae_levels": 11.578112602233887,
+        "rgb_source_mae_levels": 11.578112602233887,
+        "luma_source_mae_levels": 8.102267265319824,
+        "fg_rgb_source_mae_levels": 6.171298980712891,
+        "fg_chroma_tv_levels": 0.7233743667602539,
+        "halo_error": 3.4134178161621094,
+        "roi_max_abs_diff": 0.0
+      },
+      "thresholds": {
+        "source_ssim_floor": 0.85,
+        "source_mae_ceiling": 22.0,
+        "fg_source_mae_ceiling": 10.0,
+        "fg_chroma_tv_ceiling": 2.5,
+        "halo_ceiling": 10.0,
+        "roi_max_abs_diff": 0.0
+      },
+      "model": "mathematical_rgb_oklab_dual_gate_v2",
+      "precision": "float32",
+      "candidate_sha256": "b688058f249bc42034909fd7adf08f68af8620253141d76b45dff055e6d08c52"
+    },
+    "hardware_profile": {
+      "tf32_enabled": true,
+      "device": "cuda",
+      "vram_gb": 22.03,
+      "gradient_checkpointing_recommended": true,
+      "seed": 42
+    },
+    "victim_memory_used": false,
+    "formal_queries_used": false,
+    "shadow_pool_used": false,
+    "true_rank_used": false,
+    "elapsed_seconds": 620.206455386,
+    "source_image_sha256": "74e0c705bd248dbec29190d33f7ecd38ef9a17e8853dd58ddb13c78fff4eae0f",
+    "target_image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2",
+    "ambilage_ready": {
+      "schema_version": 3,
+      "status": "completed",
+      "method": "ambilage",
+      "definition": "ambilage_native_4stage_ambient_coop_psi_v4",
+      "test_fixture": false,
+      "production_backend": true,
+      "source_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/source.jpg",
+      "source_sha256": "74e0c705bd248dbec29190d33f7ecd38ef9a17e8853dd58ddb13c78fff4eae0f",
+      "target_image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+      "target_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2",
+      "output_image": "/content/AmbiLAGE/output/ambilage_v4_2groups_20261118/09_toothbrush/ambilage/generation/adversarial.png",
+      "output_image_sha256": "b688058f249bc42034909fd7adf08f68af8620253141d76b45dff055e6d08c52",
+      "candidates": {
+        "final": {
+          "image": "/content/AmbiLAGE/output/ambilage_v4_2groups_20261118/09_toothbrush/ambilage/generation/adversarial.png",
+          "sha256": "b688058f249bc42034909fd7adf08f68af8620253141d76b45dff055e6d08c52"
+        }
+      },
+      "pipeline": "ambilage_native_4stage_single_pass",
+      "stages": {
+        "foreground_segmentation": {
+          "status": "completed"
+        },
+        "foreground_statistics": {
+          "status": "completed"
+        },
+        "color_harmonization": {
+          "status": "completed"
+        },
+        "latent_generation_refinement": {
+          "status": "completed",
+          "steps_requested": 250,
+          "steps_completed": 180,
+          "stop_reason": "adaptive_annealing_converged"
+        }
+      },
+      "artifacts": {
+        "adversarial.png": "b688058f249bc42034909fd7adf08f68af8620253141d76b45dff055e6d08c52",
+        "generative_anchor.png": "7bea2fc017ad98af4017b034e079e0cc83cf05acd92356e21e544c3bc53f1f1a",
+        "print_core.png": "df9b4462545f0dbdeb485144050ddc3ad1a7a549dffc52d6deb5800eb026c2b1",
+        "source_foreground.png": "3a0b7e169a6e19407efbda4f76056ce1108bbae0bda0f14a2697d57ae8a1d7d2",
+        "target_foreground.png": "a5dd8b069cf4593cf2994acf87cab63543c1954c9eb18e494ceddb5128bb8f4c",
+        "latent_edit_mask.png": "0ec7828ebf67581415016d535b69c87ad2934040df3d798c3c7c4a93c5e12c8b",
+        "naturalness_gate.json": "f43ece2358d3e164ad2d373961106ee57b11e74a9902fae3715359ab8052f254",
+        "naturalness_candidate.png": "b688058f249bc42034909fd7adf08f68af8620253141d76b45dff055e6d08c52",
+        "training_surrogates.json": "08d7c89f57203416b1ecee691c327f4612fb3bac2e0e411f78e1ed0c9790403c"
+      },
+      "pixel_optimization": false,
+      "auxiliary_max_levels": 0,
+      "optimization_mode": "ambient_coop_latent_only",
+      "steps": 250,
+      "steps_requested": 250,
+      "steps_completed": 180,
+      "stop_reason": "adaptive_annealing_converged",
+      "quality": {
+        "source_ssim": 0.9878672945963699,
+        "rgb_source_ssim": 0.9878672945963699,
+        "luma_source_ssim": 0.9957942677101678,
+        "source_mae_levels": 11.578103065490723,
+        "luma_source_mae_levels": 8.10225772857666,
+        "fg_source_mae_levels": 2.3391125202178955,
+        "bg_source_mae_levels": 10.063305854797363,
+        "rgb_source_mae_levels": 11.578103065490723,
+        "fg_rgb_source_mae_levels": 5.90177583694458,
+        "bg_rgb_source_mae_levels": 13.509610176086426,
+        "fg_chroma_tv_levels": 0.1832900494337082,
+        "anchor_mae_levels": 1.09935462474823,
+        "quality_ok": true,
+        "step": 80,
+        "training_utility": 0.8984636068344116,
+        "selection_utility": 0.892763540148735,
+        "regularization": 0.005700066685676575,
+        "joint_scores": [
+          [
+            0.7541006803512573
+          ],
+          [
+            0.7399592399597168
+          ],
+          [
+            0.6893511414527893
+          ]
+        ],
+        "accepted": 80,
+        "rejected": 0,
+        "lr_scale": 0.8200302573440115,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 1
+      },
+      "refinement": {
+        "status": "completed",
+        "stage": "latent_generation_refinement",
+        "steps_requested": 250,
+        "steps_completed": 180,
+        "stop_reason": "adaptive_annealing_converged",
+        "best_step": 80,
+        "accepted_updates": 180,
+        "rejected_updates": 0,
+        "final_quality": {
+          "source_ssim": 0.9878672945963699,
+          "rgb_source_ssim": 0.9878672945963699,
+          "luma_source_ssim": 0.9957942677101678,
+          "source_mae_levels": 11.578103065490723,
+          "luma_source_mae_levels": 8.10225772857666,
+          "fg_source_mae_levels": 2.3391125202178955,
+          "bg_source_mae_levels": 10.063305854797363,
+          "rgb_source_mae_levels": 11.578103065490723,
+          "fg_rgb_source_mae_levels": 5.90177583694458,
+          "bg_rgb_source_mae_levels": 13.509610176086426,
+          "fg_chroma_tv_levels": 0.1832900494337082,
+          "anchor_mae_levels": 1.09935462474823,
+          "quality_ok": true,
+          "step": 80,
+          "training_utility": 0.8984636068344116,
+          "selection_utility": 0.892763540148735,
+          "regularization": 0.005700066685676575,
+          "joint_scores": [
+            [
+              0.7541006803512573
+            ],
+            [
+              0.7399592399597168
+            ],
+            [
+              0.6893511414527893
+            ]
+          ],
+          "accepted": 80,
+          "rejected": 0,
+          "lr_scale": 0.8200302573440115,
+          "adaptive_scale": 1.0,
+          "stagnation_checks": 1
+        },
+        "fg_latent_max_levels": 6,
+        "fg_chroma_max_levels": 1.6641701459884644,
+        "fg_rgb_max_levels": 6,
+        "bg_latent_max_levels": 1,
+        "roi_max_levels": 0,
+        "elapsed_seconds": 569.2158888299996,
+        "zero_pixel_optimization": true,
+        "vae": {
+          "kind": "flux_16_channel_vae",
+          "precision": "float32",
+          "posterior": "mode",
+          "latent_channels": 16,
+          "gradient_checkpointing": true
+        },
+        "spectral_manifold_projection": true,
+        "conditional_tangent_projection": true,
+        "tangent_projection_calls": 0,
+        "adaptive_annealing": {
+          "enabled": true,
+          "schedule": "cosine_with_backtrack_and_plateau_cooling",
+          "min_steps": 180,
+          "max_steps": 250,
+          "steps_executed": 180,
+          "stop_reason": "adaptive_annealing_converged",
+          "early_stopped": true,
+          "final_lr_scale": 0.08,
+          "final_adaptive_scale": 0.2373046875,
+          "stagnation_checks": 11,
+          "cool_events": 5,
+          "backtrack_events": 0,
+          "reject_events": 0,
+          "best_step": 80
+        },
+        "checkpoint_resume": {
+          "checkpoint_every": 5,
+          "checkpoints_saved": 36,
+          "resumed": false,
+          "resumed_from_step": null,
+          "resume_count": 0,
+          "stage3_resumed": false
+        },
+        "history": [
+          {
+            "source_ssim": 0.9898195160896618,
+            "rgb_source_ssim": 0.9898195160896618,
+            "luma_source_ssim": 0.997264514330225,
+            "source_mae_levels": 11.404258728027344,
+            "luma_source_mae_levels": 7.257118225097656,
+            "fg_source_mae_levels": 0.4220845103263855,
+            "bg_source_mae_levels": 9.582902908325195,
+            "rgb_source_mae_levels": 11.404258728027344,
+            "fg_rgb_source_mae_levels": 5.917657852172852,
+            "bg_rgb_source_mae_levels": 13.27120590209961,
+            "fg_chroma_tv_levels": 0.0,
+            "anchor_mae_levels": 0.0,
+            "quality_ok": true,
+            "step": 0,
+            "training_utility": 0.8713034391403198,
+            "selection_utility": 0.871298734586162,
+            "joint_scores": [
+              [
+                0.72309410572052
+              ],
+              [
+                0.7197239398956299
+              ],
+              [
+                0.6648380160331726
+              ]
+            ],
+            "lr_scale": 0.415,
+            "adaptive_scale": 1.0,
+            "stagnation_checks": 0
+          },
+          {
+            "source_ssim": 0.9898348877597944,
+            "rgb_source_ssim": 0.9898348877597944,
+            "luma_source_ssim": 0.9969495773663282,
+            "source_mae_levels": 11.150078773498535,
+            "luma_source_mae_levels": 7.674758434295654,
+            "fg_source_mae_levels": 1.011154294013977,
+            "bg_source_mae_levels": 9.94221019744873,
+            "rgb_source_mae_levels": 11.150078773498535,
+            "fg_rgb_source_mae_levels": 5.873311519622803,
+            "bg_rgb_source_mae_levels": 12.945626258850098,
+            "fg_chroma_tv_levels": 0.04837653785943985,
+            "anchor_mae_levels": 0.996999979019165,
+            "quality_ok": true,
+            "step": 10,
+            "training_utility": 0.8806914687156677,
+            "selection_utility": 0.8784746900200844,
+            "regularization": 0.0022167786955833435,
+            "joint_scores": [
+              [
+                0.7309387922286987
+              ],
+              [
+                0.7305654287338257
+              ],
+              [
+                0.671406626701355
+              ]
+            ],
+            "accepted": 10,
+            "rejected": 0,
+            "lr_scale": 1.0,
+            "adaptive_scale": 1.0,
+            "stagnation_checks": 0
+          },
+          {
+            "source_ssim": 0.989095669647229,
+            "rgb_source_ssim": 0.989095669647229,
+            "luma_source_ssim": 0.9964710738906125,
+            "source_mae_levels": 11.659469604492188,
+            "luma_source_mae_levels": 8.032266616821289,
+            "fg_source_mae_levels": 1.6602473258972168,
+            "bg_source_mae_levels": 10.200501441955566,
+            "rgb_source_mae_levels": 11.659469604492188,
+            "fg_rgb_source_mae_levels": 5.968788146972656,
+            "bg_rgb_source_mae_levels": 13.59585952758789,
+            "fg_chroma_tv_levels": 0.08865733444690704,
+            "anchor_mae_levels": 1.218010663986206,
+            "quality_ok": true,
+            "step": 20,
+            "training_utility": 0.8870819807052612,
+            "selection_utility": 0.8836251699831337,
+            "regularization": 0.003456810722127557,
+            "joint_scores": [
+              [
+                0.7381628751754761
+              ],
+              [
+                0.7287067174911499
+              ],
+              [
+                0.6828852891921997
+              ]
+            ],
+            "accepted": 20,
+            "rejected": 0,
+            "lr_scale": 0.9960646362319528,
+            "adaptive_scale": 1.0,
+            "stagnation_checks": 0
+          },
+          {
+            "source_ssim": 0.9889398231428816,
+            "rgb_source_ssim": 0.9889398231428816,
+            "luma_source_ssim": 0.9962671494454528,
+            "source_mae_levels": 11.44018840789795,
+            "luma_source_mae_levels": 7.9732232093811035,
+            "fg_source_mae_levels": 1.9677293300628662,
+            "bg_source_mae_levels": 10.016738891601562,
+            "rgb_source_mae_levels": 11.44018840789795,
+            "fg_rgb_source_mae_levels": 6.024814128875732,
+            "bg_rgb_source_mae_levels": 13.282899856567383,
+            "fg_chroma_tv_levels": 0.12692375481128693,
+            "anchor_mae_levels": 1.078984022140503,
+            "quality_ok": true,
+            "step": 30,
+            "training_utility": 0.8912255764007568,
+            "selection_utility": 0.8869085875339806,
+            "regularization": 0.004316988866776228,
+            "joint_scores": [
+              [
+                0.7422230243682861
+              ],
+              [
+                0.7376899719238281
+              ],
+              [
+                0.683357834815979
+              ]
+            ],
+            "accepted": 30,
+            "rejected": 0,
+            "lr_scale": 0.9843258800929714,
+            "adaptive_scale": 1.0,
+            "stagnation_checks": 0
+          },
+          {
+            "source_ssim": 0.9883647573316782,
+            "rgb_source_ssim": 0.9883647573316782,
+            "luma_source_ssim": 0.9958035539848735,
+            "source_mae_levels": 11.596597671508789,
+            "luma_source_mae_levels": 8.25654125213623,
+            "fg_source_mae_levels": 2.133087635040283,
+            "bg_source_mae_levels": 10.340193748474121,
+            "rgb_source_mae_levels": 11.596597671508789,
+            "fg_rgb_source_mae_levels": 6.032817840576172,
+            "bg_rgb_source_mae_levels": 13.489806175231934,
+            "fg_chroma_tv_levels": 0.15898019075393677,
+            "anchor_mae_levels": 1.3046826124191284,
+            "quality_ok": true,
+            "step": 40,
+            "training_utility": 0.893425464630127,
+            "selection_utility": 0.888240325730294,
+            "regularization": 0.005185138899832964,
+            "joint_scores": [
+              [
+                0.7473564147949219
+              ],
+              [
+                0.7386656403541565
+              ],
+              [
+                0.685053288936615
+              ]
+            ],
+            "accepted": 40,
+            "rejected": 0,
+            "lr_scale": 0.9649845849551919,
+            "adaptive_scale": 1.0,
+            "stagnation_checks": 0
+          },
+          {
+            "source_ssim": 0.9879805775873085,
+            "rgb_source_ssim": 0.9879805775873085,
+            "luma_source_ssim": 0.9957816006005249,
+            "source_mae_levels": 11.643082618713379,
+            "luma_source_mae_levels": 8.19460678100586,
+            "fg_source_mae_levels": 2.239492893218994,
+            "bg_source_mae_levels": 10.220977783203125,
+            "rgb_source_mae_levels": 11.643082618713379,
+            "fg_rgb_source_mae_levels": 5.997473239898682,
+            "bg_rgb_source_mae_levels": 13.564135551452637,
+            "fg_chroma_tv_levels": 0.18014973402023315,
+            "anchor_mae_levels": 1.4071813821792603,
+            "quality_ok": true,
+            "step": 50,
+            "training_utility": 0.8961398601531982,
+            "selection_utility": 0.8902772897854447,
+            "regularization": 0.005862570367753506,
+            "joint_scores": [
+              [
+                0.7496516704559326
+              ],
+              [
+                0.7399629354476929
+              ],
+              [
+                0.6870532035827637
+              ]
+            ],
+            "accepted": 50,
+            "rejected": 0,
+            "lr_scale": 0.9383716857408418,
+            "adaptive_scale": 1.0,
+            "stagnation_checks": 0
+          },
+          {
+            "source_ssim": 0.987945184213302,
+            "rgb_source_ssim": 0.987945184213302,
+            "luma_source_ssim": 0.9957185535833636,
+            "source_mae_levels": 11.695213317871094,
+            "luma_source_mae_levels": 8.239782333374023,
+            "fg_source_mae_levels": 2.2755661010742188,
+            "bg_source_mae_levels": 10.269251823425293,
+            "rgb_source_mae_levels": 11.695213317871094,
+            "fg_rgb_source_mae_levels": 5.998876094818115,
+            "bg_rgb_source_mae_levels": 13.633528709411621,
+            "fg_chroma_tv_levels": 0.18752411007881165,
+            "anchor_mae_levels": 1.4674586057662964,
+            "quality_ok": true,
+            "step": 60,
+            "training_utility": 0.8963878154754639,
+            "selection_utility": 0.8903781962580979,
+            "regularization": 0.00600961921736598,
+            "joint_scores": [
+              [
+                0.7482147216796875
+              ],
+              [
+                0.7390282154083252
+              ],
+              [
+                0.6877337694168091
+              ]
+            ],
+            "accepted": 60,
+            "rejected": 0,
+            "lr_scale": 0.9049425365339682,
+            "adaptive_scale": 1.0,
+            "stagnation_checks": 1
+          },
+          {
+            "source_ssim": 0.9878642702548875,
+            "rgb_source_ssim": 0.9878642702548875,
+            "luma_source_ssim": 0.9957880921067473,
+            "source_mae_levels": 11.803922653198242,
+            "luma_source_mae_levels": 8.222794532775879,
+            "fg_source_mae_levels": 2.287635326385498,
+            "bg_source_mae_levels": 10.242376327514648,
+            "rgb_source_mae_levels": 11.803922653198242,
+            "fg_rgb_source_mae_levels": 5.955385684967041,
+            "bg_rgb_source_mae_levels": 13.794027328491211,
+            "fg_chroma_tv_levels": 0.18879477679729462,
+            "anchor_mae_levels": 1.2996799945831299,
+            "quality_ok": true,
+            "step": 70,
+            "training_utility": 0.8984259963035583,
+            "selection_utility": 0.8925352492369711,
+            "regularization": 0.00589074706658721,
+            "joint_scores": [
+              [
+                0.7508292198181152
+              ],
+              [
+                0.740523099899292
+              ],
+              [
+                0.6913719177246094
+              ]
+            ],
+            "accepted": 70,
+            "rejected": 0,
+            "lr_scale": 0.8652691193458119,
+            "adaptive_scale": 1.0,
+            "stagnation_checks": 0
+          },
+          {
+            "source_ssim": 0.9878672945963699,
+            "rgb_source_ssim": 0.9878672945963699,
+            "luma_source_ssim": 0.9957942677101678,
+            "source_mae_levels": 11.578103065490723,
+            "luma_source_mae_levels": 8.10225772857666,
+            "fg_source_mae_levels": 2.3391125202178955,
+            "bg_source_mae_levels": 10.063305854797363,
+            "rgb_source_mae_levels": 11.578103065490723,
+            "fg_rgb_source_mae_levels": 5.90177583694458,
+            "bg_rgb_source_mae_levels": 13.509610176086426,
+            "fg_chroma_tv_levels": 0.1832900494337082,
+            "anchor_mae_levels": 1.09935462474823,
+            "quality_ok": true,
+            "step": 80,
+            "training_utility": 0.8984636068344116,
+            "selection_utility": 0.892763540148735,
+            "regularization": 0.005700066685676575,
+            "joint_scores": [
+              [
+                0.7541006803512573
+              ],
+              [
+                0.7399592399597168
+              ],
+              [
+                0.6893511414527893
+              ]
+            ],
+            "accepted": 80,
+            "rejected": 0,
+            "lr_scale": 0.8200302573440115,
+            "adaptive_scale": 1.0,
+            "stagnation_checks": 1
+          },
+          {
+            "source_ssim": 0.9879761890839357,
+            "rgb_source_ssim": 0.9879761890839357,
+            "luma_source_ssim": 0.9958021648660328,
+            "source_mae_levels": 11.385637283325195,
+            "luma_source_mae_levels": 8.070892333984375,
+            "fg_source_mae_levels": 2.384140729904175,
+            "bg_source_mae_levels": 10.005946159362793,
+            "rgb_source_mae_levels": 11.385637283325195,
+            "fg_rgb_source_mae_levels": 5.889549732208252,
+            "bg_rgb_source_mae_levels": 13.255813598632812,
+            "fg_chroma_tv_levels": 0.1836036890745163,
+            "anchor_mae_levels": 1.2687586545944214,
+            "quality_ok": true,
+            "step": 90,
+            "training_utility": 0.8975368738174438,
+            "selection_utility": 0.8917281543835998,
+            "regularization": 0.0058087194338440895,
+            "joint_scores": [
+              [
+                0.754309892654419
+              ],
+              [
+                0.7402166128158569
+              ],
+              [
+                0.686356246471405
+              ]
+            ],
+            "accepted": 90,
+            "rejected": 0,
+            "lr_scale": 0.77,
+            "adaptive_scale": 0.75,
+            "stagnation_checks": 2
+          },
+          {
+            "source_ssim": 0.987894664444886,
+            "rgb_source_ssim": 0.987894664444886,
+            "luma_source_ssim": 0.9958312852901597,
+            "source_mae_levels": 11.364407539367676,
+            "luma_source_mae_levels": 7.921864032745361,
+            "fg_source_mae_levels": 2.3887791633605957,
+            "bg_source_mae_levels": 9.8046293258667,
+            "rgb_source_mae_levels": 11.364407539367676,
+            "fg_rgb_source_mae_levels": 5.847525119781494,
+            "bg_rgb_source_mae_levels": 13.241661071777344,
+            "fg_chroma_tv_levels": 0.18293514847755432,
+            "anchor_mae_levels": 1.1857106685638428,
+            "quality_ok": true,
+            "step": 100,
+            "training_utility": 0.89845210313797,
+            "selection_utility": 0.8926368267275393,
+            "regularization": 0.00581527641043067,
+            "joint_scores": [
+              [
+                0.7564685344696045
+              ],
+              [
+                0.7396684885025024
+              ],
+              [
+                0.6905398964881897
+              ]
+            ],
+            "accepted": 100,
+            "rejected": 0,
+            "lr_scale": 0.537025784165956,
+            "adaptive_scale": 0.75,
+            "stagnation_checks": 3
+          },
+          {
+            "source_ssim": 0.9879128156551693,
+            "rgb_source_ssim": 0.9879128156551693,
+            "luma_source_ssim": 0.9958945481490993,
+            "source_mae_levels": 11.394211769104004,
+            "luma_source_mae_levels": 7.917559623718262,
+            "fg_source_mae_levels": 2.432077646255493,
+            "bg_source_mae_levels": 9.784127235412598,
+            "rgb_source_mae_levels": 11.394211769104004,
+            "fg_rgb_source_mae_levels": 5.838497638702393,
+            "bg_rgb_source_mae_levels": 13.28467845916748,
+            "fg_chroma_tv_levels": 0.18317744135856628,
+            "anchor_mae_levels": 1.3391599655151367,
+            "quality_ok": true,
+            "step": 110,
+            "training_utility": 0.8965377807617188,
+            "selection_utility": 0.8906316785141826,
+            "regularization": 0.005906102247536182,
+            "joint_scores": [
+              [
+                0.7546228766441345
+              ],
+              [
+                0.7353270053863525
+              ],
+              [
+                0.6879613995552063
+              ]
+            ],
+            "accepted": 110,
+            "rejected": 0,
+            "lr_scale": 0.4942925705603697,
+            "adaptive_scale": 0.5625,
+            "stagnation_checks": 4
+          },
+          {
+            "source_ssim": 0.9880633720322591,
+            "rgb_source_ssim": 0.9880633720322591,
+            "luma_source_ssim": 0.996040607563432,
+            "source_mae_levels": 11.370643615722656,
+            "luma_source_mae_levels": 7.882174491882324,
+            "fg_source_mae_levels": 2.4534571170806885,
+            "bg_source_mae_levels": 9.729426383972168,
+            "rgb_source_mae_levels": 11.370643615722656,
+            "fg_rgb_source_mae_levels": 5.8061628341674805,
+            "bg_rgb_source_mae_levels": 13.264093399047852,
+            "fg_chroma_tv_levels": 0.1797548234462738,
+            "anchor_mae_levels": 1.309997320175171,
+            "quality_ok": true,
+            "step": 120,
+            "training_utility": 0.8975721597671509,
+            "selection_utility": 0.8917913185432553,
+            "regularization": 0.00578084122389555,
+            "joint_scores": [
+              [
+                0.7544957399368286
+              ],
+              [
+                0.7370802164077759
+              ],
+              [
+                0.6880768537521362
+              ]
+            ],
+            "accepted": 120,
+            "rejected": 0,
+            "lr_scale": 0.33752365223693837,
+            "adaptive_scale": 0.5625,
+            "stagnation_checks": 5
+          },
+          {
+            "source_ssim": 0.9882183548399489,
+            "rgb_source_ssim": 0.9882183548399489,
+            "luma_source_ssim": 0.9961644026037445,
+            "source_mae_levels": 11.346006393432617,
+            "luma_source_mae_levels": 7.86121940612793,
+            "fg_source_mae_levels": 2.497220277786255,
+            "bg_source_mae_levels": 9.68644905090332,
+            "rgb_source_mae_levels": 11.346006393432617,
+            "fg_rgb_source_mae_levels": 5.789194107055664,
+            "bg_rgb_source_mae_levels": 13.236845970153809,
+            "fg_chroma_tv_levels": 0.173646941781044,
+            "anchor_mae_levels": 1.307802677154541,
+            "quality_ok": true,
+            "step": 130,
+            "training_utility": 0.8971835374832153,
+            "selection_utility": 0.8915595733560622,
+            "regularization": 0.005623964127153158,
+            "joint_scores": [
+              [
+                0.7524470090866089
+              ],
+              [
+                0.7365820407867432
+              ],
+              [
+                0.6884481310844421
+              ]
+            ],
+            "accepted": 130,
+            "rejected": 0,
+            "lr_scale": 0.30375,
+            "adaptive_scale": 0.421875,
+            "stagnation_checks": 6
+          },
+          {
+            "source_ssim": 0.9883408472172343,
+            "rgb_source_ssim": 0.9883408472172343,
+            "luma_source_ssim": 0.9962777927164729,
+            "source_mae_levels": 11.317312240600586,
+            "luma_source_mae_levels": 7.853401184082031,
+            "fg_source_mae_levels": 2.5259883403778076,
+            "bg_source_mae_levels": 9.666181564331055,
+            "rgb_source_mae_levels": 11.317312240600586,
+            "fg_rgb_source_mae_levels": 5.763460159301758,
+            "bg_rgb_source_mae_levels": 13.207143783569336,
+            "fg_chroma_tv_levels": 0.1671217978000641,
+            "anchor_mae_levels": 1.3275400400161743,
+            "quality_ok": true,
+            "step": 140,
+            "training_utility": 0.8976081013679504,
+            "selection_utility": 0.8921366250142455,
+            "regularization": 0.005471476353704929,
+            "joint_scores": [
+              [
+                0.7541515827178955
+              ],
+              [
+                0.735684871673584
+              ],
+              [
+                0.6891645193099976
+              ]
+            ],
+            "accepted": 140,
+            "rejected": 0,
+            "lr_scale": 0.2024822608222963,
+            "adaptive_scale": 0.421875,
+            "stagnation_checks": 7
+          },
+          {
+            "source_ssim": 0.9884144476212823,
+            "rgb_source_ssim": 0.9884144476212823,
+            "luma_source_ssim": 0.9963329338537809,
+            "source_mae_levels": 11.298858642578125,
+            "luma_source_mae_levels": 7.8446149826049805,
+            "fg_source_mae_levels": 2.5614395141601562,
+            "bg_source_mae_levels": 9.642342567443848,
+            "rgb_source_mae_levels": 11.298858642578125,
+            "fg_rgb_source_mae_levels": 5.751790523529053,
+            "bg_rgb_source_mae_levels": 13.186382293701172,
+            "fg_chroma_tv_levels": 0.16272422671318054,
+            "anchor_mae_levels": 1.3564146757125854,
+            "quality_ok": true,
+            "step": 150,
+            "training_utility": 0.8946436047554016,
+            "selection_utility": 0.8892580671235919,
+            "regularization": 0.0053855376318097115,
+            "joint_scores": [
+              [
+                0.7504315972328186
+              ],
+              [
+                0.7324697971343994
+              ],
+              [
+                0.6878189444541931
+              ]
+            ],
+            "accepted": 150,
+            "rejected": 0,
+            "lr_scale": 0.17758542905979205,
+            "adaptive_scale": 0.31640625,
+            "stagnation_checks": 8
+          },
+          {
+            "source_ssim": 0.988487644059939,
+            "rgb_source_ssim": 0.988487644059939,
+            "luma_source_ssim": 0.99640048403248,
+            "source_mae_levels": 11.261810302734375,
+            "luma_source_mae_levels": 7.833179473876953,
+            "fg_source_mae_levels": 2.5699970722198486,
+            "bg_source_mae_levels": 9.624103546142578,
+            "rgb_source_mae_levels": 11.261810302734375,
+            "fg_rgb_source_mae_levels": 5.717711925506592,
+            "bg_rgb_source_mae_levels": 13.148324012756348,
+            "fg_chroma_tv_levels": 0.15756937861442566,
+            "anchor_mae_levels": 1.3475079536437988,
+            "quality_ok": true,
+            "step": 160,
+            "training_utility": 0.8940683603286743,
+            "selection_utility": 0.8887732778675854,
+            "regularization": 0.005295082461088896,
+            "joint_scores": [
+              [
+                0.7514085173606873
+              ],
+              [
+                0.733159601688385
+              ],
+              [
+                0.684563398361206
+              ]
+            ],
+            "accepted": 160,
+            "rejected": 0,
+            "lr_scale": 0.11516099730498734,
+            "adaptive_scale": 0.31640625,
+            "stagnation_checks": 9
+          },
+          {
+            "source_ssim": 0.9885351771516112,
+            "rgb_source_ssim": 0.9885351771516112,
+            "luma_source_ssim": 0.9964390335623468,
+            "source_mae_levels": 11.234952926635742,
+            "luma_source_mae_levels": 7.825418949127197,
+            "fg_source_mae_levels": 2.5831005573272705,
+            "bg_source_mae_levels": 9.609245300292969,
+            "rgb_source_mae_levels": 11.234952926635742,
+            "fg_rgb_source_mae_levels": 5.694819927215576,
+            "bg_rgb_source_mae_levels": 13.1201171875,
+            "fg_chroma_tv_levels": 0.15370842814445496,
+            "anchor_mae_levels": 1.3469386100769043,
+            "quality_ok": true,
+            "step": 170,
+            "training_utility": 0.8930705189704895,
+            "selection_utility": 0.8878605803474784,
+            "regularization": 0.005209938623011112,
+            "joint_scores": [
+              [
+                0.7496073842048645
+              ],
+              [
+                0.7324031591415405
+              ],
+              [
+                0.6838586926460266
+              ]
+            ],
+            "accepted": 170,
+            "rejected": 0,
+            "lr_scale": 0.09808593750000004,
+            "adaptive_scale": 0.2373046875,
+            "stagnation_checks": 10
+          },
+          {
+            "source_ssim": 0.9885874114070771,
+            "rgb_source_ssim": 0.9885874114070771,
+            "luma_source_ssim": 0.9964764249213963,
+            "source_mae_levels": 11.215797424316406,
+            "luma_source_mae_levels": 7.821123123168945,
+            "fg_source_mae_levels": 2.5889692306518555,
+            "bg_source_mae_levels": 9.601490020751953,
+            "rgb_source_mae_levels": 11.215797424316406,
+            "fg_rgb_source_mae_levels": 5.667973041534424,
+            "bg_rgb_source_mae_levels": 13.103578567504883,
+            "fg_chroma_tv_levels": 0.14886724948883057,
+            "anchor_mae_levels": 1.3496760129928589,
+            "quality_ok": true,
+            "step": 180,
+            "training_utility": 0.892274022102356,
+            "selection_utility": 0.8871806995011866,
+            "regularization": 0.005093322601169348,
+            "joint_scores": [
+              [
+                0.7476812601089478
+              ],
+              [
+                0.7324541807174683
+              ],
+              [
+                0.6835533380508423
+              ]
+            ],
+            "accepted": 180,
+            "rejected": 0,
+            "lr_scale": 0.08,
+            "adaptive_scale": 0.2373046875,
+            "stagnation_checks": 11
+          }
+        ],
+        "auxiliary_levels": 0
+      },
+      "config": {
+        "steps": 250,
+        "check_every": 10,
+        "log_every": 10,
+        "adaptive_annealing": true,
+        "anneal_min_steps": 180,
+        "anneal_min_lr_ratio": 0.08,
+        "anneal_warmup_steps": 10,
+        "anneal_plateau_factor": 0.75,
+        "anneal_plateau_patience": 2,
+        "anneal_backtrack_factor": 0.9,
+        "anneal_improve_tol": 0.0005,
+        "anneal_early_stop_patience": 4,
+        "checkpoint_every": 5,
+        "resume_from_checkpoint": true,
+        "latent_levels": 6,
+        "background_levels": 28,
+        "auxiliary_levels": 0,
+        "pixel_optimization": false,
+        "fg_edge_feather_pixels": 8.0,
+        "edge_feather_pixels": 12.0,
+        "ambient_feather_pixels": 3.0,
+        "roi_feather_pixels": 6.0,
+        "edge_feather_mode": "cosine",
+        "fg_luma_smooth_sigma": 5.0,
+        "fg_chroma_smooth_sigma": 9.0,
+        "fg_chroma_keep": 0.15,
+        "bg_luma_smooth_sigma": 12.0,
+        "bg_chroma_smooth_sigma": 16.0,
+        "bg_chroma_keep": 0.1,
+        "ambient_smooth_sigma": 14.0,
+        "ambient_grid_size": 8,
+        "ambient_init_bias": 0.0,
+        "tau_scale": 0.75,
+        "tau_fg": 0.2,
+        "tau_bg": 0.35,
+        "latent_working_size": 512,
+        "latent_limit": 6.0,
+        "latent_learning_rate": 0.06,
+        "ambient_learning_rate": 0.004,
+        "ambient_limit": 0.15,
+        "latent_smoothing_mix": 0.05,
+        "temperature": 0.04,
+        "joint_weight": 1.0,
+        "compensation_weight": 0.35,
+        "text_weight": 0.35,
+        "text_key_mix": 0.6,
+        "local_ot_weight": 0.1,
+        "local_ot_clusters": 4,
+        "local_ot_iterations": 50,
+        "local_ot_sinkhorn_regularization": 0.1,
+        "local_ot_fg_threshold": 0.5,
+        "ensemble_temperature": 0.2,
+        "ensemble_uniform_mix": 0.45,
+        "surrogate_set": "lucid",
+        "surrogate_config": null,
+        "compensated_weight": 0.5,
+        "fg_l2_weight": 0.0001,
+        "fg_tv_weight": 0.0004,
+        "fg_chroma_tv_weight": 0.15,
+        "bg_l2_weight": 0.005,
+        "bg_tv_weight": 0.02,
+        "bg_chroma_tv_weight": 0.08,
+        "overflow_weight": 0.05,
+        "halo_weight": 0.002,
+        "halo_soft_weight": 0.0001,
+        "halo_floor": 12.0,
+        "halo_ceiling": 10.0,
+        "fg_chroma_tv_ceiling": 2.5,
+        "halo_parent_multiplier": 1.0,
+        "guard_backtracks": 8,
+        "fg_chroma_levels": 0,
+        "fg_chroma_limit": 0.04,
+        "fg_luma_scale": 0.4,
+        "fg_neutral_recolor_base": 0.05,
+        "fg_highlight_luma_knee": 0.88,
+        "fg_shadow_luma_knee": 0.25,
+        "bg_radial_vignette_scale": 0.05,
+        "source_ssim_floor": 0.85,
+        "source_mae_ceiling": 22.0,
+        "fg_source_mae_ceiling": 10.0,
+        "anchor_ssim_floor": 0.85,
+        "anchor_mae_ceiling": 22.0,
+        "harmonization_smoothing_sigma": 12.0,
+        "harmonization_print_ring_sigma": 7.0,
+        "harmonization_selected_color_mix": 0.12,
+        "harmonization_chroma_transfer_strength": 0.0,
+        "harmonization_strength": 1.0,
+        "harmonization_blend_mode": "matte",
+        "harmonization_fg_feather_pixels": 4.0,
+        "harmonization_bg_strength": 0.85,
+        "harmonization_bg_luma_target": 238.0,
+        "harmonization_bg_warmth": 3.0,
+        "harmonization_bg_tint_mix": 0.2,
+        "harmonization_bg_feather_pixels": 6.0,
+        "ink_margin_pixels": 2,
+        "ink_closing_pixels": 9,
+        "ink_local_contrast": 3.0,
+        "ink_dark_luminance": 180.0,
+        "ink_colored_chroma": 12.0,
+        "allow_tf32": true,
+        "enable_gradient_checkpointing": null,
+        "save_intermediate_pngs": false,
+        "device": "cuda",
+        "seed": 42,
+        "smoke_test": false,
+        "sam_model_dir": null,
+        "planner_model_dir": null,
+        "editor_model_dir": null,
+        "vae_model_dir": null,
+        "vae_model_path": null,
+        "purifier_model_path": null,
+        "purifier_working_size": 256,
+        "purifier_gradient_checkpointing": true,
+        "editor_kind": "flux",
+        "anchor_steps": 32,
+        "anchor_guidance_scale": 2.5,
+        "planner_max_new_tokens": 768,
+        "eot_enabled": true,
+        "diffusion_weight": 0.08,
+        "purifier_steps": 10,
+        "psi_progressive_schedule": true,
+        "psi_phase1_ratio": 0.24,
+        "psi_phase2_ratio": 0.72,
+        "psi_joint_end_scale": 0.45,
+        "psi_text_peak_multiplier": 2.4,
+        "psi_ot_peak_multiplier": 1.6,
+        "text_pure_image_mix": 0.25,
+        "text_phrase_decomposition": true,
+        "max_text_phrases": 6,
+        "text_spherical_augmentation": true,
+        "text_spherical_radius": 0.05,
+        "text_spherical_mix": 0.5,
+        "source_repulsion_weight": 0.15,
+        "source_repulsion_margin": 0.08,
+        "local_ot_text_weighted": true,
+        "local_ot_text_temperature": 0.1,
+        "pcgrad_enabled": true,
+        "spectral_manifold_projection": true,
+        "spectral_budget_start": 0.22,
+        "spectral_budget_end": 0.45,
+        "conditional_tangent_projection": true,
+        "tangent_ssim_slack_margin": 0.03,
+        "tangent_mae_slack_ratio": 0.2,
+        "training_manifest": null,
+        "candidate_cache_dir": null,
+        "public_retrieval_weight": 0.6,
+        "public_retrieval_temperature": 0.07,
+        "public_query_batch_size": 16,
+        "public_contrastive_margin": 0.3,
+        "low_vram_offload_threshold_gb": 28.0
+      },
+      "planning": {
+        "source_boxes": [
+          [
+            0.22,
+            0.056,
+            0.806,
+            0.954
+          ]
+        ],
+        "print_regions": [],
+        "edit_prompt": "Explicit studio lighting recipe for public category 'toothbrush': apply smooth matte studio ambient harmonization across editable product body while preserving exact geometry, framing, and morphological printed ink core pixels unchanged.",
+        "lighting_note": "studio_softbox_relighting_for_toothbrush",
+        "model": "explicit_public_category_recipe_v1",
+        "planner_model": "explicit_public_category_recipe_v1",
+        "precision": "deterministic_geometry",
+        "inputs": [
+          "source_public_image",
+          "source_public_category"
+        ]
+      },
+      "ocr": {
+        "backend": "rapidocr-onnxruntime",
+        "regions": [
+          [
+            0.492,
+            0.595,
+            0.538,
+            0.622
+          ],
+          [
+            0.625,
+            0.194,
+            0.728,
+            0.301
+          ]
+        ],
+        "confidence": [
+          0.8591862320899963,
+          0.6351231932640076
+        ],
+        "passes": [
+          "native",
+          "upscale_2x",
+          "upscale_2x_inverted"
+        ]
+      },
+      "segmentation": {
+        "source": {
+          "image_path": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/source.jpg",
+          "image_sha256": "74e0c705bd248dbec29190d33f7ecd38ef9a17e8853dd58ddb13c78fff4eae0f",
+          "boxes": [
+            [
+              0.242,
+              0.08,
+              0.782,
+              0.93
+            ]
+          ],
+          "pixel_boxes": [
+            [
+              121.0,
+              40.0,
+              391.0,
+              465.0
+            ]
+          ],
+          "segmenter": "sam2.1-hiera-large",
+          "model": "/content/AmbiLAGE/models/sam2",
+          "scores": [
+            [
+              0.8446841239929199,
+              0.9776866436004639,
+              0.9770573377609253
+            ]
+          ],
+          "foreground_ratio": 0.253884,
+          "label_region_pixels": 0,
+          "ink_core_pixels": 0,
+          "substrate_pixels": 0
+        },
+        "target": {
+          "image_path": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+          "image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2",
+          "boxes": [
+            [
+              0.27,
+              0.102,
+              0.7,
+              0.892
+            ]
+          ],
+          "pixel_boxes": [
+            [
+              135.0,
+              51.0,
+              350.0,
+              446.0
+            ]
+          ],
+          "segmenter": "sam2.1-hiera-large",
+          "model": "/content/AmbiLAGE/models/sam2",
+          "scores": [
+            [
+              0.7816389203071594,
+              0.9652423858642578,
+              0.9641913175582886
+            ]
+          ],
+          "foreground_ratio": 0.151604,
+          "label_region_pixels": 0,
+          "ink_core_pixels": 0,
+          "substrate_pixels": 0
+        }
+      },
+      "color_statistics": {
+        "color_scheme": "statistics",
+        "rgb": [
+          175,
+          212,
+          221
+        ],
+        "lab_mean": [
+          82.70592498779297,
+          -10.15125560760498,
+          -8.44670581817627
+        ],
+        "lab_covariance": [
+          [
+            20.069811689955788,
+            29.377427383300336,
+            23.817214700029336
+          ],
+          [
+            29.377427383300336,
+            71.29985375102768,
+            54.91059816164111
+          ],
+          [
+            23.817214700029336,
+            54.91059816164111,
+            45.43537131405087
+          ]
+        ],
+        "luminance_quantiles": [
+          75.58142852783203,
+          91.99589538574219
+        ],
+        "target_foreground_pixels": 34812,
+        "body_pixels": 24539,
+        "photo_border_background_rgb": [
+          255.0,
+          255.0,
+          255.0
+        ],
+        "border_connected_background_pixels": 205336,
+        "covariance_diagnostic_only": true
+      },
+      "harmonization": {
+        "status": "completed",
+        "stage": "illumination_harmonization",
+        "blend_mode": "matte",
+        "selected_rgb": [
+          175,
+          212,
+          221
+        ],
+        "bg_studio_target_rgb": [
+          237,
+          240,
+          238
+        ],
+        "bg_strength": 0.85,
+        "strength": 1.0,
+        "selected_color_mix": 0.12,
+        "smoothing_sigma": 12.0,
+        "chosen_fraction": 1.0,
+        "line_search_steps": 32,
+        "source_ssim": 0.9898195111576019,
+        "source_mae_levels": 11.404269218444824,
+        "fg_rgb_source_mae_levels": 5.917657852172852,
+        "halo_error": 3.272005796432495,
+        "ink_core_pixels": 2833,
+        "substrate_pixels": 99,
+        "max_body_change_levels": 60,
+        "mean_body_change_levels": 5.917657933019279,
+        "max_bg_change_levels": 15,
+        "mean_bg_change_levels": 13.271221454394045,
+        "roi_change_levels": 0,
+        "zero_pixel_residual": true,
+        "generator": {
+          "model": "perceptual_illumination_line_search_v1",
+          "chosen_fraction": 1.0,
+          "line_search_steps": 32
+        },
+        "trials_evaluated": 1,
+        "anchor_path": "/content/AmbiLAGE/output/ambilage_v4_2groups_20261118/09_toothbrush/ambilage/generation/color_harmonization/generative_anchor.png",
+        "anchor_sha256": "7bea2fc017ad98af4017b034e079e0cc83cf05acd92356e21e544c3bc53f1f1a"
+      },
+      "anchor_generation": {
+        "backend": "perceptual_illumination_line_search_v1",
+        "model": "perceptual_illumination_line_search_v1",
+        "precision": "float32",
+        "steps": 32,
+        "prompt": "Explicit studio lighting recipe for public category 'toothbrush': apply smooth matte studio ambient harmonization across editable product body while preserving exact geometry, framing, and morphological printed ink core pixels unchanged.",
+        "seed": 42,
+        "alignment_mode": "perceptual_line_search"
+      },
+      "training_objective": {
+        "kind": "sequential_public_joint_text_fg_ot_psi_v4",
+        "surrogates": [
+          {
+            "role": "attack_surrogate",
+            "name": "ViT-B-16",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_base_patch16_clip_224.openai",
+            "tokenizer_path": null,
+            "weight_path": "/content/AmbiLAGE/models/clip_b16/open_clip_model.safetensors",
+            "weight_sha256": "4b8699299b1e8997753c64b052ba32031449d5d853f55a039148560ee02b820f",
+            "weight_revision": null,
+            "device": "cuda",
+            "precision": "fp32",
+            "image_size": 224,
+            "preprocess": {
+              "resize": "bicubic_direct_square",
+              "align_corners": false,
+              "antialias": true,
+              "mean": [
+                0.48145466,
+                0.4578275,
+                0.40821073
+              ],
+              "std": [
+                0.26862954,
+                0.26130258,
+                0.27577711
+              ]
+            },
+            "open_clip_torch_version": "3.3.0",
+            "cache_identity": "72b05708ed8ae468d8c2aa0085aae8d7765aed6bfca89a514c29cd9e8059db20",
+            "requires_true_local_tokens": true,
+            "loading": {
+              "architecture": {
+                "embed_dim": 512,
+                "vision_cfg": {
+                  "image_size": 224,
+                  "layers": 12,
+                  "width": 768,
+                  "patch_size": 16
+                },
+                "text_cfg": {
+                  "context_length": 77,
+                  "vocab_size": 49408,
+                  "width": 512,
+                  "heads": 8,
+                  "layers": 12
+                }
+              },
+              "quick_gelu": true,
+              "activation": "QuickGELU",
+              "mean": [
+                0.48145466,
+                0.4578275,
+                0.40821073
+              ],
+              "std": [
+                0.26862954,
+                0.26130258,
+                0.27577711
+              ],
+              "metadata_source": "registered_pretrained_tag",
+              "registered_preprocess": {
+                "interpolation": "bicubic",
+                "resize_mode": "shortest"
+              },
+              "strict_state_dict": true,
+              "actual_activation_modules": {
+                "QuickGELU": 24,
+                "GELU": 0
+              },
+              "loader_version": 3,
+              "loader_sha256": "562966bba1620c5b352d9f092bee56ce10fce48afa68cb91575094bd7ad47731"
+            },
+            "tokenizer": {
+              "type": "SimpleTokenizer",
+              "special_tokens": {
+                "sot_token_id": 49406,
+                "eot_token_id": 49407,
+                "pad_token_id": null,
+                "context_length": 77
+              },
+              "content_sha256": "4710f312ff5993f9721ddf2ff9d4d3c1b49ac86b646e95e32b0e3d1ac1abf7b8"
+            }
+          },
+          {
+            "role": "attack_surrogate",
+            "name": "ViT-B-32",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_base_patch32_clip_224.openai",
+            "tokenizer_path": null,
+            "weight_path": "/content/AmbiLAGE/models/clip_b32/open_clip_model.safetensors",
+            "weight_sha256": "e6d1bd7789aa45192b3bf90570a789b478bae1b74ebcce7eddd908e83a2b7c31",
+            "weight_revision": null,
+            "device": "cuda",
+            "precision": "fp32",
+            "image_size": 224,
+            "preprocess": {
+              "resize": "bicubic_direct_square",
+              "align_corners": false,
+              "antialias": true,
+              "mean": [
+                0.48145466,
+                0.4578275,
+                0.40821073
+              ],
+              "std": [
+                0.26862954,
+                0.26130258,
+                0.27577711
+              ]
+            },
+            "open_clip_torch_version": "3.3.0",
+            "cache_identity": "d96ab268fdfbb3a2cd19299e35b25296181613e7f82c20a85c2308105764f282",
+            "requires_true_local_tokens": true,
+            "loading": {
+              "architecture": {
+                "embed_dim": 512,
+                "vision_cfg": {
+                  "image_size": 224,
+                  "layers": 12,
+                  "width": 768,
+                  "patch_size": 32
+                },
+                "text_cfg": {
+                  "context_length": 77,
+                  "vocab_size": 49408,
+                  "width": 512,
+                  "heads": 8,
+                  "layers": 12
+                }
+              },
+              "quick_gelu": true,
+              "activation": "QuickGELU",
+              "mean": [
+                0.48145466,
+                0.4578275,
+                0.40821073
+              ],
+              "std": [
+                0.26862954,
+                0.26130258,
+                0.27577711
+              ],
+              "metadata_source": "registered_pretrained_tag",
+              "registered_preprocess": {
+                "interpolation": "bicubic",
+                "resize_mode": "shortest"
+              },
+              "strict_state_dict": true,
+              "actual_activation_modules": {
+                "QuickGELU": 24,
+                "GELU": 0
+              },
+              "loader_version": 3,
+              "loader_sha256": "562966bba1620c5b352d9f092bee56ce10fce48afa68cb91575094bd7ad47731"
+            },
+            "tokenizer": {
+              "type": "SimpleTokenizer",
+              "special_tokens": {
+                "sot_token_id": 49406,
+                "eot_token_id": 49407,
+                "pad_token_id": null,
+                "context_length": 77
+              },
+              "content_sha256": "4710f312ff5993f9721ddf2ff9d4d3c1b49ac86b646e95e32b0e3d1ac1abf7b8"
+            }
+          },
+          {
+            "role": "attack_surrogate",
+            "name": "ViT-B-32",
+            "pretrained": "laion2b_s34b_b79k",
+            "hf_repo": "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
+            "tokenizer_path": null,
+            "weight_path": "/content/AmbiLAGE/models/clip_b32_laion/open_clip_model.safetensors",
+            "weight_sha256": "ac4f8c4b88af6d963118cbf40ad93176d092abbedfcb752601ae1866352656e6",
+            "weight_revision": null,
+            "device": "cuda",
+            "precision": "fp32",
+            "image_size": 224,
+            "preprocess": {
+              "resize": "bicubic_direct_square",
+              "align_corners": false,
+              "antialias": true,
+              "mean": [
+                0.48145466,
+                0.4578275,
+                0.40821073
+              ],
+              "std": [
+                0.26862954,
+                0.26130258,
+                0.27577711
+              ]
+            },
+            "open_clip_torch_version": "3.3.0",
+            "cache_identity": "ef7d6d64e5ee1c7ae19b90e623e2beb10ce34fc380e3ae0254e7c8e95c745c77",
+            "requires_true_local_tokens": true,
+            "loading": {
+              "architecture": {
+                "embed_dim": 512,
+                "vision_cfg": {
+                  "image_size": 224,
+                  "layers": 12,
+                  "width": 768,
+                  "patch_size": 32
+                },
+                "text_cfg": {
+                  "context_length": 77,
+                  "vocab_size": 49408,
+                  "width": 512,
+                  "heads": 8,
+                  "layers": 12
+                }
+              },
+              "quick_gelu": false,
+              "activation": "native",
+              "mean": [
+                0.48145466,
+                0.4578275,
+                0.40821073
+              ],
+              "std": [
+                0.26862954,
+                0.26130258,
+                0.27577711
+              ],
+              "metadata_source": "registered_pretrained_tag",
+              "registered_preprocess": {
+                "interpolation": "bicubic",
+                "resize_mode": "shortest"
+              },
+              "strict_state_dict": true,
+              "actual_activation_modules": {
+                "QuickGELU": 0,
+                "GELU": 24
+              },
+              "loader_version": 3,
+              "loader_sha256": "562966bba1620c5b352d9f092bee56ce10fce48afa68cb91575094bd7ad47731"
+            },
+            "tokenizer": {
+              "type": "SimpleTokenizer",
+              "special_tokens": {
+                "sot_token_id": 49406,
+                "eot_token_id": 49407,
+                "pad_token_id": null,
+                "context_length": 77
+              },
+              "content_sha256": "4710f312ff5993f9721ddf2ff9d4d3c1b49ac86b646e95e32b0e3d1ac1abf7b8"
+            }
+          }
+        ],
+        "surrogate_selection": {
+          "schema_version": 1,
+          "profile": "lucid",
+          "config_source": "src/visual/config/optimization.json",
+          "config_sha256": "41bd088cfd50df5f92e033a04ab23060a2daf080811254bcf998f0f23c6876d9",
+          "specs": [
+            {
+              "name": "ViT-B-16",
+              "pretrained": "openai",
+              "hf_repo": "timm/vit_base_patch16_clip_224.openai",
+              "weight_path": null,
+              "tokenizer_path": null
+            },
+            {
+              "name": "ViT-B-32",
+              "pretrained": "openai",
+              "hf_repo": "timm/vit_base_patch32_clip_224.openai",
+              "weight_path": null,
+              "tokenizer_path": null
+            },
+            {
+              "name": "ViT-B-32",
+              "pretrained": "laion2b_s34b_b79k",
+              "hf_repo": "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
+              "weight_path": null,
+              "tokenizer_path": null
+            }
+          ],
+          "specs_sha256": "67e3e7ce158c094b1d414288bb08fcb8504aa5cd1bbcac469e90ff279bd29af6",
+          "comparison_reference": "current_lucid_configuration_and_loader",
+          "activation_policy": "pretrained_native",
+          "model_count": 3,
+          "held_out_models": [
+            "ViT-g-14",
+            "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+          ],
+          "downloads_during_training": false
+        },
+        "public_objectives": [
+          {
+            "source_public_key_sha256": "7a9d1b9bb1fc81c4dc16871e4906690c647a1d5eda87a5f1c93fcbceee6ccdb8",
+            "training_text_sha256": "26774577d537636d47e2575be221c779ae5c3047468c0f8563e94a0fa92d9636",
+            "source_text_encoding": {
+              "text_sha256": "7a9d1b9bb1fc81c4dc16871e4906690c647a1d5eda87a5f1c93fcbceee6ccdb8",
+              "input_tokens": 98,
+              "encoded_tokens": 98,
+              "chunks": 2,
+              "payload_tokens_per_chunk": 75,
+              "chunk_token_counts": [
+                75,
+                23
+              ],
+              "truncated": false
+            },
+            "target_text_encoding": {
+              "text_sha256": "26774577d537636d47e2575be221c779ae5c3047468c0f8563e94a0fa92d9636",
+              "input_tokens": 18,
+              "encoded_tokens": 18,
+              "chunks": 1,
+              "payload_tokens_per_chunk": 75,
+              "chunk_token_counts": [
+                18
+              ],
+              "truncated": false
+            },
+            "query_modes": [
+              "multimodal_equal_weight",
+              "independent_target_text"
+            ],
+            "query_image_weight": 0.5,
+            "query_text_weight": 0.5,
+            "memory_key_image_weight": 0.5,
+            "compensated_target_enabled": true,
+            "compensated_valid": true,
+            "compensation_weight": 0.35,
+            "text_weight": 0.35,
+            "text_key_mix": 0.6,
+            "text_pure_image_mix": 0.25,
+            "text_compensated_valid": true,
+            "phrase_decomposition_enabled": true,
+            "phrase_count": 6,
+            "spherical_query_augmentation": true,
+            "local_ot_weight": 0.1,
+            "local_ot_clusters": 4,
+            "local_ot_fg_threshold": 0.5,
+            "local_ot_text_weighted": true,
+            "local_ot_active": true,
+            "public_bundle_retrieval_active": false,
+            "victim_memory_used": false,
+            "formal_queries_used": false,
+            "formal_ranking_used": false
+          },
+          {
+            "source_public_key_sha256": "7a9d1b9bb1fc81c4dc16871e4906690c647a1d5eda87a5f1c93fcbceee6ccdb8",
+            "training_text_sha256": "26774577d537636d47e2575be221c779ae5c3047468c0f8563e94a0fa92d9636",
+            "source_text_encoding": {
+              "text_sha256": "7a9d1b9bb1fc81c4dc16871e4906690c647a1d5eda87a5f1c93fcbceee6ccdb8",
+              "input_tokens": 98,
+              "encoded_tokens": 98,
+              "chunks": 2,
+              "payload_tokens_per_chunk": 75,
+              "chunk_token_counts": [
+                75,
+                23
+              ],
+              "truncated": false
+            },
+            "target_text_encoding": {
+              "text_sha256": "26774577d537636d47e2575be221c779ae5c3047468c0f8563e94a0fa92d9636",
+              "input_tokens": 18,
+              "encoded_tokens": 18,
+              "chunks": 1,
+              "payload_tokens_per_chunk": 75,
+              "chunk_token_counts": [
+                18
+              ],
+              "truncated": false
+            },
+            "query_modes": [
+              "multimodal_equal_weight",
+              "independent_target_text"
+            ],
+            "query_image_weight": 0.5,
+            "query_text_weight": 0.5,
+            "memory_key_image_weight": 0.5,
+            "compensated_target_enabled": true,
+            "compensated_valid": true,
+            "compensation_weight": 0.35,
+            "text_weight": 0.35,
+            "text_key_mix": 0.6,
+            "text_pure_image_mix": 0.25,
+            "text_compensated_valid": true,
+            "phrase_decomposition_enabled": true,
+            "phrase_count": 6,
+            "spherical_query_augmentation": true,
+            "local_ot_weight": 0.1,
+            "local_ot_clusters": 4,
+            "local_ot_fg_threshold": 0.5,
+            "local_ot_text_weighted": true,
+            "local_ot_active": true,
+            "public_bundle_retrieval_active": false,
+            "victim_memory_used": false,
+            "formal_queries_used": false,
+            "formal_ranking_used": false
+          },
+          {
+            "source_public_key_sha256": "7a9d1b9bb1fc81c4dc16871e4906690c647a1d5eda87a5f1c93fcbceee6ccdb8",
+            "training_text_sha256": "26774577d537636d47e2575be221c779ae5c3047468c0f8563e94a0fa92d9636",
+            "source_text_encoding": {
+              "text_sha256": "7a9d1b9bb1fc81c4dc16871e4906690c647a1d5eda87a5f1c93fcbceee6ccdb8",
+              "input_tokens": 98,
+              "encoded_tokens": 98,
+              "chunks": 2,
+              "payload_tokens_per_chunk": 75,
+              "chunk_token_counts": [
+                75,
+                23
+              ],
+              "truncated": false
+            },
+            "target_text_encoding": {
+              "text_sha256": "26774577d537636d47e2575be221c779ae5c3047468c0f8563e94a0fa92d9636",
+              "input_tokens": 18,
+              "encoded_tokens": 18,
+              "chunks": 1,
+              "payload_tokens_per_chunk": 75,
+              "chunk_token_counts": [
+                18
+              ],
+              "truncated": false
+            },
+            "query_modes": [
+              "multimodal_equal_weight",
+              "independent_target_text"
+            ],
+            "query_image_weight": 0.5,
+            "query_text_weight": 0.5,
+            "memory_key_image_weight": 0.5,
+            "compensated_target_enabled": true,
+            "compensated_valid": true,
+            "compensation_weight": 0.35,
+            "text_weight": 0.35,
+            "text_key_mix": 0.6,
+            "text_pure_image_mix": 0.25,
+            "text_compensated_valid": true,
+            "phrase_decomposition_enabled": true,
+            "phrase_count": 6,
+            "spherical_query_augmentation": true,
+            "local_ot_weight": 0.1,
+            "local_ot_clusters": 4,
+            "local_ot_fg_threshold": 0.5,
+            "local_ot_text_weighted": true,
+            "local_ot_active": true,
+            "public_bundle_retrieval_active": false,
+            "victim_memory_used": false,
+            "formal_queries_used": false,
+            "formal_ranking_used": false
+          }
+        ],
+        "held_out_models": [
+          "ViT-g-14",
+          "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+        ],
+        "held_out_purifiers": [
+          "eval_purifier_sd21",
+          "sd2-community/stable-diffusion-2-1-base",
+          "stabilityai/stable-diffusion-2-1-base"
+        ],
+        "gradient_execution": "shared_views_and_purified_pcgrad_single_backward",
+        "pcgrad_enabled": true,
+        "psi_progressive_schedule": true,
+        "weak_proxy_weighting": "baseline_calibrated_relative_gain_softmin_with_uniform_floor",
+        "ensemble_temperature": 0.2,
+        "ensemble_uniform_mix": 0.45,
+        "eot_enabled": true,
+        "eot_paths": [
+          "identity",
+          "pillow_blur_bpda",
+          "jpeg_exact_forward_ste",
+          "resize"
+        ],
+        "diffusion_weight": 0.08,
+        "diffusion_gradient": "full",
+        "purifier": {
+          "kind": "sd15_latent_noise_then_ddim_purification_v1",
+          "config": {
+            "model_path": "/content/AmbiLAGE/models/purifier",
+            "working_size": 256,
+            "reverse_steps": 10,
+            "start_timestep": 99,
+            "gradient_checkpointing": true
+          },
+          "model": {
+            "local_path": "/content/AmbiLAGE/models/purifier",
+            "local_files_only": true,
+            "variant": null,
+            "files": {
+              "unet/config.json": {
+                "sha256": "78f474de6bab3d893868f37be97b636ae65c0df3073ed3256ca458ff599b5f96",
+                "bytes": 743
+              },
+              "unet/diffusion_pytorch_model.non_ema.safetensors": {
+                "sha256": "cd1b6db09a81cb1d39fbd245a89c1e3db9da9fe8eba5e8f9098ea6c4994221d3",
+                "bytes": 3438167536
+              },
+              "unet/diffusion_pytorch_model.safetensors": {
+                "sha256": "19da7aaa4b880e59d56843f1fcb4dd9b599c28a1d9d9af7c1143057c8ffae9f1",
+                "bytes": 3438167540
+              },
+              "vae/config.json": {
+                "sha256": "786a7d21647ddea6a04b9675c03d3cb45e90a2f3c6da5fbda2c54ade040036de",
+                "bytes": 547
+              },
+              "vae/diffusion_pytorch_model.safetensors": {
+                "sha256": "a2b5134f4dbc140d9c11f11cba3233099e00af40f262f136c691fb7d38d2194c",
+                "bytes": 334643276
+              },
+              "text_encoder/config.json": {
+                "sha256": "845df614cb9327ae7bbea027316246fae917827407da6df13572e41b5f93b4cc",
+                "bytes": 617
+              },
+              "text_encoder/model.safetensors": {
+                "sha256": "d008943c017f0092921106440254dbbe00b6a285f7883ec8ba160c3faad88334",
+                "bytes": 492265874
+              },
+              "tokenizer/merges.txt": {
+                "sha256": "9fd691f7c8039210e0fced15865466c65820d09b63988b0174bfe25de299051a",
+                "bytes": 524619
+              },
+              "tokenizer/special_tokens_map.json": {
+                "sha256": "c4864a9376a8401918425bed71fc14fc0e81f9b59ec45c1cf96cccb2df508eac",
+                "bytes": 472
+              },
+              "tokenizer/tokenizer_config.json": {
+                "sha256": "00439066fcba73de57644cf41e4e3b9f2dbb09d7f3fc2005898ba52399045882",
+                "bytes": 806
+              },
+              "tokenizer/vocab.json": {
+                "sha256": "e089ad92ba36837a0d31433e555c8f45fe601ab5c221d4f607ded32d9f7a4349",
+                "bytes": 1059962
+              },
+              "scheduler/scheduler_config.json": {
+                "sha256": "699cce92eb7c122e2eb7dfdea78e6187fda76a5ed4a8e42319b85610e620e091",
+                "bytes": 308
+              }
+            }
+          },
+          "prompt": "",
+          "guidance_scale": 1.0,
+          "posterior": "mode",
+          "eta": 0.0,
+          "resize": "aspect_long_edge_round8_min64_bicubic_antialias_back_to_native",
+          "output_range": [
+            0.0,
+            1.0
+          ],
+          "quantization": "external_eight_bit_save_or_ste",
+          "implementation_sha256": "048b8b2a75056a2f0dac5208175d6937b110618d775cf8d3ffb01f5ff9c3ee87",
+          "not_original_diffpure": true,
+          "not_full_cognitiveguard": true
+        },
+        "vram_governance": {
+          "low_vram_mode": true,
+          "offloaded_text_bytes": 761208312,
+          "visual_grad_checkpointing_models": 3,
+          "sequential_gpu_streaming": false
+        },
+        "victim_memory_used": false,
+        "formal_queries_used": false
+      },
+      "final_naturalness": {
+        "passed": true,
+        "natural": true,
+        "text_preserved": true,
+        "artifact_free": true,
+        "reasons": [
+          "strict_mathematical_naturalness_gate_passed"
+        ],
+        "category": "toothbrush",
+        "metrics": {
+          "source_ssim": 0.9878672899109511,
+          "rgb_source_ssim": 0.9878672899109511,
+          "luma_source_ssim": 0.9957942578009477,
+          "source_mae_levels": 11.578112602233887,
+          "rgb_source_mae_levels": 11.578112602233887,
+          "luma_source_mae_levels": 8.102267265319824,
+          "fg_rgb_source_mae_levels": 6.171298980712891,
+          "fg_chroma_tv_levels": 0.7233743667602539,
+          "halo_error": 3.4134178161621094,
+          "roi_max_abs_diff": 0.0
+        },
+        "thresholds": {
+          "source_ssim_floor": 0.85,
+          "source_mae_ceiling": 22.0,
+          "fg_source_mae_ceiling": 10.0,
+          "fg_chroma_tv_ceiling": 2.5,
+          "halo_ceiling": 10.0,
+          "roi_max_abs_diff": 0.0
+        },
+        "model": "mathematical_rgb_oklab_dual_gate_v2",
+        "precision": "float32",
+        "candidate_sha256": "b688058f249bc42034909fd7adf08f68af8620253141d76b45dff055e6d08c52"
+      },
+      "hardware_profile": {
+        "tf32_enabled": true,
+        "device": "cuda",
+        "vram_gb": 22.03,
+        "gradient_checkpointing_recommended": true,
+        "seed": 42
+      },
+      "victim_memory_used": false,
+      "formal_queries_used": false,
+      "shadow_pool_used": false,
+      "true_rank_used": false,
+      "elapsed_seconds": 620.206455386
+    }
+  },
+  "requested_steps": 250,
+  "source": {
+    "id": "B09PNNXYJ4",
+    "title": "Tthxqing U shaped Toothbrush, Food Grade Soft Silicone Whole Mouth, Toddlers Manual Toothbrushes, Oral Teeth Cleaning Tools For Children 360 Degrees Toddler Toothbrush Soft Silicone Brush Head(Pink)",
+    "image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/source.jpg",
+    "image_sha256": "74e0c705bd248dbec29190d33f7ecd38ef9a17e8853dd58ddb13c78fff4eae0f"
+  },
+  "target": {
+    "id": "B09J81RMLD",
+    "title": "Baby U Shaped Toothbrush for Aged 2-12 with 360° Soft Silicone Brush Heads Handle Kids Cute Teeth Whitening Massage Tool",
+    "image": "/content/AmbiLAGE/resources/evaluation_base/groups/09_toothbrush/target.jpg",
+    "image_sha256": "48b0143f4c06290ab18acd036f74d640f50c3d935b4a349a4280a5bfedf11bc2"
+  },
+  "selection": {
+    "basis": "user_confirmed_existing_nine_pairs_no_reselection",
+    "passes_calibrated_threshold": true,
+    "shape_similarity": 0.612
+  },
+  "public_binding_sha256": "ebe370471db94e868b9ff9cb10803fb415119bec6b731be893a9852f2683af77"
+}

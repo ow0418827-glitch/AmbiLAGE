@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-11-14T11:19:27.293810+00:00",
+  "checked_at": "2026-11-18T00:38:14.287031+00:00",
   "code": {
-    "python_files_parsed": 131,
-    "model_manifest_entries": 15,
+    "python_files_parsed": 164,
+    "model_manifest_entries": 17,
     "private_resources_read": false
   },
   "resources": {
@@ -18,7 +18,7 @@
       "torchvision": "0.29.1+cu126",
       "transformers": "5.23.0",
       "diffusers": "0.43.0",
-      "accelerate": "1.15.0",
+      "accelerate": "1.16.0",
       "open-clip-torch": "3.3.0",
       "safetensors": "0.8.0",
       "huggingface-hub": "1.33.0",
@@ -27,10 +27,10 @@
       "scipy": "1.17.1",
       "sentence-transformers": "5.7.0"
     },
-    "disk_free_gib": 221.88,
+    "disk_free_gib": 219.94,
     "cuda_available": true,
-    "cuda_device": "Tesla T4",
-    "vram_gib": 14.56,
+    "cuda_device": "NVIDIA L4",
+    "vram_gib": 22.03,
     "bf16_supported": true,
     "recommended_dtype": "bfloat16",
     "fp32_fallback_compatible": true
@@ -119,6 +119,24 @@
       "present": false,
       "repo_id": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
       "role": "held_out_evaluator_only"
+    },
+    "eval_purifier_sd21": {
+      "present": false,
+      "repo_id": "sd2-community/stable-diffusion-2-1-base",
+      "role": "held_out_cognitiveguard_system1_purifier_only",
+      "allow_patterns": [
+        "model_index.json",
+        "scheduler/*",
+        "text_encoder/config.json",
+        "text_encoder/model.safetensors",
+        "tokenizer/*",
+        "unet/config.json",
+        "unet/diffusion_pytorch_model.safetensors",
+        "vae/config.json",
+        "vae/diffusion_pytorch_model.safetensors",
+        "LICENSE*",
+        "README.md"
+      ]
     },
     "selection": {
       "present": false,

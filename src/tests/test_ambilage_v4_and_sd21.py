@@ -172,6 +172,85 @@ def test_text_weighted_foreground_local_ot_prioritizes_text_relevant_part_center
     assert score_blue > score_other + 0.25
 
 
+def test_text_weighted_local_ot_projects_mismatched_openclip_patch_dims(monkeypatch):
+    from src.visual import training_objectives
+
+    class _ProjectedEncoder:
+        def __init__(self, base):
+            self.last_encoding_audit = {"truncated": False}
+
+        def encode_text(self, text):
+            vec = np.zeros(512, dtype=np.float32)
+            vec[2 if "blue" in text.lower() else 0] = 1.0
+            return vec
+
+    monkeypatch.setattr(training_objectives, "ChunkedClipEncoder", _ProjectedEncoder)
+
+    # 模拟 OpenCLIP ViT-B-16/B-32: patch_tokens 为 768 维，visual.ln_post + visual.proj 将其投影到 512 维文本空间
+    proj = torch.zeros(768, 512, dtype=torch.float32)
+    proj[1, 1] = 1.0
+    proj[2, 2] = 1.0
+
+    class _ProjectedSurrogate(TinySurrogate):
+        def __init__(self):
+            super().__init__(0)
+            self.model = SimpleNamespace(
+                visual=SimpleNamespace(
+                    ln_post=torch.nn.Identity(),
+                    proj=proj,
+                )
+            )
+
+    part_a = F.normalize(torch.cat([torch.tensor([[0.1, 0.95, 0.05]]), torch.zeros(1, 765)], dim=-1).expand(8, -1), dim=-1)
+    part_b = F.normalize(torch.cat([torch.tensor([[0.1, 0.05, 0.95]]), torch.zeros(1, 765)], dim=-1).expand(8, -1), dim=-1)
+    spatial = torch.cat([part_a, part_b], dim=0)[None]
+    cls_tok = torch.cat([torch.tensor([[1.0]]), torch.zeros(1, 511)], dim=-1)[None]
+    tgt_tokens = torch.cat([F.normalize(spatial.mean(dim=1, keepdim=True), dim=-1), spatial], dim=1)
+    fg = np.ones((16, 16), dtype=bool)
+
+    cfg = AmbiLAGEConfig(
+        local_ot_weight=0.20,
+        local_ot_clusters=2,
+        local_ot_iterations=30,
+        local_ot_text_weighted=True,
+        local_ot_text_temperature=0.08,
+        smoke_test=True,
+    )
+    obj = PublicFullKeyObjective(
+        _ProjectedSurrogate(),
+        cls_tok.squeeze(1),
+        "source neutral bottle",
+        "I want to buy shampoo with blue botanical cap",
+        cfg,
+        target_patch_tokens=tgt_tokens,
+        source_fg_mask=fg,
+        target_fg_mask=fg,
+    )
+    assert obj.audit["local_ot_text_weighted"] is True
+    assert obj.target_fg_center_weights is not None
+    assert float(obj.target_fg_center_weights.sum()) == pytest.approx(1.0, abs=1e-6)
+    assert float(obj.target_fg_center_weights.max()) > 0.75
+
+    # 无可用投影且维度不匹配时，应安全降级为均匀边际权重而非报错
+    class _UnprojectedSurrogate(TinySurrogate):
+        def __init__(self):
+            super().__init__(0)
+            self.model = SimpleNamespace(visual=SimpleNamespace())
+
+    obj_fallback = PublicFullKeyObjective(
+        _UnprojectedSurrogate(),
+        cls_tok.squeeze(1),
+        "source neutral bottle",
+        "I want to buy shampoo with blue botanical cap",
+        cfg,
+        target_patch_tokens=tgt_tokens,
+        source_fg_mask=fg,
+        target_fg_mask=fg,
+    )
+    assert obj_fallback.target_fg_center_weights is None
+    assert obj_fallback.audit["local_ot_text_weighted"] is False
+
+
 def test_spectral_manifold_project_suppresses_nyquist_checkerboard_and_preserves_smooth_field():
     torch.manual_seed(11)
     yy, xx = torch.meshgrid(

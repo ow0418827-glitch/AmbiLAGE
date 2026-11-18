@@ -405,6 +405,7 @@ def refine_ambient_coop_latent(
             "params": [
                 ambient_field.ambient_global,
                 ambient_field.ambient_grid,
+                ambient_field.ambient_basis,
                 ambient_field.fg_chroma_shift,
             ],
             "lr": config.ambient_learning_rate,
@@ -416,6 +417,7 @@ def refine_ambient_coop_latent(
             "delta": delta.detach().clone(),
             "ambient_global": ambient_field.ambient_global.detach().clone(),
             "ambient_grid": ambient_field.ambient_grid.detach().clone(),
+            "ambient_basis": ambient_field.ambient_basis.detach().clone(),
             "fg_chroma_shift": ambient_field.fg_chroma_shift.detach().clone(),
         }
 
@@ -424,6 +426,8 @@ def refine_ambient_coop_latent(
             delta.copy_(snap["delta"])
             ambient_field.ambient_global.copy_(snap["ambient_global"])
             ambient_field.ambient_grid.copy_(snap["ambient_grid"])
+            if "ambient_basis" in snap:
+                ambient_field.ambient_basis.copy_(snap["ambient_basis"])
             if "fg_chroma_shift" in snap:
                 ambient_field.fg_chroma_shift.copy_(snap["fg_chroma_shift"])
 
@@ -503,6 +507,10 @@ def refine_ambient_coop_latent(
             ambient_field.ambient_grid.copy_(
                 ckpt["ambient_grid"].to(device=device, dtype=ambient_field.ambient_grid.dtype)
             )
+            if "ambient_basis" in ckpt:
+                ambient_field.ambient_basis.copy_(
+                    ckpt["ambient_basis"].to(device=device, dtype=ambient_field.ambient_basis.dtype)
+                )
             if "fg_chroma_shift" in ckpt:
                 ambient_field.fg_chroma_shift.copy_(
                     ckpt["fg_chroma_shift"].to(device=device, dtype=ambient_field.fg_chroma_shift.dtype)
@@ -518,6 +526,12 @@ def refine_ambient_coop_latent(
         baseline_vals = ckpt.get("objective_baseline_values")
         if baseline_vals is not None and hasattr(objective, "_baseline_values"):
             objective._baseline_values = baseline_vals.detach().clone().to(device)
+        baseline_joint = ckpt.get("objective_baseline_joint_values")
+        if baseline_joint is not None and hasattr(objective, "_baseline_joint_values"):
+            objective._baseline_joint_values = baseline_joint.detach().clone().to(device)
+        baseline_text = ckpt.get("objective_baseline_text_values")
+        if baseline_text is not None and hasattr(objective, "_baseline_text_values"):
+            objective._baseline_text_values = baseline_text.detach().clone().to(device)
         _restore_rng_state(ckpt.get("rng_state"), device)
         start_step = saved_step + 1
         prior_elapsed = float(ckpt.get("accumulated_elapsed_seconds", 0.0))
@@ -677,7 +691,13 @@ def refine_ambient_coop_latent(
                 loss.backward()
             del decoded_img, raw_img
 
-            for p in (delta, ambient_field.ambient_global, ambient_field.ambient_grid, ambient_field.fg_chroma_shift):
+            for p in (
+                delta,
+                ambient_field.ambient_global,
+                ambient_field.ambient_grid,
+                ambient_field.ambient_basis,
+                ambient_field.fg_chroma_shift,
+            ):
                 if p.grad is not None:
                     torch.nan_to_num_(p.grad, nan=0.0, posinf=0.0, neginf=0.0)
 
@@ -714,6 +734,7 @@ def refine_ambient_coop_latent(
                 proposed_delta = (old_snap["delta"] + projected).clamp(-config.latent_limit, config.latent_limit)
                 proposed_global = ambient_field.ambient_global.clamp(-config.ambient_limit, config.ambient_limit).clone()
                 proposed_grid = ambient_field.ambient_grid.clamp(-1.0, 1.0).clone()
+                proposed_basis = ambient_field.ambient_basis.clamp(-1.0, 1.0).clone()
                 fg_chroma_lim = float(getattr(config, "fg_chroma_limit", 0.16))
                 proposed_fg_chroma = ambient_field.fg_chroma_shift.clamp(-fg_chroma_lim, fg_chroma_lim).clone()
 
@@ -729,6 +750,9 @@ def refine_ambient_coop_latent(
                     )
                     ambient_field.ambient_grid.copy_(
                         old_snap["ambient_grid"] + scale * (proposed_grid - old_snap["ambient_grid"])
+                    )
+                    ambient_field.ambient_basis.copy_(
+                        old_snap["ambient_basis"] + scale * (proposed_basis - old_snap["ambient_basis"])
                     )
                     ambient_field.fg_chroma_shift.copy_(
                         old_snap["fg_chroma_shift"] + scale * (proposed_fg_chroma - old_snap["fg_chroma_shift"])
@@ -824,6 +848,8 @@ def refine_ambient_coop_latent(
                 or interrupt_requested["name"] is not None
             ):
                 baseline_tensor = getattr(objective, "_baseline_values", None)
+                baseline_joint_tensor = getattr(objective, "_baseline_joint_values", None)
+                baseline_text_tensor = getattr(objective, "_baseline_text_values", None)
                 checkpoints_saved += 1
                 _save_atomic_checkpoint(ckpt_path, {
                     "signature": expected_sig,
@@ -834,6 +860,7 @@ def refine_ambient_coop_latent(
                     "delta": delta.detach().cpu().clone(),
                     "ambient_global": ambient_field.ambient_global.detach().cpu().clone(),
                     "ambient_grid": ambient_field.ambient_grid.detach().cpu().clone(),
+                    "ambient_basis": ambient_field.ambient_basis.detach().cpu().clone(),
                     "fg_chroma_shift": ambient_field.fg_chroma_shift.detach().cpu().clone(),
                     "optimizer_state_dict": _optimizer_state_to_cpu(optimizer.state_dict()),
                     "best_snap": {k: v.detach().cpu().clone() for k, v in best_snap.items()},
@@ -844,6 +871,16 @@ def refine_ambient_coop_latent(
                     "annealer_state": annealer.state_dict(),
                     "objective_baseline_values": (
                         baseline_tensor.detach().cpu().clone() if torch.is_tensor(baseline_tensor) else None
+                    ),
+                    "objective_baseline_joint_values": (
+                        baseline_joint_tensor.detach().cpu().clone()
+                        if torch.is_tensor(baseline_joint_tensor)
+                        else None
+                    ),
+                    "objective_baseline_text_values": (
+                        baseline_text_tensor.detach().cpu().clone()
+                        if torch.is_tensor(baseline_text_tensor)
+                        else None
                     ),
                     "rng_state": _capture_rng_state(device),
                     "accumulated_elapsed_seconds": float(prior_elapsed + (time.perf_counter() - tick)),

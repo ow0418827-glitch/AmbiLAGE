@@ -11,7 +11,11 @@ def test_new_defaults_and_partial_overrides_enable_enhanced_mechanisms():
         config = VisualInceptionConfig.from_dict(raw)
         assert config.mechanism_profile == 'enhanced_v3'
         assert config.contrastive_margin == .3
-        assert config.query_adversarial_radius == .05
+        assert config.hard_negative_same_category_count == 10
+        assert config.hard_negative_popularity_count == 10
+        assert config.hard_negative_proxy_memory_count == 10
+        assert config.query_adversarial_radius == .2
+        assert config.query_adversarial_step_size == .1
 
 
 @pytest.mark.parametrize('mode', ['semantic_perceptual', 'retrieval_semantic_perceptual'])

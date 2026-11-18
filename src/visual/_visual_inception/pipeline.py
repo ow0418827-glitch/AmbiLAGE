@@ -51,7 +51,8 @@ def _prepare_text_features(models, texts, *, fixture):
 
 
 def _proxy_components(model, image, target, *, retrieval_state=None, model_index=0,
-                      query_indices=None, temperature=.07, config=None, return_audit=False):
+                      query_indices=None, temperature=.07, config=None, return_audit=False,
+                      include_per_query_audit=True):
     if retrieval_state is None:
         values = (semantic_loss(model, image, target), image.new_zeros(()))
         return (*values, None) if return_audit else values
@@ -62,8 +63,11 @@ def _proxy_components(model, image, target, *, retrieval_state=None, model_index
     negatives = retrieval_state['negative_features'][model_index]
     if config is not None and config.mechanism_profile == 'enhanced_v3':
         from .enhanced_objective import enhanced_retrieval_semantic_losses
+        subspace = (retrieval_state['query_subspaces'][model_index]
+                    if 'query_subspaces' in retrieval_state else None)
         semantic, retrieval, audit = enhanced_retrieval_semantic_losses(feature, target, queries,
-            negatives, negative_policy=retrieval_state['negative_policies'][model_index], config=config)
+            negatives, negative_policy=retrieval_state['negative_policies'][model_index], config=config,
+            query_subspace=subspace, include_per_query_audit=include_per_query_audit)
         return (semantic, retrieval, audit) if return_audit else (semantic, retrieval)
     values = retrieval_semantic_losses(feature, target, queries, negatives, temperature)
     return (*values, None) if return_audit else values
@@ -79,7 +83,8 @@ def _gradient(image, source, models, text_features, weights, perceptual, config,
         leaf = image.detach().requires_grad_(True)
         semantic, retrieval, mechanism_audit = _proxy_components(model, leaf, targets,
             retrieval_state=retrieval_state, model_index=index, query_indices=query_indices,
-            temperature=config.retrieval_temperature, config=config, return_audit=True)
+            temperature=config.retrieval_temperature, config=config, return_audit=True,
+            include_per_query_audit=False)
         loss = config.semantic_weight * semantic + config.retrieval_weight * retrieval
         gradient, = torch.autograd.grad(loss, leaf)
         total_gradient.add_(gradient.detach(), alpha=weight)
@@ -163,9 +168,9 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
     if retrieval_enabled:
         from .retrieval_cache import encode_candidate_cache
         query_features, query_encoding = _prepare_text_features(models, bundle['queries'], fixture=config.smoke_test)
-        negatives, negative_policies = [], []
+        negatives, negative_policies, query_subspaces = [], [], []
         cache_root = _project_path(config.candidate_cache_dir) if config.candidate_cache_dir else root / 'candidate_cache'
-        for model, concept in zip(models, text_features):
+        for model_idx, (model, concept) in enumerate(zip(models, text_features)):
             vectors, record = encode_candidate_cache(model, bundle['candidates'], cache_root,
                 bundle_sha256=bundle['bundle_sha256'], fixture=config.smoke_test)
             if vectors.shape[1] != concept.shape[1]:
@@ -173,11 +178,14 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
             negatives.append(vectors.detach()); cache_records.append(record)
             if enhanced_enabled:
                 from .negative_sampling import build_negative_policy
+                from .enhanced_objective import build_query_subspace
                 negative_policies.append(build_negative_policy(bundle['candidate_metadata'], vectors,
                     category=bundle['audit']['category']))
+                query_subspaces.append(build_query_subspace(query_features[model_idx], concept_features=concept))
         retrieval_state = dict(concept_features=text_features, query_features=query_features, negative_features=negatives)
         if enhanced_enabled:
             retrieval_state['negative_policies'] = negative_policies
+            retrieval_state['query_subspaces'] = query_subspaces
         sampling = dict(algorithm=QUERY_SAMPLING_KIND, pool_size=100, batch_size=config.query_batch_size,
             calibration_indices=sample_query_indices(100, config.query_batch_size, config.seed, 0),
             step_indices=[sample_query_indices(100, config.query_batch_size, config.seed, step)
@@ -191,7 +199,7 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
         sem, ret, audit = _proxy_components(model, leaf, target_features,
             retrieval_state=retrieval_state, model_index=model_index,
             query_indices=sampling['calibration_indices'], temperature=config.retrieval_temperature,
-            config=config, return_audit=True)
+            config=config, return_audit=True, include_per_query_audit=False)
         calibration_audits[model_index].append(audit)
         return config.semantic_weight * sem + config.retrieval_weight * ret
     variances = estimate_gradient_variances(source_tensor, models, text_features,
@@ -212,7 +220,8 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
             retrieval_state=retrieval_state, query_indices=indices)
         image = torch.maximum(lower, torch.minimum(upper, image - step_size * gradient.sign())).detach()
         if enhanced_enabled:
-            mechanism_steps.append(dict(step=step, query_indices=indices, model_audits=record['mechanism_audits']))
+            mechanism_steps.append(dict(step=step, query_indices=indices,
+                                        model_audits=record.pop('mechanism_audits')))
         if step == 1 or step == config.steps or step % 10 == 0:
             history.append(dict(step=step, **record, query_indices=indices,
                                 linf_after_update=float((image - source_tensor).abs().max())))
@@ -222,7 +231,8 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
         for index, (model, targets) in enumerate(zip(models, text_features)):
             sem, ret, mechanism_audit = _proxy_components(model, image, targets, retrieval_state=retrieval_state,
                 model_index=index, query_indices=list(range(100)) if retrieval_enabled else None,
-                temperature=config.retrieval_temperature, config=config, return_audit=True)
+                temperature=config.retrieval_temperature, config=config, return_audit=True,
+                include_per_query_audit=True)
             final_semantic.append(float(sem)); final_retrieval.append(float(ret))
             if mechanism_audit is not None:
                 final_mechanism_audits.append(mechanism_audit)
@@ -259,14 +269,15 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
             paper_query_generator_reproduced=bundle['audit'].get('paper_query_generator_reproduced', False),
             query_template_adaptation='target_concept_and_future_queries_are_separate')
     if enhanced_enabled:
+        from .enhanced_objective import MARGIN_KIND, QUERY_AUGMENTATION_KIND
         semantic_definition.update(
             mechanism_profile='enhanced_v3', mechanism_parameters=mechanism_parameters(config),
-            retrieval_denominator='one_dynamic_adversarial_positive_plus_query_selected_public_hard_negatives',
+            retrieval_denominator='one_dynamic_adversarial_positive_plus_full_public_bank_and_top_hard_negatives',
             hard_negative_pool_size=len(bundle['candidates']), hard_negative_limit=config.hard_negative_count,
             contrastive_margin=config.contrastive_margin,
-            contrastive_margin_algorithm='positive_cosine_additive_margin_before_temperature_v1',
-            query_adversarial_space='normalized_text_embedding',
-            query_adversarial_algorithm='spherical_l2_pgd_best_per_query_v1',
+            contrastive_margin_algorithm=MARGIN_KIND,
+            query_adversarial_space='frozen_text_query_subspace_on_unit_sphere',
+            query_adversarial_algorithm=QUERY_AUGMENTATION_KIND,
             proxy_user_memory_is_independent_public_role=True,
             popularity_is_declared_proxy_not_real_sales=True,
             paper_missing_mechanisms_implemented=True, author_exact_mechanism_details_reproduced=False)
@@ -314,14 +325,18 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
             training_data_audit=bundle['audit'], future_queries=bundle['queries'],
             query_text_encoding_audits=query_encoding, query_sampling=sampling, negative_candidate_caches=cache_records)
     if enhanced_enabled:
-        execution = dict(schema_version=1, kind=ENHANCED_OBJECTIVE_KIND,
+        execution = dict(schema_version=2, kind=ENHANCED_OBJECTIVE_KIND,
             parameters=mechanism_parameters(config), negative_policies=negative_policies,
+            query_subspaces=[{k: v for k, v in s.items() if k != 'basis'} for s in query_subspaces],
             calibration_audits=calibration_audits, step_audits=mechanism_steps,
             final_model_audits=final_mechanism_audits,
             author_exact_implementation_claimed=False,
-            paper_underspecified_choices=['public_proxy_user_memory_role', 'feature_centrality_popularity_proxy',
-                'source_quotas_and_querywise_hard_selection', 'positive_cosine_margin_before_temperature',
-                'unit_sphere_l2_text_embedding_adversarial_queries'])
+            paper_underspecified_choices=[
+                'cross_category_public_proxy_user_memory_role',
+                'category_balanced_feature_centrality_popularity_proxy',
+                'full_bank_preserved_with_role_quotas_and_top5_hard_margin_duel',
+                'temperature_scaled_logit_margin_and_smooth_top_competitor_softplus',
+                'frozen_text_subspace_spherical_l2_adversarial_queries'])
         execution['execution_sha256'] = content_sha256(execution)
         metadata['enhanced_mechanisms'] = execution
         metadata['paper_missing_mechanisms_implemented'] = True

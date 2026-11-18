@@ -68,7 +68,7 @@ def _validate_retrieval(root, metadata, ready, config, public_semantic, selectio
     _require(objective.get('query_roles_separated') is True
              and objective.get('semantic_reduction') == 'one_minus_cosine_single_independent_target_concept'
              and objective.get('retrieval_denominator') == (
-                 'one_dynamic_adversarial_positive_plus_query_selected_public_hard_negatives'
+                 'one_dynamic_adversarial_positive_plus_full_public_bank_and_top_hard_negatives'
                  if config.mechanism_profile == 'enhanced_v3' else
                  'one_dynamic_adversarial_positive_plus_fixed_public_image_negatives')
              and objective.get('retrieval_positive_count') == 1
@@ -127,10 +127,13 @@ def _finite(value):
 def _validate_enhanced_mechanisms(metadata, ready, config, bundle, candidate_vectors):
     from .pipeline import mechanism_parameters
     from .negative_sampling import build_negative_policy, validate_negative_selection_audit
-    from .enhanced_objective import QUERY_AUGMENTATION_KIND, MARGIN_KIND
+    from .enhanced_objective import (
+        QUERY_AUGMENTATION_KIND, MARGIN_KIND, TOP_HARD_COMPETITOR_LIMIT,
+        HARD_MARGIN_SHARPNESS, BANK_LOSS_BLEND, HARD_MARGIN_LOSS_BLEND,
+    )
     execution = metadata.get('enhanced_mechanisms', {})
-    body = {k:v for k,v in execution.items() if k != 'execution_sha256'}
-    _require(execution.get('schema_version') == 1 and execution.get('kind') == ENHANCED_OBJECTIVE_KIND
+    body = {k: v for k, v in execution.items() if k != 'execution_sha256'}
+    _require(execution.get('schema_version') == 2 and execution.get('kind') == ENHANCED_OBJECTIVE_KIND
              and execution.get('parameters') == mechanism_parameters(config)
              and execution.get('execution_sha256') == content_sha256(body)
              == ready.get('enhanced_mechanisms_sha256'), '增强机制执行审计摘要或配置不一致')
@@ -147,7 +150,7 @@ def _validate_enhanced_mechanisms(metadata, ready, config, bundle, candidate_vec
              and objective.get('contrastive_margin') == config.contrastive_margin
              and objective.get('contrastive_margin_algorithm') == MARGIN_KIND
              and objective.get('query_adversarial_algorithm') == QUERY_AUGMENTATION_KIND
-             and objective.get('query_adversarial_space') == 'normalized_text_embedding'
+             and objective.get('query_adversarial_space') == 'frozen_text_query_subspace_on_unit_sphere'
              and objective.get('proxy_user_memory_is_independent_public_role') is True
              and objective.get('popularity_is_declared_proxy_not_real_sales') is True
              and objective.get('paper_missing_mechanisms_implemented') is True
@@ -157,24 +160,41 @@ def _validate_enhanced_mechanisms(metadata, ready, config, bundle, candidate_vec
     expected_policies = [build_negative_policy(bundle['candidate_metadata'], vectors,
                          category=bundle['audit']['category']) for vectors in candidate_vectors]
     _require(policies == expected_policies, '困难负例角色策略与冻结候选和真实编码向量不一致')
+    subspaces = execution.get('query_subspaces')
+    _require(isinstance(subspaces, list) and len(subspaces) == len(policies), '查询文本流形子空间审计缺失')
+    for sub, vectors in zip(subspaces, candidate_vectors):
+        dim = int(vectors.shape[1])
+        basis_sha = sub.get('basis_sha256')
+        _require(isinstance(sub, dict) and type(sub.get('rank')) is int and 0 <= sub['rank'] <= dim
+                 and sub.get('ambient_dim') == dim and sub.get('reference_count') == 101
+                 and sub.get('mean_cone_removed') is True
+                 and isinstance(basis_sha, str) and len(basis_sha) == 64
+                 and all(c in '0123456789abcdef' for c in basis_sha),
+                 '查询文本流形子空间维度、参考数量或摘要无效')
 
-    def check_audit(audit, model_index, query_count):
-        _require(isinstance(audit, dict) and audit.get('schema_version') == 1
+    def check_audit(audit, model_index, query_count, *, require_per_query):
+        _require(isinstance(audit, dict) and audit.get('schema_version') == 2
                  and audit.get('mechanism_profile') == 'enhanced_v3'
                  and audit.get('margin_algorithm') == MARGIN_KIND
                  and audit.get('contrastive_margin') == config.contrastive_margin
                  and audit.get('retrieval_temperature') == config.retrieval_temperature
+                 and audit.get('top_hard_competitor_limit') == TOP_HARD_COMPETITOR_LIMIT
+                 and audit.get('hard_margin_sharpness') == HARD_MARGIN_SHARPNESS
+                 and audit.get('bank_loss_blend') == BANK_LOSS_BLEND
+                 and audit.get('hard_margin_loss_blend') == HARD_MARGIN_LOSS_BLEND
+                 and audit.get('full_bank_denominator_preserved') is True
                  and audit.get('reduction') == 'query_mean_of_clean_adversarial_weighted_losses'
                  and audit.get('paper_exact_missing_mechanisms_reproduced') is False,
                  '逐次增强损失审计身份或间隔参数不符')
         for key in ('clean_retrieval_loss', 'adversarial_retrieval_loss', 'retrieval_loss', 'semantic_loss'):
             _require(_finite(audit.get(key)), '增强损失审计存在非有限值')
-        expected = ((1-config.query_adversarial_mix) * audit['clean_retrieval_loss']
+        expected = ((1 - config.query_adversarial_mix) * audit['clean_retrieval_loss']
                     + config.query_adversarial_mix * audit['adversarial_retrieval_loss'])
         _require(abs(audit['retrieval_loss'] - expected) <= 1e-5 * max(1.0, abs(expected)),
                  '增强检索损失与干净及对抗查询混合权重不符')
         for key in ('clean_negative_selection', 'adversarial_negative_selection'):
-            validate_negative_selection_audit(audit.get(key), policies[model_index], config, query_count)
+            validate_negative_selection_audit(audit.get(key), policies[model_index], config, query_count,
+                                              require_per_query=require_per_query)
         q = audit.get('query_augmentation', {})
         enabled = (config.query_adversarial_radius > 0 and config.query_adversarial_steps > 0
                    and config.query_adversarial_step_size > 0 and config.query_adversarial_mix > 0)
@@ -184,21 +204,28 @@ def _validate_enhanced_mechanisms(metadata, ready, config, bundle, candidate_vec
                  and q.get('step_size') == config.query_adversarial_step_size
                  and q.get('mix') == config.query_adversarial_mix,
                  '查询对抗增强实际参数与冻结配置不一致')
-        _require(q.get('space') == 'normalized_text_embedding'
-                 and q.get('optimization') == 'per_query_l2_normalized_gradient_ascent'
+        expected_sub = subspaces[model_index]
+        _require(q.get('space') == 'frozen_text_query_subspace_on_unit_sphere'
+                 and q.get('optimization') == 'per_query_text_subspace_projected_spherical_gradient_ascent'
                  and q.get('projection') == 'unit_sphere_cap_intersection_with_original_l2_ball'
                  and q.get('initialization') == 'clean_query'
                  and q.get('image_features_detached_in_inner') is True
                  and q.get('negatives_detached') is True
                  and q.get('queries_detached_for_outer') is True
+                 and q.get('subspace_rank') == expected_sub['rank']
+                 and q.get('subspace_ambient_dim') == expected_sub['ambient_dim']
+                 and q.get('subspace_reference_count') == expected_sub['reference_count']
+                 and q.get('subspace_mean_cone_removed') is True
+                 and q.get('subspace_basis_sha256') == expected_sub['basis_sha256']
                  and q.get('paper_exact_query_augmentation_reproduced') is False,
-                 '查询增强算法空间、梯度隔离或实现声明不一致')
+                 '查询增强算法空间、子空间绑定、梯度隔离或实现声明不一致')
         for key in ('clean_query_features_sha256', 'adversarial_query_features_sha256'):
             digest = q.get(key)
             _require(isinstance(digest, str) and len(digest) == 64
                      and all(c in '0123456789abcdef' for c in digest), '查询向量摘要无效')
         for key in ('clean_negative_selection', 'adversarial_negative_selection'):
-            _require(q.get(key) == audit.get(key), '查询增强与外层目标的困难负例选择不一致')
+            _require(q.get(key + '_sha256') == audit[key]['selection_sha256'],
+                     '查询增强与外层目标的困难负例选择摘要不一致')
         tolerance = q.get('numerical_tolerance')
         _require(_finite(tolerance) and 0 < tolerance <= 1e-4
                  and _finite(q.get('max_l2_perturbation'))
@@ -209,13 +236,13 @@ def _validate_enhanced_mechanisms(metadata, ready, config, bundle, candidate_vec
         _require(isinstance(clean, list) and isinstance(adversarial, list)
                  and len(clean) == len(adversarial) == query_count
                  and all(_finite(v) for v in clean + adversarial)
-                 and all(a >= c - tolerance for c,a in zip(clean, adversarial)),
+                 and all(a >= c - tolerance for c, a in zip(clean, adversarial)),
                  '对抗查询未逐条保持最坏检索损失')
-        _require(abs(sum(clean)/query_count - audit['clean_retrieval_loss']) <= tolerance * 4
-                 and abs(sum(adversarial)/query_count - audit['adversarial_retrieval_loss']) <= tolerance * 4,
+        _require(abs(sum(clean) / query_count - audit['clean_retrieval_loss']) <= tolerance * 4
+                 and abs(sum(adversarial) / query_count - audit['adversarial_retrieval_loss']) <= tolerance * 4,
                  '对抗查询逐条损失与实际外层目标不一致')
         _require(_finite(q.get('minimum_loss_gain'))
-                 and abs(q['minimum_loss_gain'] - min(a-c for c,a in zip(clean, adversarial))) <= tolerance,
+                 and abs(q['minimum_loss_gain'] - min(a - c for c, a in zip(clean, adversarial))) <= tolerance,
                  '对抗查询最小损失增量与逐条审计不一致')
         return audit
 
@@ -224,22 +251,22 @@ def _validate_enhanced_mechanisms(metadata, ready, config, bundle, candidate_vec
     for model_index, rows in enumerate(calibration):
         _require(isinstance(rows, list) and len(rows) == config.gradient_restarts, '增强梯度方差随机起点数不符')
         for row in rows:
-            check_audit(row, model_index, config.query_batch_size)
+            check_audit(row, model_index, config.query_batch_size, require_per_query=False)
     steps = execution.get('step_audits')
     _require(isinstance(steps, list) and len(steps) == config.steps, '增强机制实际优化步数不完整')
     for step, row in enumerate(steps, 1):
         _require(row.get('step') == step
-                 and row.get('query_indices') == metadata['query_sampling']['step_indices'][step-1]
+                 and row.get('query_indices') == metadata['query_sampling']['step_indices'][step - 1]
                  and isinstance(row.get('model_audits'), list) and len(row['model_audits']) == len(policies),
                  '增强机制每步查询或模型审计不符')
         for model_index, audit in enumerate(row['model_audits']):
-            check_audit(audit, model_index, config.query_batch_size)
+            check_audit(audit, model_index, config.query_batch_size, require_per_query=False)
     for row in metadata.get('history', []):
-        _require(row.get('mechanism_audits') == steps[row['step']-1]['model_audits'], '增强优化日志与逐步执行证据不一致')
+        _require('mechanism_audits' not in row, '优化历史日志不应重复拷贝逐步增强审计大对象')
     final = execution.get('final_model_audits')
     _require(isinstance(final, list) and len(final) == len(policies), '增强最终模型审计缺失')
     for model_index, audit in enumerate(final):
-        check_audit(audit, model_index, 100)
+        check_audit(audit, model_index, 100, require_per_query=True)
         _require(audit['retrieval_loss'] == metadata['final_objective']['retrieval_losses'][model_index]
                  and audit['semantic_loss'] == metadata['final_objective']['semantic_losses'][model_index],
                  '增强最终目标值与实际审计不一致')

@@ -1,28 +1,44 @@
-"""轻量公开选图：公开索引→粗类型候选→灰度门槛取中位数（或均匀抽样）→仅选中图对标注→发布。"""
+"""轻量公开选图：公开索引→粗类型候选→灰度门槛取中位数/黄金先验带→仅选中图对标注→发布。"""
 import argparse
 from collections import Counter
 from dataclasses import asdict
+import inspect
+import math
 import os
-from src.paths import PUBLIC, PRIVATE, VISUAL_CONFIGS, EXPERIMENT_CONFIGS, public_root_for, ProjectPath as Path
 import re
+from types import SimpleNamespace
 
+import numpy as np
+
+from src.paths import PUBLIC, PRIVATE, VISUAL_CONFIGS, EXPERIMENT_CONFIGS, public_root_for, ProjectPath as Path
 from src.paths import DATA,OUTPUT,CONFIGS,PRIVATE,SHARED_MEMORY,PROJECT
 from src.visual.audit import digest,freeze_json,read_json,save_json
+from src.visual.foreground_shape_features import create_shape_backend,VALID_SHAPE_POLICIES
 from src.visual.image_utils import sha256_file
 from src.visual.pair_selection import (
+    GOLDEN_BAND_MEDIAN_POLICY,
     MEDIAN_SELECTION_POLICY,
     SELECTION_POLICY,
     VALID_SELECTION_STRATEGIES,
     SelectionConfig,
     LocalSelectionBackend,
     choose_pair,
+    unit_rows,
     validate_product,
+    validate_public_rank_band,
     verify_selection,
     validate_subtype_filter,
 )
 from src.visual.shape_calibration import calibrate,load_calibration
 from src.visual.catalog_training_guard import catalog_training_guard
-from src.visual.selection.webshop_public import extract_public_candidates,random_shortlist,download_shortlist,OWNERSHIP_POLICY
+from src.visual.selection.webshop_public import (
+    MAX_CANDIDATE_LIMIT,
+    OWNERSHIP_POLICY,
+    download_shortlist,
+    extract_public_candidates,
+    extract_public_rank_peers,
+    random_shortlist,
+)
 from src.visual.pair_assets import publish_pair
 
 
@@ -47,11 +63,14 @@ def public_path(value):
 
 def validate_config(config):
     required={'schema_version','seed','candidate_limit','calibration_path','groups'}
-    optional={'models','type_reviews','subtype_filters','strategy','expand_candidate_limits','candidate_limits'}
+    optional={
+        'models','type_reviews','subtype_filters','strategy',
+        'expand_candidate_limits','candidate_limits','preprocessing','public_rank_band',
+    }
     if not isinstance(config,dict) or not required<=set(config) or set(config)-required-optional or config['schema_version']!=2:
         raise ValueError('轻量选图须使用第二版配置；旧多指标配置只保留历史读取')
-    if type(config['seed']) is not int or type(config['candidate_limit']) is not int or not 1<=config['candidate_limit']<=256:
-        raise ValueError('种子须为整数，公开图片候选预算须在一至二百五十六之间')
+    if type(config['seed']) is not int or type(config['candidate_limit']) is not int or not 1<=config['candidate_limit']<=MAX_CANDIDATE_LIMIT:
+        raise ValueError(f'种子须为整数，公开图片候选预算须在一至 {MAX_CANDIDATE_LIMIT} 之间')
     if not isinstance(config['calibration_path'],str) or not config['calibration_path'].strip():raise ValueError('须配置公开开发集校准证书路径')
     if not config['groups']:raise ValueError('至少指定一个公开目标')
     for group in config['groups']:
@@ -62,16 +81,21 @@ def validate_config(config):
     if set(config.get('models',{}))-{'dino_model','batch_size'}:raise ValueError('新选图阶段只使用单一冻结视觉模型')
     strategy=config.get('strategy','median')
     if strategy not in VALID_SELECTION_STRATEGIES:raise ValueError('选图策略只支持 median 或 uniform')
+    if config.get('preprocessing') is not None and config['preprocessing'] not in VALID_SHAPE_POLICIES:
+        raise ValueError('不受支持的选图外形预处理策略：'+str(config['preprocessing']))
+    if 'public_rank_band' in config:
+        validate_public_rank_band(config['public_rank_band'])
     keys={g['key'] for g in config['groups']}
     if 'candidate_limits' in config:
         limits=config['candidate_limits']
         if not isinstance(limits,dict) or set(limits)-keys:raise ValueError('按组候选预算只支持配置中的公开组名')
         for value in limits.values():
-            if type(value) is not int or not 1<=value<=256:raise ValueError('按组候选预算须为一至二百五十六之间的整数')
+            if type(value) is not int or not 1<=value<=MAX_CANDIDATE_LIMIT:
+                raise ValueError(f'按组候选预算须为一至 {MAX_CANDIDATE_LIMIT} 之间的整数')
     if 'expand_candidate_limits' in config:
         ladders=config['expand_candidate_limits']
-        if not isinstance(ladders,list) or not ladders or any(type(v) is not int or not config['candidate_limit']<=v<=256 for v in ladders):
-            raise ValueError('扩展候选预算阶梯须为不低于基础预算且不超过二百五十六的整数列表')
+        if not isinstance(ladders,list) or not ladders or any(type(v) is not int or not config['candidate_limit']<=v<=MAX_CANDIDATE_LIMIT for v in ladders):
+            raise ValueError(f'扩展候选预算阶梯须为不低于基础预算且不超过 {MAX_CANDIDATE_LIMIT} 的整数列表')
         if any(b<=a for a,b in zip(ladders,ladders[1:])):raise ValueError('扩展候选预算阶梯须严格递增')
     if 'subtype_filters' in config:
         filters=config['subtype_filters']
@@ -94,11 +118,14 @@ def freeze_plan(config,root):
     from src.visual.product_types import TYPE_RULES_SHA256
     path=public_path(config['calibration_path']);proof=read_json(path)
     load_calibration(path,proof['models'],public_root=(_public_root(path), PUBLIC))
+    impl_files=['src/visual/pair_selection.py','src/visual/shape_calibration.py',
+        'src/visual/selection/webshop_public.py','src/experiments/public_pair_selection.py']
+    if config.get('preprocessing'):
+        impl_files.append('src/visual/foreground_shape_features.py')
     freeze_json(Path(root)/'PUBLIC_PLAN.json',dict(schema_version=2,config=config,
         selection=asdict(selection_settings(config)),calibration_sha256=sha256_file(path),
         type_rules_sha256=TYPE_RULES_SHA256,
-        implementation_sha256={name:sha256_file(PROJECT/name) for name in ('src/visual/pair_selection.py','src/visual/shape_calibration.py',
-            'src/visual/selection/webshop_public.py','src/experiments/public_pair_selection.py')},
+        implementation_sha256={name:sha256_file(PROJECT/name) for name in impl_files},
         ownership_policy=OWNERSHIP_POLICY,target_ids_fixed=[g['target_id'] for g in config['groups']],
         formal_queries_used=False,victim_memory_used=False,shopping_allowed=False,
         annotation_scope='drawn_source_and_target_only',empty_set_policy='stop_without_relaxation'))
@@ -120,11 +147,116 @@ def downloaded_product(product,downloads,*,source=False):
                             public_root=_public_root(record['image']))
 
 
-def select_groups(config,root,public,*,device='cuda',backend_factory=LocalSelectionBackend):
+def _instantiate_backend(backend_factory,models_cfg,cache_dir,device,preprocessing=None):
+    if backend_factory is create_shape_backend:
+        return create_shape_backend(models_cfg,cache_dir,device=device,preprocessing=preprocessing)
+    sig=inspect.signature(backend_factory)
+    if 'preprocessing' in sig.parameters or any(p.kind==inspect.Parameter.VAR_KEYWORD for p in sig.parameters.values()):
+        return backend_factory(models_cfg,cache_dir,device=device,preprocessing=preprocessing)
+    return backend_factory(models_cfg,cache_dir,device)
+
+
+_RANK_TITLE_STOPWORDS=frozenset({'the','and','for','with','of','in','to','by','on','at','from'})
+
+
+def _lexical_cosine(title_a,title_b):
+    tok_a={t for t in re.findall(r'[a-z0-9]{2,}',str(title_a or '').lower()) if t not in _RANK_TITLE_STOPWORDS}
+    tok_b={t for t in re.findall(r'[a-z0-9]{2,}',str(title_b or '').lower()) if t not in _RANK_TITLE_STOPWORDS}
+    if not tok_a or not tok_b:
+        return 0.0
+    return float(len(tok_a&tok_b)/math.sqrt(len(tok_a)*len(tok_b)))
+
+
+def _resolve_local_clip_weight(model_key):
+    from src.model_registry import resolve_model
+    root=Path(resolve_model(model_key))
+    for name in ('open_clip_model.safetensors','open_clip_pytorch_model.safetensors','model.safetensors','pytorch_model.bin'):
+        cand=root/name
+        if cand.is_file():
+            return str(cand)
+    for ext in ('*.safetensors','*.bin'):
+        matches=sorted(root.rglob(ext))
+        if matches:
+            return str(matches[0])
+    raise FileNotFoundError(f'公开先验编码器缺少本地权重文件：{root}')
+
+
+def compute_public_prior_ranks(target,candidates,peers,backend,*,scorer='dino_lexical_hybrid',device='cpu'):
+    """基于零泄漏公开对照池估算每个原商品候选在公开先验下的基准名次（1 为最似目标）。"""
+    validate_public_rank_band({'scorer':scorer})
+    candidates=list(candidates);peers=list(peers)
+    if not candidates or not peers:
+        return {}
+    all_items=[target]+candidates+peers
+    scores={}
+    if scorer=='dino_lexical_hybrid':
+        if hasattr(backend,'features_many'):
+            backend.features_many(all_items)
+        t_vec=unit_rows(backend.features(target)['shape'])
+        for p in candidates+peers:
+            p_vec=unit_rows(backend.features(p)['shape'])
+            vis=float(np.clip(p_vec@t_vec,-1.0,1.0))
+            lex=_lexical_cosine(p['title'],target['title'])
+            scores[p['id']]=0.55*vis+0.45*lex
+    else:
+        import torch
+        from src.visual.encoders.backbone import OpenCLIPSurrogate
+        from src.visual.encoders.joint import ChunkedClipEncoder
+        from src.visual.encoders.spec import BackboneConfig
+        from src.visual.image_utils import read_tensor
+        clip_name={'clip_b32':'ViT-B-32','clip_b16':'ViT-B-16','clip_l14':'ViT-L-14'}[scorer]
+        spec=BackboneConfig(name=clip_name,pretrained='openai',weight_path=_resolve_local_clip_weight(scorer))
+        surrogate=OpenCLIPSurrogate(spec,device=device,precision='fp32',allow_downloads=False,
+            allow_device_fallback=True,require_true_local_tokens=False)
+        try:
+            text_encoder=ChunkedClipEncoder(SimpleNamespace(surrogate=surrogate,device=surrogate.device,snapshot=surrogate.snapshot()))
+            def joint_vec(item):
+                with torch.inference_mode():
+                    img_t=read_tensor(item['image'],surrogate.device)
+                    img_emb=surrogate.encode_image(img_t).global_embedding[0].detach().cpu().numpy().astype(np.float64)
+                txt_emb=np.asarray(text_encoder.encode_text(item['title']),dtype=np.float64)
+                combined=0.5*unit_rows(img_emb)+0.5*unit_rows(txt_emb)
+                return unit_rows(combined)
+            t_vec=joint_vec(target)
+            for p in candidates+peers:
+                scores[p['id']]=float(np.clip(joint_vec(p)@t_vec,-1.0,1.0))
+        finally:
+            surrogate=None
+    peer_keys=[(-scores[p['id']],p['id']) for p in peers]
+    return {c['id']:1+sum(1 for pk in peer_keys if pk<(-scores[c['id']],c['id'])) for c in candidates}
+
+
+def _prepare_and_download_rank_peers(products_path,groups,extracted,peer_dir,asset_output,*,seed,peer_count,index_path,excluded_ids,type_reviews,verify_source,subtype_filters):
+    candidate_ids_by_group={g['key']:[c['id'] for c in g['candidates']] for g in extracted['groups']}
+    peers_doc=extract_public_rank_peers(
+        products_path,groups,peer_dir,seed=seed,peer_count=peer_count,index_path=index_path,
+        excluded_ids=excluded_ids,candidate_ids_by_group=candidate_ids_by_group,
+        type_reviews=type_reviews,verify_source=verify_source,subtype_filters=subtype_filters,
+    )
+    shortlist=dict(schema_version=2,groups=[dict(key=g['key'],target=g['target'],candidates=g['peers']) for g in peers_doc['groups']])
+    downloads=download_shortlist(shortlist,peer_dir,asset_output=asset_output)
+    return peers_doc,downloads
+
+
+def _load_group_rank_peers(peers_dir,group_key):
+    peers_path=Path(peers_dir)/'public_rank_peers.json'
+    dl_path=Path(peers_dir)/'download_manifest.json'
+    if not peers_path.is_file() or not dl_path.is_file():
+        raise ValueError('已启用公开先验名次带但缺少公开对照池或下载清单，请先运行 prepare 阶段')
+    peers_doc=read_json(peers_path);downloads=read_json(dl_path)
+    group_row=next((g for g in peers_doc['groups'] if g['key']==group_key),None)
+    if group_row is None:
+        raise ValueError('公开对照池缺少分组：'+group_key)
+    return [downloaded_product(p,downloads,source=False) for p in group_row['peers'] if p['id'] in downloads['records']]
+
+
+def select_groups(config,root,public,*,device='cuda',backend_factory=create_shape_backend):
     root,public=Path(root),Path(public)
     short=read_json(public/'candidate_shortlist.json');downloads=read_json(public/'download_manifest.json')
     if downloads['shortlist_sha256']!=digest(short):raise ValueError('图片下载与公开候选集合不一致')
-    settings=selection_settings(config);backend=backend_factory(config.get('models',{}),public/'selection_features',device)
+    settings=selection_settings(config)
+    rank_band=validate_public_rank_band(config.get('public_rank_band'))
+    backend=_instantiate_backend(backend_factory,config.get('models',{}),public/'selection_features',device,preprocessing=config.get('preprocessing'))
     rows=[];used=set();targets={g['target_id'] for g in config['groups']}
     try:
         for group in short['groups']:
@@ -133,10 +265,15 @@ def select_groups(config,root,public,*,device='cuda',backend_factory=LocalSelect
             catalog=public/'candidate_catalogs'/(group['key']+'.json')
             freeze_json(catalog,dict(schema_version=2,target=target,candidates=candidates))
             if not candidates:raise ValueError('本组所有公开候选下载失败：'+group['key'])
+            prior_ranks=None
+            if rank_band and rank_band['enabled']:
+                peers=_load_group_rank_peers(public/'rank_peers',group['key'])
+                prior_ranks=compute_public_prior_ranks(target,candidates,peers,backend,scorer=rank_band['scorer'],device=device)
             result=choose_pair(target,candidates,backend,settings,excluded_source_ids=used|targets,
                                public_root=_public_root(public),
                                calibration_public_root=(_public_root(settings.calibration_path), PUBLIC),
-                               subtype_filter=config.get('subtype_filters',{}).get(group['key']))
+                               subtype_filter=config.get('subtype_filters',{}).get(group['key']),
+                               public_rank_band=rank_band,public_prior_ranks=prior_ranks)
             result.update(target=target,binding=dict(public_catalog_sha256=sha256_file(catalog),models_configuration=config.get('models',{}),
                 calibration_sha256=sha256_file(settings.calibration_path),public_plan_sha256=sha256_file(root/'PUBLIC_PLAN.json')),
                 download_failures={p['id']:downloads['failures'][p['id']] for p in group['candidates'] if p['id'] in downloads['failures']})
@@ -146,14 +283,19 @@ def select_groups(config,root,public,*,device='cuda',backend_factory=LocalSelect
             rows.append(dict(key=group['key'],status=result['status'],selection_path=str(path.resolve()),selection_sha256=sha256_file(path),
                 target=target,source=result.get('source'),candidate_count=len(candidates),eligible_count=sum(r['eligible'] for r in result['candidates'])))
     finally:backend.close()
-    scope='median_shape_after_public_shape_and_type_gates_v3' if settings.strategy=='median' else 'uniform_draw_after_public_shape_and_type_gates_v2'
+    if rank_band and rank_band['enabled'] and settings.strategy=='median':
+        scope='golden_band_median_shape_v1'
+    elif settings.strategy=='median':
+        scope='median_shape_after_public_shape_and_type_gates_v3'
+    else:
+        scope='uniform_draw_after_public_shape_and_type_gates_v2'
     bundle=dict(schema_version=2,status='selected' if all(r['status']=='selected' for r in rows) else 'no_eligible_pair',
         selection_scope=scope,strategy=settings.strategy,groups=rows,
         public_plan_sha256=sha256_file(root/'PUBLIC_PLAN.json'),shared_memory_read=False,formal_queries_read=False,generation_runs=0)
     freeze_json(root/'PAIR_SELECTION_BUNDLE.json',bundle);return bundle
 
 
-def resolve_candidate_limits(config,products_path,index_path,root,public,*,device='cuda',verify_source=False,backend_factory=LocalSelectionBackend):
+def resolve_candidate_limits(config,products_path,index_path,root,public,*,device='cuda',verify_source=False,backend_factory=create_shape_backend):
     """按严格递增预算阶梯扩展合格数为零的组；不放宽外形门槛，并保留完整尝试记录。"""
     root,public=Path(root),Path(public)
     base_limits=dict(config.get('candidate_limits',{}))
@@ -163,7 +305,8 @@ def resolve_candidate_limits(config,products_path,index_path,root,public,*,devic
     proof=read_json(public_path(config['calibration_path']))
     reviews=read_json(public_path(config['type_reviews'])) if config.get('type_reviews') else {}
     settings=selection_settings(config)
-    backend=backend_factory(config.get('models',{}),public/'selection_features',device)
+    rank_band=validate_public_rank_band(config.get('public_rank_band'))
+    backend=_instantiate_backend(backend_factory,config.get('models',{}),public/'selection_features',device,preprocessing=config.get('preprocessing'))
     resolved={};used=set();targets={g['target_id'] for g in config['groups']};history={}
     try:
         for group in config['groups']:
@@ -171,13 +314,14 @@ def resolve_candidate_limits(config,products_path,index_path,root,public,*,devic
             start=base_limits.get(key,config['candidate_limit'])
             steps=[start]+[v for v in ladders if v>start]
             attempts=[];chosen_limit=steps[-1]
+            sub_dict={key:config['subtype_filters'][key]} if key in config.get('subtype_filters',{}) else None
             for limit in steps:
                 trial_dir=root/'expansion_rounds'/key/f'limit_{limit}'
                 extracted=extract_public_candidates(
                     products_path,[group],trial_dir,seed=config['seed'],lexical_limit=limit,
                     index_path=index_path,excluded_ids=proof['development_product_ids'],
                     type_reviews=reviews,verify_source=verify_source,
-                    subtype_filters={key:config['subtype_filters'][key]} if key in config.get('subtype_filters',{}) else None,
+                    subtype_filters=sub_dict,
                 )
                 short=random_shortlist(extracted,trial_dir)
                 downloads=download_shortlist(short,trial_dir,asset_output=public)
@@ -187,11 +331,22 @@ def resolve_candidate_limits(config,products_path,index_path,root,public,*,devic
                 reasons=Counter()
                 eligible_count=0;status='no_downloads';selected_id=None
                 if candidates:
+                    prior_ranks=None
+                    if rank_band and rank_band['enabled']:
+                        peers_doc,peer_dl=_prepare_and_download_rank_peers(
+                            products_path,[group],extracted,trial_dir/'rank_peers',public,
+                            seed=config['seed'],peer_count=rank_band['peer_count'],index_path=index_path,
+                            excluded_ids=proof['development_product_ids'],type_reviews=reviews,
+                            verify_source=verify_source,subtype_filters=sub_dict,
+                        )
+                        peers=[downloaded_product(p,peer_dl,source=False) for p in peers_doc['groups'][0]['peers'] if p['id'] in peer_dl['records']]
+                        prior_ranks=compute_public_prior_ranks(target,candidates,peers,backend,scorer=rank_band['scorer'],device=device)
                     result=choose_pair(
                         target,candidates,backend,settings,excluded_source_ids=used|targets,
                         public_root=_public_root(public),
                         calibration_public_root=(_public_root(settings.calibration_path),PUBLIC),
                         subtype_filter=config.get('subtype_filters',{}).get(key),
+                        public_rank_band=rank_band,public_prior_ranks=prior_ranks,
                     )
                     status=result['status']
                     selected_id=result.get('selected_source_id')
@@ -290,9 +445,16 @@ def report(root,public):
     root=Path(root);bundle=read_json(root/'PAIR_SELECTION_BUNDLE.json')
     if bundle['public_plan_sha256']!=sha256_file(root/'PUBLIC_PLAN.json'):raise ValueError('公开报告与冻结计划不一致')
     strategy=bundle.get('strategy','uniform')
-    title='# 轻量公开图对选取（中位数外形）' if strategy=='median' else '# 轻量公开图对抽样'
-    summary=('仅以类型兼容、灰度全局特征门槛及去重判断合格，并在合格集合中按灰度外形分数取中位数候选。没有读取正式记忆或查询。'
-             if strategy=='median' else '仅以类型兼容、灰度全局特征门槛及去重判断合格，使用冻结种子在合格集合均匀抽样。没有按最高相似分选图，也没有读取正式记忆或查询。')
+    scope=bundle.get('selection_scope','')
+    if scope=='golden_band_median_shape_v1':
+        title='# 轻量公开图对选取（黄金先验区间 + 中位数外形）'
+        summary='以粗类型与目标差异属性排除、前景外形校准门槛、公开零泄漏对照池先验名次带及去重判断合格，再按外形分取中位数候选。未读取受害记忆或正式查询。'
+    elif strategy=='median':
+        title='# 轻量公开图对选取（中位数外形）'
+        summary='仅以类型兼容、灰度全局特征门槛及去重判断合格，并在合格集合中按灰度外形分数取中位数候选。没有读取正式记忆或查询。'
+    else:
+        title='# 轻量公开图对抽样'
+        summary='仅以类型兼容、灰度全局特征门槛及去重判断合格，使用冻结种子在合格集合均匀抽样。没有按最高相似分选图，也没有读取正式记忆或查询。'
     lines=[title,'',summary,'',
         '|组别|目标编号|选中原商品|图片候选数|合格数|选中外形分|合格外形中位数|',
         '|---|---|---|---:|---:|---:|---:|']
@@ -331,7 +493,7 @@ def main(argv=None):
     parser.add_argument('--root',type=Path,default=OUTPUT/'public_pair_selection/shape_v2')
     parser.add_argument('--public-root',type=Path,help='默认保存到本次结果目录的数据子目录')
     parser.add_argument('--strategy',choices=VALID_SELECTION_STRATEGIES,help='覆盖配置中的合格集合选取方式（median 或 uniform）')
-    parser.add_argument('--expand-limits',nargs='+',type=int,help='当基础预算下某组合格数为零时逐步扩展到指定预算（不超过 256，不降门槛）')
+    parser.add_argument('--expand-limits',nargs='+',type=int,help=f'当基础预算下某组合格数为零时逐步扩展到指定预算（不超过 {MAX_CANDIDATE_LIMIT}，不降门槛）')
     parser.add_argument('--device',choices=('cpu','cuda'),default='cuda')
     args=parser.parse_args(argv);raw_config=read_json(args.config)
     if args.strategy is not None:raw_config=dict(raw_config,strategy=args.strategy)
@@ -345,7 +507,7 @@ def main(argv=None):
                 if args.development is None:parser.error('校准需要 --development 指定实际公开视觉标签清单')
                 dev_path=public_path(args.development)
                 cal_path=public_path(config['calibration_path'])
-                backend=LocalSelectionBackend(config.get('models',{}),public/'calibration_features',args.device)
+                backend=create_shape_backend(config.get('models',{}),public/'calibration_features',device=args.device,preprocessing=config.get('preprocessing'))
                 try:calibrate(dev_path,cal_path,backend,public_root=(_public_root(dev_path),public,PUBLIC))
                 finally:backend.close()
                 save_json(root/'ACCESS_AUDIT_calibrate.json',{k:v for k,v in audit.items() if k!='active'})
@@ -364,6 +526,14 @@ def main(argv=None):
                     index_path=public_path(args.index),excluded_ids=proof['development_product_ids'],
                     type_reviews=reviews,verify_source=args.verify_source,subtype_filters=config.get('subtype_filters'))
                 download_shortlist(random_shortlist(extracted,public),public)
+                rank_band=validate_public_rank_band(config.get('public_rank_band'))
+                if rank_band and rank_band['enabled']:
+                    _prepare_and_download_rank_peers(
+                        args.products,config['groups'],extracted,public/'rank_peers',public,
+                        seed=config['seed'],peer_count=rank_band['peer_count'],index_path=public_path(args.index),
+                        excluded_ids=proof['development_product_ids'],type_reviews=reviews,
+                        verify_source=args.verify_source,subtype_filters=config.get('subtype_filters'),
+                    )
             elif args.stage!='report':
                 if (root/'EXPANSION_LOG.json').is_file() and 'candidate_limits' not in config:
                     config=dict(config,candidate_limits=read_json(root/'EXPANSION_LOG.json')['resolved_limits'])

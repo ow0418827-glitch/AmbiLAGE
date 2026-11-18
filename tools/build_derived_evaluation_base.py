@@ -17,7 +17,7 @@ from src.paths import EVALUATION_BASE, OUTPUT, PROJECT, ProjectPath
 from src.visual.audit import digest, read_json
 from src.visual.image_utils import sha256_file
 from src.visual.pair_assets import load_pair
-from src.visual.pair_selection import MEDIAN_SELECTION_POLICY, verify_selection
+from src.visual.pair_selection import GOLDEN_BAND_MEDIAN_POLICY, MEDIAN_SELECTION_POLICY, verify_selection
 from src.visual.target_features import extract_product_features
 
 
@@ -266,16 +266,23 @@ def build_derived_base(
         }
         lucid_sha = _write_json(out_group_dir / 'lucid_config.json', out_lucid)
 
+        protocol = selection.get('protocol', MEDIAN_SELECTION_POLICY)
+        name_suffix = '（黄金先验区间中位数重选）' if protocol == GOLDEN_BAND_MEDIAN_POLICY else '（中位数外形重选）'
+        prior_rank = draw.get('selected_prior_rank')
+        selected_row = next((c for c in selection.get('candidates', []) if c.get('source_id') == source_id), None)
+        if prior_rank is None and selected_row is not None:
+            prior_rank = selected_row.get('public_prior_rank')
+        rank_note = f"、公开先验名次={prior_rank}" if prior_rank is not None else ""
         out_def = {
             'schema_version': 2,
             'group': group_key,
-            'name': src_group_spec['name'] + '（中位数外形重选）',
+            'name': src_group_spec['name'] + name_suffix,
             'category': src_feat_doc['category'],
             'shape_similarity': shape_sim,
             'calibrated_threshold': threshold,
             'passes_calibrated_threshold': passes_gate,
-            'selection_status': selection.get('protocol', MEDIAN_SELECTION_POLICY),
-            'selection_notes': f"依公开 {selection.get('protocol')} 规则从 {draw.get('eligible_count')} 个合格候选中按灰度外形分数取中位数选出 {source_id}（shape={shape_sim:.4f} >= {threshold:.4f}）。",
+            'selection_status': protocol,
+            'selection_notes': f"依公开 {protocol} 规则从 {draw.get('eligible_count')} 个合格候选中按灰度外形分数取中位数选出 {source_id}（shape={shape_sim:.4f} >= {threshold:.4f}{rank_note}）。",
             'methods_supported': ['lucid', 'ambilage', 'visual_inception'],
             'target_feature_text': target_feat['canonical_sentence'],
             'training_queries': list(target_feat['training_queries']),

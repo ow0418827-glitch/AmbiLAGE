@@ -26,12 +26,12 @@ class VisualInceptionConfig:
     mechanism_profile: str = 'enhanced_v3'
     contrastive_margin: float = 0.3
     hard_negative_count: int = 32
-    hard_negative_same_category_count: int = 8
-    hard_negative_proxy_memory_count: int = 8
-    hard_negative_popularity_count: int = 8
-    query_adversarial_radius: float = 0.05
+    hard_negative_same_category_count: int = 10
+    hard_negative_proxy_memory_count: int = 10
+    hard_negative_popularity_count: int = 10
+    query_adversarial_radius: float = 0.20
     query_adversarial_steps: int = 3
-    query_adversarial_step_size: float = 0.025
+    query_adversarial_step_size: float = 0.10
     query_adversarial_mix: float = 0.5
 
     def validate(self):

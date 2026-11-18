@@ -100,37 +100,77 @@ def _under_public_root(target,public_root):
     return any(resolved.is_relative_to(Path(r).resolve()) for r in roots)
 
 
+GOLDEN_BAND_MEDIAN_POLICY='public_shape_golden_band_median_v1'
+VALID_RANK_BAND_SCORERS=('dino_lexical_hybrid','clip_b32','clip_b16','clip_l14')
+HELD_OUT_RANK_BAND_SCORERS=('eval_g14','eval_gme','vit-g-14','gme-qwen2-vl-2b-instruct','clip-vit-g-14')
+
+
+def validate_public_rank_band(rank_band):
+    if rank_band is None:return None
+    if not isinstance(rank_band,dict):raise ValueError('公开先验名次带规则必须为字典对象')
+    if set(rank_band)-{'enabled','peer_count','rank_min','rank_max','scorer'}:
+        raise ValueError('公开先验名次带字段无效')
+    enabled=rank_band.get('enabled',True)
+    if type(enabled) is not bool:raise ValueError('公开先验名次带 enabled 必须为布尔值')
+    peer_count=rank_band.get('peer_count',20)
+    rank_min=rank_band.get('rank_min',5)
+    rank_max=rank_band.get('rank_max',12)
+    scorer=rank_band.get('scorer','dino_lexical_hybrid')
+    if type(peer_count) is not int or peer_count<2:
+        raise ValueError('公开先验对照池商品数量 peer_count 须为不小于二的正整数')
+    if type(rank_min) is not int or type(rank_max) is not int or not 1<=rank_min<=rank_max<=peer_count+1:
+        raise ValueError('公开先验名次带区间 [rank_min, rank_max] 无效')
+    if not isinstance(scorer,str) or not scorer.strip():
+        raise ValueError('公开先验名次打分器名称必须为非空字符串')
+    lowered=scorer.strip().lower()
+    if any(bad in lowered for bad in HELD_OUT_RANK_BAND_SCORERS):
+        raise ValueError('公开先验名次打分器严禁使用严格留出评估模型：'+scorer)
+    if scorer not in VALID_RANK_BAND_SCORERS:
+        raise ValueError('公开先验名次打分器不受支持：'+scorer)
+    return dict(enabled=enabled,peer_count=peer_count,rank_min=rank_min,rank_max=rank_max,scorer=scorer)
+
+
 def validate_subtype_filter(subtype_filter,*,allow_empty=False):
     if subtype_filter is None:return None
     if not isinstance(subtype_filter,dict):raise ValueError('细分品类过滤规则必须为字典对象')
-    if set(subtype_filter)-{'include','exclude','policy'}:raise ValueError('细分品类过滤字段无效')
+    if set(subtype_filter)-{'include','exclude','source_exclude','policy'}:raise ValueError('细分品类过滤字段无效')
     if 'policy' in subtype_filter and (not isinstance(subtype_filter['policy'],str) or not subtype_filter['policy'].strip()):
         raise ValueError('细分品类规则名称必须为非空字符串')
-    for pattern_key in ('include','exclude'):
+    for pattern_key in ('include','exclude','source_exclude'):
         if pattern_key in subtype_filter:
             pattern=subtype_filter[pattern_key]
             if not isinstance(pattern,str) or not pattern.strip():raise ValueError('细分品类正则必须为非空字符串')
             try:re.compile(pattern,re.I)
             except re.error as err:raise ValueError('细分品类正则语法无效：'+str(err)) from err
-    if 'include' not in subtype_filter and 'exclude' not in subtype_filter:
+    if not any(k in subtype_filter for k in ('include','exclude','source_exclude')):
         if not subtype_filter and allow_empty:return subtype_filter
-        raise ValueError('细分品类过滤至少须提供 include 或 exclude 正则')
+        raise ValueError('细分品类过滤至少须提供 include、exclude 或 source_exclude 正则')
     return subtype_filter
 
 
-def matches_subtype_filter(title,subtype_filter):
+def matches_source_exclude(title,subtype_filter):
+    rule=validate_subtype_filter(subtype_filter,allow_empty=True)
+    if not rule:return False
+    source_exclude=rule.get('source_exclude')
+    return bool(source_exclude and re.search(source_exclude,title,re.I))
+
+
+def matches_subtype_filter(title,subtype_filter,*,role='source'):
+    if role not in ('source','target'):raise ValueError('细分品类过滤角色须为 source 或 target')
     rule=validate_subtype_filter(subtype_filter,allow_empty=True)
     if not rule:return True
     include=rule.get('include')
     exclude=rule.get('exclude')
     if include and not re.search(include,title,re.I):return False
     if exclude and re.search(exclude,title,re.I):return False
+    if role=='source' and matches_source_exclude(title,rule):return False
     return True
 
 
-def score_pair(source,target,source_features,target_features,*,threshold,config=SelectionConfig(),subtype_filter=None):
+def score_pair(source,target,source_features,target_features,*,threshold,config=SelectionConfig(),subtype_filter=None,public_prior_rank=None,public_rank_band=None):
     """判断公开候选是否合格；uniform 策略忽略分值排序，median 策略按合格外形分取中位数。"""
     subtype_filter=validate_subtype_filter(subtype_filter,allow_empty=False)
+    rank_band=validate_public_rank_band(public_rank_band)
     compatibility=type_compatibility(source,target)
     quality=image_quality(source,config.min_image_side);target_quality=image_quality(target,config.min_image_side)
     reasons=[]
@@ -140,21 +180,36 @@ def score_pair(source,target,source_features,target_features,*,threshold,config=
     if source.get('owned') is not True:reasons.append('source_not_attacker_owned')
     if not compatibility['resolved']:reasons.append('public_type_review_required')
     elif not compatibility['compatible']:reasons.append('obvious_product_type_conflict')
-    elif not matches_subtype_filter(source['title'],subtype_filter):reasons.append('subtype_filter_mismatch')
+    elif not matches_subtype_filter(source['title'],subtype_filter,role='target'):reasons.append('subtype_filter_mismatch')
+    elif matches_source_exclude(source['title'],subtype_filter):reasons.append('source_has_target_differentiating_attribute')
     if not quality['accepted'] or not target_quality['accepted']:reasons.append('public_image_quality_failed')
     shape=None
     if source_features is not None and target_features is not None:
         shape=float(np.clip(unit_rows(source_features['shape'])@unit_rows(target_features['shape']),-1,1))
         if shape<threshold:reasons.append('shape_below_calibrated_threshold')
     elif not reasons:reasons.append('shape_not_evaluated')
-    return dict(source_id=source['id'],target_id=target['id'],eligible=not reasons,rejected_reasons=reasons,
+    if rank_band and rank_band['enabled']:
+        if public_prior_rank is not None:
+            if type(public_prior_rank) is not int or public_prior_rank<1:
+                raise ValueError('公开先验名次须为正整数')
+            if public_prior_rank<rank_band['rank_min']:
+                reasons.append('public_prior_rank_too_high_ceiling')
+            elif public_prior_rank>rank_band['rank_max']:
+                reasons.append('public_prior_rank_too_low_deadzone')
+        elif not reasons:
+            reasons.append('public_prior_rank_not_evaluated')
+    row=dict(source_id=source['id'],target_id=target['id'],eligible=not reasons,rejected_reasons=reasons,
         shape_similarity=shape,type_compatibility=compatibility,image_quality=quality)
+    if public_prior_rank is not None or (rank_band and rank_band['enabled']):
+        row['public_prior_rank']=public_prior_rank
+    return row
 
 
-def choose_pair(target,candidates,backend,config=SelectionConfig(),*,excluded_source_ids=(),public_root=None,calibration_public_root=None,subtype_filter=None):
+def choose_pair(target,candidates,backend,config=SelectionConfig(),*,excluded_source_ids=(),public_root=None,calibration_public_root=None,subtype_filter=None,public_rank_band=None,public_prior_ranks=None):
     from src.visual.shape_calibration import load_calibration
     config.validate()
     subtype_filter=validate_subtype_filter(subtype_filter,allow_empty=False)
+    rank_band=validate_public_rank_band(public_rank_band)
     certificate=load_calibration(config.calibration_path,backend.snapshot,public_root=calibration_public_root if calibration_public_root is not None else public_root)
     ids=[p['id'] for p in candidates]
     if not ids or len(ids)!=len(set(ids)):raise ValueError('公开候选标识不能重复或为空')
@@ -164,19 +219,21 @@ def choose_pair(target,candidates,backend,config=SelectionConfig(),*,excluded_so
     if {p['image_sha256'] for p in candidates+[target]}&dev_images:raise ValueError('正式图片与公开开发集图片重复')
     if not image_quality(target,config.min_image_side)['accepted']:raise ValueError('固定目标图片质量未通过')
     if not type_compatibility(target,target)['resolved']:raise ValueError('固定目标的公开类型须先核对')
-    if not matches_subtype_filter(target['title'],subtype_filter):raise ValueError('固定目标不满足公开细分品类规则')
+    if not matches_subtype_filter(target['title'],subtype_filter,role='target'):raise ValueError('固定目标不满足公开细分品类规则')
     excluded=set(excluded_source_ids);ready=[]
     for p in candidates:
         if (p['id'] not in excluded and type_compatibility(p,target)['compatible']
-                and matches_subtype_filter(p['title'],subtype_filter)
+                and matches_subtype_filter(p['title'],subtype_filter,role='source')
                 and image_quality(p,config.min_image_side)['accepted']):ready.append(p)
     if hasattr(backend,'features_many'):backend.features_many([target]+ready)
     target_features=backend.features(target)
     rows=[];seen_images={}
     ready_ids={p['id'] for p in ready}
     for p in sorted(candidates,key=lambda p:p['id']):
+        prior_rank=None if public_prior_ranks is None else public_prior_ranks.get(p['id'])
         row=score_pair(p,target,backend.features(p) if p['id'] in ready_ids else None,target_features,
-            threshold=certificate['fit']['threshold'],config=config,subtype_filter=subtype_filter)
+            threshold=certificate['fit']['threshold'],config=config,subtype_filter=subtype_filter,
+            public_prior_rank=prior_rank,public_rank_band=rank_band)
         if p['id'] in excluded:row['rejected_reasons'].append('reserved_in_public_batch')
         if not row['rejected_reasons']:
             if p['image_sha256'] in seen_images:row['rejected_reasons'].append('duplicate_candidate_image')
@@ -185,7 +242,7 @@ def choose_pair(target,candidates,backend,config=SelectionConfig(),*,excluded_so
     eligible_rows=[r for r in rows if r['eligible']]
     if config.strategy=='median':
         draw=median_draw(eligible_rows) if eligible_rows else None
-        protocol=MEDIAN_SELECTION_POLICY
+        protocol=GOLDEN_BAND_MEDIAN_POLICY if (rank_band and rank_band['enabled']) else MEDIAN_SELECTION_POLICY
     else:
         draw=uniform_draw([r['source_id'] for r in eligible_rows],target['id'],config.seed) if eligible_rows else None
         protocol=SELECTION_POLICY
@@ -195,16 +252,17 @@ def choose_pair(target,candidates,backend,config=SelectionConfig(),*,excluded_so
         type_rules_sha256=TYPE_RULES_SHA256,excluded_source_ids=sorted(excluded),
         victim_memory_used=False,victim_queries_used=False,target_system_probed=False)
     if subtype_filter:result['subtype_filter']=subtype_filter
+    if rank_band and rank_band['enabled']:result['public_rank_band']=rank_band
     return result
 
 
 def verify_selection(selection):
-    """验证新中位数/随机选取及旧最高分兼容读取。"""
+    """验证新中位数/黄金区间/随机选取及旧最高分兼容读取。"""
     if selection.get('status')!='selected' or not selection.get('source'):raise ValueError('只有已经确定的合格图对才能发布')
     eligible=[r for r in selection['candidates'] if r['eligible']]
     protocol=selection.get('protocol')
-    if protocol in (SELECTION_POLICY,MEDIAN_SELECTION_POLICY):
-        if protocol==MEDIAN_SELECTION_POLICY:
+    if protocol in (SELECTION_POLICY,MEDIAN_SELECTION_POLICY,GOLDEN_BAND_MEDIAN_POLICY):
+        if protocol in (MEDIAN_SELECTION_POLICY,GOLDEN_BAND_MEDIAN_POLICY):
             draw=median_draw(eligible)
         else:
             draw=uniform_draw([r['source_id'] for r in eligible],selection['target_id'],selection['configuration']['seed'])
@@ -213,9 +271,14 @@ def verify_selection(selection):
         certificate=selection['calibration'];body={k:v for k,v in certificate.items() if k!='certificate_sha256'}
         if digest(body)!=certificate['certificate_sha256'] or digest(selection['models'])!=certificate['models_sha256']:
             raise ValueError('冻结图对的开发门槛或模型身份改变')
+        rank_band=validate_public_rank_band(selection.get('public_rank_band'))
         for row in eligible:
             if row['rejected_reasons'] or row['shape_similarity']<certificate['fit']['threshold']:
                 raise ValueError('抽样集合中存在不合格候选')
+            if rank_band and rank_band['enabled']:
+                pr=row.get('public_prior_rank')
+                if type(pr) is not int or not rank_band['rank_min']<=pr<=rank_band['rank_max']:
+                    raise ValueError('抽样集合中存在超出公开先验名次带的候选')
     else:
         # 不注册旧选择入口，不重新计算旧分数，不修改已有实验。
         if selection.get('calibration')!='provisional_public_only_heuristics_not_success_probabilities':

@@ -30,15 +30,20 @@ z(I)=\frac{f_\theta(\mathcal T(I))}{\|f_\theta(\mathcal T(I))\|_2},\qquad S(s,t)
 
 系统支持两种零泄漏选取模式（均仅基于公开资料，不读取共享记忆、正式请求或检索名次）：
 
-1. **中位数外形选取（`public_shape_gate_median_v3`，当前默认）**：
+1. **中位数外形选取（`public_shape_gate_median_v3`，基础默认）**：
    先筛选合格集合 \(\mathcal E_t\)，按 \((S(s,t), \text{id}(s))\) 升序排列后取下中位索引 \(\lfloor (|\mathcal E_t|-1)/2 \rfloor\)，避免极端高相似或低相似边缘样本。
 2. **均匀抽样（`public_shape_gate_uniform_v2`，历史兼容）**：
    \[
    \Pr(s^\star=s\mid t)=\frac{\mathbf1[s\in\mathcal E_t]}{|\mathcal E_t|}.
    \]
    先按编号排序，在合格集合上使用冻结种子的可复现安全散列抽样。
+3. **黄金先验区间 + 前景裁剪中位数选取（`public_shape_golden_band_median_v1`，新增可选）**：
+   为同时避免“源图原图已排前 1–3（天花板饱和）”与“高难度异构类别零通过或零增益死区”，配置可通过以下三项正交公开机制启用：
+   - **前景裁剪背景抑制外形后端（`foreground_crop_gray_letterbox224_global_cls_v1`）**：实现于独立模块 `src/visual/foreground_shape_features.py`（保持 `src/visual/shape_features.py` 原始整图实现只读与哈希不变），在进入 224 灰度缩放前自动裁剪主体前景并将背景抑制为 127 中性灰，缓解窗帘、家具等杂乱室内背景误拒。启用该预处理须绑定同预处理重新拟合的开发集校准证书。
+   - **目标区分属性仅源排除（`source_exclude`）与候选取样上限扩展（最大 1024）**：`subtype_filters` 支持 `source_exclude` 正则，仅作用于 `role="source"`（例如目标为“曲奇面团”时保留目标本身，但排除已带有 `cookie dough` 的源商品以避免同名顶包；命中者记录为 `source_has_target_differentiating_attribute`），`candidate_limit` / `expand_candidate_limits` 支持最高 `1024`（如 `64 -> 128 -> 256 -> 512 -> 1024`）以解决音箱/窗帘等深子类空集问题。
+   - **零泄漏公开对照池先验名次带门禁（`public_rank_band`）**：从同大类公开索引中提取与候选集、目标及开发集严格互斥的公开对照池（默认 `peer_count=20`，`public_rank_peers.json`），仅利用公开标题与公开主图及公开打分器（默认 `dino_lexical_hybrid`，可选 `clip_b32`/`clip_b16`/`clip_l14`，严禁 `eval_g14`、`eval_gme` 等留出评估器及受害长期记忆）计算每名候选相对于对照池的先验名次，要求落入 `[rank_min, rank_max]`（如 `[5, 12]`：过靠前者拒为 `public_prior_rank_too_high_ceiling`，过靠后者拒为 `public_prior_rank_too_low_deadzone`），再对合格集合取中位数。示例配置见 `src/experiments/config/selection_groups9_golden_band.example.json`。
 
-多目标按配置中冻结的顺序处理；先前已选中的源商品和所有目标编号被显式保留，后续组在剩余合格集合中选取。支持在某组基础候选预算（默认 32）下合格数为零时按配置阶梯（如 `64 -> 128 -> 256`）扩展候选预算，但绝不放宽校准阈值 \(\hat\tau_S\)。
+多目标按配置中冻结的顺序处理；先前已选中的源商品和所有目标编号被显式保留，后续组在剩余合格集合中选取。支持在某组基础候选预算（默认 32 或 64）下合格数为零时按配置阶梯（如 `64 -> 128 -> 256 -> 512 -> 1024`）扩展候选预算，但绝不放宽校准阈值 \(\hat\tau_S\)。
 
 ## 公开开发集校准
 

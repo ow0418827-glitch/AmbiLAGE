@@ -112,9 +112,14 @@ def build_public_index(products_path,index_path,*,verify_source=False):
     return result
 
 
+MAX_CANDIDATE_LIMIT=1024
+
+
 def extract_public_candidates(products_path,groups,output,*,seed=42,lexical_limit=32,candidate_limits=None,index_path=None,excluded_ids=(),type_reviews=None,verify_source=False,subtype_filters=None):
     """从可复用公开索引均匀截取有限候选；支持按组指定候选上限，不计算语义相似度。"""
     from src.visual.pair_selection import matches_subtype_filter,validate_subtype_filter
+    if type(lexical_limit) is not int or not 1<=lexical_limit<=MAX_CANDIDATE_LIMIT:
+        raise ValueError(f'公开图片候选预算须在一至 {MAX_CANDIDATE_LIMIT} 之间')
     output=Path(output);source=Path(products_path).resolve();index=Path(index_path or output.parent/'public_products_v2.sqlite')
     target_ids={g['target_id'] for g in groups};group_keys={g['key'] for g in groups}
     if len(target_ids)!=len(groups) or len(group_keys)!=len(groups):raise ValueError('目标及组名须唯一')
@@ -123,8 +128,8 @@ def extract_public_candidates(products_path,groups,output,*,seed=42,lexical_limi
         if not isinstance(candidate_limits,dict) or set(candidate_limits)-group_keys:
             raise ValueError('按组候选预算只支持配置中的公开组名')
         for k,limit in candidate_limits.items():
-            if type(limit) is not int or not 1<=limit<=256:
-                raise ValueError('按组候选预算须为一至二百五十六之间的整数：'+k)
+            if type(limit) is not int or not 1<=limit<=MAX_CANDIDATE_LIMIT:
+                raise ValueError(f'按组候选预算须为一至 {MAX_CANDIDATE_LIMIT} 之间的整数：'+k)
             resolved_limits[k]=limit
     if subtype_filters is not None:
         if not isinstance(subtype_filters,dict) or set(subtype_filters)-group_keys:
@@ -160,7 +165,7 @@ def extract_public_candidates(products_path,groups,output,*,seed=42,lexical_limi
             target=product(row);category=classify_public_type(target)
             if category['category'] is None:raise ValueError('目标公开类型未解决，须提供逐商品类型核对：'+target['id'])
             sub_filter=subtype_filters.get(group['key'])
-            if not matches_subtype_filter(target['title'],sub_filter):
+            if not matches_subtype_filter(target['title'],sub_filter,role='target'):
                 raise ValueError('固定目标不满足公开细分品类规则：'+target['id'])
             # 类别索引缩小范围；公开人工核对可显式纠正原有未知/多义条目。
             from src.visual.product_types import RULES,COMPATIBLE
@@ -179,7 +184,7 @@ def extract_public_candidates(products_path,groups,output,*,seed=42,lexical_limi
             def eligible():
                 for p in matching():
                     if not type_compatibility(p,target)['compatible']:continue
-                    if not matches_subtype_filter(p['title'],sub_filter):
+                    if not matches_subtype_filter(p['title'],sub_filter,role='source'):
                         counts['subtype_filtered']+=1;continue
                     counts['type_compatible']+=1
                     if p['id'] in excluded:counts['development_excluded']+=1;continue
@@ -193,6 +198,76 @@ def extract_public_candidates(products_path,groups,output,*,seed=42,lexical_limi
         scanned_products=manifest['scanned_products'],usable_public_products=manifest['usable_public_products'],
         groups=results,projected_fields=['asin','name','images[0]'],victim_memory_used=False,formal_queries_used=False,
         ownership_is_experimental_assumption=True)
+    freeze_json(final,result);return result
+
+
+def extract_public_rank_peers(products_path,groups,output,*,seed=42,peer_count=20,index_path=None,excluded_ids=(),candidate_ids_by_group=None,type_reviews=None,verify_source=False,subtype_filters=None):
+    """从公开目录零泄漏抽样每组同品类对照池（与候选集、目标、开发集严格互斥）。"""
+    from src.visual.pair_selection import matches_subtype_filter,validate_subtype_filter
+    if type(peer_count) is not int or peer_count<2:
+        raise ValueError('公开先验对照池规模 peer_count 须为不小于二的整数')
+    output=Path(output);source=Path(products_path).resolve();index=Path(index_path or output.parent/'public_products_v2.sqlite')
+    target_ids={g['target_id'] for g in groups};group_keys={g['key'] for g in groups}
+    if len(target_ids)!=len(groups) or len(group_keys)!=len(groups):raise ValueError('目标及组名须唯一')
+    if subtype_filters is not None:
+        if not isinstance(subtype_filters,dict) or set(subtype_filters)-group_keys:
+            raise ValueError('细分品类过滤只支持配置中的公开组名')
+        subtype_filters={k:validate_subtype_filter(v,allow_empty=False) for k,v in subtype_filters.items()}
+    else:
+        subtype_filters={}
+    candidate_ids_by_group={k:sorted(set(v)) for k,v in (candidate_ids_by_group or {}).items()}
+    manifest=build_public_index(source,index,verify_source=verify_source)
+    excluded=set(excluded_ids);type_reviews=type_reviews or {}
+    identity=dict(index_manifest_sha256=digest(manifest),groups=groups,seed=seed,peer_count=peer_count,
+        excluded_ids=sorted(excluded),candidate_ids_by_group=candidate_ids_by_group,
+        type_reviews=type_reviews,subtype_filters=subtype_filters)
+    final=output/'public_rank_peers.json'
+    if final.exists():
+        saved=read_json(final)
+        if saved['identity']!=identity:raise ValueError('公开对照池规则改变，请使用新目录')
+        return saved
+    results=[]
+    with closing(sqlite3.connect(index.resolve().as_uri()+'?mode=ro',uri=True)) as db:
+        def product(row):
+            p=dict(zip(('id','title','image_url','source_url'),row[:4]))
+            if p['id'] in type_reviews:p['type_review']=type_reviews[p['id']]
+            return p
+        for group in groups:
+            row=db.execute('SELECT id,title,image_url,source_url FROM products WHERE id=?',(group['target_id'],)).fetchone()
+            if row is None:raise ValueError('公开索引缺少固定目标：'+group['target_id'])
+            target=product(row);category=classify_public_type(target)
+            if category['category'] is None:raise ValueError('目标公开类型未解决：'+target['id'])
+            sub_filter=subtype_filters.get(group['key'])
+            from src.visual.product_types import RULES,COMPATIBLE
+            cats=[c for c in RULES if c==category['category'] or frozenset((c,category['category'])) in COMPATIBLE]
+            placeholders=','.join('?' for _ in cats)
+            group_candidates=set(candidate_ids_by_group.get(group['key'],()))
+            def eligible_peers():
+                seen=set()
+                for record in db.execute(f'SELECT id,title,image_url,source_url FROM products WHERE category IN ({placeholders})',cats):
+                    p=product(record)
+                    if p['id'] in seen:continue
+                    seen.add(p['id'])
+                    if p['id'] in excluded or p['id'] in target_ids or p['id'] in group_candidates:continue
+                    if not type_compatibility(p,target)['compatible']:continue
+                    # 对照池允许出现具有目标属性或中性同品类竞品，仅保留品类/exclude 一致性
+                    if not matches_subtype_filter(p['title'],sub_filter,role='target'):continue
+                    yield p
+            retained=heapq.nsmallest(peer_count,eligible_peers(),key=lambda p:(digest(['public_rank_peer_v1',seed,target['id'],p['id']]),p['id']))
+            if len(retained)<peer_count:
+                # 若严格同子类对照不足，从同大类不互斥候选补足（仍与候选/目标/开发集严格互斥）
+                already={p['id'] for p in retained}
+                def broad_peers():
+                    for record in db.execute(f'SELECT id,title,image_url,source_url FROM products WHERE category IN ({placeholders})',cats):
+                        p=product(record)
+                        if p['id'] in already or p['id'] in excluded or p['id'] in target_ids or p['id'] in group_candidates:continue
+                        if not type_compatibility(p,target)['compatible']:continue
+                        yield p
+                extra=heapq.nsmallest(peer_count-len(retained),broad_peers(),key=lambda p:(digest(['public_rank_peer_v1',seed,target['id'],p['id']]),p['id']))
+                retained.extend(extra)
+            results.append(dict(key=group['key'],target=target,peers=retained,peer_count=len(retained)))
+    result=dict(schema_version=1,identity=identity,index_path=str(index.resolve()),index_manifest=manifest,
+        groups=results,victim_memory_used=False,formal_queries_used=False,disjoint_from_candidates=True)
     freeze_json(final,result);return result
 
 

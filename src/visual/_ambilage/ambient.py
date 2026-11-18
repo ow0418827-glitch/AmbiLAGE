@@ -127,7 +127,25 @@ class AmbientCoopField(nn.Module):
         r2_norm = (gy * gy + gx * gx) * 0.5
         self.radial_profile = (1.0 - r2_norm).clamp(0.0, 1.0)[None, None].detach()
 
-        # 3. 可学习参数：全局三维背景色向量 bg_color_shift ([1,3,1,1]) + 单标量径向暗角系数 ([1,1,1,1]) + 前景全局 OKLab 色度向量 ([1,2,1,1])
+        # 七通道光滑 C^∞ 影棚照明空间基函数（[-1, 1] 归一化：左右/上下/对角渐变、墙面/地面弧光、左上/右下双侧柔和主光斑）
+        key_lobe = 2.0 * torch.exp(-((gx + 0.55) ** 2 + (gy + 0.55) ** 2) / 0.65) - 1.0
+        rim_lobe = 2.0 * torch.exp(-((gx - 0.55) ** 2 + (gy - 0.55) ** 2) / 0.65) - 1.0
+        basis_stack = torch.stack(
+            [
+                gx,
+                gy,
+                gx * gy,
+                2.0 * (gx * gx - 0.5),
+                2.0 * (gy * gy - 0.5),
+                key_lobe,
+                rim_lobe,
+            ],
+            dim=0,
+        )
+        self.studio_basis_maps = basis_stack.clamp(-1.0, 1.0).unsqueeze(0).detach()
+
+        # 3. 可学习参数：全局三维背景色向量 bg_color_shift ([1,3,1,1]) + 单标量径向暗角系数 ([1,1,1,1])
+        #    + 7 模态影棚照明空间基系数 ambient_basis ([1,3,7]) + 前景全局 OKLab 色度向量 ([1,2,1,1])
         init_tau = 0.5 * (config.background_levels / 255.0) * config.tau_scale
         init_val = float(config.ambient_init_bias * init_tau)
         self.ambient_global = nn.Parameter(
@@ -137,14 +155,24 @@ class AmbientCoopField(nn.Module):
         self.ambient_grid = nn.Parameter(
             torch.zeros((1, 1, 1, 1), device=self.device, dtype=torch.float32)
         )
+        self.ambient_basis = nn.Parameter(
+            torch.zeros((1, 3, 7), device=self.device, dtype=torch.float32)
+        )
         self.fg_chroma_shift = nn.Parameter(
             torch.zeros((1, 2, 1, 1), device=self.device, dtype=torch.float32)
         )
 
     def ambient_field(self) -> torch.Tensor:
-        """合成全局三维背景颜色与极低频 1 自由度径向暗角光场（无空间杂色自由度）。"""
+        """合成全局三维背景颜色、低频径向暗角与可选 7 模态光滑影棚光场。"""
         vig_scale = float(getattr(self.config, "bg_radial_vignette_scale", 0.05))
-        return self.bg_color_shift + vig_scale * self.ambient_grid * self.radial_profile
+        field = self.bg_color_shift + vig_scale * self.ambient_grid * self.radial_profile
+        basis_scale = float(getattr(self.config, "bg_studio_basis_scale", 0.08))
+        if bool(getattr(self.config, "bg_studio_basis_enabled", False)) and basis_scale > 0.0:
+            basis_coeff = torch.clamp(self.ambient_basis, -1.0, 1.0)
+            field = field + basis_scale * torch.einsum(
+                "bck,bkhw->bchw", basis_coeff, self.studio_basis_maps
+            )
+        return field
 
     @staticmethod
     def _feasible_bounded_residual(

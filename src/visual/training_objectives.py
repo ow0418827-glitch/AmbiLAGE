@@ -698,7 +698,7 @@ class PublicFullKeyObjective:
             col_weights=col_w,
         ).reshape(-1, 1)
 
-    def value(
+    def component_values(
         self,
         features,
         patch_tokens=None,
@@ -706,14 +706,27 @@ class PublicFullKeyObjective:
         step: int | None = None,
         progressive: bool = False,
         public_query_indices: list[int] | None = None,
-    ):
+        text_multiplier: float = 1.0,
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         scores = self.scores(features)
         w_joint, w_text, w_ot = psi_cross_modal_weights(self.config, step=step, progressive=progressive)
+        if (
+            not progressive
+            and bool(getattr(self.config, "text_aware_proxy_weighting", False))
+            and w_text > 0.0
+        ):
+            parity_mix = float(getattr(self.config, "selection_text_parity_mix", 0.0))
+            if parity_mix > 0.0:
+                w_text = max(w_text, parity_mix * w_joint)
+        w_text = w_text * float(text_multiplier)
         temperature = float(self.config.temperature)
-        total = w_joint * (0.5 * scores.mean() + 0.5 * softmin(scores, temperature))
+        u_joint = 0.5 * scores.mean() + 0.5 * softmin(scores, temperature)
+        total = w_joint * u_joint
         if w_text > 0.0:
             u_text = self.enhanced_text_utility(features, temperature, progressive=progressive)
             total = total + w_text * u_text
+        else:
+            u_text = total.new_zeros(())
         if w_ot > 0.0 and patch_tokens is not None:
             ot_scores = self.local_ot_scores(patch_tokens)
             if ot_scores is not None:
@@ -723,6 +736,26 @@ class PublicFullKeyObjective:
             u_pub = self.public_bundle_retrieval_utility(features, public_query_indices, progressive=progressive)
             if u_pub is not None:
                 total = total + self.public_retrieval_weight * u_pub
+        return total, u_joint, u_text
+
+    def value(
+        self,
+        features,
+        patch_tokens=None,
+        *,
+        step: int | None = None,
+        progressive: bool = False,
+        public_query_indices: list[int] | None = None,
+        text_multiplier: float = 1.0,
+    ):
+        total, _, _ = self.component_values(
+            features,
+            patch_tokens=patch_tokens,
+            step=step,
+            progressive=progressive,
+            public_query_indices=public_query_indices,
+            text_multiplier=text_multiplier,
+        )
         return total
 
 
@@ -766,7 +799,17 @@ class SequentialEnsembleObjective:
         if not math.isfinite(self.ensemble_uniform_mix) or not (0.0 <= self.ensemble_uniform_mix <= 1.0):
             raise ValueError('均匀保底混合比例 ensemble_uniform_mix 必须位于 [0.0, 1.0]')
         self.pcgrad_enabled = bool(getattr(config, 'pcgrad_enabled', False))
+        self.text_aware_proxy_weighting = (
+            bool(getattr(config, 'text_aware_proxy_weighting', False))
+            and float(getattr(config, 'text_weight', 0.0)) > 0.0
+        )
+        self.proxy_text_bottleneck_mix = min(
+            max(float(getattr(config, 'proxy_text_bottleneck_mix', 0.55)), 0.0), 1.0
+        )
         self._baseline_values: torch.Tensor | None = None
+        self._baseline_joint_values: torch.Tensor | None = None
+        self._baseline_text_values: torch.Tensor | None = None
+        self.last_eval_diagnostics: dict[str, Any] = {}
 
         explicit_purifier_path = (
             getattr(config, 'purifier_model_path', None)
@@ -907,7 +950,12 @@ class SequentialEnsembleObjective:
             'gradient_execution': 'shared_views_and_purified_pcgrad_single_backward' if self.pcgrad_enabled else 'shared_views_and_purified_single_backward',
             'pcgrad_enabled': self.pcgrad_enabled,
             'psi_progressive_schedule': bool(getattr(config, 'psi_progressive_schedule', False)),
-            'weak_proxy_weighting': 'baseline_calibrated_relative_gain_softmin_with_uniform_floor',
+            'text_aware_proxy_weighting': self.text_aware_proxy_weighting,
+            'weak_proxy_weighting': (
+                'text_bottleneck_relative_gain_softmin_with_uniform_floor'
+                if self.text_aware_proxy_weighting
+                else 'baseline_calibrated_relative_gain_softmin_with_uniform_floor'
+            ),
             'ensemble_temperature': self.ensemble_temperature,
             'ensemble_uniform_mix': self.ensemble_uniform_mix,
             'eot_enabled': bool(getattr(config, 'eot_enabled', True)),
@@ -956,6 +1004,7 @@ class SequentialEnsembleObjective:
         *,
         step: int | None = None,
         progressive: bool = False,
+        text_multiplier: float | None = None,
     ):
         surrogate, objective = self.surrogates[index], self.objectives[index]
         if self._stream_surrogates_on_gpu and callable(getattr(surrogate, 'move_visual_to', None)):
@@ -968,38 +1017,89 @@ class SequentialEnsembleObjective:
         views_patches = getattr(views_out, 'patch_tokens', None)
         score = objective.scores(feature)
         pub_idx = self._public_indices_for_step(step, progressive=progressive)
-        eot = objective.value(
+
+        purified_out = surrogate.encode_image(purified.to(surrogate.device))
+        purified_feature = purified_out.global_embedding
+        purified_patches = getattr(purified_out, 'patch_tokens', None)
+
+        precomputed_stationary = None
+        resolved_mult = 1.0 if text_multiplier is None else float(text_multiplier)
+        if progressive and self.text_aware_proxy_weighting:
+            with torch.no_grad():
+                stat_eot, sj_eot, st_eot = objective.component_values(
+                    feature.detach(),
+                    patch_tokens=views_patches.detach() if views_patches is not None else None,
+                    progressive=False,
+                )
+                stat_p, sj_p, st_p = objective.component_values(
+                    purified_feature.detach(),
+                    patch_tokens=purified_patches.detach() if purified_patches is not None else None,
+                    progressive=False,
+                )
+                stat_u = float(((stat_eot + self.diffusion_weight * stat_p) / (1.0 + self.diffusion_weight)).detach())
+                stat_j = float(((sj_eot + self.diffusion_weight * sj_p) / (1.0 + self.diffusion_weight)).detach())
+                stat_t = float(((st_eot + self.diffusion_weight * st_p) / (1.0 + self.diffusion_weight)).detach())
+                precomputed_stationary = (stat_u, stat_j, stat_t)
+            if (
+                text_multiplier is None
+                and self._baseline_joint_values is not None
+                and self._baseline_text_values is not None
+                and index < len(self._baseline_joint_values)
+            ):
+                g_joint_i = stat_j - float(self._baseline_joint_values[index])
+                g_text_i = stat_t - float(self._baseline_text_values[index])
+                lag_i = g_joint_i - g_text_i
+                if lag_i > 0.005:
+                    resolved_mult = min(1.85, 1.0 + 4.0 * lag_i)
+
+        eot, eot_joint, eot_text = objective.component_values(
             feature,
             patch_tokens=views_patches,
             step=step,
             progressive=progressive,
             public_query_indices=pub_idx,
+            text_multiplier=resolved_mult,
         )
-        purified_out = surrogate.encode_image(purified.to(surrogate.device))
-        purified_feature = purified_out.global_embedding
-        purified_patches = getattr(purified_out, 'patch_tokens', None)
-        pvalue = objective.value(
+        pvalue, p_joint, p_text = objective.component_values(
             purified_feature,
             patch_tokens=purified_patches,
             step=step,
             progressive=progressive,
             public_query_indices=pub_idx,
+            text_multiplier=resolved_mult,
         )
         utility = (eot + self.diffusion_weight * pvalue) / (1.0 + self.diffusion_weight)
 
         # 同时计算恒定终端评估标尺值，供 _baseline_values 与退火控制器跨阶段一致比较
-        if progressive and bool(getattr(self.config, 'psi_progressive_schedule', False)):
+        if precomputed_stationary is not None:
+            stat_util, stat_joint, stat_text = precomputed_stationary
+        elif progressive and bool(getattr(self.config, 'psi_progressive_schedule', False)):
             with torch.no_grad():
-                stat_eot = objective.value(feature.detach(), patch_tokens=views_patches.detach() if views_patches is not None else None, progressive=False)
-                stat_p = objective.value(purified_feature.detach(), patch_tokens=purified_patches.detach() if purified_patches is not None else None, progressive=False)
+                stat_eot, sj_eot, st_eot = objective.component_values(
+                    feature.detach(),
+                    patch_tokens=views_patches.detach() if views_patches is not None else None,
+                    progressive=False,
+                )
+                stat_p, sj_p, st_p = objective.component_values(
+                    purified_feature.detach(),
+                    patch_tokens=purified_patches.detach() if purified_patches is not None else None,
+                    progressive=False,
+                )
                 stat_util = float(((stat_eot + self.diffusion_weight * stat_p) / (1.0 + self.diffusion_weight)).detach())
+                stat_joint = float(((sj_eot + self.diffusion_weight * sj_p) / (1.0 + self.diffusion_weight)).detach())
+                stat_text = float(((st_eot + self.diffusion_weight * st_p) / (1.0 + self.diffusion_weight)).detach())
         else:
             stat_util = float(utility.detach())
+            stat_joint = float(((eot_joint + self.diffusion_weight * p_joint) / (1.0 + self.diffusion_weight)).detach())
+            stat_text = float(((eot_text + self.diffusion_weight * p_text) / (1.0 + self.diffusion_weight)).detach())
 
         return utility, score.mean(0), {
             'eot': float(eot.detach()),
             'purified': float(pvalue.detach()),
             'stationary_utility': stat_util,
+            'stationary_joint_utility': stat_joint,
+            'stationary_text_utility': stat_text,
+            'text_multiplier': float(resolved_mult),
         }
 
     def _maybe_offload_streamed_proxy(self, index: int) -> None:
@@ -1008,11 +1108,21 @@ class SequentialEnsembleObjective:
             if callable(getattr(surrogate, 'move_visual_to', None)):
                 surrogate.move_visual_to('cpu')
 
-    def _weights_from_values(self, values):
+    def _weights_from_values(self, values, *, joint_values=None, text_values=None):
         if self._baseline_values is None or self._baseline_values.shape != values.shape:
             self._baseline_values = values.detach().clone()
         gains = (values - self._baseline_values.to(values.device)).detach()
-        adaptive = torch.softmax(-gains / max(float(self.ensemble_temperature), 1e-4), dim=0)
+        effective_gains = gains
+        if self.text_aware_proxy_weighting and joint_values is not None and text_values is not None:
+            if self._baseline_joint_values is None or self._baseline_joint_values.shape != joint_values.shape:
+                self._baseline_joint_values = joint_values.detach().clone()
+            if self._baseline_text_values is None or self._baseline_text_values.shape != text_values.shape:
+                self._baseline_text_values = text_values.detach().clone()
+            g_joint = (joint_values.to(values.device) - self._baseline_joint_values.to(values.device)).detach()
+            g_text = (text_values.to(values.device) - self._baseline_text_values.to(values.device)).detach()
+            mix = self.proxy_text_bottleneck_mix
+            effective_gains = (1.0 - mix) * gains + mix * torch.minimum(g_joint, g_text)
+        adaptive = torch.softmax(-effective_gains / max(float(self.ensemble_temperature), 1e-4), dim=0)
         uni_mix = min(max(float(self.ensemble_uniform_mix), 0.0), 1.0)
         uniform = torch.full_like(adaptive, 1.0 / len(self.surrogates))
         weights = ((1.0 - uni_mix) * adaptive + uni_mix * uniform).detach()
@@ -1026,7 +1136,7 @@ class SequentialEnsembleObjective:
             self._maybe_offload_streamed_proxy(index)
 
     @torch.no_grad()
-    def _values(self, image, step):
+    def _values(self, image, step=0):
         views, purified, _ = self._shared_inputs(image, step, gradient='none')
         values, scores, rows = [], [], []
         for i in range(len(self.surrogates)):
@@ -1038,21 +1148,49 @@ class SequentialEnsembleObjective:
             scores.append(score.to(image.device))
             rows.append(row)
         values = torch.stack(values)
-        weights, gains = self._weights_from_values(values)
+        joint_values = torch.tensor(
+            [r['stationary_joint_utility'] for r in rows], device=image.device, dtype=values.dtype
+        )
+        text_values = torch.tensor(
+            [r['stationary_text_utility'] for r in rows], device=image.device, dtype=values.dtype
+        )
+        weights, gains = self._weights_from_values(values, joint_values=joint_values, text_values=text_values)
         return values, torch.stack(scores), weights, rows, gains
 
     @torch.no_grad()
+    def _values_with_components(self, image, step=0):
+        values, _, weights, rows, gains = self._values(image, step)
+        joint_values = torch.tensor(
+            [r['stationary_joint_utility'] for r in rows], device=image.device, dtype=values.dtype
+        )
+        text_values = torch.tensor(
+            [r['stationary_text_utility'] for r in rows], device=image.device, dtype=values.dtype
+        )
+        return values, joint_values, text_values, weights, gains
+
+    @torch.no_grad()
     def evaluate(self, image, step=0):
-        values, scores, weights, _, _ = self._values(image, step)
+        values, scores, weights, rows, gains = self._values(image, step)
+        diag: dict[str, Any] = {
+            'model_weights': weights.cpu().tolist(),
+            'model_utilities': values.cpu().tolist(),
+            'model_relative_gains': gains.cpu().tolist(),
+        }
+        if self.text_aware_proxy_weighting and self._baseline_joint_values is not None and self._baseline_text_values is not None:
+            j_vals = torch.tensor([r['stationary_joint_utility'] for r in rows], device=image.device, dtype=values.dtype)
+            t_vals = torch.tensor([r['stationary_text_utility'] for r in rows], device=image.device, dtype=values.dtype)
+            diag['model_joint_gains'] = (j_vals - self._baseline_joint_values.to(image.device)).cpu().tolist()
+            diag['model_text_gains'] = (t_vals - self._baseline_text_values.to(image.device)).cpu().tolist()
+        self.last_eval_diagnostics = diag
         return (weights * values).sum(), scores
 
-    def image_gradient(self, image, step):
+    def image_gradient(self, image, step=1):
         base_device = getattr(self.purifier, 'device', self.surrogates[0].device)
         leaf_img = image.detach().to(base_device).clone().requires_grad_(True)
         views, purified, eot_on = self._shared_inputs(leaf_img, step, gradient='full')
         v_leaf = views.detach().requires_grad_(True)
         p_leaf = purified.detach().requires_grad_(True)
-        stat_values, scores, rows, gv_list, gp_list = [], [], [], [], []
+        stat_values, joint_values, text_values, scores, rows, gv_list, gp_list = [], [], [], [], [], [], []
         use_prog = bool(getattr(self.config, 'psi_progressive_schedule', False))
         for i in range(len(self.surrogates)):
             try:
@@ -1064,14 +1202,18 @@ class SequentialEnsembleObjective:
                 self._maybe_offload_streamed_proxy(i)
             stat_val = torch.tensor(row['stationary_utility'], device=image.device, dtype=torch.float32)
             stat_values.append(stat_val)
+            joint_values.append(torch.tensor(row['stationary_joint_utility'], device=image.device, dtype=torch.float32))
+            text_values.append(torch.tensor(row['stationary_text_utility'], device=image.device, dtype=torch.float32))
             scores.append(score.detach().to(image.device))
             rows.append(row)
             gv_list.append(gv.detach())
             gp_list.append(gp.detach())
             del value, score, gv, gp
         values = torch.stack(stat_values)
+        j_tensor = torch.stack(joint_values)
+        t_tensor = torch.stack(text_values)
         scores = torch.stack(scores)
-        weights, gains = self._weights_from_values(values)
+        weights, gains = self._weights_from_values(values, joint_values=j_tensor, text_values=t_tensor)
         if self.pcgrad_enabled and len(self.surrogates) > 1:
             grad_views = pcgrad_merge_gradients(gv_list, weights)
             grad_purified = pcgrad_merge_gradients(gp_list, weights)
@@ -1090,6 +1232,15 @@ class SequentialEnsembleObjective:
         if not torch.isfinite(gradient).all():
             raise FloatingPointError('代理目标梯度含非有限值')
         utility = (weights * values).sum().detach()
-        return utility, scores.detach(), gradient, {'model_weights': weights.cpu().tolist(),
-            'model_utilities': values.cpu().tolist(), 'model_relative_gains': gains.cpu().tolist(),
-            'paths': rows, 'purifier_gradient': 'full', 'pcgrad_applied': bool(self.pcgrad_enabled and len(self.surrogates) > 1)}
+        info: dict[str, Any] = {
+            'model_weights': weights.cpu().tolist(),
+            'model_utilities': values.cpu().tolist(),
+            'model_relative_gains': gains.cpu().tolist(),
+            'paths': rows,
+            'purifier_gradient': 'full',
+            'pcgrad_applied': bool(self.pcgrad_enabled and len(self.surrogates) > 1),
+        }
+        if self.text_aware_proxy_weighting and self._baseline_joint_values is not None and self._baseline_text_values is not None:
+            info['model_joint_gains'] = (j_tensor - self._baseline_joint_values.to(image.device)).cpu().tolist()
+            info['model_text_gains'] = (t_tensor - self._baseline_text_values.to(image.device)).cpu().tolist()
+        return utility, scores.detach(), gradient, info

@@ -194,6 +194,12 @@ class AmbiLAGEConfig:
     public_query_batch_size: int = 16
     public_contrastive_margin: float = 0.30
     low_vram_offload_threshold_gb: float = 28.0
+    # Stage 4 平滑空间影棚光场基函数与文本瓶颈感知代理加权（默认关闭以保持既有默认行为）
+    bg_studio_basis_enabled: bool = False
+    bg_studio_basis_scale: float = 0.08
+    text_aware_proxy_weighting: bool = False
+    selection_text_parity_mix: float = 0.0
+    proxy_text_bottleneck_mix: float = 0.55
 
     def validate(self) -> None:
         """严格校验配置参数有效性，杜绝越界或无效数值。"""
@@ -369,6 +375,8 @@ class AmbiLAGEConfig:
             "pcgrad_enabled",
             "spectral_manifold_projection",
             "conditional_tangent_projection",
+            "bg_studio_basis_enabled",
+            "text_aware_proxy_weighting",
         ):
             if type(getattr(self, bool_name)) is not bool:
                 raise ValueError(f"配置开关 {bool_name} 必须为布尔值")
@@ -404,6 +412,12 @@ class AmbiLAGEConfig:
             raise ValueError("公开检索对比间隔 public_contrastive_margin 必须位于 [0.0, 1.0]")
         if not (8.0 <= self.low_vram_offload_threshold_gb <= 128.0):
             raise ValueError("显存自适应卸载阈值 low_vram_offload_threshold_gb 无效")
+        if not (0.0 <= self.bg_studio_basis_scale <= 0.35):
+            raise ValueError("空间影棚光场基幅值 bg_studio_basis_scale 必须位于 [0.0, 0.35]")
+        if not (0.0 <= self.selection_text_parity_mix <= 2.0):
+            raise ValueError("选优稳态文本权重下限系数 selection_text_parity_mix 必须位于 [0.0, 2.0]")
+        if not (0.0 <= self.proxy_text_bottleneck_mix <= 1.0):
+            raise ValueError("多代理文本瓶颈融合系数 proxy_text_bottleneck_mix 必须位于 [0.0, 1.0]")
 
         # 检查有限实数
         for key, val in asdict(self).items():

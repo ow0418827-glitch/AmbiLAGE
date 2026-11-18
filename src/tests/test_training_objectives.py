@@ -424,7 +424,13 @@ def test_sequential_ensemble_baseline_calibrated_weighting_and_uniform_floor():
         _BiasedSurrogate(1, img_bias=0.25, text_vec=[0.2, 1.0, 0.0, 0.0]),
         _BiasedSurrogate(2, img_bias=0.10, text_vec=[0.2, 0.2, 1.0, 0.0]),
     ]
-    cfg = AmbiLAGEConfig(ensemble_temperature=0.20, ensemble_uniform_mix=0.45, diffusion_weight=0.08, smoke_test=True)
+    cfg = AmbiLAGEConfig(
+        ensemble_temperature=0.20,
+        ensemble_uniform_mix=0.45,
+        diffusion_weight=0.08,
+        surrogate_set='visual_inception_paper',
+        smoke_test=True,
+    )
     target = torch.full((1, 3, 16, 16), 0.6, dtype=torch.float32)
     ensemble = SequentialEnsembleObjective(
         surrogates, target, 'source key', 'target text', cfg, purifier=TinyPurifier()

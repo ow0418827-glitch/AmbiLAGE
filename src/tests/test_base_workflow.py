@@ -84,7 +84,7 @@ def test_steps_and_method_config_reach_generation_without_loading_models(tmp_pat
     assert ("steps" in seen) == (steps is not None)
     if method == "ambilage":
         assert seen["ambilage_config"].steps == config['steps']
-        assert seen["ambilage_config"].surrogate_set == 'lucid'
+        assert seen["ambilage_config"].surrogate_set == 'clip_l14'
         assert seen["definition"]["source_category"] == "Shampoo & Conditioner"
         assert "source_public_key" in seen["definition"]
     else:

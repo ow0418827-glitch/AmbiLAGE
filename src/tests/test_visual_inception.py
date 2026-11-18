@@ -58,7 +58,7 @@ def test_default_configuration_is_the_declared_retrieval_baseline():
     assert cfg.step_size_levels == 2
     assert cfg.semantic_weight == 1 and cfg.perceptual_weight == .1
     assert cfg.gradient_restarts == 10
-    assert cfg.seed == 42 and cfg.surrogate_set == 'visual_inception_paper'
+    assert cfg.seed == 42 and cfg.surrogate_set == 'clip_l14'
     assert cfg.smoke_test is False
     assert cfg.objective_mode == 'retrieval_semantic_perceptual'
     assert cfg.retrieval_weight == 1 and cfg.retrieval_temperature == .07
@@ -195,7 +195,8 @@ def test_saved_perturbation_is_nonzero_and_respects_source_pixel_budget(tiny_pai
     assert 0 < difference.max() <= 8
     assert metadata['method'] == 'visual_inception'
     assert metadata['test_fixture'] is True and metadata['production_backend'] is False
-    assert metadata['paper_encoder_profile_selected'] is True
+    assert metadata['single_surrogate_profile_selected'] is True
+    assert metadata['paper_encoder_profile_selected'] is False
     assert metadata['paper_encoder_architectures_aligned'] is False
     assert metadata['paper_encoder_ensemble_reproduced'] is False
     assert metadata['paper_encoder_checkpoint_status'] == 'public_checkpoint_choices_paper_exact_revisions_unspecified'
@@ -332,7 +333,7 @@ def test_nine_group_dispatch_binds_baseline_defaults_and_real_public_category(tm
     assert seen['definition']['target_product_features'] == expected['target_features']
     binding = json.loads((root / 'PUBLIC_RUN.json').read_text(encoding='utf-8'))
     assert binding['config']['steps'] == 100 and binding['epsilon_levels'] == 8
-    assert binding['training_surrogates']['profile'] == 'visual_inception_paper'
+    assert binding['training_surrogates']['profile'] == 'clip_l14'
     assert not (root / 'FROZEN_IMAGE.json').exists()
 
 

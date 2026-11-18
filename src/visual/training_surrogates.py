@@ -10,7 +10,7 @@ import re
 from src.paths import PROJECT, MODEL_ROOT, VISUAL_CONFIGS
 from src.visual.encoders.spec import BackboneConfig
 
-SURROGATE_SETS = ('lucid', 'heterogeneous4', 'visual_inception_paper', 'custom')
+SURROGATE_SETS = ('clip_l14', 'lucid', 'heterogeneous4', 'visual_inception_paper', 'custom')
 HELD_OUT_MODELS = ('ViT-g-14', 'Alibaba-NLP/gme-Qwen2-VL-2B-Instruct')
 HELD_OUT_PURIFIERS = ('eval_purifier_sd21', 'sd2-community/stable-diffusion-2-1-base', 'stabilityai/stable-diffusion-2-1-base')
 
@@ -28,7 +28,7 @@ def is_held_out_purifier_reference(value: str | Path | None) -> bool:
 def all_registered_training_specs() -> list[BackboneConfig]:
     seen: set[tuple[str, str, str | None]] = set()
     ordered: list[BackboneConfig] = []
-    for preset in ('lucid', 'heterogeneous4', 'visual_inception_paper'):
+    for preset in ('clip_l14', 'lucid', 'heterogeneous4', 'visual_inception_paper'):
         for spec in select_training_surrogates(preset).specs:
             ident = spec_identity(spec)
             if ident not in seen:
@@ -70,7 +70,8 @@ class TrainingSurrogateSelection:
     def audit(self):
         source = self.source.relative_to(PROJECT).as_posix()
         specs = [asdict(s) for s in self.specs]
-        reference = ('current_lucid_configuration_and_loader' if self.profile == 'lucid'
+        reference = ('visual_inception_single_clip_l14_explicit_checkpoint' if self.profile == 'clip_l14'
+                     else 'current_lucid_configuration_and_loader' if self.profile == 'lucid'
                      else 'visual_inception_paper_architectures_explicit_checkpoints'
                      if self.profile == 'visual_inception_paper' else 'explicit_alternative')
         audit = dict(schema_version=1, profile=self.profile, config_source=source,
@@ -78,7 +79,11 @@ class TrainingSurrogateSelection:
                     comparison_reference=reference,
                     activation_policy='pretrained_native', model_count=len(specs),
                     held_out_models=list(HELD_OUT_MODELS), downloads_during_training=False)
-        if self.profile == 'visual_inception_paper':
+        if self.profile == 'clip_l14':
+            audit['paper_single_encoder_architecture'] = 'CLIP-ViT-L/14'
+            audit['paper_exact_checkpoints_specified'] = False
+            audit['checkpoint_policy'] = 'explicit_public_pretrained_identity_not_claimed_author_checkpoint'
+        elif self.profile == 'visual_inception_paper':
             audit['paper_architectures'] = ['CLIP-ViT-L/14', 'SigLIP-SO400M-patch14-384', 'OpenCLIP-ViT-G-14']
             audit['registered_architecture_aliases'] = {'OpenCLIP-ViT-G-14': 'ViT-bigG-14'}
             audit['paper_exact_checkpoints_specified'] = False
@@ -99,7 +104,8 @@ def select_training_surrogates(profile='lucid', config_path=None):
     else:
         if config_path is not None:
             raise ValueError('内置训练代理方案不能同时指定自定义代理配置')
-        filenames = {'lucid': 'optimization.json', 'heterogeneous4': 'surrogates.heterogeneous4.json',
+        filenames = {'clip_l14': 'surrogates.clip_l14.json', 'lucid': 'optimization.json',
+                     'heterogeneous4': 'surrogates.heterogeneous4.json',
                      'visual_inception_paper': 'surrogates.visual_inception.json'}
         path = VISUAL_CONFIGS / filenames[profile]
     data = path.read_bytes()
@@ -175,8 +181,8 @@ def validate_selection_audit(audit, config):
 
 def add_surrogate_arguments(parser):
     group = parser.add_mutually_exclusive_group()
-    group.add_argument('--surrogate-set', choices=('lucid', 'heterogeneous4', 'visual_inception_paper'),
-                       help='训练代理方案：lucid 为原始像素三代理；heterogeneous4 为四代理组合；visual_inception_paper 为论文三代理架构')
+    group.add_argument('--surrogate-set', choices=('clip_l14', 'lucid', 'heterogeneous4', 'visual_inception_paper'),
+                       help='训练代理方案：clip_l14 为单模型 CLIP-ViT-L/14；lucid 为原始像素三代理；heterogeneous4 为四代理组合；visual_inception_paper 为论文三代理架构')
     group.add_argument('--surrogate-config', type=Path,
                        help='项目内自定义公开训练代理配置文件；与内置方案互斥')
 

@@ -1,0 +1,9 @@
+{
+  "setting": "matched_public_encoder",
+  "surrogate": {
+    "name": "ViT-L-14",
+    "pretrained": "openai",
+    "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+    "weight_path": "clip_l14/open_clip_model.safetensors"
+  }
+}

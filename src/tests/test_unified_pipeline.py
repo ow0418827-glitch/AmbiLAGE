@@ -55,7 +55,8 @@ def test_unified_generate_ambilage(tmp_path: Path):
 
 
 @pytest.mark.parametrize('extra,count', [
-    ([],3),
+    ([],1),
+    (['--surrogate-set','visual_inception_paper'],3),
     (['--surrogate-set','heterogeneous4'],4),
     (['--surrogate-config','src/visual/config/training_surrogates.custom.example.json'],2),
 ])

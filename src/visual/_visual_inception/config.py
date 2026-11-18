@@ -12,7 +12,7 @@ class VisualInceptionConfig:
     perceptual_weight: float = 0.1
     gradient_restarts: int = 10
     seed: int = 42
-    surrogate_set: str = 'visual_inception_paper'
+    surrogate_set: str = 'clip_l14'
     surrogate_config: str | None = None
     lpips_backbone_weights: str | None = None
     lpips_linear_weights: str | None = None
@@ -76,7 +76,7 @@ class VisualInceptionConfig:
             raise ValueError('查询对抗步长必须为有限正数')
         if type(self.query_batch_size) is not int or not 1 <= self.query_batch_size <= 100:
             raise ValueError('训练查询批量必须为一至一百之间的整数')
-        if self.surrogate_set not in ('lucid', 'heterogeneous4', 'visual_inception_paper', 'custom'):
+        if self.surrogate_set not in ('clip_l14', 'lucid', 'heterogeneous4', 'visual_inception_paper', 'custom'):
             raise ValueError('未知训练代理方案')
         if bool(self.surrogate_config) != (self.surrogate_set == 'custom'):
             raise ValueError('自定义代理方案与配置文件必须同时指定')

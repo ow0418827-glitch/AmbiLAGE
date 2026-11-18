@@ -115,3 +115,56 @@ def estimate_gradient_variances(source, models, text_features, *, epsilon, resta
             del leaf, loss, gradient
         values.append(max(0.0, float((m2 / restarts).mean())))
     return values
+
+
+def single_surrogate_loss_and_gradient(
+    image,
+    source,
+    model,
+    target_features,
+    perceptual,
+    config,
+    *,
+    proxy_fn,
+    retrieval_state=None,
+    query_indices=None,
+):
+    """Unified single-encoder Eq. (2) objective graph without ensemble uncertainty weighting."""
+    leaf = image.detach().requires_grad_(True)
+    semantic, retrieval, mechanism_audit = proxy_fn(
+        model,
+        leaf,
+        target_features,
+        retrieval_state=retrieval_state,
+        model_index=0,
+        query_indices=query_indices,
+        temperature=config.retrieval_temperature,
+        config=config,
+        return_audit=True,
+        include_per_query_audit=False,
+    )
+    distance = perceptual(source, leaf)
+    total_loss = (
+        config.semantic_weight * semantic
+        + config.retrieval_weight * retrieval
+        + config.perceptual_weight * distance
+    )
+    gradient, = torch.autograd.grad(total_loss, leaf)
+    if not torch.isfinite(gradient).all():
+        raise FloatingPointError('单代理联合目标图片梯度含非有限值')
+    sem_val = float(semantic.detach())
+    ret_val = float(retrieval.detach())
+    dist_val = float(distance.detach())
+    record = dict(
+        semantic_losses=[sem_val],
+        retrieval_losses=[ret_val],
+        semantic_loss=sem_val,
+        retrieval_loss=ret_val,
+        perceptual_loss=dist_val,
+        loss=float(total_loss.detach()),
+    )
+    if mechanism_audit is not None:
+        record['mechanism_audits'] = [mechanism_audit]
+    grad_out = gradient.detach()
+    del leaf, total_loss, semantic, retrieval, distance, gradient
+    return grad_out, record

@@ -43,10 +43,12 @@ def tiny_pair(tmp_path):
 
 
 def test_paper_default_is_independent_and_lucid_configuration_bytes_are_preserved():
-    assert VisualInceptionConfig().surrogate_set == PAPER_PROFILE
+    assert VisualInceptionConfig().surrogate_set == 'clip_l14'
     assert choices.select_training_surrogates().profile == 'lucid'
     assert hashlib.sha256((VISUAL_CONFIGS / 'optimization.json').read_bytes()).hexdigest() == LUCID_CONFIG_SHA256
-    paper = choices.selection_from_config(VisualInceptionConfig())
+    single = choices.selection_from_config(VisualInceptionConfig())
+    assert len(single.specs) == 1 and choices.spec_identity(single.specs[0]) == PAPER_IDENTITIES[0]
+    paper = choices.selection_from_config(VisualInceptionConfig(surrogate_set=PAPER_PROFILE))
     assert [choices.spec_identity(s) for s in paper.specs] == PAPER_IDENTITIES
     lucid = choices.select_training_surrogates('lucid')
     assert [(s.name, s.pretrained) for s in lucid.specs] == [
@@ -61,13 +63,13 @@ def test_paper_profile_freezes_order_paths_and_pretrained_identity():
     assert audit['downloads_during_training'] is False
     assert selected.specs[2].weight_path == 'clip_bigG14/open_clip_model.safetensors'
     assert selected.specs[1].tokenizer_path == 'siglip_so400m'
-    restored = choices.validate_selection_audit(audit, VisualInceptionConfig().to_dict())
+    restored = choices.validate_selection_audit(audit, VisualInceptionConfig(surrogate_set=PAPER_PROFILE).to_dict())
     assert tuple(map(choices.spec_identity, restored.specs)) == tuple(PAPER_IDENTITIES)
     bad = json.loads(json.dumps(audit))
     bad['specs'].reverse()
     bad['specs_sha256'] = choices._digest(bad['specs'])
     with pytest.raises(ValueError, match='改变|冒充'):
-        choices.validate_selection_audit(bad, VisualInceptionConfig().to_dict())
+        choices.validate_selection_audit(bad, VisualInceptionConfig(surrogate_set=PAPER_PROFILE).to_dict())
 
 
 @pytest.mark.parametrize('held_out', [
@@ -158,7 +160,7 @@ def test_changing_proxy_profile_never_overwrites_existing_generated_image(tiny_p
         device='cpu', definition=public_definition())
     before = {name: (root / name).read_bytes() for name in ('adversarial.png', 'metadata.json', 'ready.json')}
     current = VisualInceptionConfig(objective_mode='semantic_perceptual', steps=1, gradient_restarts=2, smoke_test=True)
-    assert current.surrogate_set == PAPER_PROFILE
+    assert current.surrogate_set == 'clip_l14'
     with pytest.raises(FileExistsError, match='禁止覆盖'):
         generate_visual_inception(*tiny_pair, root, config=current, device='cpu', definition=public_definition())
     assert output.is_file()
@@ -166,9 +168,11 @@ def test_changing_proxy_profile_never_overwrites_existing_generated_image(tiny_p
 
 
 @pytest.mark.parametrize('arguments,expected', [
-    ([], 'lucid'),
+    ([], 'clip_l14'),
+    (['--method', 'ambilage'], 'clip_l14'),
+    (['--method', 'ambilage', '--surrogate-set', 'lucid'], 'lucid'),
     (['--method', 'lucid'], 'lucid'),
-    (['--method', 'visual_inception'], PAPER_PROFILE),
+    (['--method', 'visual_inception'], 'clip_l14'),
     (['--method', 'visual_inception', '--surrogate-set', 'lucid'], 'lucid'),
 ])
 def test_full_pipeline_doctor_selects_method_default_without_reading_run_inputs(arguments, expected, monkeypatch):

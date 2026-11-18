@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "surrogates": [
+    {
+      "name": "ViT-L-14",
+      "pretrained": "openai",
+      "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+      "weight_path": "clip_l14/open_clip_model.safetensors"
+    }
+  ],
+  "paper_single_encoder_architecture": "CLIP-ViT-L/14",
+  "paper_exact_checkpoints_specified": false,
+  "checkpoint_policy": "explicit_public_pretrained_identity_not_claimed_author_checkpoint",
+  "held_out": [
+    "ViT-g-14",
+    "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+  ],
+  "allow_downloads": false
+}

@@ -15,12 +15,13 @@ from src.visual._visual_inception.targets import content_sha256
 from src.visual.io import sha256_file
 
 
-def _generate(tmp_path, *, profile='enhanced_v3'):
+def _generate(tmp_path, *, profile='enhanced_v3', surrogate_set='visual_inception_paper'):
     source, target = tmp_path / 'source.png', tmp_path / 'target.png'
     Image.new('RGB', (16, 16), (180, 100, 75)).save(source)
     Image.new('RGB', (16, 16), (80, 170, 150)).save(target)
     manifest, _, _ = make_training_fixture(tmp_path / 'bundle', (source, target))
     config = VisualInceptionConfig(steps=2, gradient_restarts=2, smoke_test=True,
+        surrogate_set=surrogate_set,
         training_manifest=str(manifest), mechanism_profile=profile)
     return generate_visual_inception(source, target, tmp_path / 'generated', config=config,
         device='cpu', definition=public_definition())

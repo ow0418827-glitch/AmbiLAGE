@@ -1,0 +1,10 @@
+{
+  "setting": "held_out_public_encoder",
+  "surrogate": {
+    "name": "ViT-SO400M-14-SigLIP-384",
+    "pretrained": "webli",
+    "hf_repo": "timm/ViT-SO400M-14-SigLIP-384",
+    "weight_path": "siglip_so400m/open_clip_model.safetensors",
+    "tokenizer_path": "siglip_so400m"
+  }
+}

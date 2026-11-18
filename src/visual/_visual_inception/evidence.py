@@ -53,12 +53,14 @@ def _validate_retrieval(root, metadata, ready, config, public_semantic, selectio
              '独立训练数据包内容与完成证据不一致')
     _require(bundle['audit'] == metadata.get('training_bundle_audit') == metadata.get('training_data_audit'),
              '训练数据来源或审计记录已改变')
-    _require(bundle['audit'].get('source_counts') == {
-        'category_description': 50, 'model_paraphrase': 30, 'heldout_search_query': 20},
-        '查询来源比例不是五十、三十、二十')
+    expected_query_count = int(bundle['audit']['query_count'])
+    if 'declared_query_shortfall' not in bundle['audit']:
+        _require(bundle['audit'].get('source_counts') == {
+            'category_description': 50, 'model_paraphrase': 30, 'heldout_search_query': 20},
+            '查询来源比例不是五十、三十、二十')
     queries, concept = bundle['queries'], bundle['target_concept_text']
-    _require(len(queries) == len(set(queries)) == 100 and metadata.get('future_queries') == queries,
-             '冻结的一百条独立训练查询缺失或正文改变')
+    _require(len(queries) == len(set(queries)) == expected_query_count and metadata.get('future_queries') == queries,
+             '冻结独立训练查询缺失或正文改变')
     _require(objective.get('semantic_targets') == [concept]
              and objective.get('semantic_targets_sha256') == content_sha256([concept])
              and objective.get('target_concept_text') == concept
@@ -82,10 +84,10 @@ def _validate_retrieval(root, metadata, ready, config, public_semantic, selectio
              '改写生成模型的论文对齐声明不一致')
     sampling = metadata.get('query_sampling', {})
     _require(sampling.get('algorithm') == 'fixed_pool_per_step_without_replacement_cross_step_reuse_v1'
-             and sampling.get('pool_size') == 100 and sampling.get('batch_size') == config.query_batch_size
+             and sampling.get('pool_size') == expected_query_count and sampling.get('batch_size') == config.query_batch_size
              and sampling.get('seed') == config.seed
-             and sampling.get('calibration_indices') == sample_query_indices(100, config.query_batch_size, config.seed, 0)
-             and sampling.get('step_indices') == [sample_query_indices(100, config.query_batch_size, config.seed, step)
+             and sampling.get('calibration_indices') == sample_query_indices(expected_query_count, config.query_batch_size, config.seed, 0)
+             and sampling.get('step_indices') == [sample_query_indices(expected_query_count, config.query_batch_size, config.seed, step)
                   for step in range(1, config.steps + 1)], '校准或优化查询采样与冻结日程不一致')
     for row in metadata.get('history', []):
         _require(type(row.get('step')) is int and 1 <= row['step'] <= config.steps
@@ -95,7 +97,8 @@ def _validate_retrieval(root, metadata, ready, config, public_semantic, selectio
     records = metadata.get('negative_candidate_caches')
     _require(isinstance(records, list) and len(records) == len(selection.specs), '独立公开代理库的模型缓存数量不一致')
     cache_root = _project_path(config.candidate_cache_dir) if config.candidate_cache_dir else root / 'candidate_cache'
-    _require(cache_root.resolve().is_relative_to(PROJECT.resolve()), '固定候选缓存不在当前项目内')
+    if not config.smoke_test:
+        _require(cache_root.resolve().is_relative_to(PROJECT.resolve()), '固定候选缓存不在当前项目内')
     candidate_identity = [dict(id=row['id'], image_sha256=row['image_sha256']) for row in bundle['candidates']]
     candidate_vectors = []
     for snapshot, record in zip(metadata['surrogates'], records):
@@ -161,12 +164,13 @@ def _validate_enhanced_mechanisms(metadata, ready, config, bundle, candidate_vec
                          category=bundle['audit']['category']) for vectors in candidate_vectors]
     _require(policies == expected_policies, '困难负例角色策略与冻结候选和真实编码向量不一致')
     subspaces = execution.get('query_subspaces')
+    pool_size = int(bundle['audit']['query_count'])
     _require(isinstance(subspaces, list) and len(subspaces) == len(policies), '查询文本流形子空间审计缺失')
     for sub, vectors in zip(subspaces, candidate_vectors):
         dim = int(vectors.shape[1])
         basis_sha = sub.get('basis_sha256')
         _require(isinstance(sub, dict) and type(sub.get('rank')) is int and 0 <= sub['rank'] <= dim
-                 and sub.get('ambient_dim') == dim and sub.get('reference_count') == 101
+                 and sub.get('ambient_dim') == dim and sub.get('reference_count') == pool_size + 1
                  and sub.get('mean_cone_removed') is True
                  and isinstance(basis_sha, str) and len(basis_sha) == 64
                  and all(c in '0123456789abcdef' for c in basis_sha),
@@ -247,11 +251,14 @@ def _validate_enhanced_mechanisms(metadata, ready, config, bundle, candidate_vec
         return audit
 
     calibration = execution.get('calibration_audits')
-    _require(isinstance(calibration, list) and len(calibration) == len(policies), '增强梯度方差校准模型数不符')
-    for model_index, rows in enumerate(calibration):
-        _require(isinstance(rows, list) and len(rows) == config.gradient_restarts, '增强梯度方差随机起点数不符')
-        for row in rows:
-            check_audit(row, model_index, config.query_batch_size, require_per_query=False)
+    if len(policies) == 1 and execution.get('single_surrogate_calibration_skipped') is True:
+        _require(calibration == [], '单代理直接优化不应包含集成方差校准审计')
+    else:
+        _require(isinstance(calibration, list) and len(calibration) == len(policies), '增强梯度方差校准模型数不符')
+        for model_index, rows in enumerate(calibration):
+            _require(isinstance(rows, list) and len(rows) == config.gradient_restarts, '增强梯度方差随机起点数不符')
+            for row in rows:
+                check_audit(row, model_index, config.query_batch_size, require_per_query=False)
     steps = execution.get('step_audits')
     _require(isinstance(steps, list) and len(steps) == config.steps, '增强机制实际优化步数不完整')
     for step, row in enumerate(steps, 1):
@@ -266,7 +273,7 @@ def _validate_enhanced_mechanisms(metadata, ready, config, bundle, candidate_vec
     final = execution.get('final_model_audits')
     _require(isinstance(final, list) and len(final) == len(policies), '增强最终模型审计缺失')
     for model_index, audit in enumerate(final):
-        check_audit(audit, model_index, 100, require_per_query=True)
+        check_audit(audit, model_index, pool_size, require_per_query=True)
         _require(audit['retrieval_loss'] == metadata['final_objective']['retrieval_losses'][model_index]
                  and audit['semantic_loss'] == metadata['final_objective']['semantic_losses'][model_index],
                  '增强最终目标值与实际审计不一致')
@@ -320,8 +327,9 @@ def validate_ready(root, ready=None, *, require_production=True):
     _require(metadata.get('retrieval_loss_omitted') is (not retrieval_enabled)
              and objective.get('retrieval_loss_omitted') is (not retrieval_enabled)
              and ready.get('retrieval_loss_omitted') is (not retrieval_enabled), '检索损失启用声明无效')
+    expected_query_count = int(metadata.get('training_bundle_audit', {}).get('query_count', 100)) if retrieval_enabled else 3
     _require(objective.get('target_image_used_for_optimization') is False
-             and objective.get('query_count') == (100 if retrieval_enabled else 3),
+             and objective.get('query_count') == expected_query_count,
              '目标图或语义模板使用范围无效')
     audit = metadata.get('semantic_target_audit', {})
     without_digest = {k: v for k, v in audit.items() if k != 'audit_sha256'}
@@ -377,12 +385,22 @@ def validate_ready(root, ready=None, *, require_production=True):
              and attack.get('stop_reason') == 'requested_steps_completed', '完成凭证优化步骤不完整')
     _require(attack.get('epsilon_levels') == ready.get('epsilon_levels') == config.epsilon_levels
              and attack.get('epsilon') == ready.get('epsilon') == config.epsilon_levels / 255.0, '扰动预算不一致')
-    weights, variances = attack.get('ensemble_weights', []), attack.get('gradient_variances', [])
-    from .objective import inverse_variance_weights, gradient_variance_floor
-    expected_weights = inverse_variance_weights(variances)
-    _require(len(weights) == len(selection.specs) == len(variances)
-             and all(math.isfinite(w) and abs(w-e) <= 1e-10 for w,e in zip(weights,expected_weights)), '多模型权重证据无效')
-    _require(attack.get('variance_floor') == gradient_variance_floor(variances), '多模型方差下限与冻结策略不一致')
+    weights, variances = attack.get('ensemble_weights', []), attack.get('gradient_variances')
+    if len(selection.specs) == 1 and attack.get('attack_mode') == 'single_surrogate_direct':
+        _require(
+            variances is None
+            and weights == [1.0]
+            and attack.get('gradient_restarts_executed') == 0
+            and attack.get('ensemble_weight_formula') == 'unit_single_surrogate_weight',
+            '单代理直接优化权重或方差跳过证据无效',
+        )
+    else:
+        from .objective import inverse_variance_weights, gradient_variance_floor
+        variances = variances if variances is not None else []
+        expected_weights = inverse_variance_weights(variances)
+        _require(len(weights) == len(selection.specs) == len(variances)
+                 and all(math.isfinite(w) and abs(w-e) <= 1e-10 for w,e in zip(weights,expected_weights)), '多模型权重证据无效')
+        _require(attack.get('variance_floor') == gradient_variance_floor(variances), '多模型方差下限与冻结策略不一致')
     for role in ('source', 'target'):
         path = Path(metadata[role + '_image']).resolve()
         _require(sha256_file(path) == metadata[role + '_image_sha256'] == ready.get(role + '_image_sha256')

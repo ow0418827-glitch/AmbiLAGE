@@ -176,6 +176,91 @@ def pcgrad_merge_gradients(
     return merged
 
 
+def resolve_effective_category_mode(config, training_bundle) -> str:
+    raw = str(getattr(config, 'category_data_mode', 'auto') or 'auto')
+    if raw == 'auto':
+        return 'category_subspace_hybrid' if training_bundle is not None else 'legacy_target_product'
+    return raw
+
+
+def resolve_effective_key_mode(config, category_mode: str, training_bundle) -> str:
+    raw = str(getattr(config, 'memory_key_mode', 'auto') or 'auto')
+    if raw == 'auto':
+        if training_bundle is not None or category_mode != 'legacy_target_product':
+            return 'image'
+        return 'joint'
+    return raw
+
+
+def single_model_dominant_pcgrad(
+    g_primary: torch.Tensor,
+    g_aux: torch.Tensor | None,
+    *,
+    aux_cap: float = 0.80,
+    eps: float = 1e-12,
+) -> tuple[torch.Tensor, bool]:
+    """将单代理辅助视觉/净化梯度投影至与主类别检索梯度非冲突的半空间，避免局部纹理冲毁大类方向。"""
+    if g_aux is None:
+        return g_primary, False
+    p64 = g_primary.reshape(-1).to(dtype=torch.float64)
+    a64 = g_aux.reshape(-1).to(dtype=torch.float64)
+    p_norm = float(p64.norm().item())
+    a_norm = float(a64.norm().item())
+    if a_norm <= eps:
+        return g_primary, False
+    if p_norm <= eps:
+        return g_aux, False
+    dot = float(torch.dot(p64, a64).item())
+    conflicted = dot < 0.0
+    if conflicted:
+        a64 = a64 - (dot / max(p_norm * p_norm, eps * eps)) * p64
+    a_proj_norm = float(a64.norm().item())
+    max_norm = float(aux_cap) * p_norm
+    if a_proj_norm > max_norm > 0.0:
+        a64 = a64 * (max_norm / a_proj_norm)
+    merged = (p64 + a64).to(dtype=g_primary.dtype).reshape_as(g_primary)
+    return merged, conflicted
+
+
+def multiscale_grid_breaking_views(
+    image: torch.Tensor,
+    *,
+    step: int,
+    base_views: torch.Tensor,
+) -> torch.Tensor:
+    """为单代理训练追加确定性多尺度裁剪缩放视图，打破 CLIP-ViT-L/14 固定 14x14 分块边界过拟合。"""
+    from src.visual.image_utils import quantize_ste
+    x = quantize_ste(image)
+    _, _, h, w = x.shape
+    scales = (0.91, 0.96, 0.93, 1.05)
+    s1 = scales[(int(step) - 1) % 4]
+    s2 = scales[(int(step) + 1) % 4]
+    extra = []
+    for idx, scale in enumerate((s1, s2)):
+        if scale < 1.0:
+            ch = max(4, min(h, int(round(h * scale))))
+            cw = max(4, min(w, int(round(w * scale))))
+            max_y = max(0, h - ch)
+            max_x = max(0, w - cw)
+            top = ((int(step) * 7 + idx * 13) % (max_y + 1)) if max_y > 0 else 0
+            left = ((int(step) * 11 + idx * 5) % (max_x + 1)) if max_x > 0 else 0
+            cropped = x[:, :, top : top + ch, left : left + cw]
+            resized = F.interpolate(
+                cropped, size=(h, w), mode='bicubic', align_corners=False, antialias=True
+            ).clamp(0, 1)
+        else:
+            up_h = max(h + 2, int(round(h * scale)))
+            up_w = max(w + 2, int(round(w * scale)))
+            zoomed = F.interpolate(
+                x, size=(up_h, up_w), mode='bicubic', align_corners=False, antialias=True
+            )
+            top = (up_h - h) // 2
+            left = (up_w - w) // 2
+            resized = zoomed[:, :, top : top + h, left : left + w].clamp(0, 1)
+        extra.append(quantize_ste(resized))
+    return torch.cat([base_views, *extra], dim=0)
+
+
 def psi_cross_modal_weights(
     config,
     step: int | None = None,
@@ -384,7 +469,7 @@ def _project_centers_to_text_space(
 
 
 class PublicFullKeyObjective:
-    """匹配源商品公开图文全键至联合目标，并融合三路多粒度文本对齐、球面查询增强与文本加权前景局部 OT。"""
+    """匹配源商品公开图文全键至联合目标，并融合纯图类别键、大类共性抽象与文本加权前景局部 OT。"""
     def __init__(
         self,
         surrogate,
@@ -398,6 +483,10 @@ class PublicFullKeyObjective:
         target_fg_mask=None,
         source_clean_feature=None,
         public_retrieval_state=None,
+        memory_key_mode='joint',
+        category_data_mode='legacy_target_product',
+        category_abstraction=None,
+        bundle_concept_feature=None,
     ):
         for label, value in (('公开商品键', source_public_key), ('目标特点', training_text)):
             if not isinstance(value, str) or not value.strip():
@@ -406,6 +495,9 @@ class PublicFullKeyObjective:
                    ('actions and observations:', 'observed purchase:', 'action: think[')):
                 raise ValueError(label + '不能包含私人购物轨迹')
         self.config = config
+        self.effective_key_mode = str(memory_key_mode or 'joint')
+        self.effective_category_mode = str(category_data_mode or 'legacy_target_product')
+        self.category_abstraction = category_abstraction
         encoder = ChunkedClipEncoder(SimpleNamespace(surrogate=surrogate,
             device=surrogate.device, snapshot=surrogate.snapshot()))
         own = encoder.encode_text(source_public_key)
@@ -418,11 +510,47 @@ class PublicFullKeyObjective:
         self.target = F.normalize(raw_target.detach().float(), dim=-1)
         self.joint_target = F.normalize(self.target + self.target_text, dim=-1)
 
+        if bundle_concept_feature is not None:
+            self.bundle_concept_feature = F.normalize(
+                bundle_concept_feature.detach().float().to(surrogate.device).reshape(1, -1), dim=-1
+            ).detach()
+        else:
+            self.bundle_concept_feature = None
+
+        if category_abstraction is not None:
+            self.mu_cat = F.normalize(
+                category_abstraction['mu_cat'].detach().float().to(surrogate.device).reshape(1, -1), dim=-1
+            ).detach()
+            self.visual_prototype = F.normalize(
+                category_abstraction['visual_category_prototype'].detach().float().to(surrogate.device).reshape(1, -1),
+                dim=-1,
+            ).detach()
+            self.category_basis = category_abstraction['basis'].detach().float().to(surrogate.device).detach()
+            self.category_anchor_bank = F.normalize(
+                category_abstraction['pure_semantic_bank'].detach().float().to(surrogate.device), dim=-1
+            ).detach()
+            self.visual_bridge_target = F.normalize(
+                0.65 * self.visual_prototype + 0.35 * self.mu_cat, dim=-1
+            ).detach()
+        else:
+            self.mu_cat = None
+            self.visual_prototype = None
+            self.category_basis = None
+            self.category_anchor_bank = None
+            if self.effective_category_mode == 'direct_vi_bundle' and self.bundle_concept_feature is not None:
+                self.visual_bridge_target = F.normalize(
+                    0.65 * self.target + 0.35 * self.bundle_concept_feature, dim=-1
+                ).detach()
+            else:
+                self.visual_bridge_target = self.joint_target
+
         if source_clean_feature is not None:
             raw_src = getattr(source_clean_feature, 'global_embedding', source_clean_feature)
             src_norm = F.normalize(raw_src.detach().float().to(surrogate.device), dim=-1)
+            self.source_clean_img = src_norm.detach()
             self.source_clean_key = F.normalize(src_norm + self.own, dim=-1).detach()
         else:
+            self.source_clean_img = None
             self.source_clean_key = None
 
         comp_weight = float(getattr(config, 'compensation_weight', 0.35))
@@ -477,6 +605,7 @@ class PublicFullKeyObjective:
         self.target_fg_centers = None
         self.target_fg_center_weights = None
         tgt_patches = target_patch_tokens if target_patch_tokens is not None else getattr(target_feature, 'patch_tokens', None)
+        ot_ref_text = self.mu_cat if self.mu_cat is not None else self.target_text
         if self.local_ot_weight > 0.0 and tgt_patches is not None:
             tgt_fg = extract_foreground_patch_tokens(
                 tgt_patches.to(surrogate.device),
@@ -490,11 +619,11 @@ class PublicFullKeyObjective:
                 ).detach()
                 if self.local_ot_text_weighted:
                     proj_centers = _project_centers_to_text_space(
-                        surrogate, self.target_fg_centers[0], int(self.target_text.shape[-1])
+                        surrogate, self.target_fg_centers[0], int(ot_ref_text.shape[-1])
                     )
                     if proj_centers is not None:
                         center_text_logits = (
-                            (proj_centers @ self.target_text.to(device=proj_centers.device, dtype=proj_centers.dtype).T).squeeze(-1)
+                            (proj_centers @ ot_ref_text.to(device=proj_centers.device, dtype=proj_centers.dtype).T).squeeze(-1)
                             / max(self.local_ot_text_temperature, 1e-4)
                         )
                         self.target_fg_center_weights = torch.softmax(center_text_logits, dim=0).detach()
@@ -509,12 +638,19 @@ class PublicFullKeyObjective:
         query_modes = ['multimodal_equal_weight']
         if self.text_weight > 0.0:
             query_modes.append('independent_target_text')
+        if self.effective_key_mode == 'image':
+            query_modes.append('image_only_memory_key_alignment')
+        if self.effective_category_mode != 'legacy_target_product':
+            query_modes.append('category_level_' + self.effective_category_mode)
+        mem_key_img_w = 1.0 if self.effective_key_mode == 'image' else (0.75 if self.effective_key_mode == 'hybrid' else 0.5)
         self.audit = {'source_public_key_sha256': hashlib.sha256(source_public_key.encode('utf-8')).hexdigest(),
             'training_text_sha256': hashlib.sha256(training_text.encode('utf-8')).hexdigest(),
             'source_text_encoding': own_audit, 'target_text_encoding': text_audit,
             'query_modes': query_modes,
             'query_image_weight': 0.5, 'query_text_weight': 0.5,
-            'memory_key_image_weight': 0.5,
+            'memory_key_image_weight': mem_key_img_w,
+            'memory_key_mode': self.effective_key_mode,
+            'category_data_mode': self.effective_category_mode,
             'compensated_target_enabled': bool(self.compensation_weight > 0.0 and self.compensated_valid),
             'compensated_valid': self.compensated_valid,
             'compensation_weight': self.compensation_weight,
@@ -533,23 +669,35 @@ class PublicFullKeyObjective:
             'public_bundle_retrieval_active': bool(self.public_retrieval_weight > 0.0),
             'victim_memory_used': False,
             'formal_queries_used': False, 'formal_ranking_used': False}
+        if category_abstraction is not None:
+            self.audit['category_abstraction'] = category_abstraction['audit']
 
     def scores(self, features):
         img_norm = F.normalize(features.float(), dim=-1)
+        if self.effective_key_mode == 'image':
+            bridge = self.visual_bridge_target.to(img_norm.device)
+            return img_norm @ bridge.T
         own = self.own.to(img_norm.device)
         joint_tgt = self.joint_target.to(img_norm.device)
         key = F.normalize(img_norm + own, dim=-1)
         joint_scores = key @ joint_tgt.T
         if self.compensation_weight > 0.0 and self.compensated_valid:
             comp_scores = img_norm @ self.compensated_target.to(img_norm.device).T
-            return (1.0 - self.compensation_weight) * joint_scores + self.compensation_weight * comp_scores
-        return joint_scores
+            legacy_scores = (1.0 - self.compensation_weight) * joint_scores + self.compensation_weight * comp_scores
+        else:
+            legacy_scores = joint_scores
+        if self.effective_key_mode == 'hybrid':
+            pure_scores = img_norm @ self.visual_bridge_target.to(img_norm.device).T
+            return 0.5 * pure_scores + 0.5 * legacy_scores
+        return legacy_scores
 
     def text_scores(self, features):
-        """适应 AmbiLAGE 的主句子独立文本对齐打分（兼容非正半球安全退化与解析文本补偿）。"""
+        """适应 AmbiLAGE 的主句子独立文本对齐打分（支持 image 纯图键与兼容 joint 键）。"""
         img_norm = F.normalize(features.float(), dim=-1)
+        tgt_txt = (self.mu_cat if self.mu_cat is not None else self.target_text).to(img_norm.device)
+        if self.effective_key_mode == 'image':
+            return img_norm @ tgt_txt.T
         own = self.own.to(img_norm.device)
-        tgt_txt = self.target_text.to(img_norm.device)
         key = F.normalize(img_norm + own, dim=-1)
         s_key = key @ tgt_txt.T
         if self.text_compensated_valid and self.text_key_mix < 1.0:
@@ -582,8 +730,47 @@ class PublicFullKeyObjective:
             mixed_joint = s_key
         return rem * mixed_joint + alpha_img * s_img
 
+    def _pure_image_text_utility(self, img_norm: torch.Tensor, temperature: float, *, progressive: bool) -> torch.Tensor:
+        if (
+            self.effective_category_mode in ('category_commonalities_abstraction', 'category_subspace_hybrid')
+            and self.category_anchor_bank is not None
+        ):
+            phrases = self.category_anchor_bank.to(img_norm.device)
+        elif self.bundle_concept_feature is not None:
+            phrases = F.normalize(
+                torch.cat([self.bundle_concept_feature.to(img_norm.device), self.phrase_features.to(img_norm.device)], dim=0),
+                dim=-1,
+            )
+        else:
+            phrases = self.phrase_features.to(img_norm.device)
+
+        clean_mat = img_norm @ phrases.T
+        if progressive and self.spherical_augmentation and self.spherical_radius > 0.0 and self.spherical_mix > 0.0:
+            v_dir = img_norm.detach().mean(dim=0, keepdim=True)
+            adv_phrases = worst_case_spherical_queries(phrases, v_dir, self.spherical_radius)
+            adv_mat = img_norm @ adv_phrases.T
+            score_mat = (1.0 - self.spherical_mix) * clean_mat + self.spherical_mix * adv_mat
+        else:
+            score_mat = clean_mat
+
+        u_phrases = 0.5 * score_mat.mean() + 0.5 * softmin(score_mat.flatten(), max(temperature, 0.08))
+        if self.mu_cat is not None:
+            u_mu = (img_norm @ self.mu_cat.to(img_norm.device).T).mean()
+            u_phrases = 0.65 * u_phrases + 0.35 * u_mu
+        if self.source_repulsion_weight > 0.0 and self.source_clean_img is not None:
+            s_pos = img_norm @ phrases.T
+            s_src = (self.source_clean_img.to(img_norm.device) @ phrases.T).detach()
+            tau_nce = 0.07
+            u_repel = (-tau_nce * F.softplus((s_src - (s_pos - self.source_repulsion_margin)) / tau_nce)).mean()
+            u_phrases = u_phrases + self.source_repulsion_weight * u_repel
+        return u_phrases
+
     def enhanced_text_utility(self, features: torch.Tensor, temperature: float, *, progressive: bool = False) -> torch.Tensor:
-        """多粒度子句簇 + 闭式球面最坏查询增强 + 源干净键对比排斥效用。"""
+        """多粒度子句簇/共性原型 + 闭式球面最坏查询增强 + 源干净特征对比排斥效用。"""
+        img_norm = F.normalize(features.float(), dim=-1)
+        if self.effective_key_mode == 'image':
+            return self._pure_image_text_utility(img_norm, temperature, progressive=progressive)
+
         has_v4_text = (
             self.phrase_decomposition
             or self.text_pure_image_mix > 0.0
@@ -592,37 +779,39 @@ class PublicFullKeyObjective:
         )
         if not has_v4_text:
             t_scores = self.text_scores(features)
-            return 0.5 * t_scores.mean() + 0.5 * softmin(t_scores, temperature)
-
-        img_norm = F.normalize(features.float(), dim=-1)
-        own = self.own.to(img_norm.device)
-        key = F.normalize(img_norm + own, dim=-1)
-        phrases = self.phrase_features.to(img_norm.device)
-        p_comp = self.phrase_compensated_features.to(img_norm.device)
-        p_valid = self.phrase_compensated_valid.to(img_norm.device)
-
-        clean_mat = self._score_query_bank(img_norm, key, phrases, p_comp, p_valid)
-        if progressive and self.spherical_augmentation and self.spherical_radius > 0.0 and self.spherical_mix > 0.0:
-            alpha_img = min(max(self.text_pure_image_mix, 0.0), 0.80)
-            v_dir = (1.0 - alpha_img) * key.detach().mean(dim=0, keepdim=True) + alpha_img * img_norm.detach().mean(dim=0, keepdim=True)
-            adv_phrases = worst_case_spherical_queries(phrases, v_dir, self.spherical_radius)
-            adv_comp, adv_valid = compensated_targets(adv_phrases, own)
-            adv_mat = self._score_query_bank(img_norm, key, adv_phrases, adv_comp.detach(), adv_valid.detach())
-            score_mat = (1.0 - self.spherical_mix) * clean_mat + self.spherical_mix * adv_mat
+            u_legacy = 0.5 * t_scores.mean() + 0.5 * softmin(t_scores, temperature)
         else:
-            score_mat = clean_mat
+            own = self.own.to(img_norm.device)
+            key = F.normalize(img_norm + own, dim=-1)
+            phrases = self.phrase_features.to(img_norm.device)
+            p_comp = self.phrase_compensated_features.to(img_norm.device)
+            p_valid = self.phrase_compensated_valid.to(img_norm.device)
 
-        u_phrases = 0.5 * score_mat.mean() + 0.5 * softmin(score_mat.flatten(), max(temperature, 0.08))
+            clean_mat = self._score_query_bank(img_norm, key, phrases, p_comp, p_valid)
+            if progressive and self.spherical_augmentation and self.spherical_radius > 0.0 and self.spherical_mix > 0.0:
+                alpha_img = min(max(self.text_pure_image_mix, 0.0), 0.80)
+                v_dir = (1.0 - alpha_img) * key.detach().mean(dim=0, keepdim=True) + alpha_img * img_norm.detach().mean(dim=0, keepdim=True)
+                adv_phrases = worst_case_spherical_queries(phrases, v_dir, self.spherical_radius)
+                adv_comp, adv_valid = compensated_targets(adv_phrases, own)
+                adv_mat = self._score_query_bank(img_norm, key, adv_phrases, adv_comp.detach(), adv_valid.detach())
+                score_mat = (1.0 - self.spherical_mix) * clean_mat + self.spherical_mix * adv_mat
+            else:
+                score_mat = clean_mat
 
-        if self.source_repulsion_weight > 0.0 and self.source_clean_key is not None:
-            clean_key = self.source_clean_key.to(img_norm.device)
-            s_pos = key @ phrases.T
-            s_src = (clean_key @ phrases.T).detach()
-            tau_nce = 0.07
-            logits_gap = (s_src - (s_pos - self.source_repulsion_margin)) / tau_nce
-            u_repel = (-tau_nce * F.softplus(logits_gap)).mean()
-            u_phrases = u_phrases + self.source_repulsion_weight * u_repel
-        return u_phrases
+            u_legacy = 0.5 * score_mat.mean() + 0.5 * softmin(score_mat.flatten(), max(temperature, 0.08))
+
+            if self.source_repulsion_weight > 0.0 and self.source_clean_key is not None:
+                clean_key = self.source_clean_key.to(img_norm.device)
+                s_pos = key @ phrases.T
+                s_src = (clean_key @ phrases.T).detach()
+                tau_nce = 0.07
+                logits_gap = (s_src - (s_pos - self.source_repulsion_margin)) / tau_nce
+                u_repel = (-tau_nce * F.softplus(logits_gap)).mean()
+                u_legacy = u_legacy + self.source_repulsion_weight * u_repel
+        if self.effective_key_mode == 'hybrid':
+            u_pure = self._pure_image_text_utility(img_norm, temperature, progressive=progressive)
+            return 0.5 * u_pure + 0.5 * u_legacy
+        return u_legacy
 
     def public_bundle_retrieval_utility(
         self,
@@ -631,40 +820,94 @@ class PublicFullKeyObjective:
         *,
         progressive: bool = False,
     ) -> torch.Tensor | None:
-        """可选同源公开代理库 (90 候选 + 100 查询) 双键兼容困难负例对比检索效用。"""
+        """温度尺度化全库 InfoNCE + Top-5 困难竞品软间隔对决对比检索效用（支持直接/纯共性/子空间混合接口）。"""
         if self.public_retrieval_state is None or self.public_retrieval_weight <= 0.0:
             return None
         from src.visual._visual_inception.negative_sampling import select_hard_negatives
 
         img_norm = F.normalize(features.float(), dim=-1)
-        own = self.own.to(img_norm.device)
-        key = F.normalize(img_norm + own, dim=-1)
-        q_all = self.public_retrieval_state['query_features'].to(img_norm.device)
-        negatives = self.public_retrieval_state['negative_features'].to(img_norm.device)
-        policy = self.public_retrieval_state['negative_policy']
+        state = self.public_retrieval_state
+        negatives = state['negative_features'].to(img_norm.device)
+        policy = state['negative_policy']
 
-        q_batch = q_all if query_indices is None else q_all[query_indices]
+        if self.effective_category_mode == 'category_commonalities_abstraction' and 'abstracted_retrieval_queries' in state:
+            q_batch = state['abstracted_retrieval_queries'].to(img_norm.device)
+        elif self.effective_category_mode == 'category_subspace_hybrid' and 'denoised_queries_hybrid' in state:
+            q_pool = state['denoised_queries_hybrid'].to(img_norm.device)
+            q_slice = q_pool if query_indices is None else q_pool[query_indices]
+            if progressive and self.mu_cat is not None:
+                q_batch = torch.cat([self.mu_cat.to(img_norm.device), q_slice], dim=0)
+            else:
+                q_batch = q_slice
+        else:
+            q_all = state['query_features'].to(img_norm.device)
+            q_batch = q_all if query_indices is None else q_all[query_indices]
         q_batch = F.normalize(q_batch.detach(), dim=-1)
-        indices, _ = select_hard_negatives(q_batch, negatives.detach(), policy, self.public_retrieval_state['neg_config'])
-        selected_neg = negatives[indices.to(device=img_norm.device, dtype=torch.long)]  # [Q, K, D]
+
+        if self.effective_key_mode == 'image':
+            eval_keys = [img_norm]
+        elif self.effective_key_mode == 'hybrid':
+            own = self.own.to(img_norm.device)
+            eval_keys = [img_norm, F.normalize(img_norm + own, dim=-1)]
+        else:
+            own = self.own.to(img_norm.device)
+            eval_keys = [img_norm, F.normalize(img_norm + own, dim=-1)]
 
         tau = max(float(getattr(self.config, 'public_retrieval_temperature', 0.07)), 1e-4)
         margin = float(getattr(self.config, 'public_contrastive_margin', 0.30)) if progressive else 0.0
-        neg_logits = torch.einsum('qd,qkd->qk', q_batch, selected_neg) / tau  # [Q, K]
+        indices, _ = select_hard_negatives(q_batch, negatives.detach(), policy, state['neg_config'], include_per_query=False)
+        indices = indices.to(device=img_norm.device, dtype=torch.long)
 
-        # 同时激励纯图片键 (image) 与图文融合键 (joint) 在公开负例竞争中胜出
-        pos_img = ((q_batch @ img_norm.T) - margin) / tau   # [Q, B]
-        pos_key = ((q_batch @ key.T) - margin) / tau        # [Q, B]
+        def _loss_for_queries(q_vecs: torch.Tensor, q_idx: torch.Tensor) -> torch.Tensor:
+            all_neg_cos = q_vecs @ negatives.detach().T  # [Q, N_bank]
+            boost = torch.zeros_like(all_neg_cos)
+            if margin > 0.0:
+                boost.scatter_(1, q_idx, margin)
+            neg_logits = all_neg_cos / tau + boost
+            selected_cos = torch.gather(all_neg_cos, 1, q_idx)
+            top_r = min(5, selected_cos.shape[1])
+            comp_logit = torch.logsumexp(selected_cos.topk(top_r, dim=1).values / tau, dim=1) - math.log(float(top_r))
+            key_losses = []
+            for k_mat in eval_keys:
+                pos_logits = (q_vecs @ k_mat.T) / tau  # [Q, B]
+                view_losses = []
+                for b_idx in range(k_mat.shape[0]):
+                    p_b = pos_logits[:, b_idx : b_idx + 1]
+                    bank_l = torch.logsumexp(torch.cat([p_b, neg_logits], dim=1), dim=1) - p_b[:, 0]
+                    comp_l = F.softplus(2.0 * (comp_logit - p_b[:, 0] + margin)) / 2.0
+                    view_losses.append(0.3 * bank_l + 0.7 * comp_l)
+                key_losses.append(torch.stack(view_losses).mean())
+            return torch.stack(key_losses).mean()
 
-        losses_img = []
-        losses_key = []
-        for b_idx in range(img_norm.shape[0]):
-            p_i = pos_img[:, b_idx : b_idx + 1]
-            p_k = pos_key[:, b_idx : b_idx + 1]
-            losses_img.append(torch.logsumexp(torch.cat([p_i, neg_logits], dim=1), dim=1) - p_i[:, 0])
-            losses_key.append(torch.logsumexp(torch.cat([p_k, neg_logits], dim=1), dim=1) - p_k[:, 0])
-        loss_total = 0.5 * torch.stack(losses_img).mean() + 0.5 * torch.stack(losses_key).mean()
-        # 转换为与余弦效用量纲匹配的有界最大化效用 (-tau * loss)
+        loss_total = _loss_for_queries(q_batch, indices)
+        adv_radius = float(getattr(self.config, 'public_query_adv_radius', 0.0))
+        adv_steps = int(getattr(self.config, 'public_query_adv_steps', 0))
+        adv_mix = float(getattr(self.config, 'public_query_adv_mix', 0.0))
+        if progressive and adv_radius > 0.0 and adv_steps > 0 and adv_mix > 0.0:
+            basis = self.category_basis.to(img_norm.device) if self.category_basis is not None else None
+            key_anchor = F.normalize(eval_keys[0].detach().mean(dim=0, keepdim=True), dim=-1)
+            q_cur = q_batch.clone()
+            step_sz = max(adv_radius / max(1, adv_steps), 1e-3)
+            for _ in range(adv_steps):
+                # Minimize <key_anchor, q> within text subspace & sphere cap (hardest worst-case query)
+                tan = -key_anchor.expand_as(q_cur)
+                if basis is not None and basis.shape[0] > 0:
+                    tan = (tan @ basis.T) @ basis
+                tan = tan - (tan * q_cur).sum(dim=-1, keepdim=True) * q_cur
+                t_norm = tan.norm(dim=-1, keepdim=True)
+                direction = torch.where(t_norm > 1e-12, tan / t_norm.clamp_min(1e-12), torch.zeros_like(tan))
+                q_cand = F.normalize(q_cur + step_sz * direction, dim=-1)
+                # Project onto L2 cap around q_batch on S^{D-1}
+                dot_orig = (q_cand * q_batch).sum(dim=-1, keepdim=True).clamp(-1.0, 1.0)
+                min_cos = max(-1.0, 1.0 - 0.5 * adv_radius * adv_radius)
+                orth = q_cand - dot_orig * q_batch
+                o_norm = orth.norm(dim=-1, keepdim=True).clamp_min(1e-12)
+                cap_proj = F.normalize(min_cos * q_batch + math.sqrt(max(0.0, 1.0 - min_cos * min_cos)) * (orth / o_norm), dim=-1)
+                q_cur = torch.where(dot_orig >= min_cos, q_cand, cap_proj).detach()
+            idx_adv, _ = select_hard_negatives(q_cur, negatives.detach(), policy, state['neg_config'], include_per_query=False)
+            loss_adv = _loss_for_queries(q_cur, idx_adv.to(device=img_norm.device, dtype=torch.long))
+            loss_total = (1.0 - adv_mix) * loss_total + adv_mix * loss_adv
+
         return -tau * loss_total
 
     def local_ot_scores(self, patch_tokens, fg_mask=None):
@@ -698,7 +941,7 @@ class PublicFullKeyObjective:
             col_weights=col_w,
         ).reshape(-1, 1)
 
-    def component_values(
+    def split_component_values(
         self,
         features,
         patch_tokens=None,
@@ -707,7 +950,8 @@ class PublicFullKeyObjective:
         progressive: bool = False,
         public_query_indices: list[int] | None = None,
         text_multiplier: float = 1.0,
-    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+        """分解返回：(u_cat 主类别效用, u_vis 视觉/局部OT辅助效用, total, u_joint, u_text)。"""
         scores = self.scores(features)
         w_joint, w_text, w_ot = psi_cross_modal_weights(self.config, step=step, progressive=progressive)
         if (
@@ -721,21 +965,43 @@ class PublicFullKeyObjective:
         w_text = w_text * float(text_multiplier)
         temperature = float(self.config.temperature)
         u_joint = 0.5 * scores.mean() + 0.5 * softmin(scores, temperature)
-        total = w_joint * u_joint
+        u_vis = w_joint * u_joint
+        u_cat = u_vis.new_zeros(())
         if w_text > 0.0:
             u_text = self.enhanced_text_utility(features, temperature, progressive=progressive)
-            total = total + w_text * u_text
+            u_cat = u_cat + w_text * u_text
         else:
-            u_text = total.new_zeros(())
+            u_text = u_vis.new_zeros(())
         if w_ot > 0.0 and patch_tokens is not None:
             ot_scores = self.local_ot_scores(patch_tokens)
             if ot_scores is not None:
                 u_ot = 0.5 * ot_scores.mean() + 0.5 * softmin(ot_scores, temperature)
-                total = total + w_ot * u_ot
+                u_vis = u_vis + w_ot * u_ot
         if self.public_retrieval_weight > 0.0:
             u_pub = self.public_bundle_retrieval_utility(features, public_query_indices, progressive=progressive)
             if u_pub is not None:
-                total = total + self.public_retrieval_weight * u_pub
+                u_cat = u_cat + self.public_retrieval_weight * u_pub
+        total = u_cat + u_vis
+        return u_cat, u_vis, total, u_joint, u_text
+
+    def component_values(
+        self,
+        features,
+        patch_tokens=None,
+        *,
+        step: int | None = None,
+        progressive: bool = False,
+        public_query_indices: list[int] | None = None,
+        text_multiplier: float = 1.0,
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        _, _, total, u_joint, u_text = self.split_component_values(
+            features,
+            patch_tokens=patch_tokens,
+            step=step,
+            progressive=progressive,
+            public_query_indices=public_query_indices,
+            text_multiplier=text_multiplier,
+        )
         return total, u_joint, u_text
 
     def value(
@@ -834,22 +1100,23 @@ class SequentialEnsembleObjective:
         if is_held_out_purifier_reference(getattr(getattr(self.purifier, 'config', None), 'model_path', None)):
             raise ValueError('留出评估净化器 SD 2.1-base 禁止用于训练阶段')
 
+        self.effective_category_mode = resolve_effective_category_mode(config, training_bundle)
+        self.effective_key_mode = resolve_effective_key_mode(config, self.effective_category_mode, training_bundle)
         self._public_sampling = None
-        public_states = [None] * len(self.surrogates)
+        public_states: list[dict[str, Any] | None] = [None] * len(self.surrogates)
         cache_records = []
-        if training_bundle is not None and float(getattr(config, 'public_retrieval_weight', 0.0)) > 0.0:
-            from src.visual._visual_inception.retrieval_cache import encode_candidate_cache
-            from src.visual._visual_inception.negative_sampling import build_negative_policy
+        abstraction_audits: list[dict[str, Any]] = []
+        bundle_concept_features: list[torch.Tensor | None] = [None] * len(self.surrogates)
+        has_public_retrieval = bool(
+            training_bundle is not None and float(getattr(config, 'public_retrieval_weight', 0.0)) > 0.0
+        )
+        need_bundle_preparation = bool(
+            training_bundle is not None
+            and (has_public_retrieval or self.effective_category_mode != 'legacy_target_product')
+        )
+        if has_public_retrieval:
             from src.visual._visual_inception.objective import sample_query_indices
 
-            fixture_flag = bool(getattr(config, 'smoke_test', False))
-            cache_root = Path(candidate_cache_dir) if candidate_cache_dir else (PROJECT / 'output/datasets/public/ambilage_candidate_cache')
-            neg_cfg = SimpleNamespace(
-                hard_negative_count=32,
-                hard_negative_same_category_count=8,
-                hard_negative_proxy_memory_count=8,
-                hard_negative_popularity_count=8,
-            )
             batch_sz = int(getattr(config, 'public_query_batch_size', 16))
             steps_total = int(getattr(config, 'steps', 250))
             seed_val = int(getattr(config, 'seed', 42))
@@ -861,10 +1128,40 @@ class SequentialEnsembleObjective:
                     for s in range(1, steps_total + 1)
                 ],
             }
-            for idx, surrogate in enumerate(self.surrogates):
+        fixture_flag = bool(getattr(config, 'smoke_test', False))
+        cache_root = Path(candidate_cache_dir) if candidate_cache_dir else (PROJECT / 'output/datasets/public/ambilage_candidate_cache')
+        neg_cfg = SimpleNamespace(
+            hard_negative_count=32,
+            hard_negative_same_category_count=8,
+            hard_negative_proxy_memory_count=8,
+            hard_negative_popularity_count=8,
+        )
+
+        self.objectives = []
+        for idx, surrogate in enumerate(self.surrogates):
+            with torch.no_grad():
+                target_out = surrogate.encode_image(target_tensor.to(surrogate.device))
+                src_clean_out = (
+                    surrogate.encode_image(source_tensor.to(surrogate.device))
+                    if source_tensor is not None
+                    else None
+                )
+            target = target_out.global_embedding
+            target_patches = getattr(target_out, 'patch_tokens', None)
+            cat_abstraction = None
+
+            if need_bundle_preparation:
+                from src.visual._visual_inception.retrieval_cache import encode_candidate_cache
+                from src.visual._visual_inception.negative_sampling import build_negative_policy
+
                 enc = ChunkedClipEncoder(SimpleNamespace(
                     surrogate=surrogate, device=surrogate.device, snapshot=surrogate.snapshot()
                 ))
+                concept_txt = str(training_bundle.get('target_concept_text') or '').strip()
+                if concept_txt:
+                    bundle_concept_features[idx] = torch.as_tensor(
+                        enc.encode_text(concept_txt), device=surrogate.device, dtype=torch.float32
+                    ).reshape(1, -1).detach()
                 q_rows = [
                     torch.as_tensor(enc.encode_text(q_txt), device=surrogate.device, dtype=torch.float32).reshape(1, -1)
                     for q_txt in training_bundle['queries']
@@ -883,24 +1180,32 @@ class SequentialEnsembleObjective:
                     cand_vecs,
                     category=training_bundle['audit']['category'],
                 )
-                public_states[idx] = {
+                pub_state: dict[str, Any] = {
                     'query_features': q_mat,
                     'negative_features': cand_vecs.detach(),
                     'negative_policy': neg_pol,
                     'neg_config': neg_cfg,
                 }
+                if self.effective_category_mode in ('category_commonalities_abstraction', 'category_subspace_hybrid'):
+                    from src.visual.category_abstraction import build_category_abstraction
 
-        self.objectives = []
-        for idx, surrogate in enumerate(self.surrogates):
-            with torch.no_grad():
-                target_out = surrogate.encode_image(target_tensor.to(surrogate.device))
-                src_clean_out = (
-                    surrogate.encode_image(source_tensor.to(surrogate.device))
-                    if source_tensor is not None
-                    else None
-                )
-            target = target_out.global_embedding
-            target_patches = getattr(target_out, 'patch_tokens', None)
+                    cat_abstraction = build_category_abstraction(
+                        training_bundle,
+                        lambda txt: torch.as_tensor(enc.encode_text(txt)).detach().cpu(),
+                        cand_vecs,
+                        target,
+                        same_category_indices=neg_pol['role_indices'].get('same_category'),
+                        subspace_rank=int(getattr(config, 'category_subspace_rank', 6)),
+                        medoid_count=int(getattr(config, 'category_medoid_count', 12)),
+                        residual_shrinkage=float(getattr(config, 'category_residual_shrinkage', 0.30)),
+                        visual_prototype_mix=float(getattr(config, 'category_visual_prototype_mix', 0.65)),
+                        precomputed_query_vecs=q_mat,
+                    )
+                    pub_state['abstracted_retrieval_queries'] = cat_abstraction['pure_semantic_bank'].detach()
+                    pub_state['denoised_queries_hybrid'] = cat_abstraction['denoised_queries_hybrid'].detach()
+                    abstraction_audits.append(cat_abstraction['audit'])
+                public_states[idx] = pub_state
+
             self.objectives.append(PublicFullKeyObjective(
                 surrogate, target, source_public_key, training_text, config,
                 target_patch_tokens=target_patches,
@@ -908,6 +1213,10 @@ class SequentialEnsembleObjective:
                 target_fg_mask=target_fg_mask,
                 source_clean_feature=src_clean_out,
                 public_retrieval_state=public_states[idx],
+                memory_key_mode=self.effective_key_mode,
+                category_data_mode=self.effective_category_mode,
+                category_abstraction=cat_abstraction,
+                bundle_concept_feature=bundle_concept_features[idx],
             ))
 
         # L4 24GB 显存自适应治理：预编码完成后卸载闲置文本塔，并对大视觉塔启用梯度检查点与按需流式驻留
@@ -931,8 +1240,9 @@ class SequentialEnsembleObjective:
                 v_bytes = int(surrogate.visual_parameter_bytes()) if callable(getattr(surrogate, 'visual_parameter_bytes', None)) else 0
                 total_vis_bytes += v_bytes
                 img_sz = int(getattr(surrogate, 'image_size', 224))
-                if v_bytes >= int(1.0 * (1024 ** 3)) or img_sz >= 336:
-                    self._view_microbatch_sizes[idx] = 2
+                if len(self.surrogates) > 1 or v_bytes >= int(2.5 * (1024 ** 3)) or img_sz >= 336:
+                    if v_bytes >= int(1.0 * (1024 ** 3)) or img_sz >= 336:
+                        self._view_microbatch_sizes[idx] = 2
             if total_vis_bytes > int(4.2 * (1024 ** 3)):
                 self._stream_surrogates_on_gpu = True
                 for surrogate in self.surrogates:
@@ -942,12 +1252,37 @@ class SequentialEnsembleObjective:
             if torch.cuda.is_available():
                 torch.cuda.empty_cache()
 
+        single_task_pcgrad = bool(
+            len(self.surrogates) == 1 and bool(getattr(config, 'single_model_task_pcgrad', False))
+        )
+        single_multiscale_eot = bool(
+            len(self.surrogates) == 1
+            and bool(getattr(config, 'eot_enabled', True))
+            and bool(getattr(config, 'single_model_multiscale_eot', False))
+        )
+        eot_paths = ['identity', 'pillow_blur_bpda', 'jpeg_exact_forward_ste', 'resize']
+        if single_multiscale_eot:
+            eot_paths.append('multiscale_grid_breaking_crop_zoom')
+        grad_exec_mode = (
+            'single_surrogate_task_pcgrad_single_backward'
+            if single_task_pcgrad
+            else (
+                'shared_views_and_purified_pcgrad_single_backward'
+                if self.pcgrad_enabled
+                else 'shared_views_and_purified_single_backward'
+            )
+        )
         self.audit = {'kind': TRAINING_OBJECTIVE_KIND,
             'surrogates': snapshots, 'surrogate_selection': self.selection.audit(),
             'public_objectives': [o.audit for o in self.objectives],
             'held_out_models': list(HELD_OUT_MODELS),
             'held_out_purifiers': list(HELD_OUT_PURIFIERS),
-            'gradient_execution': 'shared_views_and_purified_pcgrad_single_backward' if self.pcgrad_enabled else 'shared_views_and_purified_single_backward',
+            'single_surrogate_mode': bool(len(self.surrogates) == 1),
+            'single_model_task_pcgrad': single_task_pcgrad,
+            'single_model_multiscale_eot': single_multiscale_eot,
+            'effective_key_mode': self.effective_key_mode,
+            'effective_category_mode': self.effective_category_mode,
+            'gradient_execution': grad_exec_mode,
             'pcgrad_enabled': self.pcgrad_enabled,
             'psi_progressive_schedule': bool(getattr(config, 'psi_progressive_schedule', False)),
             'text_aware_proxy_weighting': self.text_aware_proxy_weighting,
@@ -959,7 +1294,7 @@ class SequentialEnsembleObjective:
             'ensemble_temperature': self.ensemble_temperature,
             'ensemble_uniform_mix': self.ensemble_uniform_mix,
             'eot_enabled': bool(getattr(config, 'eot_enabled', True)),
-            'eot_paths': ['identity', 'pillow_blur_bpda', 'jpeg_exact_forward_ste', 'resize'],
+            'eot_paths': eot_paths,
             'diffusion_weight': self.diffusion_weight, 'diffusion_gradient': 'full',
             'purifier': self.purifier.snapshot(),
             'vram_governance': {
@@ -969,13 +1304,15 @@ class SequentialEnsembleObjective:
                 'sequential_gpu_streaming': self._stream_surrogates_on_gpu,
             },
             'victim_memory_used': False, 'formal_queries_used': False}
-        if training_bundle is not None and float(getattr(config, 'public_retrieval_weight', 0.0)) > 0.0:
+        if need_bundle_preparation and training_bundle is not None:
             self.audit.update(
                 training_manifest_sha256=training_bundle['manifest_sha256'],
                 training_bundle_sha256=training_bundle['bundle_sha256'],
                 public_retrieval_weight=float(getattr(config, 'public_retrieval_weight', 0.0)),
                 negative_candidate_caches=cache_records,
             )
+            if abstraction_audits:
+                self.audit['category_abstraction'] = abstraction_audits[0]
 
     def _seed(self, step):
         return (int(getattr(self.config, 'seed', 42)) + max(0, int(step))) % (2**63)
@@ -992,11 +1329,16 @@ class SequentialEnsembleObjective:
         base_device = getattr(self.purifier, 'device', self.surrogates[0].device)
         base_img = image.to(base_device)
         eot_on = bool(getattr(self.config, 'eot_enabled', True))
-        views = transformed_batch(base_img, step=max(1, int(step))) if eot_on else base_img
+        if eot_on:
+            views = transformed_batch(base_img, step=max(1, int(step)))
+            if len(self.surrogates) == 1 and bool(getattr(self.config, 'single_model_multiscale_eot', False)):
+                views = multiscale_grid_breaking_views(base_img, step=max(1, int(step)), base_views=views)
+        else:
+            views = base_img
         purified = self.purifier(base_img, seed=self._seed(step), gradient=gradient)
         return views, purified, eot_on
 
-    def _evaluate_proxy_from_inputs(
+    def _evaluate_proxy_components(
         self,
         index,
         views,
@@ -1052,7 +1394,7 @@ class SequentialEnsembleObjective:
                 if lag_i > 0.005:
                     resolved_mult = min(1.85, 1.0 + 4.0 * lag_i)
 
-        eot, eot_joint, eot_text = objective.component_values(
+        eot_cat, eot_vis, eot, eot_joint, eot_text = objective.split_component_values(
             feature,
             patch_tokens=views_patches,
             step=step,
@@ -1060,7 +1402,7 @@ class SequentialEnsembleObjective:
             public_query_indices=pub_idx,
             text_multiplier=resolved_mult,
         )
-        pvalue, p_joint, p_text = objective.component_values(
+        p_cat, p_vis, pvalue, p_joint, p_text = objective.split_component_values(
             purified_feature,
             patch_tokens=purified_patches,
             step=step,
@@ -1068,7 +1410,9 @@ class SequentialEnsembleObjective:
             public_query_indices=pub_idx,
             text_multiplier=resolved_mult,
         )
-        utility = (eot + self.diffusion_weight * pvalue) / (1.0 + self.diffusion_weight)
+        val_cat = (eot_cat + self.diffusion_weight * p_cat) / (1.0 + self.diffusion_weight)
+        val_vis = (eot_vis + self.diffusion_weight * p_vis) / (1.0 + self.diffusion_weight)
+        utility = val_cat + val_vis
 
         # 同时计算恒定终端评估标尺值，供 _baseline_values 与退火控制器跨阶段一致比较
         if precomputed_stationary is not None:
@@ -1093,14 +1437,37 @@ class SequentialEnsembleObjective:
             stat_joint = float(((eot_joint + self.diffusion_weight * p_joint) / (1.0 + self.diffusion_weight)).detach())
             stat_text = float(((eot_text + self.diffusion_weight * p_text) / (1.0 + self.diffusion_weight)).detach())
 
-        return utility, score.mean(0), {
+        row = {
             'eot': float(eot.detach()),
             'purified': float(pvalue.detach()),
             'stationary_utility': stat_util,
             'stationary_joint_utility': stat_joint,
             'stationary_text_utility': stat_text,
             'text_multiplier': float(resolved_mult),
+            'category_component': float(val_cat.detach()),
+            'visual_component': float(val_vis.detach()),
         }
+        return val_cat, val_vis, utility, score.mean(0), row
+
+    def _evaluate_proxy_from_inputs(
+        self,
+        index,
+        views,
+        purified,
+        *,
+        step: int | None = None,
+        progressive: bool = False,
+        text_multiplier: float | None = None,
+    ):
+        _, _, utility, score_mean, row = self._evaluate_proxy_components(
+            index,
+            views,
+            purified,
+            step=step,
+            progressive=progressive,
+            text_multiplier=text_multiplier,
+        )
+        return utility, score_mean, row
 
     def _maybe_offload_streamed_proxy(self, index: int) -> None:
         if self._stream_surrogates_on_gpu:
@@ -1184,7 +1551,77 @@ class SequentialEnsembleObjective:
         self.last_eval_diagnostics = diag
         return (weights * values).sum(), scores
 
+    def _single_surrogate_image_gradient(self, image, step=1):
+        """单代理主导任务 PCGrad 与双分支（EoT vs 扩散净化）正交合并梯度。"""
+        base_device = getattr(self.purifier, 'device', self.surrogates[0].device)
+        leaf_img = image.detach().to(base_device).clone().requires_grad_(True)
+        views, purified, eot_on = self._shared_inputs(leaf_img, step, gradient='full')
+        v_leaf = views.detach().requires_grad_(True)
+        p_leaf = purified.detach().requires_grad_(True)
+        use_prog = bool(getattr(self.config, 'psi_progressive_schedule', False))
+        try:
+            val_cat, val_vis, utility_tensor, score, row = self._evaluate_proxy_components(
+                0, v_leaf, p_leaf, step=step, progressive=use_prog
+            )
+            if bool(val_cat.requires_grad) and bool(val_vis.requires_grad):
+                gv_cat, gp_cat = torch.autograd.grad(val_cat, (v_leaf, p_leaf), retain_graph=True)
+                gv_vis, gp_vis = torch.autograd.grad(val_vis, (v_leaf, p_leaf), retain_graph=False)
+            elif bool(val_cat.requires_grad):
+                gv_cat, gp_cat = torch.autograd.grad(val_cat, (v_leaf, p_leaf), retain_graph=False)
+                gv_vis, gp_vis = torch.zeros_like(v_leaf), torch.zeros_like(p_leaf)
+            elif bool(val_vis.requires_grad):
+                gv_cat, gp_cat = torch.zeros_like(v_leaf), torch.zeros_like(p_leaf)
+                gv_vis, gp_vis = torch.autograd.grad(val_vis, (v_leaf, p_leaf), retain_graph=False)
+            else:
+                gv_cat, gp_cat = torch.zeros_like(v_leaf), torch.zeros_like(p_leaf)
+                gv_vis, gp_vis = torch.zeros_like(v_leaf), torch.zeros_like(p_leaf)
+        finally:
+            self._maybe_offload_streamed_proxy(0)
+
+        vis_cap = float(getattr(self.config, 'single_model_vis_grad_cap', 0.80))
+        grad_views, conflict_v = single_model_dominant_pcgrad(gv_cat.detach(), gv_vis.detach(), aux_cap=vis_cap)
+        grad_purified, conflict_p = single_model_dominant_pcgrad(gp_cat.detach(), gp_vis.detach(), aux_cap=vis_cap)
+        del val_cat, val_vis, utility_tensor, gv_cat, gp_cat, gv_vis, gp_vis
+
+        if eot_on:
+            g_img_views = torch.autograd.grad(views, leaf_img, grad_outputs=grad_views, retain_graph=False)[0]
+        else:
+            g_img_views = grad_views
+        g_img_pur = torch.autograd.grad(purified, leaf_img, grad_outputs=grad_purified, retain_graph=False)[0]
+        gradient, conflict_branch = single_model_dominant_pcgrad(g_img_views, g_img_pur, aux_cap=1.25)
+        gradient = gradient.detach().to(image.device)
+        if not torch.isfinite(gradient).all():
+            raise FloatingPointError('单代理任务 PCGrad 目标梯度含非有限值')
+
+        values = torch.tensor([row['stationary_utility']], device=image.device, dtype=torch.float32)
+        j_tensor = torch.tensor([row['stationary_joint_utility']], device=image.device, dtype=torch.float32)
+        t_tensor = torch.tensor([row['stationary_text_utility']], device=image.device, dtype=torch.float32)
+        scores = score.detach().to(image.device).unsqueeze(0)
+        weights, gains = self._weights_from_values(values, joint_values=j_tensor, text_values=t_tensor)
+        utility = (weights * values).sum().detach()
+        info: dict[str, Any] = {
+            'model_weights': weights.cpu().tolist(),
+            'model_utilities': values.cpu().tolist(),
+            'model_relative_gains': gains.cpu().tolist(),
+            'paths': [row],
+            'purifier_gradient': 'full',
+            'pcgrad_applied': bool(conflict_v or conflict_p or conflict_branch),
+            'single_model_task_pcgrad': True,
+            'task_pcgrad_conflicts': {
+                'views_task_conflict': bool(conflict_v),
+                'purified_task_conflict': bool(conflict_p),
+                'branch_conflict': bool(conflict_branch),
+            },
+        }
+        if self.text_aware_proxy_weighting and self._baseline_joint_values is not None and self._baseline_text_values is not None:
+            info['model_joint_gains'] = (j_tensor - self._baseline_joint_values.to(image.device)).cpu().tolist()
+            info['model_text_gains'] = (t_tensor - self._baseline_text_values.to(image.device)).cpu().tolist()
+        return utility, scores.detach(), gradient, info
+
     def image_gradient(self, image, step=1):
+        if len(self.surrogates) == 1 and bool(getattr(self.config, 'single_model_task_pcgrad', False)):
+            return self._single_surrogate_image_gradient(image, step=step)
+
         base_device = getattr(self.purifier, 'device', self.surrogates[0].device)
         leaf_img = image.detach().to(base_device).clone().requires_grad_(True)
         views, purified, eot_on = self._shared_inputs(leaf_img, step, gradient='full')

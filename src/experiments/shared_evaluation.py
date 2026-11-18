@@ -173,10 +173,59 @@ def _save_scores(output, values, ids, queries, rows, source_id):
     return path
 
 
+class InProcessFreshCachedEncoder:
+    """Isolated-verification wrapper that encodes each unique asset once in RAM."""
+
+    def __init__(self, base):
+        self._base = base
+        self.snapshot = copy.deepcopy(base.snapshot)
+        self.supports_image_weight = getattr(base, 'supports_image_weight', True)
+        self.last_encoding_audit = None
+        self._image_cache = {}
+        self._text_cache = {}
+        self._joint_cache = {}
+
+    def encode(self, path):
+        p = Path(path).resolve()
+        key = sha256_file(p)
+        if key not in self._image_cache:
+            self._image_cache[key] = self._base.encode(p)
+        return self._image_cache[key]
+
+    def encode_text(self, text):
+        s = str(text or ' ')
+        if s not in self._text_cache:
+            vec = self._base.encode_text(s)
+            audit = copy.deepcopy(getattr(self._base, 'last_encoding_audit', None))
+            self._text_cache[s] = (vec, audit)
+        vec, audit = self._text_cache[s]
+        self.last_encoding_audit = copy.deepcopy(audit)
+        return vec
+
+    def encode_joint(self, text, path, image_weight=0.5):
+        p = Path(path).resolve()
+        s = str(text or '')
+        key = (s, sha256_file(p), float(image_weight))
+        if key not in self._joint_cache:
+            if getattr(self._base, 'supports_image_weight', False):
+                vec = self._base.encode_joint(text, p, image_weight=image_weight)
+            else:
+                vec = self._base.encode_joint(text, p)
+            audit = copy.deepcopy(getattr(self._base, 'last_encoding_audit', None))
+            self._joint_cache[key] = (vec, audit)
+        vec, audit = self._joint_cache[key]
+        self.last_encoding_audit = copy.deepcopy(audit)
+        return vec
+
+    def close(self):
+        return None
+
+
 def evaluate(frozen, output, *, pool_path=SHARED_MEMORY, query_manifest,
              source_memory_id=None, device='cuda', encoder_factory=None,
              defense_factory=None, selected_conditions=None, encoder_config=None, query_mode=None,
-             key_mode=None, replacement_frozens=None, bank_root=None, memory_vector_cache_dir=None):
+             key_mode=None, replacement_frozens=None, bank_root=None, memory_vector_cache_dir=None,
+             defer_verification=False, shared_encoder=None):
     """只有此模块读取共享库；对照和修改图始终面对同一个完整共享池。"""
     output = Path(output)
     effective_key_mode = default_key_mode_for_method(frozen.get('method')) if key_mode is None else key_mode
@@ -243,10 +292,13 @@ def evaluate(frozen, output, *, pool_path=SHARED_MEMORY, query_manifest,
                               for kind in ('purchase_memory', 'simulated_gallery')})
     freeze_json(output / 'evaluation_plan.json', plan)
     custom_encoder = encoder_factory is not None
-    if encoder_factory is None:
-        encoder_factory = lambda: make_eval_encoder(device, encoder_config,
-                                                   training_surrogates=actual_training_surrogates)
-    encoder = encoder_factory()
+    if shared_encoder is not None:
+        encoder = shared_encoder
+    else:
+        if encoder_factory is None:
+            encoder_factory = lambda: make_eval_encoder(device, encoder_config,
+                                                       training_surrogates=actual_training_surrogates)
+        encoder = encoder_factory()
     bank_root = Path(bank_root) if bank_root is not None else output
     defender = defense_factory(bank_root / 'defended', device) if defense_factory else Defender(bank_root / 'defended', device)
     rows, score_rows = [], []
@@ -287,11 +339,14 @@ def evaluate(frozen, output, *, pool_path=SHARED_MEMORY, query_manifest,
         _save_scores(output, score_rows, ids, queries, rows, source_id)
         freeze_json(output / 'evaluation.json', rows)
     finally:
-        encoder.close()
+        if shared_encoder is None:
+            encoder.close()
         if callable(getattr(defender, 'close', None)):
             defender.close()
     # 使用新建编码器重新计算每个条件、每个查询的名次及分数。
-    if custom_encoder:
+    if defer_verification:
+        verification = None
+    elif custom_encoder:
         verification = verify(output, encoder_factory=encoder_factory)
     else:
         from src.paths import PROJECT
@@ -381,8 +436,20 @@ def make_eval_encoder(device='cuda', config_path=None, *, training_surrogates=No
     if not matching and setting == 'matched_public_encoder':
         raise ValueError('同代理评估配置与实际训练代理身份不符')
     if spec.get('weight_path'):
-        weight = Path(spec['weight_path'])
-        weight = weight if weight.is_absolute() else settings_path.parent / weight
+        from src.paths import MODEL_ROOT
+        raw_weight = Path(spec['weight_path'])
+        if raw_weight.is_absolute():
+            weight = raw_weight
+        else:
+            rel_settings = settings_path.parent / raw_weight
+            rel_model_root = MODEL_ROOT / raw_weight
+            weight = rel_settings if rel_settings.is_file() else rel_model_root
+        if not weight.is_file() and weight.name in ('open_clip_model.safetensors', 'open_clip_pytorch_model.safetensors'):
+            weight = next(
+                (weight.parent / name for name in ('open_clip_model.safetensors', 'open_clip_pytorch_model.safetensors')
+                 if (weight.parent / name).is_file()),
+                weight,
+            )
     else:
         # 独立准备的模型快照优先；不要求把训练代理权重也装载进内存。
         from src.model_registry import resolve_model
@@ -420,7 +487,10 @@ def make_eval_encoder(device='cuda', config_path=None, *, training_surrogates=No
     spec = dict(spec, weight_path=str(weight.resolve()))
     for key in ('tokenizer_path',):
         if spec.get(key) and not Path(spec[key]).is_absolute():
-            spec[key] = str((settings_path.parent / spec[key]).resolve())
+            from src.paths import MODEL_ROOT
+            rel_settings = (settings_path.parent / spec[key]).resolve()
+            rel_model_root = (MODEL_ROOT / spec[key]).resolve()
+            spec[key] = str(rel_settings if rel_settings.exists() else rel_model_root)
     if not spec.get('tokenizer_path') and (weight.parent / 'tokenizer_config.json').is_file():
         spec['tokenizer_path'] = str(weight.parent)
     encoder = ChunkedClipEncoder(MatchedClipEncoder(dict(surrogate=spec, surrogate_number=0, device=device), PROJECT))

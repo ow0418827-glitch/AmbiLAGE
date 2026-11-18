@@ -25,7 +25,7 @@ from src.experiments import shared_evaluation
 from src.experiments.base_workflow import public_group
 from src.experiments.defenses import DEFENSE_MODES, all_table_groups, conditions, conditions_for_mode, table_groups
 from src.experiments.paired_metrics import paired_rank_metrics
-from src.paths import EVALUATION_BASE, OUTPUT, PROJECT, RESOURCES, ProjectPath as Path
+from src.paths import EVALUATION_BASE, OUTPUT, PROJECT, RESOURCES, VISUAL_CONFIGS, ProjectPath as Path
 from src.visual.attack_completion import validate_attack_completion
 from src.visual.audit import freeze_json, read_json
 from src.visual.image_utils import sha256_file
@@ -36,6 +36,14 @@ ORACLE_PROTOCOL = 'visual_inception_training_oracle_v1'
 REQUIRED_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_v2'
 ENHANCED_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_hardneg_advquery_v3'
 SUPPORTED_OBJECTIVE_KINDS = (REQUIRED_OBJECTIVE_KIND, ENHANCED_OBJECTIVE_KIND)
+TRANSFER_PANEL_ENCODERS = (
+    ('01_clip_l14', 'CLIP-ViT-L/14', ('ViT-L-14', 'openai'),
+     'evaluator.clip_l14.matched.json', 'evaluator.clip_l14.heldout.json'),
+    ('02_openclip_bigG14', 'OpenCLIP-bigG-14', ('ViT-bigG-14', 'laion2b_s39b_b160k'),
+     'evaluator.clip_bigG14.matched.json', 'evaluator.clip_bigG14.heldout.json'),
+    ('03_siglip_so400m', 'SigLIP-SO400M', ('ViT-SO400M-14-SigLIP-384', 'webli'),
+     'evaluator.siglip_so400m.matched.json', 'evaluator.siglip_so400m.heldout.json'),
+)
 
 TRAINING_ORACLE_QUERY_ROOT = RESOURCES / 'visual_inception_evaluation/training_queries_oracle_v1'
 ZERO_OVERLAP_QUERY_ROOT = RESOURCES / 'visual_inception_evaluation/category_queries_v1'
@@ -757,31 +765,71 @@ def evaluate_category_suite(
     )
     freeze_json(output / 'category_evaluation_plan.json', plan)
 
-    for item in eval_items:
-        group = item['group']
-        group_eval_dir = output / 'groups' / group
-        group_query_path = Path(validation['groups'][group]['query_manifest'])
-        shared_evaluation.evaluate(
-            item,
-            group_eval_dir,
-            pool_path=pool_path,
-            query_manifest=group_query_path,
-            source_memory_id=item['source_memory_id'],
-            device=device,
-            encoder_factory=encoder_factory,
-            defense_factory=defense_factory,
-            selected_conditions=selected_conditions,
-            encoder_config=effective_encoder_config,
-            query_mode='text',
-            key_mode=effective_key_mode,
-            replacement_frozens=frozen_suite,
-            bank_root=output / 'shared_banks',
-            memory_vector_cache_dir=output / 'memory_vectors',
+    if encoder_factory is None:
+        training_context = shared_evaluation._frozen_training_context(
+            frozen_suite[0], frozen_suite, required=True
         )
-        shared_evaluation.report(group_eval_dir)
+        actual_training_surrogates = shared_evaluation._context_training_identities(training_context)
+        base_encoder = shared_evaluation.make_eval_encoder(
+            device, effective_encoder_config, training_surrogates=actual_training_surrogates
+        )
+        shared_enc = shared_evaluation.InProcessFreshCachedEncoder(base_encoder)
+        try:
+            for item in eval_items:
+                group = item['group']
+                group_eval_dir = output / 'groups' / group
+                group_query_path = Path(validation['groups'][group]['query_manifest'])
+                shared_evaluation.evaluate(
+                    item,
+                    group_eval_dir,
+                    pool_path=pool_path,
+                    query_manifest=group_query_path,
+                    source_memory_id=item['source_memory_id'],
+                    device=device,
+                    defense_factory=defense_factory,
+                    selected_conditions=selected_conditions,
+                    encoder_config=effective_encoder_config,
+                    query_mode='text',
+                    key_mode=effective_key_mode,
+                    replacement_frozens=frozen_suite,
+                    bank_root=output / 'shared_banks',
+                    memory_vector_cache_dir=output / 'memory_vectors',
+                    defer_verification=True,
+                    shared_encoder=shared_enc,
+                )
+        finally:
+            base_encoder.close()
+        summary = build_category_summary(output)
+        freeze_json(output / 'category_retrieval_summary.json', summary)
+        verify_category_suite(output, device=device, isolated_process=True)
+        for item in eval_items:
+            shared_evaluation.report(output / 'groups' / item['group'])
+    else:
+        for item in eval_items:
+            group = item['group']
+            group_eval_dir = output / 'groups' / group
+            group_query_path = Path(validation['groups'][group]['query_manifest'])
+            shared_evaluation.evaluate(
+                item,
+                group_eval_dir,
+                pool_path=pool_path,
+                query_manifest=group_query_path,
+                source_memory_id=item['source_memory_id'],
+                device=device,
+                encoder_factory=encoder_factory,
+                defense_factory=defense_factory,
+                selected_conditions=selected_conditions,
+                encoder_config=effective_encoder_config,
+                query_mode='text',
+                key_mode=effective_key_mode,
+                replacement_frozens=frozen_suite,
+                bank_root=output / 'shared_banks',
+                memory_vector_cache_dir=output / 'memory_vectors',
+            )
+            shared_evaluation.report(group_eval_dir)
+        summary = build_category_summary(output)
+        freeze_json(output / 'category_retrieval_summary.json', summary)
 
-    summary = build_category_summary(output)
-    freeze_json(output / 'category_retrieval_summary.json', summary)
     report_path = report_category_suite(output)
     return dict(
         output=str(output),
@@ -793,8 +841,8 @@ def evaluate_category_suite(
     )
 
 
-def verify_category_suite(output, *, device='cuda', encoder_factory=None, isolated_process=True):
-    """对全部九组评估执行全候选分数独立复算并核对汇总一致性。"""
+def _verify_category_suite_in_process(output, *, device='cuda', encoder_factory=None, isolated_process=True):
+    """在当前进程内完成全组评估复算；当 encoder_factory 为空时复用单次新鲜编码器以加速多组复核。"""
     output = Path(output).resolve()
     plan = read_json(output / 'category_evaluation_plan.json')
     validation_path = output / 'category_query_validation.json'
@@ -808,43 +856,38 @@ def verify_category_suite(output, *, device='cuda', encoder_factory=None, isolat
     total_scores = 0
     max_error = 0.0
 
-    for group in plan['groups']:
-        group_dir = output / 'groups' / group
-        if encoder_factory is not None:
-            verified = shared_evaluation.verify(
-                group_dir, encoder_factory=encoder_factory, isolated_process=isolated_process
-            )
-        elif isolated_process:
-            command = [
-                sys.executable, '-B', '-X', 'utf8', '-m', 'src.experiments.shared_evaluation',
-                'verify', '--output', str(group_dir.resolve()), '--device', device,
-            ]
-            with (group_dir / 'independent_verification.log').open('w', encoding='utf-8') as log:
-                proc = subprocess.run(
-                    command,
-                    cwd=PROJECT,
-                    stdout=log,
-                    stderr=subprocess.STDOUT,
-                    creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0,
-                )
-            if proc.returncode:
-                raise RuntimeError(f'组 {group} 独立进程复算失败，见日志：{group_dir / "independent_verification.log"}')
-            verified = read_json(group_dir / 'independent_verification.json')
-        else:
-            verified = shared_evaluation.verify(group_dir, device=device, isolated_process=False)
-
-        _require(verified.get('status') == 'passed' and verified.get('all_candidate_scores_checked') is True,
-                 f'组 {group} 独立复算未通过')
-        total_rankings += verified['rankings_recomputed']
-        total_scores += verified['candidate_scores_recomputed']
-        max_error = max(max_error, float(verified['max_score_error']))
-        group_verifications[group] = dict(
-            rankings_recomputed=verified['rankings_recomputed'],
-            candidate_scores_recomputed=verified['candidate_scores_recomputed'],
-            max_score_error=verified['max_score_error'],
-            evaluated_file_sha256=verified['evaluated_file_sha256'],
-            scores_sha256=verified['scores_sha256'],
+    shared_base_encoder = None
+    shared_factory = encoder_factory
+    if shared_factory is None:
+        first_plan = read_json(output / 'groups' / plan['groups'][0] / 'evaluation_plan.json')
+        actual_surrogates = shared_evaluation._plan_training_identities(first_plan)
+        shared_base_encoder = shared_evaluation.make_eval_encoder(
+            device, first_plan.get('encoder_config'), training_surrogates=actual_surrogates
         )
+        fresh_wrapper = shared_evaluation.InProcessFreshCachedEncoder(shared_base_encoder)
+        shared_factory = lambda w=fresh_wrapper: w
+
+    try:
+        for group in plan['groups']:
+            group_dir = output / 'groups' / group
+            verified = shared_evaluation.verify(
+                group_dir, encoder_factory=shared_factory, device=device, isolated_process=isolated_process
+            )
+            _require(verified.get('status') == 'passed' and verified.get('all_candidate_scores_checked') is True,
+                     f'组 {group} 独立复算未通过')
+            total_rankings += verified['rankings_recomputed']
+            total_scores += verified['candidate_scores_recomputed']
+            max_error = max(max_error, float(verified['max_score_error']))
+            group_verifications[group] = dict(
+                rankings_recomputed=verified['rankings_recomputed'],
+                candidate_scores_recomputed=verified['candidate_scores_recomputed'],
+                max_score_error=verified['max_score_error'],
+                evaluated_file_sha256=verified['evaluated_file_sha256'],
+                scores_sha256=verified['scores_sha256'],
+            )
+    finally:
+        if shared_base_encoder is not None:
+            shared_base_encoder.close()
 
     rebuilt_summary = build_category_summary(output)
     saved_summary = read_json(output / 'category_retrieval_summary.json')
@@ -865,6 +908,31 @@ def verify_category_suite(output, *, device='cuda', encoder_factory=None, isolat
     )
     freeze_json(output / 'category_independent_verification.json', result)
     return result
+
+
+def verify_category_suite(output, *, device='cuda', encoder_factory=None, isolated_process=True):
+    """对全部评估分组执行全候选分数独立复算并核对汇总一致性。"""
+    output = Path(output).resolve()
+    if encoder_factory is None and isolated_process:
+        command = [
+            sys.executable, '-B', '-X', 'utf8', '-m', 'src.experiments.visual_inception_category_evaluation',
+            '_verify-worker', '--output', str(output), '--device', device,
+        ]
+        log_path = output / 'category_independent_verification.log'
+        with log_path.open('w', encoding='utf-8') as log:
+            proc = subprocess.run(
+                command,
+                cwd=PROJECT,
+                stdout=log,
+                stderr=subprocess.STDOUT,
+                creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0,
+            )
+        if proc.returncode:
+            raise RuntimeError(f'全组独立进程复算失败，见日志：{log_path}')
+        return read_json(output / 'category_independent_verification.json')
+    return _verify_category_suite_in_process(
+        output, device=device, encoder_factory=encoder_factory, isolated_process=isolated_process
+    )
 
 
 def _format_summary_cells(stats):
@@ -928,8 +996,8 @@ def report_category_suite(output):
         if is_oracle else
         f"- 测试查询（0% 字面重合泛化）：{summary['group_count']} 组 × {summary['queries_per_group']} 条 = {summary['total_queries']} 条纯文字查询（每组含 5 类问法各 4 条：类别直接询问、购买意图、使用场景、功能需求、选择比较），与训练查询（50/30/20）及原特点评估查询规范化精确重合数均为 0。"
     )
-    breakdown_heading = ('## 按训练查询来源分类汇总（公开描述 90 条 / 模型改写 54 条 / 真实搜索 36 条）'
-                         if is_oracle else '## 按问法类别汇总（每类 9 组 × 4 条 = 36 条）')
+    breakdown_heading = ('## 按训练查询来源分类汇总（50% 公开描述 / 30% 模型改写 / 20% 真实搜索）'
+                         if is_oracle else f"## 按问法类别汇总（每类 {summary['group_count']} 组 × 4 条）")
     breakdown_col = '查询来源类别' if is_oracle else '问法类别'
 
     lines = [
@@ -943,11 +1011,11 @@ def report_category_suite(output):
         query_desc,
         f"- 结果边界：{summary['scope_notice']['interpretation']}",
         '',
-        '## 总体检索覆盖统计（180 条查询）',
+        f"## 总体检索覆盖统计（{summary['total_queries']} 条查询）",
         '',
         '| 口径 | 原图前1 | 修改前1 | 前1增量(百分点) | 原图前3 | 修改前3 | 前3增量(百分点) | 原图前5 | 修改前5 | 前5增量(百分点) | 平均名次变化(原->改, 改善) |',
         '|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|',
-        '| 全部九组汇总 | ' + ' | '.join(_format_summary_cells(overall)) + ' |',
+        f"| 全部 {summary['group_count']} 组汇总 | " + ' | '.join(_format_summary_cells(overall)) + ' |',
         '',
         breakdown_heading,
         '',
@@ -974,7 +1042,7 @@ def report_category_suite(output):
     if len(summary.get('by_table_group', {})) > 1:
         lines += [
             '',
-            '## 防御面板汇总（全部 9 组）',
+            f"## 防御面板汇总（全部 {summary['group_count']} 组）",
             '',
             '| 防御分组 | 原图前1 | 修改前1 | 前1增量(百分点) | 原图前3 | 修改前3 | 前3增量(百分点) | 原图前5 | 修改前5 | 前5增量(百分点) | 平均名次变化(原->改, 改善) |',
             '|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|',
@@ -994,6 +1062,163 @@ def report_category_suite(output):
     report_path = output / 'REPORT.md'
     report_path.write_text('\n'.join(lines), encoding='utf-8')
     return report_path
+
+
+def _resolve_transfer_panel_encoders(frozen_suite):
+    trained_pairs = {
+        (row.get('name'), row.get('pretrained'))
+        for item in frozen_suite
+        for row in (
+            item.get('metadata', {}).get('surrogates')
+            or item.get('metadata', {}).get('training_objective', {}).get('surrogates')
+            or []
+        )
+        if isinstance(row, dict)
+    }
+    entries = []
+    for slug, label, pair, matched_file, heldout_file in TRANSFER_PANEL_ENCODERS:
+        is_matched = pair in trained_pairs
+        entries.append(dict(
+            slug=slug,
+            label=label,
+            surrogate_pair=list(pair),
+            role='white_box_matched' if is_matched else 'black_box_heldout',
+            role_zh='白盒代理匹配' if is_matched else '黑盒迁移留出',
+            encoder_config=(VISUAL_CONFIGS / (matched_file if is_matched else heldout_file)).resolve(),
+        ))
+    return entries, sorted(f"{n}/{p}" for n, p in trained_pairs if n and p)
+
+
+def evaluate_transfer_panel(
+    images_root,
+    output,
+    *,
+    base=EVALUATION_BASE,
+    query_root=None,
+    query_suite=DEFAULT_QUERY_SUITE,
+    method='visual_inception',
+    key_mode=DEFAULT_KEY_MODE,
+    groups=None,
+    replacement_groups='all',
+    device='cuda',
+    defense_mode='none',
+    encoder_factory=None,
+    verify_training_snapshots=True,
+):
+    """依次在 CLIP-ViT-L/14 (白盒)、OpenCLIP-bigG-14 (黑盒)、SigLIP-SO400M (黑盒) 上运行完整评估与独立复算。"""
+    method = normalize_method(method)
+    effective_key_mode = DEFAULT_KEY_MODE if key_mode is None else key_mode
+    output = Path(output).resolve()
+    if not output.is_relative_to(Path(OUTPUT).resolve()):
+        raise ValueError('迁移面板评估结果必须保存在当前项目 output 目录内')
+    requested_groups = [str(g).strip() for g in groups if str(g).strip()] if groups is not None else None
+    frozen_suite = load_frozen_suite(
+        images_root,
+        base=base,
+        method=method,
+        selected_groups=(requested_groups if replacement_groups == 'selected' else None),
+    )
+    panel_encoders, trained_names = _resolve_transfer_panel_encoders(frozen_suite)
+    output.mkdir(parents=True, exist_ok=True)
+
+    encoder_results = {}
+    ordered_rows = []
+    for spec in panel_encoders:
+        sub_out = output / spec['slug']
+        res = evaluate_category_suite(
+            images_root,
+            sub_out,
+            base=base,
+            query_root=query_root,
+            query_suite=query_suite,
+            method=method,
+            key_mode=effective_key_mode,
+            groups=requested_groups,
+            replacement_groups=replacement_groups,
+            device=device,
+            defense_mode=defense_mode,
+            encoder_config=spec['encoder_config'],
+            encoder_factory=encoder_factory,
+            verify_training_snapshots=verify_training_snapshots,
+        )
+        ver_path = sub_out / 'category_independent_verification.json'
+        verification = read_json(ver_path) if ver_path.is_file() else verify_category_suite(
+            sub_out, device=device, encoder_factory=encoder_factory, isolated_process=(encoder_factory is None)
+        )
+        summary = res['summary']
+        entry = dict(
+            slug=spec['slug'],
+            label=spec['label'],
+            role=spec['role'],
+            role_zh=spec['role_zh'],
+            surrogate_pair=spec['surrogate_pair'],
+            encoder_config=str(spec['encoder_config']),
+            encoder_config_sha256=sha256_file(spec['encoder_config']),
+            output_dir=str(sub_out),
+            summary_path=res['summary_path'],
+            report_path=res['report_path'],
+            overall=summary['overall'],
+            by_family=summary['by_family'],
+            groups=summary['groups'],
+            verification=verification,
+        )
+        encoder_results[spec['slug']] = entry
+        ordered_rows.append(entry)
+
+    first_summary = read_json(Path(ordered_rows[0]['summary_path']))
+    report_path = output / 'TRANSFER_PANEL_REPORT.md'
+    panel_summary = dict(
+        schema_version=1,
+        method=method,
+        query_suite=first_summary['query_suite'],
+        protocol=first_summary['protocol'],
+        key_mode=effective_key_mode,
+        key_image_weight=first_summary['key_image_weight'],
+        defense_mode=defense_mode,
+        group_count=first_summary['group_count'],
+        total_queries=first_summary['total_queries'],
+        pool_count=first_summary['pool_count'],
+        simultaneous_replacement_count=first_summary['simultaneous_replacement_count'],
+        trained_surrogates=trained_names,
+        encoder_order=[r['slug'] for r in ordered_rows],
+        encoders=encoder_results,
+        report_path=str(report_path),
+    )
+
+    lines = [
+        f'# 三编码器检索迁移评测报告（{method} / {effective_key_mode} / {query_suite}）',
+        '',
+        f"- 测试环境：`{first_summary['query_suite']}`，记忆库检索键：`{effective_key_mode}`（`key_image_weight={first_summary['key_image_weight']}`），防御：`{defense_mode}`。",
+        f"- 覆盖规模：{first_summary['group_count']} 组 × {first_summary['queries_per_group']} 条 = {first_summary['total_queries']} 条查询；{first_summary['pool_count']} 条共享记忆库（{first_summary['simultaneous_replacement_count']} 组同时替换）。",
+        f"- 冻结训练代理：`{', '.join(trained_names) if trained_names else 'unknown'}`。",
+        '',
+        '| 顺序 | 评估编码器 | 口径角色 | 原图前1 | 修改前1 | 前1增量(百分点) | 原图前3 | 修改前3 | 前3增量(百分点) | 原图前5 | 修改前5 | 前5增量(百分点) | 平均名次变化(原->改, 改善) |',
+        '|---:|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|',
+    ]
+    for idx, entry in enumerate(ordered_rows, 1):
+        cells = _format_summary_cells(entry['overall'])
+        lines.append(f"| {idx} | {entry['label']} | {entry['role_zh']} | " + ' | '.join(cells) + ' |')
+
+    lines += ['', '## 各编码器逐组明细（Top-1 / Top-5 / 平均名次）', '']
+    group_list = list(first_summary['groups'])
+    lines.append('| 组别 | 品类 | ' + ' | '.join(f"{e['label']} 前1/前5/均名" for e in ordered_rows) + ' |')
+    lines.append('|---|---|' + '|'.join('---:' for _ in ordered_rows) + '|')
+    for group in group_list:
+        cat = first_summary['groups'][group].get('category') or ''
+        g_cells = []
+        for e in ordered_rows:
+            ov = e['groups'][group]['overall']
+            t1, t5 = ov['top1'], ov['top5']
+            g_cells.append(
+                f"{t1['modified_hits']}/{ov['query_count']} ({t1['modified_rate']*100:.0f}%) / "
+                f"{t5['modified_hits']}/{ov['query_count']} ({t5['modified_rate']*100:.0f}%) / "
+                f"{ov['mean_rank_clean']:.1f}->{ov['mean_rank_modified']:.1f}"
+            )
+        lines.append(f"| `{group}` | {cat} | " + ' | '.join(g_cells) + ' |')
+    lines.append('')
+    report_path.write_text('\n'.join(lines), encoding='utf-8')
+    freeze_json(output / 'transfer_panel_summary.json', panel_summary)
+    return panel_summary
 
 
 def main(argv=None):
@@ -1035,9 +1260,26 @@ def main(argv=None):
     p_eval.add_argument('--defense-mode', choices=DEFENSE_MODES, default='none')
     p_eval.add_argument('--encoder-config', type=Path)
 
-    p_verify = subparsers.add_parser('verify', help='独立进程复算全部九组全库候选分数及汇总')
+    p_panel = subparsers.add_parser('evaluate-transfer-panel', help='依次使用 CLIP-ViT-L/14、OpenCLIP-bigG-14、SigLIP-SO400M 完成迁移评估与独立复算')
+    p_panel.add_argument('--images-root', type=Path, required=True)
+    p_panel.add_argument('--output', type=Path, required=True)
+    p_panel.add_argument('--base', type=Path, default=EVALUATION_BASE)
+    p_panel.add_argument('--method', choices=METHODS, default='visual_inception')
+    p_panel.add_argument('--group', default='all')
+    p_panel.add_argument('--replacement-groups', choices=('all', 'selected'), default='all')
+    p_panel.add_argument('--query-suite', choices=tuple(QUERY_SUITE_ROOTS), default=DEFAULT_QUERY_SUITE)
+    p_panel.add_argument('--key-mode', choices=KEY_MODES, default=DEFAULT_KEY_MODE)
+    p_panel.add_argument('--query-root', type=Path, default=None)
+    p_panel.add_argument('--device', choices=('cuda', 'cpu'), default='cuda')
+    p_panel.add_argument('--defense-mode', choices=DEFENSE_MODES, default='none')
+
+    p_verify = subparsers.add_parser('verify', help='独立进程复算全部组别全库候选分数及汇总')
     p_verify.add_argument('--output', type=Path, required=True)
     p_verify.add_argument('--device', choices=('cuda', 'cpu'), default='cuda')
+
+    p_worker = subparsers.add_parser('_verify-worker', help='内部独立子进程全组复算工作入口')
+    p_worker.add_argument('--output', type=Path, required=True)
+    p_worker.add_argument('--device', choices=('cuda', 'cpu'), default='cuda')
 
     p_report = subparsers.add_parser('report', help='重新生成视觉记忆植入检索评估 Markdown 报告')
     p_report.add_argument('--output', type=Path, required=True)
@@ -1086,8 +1328,36 @@ def main(argv=None):
             overall=result['summary']['overall'],
         ), ensure_ascii=False, indent=2))
         return 0
+    if args.command == 'evaluate-transfer-panel':
+        selected_groups = None if args.group == 'all' else [g.strip() for g in str(args.group).split(',') if g.strip()]
+        result = evaluate_transfer_panel(
+            args.images_root,
+            args.output,
+            base=args.base,
+            query_root=args.query_root,
+            query_suite=args.query_suite,
+            method=args.method,
+            key_mode=args.key_mode,
+            groups=selected_groups,
+            replacement_groups=args.replacement_groups,
+            device=args.device,
+            defense_mode=args.defense_mode,
+        )
+        print(json.dumps({
+            'output': str(args.output),
+            'method': result['method'],
+            'key_mode': result['key_mode'],
+            'query_suite': result['query_suite'],
+            'encoders': {k: v['overall'] for k, v in result['encoders'].items()},
+            'report_path': result['report_path'],
+        }, ensure_ascii=False, indent=2))
+        return 0
     if args.command == 'verify':
         result = verify_category_suite(args.output, device=args.device, isolated_process=True)
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return 0
+    if args.command == '_verify-worker':
+        result = _verify_category_suite_in_process(args.output, device=args.device, isolated_process=True)
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 0
     report_path = report_category_suite(args.output)

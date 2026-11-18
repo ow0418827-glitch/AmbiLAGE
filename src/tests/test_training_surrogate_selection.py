@@ -29,12 +29,22 @@ def real_snapshots(selection):
 
 def test_default_uses_exact_lucid_model_and_pretraining_configuration():
     from src.visual._lucid.config import load_config
-    selected = choices.selection_from_config(AmbiLAGEConfig())
+    from src.visual._visual_inception.config import VisualInceptionConfig
+    ambilage_selected = choices.selection_from_config(AmbiLAGEConfig())
+    assert ambilage_selected.profile == 'clip_l14'
+    assert ambilage_selected.specs == choices.selection_from_config(VisualInceptionConfig()).specs
+    assert choices.validate_selection_audit(ambilage_selected.audit(), AmbiLAGEConfig().to_dict()).specs == ambilage_selected.specs
+    paper_selected = choices.selection_from_config(AmbiLAGEConfig(surrogate_set='visual_inception_paper'))
+    assert paper_selected.profile == 'visual_inception_paper' and len(paper_selected.specs) == 3
+
+    selected = choices.select_training_surrogates('lucid')
     assert selected.profile == 'lucid'
     assert selected.specs == load_config().surrogates
     assert [(s.name, s.pretrained) for s in selected.specs] == [
         ('ViT-B-16', 'openai'), ('ViT-B-32', 'openai'), ('ViT-B-32', 'laion2b_s34b_b79k')]
-    assert choices.validate_selection_audit(selected.audit(), AmbiLAGEConfig().to_dict()).specs == selected.specs
+    assert choices.validate_selection_audit(
+        selected.audit(), AmbiLAGEConfig(surrogate_set='lucid').to_dict()
+    ).specs == selected.specs
 
 
 def test_default_loader_delegates_to_lucid_resolver_and_loader(monkeypatch):

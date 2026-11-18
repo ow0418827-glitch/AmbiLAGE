@@ -18,7 +18,8 @@ from src.visual.training_surrogates import (
 from .config import VisualInceptionConfig
 from .targets import prepare_semantic_targets, content_sha256, text_sha256
 from .objective import (semantic_loss, inverse_variance_weights, estimate_gradient_variances,
-    gradient_variance_floor, retrieval_semantic_losses, sample_query_indices)
+    gradient_variance_floor, retrieval_semantic_losses, sample_query_indices,
+    single_surrogate_loss_and_gradient)
 from .perceptual import load_perceptual, resolve_lpips_weights
 
 OBJECTIVE_KIND = 'visual_inception_semantic_perceptual_no_retrieval_v1'
@@ -77,6 +78,18 @@ def _gradient(image, source, models, text_features, weights, perceptual, config,
               retrieval_state=None, query_indices=None):
     if config.objective_mode == 'retrieval_semantic_perceptual' and retrieval_state is None:
         raise ValueError('完整三项训练目标缺少独立查询与公开代理库向量')
+    if len(models) == 1 and len(weights) == 1 and abs(float(weights[0]) - 1.0) <= 1e-12:
+        return single_surrogate_loss_and_gradient(
+            image,
+            source,
+            models[0],
+            text_features[0],
+            perceptual,
+            config,
+            proxy_fn=_proxy_components,
+            retrieval_state=retrieval_state,
+            query_indices=query_indices,
+        )
     total_gradient = torch.zeros_like(image)
     similarities, retrieval_values, mechanism_audits = [], [], []
     for index, (model, targets, weight) in enumerate(zip(models, text_features, weights)):
@@ -126,8 +139,9 @@ def _load_bundle(config, source, target, public_semantic):
     source_digest = sha256_file(source)
     if any(row['image_sha256'] == source_digest for row in bundle['candidates']):
         raise ValueError('固定负例库不能同时保留干净源图片；动态正例槽位只能出现一次')
-    if len(bundle['queries']) != 100 or len(bundle['candidates']) < 2:
-        raise ValueError('完整训练需要一百条独立查询及至少两个公开固定候选')
+    expected_queries = int(bundle['audit']['query_count'])
+    if len(bundle['queries']) != expected_queries or expected_queries < config.query_batch_size or len(bundle['candidates']) < 2:
+        raise ValueError('完整训练查询数量与声明配额不符或固定公开候选不足')
     return bundle
 
 
@@ -165,6 +179,7 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
     target_texts = [bundle['target_concept_text']] if retrieval_enabled else semantic['semantic_texts']
     text_features, text_encoding = _prepare_text_features(models, target_texts, fixture=config.smoke_test)
     retrieval_state, query_encoding, cache_records, sampling = None, [], [], None
+    pool_size = len(bundle['queries']) if retrieval_enabled else 0
     if retrieval_enabled:
         from .retrieval_cache import encode_candidate_cache
         query_features, query_encoding = _prepare_text_features(models, bundle['queries'], fixture=config.smoke_test)
@@ -186,29 +201,35 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
         if enhanced_enabled:
             retrieval_state['negative_policies'] = negative_policies
             retrieval_state['query_subspaces'] = query_subspaces
-        sampling = dict(algorithm=QUERY_SAMPLING_KIND, pool_size=100, batch_size=config.query_batch_size,
-            calibration_indices=sample_query_indices(100, config.query_batch_size, config.seed, 0),
-            step_indices=[sample_query_indices(100, config.query_batch_size, config.seed, step)
+        sampling = dict(algorithm=QUERY_SAMPLING_KIND, pool_size=pool_size, batch_size=config.query_batch_size,
+            calibration_indices=sample_query_indices(pool_size, config.query_batch_size, config.seed, 0),
+            step_indices=[sample_query_indices(pool_size, config.query_batch_size, config.seed, step)
                           for step in range(1, config.steps + 1)], seed=config.seed)
     source_tensor = pil_to_tensor(source_pil, requested_device)
     started = time.perf_counter()
     epsilon = config.epsilon_levels / 255.0
     step_size = config.step_size_levels / 255.0
-    calibration_audits = [[] for _ in models]
-    def enhanced_calibration_loss(model_index, model, leaf, target_features):
-        sem, ret, audit = _proxy_components(model, leaf, target_features,
-            retrieval_state=retrieval_state, model_index=model_index,
-            query_indices=sampling['calibration_indices'], temperature=config.retrieval_temperature,
-            config=config, return_audit=True, include_per_query_audit=False)
-        calibration_audits[model_index].append(audit)
-        return config.semantic_weight * sem + config.retrieval_weight * ret
-    variances = estimate_gradient_variances(source_tensor, models, text_features,
-        epsilon=epsilon, restarts=config.gradient_restarts, seed=config.seed,
-        retrieval_state=retrieval_state, calibration_indices=sampling['calibration_indices'] if sampling else None,
-        retrieval_weight=config.retrieval_weight, semantic_weight=config.semantic_weight,
-        temperature=config.retrieval_temperature,
-        loss_function=enhanced_calibration_loss if enhanced_enabled else None)
-    weights = inverse_variance_weights(variances)
+    single_surrogate = (len(models) == 1)
+    if single_surrogate:
+        variances = None
+        weights = [1.0]
+        calibration_audits = []
+    else:
+        calibration_audits = [[] for _ in models]
+        def enhanced_calibration_loss(model_index, model, leaf, target_features):
+            sem, ret, audit = _proxy_components(model, leaf, target_features,
+                retrieval_state=retrieval_state, model_index=model_index,
+                query_indices=sampling['calibration_indices'], temperature=config.retrieval_temperature,
+                config=config, return_audit=True, include_per_query_audit=False)
+            calibration_audits[model_index].append(audit)
+            return config.semantic_weight * sem + config.retrieval_weight * ret
+        variances = estimate_gradient_variances(source_tensor, models, text_features,
+            epsilon=epsilon, restarts=config.gradient_restarts, seed=config.seed,
+            retrieval_state=retrieval_state, calibration_indices=sampling['calibration_indices'] if sampling else None,
+            retrieval_weight=config.retrieval_weight, semantic_weight=config.semantic_weight,
+            temperature=config.retrieval_temperature,
+            loss_function=enhanced_calibration_loss if enhanced_enabled else None)
+        weights = inverse_variance_weights(variances)
     lower, upper = (source_tensor - epsilon).clamp(0, 1), (source_tensor + epsilon).clamp(0, 1)
     # Clean-image initialization is an explicit reproduction assumption; random
     # restarts estimate ensemble uncertainty, not outcome-based seed selection.
@@ -230,7 +251,7 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
         final_semantic, final_retrieval, final_mechanism_audits = [], [], []
         for index, (model, targets) in enumerate(zip(models, text_features)):
             sem, ret, mechanism_audit = _proxy_components(model, image, targets, retrieval_state=retrieval_state,
-                model_index=index, query_indices=list(range(100)) if retrieval_enabled else None,
+                model_index=index, query_indices=list(range(pool_size)) if retrieval_enabled else None,
                 temperature=config.retrieval_temperature, config=config, return_audit=True,
                 include_per_query_audit=True)
             final_semantic.append(float(sem)); final_retrieval.append(float(ret))
@@ -253,10 +274,11 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
         paper_query_distribution_reproduced=False, query_count=len(semantic['semantic_texts']),
         query_template_adaptation=semantic['adaptation'])
     if retrieval_enabled:
+        shortfall_meta = bundle['audit'].get('declared_query_shortfall')
         semantic_definition.update(semantic_reduction='one_minus_cosine_single_independent_target_concept',
             retrieval_loss_omitted=False, retrieval_loss_weight=config.retrieval_weight,
             memory_denominator_implemented=True, target_concept_text=bundle['target_concept_text'],
-            semantic_targets=target_texts, semantic_targets_sha256=content_sha256(target_texts), query_count=100,
+            semantic_targets=target_texts, semantic_targets_sha256=content_sha256(target_texts), query_count=pool_size,
             training_manifest_sha256=sha256_file(_project_path(config.training_manifest)),
             training_bundle_sha256=bundle['bundle_sha256'], retrieval_temperature=config.retrieval_temperature,
             retrieval_denominator='one_dynamic_adversarial_positive_plus_fixed_public_image_negatives',
@@ -265,9 +287,11 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
             clean_source_duplicate_excluded=True, query_roles_separated=True,
             target_concept_text_sha256=text_sha256(bundle['target_concept_text']),
             future_queries_sha256=content_sha256(bundle['queries']),
-            paper_query_source_proportions_reproduced=True,
+            paper_query_source_proportions_reproduced=(pool_size == 100 and shortfall_meta is None),
             paper_query_generator_reproduced=bundle['audit'].get('paper_query_generator_reproduced', False),
             query_template_adaptation='target_concept_and_future_queries_are_separate')
+        if shortfall_meta is not None:
+            semantic_definition['declared_query_shortfall'] = shortfall_meta
     if enhanced_enabled:
         from .enhanced_objective import MARGIN_KIND, QUERY_AUGMENTATION_KIND
         semantic_definition.update(
@@ -281,18 +305,31 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
             proxy_user_memory_is_independent_public_role=True,
             popularity_is_declared_proxy_not_real_sales=True,
             paper_missing_mechanisms_implemented=True, author_exact_mechanism_details_reproduced=False)
-    attack = dict(steps_requested=config.steps, steps_completed=config.steps, selected_step=config.steps,
-        stop_reason='requested_steps_completed', epsilon=epsilon, epsilon_levels=config.epsilon_levels,
-        step_size=step_size, step_size_levels=config.step_size_levels, norm='linf',
-        optimizer='projected_sign_gradient_descent', initialization='clean_source_zero_delta',
-        gradient_execution='sequential_surrogate_graphs_plus_separate_perceptual_graph',
-        gradient_restarts=config.gradient_restarts, gradient_variances=variances,
-        variance_definition=('mean_elementwise_population_variance_of_retrieval_plus_semantic_input_gradient_over_random_projected_starts'
-            if retrieval_enabled else 'mean_elementwise_population_variance_of_semantic_input_gradient_over_random_projected_starts'),
-        variance_floor=gradient_variance_floor(variances),
-        variance_floor_policy='max(max_model_variance*1e-12,float64_tiny)',
-        ensemble_weight_formula='normalize(max(variance,relative_floor)^-2)',
-        ensemble_weights=weights, weights_frozen_before_optimization=True)
+    if single_surrogate:
+        attack = dict(attack_mode='single_surrogate_direct',
+            steps_requested=config.steps, steps_completed=config.steps, selected_step=config.steps,
+            stop_reason='requested_steps_completed', epsilon=epsilon, epsilon_levels=config.epsilon_levels,
+            step_size=step_size, step_size_levels=config.step_size_levels, norm='linf',
+            optimizer='projected_sign_gradient_descent', initialization='clean_source_zero_delta',
+            gradient_execution='single_surrogate_unified_retrieval_semantic_perceptual_graph',
+            gradient_restarts=config.gradient_restarts, gradient_restarts_executed=0,
+            gradient_variances=None, variance_definition='not_applicable_single_surrogate',
+            variance_floor=None, variance_floor_policy='not_applicable_single_surrogate',
+            ensemble_weight_formula='unit_single_surrogate_weight',
+            ensemble_weights=weights, weights_frozen_before_optimization=True)
+    else:
+        attack = dict(steps_requested=config.steps, steps_completed=config.steps, selected_step=config.steps,
+            stop_reason='requested_steps_completed', epsilon=epsilon, epsilon_levels=config.epsilon_levels,
+            step_size=step_size, step_size_levels=config.step_size_levels, norm='linf',
+            optimizer='projected_sign_gradient_descent', initialization='clean_source_zero_delta',
+            gradient_execution='sequential_surrogate_graphs_plus_separate_perceptual_graph',
+            gradient_restarts=config.gradient_restarts, gradient_variances=variances,
+            variance_definition=('mean_elementwise_population_variance_of_retrieval_plus_semantic_input_gradient_over_random_projected_starts'
+                if retrieval_enabled else 'mean_elementwise_population_variance_of_semantic_input_gradient_over_random_projected_starts'),
+            variance_floor=gradient_variance_floor(variances),
+            variance_floor_policy='max(max_model_variance*1e-12,float64_tiny)',
+            ensemble_weight_formula='normalize(max(variance,relative_floor)^-2)',
+            ensemble_weights=weights, weights_frozen_before_optimization=True)
     metadata = dict(schema_version=3 if enhanced_enabled else 2 if retrieval_enabled else 1, method='visual_inception', status='success',
         test_fixture=config.smoke_test, production_backend=not config.smoke_test,
         config=config.to_dict(), config_sha256=content_sha256(config.to_dict()), seed=config.seed,
@@ -312,12 +349,14 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
         optimization_seconds=time.perf_counter() - started,
         retrieval_loss_omitted=not retrieval_enabled, victim_memory_used=False, formal_queries_used=False,
         formal_ranking_used=False, primary_evaluator_used_during_attack=False,
+        single_surrogate_profile_selected=selection.profile == 'clip_l14',
         paper_encoder_profile_selected=selection.profile == 'visual_inception_paper',
         paper_encoder_architectures_aligned=not config.smoke_test and selection.profile == 'visual_inception_paper',
         paper_encoder_checkpoint_status='public_checkpoint_choices_paper_exact_revisions_unspecified',
         paper_encoder_ensemble_reproduced=False, paper_full_attack_reproduced=False,
         assumptions=['linf_projection', 'clean_source_initialization',
-            'random_start_semantic_gradient_population_variance_mean', 'fixed_uncertainty_weights',
+            'single_surrogate_direct_eq2_gradient_without_ensemble_variance_weighting' if single_surrogate else 'random_start_semantic_gradient_population_variance_mean',
+            'unit_single_surrogate_weight' if single_surrogate else 'fixed_uncertainty_weights',
             'dynamic_positive_in_denominator' if retrieval_enabled else 'three_public_templates_are_semantic_targets_without_retrieval_loss'])
     if retrieval_enabled:
         metadata.update(training_bundle_manifest=str(_project_path(config.training_manifest)),
@@ -337,6 +376,8 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
                 'full_bank_preserved_with_role_quotas_and_top5_hard_margin_duel',
                 'temperature_scaled_logit_margin_and_smooth_top_competitor_softplus',
                 'frozen_text_subspace_spherical_l2_adversarial_queries'])
+        if single_surrogate:
+            execution['single_surrogate_calibration_skipped'] = True
         execution['execution_sha256'] = content_sha256(execution)
         metadata['enhanced_mechanisms'] = execution
         metadata['paper_missing_mechanisms_implemented'] = True
@@ -399,7 +440,7 @@ def generate_visual_inception(source, target, output_dir, *, config=None, steps=
         roots.append(_project_path(cfg.training_manifest).parent)
     if cfg.candidate_cache_dir:
         cache_root = _project_path(cfg.candidate_cache_dir)
-        if not cache_root.is_relative_to(PROJECT):
+        if not cfg.smoke_test and not cache_root.is_relative_to(PROJECT):
             raise ValueError('候选向量缓存只能写入当前项目目录')
         roots.append(cache_root)
     with catalog_training_guard(allowed_output_roots=roots) as guard:

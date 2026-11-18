@@ -235,7 +235,7 @@ def prepare_proxy_memory(*, base, catalog_root, inputs_root, count_per_group=10)
     return dict(status='prepared', count=len(combined), group_count=len(groups))
 
 
-def freeze_group(group, *, base, catalog_root, inputs_root, bundles_root):
+def freeze_group(group, *, base, catalog_root, inputs_root, bundles_root, allow_declared_shortfall=False):
     public, semantic = _public(group, base)
     root = validate_public_bundle_root(bundles_root / group)
     _catalog_snapshot(group, catalog_root)
@@ -250,20 +250,31 @@ def freeze_group(group, *, base, catalog_root, inputs_root, bundles_root):
         candidate_catalog=inputs_root / 'proxy_memory/candidates.jsonl')
     if generation.get('output_sha256') != sha256_file(paths['model_paraphrase']):
         raise ValueError('改写输出与实际生成记录不一致')
-    for kind, count in (('category_description', 50), ('model_paraphrase', 30), ('heldout_search_query', 20)):
+    heldout_meta = _json(inputs_root / group / 'heldout_source_metadata.json')
+    actual_heldout = len(read_source_rows(paths['heldout_search_query']))
+    for kind, count in (('category_description', 50), ('model_paraphrase', 30)):
         if len(read_source_rows(paths[kind])) != count:
             raise ValueError('公开训练来源配额不足：' + kind)
+    shortfall_active = False
+    if actual_heldout != 20:
+        if (allow_declared_shortfall and heldout_meta.get('complete') is False
+                and heldout_meta.get('actual_count') == actual_heldout >= 1):
+            shortfall_active = True
+        else:
+            raise ValueError('公开训练来源配额不足：heldout_search_query')
     preparation_binding = dict(source_files={kind:sha256_file(path) for kind, path in paths.items()},
         sampling_manifest_sha256=sha256_file(catalog_root / group / 'sampling_manifest.json'),
         query_metadata_sha256=sha256_file(inputs_root / group / 'heldout_source_metadata.json'),
         generation_provenance_sha256=sha256_file(inputs_root / group / 'paraphrases/generation_provenance.json'),
         shared_proxy_memory_sha256=sha256_file(inputs_root / 'proxy_memory/proxy_memory_manifest.json'))
+    if shortfall_active:
+        preparation_binding['declared_shortfall'] = True
     if (root / 'training_bundle.json').exists():
         if _json(root / 'preparation_binding.json') != preparation_binding:
             raise ValueError('准备来源发生改变，不能把旧训练包当作新输入结果')
         bundle = load_training_bundle(root / 'training_bundle.json', source=public['source']['image'],
             target=public['target']['image'], public_semantic=semantic)
-        return dict(status='reused', queries=100, candidates=len(bundle['candidates']))
+        return dict(status='reused', queries=len(bundle['queries']), candidates=len(bundle['candidates']))
     upstream = dict(dataset='WebShop public Amazon product catalog',
         revision=_json(catalog_root / group / 'sampling_manifest.json')['catalog_identity']['sha256'],
         url='https://github.com/princeton-nlp/WebShop')
@@ -272,15 +283,16 @@ def freeze_group(group, *, base, catalog_root, inputs_root, bundles_root):
         model_paraphrase=dict(generation, test_fixture=False, is_synthetic=True,
             split='public_training', upstream=dict(dataset='MiniMax public-description query paraphrases',
                 revision=generation['prompt_version'], url='https://platform.minimax.cn')),
-        heldout_search_query=_json(inputs_root / group / 'heldout_source_metadata.json'))
+        heldout_search_query=heldout_meta)
     bundle = prepare_training_bundle(source=public['source']['image'], target=public['target']['image'],
         public_semantic=semantic, descriptions=catalog_root / group / 'descriptions.jsonl',
         paraphrases=inputs_root / group / 'paraphrases/model_paraphrases.jsonl',
         heldout_queries=inputs_root / group / 'heldout_queries.jsonl',
         candidates=paths['candidate_catalog'], source_metadata=metadata,
-        output_dir=root, paraphrase_policy='declared_model')
+        output_dir=root, paraphrase_policy='declared_model',
+        allow_declared_shortfall=allow_declared_shortfall)
     save_json(root / 'preparation_binding.json', preparation_binding)
-    return dict(status='frozen', queries=100, candidates=len(bundle['candidates']),
+    return dict(status='frozen', queries=len(bundle['queries']), candidates=len(bundle['candidates']),
                 manifest_sha256=bundle['manifest_sha256'])
 
 
@@ -293,6 +305,8 @@ def main(argv=None):
     parser.add_argument('--inputs-root', type=Path, default=PROJECT / 'data/public/visual_inception_inputs_v5')
     parser.add_argument('--bundles-root', type=Path, default=PROJECT / 'data/public/visual_inception')
     parser.add_argument('--local-service-config', type=Path, default=PROJECT / 'src/agent/config/llm.local.json')
+    parser.add_argument('--allow-declared-shortfall', action='store_true',
+                        help='允许真实搜索查询在明确声明 complete=false 与 actual_count 时按真实条数冻结')
     args = parser.parse_args(argv)
     if args.stage == 'proxy-memory':
         result = prepare_proxy_memory(base=args.base, catalog_root=args.catalog_root, inputs_root=args.inputs_root)
@@ -309,7 +323,8 @@ def main(argv=None):
                                             local_service_config=args.local_service_config)
             else:
                 result = freeze_group(group, base=args.base, catalog_root=args.catalog_root,
-                    inputs_root=args.inputs_root, bundles_root=args.bundles_root)
+                    inputs_root=args.inputs_root, bundles_root=args.bundles_root,
+                    allow_declared_shortfall=args.allow_declared_shortfall)
         except Exception as exc:
             # Only fixed local errors from our adapter are printed, without HTTP bodies.
             result = dict(status='failed', error_type=type(exc).__name__, reason=str(exc))

@@ -528,6 +528,7 @@ def test_full_micro_generation_has_separate_target_queries_and_live_positive(tin
     from src.visual._visual_inception.evidence import validate_ready
     manifest, document, semantic = make_training_fixture(tmp_path / 'bundle', tiny_pair)
     config = VisualInceptionConfig(steps=2, gradient_restarts=2, smoke_test=True, mechanism_profile='legacy_v2',
+        surrogate_set='visual_inception_paper',
         training_manifest=str(manifest), candidate_cache_dir=str(tmp_path / 'candidate_cache'))
     output, metadata = generate_visual_inception(*tiny_pair, tmp_path / 'full', config=config,
         device='cpu', definition=public_definition())

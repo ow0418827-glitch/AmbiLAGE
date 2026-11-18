@@ -184,7 +184,7 @@ def _write_rows(path, rows):
 
 def prepare_training_bundle(*, source, target, public_semantic, descriptions, paraphrases,
         heldout_queries, candidates, source_metadata, output_dir, paraphrase_policy='declared_model',
-        test_fixture=False):
+        test_fixture=False, allow_declared_shortfall=False):
     """Copy finite public snapshots/assets into a new immutable bundle.
 
     Inputs are JSONL paths. source_metadata maps the four canonical source kinds
@@ -192,17 +192,30 @@ def prepare_training_bundle(*, source, target, public_semantic, descriptions, pa
     Candidate image paths are relative to the candidate-catalog input file.
     """
     _require(type(test_fixture) is bool, '训练包夹具开关必须为布尔值')
+    _require(type(allow_declared_shortfall) is bool, '声明欠额开关必须为布尔值')
     root = validate_public_bundle_root(output_dir, require_production=not test_fixture)
     _require(not root.exists() or not any(root.iterdir()), '训练包目录非空，禁止覆盖冻结数据')
+    _require(isinstance(source_metadata, dict) and set(source_metadata) == {
+        'category_description', 'model_paraphrase', 'heldout_search_query', 'candidate_catalog'},
+        '必须为四种来源提供完整来源元数据')
+    reject_private_fields(source_metadata)
     paths = {'category_description': Path(descriptions), 'model_paraphrase': Path(paraphrases),
              'heldout_search_query': Path(heldout_queries), 'candidate_catalog': Path(candidates)}
     loaded = {kind: list(read_source_rows(path).values()) for kind, path in paths.items()}
+    declared_shortfall = {}
     for kind, count in QUERY_COUNTS.items():
-        _require(len(loaded[kind]) >= count, '训练来源配额不足：' + kind)
-        loaded[kind] = loaded[kind][:count]
+        if kind == 'heldout_search_query' and allow_declared_shortfall and len(loaded[kind]) < count:
+            held_meta = source_metadata.get('heldout_search_query', {})
+            _require(held_meta.get('complete') is False
+                     and type(held_meta.get('actual_count')) is int
+                     and held_meta['actual_count'] == len(loaded[kind]) >= 1,
+                     '允许部分预留搜索查询时须在来源元数据中如实声明 complete=false 且 actual_count 与真实条数一致')
+            declared_shortfall[kind] = dict(requested=count, actual=len(loaded[kind]), complete=False)
+            loaded[kind] = list(loaded[kind])
+        else:
+            _require(len(loaded[kind]) >= count, '训练来源配额不足：' + kind)
+            loaded[kind] = loaded[kind][:count]
     _require(bool(loaded['candidate_catalog']), '公开候选目录为空')
-    _require(isinstance(source_metadata, dict) and set(source_metadata) == set(paths), '必须为四种来源提供完整来源元数据')
-    reject_private_fields(source_metadata)
     root.mkdir(parents=True, exist_ok=True)
     records, manifest_sources, query_entries, candidate_entries = {}, {}, [], []
     for kind, rows in loaded.items():
@@ -247,6 +260,8 @@ def prepare_training_bundle(*, source, target, public_semantic, descriptions, pa
         split_manifest=dict(policy=SPLIT_POLICY, evaluation_partition_excluded=True,
             formal_query_sources_used=False,
             heldout_query_ids=[q['id'] for q in query_entries if q['source_type'] == 'heldout_search_query']))
+    if declared_shortfall:
+        manifest['declared_query_shortfall'] = declared_shortfall
     manifest_path = root / 'training_bundle.json'
     save_json(manifest_path, manifest)
     bundle = load_training_bundle(manifest_path, source=source, target=target,

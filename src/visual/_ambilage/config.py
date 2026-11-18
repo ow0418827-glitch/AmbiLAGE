@@ -84,7 +84,7 @@ class AmbiLAGEConfig:
     local_ot_fg_threshold: float = 0.50     # 前景 Patch Token 掩膜占比选中阈值
     ensemble_temperature: float = 0.20      # 跨代理相对增益软最小集成温度
     ensemble_uniform_mix: float = 0.45      # 多代理均匀保底混合比例
-    surrogate_set: str = 'lucid'            # 默认与原始像素方法共用三代理
+    surrogate_set: str = 'clip_l14'                # 默认与视觉记忆植入方法共用单代理 CLIP-ViT-L/14
     surrogate_config: str | None = None
     compensated_weight: float = 0.5
     fg_l2_weight: float = 0.0001            # 主体微光影 L2 惩罚
@@ -194,12 +194,26 @@ class AmbiLAGEConfig:
     public_query_batch_size: int = 16
     public_contrastive_margin: float = 0.30
     low_vram_offload_threshold_gb: float = 28.0
-    # Stage 4 平滑空间影棚光场基函数与文本瓶颈感知代理加权（默认关闭以保持既有默认行为）
-    bg_studio_basis_enabled: bool = False
+    # Stage 4 平滑空间影棚光场基函数与文本瓶颈感知代理加权（默认启用以适配 14x14 论文三代理）
+    bg_studio_basis_enabled: bool = True
     bg_studio_basis_scale: float = 0.08
-    text_aware_proxy_weighting: bool = False
-    selection_text_parity_mix: float = 0.0
+    text_aware_proxy_weighting: bool = True
+    selection_text_parity_mix: float = 0.75
     proxy_text_bottleneck_mix: float = 0.55
+
+    # 单代理梯度适配与大类共性训练数据抽象接口
+    memory_key_mode: str = "auto"
+    category_data_mode: str = "auto"
+    category_subspace_rank: int = 6
+    category_medoid_count: int = 12
+    category_residual_shrinkage: float = 0.30
+    category_visual_prototype_mix: float = 0.65
+    single_model_task_pcgrad: bool = True
+    single_model_vis_grad_cap: float = 0.80
+    single_model_multiscale_eot: bool = True
+    public_query_adv_radius: float = 0.15
+    public_query_adv_steps: int = 2
+    public_query_adv_mix: float = 0.50
 
     def validate(self) -> None:
         """严格校验配置参数有效性，杜绝越界或无效数值。"""
@@ -377,6 +391,8 @@ class AmbiLAGEConfig:
             "conditional_tangent_projection",
             "bg_studio_basis_enabled",
             "text_aware_proxy_weighting",
+            "single_model_task_pcgrad",
+            "single_model_multiscale_eot",
         ):
             if type(getattr(self, bool_name)) is not bool:
                 raise ValueError(f"配置开关 {bool_name} 必须为布尔值")
@@ -418,6 +434,29 @@ class AmbiLAGEConfig:
             raise ValueError("选优稳态文本权重下限系数 selection_text_parity_mix 必须位于 [0.0, 2.0]")
         if not (0.0 <= self.proxy_text_bottleneck_mix <= 1.0):
             raise ValueError("多代理文本瓶颈融合系数 proxy_text_bottleneck_mix 必须位于 [0.0, 1.0]")
+        if self.memory_key_mode not in ("auto", "image", "joint", "hybrid"):
+            raise ValueError(f"未知记忆键对齐模式 memory_key_mode: {self.memory_key_mode}")
+        if self.category_data_mode not in (
+            "auto", "legacy_target_product", "direct_vi_bundle",
+            "category_commonalities_abstraction", "category_subspace_hybrid",
+        ):
+            raise ValueError(f"未知大类训练数据接口模式 category_data_mode: {self.category_data_mode}")
+        if type(self.category_subspace_rank) is not int or not (1 <= self.category_subspace_rank <= 32):
+            raise ValueError("大类对比主子空间秩 category_subspace_rank 必须位于 [1, 32]")
+        if type(self.category_medoid_count) is not int or not (3 <= self.category_medoid_count <= 32):
+            raise ValueError("次模覆盖共性短语数量 category_medoid_count 必须位于 [3, 32]")
+        if not (0.0 <= self.category_residual_shrinkage <= 1.0):
+            raise ValueError("James-Stein 残差收缩系数 category_residual_shrinkage 必须位于 [0.0, 1.0]")
+        if not (0.0 <= self.category_visual_prototype_mix <= 1.0):
+            raise ValueError("同类公开视觉原型混合比例 category_visual_prototype_mix 必须位于 [0.0, 1.0]")
+        if not (0.10 <= self.single_model_vis_grad_cap <= 3.0):
+            raise ValueError("单代理视觉辅助梯度上限 single_model_vis_grad_cap 必须位于 [0.10, 3.0]")
+        if not (0.0 <= self.public_query_adv_radius <= 1.0):
+            raise ValueError("公开检索球面最坏查询半径 public_query_adv_radius 必须位于 [0.0, 1.0]")
+        if type(self.public_query_adv_steps) is not int or not (0 <= self.public_query_adv_steps <= 10):
+            raise ValueError("公开检索对抗查询步数 public_query_adv_steps 必须位于 [0, 10]")
+        if not (0.0 <= self.public_query_adv_mix <= 1.0):
+            raise ValueError("公开检索对抗查询混合权重 public_query_adv_mix 必须位于 [0.0, 1.0]")
 
         # 检查有限实数
         for key, val in asdict(self).items():

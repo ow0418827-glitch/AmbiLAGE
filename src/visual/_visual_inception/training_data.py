@@ -249,21 +249,41 @@ def load_training_bundle(manifest_path, *, source, target, public_semantic, requ
     policy = manifest.get('paraphrase_policy', 'declared_model')
     _require(policy in PARAPHRASE_POLICIES, '未知改写模型身份策略')
     queries = manifest.get('queries')
-    _require(isinstance(queries, list) and len(queries) == 100, '每个训练包必须包含一百条查询')
+    declared_shortfall = manifest.get('declared_query_shortfall')
+    if declared_shortfall is None:
+        expected_counts = dict(QUERY_COUNTS)
+        expected_total = 100
+        expected_heldout = 20
+        _require(isinstance(queries, list) and len(queries) == expected_total, '每个训练包必须包含一百条查询')
+    else:
+        _require(isinstance(declared_shortfall, dict) and set(declared_shortfall) == {'heldout_search_query'},
+                 '声明欠额仅支持真实搜索查询缺口')
+        short_info = declared_shortfall['heldout_search_query']
+        _require(isinstance(short_info, dict) and short_info.get('requested') == 20
+                 and short_info.get('complete') is False
+                 and type(short_info.get('actual')) is int and 1 <= short_info['actual'] < 20,
+                 '声明欠额记录无效')
+        held_src = manifest.get('sources', {}).get('heldout_search_query', {})
+        _require(held_src.get('complete') is False and held_src.get('actual_count') == short_info['actual'],
+                 '声明欠额与预留搜索查询来源元数据不一致')
+        expected_heldout = short_info['actual']
+        expected_total = 80 + expected_heldout
+        expected_counts = {'category_description': 50, 'model_paraphrase': 30, 'heldout_search_query': expected_heldout}
+        _require(isinstance(queries, list) and len(queries) == expected_total, '声明欠额训练包查询总数与声明不符')
     _require(all(isinstance(q, dict) for q in queries), '查询必须附带来源记录')
     counts = Counter(canonical_source_type(q.get('source_type')) for q in queries)
-    _require(dict(counts) == QUERY_COUNTS, '查询来源配额必须为五十条描述、三十条模型改写和二十条预留搜索查询')
+    _require(dict(counts) == expected_counts, '查询来源配额与训练包声明不一致')
     normalized = [normalized_text(q.get('text')) for q in queries]
-    _require(len(set(normalized)) == 100, '一百条查询必须互不重复，不能重复模板凑配额')
+    _require(len(set(normalized)) == expected_total, '训练查询必须互不重复，不能重复模板凑配额')
     query_ids = [q.get('id') for q in queries]
-    _require(all(isinstance(v, str) and v.strip() for v in query_ids) and len(set(query_ids)) == 100,
-             '查询编号必须为一百个不同的非空字符串')
+    _require(all(isinstance(v, str) and v.strip() for v in query_ids) and len(set(query_ids)) == expected_total,
+             '查询编号必须为互不相同的非空字符串')
     split = manifest.get('split_manifest', {})
     heldout_ids = [q['id'] for q in queries if canonical_source_type(q['source_type']) == 'heldout_search_query']
     _require(isinstance(split, dict) and split.get('policy') == SPLIT_POLICY
              and split.get('evaluation_partition_excluded') is True and split.get('formal_query_sources_used') is False
              and isinstance(split.get('heldout_query_ids'), list)
-             and len(split['heldout_query_ids']) == 20 and set(split['heldout_query_ids']) == set(heldout_ids),
+             and len(split['heldout_query_ids']) == expected_heldout and set(split['heldout_query_ids']) == set(heldout_ids),
              '训练查询、预留公开搜索语料与正式评估的隔离声明无效')
     loaded, source_audit = _source_registry(manifest, root, fixture)
     descriptions = set()
@@ -323,17 +343,19 @@ def load_training_bundle(manifest_path, *, source, target, public_semantic, requ
         manifest_path=str(path), manifest_sha256=raw_sha, bundle_sha256=bundle_sha,
         target_binding=binding, target_concept_text_sha256=text_sha256(concept),
         target_concept_format='category_colon_public_core_attributes_v1', category=category,
-        source_counts=dict(counts), query_source_counts=dict(counts), query_count=100, query_batch_size=16,
+        source_counts=dict(counts), query_source_counts=dict(counts), query_count=expected_total, query_batch_size=16,
         query_texts_sha256=content_sha256([q['text'] for q in queries]), query_provenance=provenance_audit,
         source_files=source_audit, candidate_count=len(resolved_candidates),
         candidate_entries_sha256=content_sha256(resolved_candidates), split_manifest=split,
         paraphrase_policy=policy, paraphrase_generators=generators,
         paper_query_generator_reproduced=not fixture and policy == 'paper_gpt4',
-        paper_query_distribution_reproduced=not fixture and policy == 'paper_gpt4',
+        paper_query_distribution_reproduced=not fixture and policy == 'paper_gpt4' and declared_shortfall is None,
         test_fixture=fixture, formal_queries_used=False, victim_memory_used=False,
         candidate_representation='image_only_independent_public_candidates',
         target_image_used_for_optimization=False,
         log_origin_evidence='frozen_upstream_declaration_and_source_rows_not_independent_authenticity_verification')
+    if declared_shortfall is not None:
+        audit['declared_query_shortfall'] = declared_shortfall
     audit['audit_sha256'] = content_sha256(audit)
     return dict(target_concept_text=concept, queries=[q['text'] for q in queries],
         candidates=resolved_candidates, audit=audit, bundle_sha256=bundle_sha,

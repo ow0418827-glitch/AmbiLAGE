@@ -404,11 +404,17 @@ def main(argv=None):
     os.environ.update(HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1', TOKENIZERS_PARALLELISM='false', PYTHONDONTWRITEBYTECODE='1')
     if args.stage == 'doctor':
         from src.experiments.runtime_check import doctor
+        method_for_doctor = normalize_method(args.method or 'ambilage')
         profile, profile_config = args.surrogate_set or 'lucid', args.surrogate_config
-        if args.method == 'visual_inception':
+        if method_for_doctor == 'visual_inception':
             from src.visual._visual_inception.config import VisualInceptionConfig
             options = read_json(args.visual_inception_config) if args.visual_inception_config else {}
             selected = apply_surrogate_overrides(VisualInceptionConfig.from_dict(options),
+                args.surrogate_set, args.surrogate_config)
+            profile, profile_config = selected.surrogate_set, selected.surrogate_config
+        elif method_for_doctor == 'ambilage':
+            from src.visual._ambilage.config import AmbiLAGEConfig
+            selected = apply_surrogate_overrides(AmbiLAGEConfig(),
                 args.surrogate_set, args.surrogate_config)
             profile, profile_config = selected.surrogate_set, selected.surrogate_config
         doctor(args.device,surrogate_set=profile,surrogate_config=profile_config)

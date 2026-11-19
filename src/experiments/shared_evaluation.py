@@ -139,8 +139,8 @@ def _builtin_weight_sha256(row):
 
 
 def default_key_mode_for_method(method: str | None) -> str:
-    """按方法选择默认记忆键编码模式：visual_inception 仅编码图片，其他方法使用图文联合。"""
-    if isinstance(method, str) and method.strip().lower() == 'visual_inception':
+    """环境光协同和视觉记忆植入默认仅编码图片，原始像素方法默认图文联合。"""
+    if isinstance(method, str) and method.strip().lower() in ('ambilage', 'visual_inception'):
         return 'image'
     return 'joint'
 

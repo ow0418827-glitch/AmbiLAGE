@@ -163,7 +163,7 @@ python -B -X utf8 tools/run_experiment.py generate \
 
 1. 须先完成全部九组同一完整联合目标版本的图片生成并冻结；历史第二版或增强第三版分别评估，禁止一次九组评估混用目标版本。缺组、测试夹具或早期无检索版本均会被拒绝。
 2. 沿用 `resources/evaluation_base/shared_memory/shared_memory.json` 一百八十九条完整共享长期记忆库，并将九组冻结源图同时替换进同一个修改库副本，不建按组隔离小库。
-3. 记忆库检索向量开关（`--key-mode {image,joint}`）：测试 `visual_inception`（视觉记忆植入方法）时默认使用 `image`（纯图片向量，`key_image_weight=1.0`，按原论文设定只编码记忆库图片）；测试其他方法（如 `lucid` 原始像素方法与 `ambilage` 环境光协同方法）时默认仍使用 `joint`（图文各半融合向量，`key_image_weight=0.5`）。两种模式均可通过 `--key-mode` 显式切换，以兼顾原论文口径与跨方法统一口径对照。
+3. 环境光协同 `ambilage`（方法标识）与视觉记忆植入 `visual_inception`（方法标识）默认使用 `image`（纯图像键，图像权重为 1.0）。原始像素方法 `lucid`（方法标识）在通用及单评估器入口默认使用 `joint`（图文各半融合，图像权重为 0.5）。三编码器迁移面板统一默认使用纯图像键。完整流程可在配置文件中设置 `evaluation.key_mode`（评估检索键模式），命令行传入 `--key-mode image`（纯图像键）或 `--key-mode joint`（图文融合键）时以命令行为准。
 4. 汇总输出写入 `category_retrieval_summary.json`（检索汇总）与 `REPORT.md`（评估报告），同时报告总体（一百八十条）、按协议分类（`training_oracle` 按 10/6/4 三类训练来源；`zero_overlap` 按五类问法各 4 条）及逐组（每组二十条）的原图与修改图 Top-1（首位）、Top-3（前三）、Top-5（前五）命中数、增量百分点与平均名次改善，并对每组全库候选分数执行独立复算。
 5. 明确区分检索覆盖与下游推荐：本接口仅反映检索阶段覆盖情况，不启动购物流程或策略模型；最终商品推荐或购买行为是否受到影响，须在下游推荐/购物阶段单独验证。
 

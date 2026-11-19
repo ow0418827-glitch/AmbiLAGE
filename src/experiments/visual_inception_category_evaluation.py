@@ -984,9 +984,9 @@ def report_category_suite(output):
     key_mode = summary.get('key_mode', DEFAULT_KEY_MODE)
     key_weight = summary.get('key_image_weight', 1.0 if key_mode == 'image' else 0.5)
     key_mode_desc = (
-        f'纯图片向量 `image`（`key_image_weight={key_weight}`，按原论文只编码记忆库图片，不融合商品文字）'
+        f'纯图片向量 `image`（`key_image_weight={key_weight}`，仅编码记忆库图片）'
         if key_mode == 'image' else
-        f'图文各半融合向量 `joint`（`key_image_weight={key_weight}`，与本项目其他方法一致）'
+        f'图文各半融合向量 `joint`（`key_image_weight={key_weight}`）'
     )
 
     title = ('# 视觉记忆植入训练查询抽样（100% Oracle）检索评估报告'
@@ -1253,7 +1253,7 @@ def main(argv=None):
         '--key-mode',
         choices=KEY_MODES,
         default=None,
-        help='记忆库检索向量模式：未指定时 visual_inception 默认 image，其他方法默认 joint；也可显式强制指定同口径对比。',
+        help='记忆库检索键模式。ambilage 和 visual_inception 默认 image，lucid 默认 joint。',
     )
     p_eval.add_argument('--query-root', type=Path, default=None, help='显式覆盖测试查询目录')
     p_eval.add_argument('--device', choices=('cuda', 'cpu'), default='cuda')

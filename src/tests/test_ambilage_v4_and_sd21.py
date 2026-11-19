@@ -604,7 +604,7 @@ def test_category_evaluation_supports_ambilage_cross_method_comparison(tmp_path:
     from src.tests.test_visual_inception_category_evaluation import GROUPS, _tiny_frozen_suite, _tiny_oracle_query_root
     import src.visual.attack_completion as completion
 
-    # 验证类别评测接口支持 method='ambilage' 同口径对比（同时兼容 joint 与显式 image 记忆键）
+    # 环境光协同与视觉记忆植入在类别评测中共用纯图像键默认值。
     monkeypatch.setattr(completion, "validate_attack_completion", lambda *args, **kwargs: None)
     base, images, publics, _ = _tiny_frozen_suite(tmp_path / "cat_suite")
     amb_entries = []
@@ -666,7 +666,8 @@ def test_category_evaluation_supports_ambilage_cross_method_comparison(tmp_path:
         verify_training_snapshots=False,
     )
     assert cat_res["summary"]["method"] == "ambilage"
-    assert cat_res["summary"]["key_mode"] == "joint"
+    assert cat_res["summary"]["key_mode"] == "image"
+    assert cat_res["summary"]["key_image_weight"] == 1.0
     assert cat_res["summary"]["group_count"] == 2
     assert cat_res["summary"]["total_queries"] == 40
     ver = category.verify_category_suite(amb_cat_out, device="cpu", encoder_factory=_DummyEncoder, isolated_process=False)

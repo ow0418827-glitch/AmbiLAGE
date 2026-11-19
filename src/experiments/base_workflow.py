@@ -262,7 +262,7 @@ def main(argv=None):
     add_surrogate_arguments(parser)
     parser.add_argument('--query-mode', choices=('text', 'joint'), default='text')
     parser.add_argument('--key-mode', choices=('image', 'joint'), default=None,
-                        help='记忆库检索向量模式：未指定时 visual_inception 默认 image，其他方法默认 joint')
+                        help='记忆库检索键模式。ambilage 和 visual_inception 默认 image，lucid 默认 joint')
     parser.add_argument('--query-manifest', type=Path)
     parser.add_argument('--encoder-config', type=Path)
     parser.add_argument('--evaluation-name', default='default',

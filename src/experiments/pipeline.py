@@ -393,7 +393,7 @@ def main(argv=None):
     parser.add_argument('--device', choices=('cpu', 'cuda'), default='cuda')
     parser.add_argument('--query-mode', choices=('text', 'joint'), help='正式询问采用纯文字或独立图文协议')
     parser.add_argument('--key-mode', choices=('image', 'joint'), default=None,
-                        help='记忆库检索向量模式：未指定时 visual_inception 默认 image，其他方法默认 joint')
+                        help='覆盖配置中的 evaluation.key_mode。ambilage 和 visual_inception 默认 image，lucid 默认 joint')
     parser.add_argument('--query-manifest', type=Path, help='显式复用已冻结的正式询问清单')
     parser.add_argument('--no-defense', action='store_true', help='仅运行无防御条件，不运行完整防御面板')
     parser.add_argument('--visual-inception-config', type=Path, help='视觉记忆植入基线的独立公开配置')

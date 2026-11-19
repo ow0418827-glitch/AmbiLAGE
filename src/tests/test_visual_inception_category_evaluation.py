@@ -746,7 +746,7 @@ def test_visual_inception_defaults_to_image_key_mode_and_supports_joint_switch(t
 
 @pytest.mark.parametrize('method,expected_default_key_mode,expected_weight', [
     ('lucid', 'joint', 0.5),
-    ('ambilage', 'joint', 0.5),
+    ('ambilage', 'image', 1.0),
     ('visual_inception', 'image', 1.0),
 ])
 def test_default_key_mode_by_method_in_shared_evaluation(
@@ -818,13 +818,13 @@ def test_pipeline_load_config_validates_key_mode(tmp_path):
     cfg_path = tmp_path / 'pipeline.json'
     cfg = dict(
         schema_version=1,
-        method='visual_inception',
+        method='ambilage',
         public_pair='data/public/example_pair.json',
-        evaluation=dict(query_mode='text', key_mode='image'),
+        evaluation=dict(query_mode='text', key_mode='joint'),
     )
     _write(cfg_path, cfg)
     loaded = pipeline.load_config(cfg_path)
-    assert loaded['evaluation']['key_mode'] == 'image'
+    assert loaded['evaluation']['key_mode'] == 'joint'
 
     bad_cfg = copy.deepcopy(cfg)
     bad_cfg['evaluation']['key_mode'] = 'text'

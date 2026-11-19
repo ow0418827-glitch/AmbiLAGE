@@ -1,0 +1,596 @@
+[
+  {
+    "condition": {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    },
+    "bank": "clean",
+    "bank_path": "/content/AmbiLAGE/output/eval_9groups_20261119/stage3_env4_joint/ambilage/01_clip_l14/shared_banks/banks/none/clean.json",
+    "bank_sha256": "bd76fcd4057fd63fa38e7ac2c2cad26b515baf5beee5f2a43d0f300825953145",
+    "queries": [
+      {
+        "task_id": "feature_01",
+        "rank": 6,
+        "score": 0.5721457004547119
+      },
+      {
+        "task_id": "feature_02",
+        "rank": 10,
+        "score": 0.5421919822692871
+      },
+      {
+        "task_id": "feature_03",
+        "rank": 7,
+        "score": 0.5609309077262878
+      },
+      {
+        "task_id": "feature_04",
+        "rank": 7,
+        "score": 0.5532680749893188
+      },
+      {
+        "task_id": "feature_05",
+        "rank": 10,
+        "score": 0.546651303768158
+      },
+      {
+        "task_id": "feature_06",
+        "rank": 3,
+        "score": 0.5724313855171204
+      },
+      {
+        "task_id": "feature_07",
+        "rank": 6,
+        "score": 0.5748263597488403
+      },
+      {
+        "task_id": "feature_08",
+        "rank": 11,
+        "score": 0.5384390354156494
+      },
+      {
+        "task_id": "feature_09",
+        "rank": 6,
+        "score": 0.5514331459999084
+      },
+      {
+        "task_id": "feature_10",
+        "rank": 7,
+        "score": 0.5364342331886292
+      },
+      {
+        "task_id": "feature_11",
+        "rank": 10,
+        "score": 0.5475716590881348
+      },
+      {
+        "task_id": "feature_12",
+        "rank": 5,
+        "score": 0.5645147562026978
+      },
+      {
+        "task_id": "feature_13",
+        "rank": 4,
+        "score": 0.5586170554161072
+      },
+      {
+        "task_id": "feature_14",
+        "rank": 11,
+        "score": 0.5335474610328674
+      },
+      {
+        "task_id": "feature_15",
+        "rank": 4,
+        "score": 0.564295768737793
+      },
+      {
+        "task_id": "feature_16",
+        "rank": 6,
+        "score": 0.542644739151001
+      },
+      {
+        "task_id": "feature_17",
+        "rank": 10,
+        "score": 0.5475012063980103
+      },
+      {
+        "task_id": "feature_18",
+        "rank": 5,
+        "score": 0.5838893055915833
+      },
+      {
+        "task_id": "feature_19",
+        "rank": 8,
+        "score": 0.5382005572319031
+      },
+      {
+        "task_id": "feature_20",
+        "rank": 11,
+        "score": 0.5221014618873596
+      }
+    ],
+    "top3": 1,
+    "top5": 5,
+    "query_count": 20,
+    "score_archive_index": 0,
+    "retrieval_protocol": {
+      "encoder": {
+        "provider": "clip",
+        "loader": "attack_surrogate",
+        "surrogate_number": 0,
+        "surrogate": {
+          "role": "attack_surrogate",
+          "name": "ViT-L-14",
+          "pretrained": "openai",
+          "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+          "tokenizer_path": "/content/AmbiLAGE/models/clip_l14",
+          "weight_path": "/content/AmbiLAGE/models/clip_l14/open_clip_model.safetensors",
+          "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e",
+          "weight_revision": null,
+          "device": "cuda",
+          "precision": "fp32",
+          "image_size": 224,
+          "preprocess": {
+            "resize": "bicubic_direct_square",
+            "align_corners": false,
+            "antialias": true,
+            "mean": [
+              0.48145466,
+              0.4578275,
+              0.40821073
+            ],
+            "std": [
+              0.26862954,
+              0.26130258,
+              0.27577711
+            ]
+          },
+          "open_clip_torch_version": "3.3.0",
+          "cache_identity": "2ae7d7ba721f793f3f6bc7e20c9509f7a6ff7380bd2769d0682e1e0b468d1d5d",
+          "requires_true_local_tokens": true,
+          "loading": {
+            "architecture": {
+              "embed_dim": 768,
+              "vision_cfg": {
+                "image_size": 224,
+                "layers": 24,
+                "width": 1024,
+                "patch_size": 14
+              },
+              "text_cfg": {
+                "context_length": 77,
+                "vocab_size": 49408,
+                "width": 768,
+                "heads": 12,
+                "layers": 12
+              }
+            },
+            "quick_gelu": true,
+            "activation": "QuickGELU",
+            "mean": [
+              0.48145466,
+              0.4578275,
+              0.40821073
+            ],
+            "std": [
+              0.26862954,
+              0.26130258,
+              0.27577711
+            ],
+            "metadata_source": "registered_pretrained_tag",
+            "registered_preprocess": {
+              "interpolation": "bicubic",
+              "resize_mode": "shortest"
+            },
+            "strict_state_dict": true,
+            "actual_activation_modules": {
+              "QuickGELU": 36,
+              "GELU": 0
+            },
+            "loader_version": 3,
+            "loader_sha256": "562966bba1620c5b352d9f092bee56ce10fce48afa68cb91575094bd7ad47731"
+          },
+          "tokenizer": {
+            "type": "SimpleTokenizer",
+            "special_tokens": {
+              "sot_token_id": 49406,
+              "eot_token_id": 49407,
+              "pad_token_id": null,
+              "context_length": 77
+            },
+            "content_sha256": "4710f312ff5993f9721ddf2ff9d4d3c1b49ac86b646e95e32b0e3d1ac1abf7b8"
+          }
+        },
+        "fusion": "equal_unit_image_plus_unit_full_text",
+        "text_policy": {
+          "algorithm": "contiguous_nonoverlapping_raw_token_chunks_v1",
+          "context_length": 77,
+          "payload_tokens_per_chunk": 75,
+          "special_tokens_per_chunk": 2,
+          "coverage": "all_token_ids_no_truncation",
+          "aggregation": "unit_token_count_weighted_mean_then_unit",
+          "tokenizer": "SimpleTokenizer"
+        },
+        "weighted_fusion": {
+          "algorithm": "unit_alpha_image_plus_one_minus_alpha_full_text_v1",
+          "default_image_weight": 0.5,
+          "equal_weight_path": "exact_legacy_image_plus_text",
+          "empty_text": "image_only_except_text_only_weight_rejected"
+        },
+        "evaluation_protocol": {
+          "setting": "matched_public_encoder",
+          "matches_training_surrogate": true,
+          "matching_training_surrogate_indices": [
+            0
+          ],
+          "black_box_transfer_claimed": false,
+          "tf32_enabled": false,
+          "precision": "float32",
+          "training_identity_scope": "actual_frozen_surrogates",
+          "training_surrogates_sha256": "17b7fc56d67ec8054603435c18d4b1d2e9632bb167f37953a014b6a3d118feae"
+        }
+      },
+      "key_mode": "joint",
+      "query_mode": "joint",
+      "index_text": "product_feature",
+      "index_text_policy": {
+        "version": 2,
+        "fields": [
+          "PrimaryImage.Title",
+          "Brand",
+          "Attributes",
+          "FeatureText"
+        ],
+        "coverage": "purchased_product_title_brand_and_features_only",
+        "purchase_binding": "primary_asin_must_match_final_asin",
+        "excluded": [
+          "Instruction",
+          "OriginalInstruction",
+          "Actions",
+          "FinalASIN",
+          "FinalOptions",
+          "FinalPrice",
+          "PolicyTrace",
+          "Reward",
+          "attack_metadata"
+        ]
+      },
+      "key_image_weight": 0.5,
+      "query_image_weight": 0.5,
+      "image_decoder": {
+        "schema_version": 1,
+        "scope": "local_encoder_process",
+        "library": "Pillow",
+        "verified": true,
+        "pillow_version": "12.3.0",
+        "jpeg_version": "6.2",
+        "libjpeg_turbo_enabled": true,
+        "libjpeg_turbo_version": "3.1.4.1"
+      },
+      "encoding_runtime": {
+        "torch": "2.14.1+cu126",
+        "numpy": "2.4.6",
+        "machine": "x86_64"
+      },
+      "cache_schema": 4,
+      "bank_sha256": "bd76fcd4057fd63fa38e7ac2c2cad26b515baf5beee5f2a43d0f300825953145",
+      "model_sha256": "a3bd39d8e97d01fedfa3085c5cf439a595ee8f245bcc859322ee8acf5a3d45b1",
+      "entries_sha256": "0c62e7e9f6e228c1d6d1380934a34c272602790e0626ffc5e71440fe10d542f5",
+      "query_encoding_audit": {
+        "text_sha256": "44c5264d51e67f2b5fa0a63ce5bf829d70f679856b6e3d95485d18d93205f730",
+        "input_tokens": 17,
+        "encoded_tokens": 17,
+        "chunks": 1,
+        "payload_tokens_per_chunk": 75,
+        "chunk_token_counts": [
+          17
+        ],
+        "truncated": false
+      },
+      "memory_vector_reuse": {
+        "hits": 189,
+        "misses": 0,
+        "writes": 0,
+        "rejected": 0
+      }
+    }
+  },
+  {
+    "condition": {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    },
+    "bank": "modified",
+    "bank_path": "/content/AmbiLAGE/output/eval_9groups_20261119/stage3_env4_joint/ambilage/01_clip_l14/shared_banks/banks/none/modified.json",
+    "bank_sha256": "d0301dc3c0250d1dc9bdb53a44b07c56bb0c126afee20fbcf555776839086e94",
+    "queries": [
+      {
+        "task_id": "feature_01",
+        "rank": 4,
+        "score": 0.5817149877548218
+      },
+      {
+        "task_id": "feature_02",
+        "rank": 7,
+        "score": 0.5599495768547058
+      },
+      {
+        "task_id": "feature_03",
+        "rank": 6,
+        "score": 0.5621616840362549
+      },
+      {
+        "task_id": "feature_04",
+        "rank": 7,
+        "score": 0.5545647144317627
+      },
+      {
+        "task_id": "feature_05",
+        "rank": 8,
+        "score": 0.5620239973068237
+      },
+      {
+        "task_id": "feature_06",
+        "rank": 3,
+        "score": 0.5690176486968994
+      },
+      {
+        "task_id": "feature_07",
+        "rank": 4,
+        "score": 0.5873934030532837
+      },
+      {
+        "task_id": "feature_08",
+        "rank": 9,
+        "score": 0.5534375905990601
+      },
+      {
+        "task_id": "feature_09",
+        "rank": 5,
+        "score": 0.5540430545806885
+      },
+      {
+        "task_id": "feature_10",
+        "rank": 7,
+        "score": 0.5364022850990295
+      },
+      {
+        "task_id": "feature_11",
+        "rank": 7,
+        "score": 0.5686746835708618
+      },
+      {
+        "task_id": "feature_12",
+        "rank": 5,
+        "score": 0.5661075711250305
+      },
+      {
+        "task_id": "feature_13",
+        "rank": 4,
+        "score": 0.5603073835372925
+      },
+      {
+        "task_id": "feature_14",
+        "rank": 9,
+        "score": 0.5524436235427856
+      },
+      {
+        "task_id": "feature_15",
+        "rank": 4,
+        "score": 0.5701599717140198
+      },
+      {
+        "task_id": "feature_16",
+        "rank": 6,
+        "score": 0.548243522644043
+      },
+      {
+        "task_id": "feature_17",
+        "rank": 10,
+        "score": 0.5616540312767029
+      },
+      {
+        "task_id": "feature_18",
+        "rank": 4,
+        "score": 0.5893841981887817
+      },
+      {
+        "task_id": "feature_19",
+        "rank": 8,
+        "score": 0.5481669902801514
+      },
+      {
+        "task_id": "feature_20",
+        "rank": 10,
+        "score": 0.5326011180877686
+      }
+    ],
+    "top3": 1,
+    "top5": 8,
+    "query_count": 20,
+    "score_archive_index": 1,
+    "retrieval_protocol": {
+      "encoder": {
+        "provider": "clip",
+        "loader": "attack_surrogate",
+        "surrogate_number": 0,
+        "surrogate": {
+          "role": "attack_surrogate",
+          "name": "ViT-L-14",
+          "pretrained": "openai",
+          "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+          "tokenizer_path": "/content/AmbiLAGE/models/clip_l14",
+          "weight_path": "/content/AmbiLAGE/models/clip_l14/open_clip_model.safetensors",
+          "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e",
+          "weight_revision": null,
+          "device": "cuda",
+          "precision": "fp32",
+          "image_size": 224,
+          "preprocess": {
+            "resize": "bicubic_direct_square",
+            "align_corners": false,
+            "antialias": true,
+            "mean": [
+              0.48145466,
+              0.4578275,
+              0.40821073
+            ],
+            "std": [
+              0.26862954,
+              0.26130258,
+              0.27577711
+            ]
+          },
+          "open_clip_torch_version": "3.3.0",
+          "cache_identity": "2ae7d7ba721f793f3f6bc7e20c9509f7a6ff7380bd2769d0682e1e0b468d1d5d",
+          "requires_true_local_tokens": true,
+          "loading": {
+            "architecture": {
+              "embed_dim": 768,
+              "vision_cfg": {
+                "image_size": 224,
+                "layers": 24,
+                "width": 1024,
+                "patch_size": 14
+              },
+              "text_cfg": {
+                "context_length": 77,
+                "vocab_size": 49408,
+                "width": 768,
+                "heads": 12,
+                "layers": 12
+              }
+            },
+            "quick_gelu": true,
+            "activation": "QuickGELU",
+            "mean": [
+              0.48145466,
+              0.4578275,
+              0.40821073
+            ],
+            "std": [
+              0.26862954,
+              0.26130258,
+              0.27577711
+            ],
+            "metadata_source": "registered_pretrained_tag",
+            "registered_preprocess": {
+              "interpolation": "bicubic",
+              "resize_mode": "shortest"
+            },
+            "strict_state_dict": true,
+            "actual_activation_modules": {
+              "QuickGELU": 36,
+              "GELU": 0
+            },
+            "loader_version": 3,
+            "loader_sha256": "562966bba1620c5b352d9f092bee56ce10fce48afa68cb91575094bd7ad47731"
+          },
+          "tokenizer": {
+            "type": "SimpleTokenizer",
+            "special_tokens": {
+              "sot_token_id": 49406,
+              "eot_token_id": 49407,
+              "pad_token_id": null,
+              "context_length": 77
+            },
+            "content_sha256": "4710f312ff5993f9721ddf2ff9d4d3c1b49ac86b646e95e32b0e3d1ac1abf7b8"
+          }
+        },
+        "fusion": "equal_unit_image_plus_unit_full_text",
+        "text_policy": {
+          "algorithm": "contiguous_nonoverlapping_raw_token_chunks_v1",
+          "context_length": 77,
+          "payload_tokens_per_chunk": 75,
+          "special_tokens_per_chunk": 2,
+          "coverage": "all_token_ids_no_truncation",
+          "aggregation": "unit_token_count_weighted_mean_then_unit",
+          "tokenizer": "SimpleTokenizer"
+        },
+        "weighted_fusion": {
+          "algorithm": "unit_alpha_image_plus_one_minus_alpha_full_text_v1",
+          "default_image_weight": 0.5,
+          "equal_weight_path": "exact_legacy_image_plus_text",
+          "empty_text": "image_only_except_text_only_weight_rejected"
+        },
+        "evaluation_protocol": {
+          "setting": "matched_public_encoder",
+          "matches_training_surrogate": true,
+          "matching_training_surrogate_indices": [
+            0
+          ],
+          "black_box_transfer_claimed": false,
+          "tf32_enabled": false,
+          "precision": "float32",
+          "training_identity_scope": "actual_frozen_surrogates",
+          "training_surrogates_sha256": "17b7fc56d67ec8054603435c18d4b1d2e9632bb167f37953a014b6a3d118feae"
+        }
+      },
+      "key_mode": "joint",
+      "query_mode": "joint",
+      "index_text": "product_feature",
+      "index_text_policy": {
+        "version": 2,
+        "fields": [
+          "PrimaryImage.Title",
+          "Brand",
+          "Attributes",
+          "FeatureText"
+        ],
+        "coverage": "purchased_product_title_brand_and_features_only",
+        "purchase_binding": "primary_asin_must_match_final_asin",
+        "excluded": [
+          "Instruction",
+          "OriginalInstruction",
+          "Actions",
+          "FinalASIN",
+          "FinalOptions",
+          "FinalPrice",
+          "PolicyTrace",
+          "Reward",
+          "attack_metadata"
+        ]
+      },
+      "key_image_weight": 0.5,
+      "query_image_weight": 0.5,
+      "image_decoder": {
+        "schema_version": 1,
+        "scope": "local_encoder_process",
+        "library": "Pillow",
+        "verified": true,
+        "pillow_version": "12.3.0",
+        "jpeg_version": "6.2",
+        "libjpeg_turbo_enabled": true,
+        "libjpeg_turbo_version": "3.1.4.1"
+      },
+      "encoding_runtime": {
+        "torch": "2.14.1+cu126",
+        "numpy": "2.4.6",
+        "machine": "x86_64"
+      },
+      "cache_schema": 4,
+      "bank_sha256": "d0301dc3c0250d1dc9bdb53a44b07c56bb0c126afee20fbcf555776839086e94",
+      "model_sha256": "a3bd39d8e97d01fedfa3085c5cf439a595ee8f245bcc859322ee8acf5a3d45b1",
+      "entries_sha256": "c903a9a2b5fb05fd04186cafe4bf179bb539e496a004c4ae87060bc0b9a9aa3f",
+      "query_encoding_audit": {
+        "text_sha256": "44c5264d51e67f2b5fa0a63ce5bf829d70f679856b6e3d95485d18d93205f730",
+        "input_tokens": 17,
+        "encoded_tokens": 17,
+        "chunks": 1,
+        "payload_tokens_per_chunk": 75,
+        "chunk_token_counts": [
+          17
+        ],
+        "truncated": false
+      },
+      "memory_vector_reuse": {
+        "hits": 189,
+        "misses": 0,
+        "writes": 0,
+        "rejected": 0
+      }
+    }
+  }
+]

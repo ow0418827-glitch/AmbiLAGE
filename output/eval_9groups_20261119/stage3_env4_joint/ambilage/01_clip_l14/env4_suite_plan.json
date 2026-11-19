@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "diagnostic_environment": "env4_feature_text_plus_target_image",
+  "method": "ambilage",
+  "encoder_slug": "01_clip_l14",
+  "encoder_label": "CLIP-ViT-L/14",
+  "key_mode": "joint",
+  "key_image_weight": 0.5,
+  "query_mode": "joint",
+  "query_image_weight": 0.5,
+  "groups": [
+    "01_camera",
+    "02_chair",
+    "03_cookies",
+    "04_curtain",
+    "05_hair_extension",
+    "06_jeans",
+    "07_shampoo",
+    "08_speaker",
+    "09_toothbrush"
+  ]
+}

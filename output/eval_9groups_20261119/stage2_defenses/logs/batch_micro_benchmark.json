@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "source_run_dir": "/content/AmbiLAGE/output/eval_9groups_20261119/stage2_defenses/ambilage_training_oracle",
+  "b1_only": true,
+  "conditions": [
+    "none",
+    "blur2",
+    "jpeg50",
+    "diff512_t199_s1001",
+    "sd21_diff512_t199_s1001"
+  ],
+  "groups": [
+    "01_camera",
+    "07_shampoo"
+  ],
+  "recommended_batch_sizes": {
+    "01_clip_l14": 1,
+    "02_openclip_bigG14": 1,
+    "03_siglip_so400m": 1
+  },
+  "encoders": {
+    "01_clip_l14": {
+      "encoder_slug": "01_clip_l14",
+      "unique_assets": 990,
+      "model_load_sec": 13.256699139001284,
+      "recommended_batch_size": 1,
+      "batch_1": {
+        "elapsed_sec": 28.73971777800034,
+        "imgs_per_sec": 34.4471023566496,
+        "peak_vram_gib": 1.622018814086914,
+        "total_scores": 75600,
+        "max_score_diff_vs_legacy_b1": 0.0,
+        "rank_mismatches_vs_legacy_b1": 0,
+        "source_rank_mismatches_vs_legacy_b1": 0,
+        "top1_delta": 0,
+        "top3_delta": 0,
+        "top5_delta": 0,
+        "mean_rank_delta": 0.0
+      },
+      "candidates": {}
+    },
+    "02_openclip_bigG14": {
+      "encoder_slug": "02_openclip_bigG14",
+      "unique_assets": 990,
+      "model_load_sec": 55.35721669900158,
+      "recommended_batch_size": 1,
+      "batch_1": {
+        "elapsed_sec": 165.86843919300009,
+        "imgs_per_sec": 5.968585734674108,
+        "peak_vram_gib": 9.569828033447266,
+        "total_scores": 75600,
+        "max_score_diff_vs_legacy_b1": 0.0,
+        "rank_mismatches_vs_legacy_b1": 0,
+        "source_rank_mismatches_vs_legacy_b1": 0,
+        "top1_delta": 0,
+        "top3_delta": 0,
+        "top5_delta": 0,
+        "mean_rank_delta": 0.0
+      },
+      "candidates": {}
+    },
+    "03_siglip_so400m": {
+      "encoder_slug": "03_siglip_so400m",
+      "unique_assets": 990,
+      "model_load_sec": 22.923575503002212,
+      "recommended_batch_size": 1,
+      "batch_1": {
+        "elapsed_sec": 105.35285277100047,
+        "imgs_per_sec": 9.396992809980256,
+        "peak_vram_gib": 3.3590502738952637,
+        "total_scores": 75600,
+        "max_score_diff_vs_legacy_b1": 0.0,
+        "rank_mismatches_vs_legacy_b1": 0,
+        "source_rank_mismatches_vs_legacy_b1": 0,
+        "top1_delta": 0,
+        "top3_delta": 0,
+        "top5_delta": 0,
+        "mean_rank_delta": 0.0
+      },
+      "candidates": {}
+    }
+  }
+}

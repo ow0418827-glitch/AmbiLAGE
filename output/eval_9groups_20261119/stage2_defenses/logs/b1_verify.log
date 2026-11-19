@@ -1,0 +1,17 @@
+
+=== [01_clip_l14] unique_assets=990 groups=('01_camera', '07_shampoo') ===
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+[01_clip_l14] model loaded in 13.26s
+[01_clip_l14] batch=1: time=28.74s (34.4 img/s) vram=1.62GiB score_diff=0.00e+00 rank_mismatch=0 src_rank_mismatch=0 top1_d=0 top3_d=0 top5_d=0 mean_rank_d=0.0000
+
+=== [02_openclip_bigG14] unique_assets=990 groups=('01_camera', '07_shampoo') ===
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+[02_openclip_bigG14] model loaded in 55.36s
+[02_openclip_bigG14] batch=1: time=165.87s (6.0 img/s) vram=9.57GiB score_diff=0.00e+00 rank_mismatch=0 src_rank_mismatch=0 top1_d=0 top3_d=0 top5_d=0 mean_rank_d=0.0000
+
+=== [03_siglip_so400m] unique_assets=990 groups=('01_camera', '07_shampoo') ===
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+[03_siglip_so400m] model loaded in 22.92s
+[03_siglip_so400m] batch=1: time=105.35s (9.4 img/s) vram=3.36GiB score_diff=0.00e+00 rank_mismatch=0 src_rank_mismatch=0 top1_d=0 top3_d=0 top5_d=0 mean_rank_d=0.0000
+
+=== RECOMMENDED BATCH SIZES === {"01_clip_l14": 1, "02_openclip_bigG14": 1, "03_siglip_so400m": 1}

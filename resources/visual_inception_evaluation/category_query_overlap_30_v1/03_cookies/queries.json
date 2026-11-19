@@ -1,0 +1,186 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "category_query_overlap_30_v1",
+  "group": "03_cookies",
+  "query_mode": "text",
+  "target_public_id": "B08Z8MHWVS",
+  "category": "cookie dough",
+  "source_type": "mixed_30pct_training_oracle_70pct_non_overlap",
+  "language": "en",
+  "instruction_policy": "category_query_overlap_30_v1",
+  "instructions": [
+    "DESSERT: Immaculate Baking cookie dough is made with wholesome ingredients and is the perfect dessert satisfy those late night cravings",
+    "Once you’ve discovered the coolest ever cache of Ben & Jerry's cookie dough chunks you can grab straight from the package, we think you’ll agree it’s the direct est route to dough phoria you can get",
+    "Ships frozen, CANNOT be cancelled after being processed.",
+    "I'm looking for a case of 324 Davids 1-ounce chocolate chip cookie dough portions.",
+    "I want chocolate chunk cookie dough made with molasses, whole eggs, butter, vanilla, and sea salt.",
+    "raw cookie dough",
+    "Find refrigerated chocolate chunk cookie dough that I can bake a few pieces at a time.",
+    "I need pre-portioned cookie dough for a weekend bake sale.",
+    "Which cookie dough comes frozen in individual scoops instead of a solid block?",
+    "Show me ready-to-bake sugar cookie dough I can roll out for shaped cookies.",
+    "I want oatmeal cookie dough for a tray of soft cookies.",
+    "Compare chilled cookie dough logs and frozen dough balls for baking small batches.",
+    "Look for dairy-free chocolate chip cookie dough to bake for guests.",
+    "Which gluten-free cookie dough comes in pieces that can go straight onto a tray?",
+    "Find plain cookie dough that I can use with my own sprinkles and mix-ins.",
+    "I need a family-size pack of unbaked chocolate chip cookie dough.",
+    "Show me ready-to-bake cookie dough for making thick cookies with soft centers.",
+    "What cookie dough is sold in small freezer packs for one or two servings?",
+    "I want peanut butter cookie dough that is already shaped into portions.",
+    "Find a variety pack of bake-at-home cookie dough for a family movie night."
+  ],
+  "instructions_sha256": "a38e30863387575ea7566733f50f4e39cc0dd31c3aaf8e71247c4968da54f9b5",
+  "query_records": [
+    {
+      "id": "03_cookies_overlap30_01",
+      "query_family": "category_description",
+      "instruction": "DESSERT: Immaculate Baking cookie dough is made with wholesome ingredients and is the perfect dessert satisfy those late night cravings",
+      "instruction_zh": "训练公开描述原句（商品 B00B049CB8）：Immaculate Baking, Chocolate Chunk Cookie Dough, Gluten Free, 12 Cookies",
+      "source_row_id": "B00B049CB8:BulletPoints:array_item:3",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/03_cookies/descriptions.jsonl",
+      "reused_oracle_id": "03_cookies_oracle_01"
+    },
+    {
+      "id": "03_cookies_overlap30_02",
+      "query_family": "category_description",
+      "instruction": "Once you’ve discovered the coolest ever cache of Ben & Jerry's cookie dough chunks you can grab straight from the package, we think you’ll agree it’s the direct est route to dough phoria you can get",
+      "instruction_zh": "训练公开描述原句（商品 B07SDN84R6）：Ben & Jerry's Dough Chunks Chocolate Chip Cookie Dough Non-GMO 8 oz",
+      "source_row_id": "B07SDN84R6:BulletPoints:array_item:5",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/03_cookies/descriptions.jsonl",
+      "reused_oracle_id": "03_cookies_oracle_02"
+    },
+    {
+      "id": "03_cookies_overlap30_03",
+      "query_family": "category_description",
+      "instruction": "Ships frozen, CANNOT be cancelled after being processed.",
+      "instruction_zh": "训练公开描述原句（商品 B00CHU1RGC）：Davids Cookies Triple Chocolate Chip Cookie Dough, 4.5 Ounce -- 45 per case.",
+      "source_row_id": "B00CHU1RGC:BulletPoints:array_item:0",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/03_cookies/descriptions.jsonl",
+      "reused_oracle_id": "03_cookies_oracle_03"
+    },
+    {
+      "id": "03_cookies_overlap30_04",
+      "query_family": "model_paraphrase",
+      "instruction": "I'm looking for a case of 324 Davids 1-ounce chocolate chip cookie dough portions.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_002，输入商品 B00CHU0TD4:Description:sentence:0）",
+      "source_row_id": "paraphrase_002",
+      "source_file": "data/public/visual_inception_inputs_v5/03_cookies/paraphrases/model_paraphrases.jsonl",
+      "reused_oracle_id": "03_cookies_oracle_11"
+    },
+    {
+      "id": "03_cookies_overlap30_05",
+      "query_family": "model_paraphrase",
+      "instruction": "I want chocolate chunk cookie dough made with molasses, whole eggs, butter, vanilla, and sea salt.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_009，输入商品 B089TRM2ZC:BulletPoints:array_item:0）",
+      "source_row_id": "paraphrase_009",
+      "source_file": "data/public/visual_inception_inputs_v5/03_cookies/paraphrases/model_paraphrases.jsonl",
+      "reused_oracle_id": "03_cookies_oracle_12"
+    },
+    {
+      "id": "03_cookies_overlap30_06",
+      "query_family": "heldout_search_query",
+      "instruction": "raw cookie dough",
+      "instruction_zh": "训练真实搜索原句（orcas / orcas_orcas-doctrain_4076126）：raw cookie dough",
+      "source_row_id": "orcas_orcas-doctrain_4076126",
+      "source_file": "data/public/visual_inception_inputs_v5/03_cookies/heldout_queries.jsonl",
+      "reused_oracle_id": "03_cookies_oracle_17"
+    },
+    {
+      "id": "03_cookies_overlap30_07",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Find refrigerated chocolate chunk cookie dough that I can bake a few pieces at a time.",
+      "instruction_zh": "找一款可每次少烤几块的冷藏大块巧克力曲奇面团。"
+    },
+    {
+      "id": "03_cookies_overlap30_08",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "I need pre-portioned cookie dough for a weekend bake sale.",
+      "instruction_zh": "我需要适合周末烘焙义卖的预先分份曲奇面团。"
+    },
+    {
+      "id": "03_cookies_overlap30_09",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Which cookie dough comes frozen in individual scoops instead of a solid block?",
+      "instruction_zh": "哪款曲奇面团是冷冻独立球状而不是整块包装的？"
+    },
+    {
+      "id": "03_cookies_overlap30_10",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Show me ready-to-bake sugar cookie dough I can roll out for shaped cookies.",
+      "instruction_zh": "推荐几款可以擀平压模制作造型饼干的即烤糖霜曲奇面团。"
+    },
+    {
+      "id": "03_cookies_overlap30_11",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "I want oatmeal cookie dough for a tray of soft cookies.",
+      "instruction_zh": "我想要一款能烤出一盘松软饼干的燕麦曲奇面团。"
+    },
+    {
+      "id": "03_cookies_overlap30_12",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Compare chilled cookie dough logs and frozen dough balls for baking small batches.",
+      "instruction_zh": "对比冷藏曲奇面团卷和冷冻面团球在少量烘焙时的便利性。"
+    },
+    {
+      "id": "03_cookies_overlap30_13",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Look for dairy-free chocolate chip cookie dough to bake for guests.",
+      "instruction_zh": "找一款适合招待客人的无乳制品巧克力豆曲奇面团。"
+    },
+    {
+      "id": "03_cookies_overlap30_14",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Which gluten-free cookie dough comes in pieces that can go straight onto a tray?",
+      "instruction_zh": "哪款无麸质曲奇面团已分成小块可直接放上烤盘烘烤？"
+    },
+    {
+      "id": "03_cookies_overlap30_15",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Find plain cookie dough that I can use with my own sprinkles and mix-ins.",
+      "instruction_zh": "找一款可以自行添加糖针和配料的原味曲奇面团。"
+    },
+    {
+      "id": "03_cookies_overlap30_16",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "I need a family-size pack of unbaked chocolate chip cookie dough.",
+      "instruction_zh": "我需要一份家庭装未烘焙巧克力碎曲奇面团。"
+    },
+    {
+      "id": "03_cookies_overlap30_17",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Show me ready-to-bake cookie dough for making thick cookies with soft centers.",
+      "instruction_zh": "推荐几款能烤出外厚内软口感的即烤曲奇面团。"
+    },
+    {
+      "id": "03_cookies_overlap30_18",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "What cookie dough is sold in small freezer packs for one or two servings?",
+      "instruction_zh": "哪款曲奇面团有适合一两人份的小袋冷冻包装？"
+    },
+    {
+      "id": "03_cookies_overlap30_19",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "I want peanut butter cookie dough that is already shaped into portions.",
+      "instruction_zh": "我想要一款已经分好造型小份的花生酱曲奇面团。"
+    },
+    {
+      "id": "03_cookies_overlap30_20",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Find a variety pack of bake-at-home cookie dough for a family movie night.",
+      "instruction_zh": "找一款适合家庭电影夜的多种口味家庭烘焙曲奇面团组合装。"
+    }
+  ],
+  "query_family_counts": {
+    "category_description": 3,
+    "model_paraphrase": 2,
+    "heldout_search_query": 1,
+    "synthetic_non_overlap": 14
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false
+}

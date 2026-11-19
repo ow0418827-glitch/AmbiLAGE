@@ -203,6 +203,69 @@
         "tokenizer_config.json": "e19f34ef773563fb695f96cfcae1e4c7b112ab6ad532f6962061df5242d924f0",
         "vocab.json": "5047b556ce86ccaf6aa22b3ffccfc52d391ea4accdab9c2f2407da5b742d4363"
       }
+    },
+    "eval_gme": {
+      "repo_id": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+      "revision": "9cfa6413f704a7c1cf5064d240748e10c876b286",
+      "files": {
+        "1_Pooling/config.json": "f25c114f765f96fb30c843ec709c35ee6e92f24a782b8f37d95e29a32a7da5d6",
+        "README.md": "c46d467403a84b8c61a55f7fa0ea80ac7a81f1d554139a3c1187d60873f31734",
+        "added_tokens.json": "7fa54985b58718a8fdb4f4d97484c4bd908db114847675e4bf3afe3e1d5d7bd4",
+        "chat_template.json": "ad60d90252ed0b0705ba14e2d0ad0fec0beac1ea955642b54059b36052d8bc96",
+        "config.json": "dd18f3c69154bc6ccd1f55a6e0d0831c7edde2e29fee19d7ee91ad0e2e9f24c4",
+        "config_sentence_transformers.json": "85db35e7374940a9db49841a1bd07a16e8b934ab7fe3f9430e9f7498e9e026a4",
+        "custom_st.py": "3581b891b5f480e7ec17562fcd0df662cedb2d62ae194e9f5f0cbf3984f4b309",
+        "generation_config.json": "ff59fad29b00eab5bef61be17668b46b3eac6e12d452b85ec88ad8f8cdfd4e59",
+        "gme_inference.py": "10a4bf65193df6d801b7827d2a24d0e7b75114f77dc147d0cc71401d2efa3535",
+        "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+        "model-00001-of-00003.safetensors": "ce525de1d47307ebf63285ce4f2f80ca8ffffd94235b2151585e5714307e4e99",
+        "model-00002-of-00003.safetensors": "7b42b76064f5d14ee9d0390f9a1f3571fc66eae4f40764f818cb5e9aafc5d6f5",
+        "model-00003-of-00003.safetensors": "e3f1342fe1dd7df1582be00ebd45557316015050ae2edb841e61150825f16adc",
+        "model.safetensors.index.json": "047653b243143a82b3460c187826bebca04ec93b48f0bb19109d5674a124cbca",
+        "modeling_gme_qwen2vl.py": "b21b5071fcbba5ab71bfa2667c82f446c32d7d27b42148c7571c5d59f940e8c4",
+        "modules.json": "2923a704ccbddb790764375fc1353bb2d3f8766f95e7224aae050432c4c72d6c",
+        "preprocessor_config.json": "b5eaad0c2815f07631535dcc58f3c462b0d73693638ad21d19f3c50820eae1cc",
+        "results.json": "285321070f2c4d18dc9267a66f8579a0e0c3f5bf3288ca80e89471b0aee9b9c9",
+        "special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+        "tokenizer.json": "0b233397aeabcb441562b9186b921d6449dfc5f7bc567880400dc3662d264f02",
+        "tokenizer_config.json": "c715bebf439296530bc63ac45461f3f70d6e45b561ebf02d3a21091e07b698a1",
+        "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+      }
+    },
+    "eval_purifier_sd21": {
+      "repo_id": "sd2-community/stable-diffusion-2-1-base",
+      "revision": "4e63672c03103b6c636b8fb4119ba982469b2955",
+      "files": {
+        "README.md": "28d20df20b26b5bd476370e4bf51832442db701b21a9fa90a62cc4a272d18581",
+        "model_index.json": "518553e098fdaa4153d9a92139e344e44f53bb329c22f383293e3099c4f1bad2",
+        "scheduler/scheduler_config.json": "11ac5627d7df0fa344b875c4b5722b1767a8a2aa1684c2cf8b4d614300127234",
+        "text_encoder/config.json": "7e33bfc475f6cf76e69b28b101993ca834d1f22ff4d35caefde32d63d4f42fba",
+        "text_encoder/model.safetensors": "cce6febb0b6d876ee5eb24af35e27e764eb4f9b1d0b7c026c8c3333d4cfc916c",
+        "tokenizer/merges.txt": "9fd691f7c8039210e0fced15865466c65820d09b63988b0174bfe25de299051a",
+        "tokenizer/special_tokens_map.json": "f118ab3a983206e4f32583448de6bd6aae4ee21869135cef1f5848a753cdaab6",
+        "tokenizer/tokenizer_config.json": "d562b18a0c6d32a168fce3d7a342fce64579ebacffb98fb71b0affc494fc32d8",
+        "tokenizer/vocab.json": "e089ad92ba36837a0d31433e555c8f45fe601ab5c221d4f607ded32d9f7a4349",
+        "unet/config.json": "ce0c6d379e3b1d3e1f79338de70c80a1e36f17a6372439a8249b6fb0dfa1b608",
+        "unet/diffusion_pytorch_model.safetensors": "6dfae3e5f7d459b50f4b0850ead945972c75bb0e1897628933e169eb43974214",
+        "vae/config.json": "424117cb534ce03497c41305ed868980123917b2b6abba4bbaa615e968772903",
+        "vae/diffusion_pytorch_model.safetensors": "a1d993488569e928462932c8c38a0760b874d166399b14414135bd9c42df5815"
+      }
+    },
+    "clip_h14": {
+      "repo_id": "laion/CLIP-ViT-H-14-laion2B-s32B-b79K",
+      "revision": "1c2b8495b28150b8a4922ee1c8edee224c284c0c",
+      "files": {
+        "README.md": "14db420f00ddf78a07194dc4cdc57977d979e0f2c34994137679046defdf6577",
+        "config.json": "50150597fccadc90f3198d1c2caf2c41d88a40908c38fb428ea56c249b501d85",
+        "merges.txt": "f1cd414c2d113a28b296afc0fd66ae854c0e0c34d5de373a2f5b7f62e0c02344",
+        "open_clip_config.json": "42736e39d52321d5cb6a6c21250669f942411f4732a7eb9011f83de7d781c1c5",
+        "open_clip_model.safetensors": "0084e75319a50ad85ef45377bad5bc38f2f58824459eb690048d51c9f8863be5",
+        "preprocessor_config.json": "910e70b3956ac9879ebc90b22fb3bc8a75b6a0677814500101a4c072bd7857bd",
+        "special_tokens_map.json": "f8c0d6c39aee3f8431078ef6646567b0aba7f2246e9c54b8b99d55c22b707cbf",
+        "tokenizer.json": "b556ac8c99757ffb677208af34bc8c6721572114111a6e0aaf5fa69ff0b8d842",
+        "tokenizer_config.json": "e19f34ef773563fb695f96cfcae1e4c7b112ab6ad532f6962061df5242d924f0",
+        "vocab.json": "5047b556ce86ccaf6aa22b3ffccfc52d391ea4accdab9c2f2407da5b742d4363"
+      }
     }
   }
 }

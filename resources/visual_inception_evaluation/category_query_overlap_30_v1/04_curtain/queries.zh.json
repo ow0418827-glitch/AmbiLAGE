@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "language": "zh",
+  "purpose": "仅供人工阅读，不传给检索编码器",
+  "group": "04_curtain",
+  "category": "curtains",
+  "query_records": [
+    {
+      "id": "04_curtain_overlap30_01",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "训练公开描述原句（商品 B09KRNCBJJ）：Sheer Curtains 2 Panels Sheer Window Covering Rod Pocket, Soccer Basketball Baseball Football Voile Window Treatment Drapes for Bedroom Living Room Kitchen Vintage Wooden Board 52x108 inch,"
+    },
+    {
+      "id": "04_curtain_overlap30_02",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "训练公开描述原句（商品 B086PX13GL）：Arts Language Windows Treatment Blackout Curtains Grommet Drapes for Boys/Girls Kids Bedroom Green Purple Scale Sequined Mermaid Printed Room Darkening Curtains for Livingroom/Office, 1 Panel 52x84in"
+    },
+    {
+      "id": "04_curtain_overlap30_03",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "训练公开描述原句（商品 B06VWM2BX7）：Duck River Textile Blair Floral Insulated Blackout Room Darkening Window Curtain Set of 2 Panels, 36 X 84 Inch, Purple, 2 Piece"
+    },
+    {
+      "id": "04_curtain_overlap30_04",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "复用模型改写查询(10%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_013，输入商品 B09LCNFGX6）"
+    },
+    {
+      "id": "04_curtain_overlap30_05",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "复用模型改写查询(10%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_004，输入商品 B09FYZPTLB）"
+    },
+    {
+      "id": "04_curtain_overlap30_06",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "复用独立真实搜索(5%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_31005）：cute curtains for bedroom"
+    },
+    {
+      "id": "04_curtain_overlap30_07",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一款能柔和西晒房间午后强光的及地窗帘。"
+    },
+    {
+      "id": "04_curtain_overlap30_08",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪些卧室窗帘带有遮挡清晨阳光的遮光内衬？"
+    },
+    {
+      "id": "04_curtain_overlap30_09",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我需要两条可机洗的窗帘布，用于客厅宽大窗户。"
+    },
+    {
+      "id": "04_curtain_overlap30_10",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "推荐几款适合厨房水槽上方窗户的短款窗帘。"
+    },
+    {
+      "id": "04_curtain_overlap30_11",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "对比亚麻质感窗帘与薄纱窗帘在白天隐私保护上的效果。"
+    },
+    {
+      "id": "04_curtain_overlap30_12",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "什么窗帘挂在租住卧室的细窗帘杆上也能自然垂坠？"
+    },
+    {
+      "id": "04_curtain_overlap30_13",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我想要一款有肌理的中性色窗帘，可以遮住窗下的暖气片。"
+    },
+    {
+      "id": "04_curtain_overlap30_14",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一款宽度足够完全拉合、适合透风露台门的隔热防风窗帘。"
+    },
+    {
+      "id": "04_curtain_overlap30_15",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "推荐几款采用背带挂环、顶部造型利落简约的窗帘。"
+    },
+    {
+      "id": "04_curtain_overlap30_16",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪些双层窗帘既能过滤阳光又不会让整个房间变得过暗？"
+    },
+    {
+      "id": "04_curtain_overlap30_17",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我需要一款易打理的遮光窗帘，用于临街婴儿房窗户。"
+    },
+    {
+      "id": "04_curtain_overlap30_18",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一款适合家庭办公室的低饱和素色无内衬纯棉窗帘。"
+    },
+    {
+      "id": "04_curtain_overlap30_19",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款金属孔眼窗帘适合每天反复拉合的窗帘杆？"
+    },
+    {
+      "id": "04_curtain_overlap30_20",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一款适合高大餐厅窗户、带低调暗纹的长款窗帘布。"
+    }
+  ]
+}

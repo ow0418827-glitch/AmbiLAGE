@@ -1,0 +1,697 @@
+[START] 2026-11-19T05:27:21Z ambilage_zero_overlap
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+none clean: 前三 2/20；前五 3/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 14/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 20/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 18/20；前五 19/20
+none clean: 前三 5/20；前五 5/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 16/20；前五 18/20
+none clean: 前三 3/20；前五 3/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 17/20；前五 18/20
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+none clean: 前三 2/20；前五 5/20
+none modified: 前三 10/20；前五 12/20
+none clean: 前三 6/20；前五 20/20
+none modified: 前三 18/20；前五 20/20
+none clean: 前三 20/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 3/20
+none modified: 前三 2/20；前五 2/20
+none clean: 前三 6/20；前五 6/20
+none modified: 前三 11/20；前五 16/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 10/20；前五 15/20
+none clean: 前三 5/20；前五 8/20
+none modified: 前三 10/20；前五 12/20
+none clean: 前三 1/20；前五 3/20
+none modified: 前三 6/20；前五 9/20
+none clean: 前三 6/20；前五 8/20
+none modified: 前三 9/20；前五 14/20
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+none clean: 前三 4/20；前五 8/20
+none modified: 前三 7/20；前五 10/20
+none clean: 前三 10/20；前五 20/20
+none modified: 前三 18/20；前五 20/20
+none clean: 前三 20/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 2/20；前五 3/20
+none modified: 前三 0/20；前五 6/20
+none clean: 前三 1/20；前五 5/20
+none modified: 前三 12/20；前五 14/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 1/20；前五 4/20
+none clean: 前三 4/20；前五 5/20
+none modified: 前三 10/20；前五 13/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 4/20；前五 7/20
+none clean: 前三 5/20；前五 7/20
+none modified: 前三 5/20；前五 7/20
+{
+  "output": "/content/AmbiLAGE/output/eval_9groups_20261119/stage1_none/ambilage_zero_overlap",
+  "method": "ambilage",
+  "key_mode": "image",
+  "query_suite": "zero_overlap",
+  "encoders": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 13.905555555555555,
+      "mean_rank_modified": 1.3166666666666667,
+      "mean_rank_gain": 12.588888888888889,
+      "top1": {
+        "clean_hits": 20,
+        "modified_hits": 160,
+        "clean_rate": 0.1111111111111111,
+        "modified_rate": 0.8888888888888888,
+        "gain": 0.7777777777777778,
+        "new_hits": 140,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 44,
+        "modified_hits": 171,
+        "clean_rate": 0.24444444444444444,
+        "modified_rate": 0.95,
+        "gain": 0.7055555555555556,
+        "new_hits": 127,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 51,
+        "modified_hits": 175,
+        "clean_rate": 0.2833333333333333,
+        "modified_rate": 0.9722222222222222,
+        "gain": 0.6888888888888889,
+        "new_hits": 124,
+        "lost_hits": 0
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 8.655555555555555,
+      "mean_rank_modified": 5.0055555555555555,
+      "mean_rank_gain": 3.65,
+      "top1": {
+        "clean_hits": 23,
+        "modified_hits": 48,
+        "clean_rate": 0.12777777777777777,
+        "modified_rate": 0.26666666666666666,
+        "gain": 0.1388888888888889,
+        "new_hits": 26,
+        "lost_hits": 1
+      },
+      "top3": {
+        "clean_hits": 47,
+        "modified_hits": 96,
+        "clean_rate": 0.2611111111111111,
+        "modified_rate": 0.5333333333333333,
+        "gain": 0.2722222222222222,
+        "new_hits": 49,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 73,
+        "modified_hits": 120,
+        "clean_rate": 0.40555555555555556,
+        "modified_rate": 0.6666666666666666,
+        "gain": 0.2611111111111111,
+        "new_hits": 48,
+        "lost_hits": 1
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 9.433333333333334,
+      "mean_rank_modified": 6.0055555555555555,
+      "mean_rank_gain": 3.4277777777777776,
+      "top1": {
+        "clean_hits": 23,
+        "modified_hits": 44,
+        "clean_rate": 0.12777777777777777,
+        "modified_rate": 0.24444444444444444,
+        "gain": 0.11666666666666667,
+        "new_hits": 21,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 46,
+        "modified_hits": 77,
+        "clean_rate": 0.25555555555555554,
+        "modified_rate": 0.42777777777777776,
+        "gain": 0.17222222222222222,
+        "new_hits": 34,
+        "lost_hits": 3
+      },
+      "top5": {
+        "clean_hits": 68,
+        "modified_hits": 101,
+        "clean_rate": 0.37777777777777777,
+        "modified_rate": 0.5611111111111111,
+        "gain": 0.18333333333333332,
+        "new_hits": 33,
+        "lost_hits": 0
+      }
+    }
+  },
+  "report_path": "/content/AmbiLAGE/output/eval_9groups_20261119/stage1_none/ambilage_zero_overlap/TRANSFER_PANEL_REPORT.md"
+}
+[DONE] 2026-11-19T05:35:09Z ambilage_zero_overlap
+[START] 2026-11-19T05:35:10Z vi_zero_overlap
+Traceback (most recent call last):
+  File "/content/AmbiLAGE/tools/evaluate_visual_inception_category.py", line 9, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/content/AmbiLAGE/src/experiments/visual_inception_category_evaluation.py", line 1474, in main
+    result = evaluate_transfer_panel(
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/content/AmbiLAGE/src/experiments/visual_inception_category_evaluation.py", line 1232, in evaluate_transfer_panel
+    frozen_suite = load_frozen_suite(
+                   ^^^^^^^^^^^^^^^^^^
+  File "/content/AmbiLAGE/src/experiments/visual_inception_category_evaluation.py", line 218, in load_frozen_suite
+    validate_attack_completion(
+  File "/content/AmbiLAGE/src/visual/attack_completion.py", line 23, in validate_attack_completion
+    ready = validate_ready(output.parent, require_production=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/content/AmbiLAGE/src/visual/_visual_inception/evidence.py", line 375, in validate_ready
+    _require(sha256_file(Path(perceptual[role + '_path'])) == perceptual[role + '_sha256'], '冻结感知权重已改变')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/content/AmbiLAGE/src/visual/io.py", line 48, in sha256_file
+    with Path(path).open("rb") as handle:
+         ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.local/share/uv/python/cpython-3.11.17-linux-x86_64-gnu/lib/python3.11/pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/content/AmbiLAGE/models/lpips/alexnet-owt-7be5be79.pth'
+[SKIP] ambilage_zero_overlap already has transfer_panel_summary.json
+[START] 2026-11-19T05:38:12Z vi_zero_overlap
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+none clean: 前三 2/20；前五 3/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 14/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 20/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 19/20；前五 19/20
+none clean: 前三 5/20；前五 5/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 19/20；前五 19/20
+none clean: 前三 3/20；前五 3/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 18/20；前五 20/20
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+none clean: 前三 2/20；前五 5/20
+none modified: 前三 4/20；前五 11/20
+none clean: 前三 6/20；前五 20/20
+none modified: 前三 16/20；前五 20/20
+none clean: 前三 20/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 3/20
+none modified: 前三 1/20；前五 1/20
+none clean: 前三 6/20；前五 6/20
+none modified: 前三 8/20；前五 11/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 1/20
+none clean: 前三 5/20；前五 8/20
+none modified: 前三 8/20；前五 8/20
+none clean: 前三 1/20；前五 3/20
+none modified: 前三 3/20；前五 4/20
+none clean: 前三 6/20；前五 8/20
+none modified: 前三 0/20；前五 2/20
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+none clean: 前三 4/20；前五 8/20
+none modified: 前三 5/20；前五 11/20
+none clean: 前三 10/20；前五 20/20
+none modified: 前三 18/20；前五 20/20
+none clean: 前三 20/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 2/20；前五 3/20
+none modified: 前三 0/20；前五 4/20
+none clean: 前三 1/20；前五 5/20
+none modified: 前三 11/20；前五 14/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 3/20
+none clean: 前三 4/20；前五 5/20
+none modified: 前三 4/20；前五 4/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 2/20；前五 4/20
+none clean: 前三 5/20；前五 7/20
+none modified: 前三 5/20；前五 9/20
+{
+  "output": "/content/AmbiLAGE/output/eval_9groups_20261119/stage1_none/vi_zero_overlap",
+  "method": "visual_inception",
+  "key_mode": "image",
+  "query_suite": "zero_overlap",
+  "encoders": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 13.905555555555555,
+      "mean_rank_modified": 1.1666666666666667,
+      "mean_rank_gain": 12.738888888888889,
+      "top1": {
+        "clean_hits": 20,
+        "modified_hits": 167,
+        "clean_rate": 0.1111111111111111,
+        "modified_rate": 0.9277777777777778,
+        "gain": 0.8166666666666667,
+        "new_hits": 147,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 44,
+        "modified_hits": 176,
+        "clean_rate": 0.24444444444444444,
+        "modified_rate": 0.9777777777777777,
+        "gain": 0.7333333333333333,
+        "new_hits": 132,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 51,
+        "modified_hits": 178,
+        "clean_rate": 0.2833333333333333,
+        "modified_rate": 0.9888888888888889,
+        "gain": 0.7055555555555556,
+        "new_hits": 127,
+        "lost_hits": 0
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 8.655555555555555,
+      "mean_rank_modified": 7.816666666666666,
+      "mean_rank_gain": 0.8388888888888889,
+      "top1": {
+        "clean_hits": 23,
+        "modified_hits": 38,
+        "clean_rate": 0.12777777777777777,
+        "modified_rate": 0.2111111111111111,
+        "gain": 0.08333333333333333,
+        "new_hits": 17,
+        "lost_hits": 2
+      },
+      "top3": {
+        "clean_hits": 47,
+        "modified_hits": 60,
+        "clean_rate": 0.2611111111111111,
+        "modified_rate": 0.3333333333333333,
+        "gain": 0.07222222222222222,
+        "new_hits": 20,
+        "lost_hits": 7
+      },
+      "top5": {
+        "clean_hits": 73,
+        "modified_hits": 78,
+        "clean_rate": 0.40555555555555556,
+        "modified_rate": 0.43333333333333335,
+        "gain": 0.027777777777777776,
+        "new_hits": 13,
+        "lost_hits": 8
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 9.433333333333334,
+      "mean_rank_modified": 7.133333333333334,
+      "mean_rank_gain": 2.3,
+      "top1": {
+        "clean_hits": 23,
+        "modified_hits": 34,
+        "clean_rate": 0.12777777777777777,
+        "modified_rate": 0.18888888888888888,
+        "gain": 0.06111111111111111,
+        "new_hits": 12,
+        "lost_hits": 1
+      },
+      "top3": {
+        "clean_hits": 46,
+        "modified_hits": 65,
+        "clean_rate": 0.25555555555555554,
+        "modified_rate": 0.3611111111111111,
+        "gain": 0.10555555555555556,
+        "new_hits": 22,
+        "lost_hits": 3
+      },
+      "top5": {
+        "clean_hits": 68,
+        "modified_hits": 89,
+        "clean_rate": 0.37777777777777777,
+        "modified_rate": 0.49444444444444446,
+        "gain": 0.11666666666666667,
+        "new_hits": 22,
+        "lost_hits": 1
+      }
+    }
+  },
+  "report_path": "/content/AmbiLAGE/output/eval_9groups_20261119/stage1_none/vi_zero_overlap/TRANSFER_PANEL_REPORT.md"
+}
+[DONE] 2026-11-19T05:51:17Z vi_zero_overlap
+[START] 2026-11-19T05:51:18Z ambilage_overlap_30
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+none clean: 前三 5/20；前五 7/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 14/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 17/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 3/20；前五 6/20
+none modified: 前三 19/20；前五 19/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 13/20；前五 16/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 19/20；前五 19/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 16/20；前五 18/20
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+none clean: 前三 0/20；前五 5/20
+none modified: 前三 7/20；前五 13/20
+none clean: 前三 8/20；前五 20/20
+none modified: 前三 17/20；前五 20/20
+none clean: 前三 19/20；前五 19/20
+none modified: 前三 19/20；前五 19/20
+none clean: 前三 1/20；前五 5/20
+none modified: 前三 2/20；前五 5/20
+none clean: 前三 2/20；前五 4/20
+none modified: 前三 8/20；前五 12/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 10/20；前五 15/20
+none clean: 前三 3/20；前五 7/20
+none modified: 前三 10/20；前五 13/20
+none clean: 前三 2/20；前五 2/20
+none modified: 前三 5/20；前五 9/20
+none clean: 前三 5/20；前五 5/20
+none modified: 前三 7/20；前五 12/20
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+none clean: 前三 3/20；前五 10/20
+none modified: 前三 7/20；前五 15/20
+none clean: 前三 9/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 19/20；前五 19/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 3/20
+none modified: 前三 3/20；前五 4/20
+none clean: 前三 1/20；前五 2/20
+none modified: 前三 13/20；前五 17/20
+none clean: 前三 1/20；前五 2/20
+none modified: 前三 6/20；前五 10/20
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 8/20；前五 9/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 5/20；前五 8/20
+none clean: 前三 3/20；前五 4/20
+none modified: 前三 3/20；前五 4/20
+{
+  "output": "/content/AmbiLAGE/output/eval_9groups_20261119/stage1_none/ambilage_overlap_30",
+  "method": "ambilage",
+  "key_mode": "image",
+  "query_suite": "overlap_30",
+  "encoders": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 13.194444444444445,
+      "mean_rank_modified": 1.488888888888889,
+      "mean_rank_gain": 11.705555555555556,
+      "top1": {
+        "clean_hits": 17,
+        "modified_hits": 155,
+        "clean_rate": 0.09444444444444444,
+        "modified_rate": 0.8611111111111112,
+        "gain": 0.7666666666666667,
+        "new_hits": 139,
+        "lost_hits": 1
+      },
+      "top3": {
+        "clean_hits": 41,
+        "modified_hits": 167,
+        "clean_rate": 0.22777777777777777,
+        "modified_rate": 0.9277777777777778,
+        "gain": 0.7,
+        "new_hits": 127,
+        "lost_hits": 1
+      },
+      "top5": {
+        "clean_hits": 56,
+        "modified_hits": 172,
+        "clean_rate": 0.3111111111111111,
+        "modified_rate": 0.9555555555555556,
+        "gain": 0.6444444444444445,
+        "new_hits": 117,
+        "lost_hits": 1
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 10.03888888888889,
+      "mean_rank_modified": 5.855555555555555,
+      "mean_rank_gain": 4.183333333333334,
+      "top1": {
+        "clean_hits": 24,
+        "modified_hits": 40,
+        "clean_rate": 0.13333333333333333,
+        "modified_rate": 0.2222222222222222,
+        "gain": 0.08888888888888889,
+        "new_hits": 16,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 40,
+        "modified_hits": 85,
+        "clean_rate": 0.2222222222222222,
+        "modified_rate": 0.4722222222222222,
+        "gain": 0.25,
+        "new_hits": 45,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 68,
+        "modified_hits": 118,
+        "clean_rate": 0.37777777777777777,
+        "modified_rate": 0.6555555555555556,
+        "gain": 0.2777777777777778,
+        "new_hits": 51,
+        "lost_hits": 1
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 10.855555555555556,
+      "mean_rank_modified": 6.311111111111111,
+      "mean_rank_gain": 4.544444444444444,
+      "top1": {
+        "clean_hits": 20,
+        "modified_hits": 46,
+        "clean_rate": 0.1111111111111111,
+        "modified_rate": 0.25555555555555554,
+        "gain": 0.14444444444444443,
+        "new_hits": 26,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 38,
+        "modified_hits": 85,
+        "clean_rate": 0.2111111111111111,
+        "modified_rate": 0.4722222222222222,
+        "gain": 0.2611111111111111,
+        "new_hits": 47,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 64,
+        "modified_hits": 107,
+        "clean_rate": 0.35555555555555557,
+        "modified_rate": 0.5944444444444444,
+        "gain": 0.2388888888888889,
+        "new_hits": 44,
+        "lost_hits": 1
+      }
+    }
+  },
+  "report_path": "/content/AmbiLAGE/output/eval_9groups_20261119/stage1_none/ambilage_overlap_30/TRANSFER_PANEL_REPORT.md"
+}
+[DONE] 2026-11-19T05:58:06Z ambilage_overlap_30
+[START] 2026-11-19T05:58:07Z vi_overlap_30
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+none clean: 前三 5/20；前五 7/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 14/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 17/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 3/20；前五 6/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 13/20；前五 15/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 19/20；前五 19/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 17/20；前五 19/20
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+none clean: 前三 0/20；前五 5/20
+none modified: 前三 7/20；前五 11/20
+none clean: 前三 8/20；前五 20/20
+none modified: 前三 16/20；前五 20/20
+none clean: 前三 19/20；前五 19/20
+none modified: 前三 19/20；前五 19/20
+none clean: 前三 1/20；前五 5/20
+none modified: 前三 0/20；前五 1/20
+none clean: 前三 2/20；前五 4/20
+none modified: 前三 6/20；前五 11/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 2/20；前五 4/20
+none clean: 前三 3/20；前五 7/20
+none modified: 前三 9/20；前五 12/20
+none clean: 前三 2/20；前五 2/20
+none modified: 前三 2/20；前五 3/20
+none clean: 前三 5/20；前五 5/20
+none modified: 前三 1/20；前五 2/20
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+none clean: 前三 3/20；前五 10/20
+none modified: 前三 7/20；前五 15/20
+none clean: 前三 9/20；前五 20/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 19/20；前五 19/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 3/20
+none modified: 前三 3/20；前五 3/20
+none clean: 前三 1/20；前五 2/20
+none modified: 前三 13/20；前五 15/20
+none clean: 前三 1/20；前五 2/20
+none modified: 前三 5/20；前五 10/20
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 0/20；前五 5/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 4/20；前五 4/20
+none clean: 前三 3/20；前五 4/20
+none modified: 前三 4/20；前五 5/20
+{
+  "output": "/content/AmbiLAGE/output/eval_9groups_20261119/stage1_none/vi_overlap_30",
+  "method": "visual_inception",
+  "key_mode": "image",
+  "query_suite": "overlap_30",
+  "encoders": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 13.194444444444445,
+      "mean_rank_modified": 1.5888888888888888,
+      "mean_rank_gain": 11.605555555555556,
+      "top1": {
+        "clean_hits": 17,
+        "modified_hits": 151,
+        "clean_rate": 0.09444444444444444,
+        "modified_rate": 0.8388888888888889,
+        "gain": 0.7444444444444445,
+        "new_hits": 134,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 41,
+        "modified_hits": 169,
+        "clean_rate": 0.22777777777777777,
+        "modified_rate": 0.9388888888888889,
+        "gain": 0.7111111111111111,
+        "new_hits": 128,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 56,
+        "modified_hits": 173,
+        "clean_rate": 0.3111111111111111,
+        "modified_rate": 0.9611111111111111,
+        "gain": 0.65,
+        "new_hits": 117,
+        "lost_hits": 0
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 10.03888888888889,
+      "mean_rank_modified": 8.7,
+      "mean_rank_gain": 1.3388888888888888,
+      "top1": {
+        "clean_hits": 24,
+        "modified_hits": 31,
+        "clean_rate": 0.13333333333333333,
+        "modified_rate": 0.17222222222222222,
+        "gain": 0.03888888888888889,
+        "new_hits": 10,
+        "lost_hits": 3
+      },
+      "top3": {
+        "clean_hits": 40,
+        "modified_hits": 62,
+        "clean_rate": 0.2222222222222222,
+        "modified_rate": 0.34444444444444444,
+        "gain": 0.12222222222222222,
+        "new_hits": 27,
+        "lost_hits": 5
+      },
+      "top5": {
+        "clean_hits": 68,
+        "modified_hits": 83,
+        "clean_rate": 0.37777777777777777,
+        "modified_rate": 0.46111111111111114,
+        "gain": 0.08333333333333333,
+        "new_hits": 23,
+        "lost_hits": 8
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 10.855555555555556,
+      "mean_rank_modified": 7.1,
+      "mean_rank_gain": 3.7555555555555555,
+      "top1": {
+        "clean_hits": 20,
+        "modified_hits": 37,
+        "clean_rate": 0.1111111111111111,
+        "modified_rate": 0.20555555555555555,
+        "gain": 0.09444444444444444,
+        "new_hits": 17,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 38,
+        "modified_hits": 75,
+        "clean_rate": 0.2111111111111111,
+        "modified_rate": 0.4166666666666667,
+        "gain": 0.20555555555555555,
+        "new_hits": 38,
+        "lost_hits": 1
+      },
+      "top5": {
+        "clean_hits": 64,
+        "modified_hits": 97,
+        "clean_rate": 0.35555555555555557,
+        "modified_rate": 0.5388888888888889,
+        "gain": 0.18333333333333332,
+        "new_hits": 34,
+        "lost_hits": 1
+      }
+    }
+  },
+  "report_path": "/content/AmbiLAGE/output/eval_9groups_20261119/stage1_none/vi_overlap_30/TRANSFER_PANEL_REPORT.md"
+}
+[DONE] 2026-11-19T06:11:13Z vi_overlap_30
+WROTE: /content/AmbiLAGE/output/eval_9groups_20261119/stage1_none/STAGE1_SUMMARY.md
+[ALL STAGE 1 COMPLETED] 2026-11-19T06:11:15Z

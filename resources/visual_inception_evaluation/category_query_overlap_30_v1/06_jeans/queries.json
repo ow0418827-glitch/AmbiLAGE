@@ -1,0 +1,186 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "category_query_overlap_30_v1",
+  "group": "06_jeans",
+  "query_mode": "text",
+  "target_public_id": "B09HH96NJY",
+  "category": "jeans",
+  "source_type": "mixed_30pct_training_oracle_70pct_non_overlap",
+  "language": "en",
+  "instruction_policy": "category_query_overlap_30_v1",
+  "instructions": [
+    "The easy, figure-elongating construction of the NYDJ Marilyn Straight Women's Pull-On Jeans pairs well with everything, thanks to a flattering waist and a versatile, straight-leg fit. Lift Tuck Technology uses a proprietary slimming panel with a patented crisscross design to shape and support your curves for an always-sleek silhouette, so you can look, feel and wear one size smaller. Finished with back pockets and a pull-on waistband for greater comfort. MATERIAL: 72% Cotton, 20% Lyocell, 5% Elastomultiester, 3% Elastane.SIZING: Inseam: 32\", Front Rise: 9.75\", Leg Opening: 16\". Select one size smaller for the perfect fit. NYDJ, formally known as Not Your Daughter's Jeans, creates jeans for every body: all shapes, all sizes, and all ages. Founded in 2003, NYDJ set out to design premium stretch jeans with a fabulous fit that makes every woman feel comfortable and confident—like her best self. All NYDJ jeans are made with Lift Tuck Technology, a proprietary slimming panel with a patented crisscross design to flatten in the front and curve-contouring construction to flatter curves in the back. Headquartered in Los Angeles and inspired by California style and the latest denim trends, NYDJ is always working to bring you the most innovative denim technologies as well as the chicest non-denim pants and pair-perfect tops.",
+    "Welcome to Andongnywell store :   About Andongnywell Jeans :  Product description :  --- Andongnywell is a brand that offers a variety of styles' clothing.We hope that everybody who wears our clothes will be more comfort to enjoy life.   Product Description :   1.Gender: Women's  2. Seasons : Spring, Summer, Autumn  3. Occasion: Casual, Street, Everyday Wear  4. Can be well paired for any style tops, t-shirts, tanks, mini dress,etc  5. Package included: 1*women jeans pants   Size :   Please check the size chart carefully from the picture before purchase,  Please order a freshman size if you want a loose fit, thank you.   Attention :  1.As different computers display colors differently, the color of the actual item may vary slightly from the above images.  2.Please check size measurements before ordering to ensure a proper fit.If you have any questions before ordering,please contact us ,we are pleased to help you.",
+    "100% Cotton\nButton closure\nMachine Wash\nMATERIAL & FABRIC: Made in cotton, denim fabric skin-friendly, comfortable, elegant and fashionable design. Relaxed mobility without any restrictions.\nFEATURED & DESIGN: Featured with belted mid waist with beautiful bow tie, 2 mini pockets on both side, sense of layer catch eyes and easy to take small things, like key, accessories, flattering bell bottom with zipper closure, high quality denim fabric touch by soft. Good choice with crop tank tops, tshirts, tees, sandals, slippers, sneakers, comfortable and versatile to wear in summer, spring, autumn.\nFUNCTION & SIZING: Perfect for work office, office ladies, vacation, travel, street style, leisure, lounge, walking, fishing, camping, housewife. Available in blue color and in size (). To be more charming in the workplace and any leisure places.\nHand/Machine wash up to 30℃, turn jeans inside out, do not bleach, iron with low heat, do not dry clean, hang dry or line dry in the shadow, wash separately with different colors.",
+    "Find full-length stretchy bell-bottom flare jeans for women in light blue, black, or dark denim, with back pockets, frayed hems, and a breathable cotton-blend-spandex construction.",
+    "Find low-waist light polyester pull-on pants with a butterfly embroidery design in Korean hip-hop, Y2K, Harajuku, or streetwear style for S, M, or L.",
+    "mens high waisted jeans",
+    "Find high-rise straight jeans that still leave some room through the thighs.",
+    "I need dark denim jeans that look polished enough for a casual office.",
+    "Show me relaxed-fit jeans with a short inseam for someone who is petite.",
+    "Which bootcut jeans have a little stretch through the seat without a tight waist?",
+    "I want light-wash loose jeans for warm days when heavy denim feels stuffy.",
+    "Compare rigid cotton jeans and stretch denim for wearing on a long flight.",
+    "Find straight-leg jeans with front pockets deep enough to hold a phone.",
+    "What wide-leg jeans have a fitted waistband and a full-length hem?",
+    "I am looking for mid-rise jeans with a faded wash and no holes.",
+    "Show me tapered jeans that fit easily under ankle boots.",
+    "Which relaxed jeans come in a longer inseam and a plain black wash?",
+    "I need everyday slim jeans that have extra room at the knee.",
+    "Find cropped blue jeans with a clean hem for wearing with flats.",
+    "What soft denim jeans would work for someone between two waist sizes?"
+  ],
+  "instructions_sha256": "82161514cb23e7adf9fb89b5f760722a61d69bf2d06169a87294ef6d9d1babf2",
+  "query_records": [
+    {
+      "id": "06_jeans_overlap30_01",
+      "query_family": "category_description",
+      "instruction": "The easy, figure-elongating construction of the NYDJ Marilyn Straight Women's Pull-On Jeans pairs well with everything, thanks to a flattering waist and a versatile, straight-leg fit. Lift Tuck Technology uses a proprietary slimming panel with a patented crisscross design to shape and support your curves for an always-sleek silhouette, so you can look, feel and wear one size smaller. Finished with back pockets and a pull-on waistband for greater comfort. MATERIAL: 72% Cotton, 20% Lyocell, 5% Elastomultiester, 3% Elastane.SIZING: Inseam: 32\", Front Rise: 9.75\", Leg Opening: 16\". Select one size smaller for the perfect fit. NYDJ, formally known as Not Your Daughter's Jeans, creates jeans for every body: all shapes, all sizes, and all ages. Founded in 2003, NYDJ set out to design premium stretch jeans with a fabulous fit that makes every woman feel comfortable and confident—like her best self. All NYDJ jeans are made with Lift Tuck Technology, a proprietary slimming panel with a patented crisscross design to flatten in the front and curve-contouring construction to flatter curves in the back. Headquartered in Los Angeles and inspired by California style and the latest denim trends, NYDJ is always working to bring you the most innovative denim technologies as well as the chicest non-denim pants and pair-perfect tops.",
+      "instruction_zh": "训练公开描述原句（商品 B07JMZQT4B）：NYDJ Women's Pull-On Marilyn Straight Jeans | Slimming & Flattering Fit",
+      "source_row_id": "B07JMZQT4B",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/06_jeans/descriptions.jsonl",
+      "reused_oracle_id": "06_jeans_oracle_01"
+    },
+    {
+      "id": "06_jeans_overlap30_02",
+      "query_family": "category_description",
+      "instruction": "Welcome to Andongnywell store :   About Andongnywell Jeans :  Product description :  --- Andongnywell is a brand that offers a variety of styles' clothing.We hope that everybody who wears our clothes will be more comfort to enjoy life.   Product Description :   1.Gender: Women's  2. Seasons : Spring, Summer, Autumn  3. Occasion: Casual, Street, Everyday Wear  4. Can be well paired for any style tops, t-shirts, tanks, mini dress,etc  5. Package included: 1*women jeans pants   Size :   Please check the size chart carefully from the picture before purchase,  Please order a freshman size if you want a loose fit, thank you.   Attention :  1.As different computers display colors differently, the color of the actual item may vary slightly from the above images.  2.Please check size measurements before ordering to ensure a proper fit.If you have any questions before ordering,please contact us ,we are pleased to help you.",
+      "instruction_zh": "训练公开描述原句（商品 B08PS1XYS9）：Andongnywell Women's Plus Size mid-Rise Wide Leg Flared Jeans Trousers Mid Waist Fitted Bell Bottom Denim Pants",
+      "source_row_id": "B08PS1XYS9",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/06_jeans/descriptions.jsonl",
+      "reused_oracle_id": "06_jeans_oracle_02"
+    },
+    {
+      "id": "06_jeans_overlap30_03",
+      "query_family": "category_description",
+      "instruction": "100% Cotton\nButton closure\nMachine Wash\nMATERIAL & FABRIC: Made in cotton, denim fabric skin-friendly, comfortable, elegant and fashionable design. Relaxed mobility without any restrictions.\nFEATURED & DESIGN: Featured with belted mid waist with beautiful bow tie, 2 mini pockets on both side, sense of layer catch eyes and easy to take small things, like key, accessories, flattering bell bottom with zipper closure, high quality denim fabric touch by soft. Good choice with crop tank tops, tshirts, tees, sandals, slippers, sneakers, comfortable and versatile to wear in summer, spring, autumn.\nFUNCTION & SIZING: Perfect for work office, office ladies, vacation, travel, street style, leisure, lounge, walking, fishing, camping, housewife. Available in blue color and in size (). To be more charming in the workplace and any leisure places.\nHand/Machine wash up to 30℃, turn jeans inside out, do not bleach, iron with low heat, do not dry clean, hang dry or line dry in the shadow, wash separately with different colors.",
+      "instruction_zh": "训练公开描述原句（商品 B094FVGLXQ）：utcoco Women's Casual Loose Fit Mid Waisted Belted Flare Bell Bottom Palazzo Lounge Denim Jeans Pants",
+      "source_row_id": "B094FVGLXQ",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/06_jeans/descriptions.jsonl",
+      "reused_oracle_id": "06_jeans_oracle_03"
+    },
+    {
+      "id": "06_jeans_overlap30_04",
+      "query_family": "model_paraphrase",
+      "instruction": "Find full-length stretchy bell-bottom flare jeans for women in light blue, black, or dark denim, with back pockets, frayed hems, and a breathable cotton-blend-spandex construction.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_018，输入商品 B093QZKT2R）",
+      "source_row_id": "paraphrase_018",
+      "source_file": "data/public/visual_inception_inputs_v5/06_jeans/paraphrases/model_paraphrases.jsonl",
+      "reused_oracle_id": "06_jeans_oracle_11"
+    },
+    {
+      "id": "06_jeans_overlap30_05",
+      "query_family": "model_paraphrase",
+      "instruction": "Find low-waist light polyester pull-on pants with a butterfly embroidery design in Korean hip-hop, Y2K, Harajuku, or streetwear style for S, M, or L.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_022，输入商品 B09J8FXZ9X）",
+      "source_row_id": "paraphrase_022",
+      "source_file": "data/public/visual_inception_inputs_v5/06_jeans/paraphrases/model_paraphrases.jsonl",
+      "reused_oracle_id": "06_jeans_oracle_12"
+    },
+    {
+      "id": "06_jeans_overlap30_06",
+      "query_family": "heldout_search_query",
+      "instruction": "mens high waisted jeans",
+      "instruction_zh": "训练真实搜索原句（esci / esci_train_67658）：mens high waisted jeans",
+      "source_row_id": "esci_train_67658",
+      "source_file": "data/public/visual_inception_inputs_v5/06_jeans/heldout_queries.jsonl",
+      "reused_oracle_id": "06_jeans_oracle_17"
+    },
+    {
+      "id": "06_jeans_overlap30_07",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Find high-rise straight jeans that still leave some room through the thighs.",
+      "instruction_zh": "找一款高腰直筒但大腿处仍留有舒适活动空间的牛仔裤。"
+    },
+    {
+      "id": "06_jeans_overlap30_08",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "I need dark denim jeans that look polished enough for a casual office.",
+      "instruction_zh": "我需要一条版型利落、适合休闲办公室穿搭的深色牛仔裤。"
+    },
+    {
+      "id": "06_jeans_overlap30_09",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Show me relaxed-fit jeans with a short inseam for someone who is petite.",
+      "instruction_zh": "推荐几款适合小个子穿着的短裤长宽松版型牛仔裤。"
+    },
+    {
+      "id": "06_jeans_overlap30_10",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Which bootcut jeans have a little stretch through the seat without a tight waist?",
+      "instruction_zh": "哪些微喇牛仔裤臀部略带弹性而腰部不会过紧？"
+    },
+    {
+      "id": "06_jeans_overlap30_11",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "I want light-wash loose jeans for warm days when heavy denim feels stuffy.",
+      "instruction_zh": "我想要一条浅水洗宽松牛仔裤，适合闷热天气替代厚重丹宁。"
+    },
+    {
+      "id": "06_jeans_overlap30_12",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Compare rigid cotton jeans and stretch denim for wearing on a long flight.",
+      "instruction_zh": "对比纯棉硬挺牛仔裤和弹力牛仔裤在长途飞行时的舒适度。"
+    },
+    {
+      "id": "06_jeans_overlap30_13",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Find straight-leg jeans with front pockets deep enough to hold a phone.",
+      "instruction_zh": "找一款前袋足够深、能稳妥装下手机的直筒牛仔裤。"
+    },
+    {
+      "id": "06_jeans_overlap30_14",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "What wide-leg jeans have a fitted waistband and a full-length hem?",
+      "instruction_zh": "哪款阔腿牛仔裤拥有合身腰头与全长裤脚设计？"
+    },
+    {
+      "id": "06_jeans_overlap30_15",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "I am looking for mid-rise jeans with a faded wash and no holes.",
+      "instruction_zh": "我在找一条无破洞、水洗泛白效果的中腰牛仔裤。"
+    },
+    {
+      "id": "06_jeans_overlap30_16",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Show me tapered jeans that fit easily under ankle boots.",
+      "instruction_zh": "推荐几款裤脚能轻松塞进短靴里的锥形牛仔裤。"
+    },
+    {
+      "id": "06_jeans_overlap30_17",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Which relaxed jeans come in a longer inseam and a plain black wash?",
+      "instruction_zh": "哪些宽松牛仔裤提供加长裤长和纯黑水洗款式？"
+    },
+    {
+      "id": "06_jeans_overlap30_18",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "I need everyday slim jeans that have extra room at the knee.",
+      "instruction_zh": "我需要一条日常穿着、膝盖处空间更宽松的修身牛仔裤。"
+    },
+    {
+      "id": "06_jeans_overlap30_19",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Find cropped blue jeans with a clean hem for wearing with flats.",
+      "instruction_zh": "找一款适合搭配平底鞋、裤脚利落的九分蓝色牛仔裤。"
+    },
+    {
+      "id": "06_jeans_overlap30_20",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "What soft denim jeans would work for someone between two waist sizes?",
+      "instruction_zh": "哪款柔软丹宁牛仔裤适合腰围介于两个尺码之间的人？"
+    }
+  ],
+  "query_family_counts": {
+    "category_description": 3,
+    "model_paraphrase": 2,
+    "heldout_search_query": 1,
+    "synthetic_non_overlap": 14
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false
+}

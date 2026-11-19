@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "language": "zh",
+  "purpose": "仅供人工阅读，不传给检索编码器",
+  "group": "02_chair",
+  "category": "barber chair",
+  "query_records": [
+    {
+      "id": "02_chair_overlap30_01",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "训练公开描述原句（商品 B084KKKSQK）：BarberPub All Purpose Heavy Duty Vintage Hydraulic Recline Barber Chair Salon Beauty Spa Styling Equipment 2008"
+    },
+    {
+      "id": "02_chair_overlap30_02",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "训练公开描述原句（商品 B09NKCPT92）：Hair Salon Chair Beauty Shampoo Barbering Chair Hydraulic Barber Chair Heavy Duty Hair Cutting Chairs Shampoo Spa Beauty Salon Barber Swivel, Beauty Salon Spa Shampoo Equipment"
+    },
+    {
+      "id": "02_chair_overlap30_03",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "训练公开描述原句（商品 B09LLV2DRD）：Hydraulic Recliner Barber Chair for Hair Salon, Salon Chair Barber Chair for Stations, Hydraulic Reclining 360 Degrees Rolling Swivel Hair Salon,Barber Chairs Hair Salon Spa Equipment"
+    },
+    {
+      "id": "02_chair_overlap30_04",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "复用模型改写查询(10%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_005，输入商品 B09C3XYMBP）"
+    },
+    {
+      "id": "02_chair_overlap30_05",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "复用模型改写查询(10%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_001，输入商品 B09SPQH3J5）"
+    },
+    {
+      "id": "02_chair_overlap30_06",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "复用独立真实搜索(5%)",
+      "instruction": "训练真实搜索原句（msmarco_websearch / msmarco_websearch_train_2098274）：koken barber chairs for sale"
+    },
+    {
+      "id": "02_chair_overlap30_07",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一款理发时能顺滑旋转并可锁定的理发椅。"
+    },
+    {
+      "id": "02_chair_overlap30_08",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我需要一款适合窄过道店铺的紧凑型液压理发椅。"
+    },
+    {
+      "id": "02_chair_overlap30_09",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪些理发椅的脚踏板对身高较矮的顾客也很舒适？"
+    },
+    {
+      "id": "02_chair_overlap30_10",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "推荐几款带可拆卸软垫头枕的可躺式理发椅。"
+    },
+    {
+      "id": "02_chair_overlap30_11",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款理发椅能够降到足够低以方便顾客轻松坐下？"
+    },
+    {
+      "id": "02_chair_overlap30_12",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我想要一款易擦拭清洁的深色面料经典理发椅。"
+    },
+    {
+      "id": "02_chair_overlap30_13",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "对比方形底座和圆形底座理发椅在瓷砖地面上的稳定性。"
+    },
+    {
+      "id": "02_chair_overlap30_14",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "推荐一款适合长时间护理服务的宽扶手理发椅。"
+    },
+    {
+      "id": "02_chair_overlap30_15",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一款脚踏升降且底座周围空间宽敞的理发椅。"
+    },
+    {
+      "id": "02_chair_overlap30_16",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪些理发椅在顾客后仰剃须时也能保持稳固不晃动？"
+    },
+    {
+      "id": "02_chair_overlap30_17",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我想买一款带坚固液压底座的矮背造型理发椅。"
+    },
+    {
+      "id": "02_chair_overlap30_18",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "推荐几款靠背后仰时腿托能同步抬升的理发椅。"
+    },
+    {
+      "id": "02_chair_overlap30_19",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我需要一款座垫耐用、适合日常高频使用的商用理发椅。"
+    },
+    {
+      "id": "02_chair_overlap30_20",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款可躺式理发椅既适合剪发也方便修面剃须？"
+    }
+  ]
+}

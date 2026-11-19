@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "language": "zh",
+  "purpose": "仅供人工阅读，不传给检索编码器",
+  "group": "06_jeans",
+  "category": "jeans",
+  "query_records": [
+    {
+      "id": "06_jeans_overlap30_01",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "训练公开描述原句（商品 B07JMZQT4B）：NYDJ Women's Pull-On Marilyn Straight Jeans | Slimming & Flattering Fit"
+    },
+    {
+      "id": "06_jeans_overlap30_02",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "训练公开描述原句（商品 B08PS1XYS9）：Andongnywell Women's Plus Size mid-Rise Wide Leg Flared Jeans Trousers Mid Waist Fitted Bell Bottom Denim Pants"
+    },
+    {
+      "id": "06_jeans_overlap30_03",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "训练公开描述原句（商品 B094FVGLXQ）：utcoco Women's Casual Loose Fit Mid Waisted Belted Flare Bell Bottom Palazzo Lounge Denim Jeans Pants"
+    },
+    {
+      "id": "06_jeans_overlap30_04",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "复用模型改写查询(10%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_018，输入商品 B093QZKT2R）"
+    },
+    {
+      "id": "06_jeans_overlap30_05",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "复用模型改写查询(10%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_022，输入商品 B09J8FXZ9X）"
+    },
+    {
+      "id": "06_jeans_overlap30_06",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "复用独立真实搜索(5%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_67658）：mens high waisted jeans"
+    },
+    {
+      "id": "06_jeans_overlap30_07",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一款高腰直筒但大腿处仍留有舒适活动空间的牛仔裤。"
+    },
+    {
+      "id": "06_jeans_overlap30_08",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我需要一条版型利落、适合休闲办公室穿搭的深色牛仔裤。"
+    },
+    {
+      "id": "06_jeans_overlap30_09",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "推荐几款适合小个子穿着的短裤长宽松版型牛仔裤。"
+    },
+    {
+      "id": "06_jeans_overlap30_10",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪些微喇牛仔裤臀部略带弹性而腰部不会过紧？"
+    },
+    {
+      "id": "06_jeans_overlap30_11",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我想要一条浅水洗宽松牛仔裤，适合闷热天气替代厚重丹宁。"
+    },
+    {
+      "id": "06_jeans_overlap30_12",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "对比纯棉硬挺牛仔裤和弹力牛仔裤在长途飞行时的舒适度。"
+    },
+    {
+      "id": "06_jeans_overlap30_13",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一款前袋足够深、能稳妥装下手机的直筒牛仔裤。"
+    },
+    {
+      "id": "06_jeans_overlap30_14",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款阔腿牛仔裤拥有合身腰头与全长裤脚设计？"
+    },
+    {
+      "id": "06_jeans_overlap30_15",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我在找一条无破洞、水洗泛白效果的中腰牛仔裤。"
+    },
+    {
+      "id": "06_jeans_overlap30_16",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "推荐几款裤脚能轻松塞进短靴里的锥形牛仔裤。"
+    },
+    {
+      "id": "06_jeans_overlap30_17",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪些宽松牛仔裤提供加长裤长和纯黑水洗款式？"
+    },
+    {
+      "id": "06_jeans_overlap30_18",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我需要一条日常穿着、膝盖处空间更宽松的修身牛仔裤。"
+    },
+    {
+      "id": "06_jeans_overlap30_19",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一款适合搭配平底鞋、裤脚利落的九分蓝色牛仔裤。"
+    },
+    {
+      "id": "06_jeans_overlap30_20",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款柔软丹宁牛仔裤适合腰围介于两个尺码之间的人？"
+    }
+  ]
+}

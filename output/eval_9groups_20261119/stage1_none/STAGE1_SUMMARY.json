@@ -1,0 +1,330 @@
+{
+  "schema_version": 1,
+  "stage": "stage1_none",
+  "records": {
+    "ambilage__training_oracle": {
+      "source_summary": "/content/AmbiLAGE/output/ambilage_single_clip_l14_9groups_20261118/transfer_panel_9groups/transfer_panel_summary.json",
+      "query_suite": "training_oracle",
+      "protocol": "visual_inception_training_oracle_v1",
+      "key_mode": "image",
+      "defense_mode": "none",
+      "encoders": {
+        "01_clip_l14": {
+          "label": "CLIP-ViT-L/14",
+          "role": "白盒代理匹配",
+          "top1_clean": 0.08888888888888889,
+          "top1_modified": 0.9277777777777778,
+          "top1_hits": "167/180",
+          "top3_modified": 0.9555555555555556,
+          "top3_hits": "172/180",
+          "top5_modified": 0.9666666666666667,
+          "top5_hits": "174/180",
+          "mean_rank_clean": 14.083333333333334,
+          "mean_rank_modified": 1.4833333333333334,
+          "max_score_error": 0.0,
+          "verification_status": "passed"
+        },
+        "02_openclip_bigG14": {
+          "label": "OpenCLIP-bigG-14",
+          "role": "黑盒迁移留出",
+          "top1_clean": 0.11666666666666667,
+          "top1_modified": 0.18333333333333332,
+          "top1_hits": "33/180",
+          "top3_modified": 0.4222222222222222,
+          "top3_hits": "76/180",
+          "top5_modified": 0.6,
+          "top5_hits": "108/180",
+          "mean_rank_clean": 12.46111111111111,
+          "mean_rank_modified": 7.083333333333333,
+          "max_score_error": 0.0,
+          "verification_status": "passed"
+        },
+        "03_siglip_so400m": {
+          "label": "SigLIP-SO400M",
+          "role": "黑盒迁移留出",
+          "top1_clean": 0.11666666666666667,
+          "top1_modified": 0.26666666666666666,
+          "top1_hits": "48/180",
+          "top3_modified": 0.4222222222222222,
+          "top3_hits": "76/180",
+          "top5_modified": 0.5333333333333333,
+          "top5_hits": "96/180",
+          "mean_rank_clean": 13.744444444444444,
+          "mean_rank_modified": 7.9944444444444445,
+          "max_score_error": 0.0,
+          "verification_status": "passed"
+        }
+      }
+    },
+    "visual_inception__training_oracle": {
+      "source_summary": "/content/AmbiLAGE/output/vi_single_clip_l14_9groups_20261118/transfer_panel_9groups/transfer_panel_summary.json",
+      "query_suite": "training_oracle",
+      "protocol": "visual_inception_training_oracle_v1",
+      "key_mode": "image",
+      "defense_mode": "none",
+      "encoders": {
+        "01_clip_l14": {
+          "label": "CLIP-ViT-L/14",
+          "role": "白盒代理匹配",
+          "top1_clean": 0.08888888888888889,
+          "top1_modified": 0.9222222222222223,
+          "top1_hits": "166/180",
+          "top3_modified": 0.9611111111111111,
+          "top3_hits": "173/180",
+          "top5_modified": 0.9611111111111111,
+          "top5_hits": "173/180",
+          "mean_rank_clean": 14.083333333333334,
+          "mean_rank_modified": 1.5333333333333334,
+          "max_score_error": 0.0,
+          "verification_status": "passed"
+        },
+        "02_openclip_bigG14": {
+          "label": "OpenCLIP-bigG-14",
+          "role": "黑盒迁移留出",
+          "top1_clean": 0.11666666666666667,
+          "top1_modified": 0.12777777777777777,
+          "top1_hits": "23/180",
+          "top3_modified": 0.3333333333333333,
+          "top3_hits": "60/180",
+          "top5_modified": 0.4722222222222222,
+          "top5_hits": "85/180",
+          "mean_rank_clean": 12.46111111111111,
+          "mean_rank_modified": 10.65,
+          "max_score_error": 0.0,
+          "verification_status": "passed"
+        },
+        "03_siglip_so400m": {
+          "label": "SigLIP-SO400M",
+          "role": "黑盒迁移留出",
+          "top1_clean": 0.11666666666666667,
+          "top1_modified": 0.25555555555555554,
+          "top1_hits": "46/180",
+          "top3_modified": 0.3888888888888889,
+          "top3_hits": "70/180",
+          "top5_modified": 0.4722222222222222,
+          "top5_hits": "85/180",
+          "mean_rank_clean": 13.744444444444444,
+          "mean_rank_modified": 9.238888888888889,
+          "max_score_error": 0.0,
+          "verification_status": "passed"
+        }
+      }
+    },
+    "ambilage__overlap_30": {
+      "source_summary": "/content/AmbiLAGE/output/eval_9groups_20261119/stage1_none/ambilage_overlap_30/transfer_panel_summary.json",
+      "query_suite": "overlap_30",
+      "protocol": "category_query_overlap_30_v1",
+      "key_mode": "image",
+      "defense_mode": "none",
+      "encoders": {
+        "01_clip_l14": {
+          "label": "CLIP-ViT-L/14",
+          "role": "白盒代理匹配",
+          "top1_clean": 0.09444444444444444,
+          "top1_modified": 0.8611111111111112,
+          "top1_hits": "155/180",
+          "top3_modified": 0.9277777777777778,
+          "top3_hits": "167/180",
+          "top5_modified": 0.9555555555555556,
+          "top5_hits": "172/180",
+          "mean_rank_clean": 13.194444444444445,
+          "mean_rank_modified": 1.488888888888889,
+          "max_score_error": 0.0,
+          "verification_status": "passed"
+        },
+        "02_openclip_bigG14": {
+          "label": "OpenCLIP-bigG-14",
+          "role": "黑盒迁移留出",
+          "top1_clean": 0.13333333333333333,
+          "top1_modified": 0.2222222222222222,
+          "top1_hits": "40/180",
+          "top3_modified": 0.4722222222222222,
+          "top3_hits": "85/180",
+          "top5_modified": 0.6555555555555556,
+          "top5_hits": "118/180",
+          "mean_rank_clean": 10.03888888888889,
+          "mean_rank_modified": 5.855555555555555,
+          "max_score_error": 0.0,
+          "verification_status": "passed"
+        },
+        "03_siglip_so400m": {
+          "label": "SigLIP-SO400M",
+          "role": "黑盒迁移留出",
+          "top1_clean": 0.1111111111111111,
+          "top1_modified": 0.25555555555555554,
+          "top1_hits": "46/180",
+          "top3_modified": 0.4722222222222222,
+          "top3_hits": "85/180",
+          "top5_modified": 0.5944444444444444,
+          "top5_hits": "107/180",
+          "mean_rank_clean": 10.855555555555556,
+          "mean_rank_modified": 6.311111111111111,
+          "max_score_error": 0.0,
+          "verification_status": "passed"
+        }
+      }
+    },
+    "visual_inception__overlap_30": {
+      "source_summary": "/content/AmbiLAGE/output/eval_9groups_20261119/stage1_none/vi_overlap_30/transfer_panel_summary.json",
+      "query_suite": "overlap_30",
+      "protocol": "category_query_overlap_30_v1",
+      "key_mode": "image",
+      "defense_mode": "none",
+      "encoders": {
+        "01_clip_l14": {
+          "label": "CLIP-ViT-L/14",
+          "role": "白盒代理匹配",
+          "top1_clean": 0.09444444444444444,
+          "top1_modified": 0.8388888888888889,
+          "top1_hits": "151/180",
+          "top3_modified": 0.9388888888888889,
+          "top3_hits": "169/180",
+          "top5_modified": 0.9611111111111111,
+          "top5_hits": "173/180",
+          "mean_rank_clean": 13.194444444444445,
+          "mean_rank_modified": 1.5888888888888888,
+          "max_score_error": 0.0,
+          "verification_status": "passed"
+        },
+        "02_openclip_bigG14": {
+          "label": "OpenCLIP-bigG-14",
+          "role": "黑盒迁移留出",
+          "top1_clean": 0.13333333333333333,
+          "top1_modified": 0.17222222222222222,
+          "top1_hits": "31/180",
+          "top3_modified": 0.34444444444444444,
+          "top3_hits": "62/180",
+          "top5_modified": 0.46111111111111114,
+          "top5_hits": "83/180",
+          "mean_rank_clean": 10.03888888888889,
+          "mean_rank_modified": 8.7,
+          "max_score_error": 0.0,
+          "verification_status": "passed"
+        },
+        "03_siglip_so400m": {
+          "label": "SigLIP-SO400M",
+          "role": "黑盒迁移留出",
+          "top1_clean": 0.1111111111111111,
+          "top1_modified": 0.20555555555555555,
+          "top1_hits": "37/180",
+          "top3_modified": 0.4166666666666667,
+          "top3_hits": "75/180",
+          "top5_modified": 0.5388888888888889,
+          "top5_hits": "97/180",
+          "mean_rank_clean": 10.855555555555556,
+          "mean_rank_modified": 7.1,
+          "max_score_error": 0.0,
+          "verification_status": "passed"
+        }
+      }
+    },
+    "ambilage__zero_overlap": {
+      "source_summary": "/content/AmbiLAGE/output/eval_9groups_20261119/stage1_none/ambilage_zero_overlap/transfer_panel_summary.json",
+      "query_suite": "zero_overlap",
+      "protocol": "visual_inception_category_diversity_v1",
+      "key_mode": "image",
+      "defense_mode": "none",
+      "encoders": {
+        "01_clip_l14": {
+          "label": "CLIP-ViT-L/14",
+          "role": "白盒代理匹配",
+          "top1_clean": 0.1111111111111111,
+          "top1_modified": 0.8888888888888888,
+          "top1_hits": "160/180",
+          "top3_modified": 0.95,
+          "top3_hits": "171/180",
+          "top5_modified": 0.9722222222222222,
+          "top5_hits": "175/180",
+          "mean_rank_clean": 13.905555555555555,
+          "mean_rank_modified": 1.3166666666666667,
+          "max_score_error": 0.0,
+          "verification_status": "passed"
+        },
+        "02_openclip_bigG14": {
+          "label": "OpenCLIP-bigG-14",
+          "role": "黑盒迁移留出",
+          "top1_clean": 0.12777777777777777,
+          "top1_modified": 0.26666666666666666,
+          "top1_hits": "48/180",
+          "top3_modified": 0.5333333333333333,
+          "top3_hits": "96/180",
+          "top5_modified": 0.6666666666666666,
+          "top5_hits": "120/180",
+          "mean_rank_clean": 8.655555555555555,
+          "mean_rank_modified": 5.0055555555555555,
+          "max_score_error": 0.0,
+          "verification_status": "passed"
+        },
+        "03_siglip_so400m": {
+          "label": "SigLIP-SO400M",
+          "role": "黑盒迁移留出",
+          "top1_clean": 0.12777777777777777,
+          "top1_modified": 0.24444444444444444,
+          "top1_hits": "44/180",
+          "top3_modified": 0.42777777777777776,
+          "top3_hits": "77/180",
+          "top5_modified": 0.5611111111111111,
+          "top5_hits": "101/180",
+          "mean_rank_clean": 9.433333333333334,
+          "mean_rank_modified": 6.0055555555555555,
+          "max_score_error": 0.0,
+          "verification_status": "passed"
+        }
+      }
+    },
+    "visual_inception__zero_overlap": {
+      "source_summary": "/content/AmbiLAGE/output/eval_9groups_20261119/stage1_none/vi_zero_overlap/transfer_panel_summary.json",
+      "query_suite": "zero_overlap",
+      "protocol": "visual_inception_category_diversity_v1",
+      "key_mode": "image",
+      "defense_mode": "none",
+      "encoders": {
+        "01_clip_l14": {
+          "label": "CLIP-ViT-L/14",
+          "role": "白盒代理匹配",
+          "top1_clean": 0.1111111111111111,
+          "top1_modified": 0.9277777777777778,
+          "top1_hits": "167/180",
+          "top3_modified": 0.9777777777777777,
+          "top3_hits": "176/180",
+          "top5_modified": 0.9888888888888889,
+          "top5_hits": "178/180",
+          "mean_rank_clean": 13.905555555555555,
+          "mean_rank_modified": 1.1666666666666667,
+          "max_score_error": 0.0,
+          "verification_status": "passed"
+        },
+        "02_openclip_bigG14": {
+          "label": "OpenCLIP-bigG-14",
+          "role": "黑盒迁移留出",
+          "top1_clean": 0.12777777777777777,
+          "top1_modified": 0.2111111111111111,
+          "top1_hits": "38/180",
+          "top3_modified": 0.3333333333333333,
+          "top3_hits": "60/180",
+          "top5_modified": 0.43333333333333335,
+          "top5_hits": "78/180",
+          "mean_rank_clean": 8.655555555555555,
+          "mean_rank_modified": 7.816666666666666,
+          "max_score_error": 0.0,
+          "verification_status": "passed"
+        },
+        "03_siglip_so400m": {
+          "label": "SigLIP-SO400M",
+          "role": "黑盒迁移留出",
+          "top1_clean": 0.12777777777777777,
+          "top1_modified": 0.18888888888888888,
+          "top1_hits": "34/180",
+          "top3_modified": 0.3611111111111111,
+          "top3_hits": "65/180",
+          "top5_modified": 0.49444444444444446,
+          "top5_hits": "89/180",
+          "mean_rank_clean": 9.433333333333334,
+          "mean_rank_modified": 7.133333333333334,
+          "max_score_error": 0.0,
+          "verification_status": "passed"
+        }
+      }
+    }
+  }
+}

@@ -33,6 +33,7 @@ from src.visual.optimization import METHODS, normalize_method
 
 PROTOCOL = 'visual_inception_category_diversity_v1'
 ORACLE_PROTOCOL = 'visual_inception_training_oracle_v1'
+OVERLAP_30_PROTOCOL = 'category_query_overlap_30_v1'
 REQUIRED_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_v2'
 ENHANCED_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_hardneg_advquery_v3'
 SUPPORTED_OBJECTIVE_KINDS = (REQUIRED_OBJECTIVE_KIND, ENHANCED_OBJECTIVE_KIND)
@@ -46,10 +47,13 @@ TRANSFER_PANEL_ENCODERS = (
 )
 
 TRAINING_ORACLE_QUERY_ROOT = RESOURCES / 'visual_inception_evaluation/training_queries_oracle_v1'
+OVERLAP_30_QUERY_ROOT = RESOURCES / 'visual_inception_evaluation/category_query_overlap_30_v1'
+OVERLAP_30_SOURCE_MANIFEST = RESOURCES / 'visual_inception_evaluation/category_query_overlap_30_v1.json'
 ZERO_OVERLAP_QUERY_ROOT = RESOURCES / 'visual_inception_evaluation/category_queries_v1'
 CATEGORY_QUERY_ROOT = ZERO_OVERLAP_QUERY_ROOT
 QUERY_SUITE_ROOTS = {
     'training_oracle': TRAINING_ORACLE_QUERY_ROOT,
+    'overlap_30': OVERLAP_30_QUERY_ROOT,
     'zero_overlap': ZERO_OVERLAP_QUERY_ROOT,
 }
 DEFAULT_QUERY_SUITE = 'training_oracle'
@@ -87,6 +91,25 @@ ORACLE_FAMILY_LABELS_ZH = {
     'heldout_search_query': '独立真实搜索查询(20%)',
 }
 
+OVERLAP_30_FAMILIES = (
+    'category_description',
+    'model_paraphrase',
+    'heldout_search_query',
+    'synthetic_non_overlap',
+)
+OVERLAP_30_FAMILY_COUNTS = {
+    'category_description': 3,
+    'model_paraphrase': 2,
+    'heldout_search_query': 1,
+    'synthetic_non_overlap': 14,
+}
+OVERLAP_30_FAMILY_LABELS_ZH = {
+    'category_description': '复用同类公开描述(15%)',
+    'model_paraphrase': '复用模型改写查询(10%)',
+    'heldout_search_query': '复用独立真实搜索(5%)',
+    'synthetic_non_overlap': '非重合新查询(70%)',
+}
+
 SCOPE_INTERPRETATION = (
     '本结果仅反映不同测试查询下的记忆检索覆盖情况（Top-1/Top-3/Top-5 召回与名次变化）；'
     '最终推荐或购买决策是否受到影响，须在下游推荐/购物阶段单独验证。'
@@ -118,6 +141,8 @@ def _protocol_spec(protocol):
         return QUERY_FAMILIES, {f: 4 for f in QUERY_FAMILIES}, QUERY_FAMILY_LABELS_ZH, 'zero_overlap'
     if protocol == ORACLE_PROTOCOL:
         return ORACLE_FAMILIES, dict(ORACLE_FAMILY_COUNTS), ORACLE_FAMILY_LABELS_ZH, 'training_oracle'
+    if protocol == OVERLAP_30_PROTOCOL:
+        return OVERLAP_30_FAMILIES, dict(OVERLAP_30_FAMILY_COUNTS), OVERLAP_30_FAMILY_LABELS_ZH, 'overlap_30'
     raise ValueError('未知测试查询协议标识：' + str(protocol))
 
 
@@ -263,6 +288,8 @@ def validate_category_query_suite(query_root=None, *, query_suite=DEFAULT_QUERY_
     all_norm_queries = set()
     group_audits = {}
     group_norm_queries = {}
+    group_reused_norms = {}
+    group_new_norms = {}
 
     for group in base_groups:
         entry = manifest_groups[group]
@@ -310,6 +337,11 @@ def validate_category_query_suite(query_root=None, *, query_suite=DEFAULT_QUERY_
                          and isinstance(r.get('source_file'), str) and bool(r['source_file'].strip())
                          for r in records),
                      f'{group} 训练抽样明细缺少来源行号或来源文件')
+        elif protocol == OVERLAP_30_PROTOCOL:
+            _require(all(isinstance(r.get('source_row_id'), str) and bool(r['source_row_id'].strip())
+                         and isinstance(r.get('source_file'), str) and bool(r['source_file'].strip())
+                         for r in records if r['query_family'] in ORACLE_FAMILIES),
+                     f'{group} 三成重合复用明细缺少来源行号或来源文件')
         counts = dict(Counter(r['query_family'] for r in records))
         _require(counts == expected_family_counts
                  and q_doc.get('query_family_counts') == expected_family_counts
@@ -336,6 +368,13 @@ def validate_category_query_suite(query_root=None, *, query_suite=DEFAULT_QUERY_
 
         all_norm_queries.update(norm_instructions)
         group_norm_queries[group] = norm_instructions
+        if protocol == OVERLAP_30_PROTOCOL:
+            group_reused_norms[group] = [
+                normalize_query_text(r['instruction']) for r in records if r['query_family'] in ORACLE_FAMILIES
+            ]
+            group_new_norms[group] = [
+                normalize_query_text(r['instruction']) for r in records if r['query_family'] == 'synthetic_non_overlap'
+            ]
         group_audits[group] = dict(
             target_public_id=q_doc['target_public_id'],
             category=q_doc.get('category'),
@@ -349,13 +388,29 @@ def validate_category_query_suite(query_root=None, *, query_suite=DEFAULT_QUERY_
     snapshots = manifest.get('training_overlap_audit', {}).get('training_source_snapshots', [])
     training_texts = set()
     training_checked = False
-    overlap_count = None if protocol == ORACLE_PROTOCOL else 0
+    overlap_count = (
+        None if protocol == ORACLE_PROTOCOL else (54 if protocol == OVERLAP_30_PROTOCOL else 0)
+    )
     if verify_training_snapshots and snapshots:
         training_texts = _load_training_snapshot_texts(snapshots)
         overlap = sorted(all_norm_queries & training_texts)
         if protocol == PROTOCOL:
             _require(not overlap, '零重合测试查询与公开训练查询存在精确重合')
             overlap_count = 0
+        elif protocol == OVERLAP_30_PROTOCOL:
+            for group in base_groups:
+                reused_norms = group_reused_norms[group]
+                new_norms = group_new_norms[group]
+                missing = [t for t in reused_norms if t not in training_texts]
+                _require(not missing, f'{group} 三成重合复用查询未全部命中冻结训练快照')
+                leaked = [t for t in new_norms if t in training_texts]
+                _require(not leaked, f'{group} 三成重合新查询与冻结训练快照存在重合')
+            if OVERLAP_30_SOURCE_MANIFEST.is_file() and query_root == OVERLAP_30_QUERY_ROOT.resolve():
+                source_overlap = read_json(OVERLAP_30_SOURCE_MANIFEST)
+                for group in base_groups:
+                    expected_new = [normalize_query_text(t) for t in source_overlap['groups'][group]['new_queries']]
+                    _require(group_new_norms[group] == expected_new, f'{group} 新查询与三成重合源清单不一致')
+            overlap_count = sum(len(norms) for norms in group_reused_norms.values())
         else:
             for group, norms in group_norm_queries.items():
                 missing = [t for t in norms if t not in training_texts]
@@ -369,11 +424,15 @@ def validate_category_query_suite(query_root=None, *, query_suite=DEFAULT_QUERY_
             overlap_count = sum(len(norms) for norms in group_norm_queries.values())
         training_checked = True
 
+    overlap_mode = (
+        'oracle_100pct' if protocol == ORACLE_PROTOCOL
+        else ('overlap_30pct' if protocol == OVERLAP_30_PROTOCOL else 'zero_overlap')
+    )
     return dict(
         schema_version=1,
         protocol=protocol,
         query_suite=inferred_suite,
-        training_overlap_mode='oracle_100pct' if protocol == ORACLE_PROTOCOL else 'zero_overlap',
+        training_overlap_mode=overlap_mode,
         status='passed',
         query_root=str(query_root),
         manifest_sha256=sha256_file(manifest_path),
@@ -653,6 +712,8 @@ def evaluate_category_suite(
     encoder_config=None,
     encoder_factory=None,
     defense_factory=None,
+    defended_cache_dir=None,
+    memory_vector_cache_dir=None,
     verify_training_snapshots=True,
 ):
     """在完整共享记忆库上执行类别查询检索评估（支持 visual_inception、ambilage、lucid 跨方法公平同库对比）。"""
@@ -717,6 +778,19 @@ def evaluate_category_suite(
         effective_encoder_config = None
 
     selected_conditions = conditions_for_mode(defense_mode)
+    effective_defense_factory = defense_factory
+    if effective_defense_factory is None and defended_cache_dir is not None:
+        shared_defended_root = Path(defended_cache_dir).resolve()
+        if not shared_defended_root.is_relative_to(Path(OUTPUT).resolve()):
+            raise ValueError('共享防御缓存目录必须位于当前项目 output 目录内')
+        effective_defense_factory = lambda _unused_out, dev, root=shared_defended_root: shared_evaluation.Defender(root, dev)
+    effective_vector_cache_dir = (
+        Path(memory_vector_cache_dir).resolve()
+        if memory_vector_cache_dir is not None
+        else output / 'memory_vectors'
+    )
+    if not effective_vector_cache_dir.is_relative_to(Path(OUTPUT).resolve()):
+        raise ValueError('共享记忆向量缓存目录必须位于当前项目 output 目录内')
     output.mkdir(parents=True, exist_ok=True)
     validation_path = output / 'category_query_validation.json'
     freeze_json(validation_path, validation)
@@ -765,16 +839,62 @@ def evaluate_category_suite(
     )
     freeze_json(output / 'category_evaluation_plan.json', plan)
 
-    if encoder_factory is None:
-        training_context = shared_evaluation._frozen_training_context(
-            frozen_suite[0], frozen_suite, required=True
-        )
-        actual_training_surrogates = shared_evaluation._context_training_identities(training_context)
-        base_encoder = shared_evaluation.make_eval_encoder(
-            device, effective_encoder_config, training_surrogates=actual_training_surrogates
-        )
-        shared_enc = shared_evaluation.InProcessFreshCachedEncoder(base_encoder)
-        try:
+    shared_pool = shared_evaluation.load_shared_pool(pool_path)
+    shared_bank_memo = {}
+    path_sha_cache = {}
+    bank_digest_cache = {}
+    bank_root = output / 'shared_banks'
+    shared_defender = (
+        effective_defense_factory(bank_root / 'defended', device)
+        if effective_defense_factory is not None
+        else shared_evaluation.Defender(bank_root / 'defended', device)
+    )
+    try:
+        if encoder_factory is None:
+            training_context = shared_evaluation._frozen_training_context(
+                frozen_suite[0], frozen_suite, required=True
+            )
+            actual_training_surrogates = shared_evaluation._context_training_identities(training_context)
+            base_encoder = shared_evaluation.make_eval_encoder(
+                device, effective_encoder_config, training_surrogates=actual_training_surrogates
+            )
+            shared_enc = shared_evaluation.InProcessFreshCachedEncoder(base_encoder)
+            try:
+                for item in eval_items:
+                    group = item['group']
+                    group_eval_dir = output / 'groups' / group
+                    group_query_path = Path(validation['groups'][group]['query_manifest'])
+                    shared_evaluation.evaluate(
+                        item,
+                        group_eval_dir,
+                        pool_path=pool_path,
+                        query_manifest=group_query_path,
+                        source_memory_id=item['source_memory_id'],
+                        device=device,
+                        defense_factory=effective_defense_factory,
+                        selected_conditions=selected_conditions,
+                        encoder_config=effective_encoder_config,
+                        query_mode='text',
+                        key_mode=effective_key_mode,
+                        replacement_frozens=frozen_suite,
+                        bank_root=bank_root,
+                        memory_vector_cache_dir=effective_vector_cache_dir,
+                        defer_verification=True,
+                        shared_encoder=shared_enc,
+                        _shared_defender=shared_defender,
+                        _shared_bank_memo=shared_bank_memo,
+                        _shared_pool=shared_pool,
+                        _path_sha_cache=path_sha_cache,
+                        _bank_digest_cache=bank_digest_cache,
+                    )
+            finally:
+                base_encoder.close()
+            summary = build_category_summary(output)
+            freeze_json(output / 'category_retrieval_summary.json', summary)
+            verify_category_suite(output, device=device, isolated_process=True)
+            for item in eval_items:
+                shared_evaluation.report(output / 'groups' / item['group'])
+        else:
             for item in eval_items:
                 group = item['group']
                 group_eval_dir = output / 'groups' / group
@@ -786,49 +906,27 @@ def evaluate_category_suite(
                     query_manifest=group_query_path,
                     source_memory_id=item['source_memory_id'],
                     device=device,
-                    defense_factory=defense_factory,
+                    encoder_factory=encoder_factory,
+                    defense_factory=effective_defense_factory,
                     selected_conditions=selected_conditions,
                     encoder_config=effective_encoder_config,
                     query_mode='text',
                     key_mode=effective_key_mode,
                     replacement_frozens=frozen_suite,
-                    bank_root=output / 'shared_banks',
-                    memory_vector_cache_dir=output / 'memory_vectors',
-                    defer_verification=True,
-                    shared_encoder=shared_enc,
+                    bank_root=bank_root,
+                    memory_vector_cache_dir=effective_vector_cache_dir,
+                    _shared_defender=shared_defender,
+                    _shared_bank_memo=shared_bank_memo,
+                    _shared_pool=shared_pool,
+                    _path_sha_cache=path_sha_cache,
+                    _bank_digest_cache=bank_digest_cache,
                 )
-        finally:
-            base_encoder.close()
-        summary = build_category_summary(output)
-        freeze_json(output / 'category_retrieval_summary.json', summary)
-        verify_category_suite(output, device=device, isolated_process=True)
-        for item in eval_items:
-            shared_evaluation.report(output / 'groups' / item['group'])
-    else:
-        for item in eval_items:
-            group = item['group']
-            group_eval_dir = output / 'groups' / group
-            group_query_path = Path(validation['groups'][group]['query_manifest'])
-            shared_evaluation.evaluate(
-                item,
-                group_eval_dir,
-                pool_path=pool_path,
-                query_manifest=group_query_path,
-                source_memory_id=item['source_memory_id'],
-                device=device,
-                encoder_factory=encoder_factory,
-                defense_factory=defense_factory,
-                selected_conditions=selected_conditions,
-                encoder_config=effective_encoder_config,
-                query_mode='text',
-                key_mode=effective_key_mode,
-                replacement_frozens=frozen_suite,
-                bank_root=output / 'shared_banks',
-                memory_vector_cache_dir=output / 'memory_vectors',
-            )
-            shared_evaluation.report(group_eval_dir)
-        summary = build_category_summary(output)
-        freeze_json(output / 'category_retrieval_summary.json', summary)
+                shared_evaluation.report(group_eval_dir)
+            summary = build_category_summary(output)
+            freeze_json(output / 'category_retrieval_summary.json', summary)
+    finally:
+        if callable(getattr(shared_defender, 'close', None)):
+            shared_defender.close()
 
     report_path = report_category_suite(output)
     return dict(
@@ -867,11 +965,22 @@ def _verify_category_suite_in_process(output, *, device='cuda', encoder_factory=
         fresh_wrapper = shared_evaluation.InProcessFreshCachedEncoder(shared_base_encoder)
         shared_factory = lambda w=fresh_wrapper: w
 
+    shared_pool = shared_evaluation.load_shared_pool(plan['pool_path'])
+    bank_cache = {}
+    path_sha_cache = {}
+    bank_digest_cache = {}
     try:
         for group in plan['groups']:
             group_dir = output / 'groups' / group
             verified = shared_evaluation.verify(
-                group_dir, encoder_factory=shared_factory, device=device, isolated_process=isolated_process
+                group_dir,
+                encoder_factory=shared_factory,
+                device=device,
+                isolated_process=isolated_process,
+                _bank_cache=bank_cache,
+                _path_sha_cache=path_sha_cache,
+                _bank_digest_cache=bank_digest_cache,
+                _shared_pool=shared_pool,
             )
             _require(verified.get('status') == 'passed' and verified.get('all_candidate_scores_checked') is True,
                      f'组 {group} 独立复算未通过')
@@ -981,6 +1090,7 @@ def report_category_suite(output):
     families = summary['query_families']
     labels_zh = summary['query_family_labels_zh']
     is_oracle = summary['protocol'] == ORACLE_PROTOCOL
+    is_overlap30 = summary['protocol'] == OVERLAP_30_PROTOCOL
     key_mode = summary.get('key_mode', DEFAULT_KEY_MODE)
     key_weight = summary.get('key_image_weight', 1.0 if key_mode == 'image' else 0.5)
     key_mode_desc = (
@@ -989,16 +1099,21 @@ def report_category_suite(output):
         f'图文各半融合向量 `joint`（`key_image_weight={key_weight}`）'
     )
 
-    title = ('# 视觉记忆植入训练查询抽样（100% Oracle）检索评估报告'
-             if is_oracle else '# 视觉记忆植入类别多样化（0% 重合）检索评估报告')
-    query_desc = (
-        f"- 测试查询（100% Oracle 训练查询抽样）：{summary['group_count']} 组 × {summary['queries_per_group']} 条 = {summary['total_queries']} 条纯文字查询，每组从训练查询按原论文 50% / 30% / 20% 分层抽取 10 条公开描述、6 条模型改写、4 条真实搜索词（对应论文 Table 1 与 Table 6 的 `100% Oracle` 口径）。"
-        if is_oracle else
-        f"- 测试查询（0% 字面重合泛化）：{summary['group_count']} 组 × {summary['queries_per_group']} 条 = {summary['total_queries']} 条纯文字查询（每组含 5 类问法各 4 条：类别直接询问、购买意图、使用场景、功能需求、选择比较），与训练查询（50/30/20）及原特点评估查询规范化精确重合数均为 0。"
-    )
-    breakdown_heading = ('## 按训练查询来源分类汇总（50% 公开描述 / 30% 模型改写 / 20% 真实搜索）'
-                         if is_oracle else f"## 按问法类别汇总（每类 {summary['group_count']} 组 × 4 条）")
-    breakdown_col = '查询来源类别' if is_oracle else '问法类别'
+    if is_oracle:
+        title = '# 视觉记忆植入训练查询抽样（100% Oracle）检索评估报告'
+        query_desc = f"- 测试查询（100% Oracle 训练查询抽样）：{summary['group_count']} 组 × {summary['queries_per_group']} 条 = {summary['total_queries']} 条纯文字查询，每组从训练查询按原论文 50% / 30% / 20% 分层抽取 10 条公开描述、6 条模型改写、4 条真实搜索词（对应论文 Table 1 与 Table 6 的 `100% Oracle` 口径）。"
+        breakdown_heading = '## 按训练查询来源分类汇总（50% 公开描述 / 30% 模型改写 / 20% 真实搜索）'
+        breakdown_col = '查询来源类别'
+    elif is_overlap30:
+        title = '# 视觉记忆植入三成训练重合（30% Overlap）检索评估报告'
+        query_desc = f"- 测试查询（30% 训练重合混合）：{summary['group_count']} 组 × {summary['queries_per_group']} 条 = {summary['total_queries']} 条纯文字查询，每组含 6 条复用训练查询（3 公开描述 / 2 模型改写 / 1 真实搜索，占 30%）与 14 条零重合新查询（占 70%）。"
+        breakdown_heading = '## 按查询重合与来源分类汇总（30% 训练重合 / 70% 非重合新查询）'
+        breakdown_col = '查询来源类别'
+    else:
+        title = '# 视觉记忆植入类别多样化（0% 重合）检索评估报告'
+        query_desc = f"- 测试查询（0% 字面重合泛化）：{summary['group_count']} 组 × {summary['queries_per_group']} 条 = {summary['total_queries']} 条纯文字查询（每组含 5 类问法各 4 条：类别直接询问、购买意图、使用场景、功能需求、选择比较），与训练查询（50/30/20）及原特点评估查询规范化精确重合数均为 0。"
+        breakdown_heading = f"## 按问法类别汇总（每类 {summary['group_count']} 组 × 4 条）"
+        breakdown_col = '问法类别'
 
     lines = [
         title,
@@ -1103,6 +1218,8 @@ def evaluate_transfer_panel(
     device='cuda',
     defense_mode='none',
     encoder_factory=None,
+    defended_cache_dir=None,
+    memory_vector_cache_dir=None,
     verify_training_snapshots=True,
 ):
     """依次在 CLIP-ViT-L/14 (白盒)、OpenCLIP-bigG-14 (黑盒)、SigLIP-SO400M (黑盒) 上运行完整评估与独立复算。"""
@@ -1139,6 +1256,8 @@ def evaluate_transfer_panel(
             defense_mode=defense_mode,
             encoder_config=spec['encoder_config'],
             encoder_factory=encoder_factory,
+            defended_cache_dir=defended_cache_dir,
+            memory_vector_cache_dir=memory_vector_cache_dir,
             verify_training_snapshots=verify_training_snapshots,
         )
         ver_path = sub_out / 'category_independent_verification.json'
@@ -1159,6 +1278,7 @@ def evaluate_transfer_panel(
             report_path=res['report_path'],
             overall=summary['overall'],
             by_family=summary['by_family'],
+            by_table_group=summary.get('by_table_group', {}),
             groups=summary['groups'],
             verification=verification,
         )
@@ -1215,6 +1335,21 @@ def evaluate_transfer_panel(
                 f"{ov['mean_rank_clean']:.1f}->{ov['mean_rank_modified']:.1f}"
             )
         lines.append(f"| `{group}` | {cat} | " + ' | '.join(g_cells) + ' |')
+    table_titles = list(ordered_rows[0].get('by_table_group', {}))
+    if len(table_titles) > 1:
+        lines += ['', '## 各防御条件三编码器对比汇总（Top-1 / Top-3 / Top-5 / 均名）', '']
+        lines.append('| 防御条件 | ' + ' | '.join(f"{e['label']} 前1/前3/前5/均名" for e in ordered_rows) + ' |')
+        lines.append('|---|' + '|'.join('---:' for _ in ordered_rows) + '|')
+        for title_row in table_titles:
+            row_cells = []
+            for e in ordered_rows:
+                st = e['by_table_group'][title_row]['overall']
+                t1, t3, t5 = st['top1'], st['top3'], st['top5']
+                row_cells.append(
+                    f"{t1['modified_rate']*100:.1f}% / {t3['modified_rate']*100:.1f}% / "
+                    f"{t5['modified_rate']*100:.1f}% / {st['mean_rank_clean']:.2f}->{st['mean_rank_modified']:.2f}"
+                )
+            lines.append(f"| {title_row} | " + ' | '.join(row_cells) + ' |')
     lines.append('')
     report_path.write_text('\n'.join(lines), encoding='utf-8')
     freeze_json(output / 'transfer_panel_summary.json', panel_summary)
@@ -1247,7 +1382,7 @@ def main(argv=None):
         '--query-suite',
         choices=tuple(QUERY_SUITE_ROOTS),
         default=DEFAULT_QUERY_SUITE,
-        help='测试查询环境：training_oracle（默认，每组从训练查询按 10/6/4 抽样）或 zero_overlap（0 字面重合五类问法）。',
+        help='测试查询环境：training_oracle（默认，10/6/4抽样）、overlap_30（三成训练重合+七成新查询）或 zero_overlap（0字面重合五类问法）。',
     )
     p_eval.add_argument(
         '--key-mode',
@@ -1259,6 +1394,8 @@ def main(argv=None):
     p_eval.add_argument('--device', choices=('cuda', 'cpu'), default='cuda')
     p_eval.add_argument('--defense-mode', choices=DEFENSE_MODES, default='none')
     p_eval.add_argument('--encoder-config', type=Path)
+    p_eval.add_argument('--defended-cache-dir', type=Path, default=None)
+    p_eval.add_argument('--memory-vectors-dir', type=Path, default=None)
 
     p_panel = subparsers.add_parser('evaluate-transfer-panel', help='依次使用 CLIP-ViT-L/14、OpenCLIP-bigG-14、SigLIP-SO400M 完成迁移评估与独立复算')
     p_panel.add_argument('--images-root', type=Path, required=True)
@@ -1272,6 +1409,8 @@ def main(argv=None):
     p_panel.add_argument('--query-root', type=Path, default=None)
     p_panel.add_argument('--device', choices=('cuda', 'cpu'), default='cuda')
     p_panel.add_argument('--defense-mode', choices=DEFENSE_MODES, default='none')
+    p_panel.add_argument('--defended-cache-dir', type=Path, default=None)
+    p_panel.add_argument('--memory-vectors-dir', type=Path, default=None)
 
     p_verify = subparsers.add_parser('verify', help='独立进程复算全部组别全库候选分数及汇总')
     p_verify.add_argument('--output', type=Path, required=True)
@@ -1316,6 +1455,8 @@ def main(argv=None):
             device=args.device,
             defense_mode=args.defense_mode,
             encoder_config=args.encoder_config,
+            defended_cache_dir=args.defended_cache_dir,
+            memory_vector_cache_dir=args.memory_vectors_dir,
         )
         print(json.dumps(dict(
             output=result['output'],
@@ -1342,6 +1483,8 @@ def main(argv=None):
             replacement_groups=args.replacement_groups,
             device=args.device,
             defense_mode=args.defense_mode,
+            defended_cache_dir=args.defended_cache_dir,
+            memory_vector_cache_dir=args.memory_vectors_dir,
         )
         print(json.dumps({
             'output': str(args.output),

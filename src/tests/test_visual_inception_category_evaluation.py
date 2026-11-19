@@ -833,4 +833,192 @@ def test_pipeline_load_config_validates_key_mode(tmp_path):
         pipeline.load_config(cfg_path)
 
 
+def test_frozen_category_query_overlap_30_v1_integrity():
+    from src.experiments import visual_inception_category_evaluation as category
+
+    report = category.validate_category_query_suite(query_suite='overlap_30')
+    assert report['status'] == 'passed'
+    assert report['protocol'] == 'category_query_overlap_30_v1'
+    assert report['total_queries'] == 180
+    assert report['training_normalized_exact_overlap_count'] == 54
+    assert report['queries_per_family'] == {
+        'category_description': 3,
+        'model_paraphrase': 2,
+        'heldout_search_query': 1,
+        'synthetic_non_overlap': 14,
+    }
+
+
+def test_defender_disk_snapshot_cache_hit_skips_purifier_init(tmp_path, monkeypatch):
+    import PIL
+    import src.visual.diffusion_purification as dp
+    from src.experiments.defenses import Defender, conditions_for_mode
+    from src.visual.audit import digest
+
+    spec = next(s for s in conditions_for_mode('panel_with_sd21') if s['label'] == 'diff512_t99_s1001')
+    src_img = tmp_path / 'src.png'
+    Image.new('RGB', (16, 16), (30, 80, 140)).save(src_img)
+    fake_snap = dict(kind='disk_only_purifier_fixture', working_size=512)
+    monkeypatch.setattr(dp, 'purifier_snapshot', lambda *args, **kwargs: copy.deepcopy(fake_snap))
+
+    def _fail_init(*args, **kwargs):
+        raise AssertionError('LatentDiffusionPurifier.__init__ must not run on a cache hit')
+
+    monkeypatch.setattr(dp.LatentDiffusionPurifier, '__init__', _fail_init)
+    defended_dir = tmp_path / 'defended'
+    defender = Defender(defended_dir, device='cpu')
+    try:
+        identity = dict(
+            input_sha256=sha256_file(src_img),
+            condition=spec,
+            implementation_sha256=defender._impl_sha256,
+            pillow=PIL.__version__,
+            purifier=fake_snap,
+        )
+        out_img = defended_dir / spec['label'] / (digest(identity) + '.png')
+        out_img.parent.mkdir(parents=True, exist_ok=True)
+        Image.new('RGB', (16, 16), (40, 90, 150)).save(out_img)
+        _write(out_img.with_suffix('.json'), dict(identity=identity, output_sha256=sha256_file(out_img)))
+
+        returned = defender(src_img, spec)
+        assert returned == out_img
+    finally:
+        defender.close()
+
+
+def test_freeze_memory_matches_unfrozen_and_shared_bank_memo_category_suite(tmp_path, monkeypatch):
+    import numpy as np
+    from src.experiments import shared_evaluation
+    from src.experiments import visual_inception_category_evaluation as category
+    from src.tests.test_evaluation_integrity import _DummyEncoder
+    from src.visual.visual_retrieval import VisualMemoryRetriever
+    import src.visual.attack_completion as completion
+
+    pool_path, entries = _micro_eval_pool(tmp_path, text_variant='alpha')
+    encoder = _DummyEncoder()
+    try:
+        unfrozen = VisualMemoryRetriever(
+            encoder, pool_path, key_mode='image', query_mode='text',
+            cache_dir=None, image_base_path=pool_path, freeze_memory=False,
+        )
+        frozen = VisualMemoryRetriever(
+            encoder, pool_path, key_mode='image', query_mode='text',
+            cache_dir=None, image_base_path=pool_path, freeze_memory=True,
+        )
+        for query in ('Find similar product', 'Smooth color option'):
+            r1 = unfrozen.rank(entries, query, None)
+            r2 = frozen.rank(entries, query, None)
+            assert [(x['Id'], x['rank'], pytest.approx(x['score'], abs=1e-12)) for x in r1] == [
+                (y['Id'], y['rank'], pytest.approx(y['score'], abs=1e-12)) for y in r2
+            ]
+    finally:
+        encoder.close()
+
+    base, images, publics, _ = _tiny_frozen_suite(tmp_path / 'suite_case')
+    suite_entries = []
+    source_mapping = {}
+    for index, group in enumerate(GROUPS):
+        src = publics[group]['source']
+        mem_id = f'fixture_memory_{index}'
+        source_mapping[group] = {'source_asin': src['id'], 'source_memory_id': mem_id}
+        suite_entries.append(dict(
+            Id=mem_id, FinalASIN=src['id'], RecordKind='simulated_gallery', Completed=False,
+            PrimaryImage=dict(ASIN=src['id'], Title=src['title'], LocalPath=src['image'], SHA256=src['image_sha256']),
+            FeatureText=f'Fixture feature {index}', Attributes=[f'attr_{index}'],
+        ))
+    suite_pool = base / 'shared_memory/shared_memory.json'
+    _write(suite_pool, dict(schema_version=1, scope='shared', entries=suite_entries))
+    _write(base / 'manifest.json', dict(
+        groups={g: dict(target_id=publics[g]['target']['id'], source_id=publics[g]['source']['id']) for g in GROUPS},
+        shared_memory=dict(pool_file='shared_memory/shared_memory.json', pool_sha256=sha256_file(suite_pool),
+                           source_mapping=source_mapping),
+    ))
+    import hashlib
+    overlap_root = tmp_path / 'overlap_queries'
+    base_sha = sha256_file(base / 'manifest.json')
+    groups_meta = {}
+    quotas = dict(category.OVERLAP_30_FAMILY_COUNTS)
+    for index, group in enumerate(GROUPS):
+        target_id = publics[group]['target']['id']
+        instructions, records, zh_records = [], [], []
+        q_num = 0
+        for fam, quota in quotas.items():
+            for item_idx in range(quota):
+                q_num += 1
+                qid = f'fixture_{group}_o30_{q_num:02d}'
+                text = f'Overlap30 fixture {group} {fam} item {item_idx + 1} target {index}'
+                text_zh = f'三成重合夹具 {group} {fam} 第{item_idx + 1}条'
+                instructions.append(text)
+                rec = dict(
+                    id=qid,
+                    query_family=fam,
+                    instruction=text,
+                    instruction_zh=text_zh,
+                )
+                if fam in category.ORACLE_FAMILIES:
+                    rec['source_row_id'] = f'row_{q_num:02d}'
+                    rec['source_file'] = f'fixture/{group}/{fam}.jsonl'
+                records.append(rec)
+                zh_records.append(dict(
+                    id=qid,
+                    query_family=fam,
+                    query_family_zh=category.OVERLAP_30_FAMILY_LABELS_ZH[fam],
+                    instruction=text_zh,
+                ))
+        instr_sha = hashlib.sha256(
+            json.dumps(instructions, ensure_ascii=False, separators=(',', ':')).encode('utf-8')
+        ).hexdigest()
+        q_rel = f'{group}/queries.json'
+        zh_rel = f'{group}/queries.zh.json'
+        _write(overlap_root / q_rel, dict(
+            schema_version=2, status='ready', method='visual_inception',
+            evaluation_protocol=category.OVERLAP_30_PROTOCOL, group=group,
+            query_mode='text', target_public_id=target_id, category=f'fixture_category_{index}',
+            language='en', instructions=instructions, instructions_sha256=instr_sha,
+            query_records=records, query_family_counts=quotas,
+            query_image_required=False, query_images_generated=False,
+            is_real_search_log=False, training_use_allowed=False,
+        ))
+        _write(overlap_root / zh_rel, dict(
+            schema_version=1, language='zh', purpose='仅供人工阅读，不传给检索编码器',
+            group=group, category=f'fixture_category_{index}', query_records=zh_records,
+        ))
+        groups_meta[group] = dict(
+            path=q_rel,
+            sha256=sha256_file(overlap_root / q_rel),
+            chinese_review_path=zh_rel,
+            chinese_review_sha256=sha256_file(overlap_root / zh_rel),
+            target_public_id=target_id,
+            category=f'fixture_category_{index}',
+            query_count=20,
+            instructions_sha256=instr_sha,
+            query_family_counts=quotas,
+        )
+    _write(overlap_root / 'manifest.json', dict(
+        schema_version=1, protocol=category.OVERLAP_30_PROTOCOL, method='visual_inception',
+        query_mode='text', language='en', group_count=9, queries_per_group=20, total_queries=180,
+        query_families=list(category.OVERLAP_30_FAMILIES), queries_per_family=quotas,
+        optimization_may_read=False, is_real_search_log=False, outcome_selection_used=False,
+        base_manifest_sha256=base_sha, groups=groups_meta,
+    ))
+    monkeypatch.setattr(category, 'OUTPUT', tmp_path / 'suite_out')
+    monkeypatch.setitem(category.QUERY_SUITE_ROOTS, 'overlap_30', overlap_root)
+    monkeypatch.setattr(category, 'public_group', lambda _base, group: publics[group])
+    monkeypatch.setattr(completion, 'validate_attack_completion', lambda *args, **kwargs: None)
+    monkeypatch.setattr(category, 'validate_attack_completion', lambda *args, **kwargs: None)
+
+    out_dir = tmp_path / 'suite_out/vi_o30_fast'
+    res = category.evaluate_category_suite(
+        images, out_dir, base=base, query_suite='overlap_30', device='cpu',
+        defense_mode='none', encoder_factory=_DummyEncoder, verify_training_snapshots=False,
+    )
+    assert res['summary']['query_suite'] == 'overlap_30'
+    assert res['summary']['overall']['query_count'] == 180
+    verified = category.verify_category_suite(out_dir, device='cpu', encoder_factory=_DummyEncoder, isolated_process=False)
+    assert verified['status'] == 'passed'
+    assert verified['all_candidate_scores_checked'] is True
+    assert float(verified['max_score_error']) <= shared_evaluation.SCORE_TOLERANCE
+
+
+
 

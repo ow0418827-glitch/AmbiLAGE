@@ -184,10 +184,20 @@ class InProcessFreshCachedEncoder:
         self._image_cache = {}
         self._text_cache = {}
         self._joint_cache = {}
+        self._stat_hashes = {}
+
+    def _sha(self, p):
+        st = p.stat()
+        stat_key = (str(p), st.st_mtime_ns, st.st_size)
+        digest_val = self._stat_hashes.get(stat_key)
+        if digest_val is None:
+            digest_val = sha256_file(p)
+            self._stat_hashes[stat_key] = digest_val
+        return digest_val
 
     def encode(self, path):
         p = Path(path).resolve()
-        key = sha256_file(p)
+        key = self._sha(p)
         if key not in self._image_cache:
             self._image_cache[key] = self._base.encode(p)
         return self._image_cache[key]
@@ -205,7 +215,7 @@ class InProcessFreshCachedEncoder:
     def encode_joint(self, text, path, image_weight=0.5):
         p = Path(path).resolve()
         s = str(text or '')
-        key = (s, sha256_file(p), float(image_weight))
+        key = (s, self._sha(p), float(image_weight))
         if key not in self._joint_cache:
             if getattr(self._base, 'supports_image_weight', False):
                 vec = self._base.encode_joint(text, p, image_weight=image_weight)
@@ -225,7 +235,9 @@ def evaluate(frozen, output, *, pool_path=SHARED_MEMORY, query_manifest,
              source_memory_id=None, device='cuda', encoder_factory=None,
              defense_factory=None, selected_conditions=None, encoder_config=None, query_mode=None,
              key_mode=None, replacement_frozens=None, bank_root=None, memory_vector_cache_dir=None,
-             defer_verification=False, shared_encoder=None):
+             defer_verification=False, shared_encoder=None,
+             _shared_defender=None, _shared_bank_memo=None, _shared_pool=None,
+             _path_sha_cache=None, _bank_digest_cache=None):
     """只有此模块读取共享库；对照和修改图始终面对同一个完整共享池。"""
     output = Path(output)
     effective_key_mode = default_key_mode_for_method(frozen.get('method')) if key_mode is None else key_mode
@@ -261,7 +273,7 @@ def evaluate(frozen, output, *, pool_path=SHARED_MEMORY, query_manifest,
     query_options = query_retriever_options(queries)
     if sha256_file(frozen['image']) != frozen['image_sha256']:
         raise ValueError('冻结成图摘要改变')
-    entries = load_shared_pool(pool_path)
+    entries = _shared_pool if _shared_pool is not None else load_shared_pool(pool_path)
     banks, source_id = evaluation_banks(entries, pool_path, frozen['source'],
                                         frozen['image'], source_memory_id=source_memory_id,
                                         replacements=replacement_inputs)
@@ -300,23 +312,48 @@ def evaluate(frozen, output, *, pool_path=SHARED_MEMORY, query_manifest,
                                                        training_surrogates=actual_training_surrogates)
         encoder = encoder_factory()
     bank_root = Path(bank_root) if bank_root is not None else output
-    defender = defense_factory(bank_root / 'defended', device) if defense_factory else Defender(bank_root / 'defended', device)
+    if _shared_defender is not None:
+        defender = _shared_defender
+    else:
+        defender = defense_factory(bank_root / 'defended', device) if defense_factory else Defender(bank_root / 'defended', device)
+    image_sha = getattr(defender, '_cached_sha256', None) or sha256_file
     rows, score_rows = [], []
     ids = [e['Id'] for e in entries]
     try:
         for spec in specs:
             for name, original_bank in banks.items():
-                bank = copy.deepcopy(original_bank)
-                if spec['kind'] != 'none':
-                    for entry in bank:
-                        original = resolve_image(entry, pool_path)
-                        image = defender(original, spec)
-                        entry['RetrievalImage'] = dict(ASIN=entry['FinalASIN'], LocalPath=str(image.resolve()), SHA256=sha256_file(image))
                 bank_file = bank_root / 'banks' / spec['label'] / (name + '.json')
-                freeze_json(bank_file, bank)
+                source_shas = [
+                    (e.get('RetrievalImage') or {}).get('SHA256')
+                    for e in original_bank
+                ]
+                memo_key = (str(bank_file.resolve()), name, spec['label'])
+                memo = _shared_bank_memo.get(memo_key) if _shared_bank_memo is not None else None
+                if memo is not None and memo['source_retrieval_sha256s'] == source_shas:
+                    bank, bank_sha = memo['bank'], memo['bank_sha256']
+                else:
+                    bank = copy.deepcopy(original_bank)
+                    if spec['kind'] != 'none':
+                        for entry in bank:
+                            original = resolve_image(entry, pool_path)
+                            image = defender(original, spec)
+                            entry['RetrievalImage'] = dict(ASIN=entry['FinalASIN'], LocalPath=str(image.resolve()), SHA256=image_sha(image))
+                    freeze_json(bank_file, bank)
+                    bank_sha = sha256_file(bank_file)
+                    if _shared_bank_memo is not None:
+                        _shared_bank_memo[memo_key] = dict(
+                            bank=bank,
+                            bank_sha256=bank_sha,
+                            source_retrieval_sha256s=source_shas,
+                        )
+                retriever_kwargs = dict(query_options)
+                retriever_kwargs.setdefault('index_text', plan['index_text'])
                 ranker = VisualMemoryRetriever(encoder, bank_file, key_mode=effective_key_mode, cache_dir=None,
                                                entry_cache_dir=memory_vector_cache_dir,
-                                               image_base_path=pool_path, **query_options)
+                                               image_base_path=pool_path, freeze_memory=True,
+                                               path_sha_cache=_path_sha_cache,
+                                               bank_digest_cache=_bank_digest_cache,
+                                               **retriever_kwargs)
                 observations, candidate_scores = [], []
                 for query in queries:
                     verify_query_input(query)
@@ -327,7 +364,7 @@ def evaluate(frozen, output, *, pool_path=SHARED_MEMORY, query_manifest,
                     candidate_scores.append(_score_vector(ranking, ids))
                     observations.append(dict(task_id=query['task_id'], rank=chosen['rank'], score=chosen['score']))
                 row = dict(condition=spec, bank=name, bank_path=str(bank_file.resolve()),
-                           bank_sha256=sha256_file(bank_file), queries=observations,
+                           bank_sha256=bank_sha, queries=observations,
                            top3=sum(q['rank'] <= 3 for q in observations),
                            top5=sum(q['rank'] <= 5 for q in observations),
                            query_count=len(queries), score_archive_index=len(rows),
@@ -341,7 +378,7 @@ def evaluate(frozen, output, *, pool_path=SHARED_MEMORY, query_manifest,
     finally:
         if shared_encoder is None:
             encoder.close()
-        if callable(getattr(defender, 'close', None)):
+        if _shared_defender is None and callable(getattr(defender, 'close', None)):
             defender.close()
     # 使用新建编码器重新计算每个条件、每个查询的名次及分数。
     if defer_verification:
@@ -502,7 +539,8 @@ def make_eval_encoder(device='cuda', config_path=None, *, training_surrogates=No
 
 
 def verify(output, *, encoder_factory=None, device='cuda', query_mode=None, query_manifest=None,
-           key_mode=None, encoder_config=None, isolated_process=False):
+           key_mode=None, encoder_config=None, isolated_process=False,
+           _bank_cache=None, _path_sha_cache=None, _bank_digest_cache=None, _shared_pool=None):
     output = Path(output)
     plan = read_json(output / 'evaluation_plan.json')
     actual_training_surrogates = _plan_training_identities(plan)
@@ -526,7 +564,7 @@ def verify(output, *, encoder_factory=None, device='cuda', query_mode=None, quer
     if encoder_config is not None and (not plan.get('encoder_config_sha256')
             or sha256_file(encoder_config) != plan['encoder_config_sha256']):
         raise ValueError('复算指定的评估编码器配置与冻结评估不一致')
-    entries = load_shared_pool(plan['pool_path'])
+    entries = _shared_pool if _shared_pool is not None else load_shared_pool(plan['pool_path'])
     ids = [e['Id'] for e in entries]
     rows = read_json(output / 'evaluation.json')
     expected = {(s['label'], bank) for s in plan['conditions'] for bank in ('clean', 'modified')}
@@ -546,6 +584,7 @@ def verify(output, *, encoder_factory=None, device='cuda', query_mode=None, quer
         raise ValueError('全候选分数归档维度无效或包含非有限值')
     encoder = (encoder_factory or (lambda: make_eval_encoder(device, plan.get('encoder_config'),
                                             training_surrogates=actual_training_surrogates)))()
+    encoder_snapshot_digest = digest(encoder.snapshot)
     max_error, count, score_count = 0.0, 0, 0
     try:
         for row_index, row in enumerate(rows):
@@ -553,16 +592,29 @@ def verify(output, *, encoder_factory=None, device='cuda', query_mode=None, quer
                 raise ValueError('分数归档行号改变')
             if row['condition'] not in plan['conditions']:
                 raise ValueError('条件的具体参数改变')
-            if sha256_file(row['bank_path']) != row['bank_sha256']:
-                raise ValueError('评估副本改变')
-            bank = read_json(row['bank_path'])
+            bank_key = (str(Path(row['bank_path']).resolve()), row['bank_sha256'])
+            cached_bank = _bank_cache.get(bank_key) if _bank_cache is not None else None
+            if cached_bank is None:
+                if sha256_file(row['bank_path']) != row['bank_sha256']:
+                    raise ValueError('评估副本改变')
+                bank = read_json(row['bank_path'])
+                if _bank_cache is not None:
+                    _bank_cache[bank_key] = bank
+            else:
+                bank = cached_bank
             if len(bank) != plan['pool_count'] or [e['Id'] for e in bank] != ids:
                 raise ValueError('评估缩减了共享池')
+            retriever_kwargs = dict(query_options)
+            if plan.get('index_text'):
+                retriever_kwargs.setdefault('index_text', plan['index_text'])
             ranker = VisualMemoryRetriever(encoder, row['bank_path'], key_mode=effective_key_mode, cache_dir=None,
-                                           image_base_path=plan['pool_path'], **query_options)
+                                           image_base_path=plan['pool_path'], freeze_memory=True,
+                                           path_sha_cache=_path_sha_cache,
+                                           bank_digest_cache=_bank_digest_cache,
+                                           **retriever_kwargs)
             if 'key_mode' in row['retrieval_protocol'] and row['retrieval_protocol']['key_mode'] != effective_key_mode:
                 raise ValueError('独立复算的记忆键模式与评估结果不一致')
-            if digest(encoder.snapshot) != row['retrieval_protocol']['model_sha256']:
+            if encoder_snapshot_digest != row['retrieval_protocol']['model_sha256']:
                 raise ValueError('独立复算编码器的权重或实现身份改变')
             if len(row['queries']) != len(plan['queries']):
                 raise ValueError('正式请求数量改变')

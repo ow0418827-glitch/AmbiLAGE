@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-11-18T00:42:34.536222+00:00",
+  "checked_at": "2026-11-19T05:08:32.980719+00:00",
   "code": {
-    "python_files_parsed": 164,
+    "python_files_parsed": 169,
     "model_manifest_entries": 17,
     "private_resources_read": false
   },
@@ -35,7 +35,7 @@
       "scipy": "1.17.1",
       "sentence-transformers": "5.7.0"
     },
-    "disk_free_gib": 192.52,
+    "disk_free_gib": 159.26,
     "cuda_available": true,
     "cuda_device": "NVIDIA L4",
     "vram_gib": 22.03,
@@ -138,12 +138,14 @@
       "content_hashes_verified": true
     },
     "eval_gme": {
-      "present": false,
+      "present": true,
       "repo_id": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
-      "role": "held_out_evaluator_only"
+      "role": "held_out_evaluator_only",
+      "snapshot_files_verified": 22,
+      "content_hashes_verified": true
     },
     "eval_purifier_sd21": {
-      "present": false,
+      "present": true,
       "repo_id": "sd2-community/stable-diffusion-2-1-base",
       "role": "held_out_cognitiveguard_system1_purifier_only",
       "allow_patterns": [
@@ -158,7 +160,9 @@
         "vae/diffusion_pytorch_model.safetensors",
         "LICENSE*",
         "README.md"
-      ]
+      ],
+      "snapshot_files_verified": 13,
+      "content_hashes_verified": true
     },
     "selection": {
       "present": true,

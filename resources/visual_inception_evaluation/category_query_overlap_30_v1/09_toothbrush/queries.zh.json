@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "language": "zh",
+  "purpose": "仅供人工阅读，不传给检索编码器",
+  "group": "09_toothbrush",
+  "category": "toothbrush",
+  "query_records": [
+    {
+      "id": "09_toothbrush_overlap30_01",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "训练公开描述原句（商品 B09QKHK4NP）：Healifty Children Toothbrush Soft-bristles Toothbrush Lovely Cartoon Toothbrush Small Head Toothbrush"
+    },
+    {
+      "id": "09_toothbrush_overlap30_02",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "训练公开描述原句（商品 B09Q5MBQK3）：Kids Toothbrushes U Shape, Manual Training Tooth Brush, 360 Toothbrush Kids, Extra Soft Toothbrush, Toddler Tooth Brush, Cartoon Teeth Cleaning Tool"
+    },
+    {
+      "id": "09_toothbrush_overlap30_03",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "训练公开描述原句（商品 B09R1HJWSY）：WSVVMQY 4PC Children’s U-Shape Toothbrush for 360° Thorough Cleansing (A, S)"
+    },
+    {
+      "id": "09_toothbrush_overlap30_04",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "复用模型改写查询(10%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_029，输入商品 B08PVNNFMR）"
+    },
+    {
+      "id": "09_toothbrush_overlap30_05",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "复用模型改写查询(10%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_003，输入商品 B09NMBRQS1）"
+    },
+    {
+      "id": "09_toothbrush_overlap30_06",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "复用独立真实搜索(5%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_12893）：bamboo toothbrush"
+    },
+    {
+      "id": "09_toothbrush_overlap30_07",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一款带轻柔挡位和小巧刷头的电动牙刷。"
+    },
+    {
+      "id": "09_toothbrush_overlap30_08",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我需要一支刷头颈部纤细、方便清洁大牙后侧的超软毛手动牙刷。"
+    },
+    {
+      "id": "09_toothbrush_overlap30_09",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "推荐几款附带旅行收纳盒与基础计时功能的可充电牙刷。"
+    },
+    {
+      "id": "09_toothbrush_overlap30_10",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款电动牙刷在刷牙用力过猛时会给出明显提示？"
+    },
+    {
+      "id": "09_toothbrush_overlap30_11",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我想要一支刷毛柔软、手柄沾水后依然防滑的日常基础牙刷。"
+    },
+    {
+      "id": "09_toothbrush_overlap30_12",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "对比可替换刷头手动牙刷与入门级可充电电动牙刷的性价比。"
+    },
+    {
+      "id": "09_toothbrush_overlap30_13",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一款电池仓开启轻松方便的干电池驱动牙刷。"
+    },
+    {
+      "id": "09_toothbrush_overlap30_14",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款紧凑型电动牙刷适合外出旅行一周随身携带？"
+    },
+    {
+      "id": "09_toothbrush_overlap30_15",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我在找一支小刷头、尖细磨尖刷毛的手动牙刷。"
+    },
+    {
+      "id": "09_toothbrush_overlap30_16",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "推荐几款配有两个不同颜色区分刷头的电动牙刷入门套装。"
+    },
+    {
+      "id": "09_toothbrush_overlap30_17",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款牙刷手柄较宽大，不用用力紧握也能稳稳拿住？"
+    },
+    {
+      "id": "09_toothbrush_overlap30_18",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我需要一支适合已换掉幼儿牙刷的儿童使用的软毛手动牙刷。"
+    },
+    {
+      "id": "09_toothbrush_overlap30_19",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找几款在每次换区刷牙时会发出停顿提醒的电动牙刷。"
+    },
+    {
+      "id": "09_toothbrush_overlap30_20",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款家庭装软毛牙刷配有多种不同颜色方便家人区分？"
+    }
+  ]
+}

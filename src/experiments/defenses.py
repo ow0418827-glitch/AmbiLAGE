@@ -69,6 +69,40 @@ class Defender:
     def __init__(self, output, device='cuda'):
         self.output, self.device, self.purifier = Path(output), device, None
         self._purifier_key = None
+        self._impl_sha256 = sha256_file(__file__)
+        self._sha_cache = {}
+        self._purifier_snapshots = {}
+
+    def _cached_sha256(self, file_path):
+        p = Path(file_path).resolve()
+        st = p.stat()
+        cache_key = (str(p), st.st_mtime_ns, st.st_size)
+        digest_val = self._sha_cache.get(cache_key)
+        if digest_val is None:
+            digest_val = sha256_file(p)
+            self._sha_cache[cache_key] = digest_val
+        return digest_val
+
+    def _purifier_config(self, purifier_key='purifier'):
+        from src.visual.diffusion_purification import PurificationConfig
+        if purifier_key == 'purifier':
+            return PurificationConfig(working_size=512)
+        from src.model_registry import resolve_model
+        return PurificationConfig(model_path=resolve_model(purifier_key), working_size=512)
+
+    def _purifier_snapshot(self, purifier_key='purifier'):
+        if purifier_key in self._purifier_snapshots:
+            return self._purifier_snapshots[purifier_key]
+        import src.visual.diffusion_purification as dp
+        # Use disk-only snapshot when real LatentDiffusionPurifier is active so cache hits never load GPU weights.
+        if getattr(dp.LatentDiffusionPurifier, '__module__', '') == dp.__name__:
+            snap = dp.purifier_snapshot(self._purifier_config(purifier_key))
+            self._purifier_snapshots[purifier_key] = snap
+            return snap
+        self._ensure_purifier(purifier_key)
+        snap = self.purifier.snapshot()
+        self._purifier_snapshots[purifier_key] = snap
+        return snap
 
     def close(self):
         if self.purifier is not None:
@@ -87,12 +121,8 @@ class Defender:
             if self._purifier_key == purifier_key or (self._purifier_key is None and purifier_key == 'purifier'):
                 return
             self.close()
-        from src.visual.diffusion_purification import LatentDiffusionPurifier, PurificationConfig
-        if purifier_key == 'purifier':
-            cfg = PurificationConfig(working_size=512)
-        else:
-            from src.model_registry import resolve_model
-            cfg = PurificationConfig(model_path=resolve_model(purifier_key), working_size=512)
+        from src.visual.diffusion_purification import LatentDiffusionPurifier
+        cfg = self._purifier_config(purifier_key)
         self.purifier = LatentDiffusionPurifier(cfg, device=self.device)
         self._purifier_key = purifier_key
 
@@ -100,20 +130,22 @@ class Defender:
         if spec['kind'] == 'none':
             return Path(image_path).resolve()
         import PIL
-        identity = dict(input_sha256=sha256_file(image_path), condition=spec,
-                        implementation_sha256=sha256_file(__file__), pillow=PIL.__version__)
+        identity = dict(input_sha256=self._cached_sha256(image_path), condition=spec,
+                        implementation_sha256=self._impl_sha256, pillow=PIL.__version__)
+        purifier_key = spec.get('purifier_key', 'purifier')
         if spec['kind'] in ('vae', 'diffusion'):
-            self._ensure_purifier(spec.get('purifier_key', 'purifier'))
-            identity['purifier'] = self.purifier.snapshot()
+            identity['purifier'] = self._purifier_snapshot(purifier_key)
         path = self.output / spec['label'] / (digest(identity) + '.png')
         sidecar = path.with_suffix('.json')
         if path.exists() or sidecar.exists():
             if not path.is_file() or not sidecar.is_file():
                 raise ValueError('防御缓存不完整')
             saved = read_json(sidecar)
-            if saved['identity'] != identity or saved['output_sha256'] != sha256_file(path):
+            if saved['identity'] != identity or saved['output_sha256'] != self._cached_sha256(path):
                 raise ValueError('防御缓存图片或身份已改变')
             return path
+        if spec['kind'] in ('vae', 'diffusion'):
+            self._ensure_purifier(purifier_key)
         path.parent.mkdir(parents=True, exist_ok=True)
         with Image.open(image_path) as opened:
             image = opened.convert('RGB')

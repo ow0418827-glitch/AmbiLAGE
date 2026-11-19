@@ -224,7 +224,8 @@ def resolve_image(entry, memory_path):
 class VisualMemoryRetriever:
     def __init__(self, encoder, memory_path, key_mode="joint", query_mode="joint",
                  index_text="auto", cache_dir="auto", key_image_weight=0.5,
-                 query_image_weight=0.5, query_cache=None, entry_cache_dir=None, image_base_path=None):
+                 query_image_weight=0.5, query_cache=None, entry_cache_dir=None, image_base_path=None,
+                 freeze_memory=False, path_sha_cache=None, bank_digest_cache=None):
         if key_mode not in {"image", "joint"} or query_mode not in {"image", "joint", "text"}:
             raise ValueError("key mode must be image/joint; query mode must be image/joint/text")
         if query_mode == 'text' and not callable(getattr(encoder, 'encode_text', None)):
@@ -270,6 +271,12 @@ class VisualMemoryRetriever:
             self.query_cache = query_cache
 
         self.image_decoder = encoder_image_decoder_signature(encoder)
+        self.freeze_memory = bool(freeze_memory)
+        self._frozen_bank_state = None
+        self._path_sha_cache = path_sha_cache
+        self._bank_digest_cache = bank_digest_cache
+        self._image_decoder_sha256 = canonical_digest(self.image_decoder)
+        self._encoding_runtime_sha256 = canonical_digest(self.encoding_runtime)
         self.snapshot = {"encoder": encoder.snapshot, "key_mode": key_mode,
                          "query_mode": query_mode, "index_text": index_text,
                          "index_text_policy": policy,
@@ -278,6 +285,8 @@ class VisualMemoryRetriever:
                          "image_decoder": self.image_decoder,
                          "encoding_runtime": self.encoding_runtime,
                          "cache_schema": RETRIEVAL_CACHE_SCHEMA}
+        self._index_text_policy_sha256 = canonical_digest(policy)
+        self._frozen_model_sha256 = canonical_digest(encoder.snapshot) if self.freeze_memory else None
 
     def _detect_index_policy(self):
         """Detect enriched product fields without hiding malformed bank files."""
@@ -290,16 +299,29 @@ class VisualMemoryRetriever:
             return detect_index_text_policy(data)
         raise ValueError("Memory bank must be an object or a list")
 
-    def _encode(self, text, path, mode, *, scope="query", image_weight=0.5):
+    def _file_sha256(self, path):
+        p = Path(path)
+        if self._path_sha_cache is None:
+            return sha256(p)
+        st = p.stat()
+        key = (str(p), st.st_mtime_ns, st.st_size)
+        cached = self._path_sha_cache.get(key)
+        if cached is None:
+            cached = sha256(p)
+            self._path_sha_cache[key] = cached
+        return cached
+
+    def _encode(self, text, path, mode, *, scope="query", image_weight=0.5, image_digest=None):
         weight = validated_image_weight(image_weight)
         if mode == 'text' and (not isinstance(text, str) or not text.strip()):
             raise ValueError('纯文字查询不能为空')
-        digest = None if mode == 'text' else sha256(path)
+        digest = None if mode == 'text' else (image_digest or self._file_sha256(path))
+        model_sha = self._frozen_model_sha256 if self._frozen_model_sha256 is not None else canonical_digest(self.encoder.snapshot)
         key = canonical_digest({"mode": mode, "image_sha256": digest,
                                 "text_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest()
                                 if mode in ("joint", "text") else None,
-                                "model_sha256": canonical_digest(self.encoder.snapshot),
-                                "image_decoder_sha256": canonical_digest(self.image_decoder),
+                                "model_sha256": model_sha,
+                                "image_decoder_sha256": self._image_decoder_sha256,
                                 "scope": scope, "image_weight": weight if mode == "joint" else None,
                                 "cache_schema": RETRIEVAL_CACHE_SCHEMA})
         if key not in self.cache:
@@ -308,11 +330,11 @@ class VisualMemoryRetriever:
                 entry_identity = dict(schema_version=1, cache_schema=RETRIEVAL_CACHE_SCHEMA,
                     mode=mode, image_sha256=digest,
                     text_sha256=hashlib.sha256(text.encode('utf-8')).hexdigest() if mode == 'joint' else None,
-                    model_sha256=canonical_digest(self.encoder.snapshot),
-                    image_decoder_sha256=canonical_digest(self.image_decoder),
-                    encoding_runtime_sha256=canonical_digest(self.encoding_runtime),
+                    model_sha256=model_sha,
+                    image_decoder_sha256=self._image_decoder_sha256,
+                    encoding_runtime_sha256=self._encoding_runtime_sha256,
                     index_text=self.index_text,
-                    index_text_policy_sha256=canonical_digest(self.snapshot['index_text_policy']),
+                    index_text_policy_sha256=self._index_text_policy_sha256,
                     image_weight=weight if mode == 'joint' else None)
                 found = self.entry_cache.load(entry_identity)
                 if found is not None:
@@ -384,26 +406,86 @@ class VisualMemoryRetriever:
 
     def index_identity(self, memory):
         """The same index identity is used by ranking and offline preparation."""
-        return {"bank_sha256": sha256(self.memory_path) if self.memory_path.is_file() else None,
-                "entries_sha256": canonical_digest(memory),
-                "model_sha256": canonical_digest(self.encoder.snapshot),
+        bank_sha = self._file_sha256(self.memory_path) if self.memory_path.is_file() else None
+        if self._bank_digest_cache is not None and bank_sha is not None and id(memory) in self._bank_digest_cache:
+            cached_bank_sha, cached_entries_sha = self._bank_digest_cache[id(memory)]
+            if cached_bank_sha == bank_sha:
+                entries_sha = cached_entries_sha
+            else:
+                entries_sha = canonical_digest(memory)
+        else:
+            entries_sha = canonical_digest(memory)
+            if self._bank_digest_cache is not None and bank_sha is not None:
+                self._bank_digest_cache[id(memory)] = (bank_sha, entries_sha)
+        model_sha = self._frozen_model_sha256 if self._frozen_model_sha256 is not None else canonical_digest(self.encoder.snapshot)
+        return {"bank_sha256": bank_sha,
+                "entries_sha256": entries_sha,
+                "model_sha256": model_sha,
                 "key_mode": self.key_mode, "query_mode": self.query_mode,
                 "index_text": self.index_text,
-                "index_text_policy_sha256": canonical_digest(self.snapshot["index_text_policy"]),
+                "index_text_policy_sha256": self._index_text_policy_sha256,
                 "key_image_weight": self.key_image_weight,
                 "query_image_weight": self.query_image_weight,
-                "image_decoder_sha256": canonical_digest(self.image_decoder),
-                "encoding_runtime_sha256": canonical_digest(self.encoding_runtime),
+                "image_decoder_sha256": self._image_decoder_sha256,
+                "encoding_runtime_sha256": self._encoding_runtime_sha256,
                 "cache_schema": RETRIEVAL_CACHE_SCHEMA}
 
-    def rank(self, memory, instruction, query_image=None):
-        # Bank bytes, caller entries and encoder configuration are refreshed on
-        # every ranking, even if this retriever instance is reused after edits.
+    def _prepare_memory(self, memory):
         identity = self.index_identity(memory)
         bank_sha, model_sha = identity["bank_sha256"], identity["model_sha256"]
         scope = canonical_digest(identity)
         cache_path = self.cache_dir / (scope + ".json") if self.cache_dir else None
         self._load_index_cache(cache_path, identity)
+        prepared_entries = []
+        keys = []
+        path_hashes = {}
+        for index, entry in enumerate(memory):
+            field = "RetrievalImage" if entry.get("RetrievalImage") is not None else "PrimaryImage"
+            record = entry.get(field)
+            if not record or not record.get("LocalPath"):
+                if field == "RetrievalImage":
+                    raise ValueError("RetrievalImage must reference a local image")
+                continue
+            path = Path(record["LocalPath"])
+            if not path.is_absolute():
+                path = self.image_base_path.parent / path
+            path = path.resolve()
+            if not path.is_file():
+                raise FileNotFoundError(path)
+            path_key = str(path)
+            img_sha = path_hashes.get(path_key)
+            if img_sha is None:
+                img_sha = self._file_sha256(path)
+                path_hashes[path_key] = img_sha
+            if record.get("SHA256") and img_sha != record["SHA256"]:
+                raise ValueError(f"Image digest mismatch: {path}")
+            text = memory_index_text(entry, self.index_text) if self.key_mode == "joint" else ""
+            vector, key = self._encode(text, path, self.key_mode, scope=scope,
+                                      image_weight=self.key_image_weight, image_digest=img_sha)
+            keys.append(key)
+            prepared_entries.append((
+                index,
+                entry["Id"],
+                vector,
+                img_sha,
+                hashlib.sha256(text.encode("utf-8")).hexdigest(),
+                len(text),
+                self.audits.get(key),
+            ))
+        self._save_index_cache(cache_path, identity, keys)
+        return dict(identity=identity, bank_sha=bank_sha, model_sha=model_sha, entries=prepared_entries)
+
+    def rank(self, memory, instruction, query_image=None):
+        # Bank bytes, caller entries and encoder configuration are refreshed on
+        # every ranking unless freeze_memory=True was explicitly requested for a read-only bank.
+        if self.freeze_memory and self._frozen_bank_state is not None:
+            prepared = self._frozen_bank_state
+        else:
+            prepared = self._prepare_memory(memory)
+            if self.freeze_memory:
+                self._frozen_bank_state = prepared
+        identity = prepared["identity"]
+        bank_sha, model_sha = prepared["bank_sha"], prepared["model_sha"]
         self.snapshot.update(encoder=self.encoder.snapshot, bank_sha256=bank_sha,
                              model_sha256=model_sha, entries_sha256=identity["entries_sha256"])
         query_text = str(instruction or "")
@@ -411,42 +493,37 @@ class VisualMemoryRetriever:
             if query_image is not None:
                 raise ValueError('纯文字查询不得附带图片')
             query_path = None
+            query_img_sha = None
         else:
             if query_image is None:
                 raise ValueError('图文查询缺少正式参考图')
             query_path = Path(query_image).resolve()
+            query_img_sha = sha256(query_path)
         query, query_key = self._encode(query_text, query_path, self.query_mode,
-                                        image_weight=self.query_image_weight)
+                                        image_weight=self.query_image_weight, image_digest=query_img_sha)
         query_audit = self.audits.get(query_key)
         self.snapshot["query_encoding_audit"] = query_audit
+        query_text_sha = hashlib.sha256(query_text.encode("utf-8")).hexdigest()
+        img_dec_sha = self._image_decoder_sha256
         ranked = []
-        keys = []
-        for index, entry in enumerate(memory):
-            path = resolve_image(entry, self.image_base_path)
-            if path is None:
-                continue
-            text = memory_index_text(entry, self.index_text) if self.key_mode == "joint" else ""
-            vector, key = self._encode(text, path, self.key_mode, scope=scope,
-                                      image_weight=self.key_image_weight)
-            keys.append(key)
+        for index, entry_id, vector, img_sha, text_sha, text_chars, entry_audit in prepared["entries"]:
             if vector.shape != query.shape:
                 raise ValueError("Query and memory vector dimensions differ")
-            ranked.append({"index": index, "Id": entry["Id"], "score": float(vector @ query),
-                           "image_sha256": sha256(path),
-                           "text_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
-                           "text_characters": len(text), "index_text": self.index_text,
+            ranked.append({"index": index, "Id": entry_id, "score": float(vector @ query),
+                           "image_sha256": img_sha,
+                           "text_sha256": text_sha,
+                           "text_characters": text_chars, "index_text": self.index_text,
                            "key_image_weight": self.key_image_weight,
                            "query_image_weight": self.query_image_weight,
-                           "image_decoder_sha256": canonical_digest(self.image_decoder),
+                           "image_decoder_sha256": img_dec_sha,
                            "model_sha256": model_sha, "bank_sha256": bank_sha,
-                           "query_text_sha256": hashlib.sha256(query_text.encode("utf-8")).hexdigest(),
-                           "query_image_sha256": sha256(query_path) if query_path is not None else None,
+                           "query_text_sha256": query_text_sha,
+                           "query_image_sha256": query_img_sha,
                            "query_encoding_audit": query_audit,
-                           "encoding_audit": self.audits.get(key)})
+                           "encoding_audit": entry_audit})
         ranked.sort(key=lambda item: (-item["score"], item["index"]))
         for rank, item in enumerate(ranked, 1):
             item["rank"] = rank
-        self._save_index_cache(cache_path, identity, keys)
         if self.entry_cache is not None:
             self.snapshot['memory_vector_reuse'] = dict(self.entry_cache.stats)
         return ranked

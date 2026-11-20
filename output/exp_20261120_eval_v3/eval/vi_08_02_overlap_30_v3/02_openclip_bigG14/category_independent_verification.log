@@ -1,0 +1,78 @@
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+{
+  "schema_version": 1,
+  "protocol": "category_query_overlap_30_v3",
+  "query_suite": "overlap_30_v3",
+  "status": "passed",
+  "groups_verified": 9,
+  "rankings_recomputed": 360,
+  "candidate_scores_recomputed": 68040,
+  "max_score_error": 0.0,
+  "all_candidate_scores_checked": true,
+  "summary_sha256": "469f1ed399f84fb097d31df0906e680df702c30610ba88d2c05ca17ae6f53566",
+  "groups": {
+    "01_camera": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "c419a5a92b565a74599220d097df0e1deba235a675f1d7d7810ed6321f80a0b7",
+      "scores_sha256": "d7bd784acd4abddfcf669879dc957877fb3913adc2c0d71de870014ae001c852"
+    },
+    "02_chair": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "e2faa77f13a67cabd73885b4e111e2e10b49655daca94e571aa9532b95ed999c",
+      "scores_sha256": "3c9e8c4360a4dcb8917fc338f43708c3cf92463ee185418f2170891e71cd7b91"
+    },
+    "03_cookies": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "39ae2a7fd6d423e784a11a6c1c4724bc1d1592f25a02877007c2a5e6d648dbd9",
+      "scores_sha256": "8d4e14cc2d35d9417cde465aae4271f0dab5ab5ddce8d0fcd663dc4cab49fc8c"
+    },
+    "04_curtain": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "55d9e1b509552864023d1660b7be12f201b54fe72c77251aea007810aeb04bc5",
+      "scores_sha256": "e08ef987cce0e42a84f69a6ae3c95f044e3e2c40eb811c2de053119026146769"
+    },
+    "05_hair_extension": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "a4cd4feed1456bfd943c2ed96c66df5ec5bd25b40ff2517cc32fe9ed71f73cb2",
+      "scores_sha256": "187b7e08c78d44b1cf62e49c5d247419000f7471db272fdfaf9c723e188750ad"
+    },
+    "06_jeans": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "05d9f2c671b3808fea8b5899f8ee663e948eb0e1bda316fbcb5788af8ee0e88c",
+      "scores_sha256": "acd7afbdf109f012edb23319d2c63ae04b5a2a68d3fd6af531ae4e9b90db943b"
+    },
+    "07_shampoo": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "1c57a077b3c34542741498cf5d974b7230cd87c2f4eee2e8c5023c0b39299c57",
+      "scores_sha256": "c01083777e6cfb2b4f4c53c763b6409c86f7439b497d5a371ae5e818ba6faa77"
+    },
+    "08_speaker": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "8bbad6be0154918f8cfb6a00f76f1973be2a9b2189dc3b81c79eba2240167d3e",
+      "scores_sha256": "a15764cc9aff679d3b00947c02c3bb41b1cab51361ad6f069dd2d83a67373240"
+    },
+    "09_toothbrush": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "40e68edc7d249a88c588231a150eeada9039610bc0aca083027cbeb69ed6e6ef",
+      "scores_sha256": "0c959fa34365bf4656ff0865401a9a50f210caac189f9d1fa519a6101cc79743"
+    }
+  }
+}

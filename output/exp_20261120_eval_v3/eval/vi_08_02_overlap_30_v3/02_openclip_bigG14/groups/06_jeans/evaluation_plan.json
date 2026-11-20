@@ -1,0 +1,349 @@
+{
+  "schema_version": 1,
+  "scope": "shared",
+  "pool_path": "/content/AmbiLAGE/resources/evaluation_base/shared_memory/shared_memory.json",
+  "pool_sha256": "bfd8964a4477b694796787ffe2fc746c5eb19a389c23c904ebccc81975cd77a8",
+  "pool_count": 189,
+  "source_memory_id": "groups9_reference_06_jeans_B07FRKQNFV",
+  "frozen_image_sha256": "38033cf15b6f8abcd3a5dd217f0583c46b8918c87f4e13d4dcab1b652a111bca",
+  "source_public_id": "B07FRKQNFV",
+  "method": "visual_inception",
+  "queries": [
+    {
+      "task_id": "feature_01",
+      "instruction": "Stretch pull-on women straight-leg jeans designed with a tummy-shaping front panel and comfortable waist.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_02",
+      "instruction": "Plus-size mid-rise wide-leg flared denim jeans cut for comfortable casual pairing with everyday tops.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_03",
+      "instruction": "Cotton mid-waisted bell-bottom denim jeans featuring comfortable relaxed mobility, practical pockets, and zipper closure.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_04",
+      "instruction": "Stretchable cotton women jeans constructed to retain firm knee recovery throughout long sitting shifts.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_05",
+      "instruction": "Soft lightweight travel denim jeans offering breathable comfort for walking all day outdoors.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_06",
+      "instruction": "Flattering high-rise wide jeans crafted with spacious front pockets large enough for phones.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_07",
+      "instruction": "Loose streetwear boyfriend jeans crafted with durable seam stitching that endures regular home laundering.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_08",
+      "instruction": "Loose cargo street bottoms featuring spacious pocket storage and comfortable soft everyday cotton blend.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_09",
+      "instruction": "High-waisted slimming pull-on straight bottoms crafted for clean waist support and all-day office comfort.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_10",
+      "instruction": "Relaxed wide-leg weekend streetwear bottoms tailored cleanly from breathable woven cloth for warm seasons.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_11",
+      "instruction": "Find stretchy flare women jeans crafted with comfortable pockets and breathable cotton weave.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_12",
+      "instruction": "Find casual comfortable low-waist pull-on street pants tailored for relaxed everyday outfits.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_13",
+      "instruction": "Which stretch cotton women jeans prevent awkward waist gapping when sitting or bending?",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_14",
+      "instruction": "What high-waisted stretchy straight street bottoms pair cleanly with boots and tucked sweaters?",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_15",
+      "instruction": "Want deep cargo flap-pocket street bottoms able cleanly holding daily phones upright.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_16",
+      "instruction": "Which breathable outdoor climbing stretch twill bottoms flex cleanly beneath tight waist harnesses?",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_17",
+      "instruction": "plus size jeans",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_18",
+      "instruction": "relaxed fit street jeans",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_19",
+      "instruction": "stretch waist women jeans",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_20",
+      "instruction": "loose relaxed cotton jeans",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    }
+  ],
+  "conditions": [
+    {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    }
+  ],
+  "training_surrogate_context": {
+    "schema_version": 1,
+    "scope": "all_frozen_images_in_modified_bank",
+    "images": [
+      {
+        "method": "visual_inception",
+        "source_id": "B07FRKQNFV",
+        "image_sha256": "38033cf15b6f8abcd3a5dd217f0583c46b8918c87f4e13d4dcab1b652a111bca",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B071ZFHTZN",
+        "image_sha256": "1008b2fbf0a6ba279e531ab0e5bd64d45d5a82c7fe8721e31d0312cf214eb656",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B08GCSRXKS",
+        "image_sha256": "4b506b0e46d40b69c43d9b0246a10dbfef9532db584f44d656f672b1418e9285",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B07BBLWTLM",
+        "image_sha256": "7cc9136b918330ad6520b27cf7ae3897e146e193964e48a3392797cdc948abfa",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B09PHLS2QD",
+        "image_sha256": "4deada105c81b09461da228e601a52ff2934e3c0cfe6157f616ae5780978e2ce",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B07Z7MQSM1",
+        "image_sha256": "a1b6402d015bb5050879cd9b4858c287e4d3f8bb21a9af12c09db8b1b1c72d12",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B09B63YYCW",
+        "image_sha256": "fe56c83b8ed8ac46338635c42fb38a570dbece823512d838bb9f9adbf1ce5325",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B01590FHS0",
+        "image_sha256": "3e4649db5a41c1e26d7afd64d6acecc845a1658579308f880b37f212a550c206",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B09PNNXYJ4",
+        "image_sha256": "75eecd1bb1d8bd18b6141dcc22dead3878d8390b5765023d72e9772dc21503dc",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      }
+    ],
+    "context_sha256": "0a1421fc9184d1375a888edd6fdb1ca90db476ad60a85b9d33887193da42070b"
+  },
+  "training_identity_policy": "actual_frozen_surrogates_v1",
+  "simultaneous_replacements": [
+    {
+      "source_id": "B071ZFHTZN",
+      "image_sha256": "1008b2fbf0a6ba279e531ab0e5bd64d45d5a82c7fe8721e31d0312cf214eb656",
+      "source_memory_id": "groups9_reference_01_camera_B071ZFHTZN"
+    },
+    {
+      "source_id": "B08GCSRXKS",
+      "image_sha256": "4b506b0e46d40b69c43d9b0246a10dbfef9532db584f44d656f672b1418e9285",
+      "source_memory_id": "groups9_reference_02_chair_B08GCSRXKS"
+    },
+    {
+      "source_id": "B07BBLWTLM",
+      "image_sha256": "7cc9136b918330ad6520b27cf7ae3897e146e193964e48a3392797cdc948abfa",
+      "source_memory_id": "groups9_reference_03_cookies_B07BBLWTLM"
+    },
+    {
+      "source_id": "B09PHLS2QD",
+      "image_sha256": "4deada105c81b09461da228e601a52ff2934e3c0cfe6157f616ae5780978e2ce",
+      "source_memory_id": "groups9_reference_04_curtain_B09PHLS2QD"
+    },
+    {
+      "source_id": "B07Z7MQSM1",
+      "image_sha256": "a1b6402d015bb5050879cd9b4858c287e4d3f8bb21a9af12c09db8b1b1c72d12",
+      "source_memory_id": "groups9_reference_05_hair_extension_B07Z7MQSM1"
+    },
+    {
+      "source_id": "B07FRKQNFV",
+      "image_sha256": "38033cf15b6f8abcd3a5dd217f0583c46b8918c87f4e13d4dcab1b652a111bca",
+      "source_memory_id": "groups9_reference_06_jeans_B07FRKQNFV"
+    },
+    {
+      "source_id": "B09B63YYCW",
+      "image_sha256": "fe56c83b8ed8ac46338635c42fb38a570dbece823512d838bb9f9adbf1ce5325",
+      "source_memory_id": "groups9_reference_07_shampoo_B09B63YYCW"
+    },
+    {
+      "source_id": "B01590FHS0",
+      "image_sha256": "3e4649db5a41c1e26d7afd64d6acecc845a1658579308f880b37f212a550c206",
+      "source_memory_id": "groups9_reference_08_speaker_B01590FHS0"
+    },
+    {
+      "source_id": "B09PNNXYJ4",
+      "image_sha256": "75eecd1bb1d8bd18b6141dcc22dead3878d8390b5765023d72e9772dc21503dc",
+      "source_memory_id": "groups9_reference_09_toothbrush_B09PNNXYJ4"
+    }
+  ],
+  "memory_vector_cache_policy": "content_model_decoder_text_fusion_bound_v1",
+  "encoder_config": "/content/AmbiLAGE/src/visual/config/evaluator.clip_bigG14.heldout.json",
+  "encoder_config_sha256": "a7a7da0b205e7f814af790bf6227a055e35795a6e3a3248c1b0f1c07b1eae1ac",
+  "key_mode": "image",
+  "key_image_weight": 1.0,
+  "query_image_weight": 0.0,
+  "query_mode": "text",
+  "query_manifest": "/content/AmbiLAGE/resources/visual_inception_evaluation/category_query_overlap_30_v3/06_jeans/queries.json",
+  "query_manifest_sha256": "b6a3245eb7916400df4d6d05c9689b6059a8bba222e16ebb0ca15c361f614542",
+  "index_text": "product_feature",
+  "query_image_defended": false,
+  "all_memory_images_equally_defended": true,
+  "shopping_allowed": false,
+  "record_kinds": {
+    "purchase_memory": 51,
+    "simulated_gallery": 138
+  }
+}

@@ -100,6 +100,32 @@ def parse_args(argv=None) -> argparse.Namespace:
         help="AmbiLAGE 自定义配置 JSON 路径或 JSON 字符串",
     )
     parser.add_argument(
+        "--enable-eot",
+        dest="eot_enabled",
+        action="store_true",
+        default=None,
+        help="显式开启 AmbiLAGE 优化阶段 EoT 变换（默认不开启）",
+    )
+    parser.add_argument(
+        "--disable-eot",
+        dest="eot_enabled",
+        action="store_false",
+        help="显式关闭 AmbiLAGE 优化阶段 EoT 变换",
+    )
+    parser.add_argument(
+        "--enable-diffusion-eot",
+        dest="diffusion_eot_enabled",
+        action="store_true",
+        default=None,
+        help="显式开启 AmbiLAGE 优化阶段扩散净化 EoT",
+    )
+    parser.add_argument(
+        "--disable-diffusion-eot",
+        dest="diffusion_eot_enabled",
+        action="store_false",
+        help="显式关闭 AmbiLAGE 优化阶段扩散净化 EoT",
+    )
+    parser.add_argument(
         "--optimization-config",
         default=None,
         help="Lucid 优化配置 JSON 路径",
@@ -119,6 +145,8 @@ def parse_args(argv=None) -> argparse.Namespace:
         parser.error('公开训练清单仅用于环境光协同或视觉记忆植入方法')
     if args.ambilage_config and args.method != 'ambilage':
         parser.error('环境光协同配置只能用于对应方法')
+    if (args.eot_enabled is not None or args.diffusion_eot_enabled is not None) and args.method != 'ambilage':
+        parser.error('EoT 接口开关仅用于环境光协同（ambilage）方法')
     return args
 
 
@@ -132,6 +160,12 @@ def main(argv=None) -> int:
             amb_cfg = json.loads(cfg_p.read_text(encoding="utf-8"))
         else:
             amb_cfg = json.loads(args.ambilage_config)
+    if args.eot_enabled is not None or args.diffusion_eot_enabled is not None:
+        amb_cfg = dict(amb_cfg or {})
+        if args.eot_enabled is not None:
+            amb_cfg['eot_enabled'] = bool(args.eot_enabled)
+        if args.diffusion_eot_enabled is not None:
+            amb_cfg['diffusion_eot_enabled'] = bool(args.diffusion_eot_enabled)
 
     print("=" * 60)
     print(f"AmbiLAGE 统一图像生成启动")

@@ -259,6 +259,8 @@ def _stage4_signature(
     checkpoint_binding: Mapping[str, Any] | None = None,
 ) -> str:
     cfg_dict = config.to_dict()
+    if cfg_dict.get("diffusion_eot_enabled") is None:
+        cfg_dict.pop("diffusion_eot_enabled", None)
     for runtime_key in ("log_every", "checkpoint_every", "resume_from_checkpoint", "save_intermediate_pngs", "device"):
         cfg_dict.pop(runtime_key, None)
     payload = {

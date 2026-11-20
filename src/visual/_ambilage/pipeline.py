@@ -41,6 +41,8 @@ def _stage3_signature(
     training_manifest_sha256: str | None = None,
 ) -> str:
     cfg_dict = config.to_dict()
+    if cfg_dict.get('diffusion_eot_enabled') is None:
+        cfg_dict.pop('diffusion_eot_enabled', None)
     for runtime_key in ('log_every', 'checkpoint_every', 'resume_from_checkpoint', 'save_intermediate_pngs', 'device'):
         cfg_dict.pop(runtime_key, None)
     payload = {
@@ -302,7 +304,7 @@ class AmbiLAGEPipeline:
             if self.config.smoke_test:
                 from .smoke import TinySurrogate, TinyPurifier
                 surrogates = [TinySurrogate(i) for i in range(len(self.surrogate_selection.specs))]
-                purifier = TinyPurifier()
+                purifier = TinyPurifier() if self.config.effective_diffusion_eot_enabled() else None
                 vae = backend.make_vae()
                 effective = replace(self.config, latent_working_size=64)
             else:

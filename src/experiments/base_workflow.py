@@ -255,6 +255,14 @@ def main(argv=None):
     parser.add_argument('--steps', type=int)
     parser.add_argument('--epsilon-levels', type=int, default=None)
     parser.add_argument('--ambilage-config', type=Path)
+    parser.add_argument('--enable-eot', dest='eot_enabled', action='store_true', default=None,
+                        help='显式开启 AmbiLAGE 优化阶段 EoT 变换（默认不开启）')
+    parser.add_argument('--disable-eot', dest='eot_enabled', action='store_false',
+                        help='显式关闭 AmbiLAGE 优化阶段 EoT 变换')
+    parser.add_argument('--enable-diffusion-eot', dest='diffusion_eot_enabled', action='store_true', default=None,
+                        help='显式开启 AmbiLAGE 优化阶段扩散净化 EoT')
+    parser.add_argument('--disable-diffusion-eot', dest='diffusion_eot_enabled', action='store_false',
+                        help='显式关闭 AmbiLAGE 优化阶段扩散净化 EoT')
     parser.add_argument('--visual-inception-config', type=Path)
     parser.add_argument('--training-manifest', type=Path)
     parser.add_argument('--training-bundles-root', type=Path, help='每组子目录保存独立训练包清单的公开根目录')
@@ -285,6 +293,8 @@ def main(argv=None):
         parser.error('公开训练包根目录仅用于环境光协同或视觉记忆植入，且与单份清单互斥')
     if args.ambilage_config and args.method != 'ambilage':
         parser.error('环境光协同配置只能用于对应方法')
+    if (args.eot_enabled is not None or args.diffusion_eot_enabled is not None) and args.method != 'ambilage':
+        parser.error('EoT 接口开关仅用于环境光协同（ambilage）方法')
     if args.environments != 'single' and args.query_manifest is not None:
         parser.error('standard3 多环境评测不能同时指定单个 query-manifest')
     if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]{0,63}', args.evaluation_name):
@@ -305,6 +315,12 @@ def main(argv=None):
     if args.query_manifest is not None and len(groups) != 1:
         parser.error('多组运行不能共用一份正式询问清单')
     config = read_json(args.ambilage_config) if args.ambilage_config else None
+    if args.eot_enabled is not None or args.diffusion_eot_enabled is not None:
+        config = dict(config or {})
+        if args.eot_enabled is not None:
+            config['eot_enabled'] = bool(args.eot_enabled)
+        if args.diffusion_eot_enabled is not None:
+            config['diffusion_eot_enabled'] = bool(args.diffusion_eot_enabled)
     inception_config = read_json(args.visual_inception_config) if args.visual_inception_config else None
     # 所有生成先完成并冻结，随后才进入任何一组正式评估。
     if args.stage in ('generate', 'all'):

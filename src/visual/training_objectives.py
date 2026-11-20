@@ -1090,9 +1090,17 @@ class SequentialEnsembleObjective:
         self.selection = selection or selection_from_config(config)
         snapshots = validate_loaded_surrogates(self.surrogates, self.selection,
             allow_fixture=bool(getattr(config, 'smoke_test', False)))
+        eot_on = bool(getattr(config, 'eot_enabled', False))
+        raw_diff_eot = getattr(config, 'diffusion_eot_enabled', None)
+        if raw_diff_eot is None:
+            self.diffusion_eot_enabled = bool(eot_on or purifier is not None)
+        else:
+            self.diffusion_eot_enabled = bool(raw_diff_eot)
         self.diffusion_weight = float(getattr(config, 'diffusion_weight', 0.08))
-        if not torch.isfinite(torch.tensor(self.diffusion_weight)) or self.diffusion_weight <= 0:
-            raise ValueError('完整新方法必须启用正权重扩散净化目标')
+        if not torch.isfinite(torch.tensor(self.diffusion_weight)) or (
+            self.diffusion_weight <= 0 if self.diffusion_eot_enabled else self.diffusion_weight < 0
+        ):
+            raise ValueError('扩散净化目标权重无效')
         self.ensemble_temperature = float(getattr(config, 'ensemble_temperature', 0.20))
         self.ensemble_uniform_mix = float(getattr(config, 'ensemble_uniform_mix', 0.45))
         if not math.isfinite(self.ensemble_temperature) or self.ensemble_temperature <= 0:
@@ -1118,22 +1126,26 @@ class SequentialEnsembleObjective:
         )
         if is_held_out_purifier_reference(explicit_purifier_path):
             raise ValueError('留出评估净化器 SD 2.1-base 禁止用于训练阶段')
-        if purifier is None:
-            from src.visual.diffusion_purification import LatentDiffusionPurifier, PurificationConfig
-            from src.model_registry import resolve_model
-            resolved_purifier = explicit_purifier_path or resolve_model('purifier')
-            if is_held_out_purifier_reference(resolved_purifier):
+        if self.diffusion_eot_enabled:
+            if purifier is None:
+                from src.visual.diffusion_purification import LatentDiffusionPurifier, PurificationConfig
+                from src.model_registry import resolve_model
+                resolved_purifier = explicit_purifier_path or resolve_model('purifier')
+                if is_held_out_purifier_reference(resolved_purifier):
+                    raise ValueError('留出评估净化器 SD 2.1-base 禁止用于训练阶段')
+                self.purifier = LatentDiffusionPurifier(PurificationConfig(
+                    model_path=resolved_purifier,
+                    working_size=int(getattr(config, 'purifier_working_size', 256)),
+                    reverse_steps=int(getattr(config, 'purifier_steps', 10)),
+                    gradient_checkpointing=bool(getattr(config, 'purifier_gradient_checkpointing', True))),
+                    device=str(self.surrogates[0].device))
+            if getattr(getattr(self.purifier, 'config', None), 'reverse_steps', 10) != 10:
+                raise ValueError('开启扩散净化期望变换时固定十步扩散净化')
+            if is_held_out_purifier_reference(getattr(getattr(self.purifier, 'config', None), 'model_path', None)):
                 raise ValueError('留出评估净化器 SD 2.1-base 禁止用于训练阶段')
-            self.purifier = LatentDiffusionPurifier(PurificationConfig(
-                model_path=resolved_purifier,
-                working_size=int(getattr(config, 'purifier_working_size', 256)),
-                reverse_steps=int(getattr(config, 'purifier_steps', 10)),
-                gradient_checkpointing=bool(getattr(config, 'purifier_gradient_checkpointing', True))),
-                device=str(self.surrogates[0].device))
-        if getattr(getattr(self.purifier, 'config', None), 'reverse_steps', 10) != 10:
-            raise ValueError('完整新方法固定十步扩散净化')
-        if is_held_out_purifier_reference(getattr(getattr(self.purifier, 'config', None), 'model_path', None)):
-            raise ValueError('留出评估净化器 SD 2.1-base 禁止用于训练阶段')
+        else:
+            self.diffusion_weight = 0.0
+            self.purifier = None
 
         self.effective_category_mode = resolve_effective_category_mode(config, training_bundle)
         self.effective_key_mode = resolve_effective_key_mode(config, self.effective_category_mode, training_bundle)
@@ -1290,12 +1302,13 @@ class SequentialEnsembleObjective:
         single_task_pcgrad = bool(
             len(self.surrogates) == 1 and bool(getattr(config, 'single_model_task_pcgrad', False))
         )
+        eot_on = bool(getattr(config, 'eot_enabled', False))
         single_multiscale_eot = bool(
             len(self.surrogates) == 1
-            and bool(getattr(config, 'eot_enabled', True))
+            and eot_on
             and bool(getattr(config, 'single_model_multiscale_eot', False))
         )
-        eot_paths = ['identity', 'pillow_blur_bpda', 'jpeg_exact_forward_ste', 'resize']
+        eot_paths = ['identity', 'pillow_blur_bpda', 'jpeg_exact_forward_ste', 'resize'] if eot_on else ['identity']
         if single_multiscale_eot:
             eot_paths.append('multiscale_grid_breaking_crop_zoom')
         grad_exec_mode = (
@@ -1328,10 +1341,12 @@ class SequentialEnsembleObjective:
             ),
             'ensemble_temperature': self.ensemble_temperature,
             'ensemble_uniform_mix': self.ensemble_uniform_mix,
-            'eot_enabled': bool(getattr(config, 'eot_enabled', True)),
+            'eot_enabled': eot_on,
+            'diffusion_eot_enabled': self.diffusion_eot_enabled,
             'eot_paths': eot_paths,
-            'diffusion_weight': self.diffusion_weight, 'diffusion_gradient': 'full',
-            'purifier': self.purifier.snapshot(),
+            'diffusion_weight': self.diffusion_weight,
+            'diffusion_gradient': 'full' if self.diffusion_eot_enabled else 'disabled',
+            'purifier': self.purifier.snapshot() if self.purifier is not None else {'kind': 'disabled', 'enabled': False},
             'vram_governance': {
                 'low_vram_mode': self._low_vram_mode,
                 'offloaded_text_bytes': offloaded_text_bytes,
@@ -1361,16 +1376,20 @@ class SequentialEnsembleObjective:
         return self._public_sampling['step_indices'][idx]
 
     def _shared_inputs(self, image, step, *, gradient):
-        base_device = getattr(self.purifier, 'device', self.surrogates[0].device)
+        base_device = getattr(self.purifier, 'device', self.surrogates[0].device) if self.purifier is not None else self.surrogates[0].device
         base_img = image.to(base_device)
-        eot_on = bool(getattr(self.config, 'eot_enabled', True))
+        eot_on = bool(getattr(self.config, 'eot_enabled', False))
         if eot_on:
             views = transformed_batch(base_img, step=max(1, int(step)))
             if len(self.surrogates) == 1 and bool(getattr(self.config, 'single_model_multiscale_eot', False)):
                 views = multiscale_grid_breaking_views(base_img, step=max(1, int(step)), base_views=views)
         else:
             views = base_img
-        purified = self.purifier(base_img, seed=self._seed(step), gradient=gradient)
+        purified = (
+            self.purifier(base_img, seed=self._seed(step), gradient=gradient)
+            if (self.diffusion_eot_enabled and self.purifier is not None)
+            else None
+        )
         return views, purified, eot_on
 
     def _evaluate_proxy_split_core(
@@ -1395,9 +1414,14 @@ class SequentialEnsembleObjective:
         score = objective.scores(feature)
         pub_idx = self._public_indices_for_step(step, progressive=progressive)
 
-        purified_out = surrogate.encode_image(purified.to(surrogate.device))
-        purified_feature = purified_out.global_embedding
-        purified_patches = getattr(purified_out, 'patch_tokens', None)
+        has_purified = bool(self.diffusion_eot_enabled and purified is not None and self.diffusion_weight > 0.0)
+        if has_purified:
+            purified_out = surrogate.encode_image(purified.to(surrogate.device))
+            purified_feature = purified_out.global_embedding
+            purified_patches = getattr(purified_out, 'patch_tokens', None)
+        else:
+            purified_feature = None
+            purified_patches = None
 
         precomputed_stationary = None
         resolved_mult = 1.0 if text_multiplier is None else float(text_multiplier)
@@ -1408,14 +1432,20 @@ class SequentialEnsembleObjective:
                     patch_tokens=views_patches.detach() if views_patches is not None else None,
                     progressive=False,
                 )
-                stat_p, sj_p, st_p = objective.component_values(
-                    purified_feature.detach(),
-                    patch_tokens=purified_patches.detach() if purified_patches is not None else None,
-                    progressive=False,
-                )
-                stat_u = float(((stat_eot + self.diffusion_weight * stat_p) / (1.0 + self.diffusion_weight)).detach())
-                stat_j = float(((sj_eot + self.diffusion_weight * sj_p) / (1.0 + self.diffusion_weight)).detach())
-                stat_t = float(((st_eot + self.diffusion_weight * st_p) / (1.0 + self.diffusion_weight)).detach())
+                if has_purified:
+                    stat_p, sj_p, st_p = objective.component_values(
+                        purified_feature.detach(),
+                        patch_tokens=purified_patches.detach() if purified_patches is not None else None,
+                        progressive=False,
+                    )
+                    denom = 1.0 + self.diffusion_weight
+                    stat_u = float(((stat_eot + self.diffusion_weight * stat_p) / denom).detach())
+                    stat_j = float(((sj_eot + self.diffusion_weight * sj_p) / denom).detach())
+                    stat_t = float(((st_eot + self.diffusion_weight * st_p) / denom).detach())
+                else:
+                    stat_u = float(stat_eot.detach())
+                    stat_j = float(sj_eot.detach())
+                    stat_t = float(st_eot.detach())
                 precomputed_stationary = (stat_u, stat_j, stat_t)
             if (
                 text_multiplier is None
@@ -1437,18 +1467,23 @@ class SequentialEnsembleObjective:
             public_query_indices=pub_idx,
             text_multiplier=resolved_mult,
         )
-        p_cat, p_joint_w, p_ot_w, pvalue, p_joint, p_text = objective.split_three_component_values(
-            purified_feature,
-            patch_tokens=purified_patches,
-            step=step,
-            progressive=progressive,
-            public_query_indices=pub_idx,
-            text_multiplier=resolved_mult,
-        )
-        denom = 1.0 + self.diffusion_weight
-        val_cat = (eot_cat + self.diffusion_weight * p_cat) / denom
-        val_joint = (eot_joint_w + self.diffusion_weight * p_joint_w) / denom
-        val_ot = (eot_ot_w + self.diffusion_weight * p_ot_w) / denom
+        if has_purified:
+            p_cat, p_joint_w, p_ot_w, pvalue, p_joint, p_text = objective.split_three_component_values(
+                purified_feature,
+                patch_tokens=purified_patches,
+                step=step,
+                progressive=progressive,
+                public_query_indices=pub_idx,
+                text_multiplier=resolved_mult,
+            )
+            denom = 1.0 + self.diffusion_weight
+            val_cat = (eot_cat + self.diffusion_weight * p_cat) / denom
+            val_joint = (eot_joint_w + self.diffusion_weight * p_joint_w) / denom
+            val_ot = (eot_ot_w + self.diffusion_weight * p_ot_w) / denom
+        else:
+            denom = 1.0
+            val_cat, val_joint, val_ot = eot_cat, eot_joint_w, eot_ot_w
+            pvalue, p_joint, p_text = eot, eot_joint, eot_text
         utility = val_cat + val_joint + val_ot
 
         # 同时计算恒定终端评估标尺值，供 _baseline_values 与退火控制器跨阶段一致比较
@@ -1461,18 +1496,31 @@ class SequentialEnsembleObjective:
                     patch_tokens=views_patches.detach() if views_patches is not None else None,
                     progressive=False,
                 )
-                stat_p, sj_p, st_p = objective.component_values(
-                    purified_feature.detach(),
-                    patch_tokens=purified_patches.detach() if purified_patches is not None else None,
-                    progressive=False,
-                )
-                stat_util = float(((stat_eot + self.diffusion_weight * stat_p) / denom).detach())
-                stat_joint = float(((sj_eot + self.diffusion_weight * sj_p) / denom).detach())
-                stat_text = float(((st_eot + self.diffusion_weight * st_p) / denom).detach())
+                if has_purified:
+                    stat_p, sj_p, st_p = objective.component_values(
+                        purified_feature.detach(),
+                        patch_tokens=purified_patches.detach() if purified_patches is not None else None,
+                        progressive=False,
+                    )
+                    stat_util = float(((stat_eot + self.diffusion_weight * stat_p) / denom).detach())
+                    stat_joint = float(((sj_eot + self.diffusion_weight * sj_p) / denom).detach())
+                    stat_text = float(((st_eot + self.diffusion_weight * st_p) / denom).detach())
+                else:
+                    stat_util = float(stat_eot.detach())
+                    stat_joint = float(sj_eot.detach())
+                    stat_text = float(st_eot.detach())
         else:
             stat_util = float(utility.detach())
-            stat_joint = float(((eot_joint + self.diffusion_weight * p_joint) / denom).detach())
-            stat_text = float(((eot_text + self.diffusion_weight * p_text) / denom).detach())
+            stat_joint = (
+                float(((eot_joint + self.diffusion_weight * p_joint) / denom).detach())
+                if has_purified
+                else float(eot_joint.detach())
+            )
+            stat_text = (
+                float(((eot_text + self.diffusion_weight * p_text) / denom).detach())
+                if has_purified
+                else float(eot_text.detach())
+            )
 
         row = {
             'eot': float(eot.detach()),
@@ -1612,15 +1660,18 @@ class SequentialEnsembleObjective:
 
     def _single_surrogate_image_gradient(self, image, step=1):
         """单代理主导任务 PCGrad 与双分支（EoT vs 扩散净化）正交合并梯度。"""
-        base_device = getattr(self.purifier, 'device', self.surrogates[0].device)
+        base_device = getattr(self.purifier, 'device', self.surrogates[0].device) if self.purifier is not None else self.surrogates[0].device
         leaf_img = image.detach().to(base_device).clone().requires_grad_(True)
         views, purified, eot_on = self._shared_inputs(leaf_img, step, gradient='full')
+        has_purified = bool(self.diffusion_eot_enabled and purified is not None and self.diffusion_weight > 0.0)
         v_leaf = views.detach().requires_grad_(True)
-        p_leaf = purified.detach().requires_grad_(True)
+        p_leaf = purified.detach().requires_grad_(True) if has_purified else None
+        grad_targets = (v_leaf, p_leaf) if has_purified else (v_leaf,)
         use_prog = bool(getattr(self.config, 'psi_progressive_schedule', False))
         joint_protect = bool(getattr(self.config, 'joint_grad_protect', False))
         vis_cap = float(getattr(self.config, 'single_model_vis_grad_cap', 0.80))
         joint_cap = float(getattr(self.config, 'joint_grad_cap', 0.35))
+        conflict_p = False
         conflict_jv = False
         conflict_jp = False
         try:
@@ -1636,37 +1687,47 @@ class SequentialEnsembleObjective:
                 grads_map = {}
                 for idx_t, (tname, tval) in enumerate(active_terms):
                     grads_map[tname] = torch.autograd.grad(
-                        tval, (v_leaf, p_leaf), retain_graph=(idx_t < len(active_terms) - 1)
+                        tval, grad_targets, retain_graph=(idx_t < len(active_terms) - 1)
                     )
-                gv_cat, gp_cat = grads_map.get('cat', (torch.zeros_like(v_leaf), torch.zeros_like(p_leaf)))
-                gv_ot, gp_ot = grads_map.get('ot', (torch.zeros_like(v_leaf), torch.zeros_like(p_leaf)))
-                gv_j, gp_j = grads_map.get('joint', (torch.zeros_like(v_leaf), torch.zeros_like(p_leaf)))
+                gv_cat = grads_map['cat'][0] if 'cat' in grads_map else torch.zeros_like(v_leaf)
+                gv_ot = grads_map['ot'][0] if 'ot' in grads_map else torch.zeros_like(v_leaf)
+                gv_j = grads_map['joint'][0] if 'joint' in grads_map else torch.zeros_like(v_leaf)
                 gv_cat_ot, conflict_v = single_model_dominant_pcgrad(gv_cat.detach(), gv_ot.detach(), aux_cap=vis_cap)
-                gp_cat_ot, conflict_p = single_model_dominant_pcgrad(gp_cat.detach(), gp_ot.detach(), aux_cap=vis_cap)
                 gv_j_merged, conflict_jv = single_model_dominant_pcgrad(gv_cat.detach(), gv_j.detach(), aux_cap=joint_cap)
-                gp_j_merged, conflict_jp = single_model_dominant_pcgrad(gp_cat.detach(), gp_j.detach(), aux_cap=joint_cap)
                 grad_views = gv_cat_ot + (gv_j_merged - gv_cat.detach())
-                grad_purified = gp_cat_ot + (gp_j_merged - gp_cat.detach())
-                del val_cat, val_joint, val_ot, utility_tensor, grads_map, gv_cat, gp_cat, gv_ot, gp_ot, gv_j, gp_j
+                if has_purified:
+                    gp_cat = grads_map['cat'][1] if 'cat' in grads_map else torch.zeros_like(p_leaf)
+                    gp_ot = grads_map['ot'][1] if 'ot' in grads_map else torch.zeros_like(p_leaf)
+                    gp_j = grads_map['joint'][1] if 'joint' in grads_map else torch.zeros_like(p_leaf)
+                    gp_cat_ot, conflict_p = single_model_dominant_pcgrad(gp_cat.detach(), gp_ot.detach(), aux_cap=vis_cap)
+                    gp_j_merged, conflict_jp = single_model_dominant_pcgrad(gp_cat.detach(), gp_j.detach(), aux_cap=joint_cap)
+                    grad_purified = gp_cat_ot + (gp_j_merged - gp_cat.detach())
+                    del gp_cat, gp_ot, gp_j
+                else:
+                    grad_purified = None
+                del val_cat, val_joint, val_ot, utility_tensor, grads_map, gv_cat, gv_ot, gv_j
             else:
                 val_cat, val_vis, utility_tensor, score, row = self._evaluate_proxy_components(
                     0, v_leaf, p_leaf, step=step, progressive=use_prog
                 )
                 if bool(val_cat.requires_grad) and bool(val_vis.requires_grad):
-                    gv_cat, gp_cat = torch.autograd.grad(val_cat, (v_leaf, p_leaf), retain_graph=True)
-                    gv_vis, gp_vis = torch.autograd.grad(val_vis, (v_leaf, p_leaf), retain_graph=False)
+                    g_cat = torch.autograd.grad(val_cat, grad_targets, retain_graph=True)
+                    g_vis = torch.autograd.grad(val_vis, grad_targets, retain_graph=False)
                 elif bool(val_cat.requires_grad):
-                    gv_cat, gp_cat = torch.autograd.grad(val_cat, (v_leaf, p_leaf), retain_graph=False)
-                    gv_vis, gp_vis = torch.zeros_like(v_leaf), torch.zeros_like(p_leaf)
+                    g_cat = torch.autograd.grad(val_cat, grad_targets, retain_graph=False)
+                    g_vis = tuple(torch.zeros_like(t) for t in grad_targets)
                 elif bool(val_vis.requires_grad):
-                    gv_cat, gp_cat = torch.zeros_like(v_leaf), torch.zeros_like(p_leaf)
-                    gv_vis, gp_vis = torch.autograd.grad(val_vis, (v_leaf, p_leaf), retain_graph=False)
+                    g_cat = tuple(torch.zeros_like(t) for t in grad_targets)
+                    g_vis = torch.autograd.grad(val_vis, grad_targets, retain_graph=False)
                 else:
-                    gv_cat, gp_cat = torch.zeros_like(v_leaf), torch.zeros_like(p_leaf)
-                    gv_vis, gp_vis = torch.zeros_like(v_leaf), torch.zeros_like(p_leaf)
-                grad_views, conflict_v = single_model_dominant_pcgrad(gv_cat.detach(), gv_vis.detach(), aux_cap=vis_cap)
-                grad_purified, conflict_p = single_model_dominant_pcgrad(gp_cat.detach(), gp_vis.detach(), aux_cap=vis_cap)
-                del val_cat, val_vis, utility_tensor, gv_cat, gp_cat, gv_vis, gp_vis
+                    g_cat = tuple(torch.zeros_like(t) for t in grad_targets)
+                    g_vis = tuple(torch.zeros_like(t) for t in grad_targets)
+                grad_views, conflict_v = single_model_dominant_pcgrad(g_cat[0].detach(), g_vis[0].detach(), aux_cap=vis_cap)
+                if has_purified:
+                    grad_purified, conflict_p = single_model_dominant_pcgrad(g_cat[1].detach(), g_vis[1].detach(), aux_cap=vis_cap)
+                else:
+                    grad_purified = None
+                del val_cat, val_vis, utility_tensor, g_cat, g_vis
         finally:
             self._maybe_offload_streamed_proxy(0)
 
@@ -1674,8 +1735,11 @@ class SequentialEnsembleObjective:
             g_img_views = torch.autograd.grad(views, leaf_img, grad_outputs=grad_views, retain_graph=False)[0]
         else:
             g_img_views = grad_views
-        g_img_pur = torch.autograd.grad(purified, leaf_img, grad_outputs=grad_purified, retain_graph=False)[0]
-        gradient, conflict_branch = single_model_dominant_pcgrad(g_img_views, g_img_pur, aux_cap=1.25)
+        if has_purified:
+            g_img_pur = torch.autograd.grad(purified, leaf_img, grad_outputs=grad_purified, retain_graph=False)[0]
+            gradient, conflict_branch = single_model_dominant_pcgrad(g_img_views, g_img_pur, aux_cap=1.25)
+        else:
+            gradient, conflict_branch = g_img_views, False
         gradient = gradient.detach().to(image.device)
         if not torch.isfinite(gradient).all():
             raise FloatingPointError('单代理任务 PCGrad 目标梯度含非有限值')
@@ -1691,7 +1755,9 @@ class SequentialEnsembleObjective:
             'model_utilities': values.cpu().tolist(),
             'model_relative_gains': gains.cpu().tolist(),
             'paths': [row],
-            'purifier_gradient': 'full',
+            'eot_enabled': eot_on,
+            'diffusion_eot_enabled': self.diffusion_eot_enabled,
+            'purifier_gradient': 'full' if has_purified else 'disabled',
             'pcgrad_applied': bool(conflict_v or conflict_p or conflict_jv or conflict_jp or conflict_branch),
             'single_model_task_pcgrad': True,
             'joint_grad_protect': joint_protect,
@@ -1712,11 +1778,13 @@ class SequentialEnsembleObjective:
         if len(self.surrogates) == 1 and bool(getattr(self.config, 'single_model_task_pcgrad', False)):
             return self._single_surrogate_image_gradient(image, step=step)
 
-        base_device = getattr(self.purifier, 'device', self.surrogates[0].device)
+        base_device = getattr(self.purifier, 'device', self.surrogates[0].device) if self.purifier is not None else self.surrogates[0].device
         leaf_img = image.detach().to(base_device).clone().requires_grad_(True)
         views, purified, eot_on = self._shared_inputs(leaf_img, step, gradient='full')
+        has_purified = bool(self.diffusion_eot_enabled and purified is not None and self.diffusion_weight > 0.0)
         v_leaf = views.detach().requires_grad_(True)
-        p_leaf = purified.detach().requires_grad_(True)
+        p_leaf = purified.detach().requires_grad_(True) if has_purified else None
+        grad_targets = (v_leaf, p_leaf) if has_purified else (v_leaf,)
         stat_values, joint_values, text_values, scores, rows, gv_list, gp_list = [], [], [], [], [], [], []
         use_prog = bool(getattr(self.config, 'psi_progressive_schedule', False))
         for i in range(len(self.surrogates)):
@@ -1724,7 +1792,7 @@ class SequentialEnsembleObjective:
                 value, score, row = self._evaluate_proxy_from_inputs(
                     i, v_leaf, p_leaf, step=step, progressive=use_prog
                 )
-                gv, gp = torch.autograd.grad(value, (v_leaf, p_leaf), retain_graph=False)
+                grads = torch.autograd.grad(value, grad_targets, retain_graph=False)
             finally:
                 self._maybe_offload_streamed_proxy(i)
             stat_val = torch.tensor(row['stationary_utility'], device=image.device, dtype=torch.float32)
@@ -1733,9 +1801,10 @@ class SequentialEnsembleObjective:
             text_values.append(torch.tensor(row['stationary_text_utility'], device=image.device, dtype=torch.float32))
             scores.append(score.detach().to(image.device))
             rows.append(row)
-            gv_list.append(gv.detach())
-            gp_list.append(gp.detach())
-            del value, score, gv, gp
+            gv_list.append(grads[0].detach())
+            if has_purified:
+                gp_list.append(grads[1].detach())
+            del value, score, grads
         values = torch.stack(stat_values)
         j_tensor = torch.stack(joint_values)
         t_tensor = torch.stack(text_values)
@@ -1743,18 +1812,25 @@ class SequentialEnsembleObjective:
         weights, gains = self._weights_from_values(values, joint_values=j_tensor, text_values=t_tensor)
         if self.pcgrad_enabled and len(self.surrogates) > 1:
             grad_views = pcgrad_merge_gradients(gv_list, weights)
-            grad_purified = pcgrad_merge_gradients(gp_list, weights)
+            grad_purified = pcgrad_merge_gradients(gp_list, weights) if has_purified else None
         else:
             grad_views = torch.zeros_like(v_leaf)
-            grad_purified = torch.zeros_like(p_leaf)
+            grad_purified = torch.zeros_like(p_leaf) if has_purified else None
             for i in range(len(self.surrogates)):
                 w_i = float(weights[i])
                 grad_views.add_(gv_list[i], alpha=w_i)
-                grad_purified.add_(gp_list[i], alpha=w_i)
-        if eot_on:
-            gradient = torch.autograd.grad((views, purified), leaf_img, grad_outputs=(grad_views, grad_purified))[0]
+                if has_purified:
+                    grad_purified.add_(gp_list[i], alpha=w_i)
+        if has_purified:
+            if eot_on:
+                gradient = torch.autograd.grad((views, purified), leaf_img, grad_outputs=(grad_views, grad_purified))[0]
+            else:
+                gradient = grad_views + torch.autograd.grad(purified, leaf_img, grad_outputs=grad_purified)[0]
         else:
-            gradient = grad_views + torch.autograd.grad(purified, leaf_img, grad_outputs=grad_purified)[0]
+            if eot_on:
+                gradient = torch.autograd.grad(views, leaf_img, grad_outputs=grad_views)[0]
+            else:
+                gradient = grad_views
         gradient = gradient.detach().to(image.device)
         if not torch.isfinite(gradient).all():
             raise FloatingPointError('代理目标梯度含非有限值')
@@ -1764,7 +1840,9 @@ class SequentialEnsembleObjective:
             'model_utilities': values.cpu().tolist(),
             'model_relative_gains': gains.cpu().tolist(),
             'paths': rows,
-            'purifier_gradient': 'full',
+            'eot_enabled': eot_on,
+            'diffusion_eot_enabled': self.diffusion_eot_enabled,
+            'purifier_gradient': 'full' if has_purified else 'disabled',
             'pcgrad_applied': bool(self.pcgrad_enabled and len(self.surrogates) > 1),
         }
         if self.text_aware_proxy_weighting and self._baseline_joint_values is not None and self._baseline_text_values is not None:

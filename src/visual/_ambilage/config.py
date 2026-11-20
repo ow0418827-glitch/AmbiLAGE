@@ -157,7 +157,8 @@ class AmbiLAGEConfig:
     anchor_steps: int = 32                  # Stage 3 32 步回溯线搜索步数
     anchor_guidance_scale: float = 2.5
     planner_max_new_tokens: int = 768
-    eot_enabled: bool = True
+    eot_enabled: bool = False
+    diffusion_eot_enabled: bool | None = None
     diffusion_weight: float = 0.08          # 压低扩散净化梯度权重以消除潜空间棋盘格伪影
     purifier_steps: int = 10
 
@@ -217,6 +218,12 @@ class AmbiLAGEConfig:
     joint_key_aux_mix: float = 0.0
     joint_grad_protect: bool = False
     joint_grad_cap: float = 0.35
+
+    def effective_diffusion_eot_enabled(self) -> bool:
+        """解析扩散净化 EoT 开关：显式设置时优先，否则跟随 `eot_enabled`。"""
+        if self.diffusion_eot_enabled is not None:
+            return bool(self.diffusion_eot_enabled)
+        return bool(self.eot_enabled)
 
     def validate(self) -> None:
         """严格校验配置参数有效性，杜绝越界或无效数值。"""
@@ -377,8 +384,16 @@ class AmbiLAGEConfig:
             raise ValueError("自然锚点生成步数必须为正整数")
         if type(self.latent_working_size) is not int or self.latent_working_size < 64 or self.latent_working_size % 8:
             raise ValueError("潜空间工作尺寸必须至少六十四且为八的倍数")
-        if not self.eot_enabled or self.diffusion_weight <= 0 or self.purifier_steps != 10:
-            raise ValueError("正式方法须开启期望变换和正权重十步扩散净化")
+        if type(self.eot_enabled) is not bool:
+            raise ValueError("期望变换开关 eot_enabled 必须为布尔值")
+        if self.diffusion_eot_enabled is not None and type(self.diffusion_eot_enabled) is not bool:
+            raise ValueError("扩散净化期望变换开关 diffusion_eot_enabled 必须为布尔值或 None")
+        if self.effective_diffusion_eot_enabled():
+            if self.diffusion_weight <= 0 or self.purifier_steps != 10:
+                raise ValueError("开启扩散净化期望变换时须使用正权重十步扩散净化")
+        else:
+            if self.diffusion_weight < 0:
+                raise ValueError("扩散净化权重 diffusion_weight 不能为负数")
         if self.joint_weight <= 0:
             raise ValueError("图文联合目标权重必须为正")
         from src.visual.training_surrogates import is_held_out_purifier_reference

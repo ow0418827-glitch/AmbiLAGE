@@ -99,10 +99,20 @@ def validate_ready(root,require_production=True):
     validate_loaded_surrogates(training.get('surrogates',[]),selection,
         allow_fixture=not require_production and ready.get('test_fixture') is True)
     if require_production:
-        if (training.get('eot_enabled') is not True or training.get('diffusion_weight',0)<=0 or
-            training.get('diffusion_gradient')!='full' or
-            training.get('purifier',{}).get('config',{}).get('reverse_steps')!=10):
-            raise ValueError('期望变换或全梯度十步净化证据不完整')
+        eot_val = training.get('eot_enabled')
+        if type(eot_val) is not bool:
+            raise ValueError('期望变换开关审计记录缺失')
+        diff_eot_val = training.get('diffusion_eot_enabled')
+        diff_eot_on = bool(eot_val) if diff_eot_val is None else bool(diff_eot_val)
+        if diff_eot_on:
+            if (training.get('diffusion_weight', 0) <= 0 or
+                training.get('diffusion_gradient') != 'full' or
+                training.get('purifier', {}).get('config', {}).get('reverse_steps') != 10):
+                raise ValueError('期望变换或全梯度十步净化证据不完整')
+        else:
+            if (training.get('diffusion_weight', 0) != 0 or
+                training.get('diffusion_gradient') != 'disabled'):
+                raise ValueError('关闭扩散净化期望变换时须关闭净化梯度并置零权重')
         vae=ready.get('refinement',{}).get('vae',{})
         if vae.get('kind')!='flux_16_channel_vae' or vae.get('latent_channels')!=16:
             raise ValueError('缺少十六通道生成载体证据')

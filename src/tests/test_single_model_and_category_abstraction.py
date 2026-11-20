@@ -444,14 +444,14 @@ def test_ambilage_single_model_pcgrad_multiscale_and_category_modes(tmp_path):
     views_multi = multiscale_grid_breaking_views(base_img, step=1, base_views=torch.cat([base_img] * 4, dim=0))
     assert views_multi.shape[0] == 6
 
-    cfg_1 = AmbiLAGEConfig(steps=1, surrogate_set='clip_l14', single_model_multiscale_eot=True, smoke_test=True)
+    cfg_1 = AmbiLAGEConfig(steps=1, surrogate_set='clip_l14', eot_enabled=True, single_model_multiscale_eot=True, smoke_test=True)
     obj_1 = SequentialEnsembleObjective(
         [TinySurrogate(0)], base_img, 'source key', 'target text', cfg_1, purifier=TinyPurifier()
     )
     views_1, _, _ = obj_1._shared_inputs(base_img, step=1, gradient='none')
     assert views_1.shape[0] == 6
 
-    cfg_3 = AmbiLAGEConfig(steps=1, surrogate_set='visual_inception_paper', single_model_multiscale_eot=True, smoke_test=True)
+    cfg_3 = AmbiLAGEConfig(steps=1, surrogate_set='visual_inception_paper', eot_enabled=True, single_model_multiscale_eot=True, smoke_test=True)
     obj_3 = SequentialEnsembleObjective(
         [TinySurrogate(i) for i in range(3)], base_img, 'source key', 'target text', cfg_3, purifier=TinyPurifier()
     )
@@ -468,6 +468,7 @@ def test_ambilage_single_model_pcgrad_multiscale_and_category_modes(tmp_path):
             training_manifest=str(manifest),
             memory_key_mode='image',
             category_data_mode=mode,
+            eot_enabled=True,
             single_model_task_pcgrad=True,
             single_model_multiscale_eot=True,
             smoke_test=True,
@@ -648,3 +649,100 @@ def test_maybe_fallback_public_foreground_mask_respects_confidence_and_smoke(tmp
     assert deg_rec['public_mask_fallback'] is True
     assert deg_rec['public_mask_reason'] == 'sam2_degenerate_ratio'
     assert np.isclose(float(deg_mask.mean()), 0.64, atol=1e-4)
+
+
+def test_ambilage_eot_ablation_interface_defaults_off_and_supports_all_modes(tmp_path):
+    from src.visual._ambilage.config import AmbiLAGEConfig
+    from src.visual._ambilage.pipeline import AmbiLAGEPipeline
+    from src.visual._ambilage.smoke import TinyPurifier, TinySurrogate
+    from src.visual.training_objectives import SequentialEnsembleObjective
+    from tools import generate as generate_cli
+
+    default_cfg = AmbiLAGEConfig()
+    default_cfg.validate()
+    assert default_cfg.eot_enabled is False
+    assert default_cfg.diffusion_eot_enabled is None
+    assert default_cfg.effective_diffusion_eot_enabled() is False
+
+    src_img, tgt_img = tmp_path / 'src_eot.png', tmp_path / 'tgt_eot.png'
+    Image.new('RGB', (32, 32), (165, 115, 90)).save(src_img)
+    Image.new('RGB', (32, 32), (70, 160, 180)).save(tgt_img)
+    definition = _public_shampoo_definition()
+    base_img = torch.full((1, 3, 32, 32), 0.5, dtype=torch.float32)
+
+    # Mode 1: default OFF (eot_enabled=False) — skips transforms and diffusion purifier
+    cfg_off = AmbiLAGEConfig(steps=2, surrogate_set='clip_l14', joint_grad_protect=True, smoke_test=True)
+    obj_off = SequentialEnsembleObjective([TinySurrogate(0)], base_img, 'source key', 'target text', cfg_off)
+    views_off, pur_off, eot_flag_off = obj_off._shared_inputs(base_img, step=1, gradient='none')
+    assert eot_flag_off is False
+    assert views_off.shape == base_img.shape
+    assert pur_off is None
+    _, _, grad_off, info_off = obj_off.image_gradient(base_img, step=1)
+    assert torch.isfinite(grad_off).all() and grad_off.abs().sum() > 0
+    assert info_off['purifier_gradient'] == 'disabled'
+
+    run_off = tmp_path / 'run_eot_off'
+    adv_off, meta_off = AmbiLAGEPipeline(cfg_off, device='cpu').execute(
+        src_img, tgt_img, run_off,
+        target_text=definition['target_feature_text'],
+        source_public_key=definition['source_public_key'],
+        source_category=definition['source_category'],
+        definition=definition,
+    )
+    assert adv_off.is_file()
+    to_off = meta_off['training_objective']
+    assert to_off['eot_enabled'] is False
+    assert to_off['diffusion_eot_enabled'] is False
+    assert to_off['eot_paths'] == ['identity']
+    assert to_off['diffusion_weight'] == 0.0
+    assert to_off['diffusion_gradient'] == 'disabled'
+    assert validate_ambilage_ready(run_off, require_production=False)['status'] == 'completed'
+
+    # Mode 2: spatial transforms ON, diffusion purifier OFF
+    cfg_nodiff = AmbiLAGEConfig(
+        steps=2, surrogate_set='clip_l14', eot_enabled=True, diffusion_eot_enabled=False, smoke_test=True,
+    )
+    run_nodiff = tmp_path / 'run_eot_nodiff'
+    _, meta_nodiff = AmbiLAGEPipeline(cfg_nodiff, device='cpu').execute(
+        src_img, tgt_img, run_nodiff,
+        target_text=definition['target_feature_text'],
+        source_public_key=definition['source_public_key'],
+        source_category=definition['source_category'],
+        definition=definition,
+    )
+    to_nodiff = meta_nodiff['training_objective']
+    assert to_nodiff['eot_enabled'] is True
+    assert to_nodiff['diffusion_eot_enabled'] is False
+    assert 'pillow_blur_bpda' in to_nodiff['eot_paths']
+    assert to_nodiff['diffusion_weight'] == 0.0
+    assert to_nodiff['diffusion_gradient'] == 'disabled'
+    assert validate_ambilage_ready(run_nodiff, require_production=False)['status'] == 'completed'
+
+    # Mode 3: both spatial transforms ON and diffusion purifier ON
+    cfg_on = AmbiLAGEConfig(steps=2, surrogate_set='clip_l14', eot_enabled=True, smoke_test=True)
+    obj_on = SequentialEnsembleObjective([TinySurrogate(0)], base_img, 'source key', 'target text', cfg_on, purifier=TinyPurifier())
+    views_on, pur_on, eot_flag_on = obj_on._shared_inputs(base_img, step=1, gradient='none')
+    assert eot_flag_on is True
+    assert views_on.shape[0] > 1 and pur_on is not None
+    run_on = tmp_path / 'run_eot_on'
+    _, meta_on = AmbiLAGEPipeline(cfg_on, device='cpu').execute(
+        src_img, tgt_img, run_on,
+        target_text=definition['target_feature_text'],
+        source_public_key=definition['source_public_key'],
+        source_category=definition['source_category'],
+        definition=definition,
+    )
+    to_on = meta_on['training_objective']
+    assert to_on['eot_enabled'] is True
+    assert to_on['diffusion_eot_enabled'] is True
+    assert to_on['diffusion_weight'] > 0.0
+    assert to_on['diffusion_gradient'] == 'full'
+    assert validate_ambilage_ready(run_on, require_production=False)['status'] == 'completed'
+
+    # CLI flags in tools/generate.py
+    parsed = generate_cli.parse_args([
+        '--method', 'ambilage', '--source', str(src_img), '--target', str(tgt_img),
+        '--output', str(tmp_path / 'cli_out'), '--enable-eot', '--disable-diffusion-eot',
+    ])
+    assert parsed.eot_enabled is True
+    assert parsed.diffusion_eot_enabled is False

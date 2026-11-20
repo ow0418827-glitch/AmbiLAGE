@@ -22,7 +22,7 @@ import subprocess
 import sys
 import unicodedata
 
-from src.experiments import shared_evaluation
+from src.experiments import exact_overlap_queries, shared_evaluation
 from src.experiments.base_workflow import public_group
 from src.experiments.defenses import DEFENSE_MODES, all_table_groups, conditions, conditions_for_mode, table_groups
 from src.experiments.paired_metrics import paired_rank_metrics
@@ -79,6 +79,7 @@ QUERY_SUITE_ROOTS = {
     'training_oracle_v3': TRAINING_ORACLE_V3_QUERY_ROOT,
     'overlap_30_v3': OVERLAP_30_V3_QUERY_ROOT,
     'zero_overlap_v3': ZERO_OVERLAP_V3_QUERY_ROOT,
+    **{suite: exact_overlap_queries.ROOT / suite for suite in exact_overlap_queries.SUITES},
 }
 DEFAULT_QUERY_SUITE = 'training_oracle'
 KEY_MODES = ('image', 'joint')
@@ -235,6 +236,9 @@ def resolve_query_root(query_root=None, query_suite=DEFAULT_QUERY_SUITE):
 
 
 def _protocol_spec(protocol):
+    if protocol in exact_overlap_queries.PROTOCOLS:
+        families = exact_overlap_queries.FAMILIES
+        return tuple(families), dict(families), exact_overlap_queries.LABELS, exact_overlap_queries.PROTOCOLS[protocol]
     if protocol == PROTOCOL:
         return QUERY_FAMILIES, {f: 4 for f in QUERY_FAMILIES}, QUERY_FAMILY_LABELS_ZH, 'zero_overlap'
     if protocol == PROTOCOL_V2:
@@ -461,9 +465,15 @@ def validate_category_query_suite(query_root=None, *, query_suite=DEFAULT_QUERY_
     """校验九组测试查询集（training_oracle 或 zero_overlap）的结构、摘要、配额及与训练查询的关系。"""
     query_root = resolve_query_root(query_root, query_suite)
     base = Path(base).resolve()
+    if query_suite in exact_overlap_queries.SUITES:
+        result = exact_overlap_queries.validate(query_root, base=base)
+        _require(result['query_suite'] == query_suite, '第四版测试集名称与指定档位不符')
+        return result
     manifest_path = query_root / 'manifest.json'
     _require(manifest_path.is_file(), '缺少测试查询集总清单：' + str(manifest_path))
     manifest = read_json(manifest_path)
+    if manifest.get('suite') in exact_overlap_queries.SUITES:
+        return exact_overlap_queries.validate(query_root, base=base)
     base_manifest_path = base / 'manifest.json'
     _require(base_manifest_path.is_file(), '缺少基础包清单：' + str(base_manifest_path))
     base_manifest = read_json(base_manifest_path)
@@ -940,7 +950,7 @@ def summarize_group_evaluation(eval_dir, group_query_manifest):
                 query_family=rec['query_family'],
                 query_family_zh=labels_zh[rec['query_family']],
                 instruction=rec['instruction'],
-                instruction_zh=rec['instruction_zh'],
+                instruction_zh=rec.get('instruction_zh', ''),
                 clean_rank=clean_obs[tid]['rank'],
                 modified_rank=mod_obs[tid]['rank'],
                 rank_gain=clean_obs[tid]['rank'] - mod_obs[tid]['rank'],

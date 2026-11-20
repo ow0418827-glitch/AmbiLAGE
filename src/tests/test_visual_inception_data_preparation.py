@@ -171,3 +171,23 @@ def test_invalid_production_output_stops_before_reading_or_creating_anything(tmp
             output_dir=invalid_output, test_fixture=False)
     assert not invalid_output.exists()
 
+
+
+
+def test_evaluation_paraphrases_bind_six_inputs_and_leave_unsupported_temperature_out(monkeypatch):
+    environment_name = 'VISUAL_INCEPTION_EXPLICIT_TEST_KEY'
+    monkeypatch.setenv(environment_name, 'synthetic-adapter-fixture')
+    requests = []
+
+    def respond(_url, payload, _key, _timeout):
+        requests.append(payload)
+        response = model_response()
+        message = response['choices'][0]['message']
+        message['content'] = json.dumps(json.loads(message['content'])[:6])
+        return response
+
+    result = preparation.generate_evaluation_paraphrases(descriptions()[:6], model='MiniMax-M3',
+        api_key_env=environment_name, generate=True, request_fn=respond)
+    assert len(result['rows']) == 6
+    assert 'temperature' not in requests[0]
+    assert [row['input_row_id'] for row in result['rows']] == [row['id'] for row in descriptions()[:6]]

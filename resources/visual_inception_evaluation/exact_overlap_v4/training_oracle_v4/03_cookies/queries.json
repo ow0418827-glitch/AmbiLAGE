@@ -1,0 +1,165 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "visual_inception_training_oracle_v4_exact",
+  "group": "03_cookies",
+  "query_mode": "text",
+  "target_public_id": "B08Z8MHWVS",
+  "category": "cookies",
+  "language": "en",
+  "training_use_allowed": false,
+  "is_real_search_log": false,
+  "query_image_required": false,
+  "query_images_generated": false,
+  "instructions": [
+    "DESSERT: Immaculate Baking cookie dough is made with wholesome ingredients and is the perfect dessert satisfy those late night cravings",
+    "Once you’ve discovered the coolest ever cache of Ben & Jerry's cookie dough chunks you can grab straight from the package, we think you’ll agree it’s the direct est route to dough phoria you can get",
+    "Ships frozen, CANNOT be cancelled after being processed.",
+    "Ready to Eat - Grab a spoon because this is the perfect edible cookie dough. No need to make dough from scratch. Enjoy your edible cookie dough right of the scoop straight from the tub!",
+    "Peanut Butter lovers beware.",
+    "Our Cookie Doughs are all hand made with only the finest ingredients, including, butter, shortening, fresh eggs, fine chocolates, and delicious nuts. They come shipped in a air tight shipping container, complete with freezer packs, to ensure freshness. We have many flavors, some that you scoop out with a spoon, or roll out for different shapes, or some that you can squeeze out with a pastry bag. You can also include a gift message.",
+    "This oversized cookie is made with broken pieces of real Reeses Peanut Butter Cups and Reeses Peanut Butter Chips.",
+    "Otis Spunkmeyer Gourmet Chocolate Chunk Cookie Dough, 5 Pound Bag -- 4 per case. Ingredients Enriched Bleached Flour (Bleached Flour, Malted Barley Flour, Niacin, Reduced Iron, Thiamin Mononitrate, Riboflavin, Folic Acid), Sugar, Semi-Sweet Chocolate Chunks (Sugar, Unsweetened Chocolate, Cocoa Butter, Soy Lecithin, Vanilla, Salt), Palm Oil, Eggs, Molasses, Unsalted Butter, Natural and Artificial Flavors, Salt, Baking Soda. ENRICHED BLEACHED FLOUR (BLEACHED FLOUR, MALTED BARLEY FLOUR, NIACIN, REDUCED IRON, THIAMIN MONONITRATE, RIBOFLAVIN, FOLIC ACID), SUGAR, SEMI-SWEET CHOCOLATE CHUNKS (SUGAR, UNSWEETENED CHOCOLATE, COCOA BUTTER, SOY LECITHIN, VANILLA, SALT), PALM OIL, EGGS, MOLASSES, UNSALTED BUTTER, NATURAL AND ARTIFICIAL FLAVORS, SALT, BAKING SODA. Approximately 107 per bag View Nutrition Fact",
+    "Special Orders CANNOT be cancelled, returned or refunded.",
+    "Chocolate chip cookies made with farm fresh ingredients.",
+    "I'm looking for a case of 324 Davids 1-ounce chocolate chip cookie dough portions.",
+    "I want chocolate chunk cookie dough made with molasses, whole eggs, butter, vanilla, and sea salt.",
+    "I'm looking for certified vegan frozen cookie dough chunks with ice cream.",
+    "I need refrigerated chocolate chip cookie dough with no preservatives, artificial flavors, or colors.",
+    "Where can I buy sugar cookie dough with no measuring, mixing, or mess?",
+    "I need frozen Davids cookie dough shipped in a case that cannot be canceled after processing.",
+    "raw cookie dough",
+    "simple cookie dough",
+    "costco frozen cookie dough",
+    "pillsbury refrigerated cookie dough"
+  ],
+  "instructions_sha256": "b31f2ebee93c4da9e5569f7c18548c8ead84ad8bb19e26f4f12a8594f9d919f5",
+  "query_records": [
+    {
+      "id": "03_cookies_pair_01",
+      "query_family": "category_description",
+      "instruction": "DESSERT: Immaculate Baking cookie dough is made with wholesome ingredients and is the perfect dessert satisfy those late night cravings",
+      "overlap_source": "training"
+    },
+    {
+      "id": "03_cookies_pair_02",
+      "query_family": "category_description",
+      "instruction": "Once you’ve discovered the coolest ever cache of Ben & Jerry's cookie dough chunks you can grab straight from the package, we think you’ll agree it’s the direct est route to dough phoria you can get",
+      "overlap_source": "training"
+    },
+    {
+      "id": "03_cookies_pair_03",
+      "query_family": "category_description",
+      "instruction": "Ships frozen, CANNOT be cancelled after being processed.",
+      "overlap_source": "training"
+    },
+    {
+      "id": "03_cookies_pair_04",
+      "query_family": "category_description",
+      "instruction": "Ready to Eat - Grab a spoon because this is the perfect edible cookie dough. No need to make dough from scratch. Enjoy your edible cookie dough right of the scoop straight from the tub!",
+      "overlap_source": "training"
+    },
+    {
+      "id": "03_cookies_pair_05",
+      "query_family": "category_description",
+      "instruction": "Peanut Butter lovers beware.",
+      "overlap_source": "training"
+    },
+    {
+      "id": "03_cookies_pair_06",
+      "query_family": "category_description",
+      "instruction": "Our Cookie Doughs are all hand made with only the finest ingredients, including, butter, shortening, fresh eggs, fine chocolates, and delicious nuts. They come shipped in a air tight shipping container, complete with freezer packs, to ensure freshness. We have many flavors, some that you scoop out with a spoon, or roll out for different shapes, or some that you can squeeze out with a pastry bag. You can also include a gift message.",
+      "overlap_source": "training"
+    },
+    {
+      "id": "03_cookies_pair_07",
+      "query_family": "category_description",
+      "instruction": "This oversized cookie is made with broken pieces of real Reeses Peanut Butter Cups and Reeses Peanut Butter Chips.",
+      "overlap_source": "training"
+    },
+    {
+      "id": "03_cookies_pair_08",
+      "query_family": "category_description",
+      "instruction": "Otis Spunkmeyer Gourmet Chocolate Chunk Cookie Dough, 5 Pound Bag -- 4 per case. Ingredients Enriched Bleached Flour (Bleached Flour, Malted Barley Flour, Niacin, Reduced Iron, Thiamin Mononitrate, Riboflavin, Folic Acid), Sugar, Semi-Sweet Chocolate Chunks (Sugar, Unsweetened Chocolate, Cocoa Butter, Soy Lecithin, Vanilla, Salt), Palm Oil, Eggs, Molasses, Unsalted Butter, Natural and Artificial Flavors, Salt, Baking Soda. ENRICHED BLEACHED FLOUR (BLEACHED FLOUR, MALTED BARLEY FLOUR, NIACIN, REDUCED IRON, THIAMIN MONONITRATE, RIBOFLAVIN, FOLIC ACID), SUGAR, SEMI-SWEET CHOCOLATE CHUNKS (SUGAR, UNSWEETENED CHOCOLATE, COCOA BUTTER, SOY LECITHIN, VANILLA, SALT), PALM OIL, EGGS, MOLASSES, UNSALTED BUTTER, NATURAL AND ARTIFICIAL FLAVORS, SALT, BAKING SODA. Approximately 107 per bag View Nutrition Fact",
+      "overlap_source": "training"
+    },
+    {
+      "id": "03_cookies_pair_09",
+      "query_family": "category_description",
+      "instruction": "Special Orders CANNOT be cancelled, returned or refunded.",
+      "overlap_source": "training"
+    },
+    {
+      "id": "03_cookies_pair_10",
+      "query_family": "category_description",
+      "instruction": "Chocolate chip cookies made with farm fresh ingredients.",
+      "overlap_source": "training"
+    },
+    {
+      "id": "03_cookies_pair_11",
+      "query_family": "model_paraphrase",
+      "instruction": "I'm looking for a case of 324 Davids 1-ounce chocolate chip cookie dough portions.",
+      "overlap_source": "training"
+    },
+    {
+      "id": "03_cookies_pair_12",
+      "query_family": "model_paraphrase",
+      "instruction": "I want chocolate chunk cookie dough made with molasses, whole eggs, butter, vanilla, and sea salt.",
+      "overlap_source": "training"
+    },
+    {
+      "id": "03_cookies_pair_13",
+      "query_family": "model_paraphrase",
+      "instruction": "I'm looking for certified vegan frozen cookie dough chunks with ice cream.",
+      "overlap_source": "training"
+    },
+    {
+      "id": "03_cookies_pair_14",
+      "query_family": "model_paraphrase",
+      "instruction": "I need refrigerated chocolate chip cookie dough with no preservatives, artificial flavors, or colors.",
+      "overlap_source": "training"
+    },
+    {
+      "id": "03_cookies_pair_15",
+      "query_family": "model_paraphrase",
+      "instruction": "Where can I buy sugar cookie dough with no measuring, mixing, or mess?",
+      "overlap_source": "training"
+    },
+    {
+      "id": "03_cookies_pair_16",
+      "query_family": "model_paraphrase",
+      "instruction": "I need frozen Davids cookie dough shipped in a case that cannot be canceled after processing.",
+      "overlap_source": "training"
+    },
+    {
+      "id": "03_cookies_pair_17",
+      "query_family": "heldout_search_query",
+      "instruction": "raw cookie dough",
+      "overlap_source": "training"
+    },
+    {
+      "id": "03_cookies_pair_18",
+      "query_family": "heldout_search_query",
+      "instruction": "simple cookie dough",
+      "overlap_source": "training"
+    },
+    {
+      "id": "03_cookies_pair_19",
+      "query_family": "heldout_search_query",
+      "instruction": "costco frozen cookie dough",
+      "overlap_source": "training"
+    },
+    {
+      "id": "03_cookies_pair_20",
+      "query_family": "heldout_search_query",
+      "instruction": "pillsbury refrigerated cookie dough",
+      "overlap_source": "training"
+    }
+  ],
+  "query_family_counts": {
+    "category_description": 10,
+    "model_paraphrase": 6,
+    "heldout_search_query": 4
+  }
+}

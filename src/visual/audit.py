@@ -14,22 +14,22 @@ def read_json(path):
     return json.loads(Path(path).read_text(encoding='utf-8'))
 
 
-def save_json(path, value):
+def save_json(path, value, *, newline=None):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     # 临时名不再重复长摘要文件名，兼容未启用长路径的本地系统。
     temporary = path.with_name('.write-' + uuid.uuid4().hex[:16] + '.tmp')
-    temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False) + '\n', encoding='utf-8')
+    temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False) + '\n', encoding='utf-8', newline=newline)
     temporary.replace(path)
 
 
-def freeze_json(path, value):
+def freeze_json(path, value, *, newline=None):
     path = Path(path)
     if path.exists():
         if read_json(path) != json.loads(json.dumps(value)):
             raise ValueError('冻结记录改变；请创建新的运行目录：' + str(path))
         return
-    save_json(path, value)
+    save_json(path, value, newline=newline)
 
 
 def model_files(root):

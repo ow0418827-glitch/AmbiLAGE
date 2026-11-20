@@ -26,9 +26,10 @@ OBJECTIVE_KIND = 'visual_inception_semantic_perceptual_no_retrieval_v1'
 RETRIEVAL_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_v2'
 ENHANCED_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_hardneg_advquery_v3'
 QUERY_SAMPLING_KIND = 'fixed_pool_per_step_without_replacement_cross_step_reuse_v1'
-MECHANISM_FIELDS = ('mechanism_profile', 'contrastive_margin', 'hard_negative_count',
+LEGACY_MECHANISM_FIELDS = ('mechanism_profile', 'contrastive_margin', 'hard_negative_count',
     'hard_negative_same_category_count', 'hard_negative_proxy_memory_count', 'hard_negative_popularity_count',
     'query_adversarial_radius', 'query_adversarial_steps', 'query_adversarial_step_size', 'query_adversarial_mix')
+MECHANISM_FIELDS = LEGACY_MECHANISM_FIELDS + ('bank_loss_blend', 'hard_margin_loss_blend')
 
 
 def mechanism_parameters(config):

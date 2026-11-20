@@ -33,8 +33,8 @@ QUERY_AUGMENTATION_KIND = 'text_subspace_spherical_l2_pgd_best_per_query_v2'
 MARGIN_KIND = 'temperature_scaled_full_bank_and_top_hard_softplus_margin_v2'
 TOP_HARD_COMPETITOR_LIMIT = 5
 HARD_MARGIN_SHARPNESS = 2.0
-BANK_LOSS_BLEND = 0.3
-HARD_MARGIN_LOSS_BLEND = 0.7
+BANK_LOSS_BLEND = 0.8
+HARD_MARGIN_LOSS_BLEND = 0.2
 
 
 def _require(condition, message):
@@ -46,8 +46,10 @@ def _parameters(config):
     values = dict(temperature=config.retrieval_temperature,
         margin=config.contrastive_margin, radius=config.query_adversarial_radius,
         steps=config.query_adversarial_steps, step_size=config.query_adversarial_step_size,
-        mix=config.query_adversarial_mix)
-    for key in ('temperature', 'margin', 'radius', 'step_size', 'mix'):
+        mix=config.query_adversarial_mix,
+        bank_loss_blend=getattr(config, 'bank_loss_blend', BANK_LOSS_BLEND),
+        hard_margin_loss_blend=getattr(config, 'hard_margin_loss_blend', HARD_MARGIN_LOSS_BLEND))
+    for key in ('temperature', 'margin', 'radius', 'step_size', 'mix', 'bank_loss_blend', 'hard_margin_loss_blend'):
         value = values[key]
         _require(not isinstance(value, bool) and isinstance(value, (float, int))
                  and math.isfinite(value), '增强目标参数必须为有限实数：' + key)
@@ -55,9 +57,14 @@ def _parameters(config):
     _require(0 <= values['margin'] <= 2, '对比间隔必须在零至二之间')
     _require(0 <= values['radius'] <= 2, '单位球面查询扰动半径必须在零至二之间')
     _require(0 <= values['mix'] <= 1, '对抗查询混合权重必须在零至一之间')
+    _require(0 <= values['bank_loss_blend'] <= 1 and 0 <= values['hard_margin_loss_blend'] <= 1
+             and abs((float(values['bank_loss_blend']) + float(values['hard_margin_loss_blend'])) - 1.0) <= 1e-6,
+             '检索损失混合权重必须位于零至一之间且总和为一')
     _require(type(values['steps']) is int and values['steps'] >= 0,
              '对抗查询步数必须为非负整数')
     _require(values['step_size'] >= 0, '对抗查询步长不能为负数')
+    values['bank_loss_blend'] = float(values['bank_loss_blend'])
+    values['hard_margin_loss_blend'] = float(values['hard_margin_loss_blend'])
     return values
 
 
@@ -155,14 +162,18 @@ def _selected_loss(image, queries, negatives, negative_policy, config, parameter
     neg_logits = all_neg_cos / tau + boost
     bank_loss = torch.logsumexp(torch.cat((pos_logit[:, None], neg_logits), dim=1), dim=1) - pos_logit
 
-    # 2. Top-5 hard-competitor smooth margin duel in temperature-scaled logit space
-    selected_cos = torch.gather(all_neg_cos, 1, indices)
-    top_r = min(TOP_HARD_COMPETITOR_LIMIT, selected_cos.shape[1])
-    top_hard_cos = selected_cos.topk(top_r, dim=1).values
-    comp_logit = torch.logsumexp(top_hard_cos / tau, dim=1) - math.log(float(top_r))
-    comp_loss = F.softplus(HARD_MARGIN_SHARPNESS * (comp_logit - pos_logit + margin)) / HARD_MARGIN_SHARPNESS
-
-    loss = BANK_LOSS_BLEND * bank_loss + HARD_MARGIN_LOSS_BLEND * comp_loss
+    bank_blend = parameters['bank_loss_blend']
+    comp_blend = parameters['hard_margin_loss_blend']
+    if comp_blend == 0.0:
+        loss = bank_blend * bank_loss
+    else:
+        # 2. Top-5 hard-competitor smooth margin duel in temperature-scaled logit space
+        selected_cos = torch.gather(all_neg_cos, 1, indices)
+        top_r = min(TOP_HARD_COMPETITOR_LIMIT, selected_cos.shape[1])
+        top_hard_cos = selected_cos.topk(top_r, dim=1).values
+        comp_logit = torch.logsumexp(top_hard_cos / tau, dim=1) - math.log(float(top_r))
+        comp_loss = F.softplus(HARD_MARGIN_SHARPNESS * (comp_logit - pos_logit + margin)) / HARD_MARGIN_SHARPNESS
+        loss = comp_blend * comp_loss if bank_blend == 0.0 else (bank_blend * bank_loss + comp_blend * comp_loss)
     _require(bool(torch.isfinite(loss).all()), '增强检索损失包含非有限值')
     return loss, audit
 
@@ -313,8 +324,8 @@ def enhanced_retrieval_semantic_losses(image_features, concept_features, query_f
         retrieval_temperature=parameters['temperature'],
         top_hard_competitor_limit=TOP_HARD_COMPETITOR_LIMIT,
         hard_margin_sharpness=HARD_MARGIN_SHARPNESS,
-        bank_loss_blend=BANK_LOSS_BLEND,
-        hard_margin_loss_blend=HARD_MARGIN_LOSS_BLEND,
+        bank_loss_blend=parameters['bank_loss_blend'],
+        hard_margin_loss_blend=parameters['hard_margin_loss_blend'],
         full_bank_denominator_preserved=True,
         reduction='query_mean_of_clean_adversarial_weighted_losses',
         clean_retrieval_loss=float(clean_loss.detach().mean()),

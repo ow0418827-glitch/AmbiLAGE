@@ -1,0 +1,206 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "category_query_overlap_30_v2",
+  "group": "03_cookies",
+  "query_mode": "text",
+  "target_public_id": "B08Z8MHWVS",
+  "category": "cookie dough",
+  "source_type": "mixed_30pct_training_oracle_70pct_non_overlap",
+  "language": "en",
+  "instruction_policy": "category_query_overlap_30_v2",
+  "instructions": [
+    "Gluten-free refrigerated chocolate chunk cookie dough made from wholesome baking ingredients, ready to bake into soft rich dessert cookies.",
+    "Bite-sized non-GMO edible chocolate chip cookie dough chunks packed ready to eat straight from the snack pouch.",
+    "Pre-portioned triple chocolate chip frozen cookie dough pucks formulated for bakery-style rich chocolate cookies straight from the oven.",
+    "I'm looking for a case of 324 Davids 1-ounce chocolate chip cookie dough portions.",
+    "I want chocolate chunk cookie dough made with molasses, whole eggs, butter, vanilla, and sea salt.",
+    "raw cookie dough",
+    "Find refrigerated chocolate chunk cookie dough that I can bake a few pieces at a time.",
+    "I need pre-portioned cookie dough for a weekend bake sale.",
+    "Which cookie dough comes frozen in individual scoops instead of a solid block?",
+    "Show me ready-to-bake sugar cookie dough I can roll out for shaped cookies.",
+    "I want oatmeal cookie dough for a tray of soft cookies.",
+    "Compare chilled cookie dough logs and frozen dough balls for baking small batches.",
+    "Look for dairy-free chocolate chip cookie dough to bake for guests.",
+    "Which gluten-free cookie dough comes in pieces that can go straight onto a tray?",
+    "Which safe eggless pint-tub dessert doughs can kids scoop and enjoy raw straight with a spoon?",
+    "Compare frozen pre-portioned triple-chocolate baking pucks against scoopable butterscotch dessert tubs.",
+    "Find gluten-free refrigerated chocolate-chunk baking dough made with wholesome natural ingredients.",
+    "I want peanut-butter-cup stuffed sweet dough rounds that bake soft and chewy inside in twelve minutes.",
+    "Suggest farm-fresh butter gourmet chocolate chunk baking drops convenient for quick family treats.",
+    "What non-GMO bite-sized chocolate chip dough snacks come ready to eat right out of the pouch?"
+  ],
+  "instructions_sha256": "50c003bfab2429dce55d1e92dfdfa1e109b09eb3d654f7a2c4f02fdc995b5845",
+  "query_records": [
+    {
+      "id": "03_cookies_overlap30v2_01",
+      "query_family": "category_description",
+      "instruction": "Gluten-free refrigerated chocolate chunk cookie dough made from wholesome baking ingredients, ready to bake into soft rich dessert cookies.",
+      "instruction_zh": "提炼公开描述（B00B049CB8）：无麸质冷藏黑巧块曲奇面团，采用天然烘焙原料，烤后松软浓郁。",
+      "source_row_id": "B00B049CB8:BulletPoints:array_item:3",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/03_cookies/descriptions.jsonl",
+      "reused_oracle_id": "03_cookies_oracle_01",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "eed6131607e46eb2c647df5778fc8035c6e255751bb4657a75a298afe097879e"
+    },
+    {
+      "id": "03_cookies_overlap30v2_02",
+      "query_family": "category_description",
+      "instruction": "Bite-sized non-GMO edible chocolate chip cookie dough chunks packed ready to eat straight from the snack pouch.",
+      "instruction_zh": "提炼公开描述（B07SDN84R6）：非转基因可生食一口装巧克力豆曲奇面团块，开袋即食。",
+      "source_row_id": "B07SDN84R6:BulletPoints:array_item:5",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/03_cookies/descriptions.jsonl",
+      "reused_oracle_id": "03_cookies_oracle_02",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "8f6fd09e302f166d7fec272f880f0fc72fe81465e158349568316cc89a9d26a3"
+    },
+    {
+      "id": "03_cookies_overlap30v2_03",
+      "query_family": "category_description",
+      "instruction": "Pre-portioned triple chocolate chip frozen cookie dough pucks formulated for bakery-style rich chocolate cookies straight from the oven.",
+      "instruction_zh": "提炼公开描述（B00CHU1RGC）：三重巧克力豆冷冻预分装曲奇面团饼，适合烘焙坊级浓郁巧克力的现烤曲奇。",
+      "source_row_id": "B00CHU1RGC:BulletPoints:array_item:0",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/03_cookies/descriptions.jsonl",
+      "reused_oracle_id": "03_cookies_oracle_03",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "17731471fa0bff31467bc9968c0e9cdca121c65ce5a7486ea7051329ddb23299"
+    },
+    {
+      "id": "03_cookies_overlap30v2_04",
+      "query_family": "model_paraphrase",
+      "instruction": "I'm looking for a case of 324 Davids 1-ounce chocolate chip cookie dough portions.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_002，输入商品 B00CHU0TD4:Description:sentence:0）",
+      "source_row_id": "paraphrase_002",
+      "source_file": "data/public/visual_inception_inputs_v5/03_cookies/paraphrases/model_paraphrases.jsonl",
+      "reused_oracle_id": "03_cookies_oracle_11"
+    },
+    {
+      "id": "03_cookies_overlap30v2_05",
+      "query_family": "model_paraphrase",
+      "instruction": "I want chocolate chunk cookie dough made with molasses, whole eggs, butter, vanilla, and sea salt.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_009，输入商品 B089TRM2ZC:BulletPoints:array_item:0）",
+      "source_row_id": "paraphrase_009",
+      "source_file": "data/public/visual_inception_inputs_v5/03_cookies/paraphrases/model_paraphrases.jsonl",
+      "reused_oracle_id": "03_cookies_oracle_12"
+    },
+    {
+      "id": "03_cookies_overlap30v2_06",
+      "query_family": "heldout_search_query",
+      "instruction": "raw cookie dough",
+      "instruction_zh": "训练真实搜索原句（orcas / orcas_orcas-doctrain_4076126）：raw cookie dough",
+      "source_row_id": "orcas_orcas-doctrain_4076126",
+      "source_file": "data/public/visual_inception_inputs_v5/03_cookies/heldout_queries.jsonl",
+      "reused_oracle_id": "03_cookies_oracle_17"
+    },
+    {
+      "id": "03_cookies_overlap30v2_07",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Find refrigerated chocolate chunk cookie dough that I can bake a few pieces at a time.",
+      "instruction_zh": "找一款可每次少烤几块的冷藏大块巧克力曲奇面团。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "03_cookies_overlap30v2_08",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "I need pre-portioned cookie dough for a weekend bake sale.",
+      "instruction_zh": "我需要适合周末烘焙义卖的预先分份曲奇面团。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "03_cookies_overlap30v2_09",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Which cookie dough comes frozen in individual scoops instead of a solid block?",
+      "instruction_zh": "哪款曲奇面团是冷冻独立球状而不是整块包装的？",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "03_cookies_overlap30v2_10",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Show me ready-to-bake sugar cookie dough I can roll out for shaped cookies.",
+      "instruction_zh": "推荐几款可以擀平压模制作造型饼干的即烤糖霜曲奇面团。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "03_cookies_overlap30v2_11",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "I want oatmeal cookie dough for a tray of soft cookies.",
+      "instruction_zh": "我想要一款能烤出一盘松软饼干的燕麦曲奇面团。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "03_cookies_overlap30v2_12",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Compare chilled cookie dough logs and frozen dough balls for baking small batches.",
+      "instruction_zh": "对比冷藏曲奇面团卷和冷冻面团球在少量烘焙时的便利性。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "03_cookies_overlap30v2_13",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Look for dairy-free chocolate chip cookie dough to bake for guests.",
+      "instruction_zh": "找一款适合招待客人的无乳制品巧克力豆曲奇面团。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "03_cookies_overlap30v2_14",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Which gluten-free cookie dough comes in pieces that can go straight onto a tray?",
+      "instruction_zh": "哪款无麸质曲奇面团已分成小块可直接放上烤盘烘烤？",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "03_cookies_overlap30v2_15",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Which safe eggless pint-tub dessert doughs can kids scoop and enjoy raw straight with a spoon?",
+      "instruction_zh": "哪款无蛋安全品脱杯装甜品生面团可以直接让孩子用勺挖着吃？",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "03_cookies_overlap30v2_16",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Compare frozen pre-portioned triple-chocolate baking pucks against scoopable butterscotch dessert tubs.",
+      "instruction_zh": "对比冷冻预分装三重黑巧烘焙圆坯与可挖取奶油糖果甜点桶。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "03_cookies_overlap30v2_17",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Find gluten-free refrigerated chocolate-chunk baking dough made with wholesome natural ingredients.",
+      "instruction_zh": "找一款采用天然无麸质原料制成的冷藏黑巧碎烘焙面团。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "03_cookies_overlap30v2_18",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "I want peanut-butter-cup stuffed sweet dough rounds that bake soft and chewy inside in twelve minutes.",
+      "instruction_zh": "想要一款含花生酱杯碎、十二分钟烤出外酥内糯口感的甜点面团坯。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "03_cookies_overlap30v2_19",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Suggest farm-fresh butter gourmet chocolate chunk baking drops convenient for quick family treats.",
+      "instruction_zh": "推荐用农场鲜黄油配大块黑巧调制、适合家庭快手烘烤的曲奇坯料。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "03_cookies_overlap30v2_20",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "What non-GMO bite-sized chocolate chip dough snacks come ready to eat right out of the pouch?",
+      "instruction_zh": "哪款非转基因一口装巧克力碎甜面块开袋即可当作零食享用？",
+      "implicit_anchor_free": true
+    }
+  ],
+  "query_family_counts": {
+    "category_description": 3,
+    "model_paraphrase": 2,
+    "heldout_search_query": 1,
+    "synthetic_non_overlap": 14
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false
+}

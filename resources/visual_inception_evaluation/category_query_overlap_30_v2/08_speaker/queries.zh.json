@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "language": "zh",
+  "purpose": "仅供人工阅读，不传给检索编码器",
+  "group": "08_speaker",
+  "category": "Bluetooth speaker",
+  "query_records": [
+    {
+      "id": "08_speaker_overlap30v2_01",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "提炼公开描述（B093GJCJQJ）：清新马卡龙绿迷你便携蓝牙音箱，附挂绳、一键通话、收音机及USB接口。"
+    },
+    {
+      "id": "08_speaker_overlap30v2_02",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "提炼公开描述（B09B48YFQV）：15英寸便携派对PA蓝牙音箱，内置8英寸低音与高音单元、律动彩灯及有线麦克风。"
+    },
+    {
+      "id": "08_speaker_overlap30v2_03",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "提炼公开描述（B0967T22YR）：无线蓝牙双音箱套装，包含增强低音款桌面音箱与防水户外运动款音箱。"
+    },
+    {
+      "id": "08_speaker_overlap30v2_04",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "复用模型改写查询(10%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_007，输入商品 B097WMPMGV）"
+    },
+    {
+      "id": "08_speaker_overlap30v2_05",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "复用模型改写查询(10%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_021，输入商品 B07X8W4WN8）"
+    },
+    {
+      "id": "08_speaker_overlap30v2_06",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "复用独立真实搜索(5%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_112249）：wireless soundbar with speakers and sound woofer"
+    },
+    {
+      "id": "08_speaker_overlap30v2_07",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一款可以挂在双肩包肩带上的便携蓝牙音箱。"
+    },
+    {
+      "id": "08_speaker_overlap30v2_08",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我需要一款小音量播放播客时人声依然清晰的紧凑型无线音箱。"
+    },
+    {
+      "id": "08_speaker_overlap30v2_09",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "推荐几款适合在小阳台使用的可充电蓝牙音箱。"
+    },
+    {
+      "id": "08_speaker_overlap30v2_10",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款便携蓝牙音箱支持两部手机轮流连接播放音乐？"
+    },
+    {
+      "id": "08_speaker_overlap30v2_11",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我想要一款带有无需低头看就能盲操物理按键的无线音箱。"
+    },
+    {
+      "id": "08_speaker_overlap30v2_12",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "对比适合野餐连续播放数小时音乐的防水蓝牙音箱。"
+    },
+    {
+      "id": "08_speaker_overlap30v2_13",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一对可以无线串联实现立体声播放的小型音箱。"
+    },
+    {
+      "id": "08_speaker_overlap30v2_14",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款蓝牙音箱体积小巧能放进拥挤厨房架子且支持接口充电？"
+    },
+    {
+      "id": "08_speaker_overlap30v2_15",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "想要一只清新马卡龙绿带挂绳、支持收音和USB的便携迷你音乐小盒子。"
+    },
+    {
+      "id": "08_speaker_overlap30v2_16",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "对比30瓦防泼水带火焰氛围灯的庭院音乐播放器与户外防水圆柱蓝牙音箱。"
+    },
+    {
+      "id": "08_speaker_overlap30v2_17",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一台配8英寸低音炮、霓虹灯和有线麦克风的15英寸便携派对唱跳移动音箱。"
+    },
+    {
+      "id": "08_speaker_overlap30v2_18",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款天然榉木复古桌面无线音频播放器带经典AM/FM调频旋钮与12小时续航？"
+    },
+    {
+      "id": "08_speaker_overlap30v2_19",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "推荐底座防滑、横竖摆放皆稳的黑色无线便携立体声家庭播放器。"
+    },
+    {
+      "id": "08_speaker_overlap30v2_20",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款迷你2英寸银色圆柱蓝牙无线小钢炮支持自动回连并可连续播放四小时？"
+    }
+  ]
+}

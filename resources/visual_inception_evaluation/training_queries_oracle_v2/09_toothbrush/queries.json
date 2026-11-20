@@ -1,0 +1,251 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "visual_inception_training_oracle_v2",
+  "group": "09_toothbrush",
+  "query_mode": "text",
+  "target_public_id": "B09J81RMLD",
+  "category": "toothbrush",
+  "source_type": "training_oracle_stratified_sample",
+  "language": "en",
+  "instruction_policy": "training_oracle_v2_distilled_descriptions_20",
+  "instructions": [
+    "Cute cartoon donut-shaped children's manual toothbrush made from soft high-grade silicone bristles for gentle gum-safe mouth cleaning and easy toddler grip.",
+    "Ergonomic manual 360-degree U-shaped children's toothbrush molded with food-grade soft silica gel bristles to gently wrap teeth and protect sensitive toddler gums.",
+    "Four-pack U-shaped manual silicone and PP children's toothbrushes sized for ages 2 to 12, cleaning front and back tooth surfaces gently.",
+    "Two-pack lightweight waterproof handheld kids U-shaped silicone training toothbrushes designed in small and large arches for ages 2 to 12.",
+    "Pink two-pack U-shaped silicone children's whole-mouth toothbrushes featuring soft gum-massaging bristles and an easy-grip cartoon handle for toddlers and kids.",
+    "Blue octopus-themed waterproof electric kids toothbrush clad in soft food-grade silicone with dual gentle sonic modes up to 31,000 SPM for ages 3–12.",
+    "Cartoon toddler training manual toothbrush crafted from eco-friendly bamboo fiber and wheat straw with ultra-soft bristles and a small anti-slip handle.",
+    "Bright yellow cow-patterned reusable manual children's U-shaped silicone toothbrush with heat-tolerant soft bristles sized compactly for baby and toddler mouths.",
+    "Pink cartoon manual U-shaped kids toothbrush built with boil-safe food-grade silica gel bristles providing gentle 360-degree wrap-around dental cleaning.",
+    "Blue IPX7 waterproof kids ultrasonic electric toothbrush featuring three gentle cleaning modes, smart timer, cup cover, and three soft U-shaped silicone heads.",
+    "Find a 10-piece set of manual plastic toothbrushes with ultra-fine floss-tapered angled bristles for adults, students, and children.",
+    "Find a waterproof electric U-shaped toothbrush with soft bristles, three brushing modes, a disinfecting chamber, and a wall-mountable handle.",
+    "Find a bundle made with licensed products.",
+    "Find a charcoal-infused soft-bristle toothbrush with a tapered brush head and stand-up base, suitable for kids, teens, and adults and available in four colors.",
+    "Find a 4-piece set of silicone and PP U-shaped toothbrushes with pink and blue heart and oval styles for ages 0-6 and 6-12.",
+    "Find a slim sonic electric toothbrush with IPX7 waterproofing, a non-slip design, a changeable brush head and battery base, and two interchangeable heads.",
+    "bamboo toothbrush",
+    "disposable toothbrushes without paste",
+    "life without plastic toothbrush",
+    "kids toothbrush"
+  ],
+  "instructions_sha256": "24a12c669f787217f43238fb3b67a63cbb3810ed1a2634b8344e0a096321d9bf",
+  "query_records": [
+    {
+      "id": "09_toothbrush_oracle_01",
+      "query_family": "category_description",
+      "instruction": "Cute cartoon donut-shaped children's manual toothbrush made from soft high-grade silicone bristles for gentle gum-safe mouth cleaning and easy toddler grip.",
+      "instruction_zh": "提炼公开描述（B09QKHK4NP）：可爱卡通甜甜圈造型儿童硅胶软毛牙刷，轻柔护龈且便于宝宝小手握持。",
+      "source_row_id": "B09QKHK4NP",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/09_toothbrush/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "4cd183c2728c25d2105dd9d84b7f07793baa4e0bfb32320ccd45fba9d2b578fa"
+    },
+    {
+      "id": "09_toothbrush_oracle_02",
+      "query_family": "category_description",
+      "instruction": "Ergonomic manual 360-degree U-shaped children's toothbrush molded with food-grade soft silica gel bristles to gently wrap teeth and protect sensitive toddler gums.",
+      "instruction_zh": "提炼公开描述（B09Q5MBQK3）：人体工学360度U形儿童手动硅胶牙刷，食品级软胶毛温和包裹牙齿保护乳牙牙龈。",
+      "source_row_id": "B09Q5MBQK3",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/09_toothbrush/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "8958cad560322b7a064b03bd48aa6eebc65496761504b2882cb4f1d09f18c5ad"
+    },
+    {
+      "id": "09_toothbrush_oracle_03",
+      "query_family": "category_description",
+      "instruction": "Four-pack U-shaped manual silicone and PP children's toothbrushes sized for ages 2 to 12, cleaning front and back tooth surfaces gently.",
+      "instruction_zh": "提炼公开描述（B09R1HJWSY）：四支装耐高温PP+硅胶U形儿童口腔清洁牙刷，分2-6岁与6-12岁大小号贴合齿列。",
+      "source_row_id": "B09R1HJWSY",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/09_toothbrush/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "1f322f8b9bd0badf0ca15b71ad6970a92200cd7aab95098e1e658d45ff5cf629"
+    },
+    {
+      "id": "09_toothbrush_oracle_04",
+      "query_family": "category_description",
+      "instruction": "Two-pack lightweight waterproof handheld kids U-shaped silicone training toothbrushes designed in small and large arches for ages 2 to 12.",
+      "instruction_zh": "提炼公开描述（B09R9T6WYC）：两支装便携防水儿童U形硅胶训练牙刷，柔和弧形刷头适配幼童至少年刷牙练习。",
+      "source_row_id": "B09R9T6WYC",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/09_toothbrush/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "0a71f85adfe1eeb251140543eafaf838985e3f4953a238b9bd33f17705abe94e"
+    },
+    {
+      "id": "09_toothbrush_oracle_05",
+      "query_family": "category_description",
+      "instruction": "Pink two-pack U-shaped silicone children's whole-mouth toothbrushes featuring soft gum-massaging bristles and an easy-grip cartoon handle for toddlers and kids.",
+      "instruction_zh": "提炼公开描述（B09JB4K18P）：粉色两支装全口包覆儿童U形牙刷，食品级硅胶细毛轻柔按摩牙龈并配趣味握柄。",
+      "source_row_id": "B09JB4K18P",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/09_toothbrush/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "c6c1eb2b58ea506331b20169a8c3ba6286d509418885a71bb2dc930073ec71af"
+    },
+    {
+      "id": "09_toothbrush_oracle_06",
+      "query_family": "category_description",
+      "instruction": "Blue octopus-themed waterproof electric kids toothbrush clad in soft food-grade silicone with dual gentle sonic modes up to 31,000 SPM for ages 3–12.",
+      "instruction_zh": "提炼公开描述（B08RD8Z9QV）：蓝色小章鱼造型防水儿童电动牙刷，全包柔软硅胶机身带双轻柔声波清洁模式。",
+      "source_row_id": "B08RD8Z9QV",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/09_toothbrush/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "90a9daa50214fdffbdd1e2b282e69af0883ac6922684b95a7f6727b2e5c55181"
+    },
+    {
+      "id": "09_toothbrush_oracle_07",
+      "query_family": "category_description",
+      "instruction": "Cartoon toddler training manual toothbrush crafted from eco-friendly bamboo fiber and wheat straw with ultra-soft bristles and a small anti-slip handle.",
+      "instruction_zh": "提炼公开描述（B08TBDTHS1）：天然竹纤维小麦秸秆环保材质宝宝训练小牙刷，卡通防滑柄配超柔细刷毛。",
+      "source_row_id": "B08TBDTHS1",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/09_toothbrush/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "4cd08600e9e940b3ff3ad90dadbf793b1dd09132de4430eb0a38f77156892d29"
+    },
+    {
+      "id": "09_toothbrush_oracle_08",
+      "query_family": "category_description",
+      "instruction": "Bright yellow cow-patterned reusable manual children's U-shaped silicone toothbrush with heat-tolerant soft bristles sized compactly for baby and toddler mouths.",
+      "instruction_zh": "提炼公开描述（B09QCT8FS6）：亮黄色奶牛造型儿童手动U形硅胶牙刷，耐温软刷毛小巧贴合低龄幼童口腔。",
+      "source_row_id": "B09QCT8FS6",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/09_toothbrush/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "66cbe005c7e63abfb6dfde0991b9a27d35f85c4fd8e876ab2030204c1cd8eced"
+    },
+    {
+      "id": "09_toothbrush_oracle_09",
+      "query_family": "category_description",
+      "instruction": "Pink cartoon manual U-shaped kids toothbrush built with boil-safe food-grade silica gel bristles providing gentle 360-degree wrap-around dental cleaning.",
+      "instruction_zh": "提炼公开描述（B09NRP8DSH）：粉色卡通儿童U形手动牙刷，耐高温消毒食品级硅胶头实现360度全方位清洁。",
+      "source_row_id": "B09NRP8DSH",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/09_toothbrush/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "396570c692376c1c43dcdebdec3261aa35f623dad3b25e7fb27249a2cc00fbe7"
+    },
+    {
+      "id": "09_toothbrush_oracle_10",
+      "query_family": "category_description",
+      "instruction": "Blue IPX7 waterproof kids ultrasonic electric toothbrush featuring three gentle cleaning modes, smart timer, cup cover, and three soft U-shaped silicone heads.",
+      "instruction_zh": "提炼公开描述（B088TL63PW）：蓝色IPX7防水儿童超声波电动牙刷，三档轻柔洁净模式配三个U形软硅胶刷头与漱口杯盖。",
+      "source_row_id": "B088TL63PW",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/09_toothbrush/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "c751b6cfd34bc4b7d2675081a35828749a98439e255d64d67768db73b9247c0a"
+    },
+    {
+      "id": "09_toothbrush_oracle_11",
+      "query_family": "model_paraphrase",
+      "instruction": "Find a 10-piece set of manual plastic toothbrushes with ultra-fine floss-tapered angled bristles for adults, students, and children.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_029，输入商品 B08PVNNFMR）",
+      "source_row_id": "paraphrase_029",
+      "source_file": "data/public/visual_inception_inputs_v5/09_toothbrush/paraphrases/model_paraphrases.jsonl"
+    },
+    {
+      "id": "09_toothbrush_oracle_12",
+      "query_family": "model_paraphrase",
+      "instruction": "Find a waterproof electric U-shaped toothbrush with soft bristles, three brushing modes, a disinfecting chamber, and a wall-mountable handle.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_003，输入商品 B09NMBRQS1）",
+      "source_row_id": "paraphrase_003",
+      "source_file": "data/public/visual_inception_inputs_v5/09_toothbrush/paraphrases/model_paraphrases.jsonl"
+    },
+    {
+      "id": "09_toothbrush_oracle_13",
+      "query_family": "model_paraphrase",
+      "instruction": "Find a bundle made with licensed products.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_004，输入商品 B07DLZ34W9）",
+      "source_row_id": "paraphrase_004",
+      "source_file": "data/public/visual_inception_inputs_v5/09_toothbrush/paraphrases/model_paraphrases.jsonl"
+    },
+    {
+      "id": "09_toothbrush_oracle_14",
+      "query_family": "model_paraphrase",
+      "instruction": "Find a charcoal-infused soft-bristle toothbrush with a tapered brush head and stand-up base, suitable for kids, teens, and adults and available in four colors.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_021，输入商品 B09PZVV7TZ）",
+      "source_row_id": "paraphrase_021",
+      "source_file": "data/public/visual_inception_inputs_v5/09_toothbrush/paraphrases/model_paraphrases.jsonl"
+    },
+    {
+      "id": "09_toothbrush_oracle_15",
+      "query_family": "model_paraphrase",
+      "instruction": "Find a 4-piece set of silicone and PP U-shaped toothbrushes with pink and blue heart and oval styles for ages 0-6 and 6-12.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_019，输入商品 B09SBHHJQ2）",
+      "source_row_id": "paraphrase_019",
+      "source_file": "data/public/visual_inception_inputs_v5/09_toothbrush/paraphrases/model_paraphrases.jsonl"
+    },
+    {
+      "id": "09_toothbrush_oracle_16",
+      "query_family": "model_paraphrase",
+      "instruction": "Find a slim sonic electric toothbrush with IPX7 waterproofing, a non-slip design, a changeable brush head and battery base, and two interchangeable heads.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_030，输入商品 B07PS9JDNX）",
+      "source_row_id": "paraphrase_030",
+      "source_file": "data/public/visual_inception_inputs_v5/09_toothbrush/paraphrases/model_paraphrases.jsonl"
+    },
+    {
+      "id": "09_toothbrush_oracle_17",
+      "query_family": "heldout_search_query",
+      "instruction": "bamboo toothbrush",
+      "instruction_zh": "训练真实搜索原句（esci / esci_train_12893）：bamboo toothbrush",
+      "source_row_id": "esci_train_12893",
+      "source_file": "data/public/visual_inception_inputs_v5/09_toothbrush/heldout_queries.jsonl"
+    },
+    {
+      "id": "09_toothbrush_oracle_18",
+      "query_family": "heldout_search_query",
+      "instruction": "disposable toothbrushes without paste",
+      "instruction_zh": "训练真实搜索原句（esci / esci_train_33935）：disposable toothbrushes without paste",
+      "source_row_id": "esci_train_33935",
+      "source_file": "data/public/visual_inception_inputs_v5/09_toothbrush/heldout_queries.jsonl"
+    },
+    {
+      "id": "09_toothbrush_oracle_19",
+      "query_family": "heldout_search_query",
+      "instruction": "life without plastic toothbrush",
+      "instruction_zh": "训练真实搜索原句（esci / esci_train_62154）：life without plastic toothbrush",
+      "source_row_id": "esci_train_62154",
+      "source_file": "data/public/visual_inception_inputs_v5/09_toothbrush/heldout_queries.jsonl"
+    },
+    {
+      "id": "09_toothbrush_oracle_20",
+      "query_family": "heldout_search_query",
+      "instruction": "kids toothbrush",
+      "instruction_zh": "训练真实搜索原句（esci / esci_train_58043）：kids toothbrush",
+      "source_row_id": "esci_train_58043",
+      "source_file": "data/public/visual_inception_inputs_v5/09_toothbrush/heldout_queries.jsonl"
+    }
+  ],
+  "query_family_counts": {
+    "category_description": 10,
+    "model_paraphrase": 6,
+    "heldout_search_query": 4
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false,
+  "sampling": {
+    "algorithm": "stratified_sha256_hash_order_v1",
+    "seed": 42,
+    "quotas": {
+      "category_description": 10,
+      "model_paraphrase": 6,
+      "heldout_search_query": 4
+    }
+  },
+  "training_overlap": {
+    "normalization": "unicode_nfkc_whitespace_casefold",
+    "normalized_exact_overlap_count": 20,
+    "expected_overlap_count": 20,
+    "semantic_independence_claimed": false,
+    "oracle_overlap_protocol": "paper_table1_table6_100pct_oracle",
+    "checked_against_training_source_manifest": "../manifest.json"
+  },
+  "authoring": {
+    "kind": "stratified_sample_from_frozen_training_sources",
+    "basis": "paper_table1_oracle_100pct_overlap_50_30_20_quotas_v1",
+    "target_brand_or_model_specified": false,
+    "formal_memory_contents_read": false,
+    "selection_by_retrieval_outcomes": false
+  }
+}

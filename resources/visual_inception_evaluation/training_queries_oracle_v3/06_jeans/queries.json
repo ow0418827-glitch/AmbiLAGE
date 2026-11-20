@@ -1,0 +1,283 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "visual_inception_training_oracle_v3",
+  "group": "06_jeans",
+  "query_mode": "text",
+  "target_public_id": "B09HH96NJY",
+  "category": "jeans",
+  "source_type": "training_oracle_stratified_sample",
+  "language": "en",
+  "instruction_policy": "training_oracle_v3_denoised_aligned_20",
+  "instructions": [
+    "Stretch pull-on women straight-leg jeans designed with a tummy-shaping front panel and comfortable waist.",
+    "Plus-size mid-rise wide-leg flared denim jeans cut for comfortable casual pairing with everyday tops.",
+    "Cotton mid-waisted bell-bottom denim jeans featuring comfortable relaxed mobility, practical pockets, and zipper closure.",
+    "Stretch performance climbing denim jeans engineered for flexible outdoor movement beneath athletic safety gear.",
+    "High-waisted vintage loose bell-bottom denim pants crafted with stretchy breathable fabric for casual street outfits.",
+    "High-waisted baggy straight-leg cargo denim jeans built with spacious side utility pockets and relaxed cut.",
+    "Relaxed high-waisted baggy cargo denim jeans featuring deep front flap pockets and casual straight legs.",
+    "Cotton low-rise loose straight-leg street denim jeans designed for breathable year-round casual fashion outfits.",
+    "Low-rise stretch cotton bootcut denim jeans designed with five practical pockets and flattering leg cut.",
+    "High-waisted slim straight-leg street denim jeans made with comfortable stretch tailoring for everyday casual style.",
+    "Find stretchy flare women jeans crafted with comfortable pockets and breathable cotton weave.",
+    "Find casual comfortable low-waist pull-on street pants tailored for relaxed everyday outfits.",
+    "Find casual full-length wide-leg printed women street pants offering relaxed everyday comfort.",
+    "Find high-waisted tapered stretch jeans built with deep pockets for daily styling.",
+    "Seeking lightweight breathable stretch denim pants suited for daily travel and office wear.",
+    "Find plus-size mid-rise skinny women jeans offering gentle stretch and zipper closure.",
+    "plus size jeans",
+    "woman's jeans low rise",
+    "ladies jeans",
+    "curvy jeans for women high waist"
+  ],
+  "instructions_sha256": "c2fe19363d402ec9657970f8e4bf9aecdf267a20aa5c75cc72b59624222ecfca",
+  "query_records": [
+    {
+      "id": "06_jeans_oraclev3_01",
+      "query_family": "category_description",
+      "instruction": "Stretch pull-on women straight-leg jeans designed with a tummy-shaping front panel and comfortable waist.",
+      "instruction_zh": "女士高弹套穿直筒牛仔裤，前片塑形提臀配舒适腰部裁剪。",
+      "source_row_id": "B07JMZQT4B",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/06_jeans/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "95ef2f88a3bb209f08a69e1ee7cb827279d5d259e25aa22d57d896f51bec62d2"
+    },
+    {
+      "id": "06_jeans_oraclev3_02",
+      "query_family": "category_description",
+      "instruction": "Plus-size mid-rise wide-leg flared denim jeans cut for comfortable casual pairing with everyday tops.",
+      "instruction_zh": "大码中腰阔腿微喇牛仔裤，穿着自在舒适并百搭日常上衣。",
+      "source_row_id": "B08PS1XYS9",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/06_jeans/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "6078d76e1a71a38fbf7fda5d2b09714b51d387798b1bc4dd63353cb554c3c852"
+    },
+    {
+      "id": "06_jeans_oraclev3_03",
+      "query_family": "category_description",
+      "instruction": "Cotton mid-waisted bell-bottom denim jeans featuring comfortable relaxed mobility, practical pockets, and zipper closure.",
+      "instruction_zh": "纯棉中腰宽松喇叭牛仔裤，活动无束缚且搭配实用口袋与拉链。",
+      "source_row_id": "B094FVGLXQ",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/06_jeans/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "98a1cd4c89f4a274eb44a51f33f12539f85e9fea543797357bd220f3936664df"
+    },
+    {
+      "id": "06_jeans_oraclev3_04",
+      "query_family": "category_description",
+      "instruction": "Stretch performance climbing denim jeans engineered for flexible outdoor movement beneath athletic safety gear.",
+      "instruction_zh": "高弹户外攀岩专用机能牛仔裤，兼顾耐磨防护与大跨步舒展自由度。",
+      "source_row_id": "B07N95CH33",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/06_jeans/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "345b48e7294a36a11ca2888e8a62f9f891a77c6094a4699c3c001f983cfe7a46"
+    },
+    {
+      "id": "06_jeans_oraclev3_05",
+      "query_family": "category_description",
+      "instruction": "High-waisted vintage loose bell-bottom denim pants crafted with stretchy breathable fabric for casual street outfits.",
+      "instruction_zh": "复古高腰宽松微喇街头牛仔裤，弹性透气面料展现复古休闲风。",
+      "source_row_id": "B08TH8SFQW",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/06_jeans/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "18593bb558e2a60af311e9338fb48e51aa20f9d3ddcda027cee718abbf65d8a5"
+    },
+    {
+      "id": "06_jeans_oraclev3_06",
+      "query_family": "category_description",
+      "instruction": "High-waisted baggy straight-leg cargo denim jeans built with spacious side utility pockets and relaxed cut.",
+      "instruction_zh": "高腰宽松直筒工装风牛仔裤，搭配实用大容量口袋与松弛剪裁。",
+      "source_row_id": "B09MZCG7JD",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/06_jeans/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "ff73495b0de395d496cb62f5c126a0ed0d7af94344511e1c9cbd2a020c7c474c"
+    },
+    {
+      "id": "06_jeans_oraclev3_07",
+      "query_family": "category_description",
+      "instruction": "Relaxed high-waisted baggy cargo denim jeans featuring deep front flap pockets and casual straight legs.",
+      "instruction_zh": "宽松高腰直筒工装牛仔长裤，前侧配有深大翻盖贴袋方便收纳随身小物。",
+      "source_row_id": "B09MQTFP11",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/06_jeans/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "dd5f15f79d070f4dd2268c6965f30baa40c53f7cf0dae1152b4c04b3cc22bd58"
+    },
+    {
+      "id": "06_jeans_oraclev3_08",
+      "query_family": "category_description",
+      "instruction": "Cotton low-rise loose straight-leg street denim jeans designed for breathable year-round casual fashion outfits.",
+      "instruction_zh": "纯棉低腰宽松直筒街头潮流牛仔裤，四季透气百搭各类休闲上衣。",
+      "source_row_id": "B09Q2QW66Q",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/06_jeans/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "10fc29bc0f2a789d46222eb733cf190293da65041b28288def89957cfe1cd899"
+    },
+    {
+      "id": "06_jeans_oraclev3_09",
+      "query_family": "category_description",
+      "instruction": "Low-rise stretch cotton bootcut denim jeans designed with five practical pockets and flattering leg cut.",
+      "instruction_zh": "低腰棉弹五袋微喇牛仔裤，剪裁修长显瘦并兼顾经典细节。",
+      "source_row_id": "B07PQYS7SY",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/06_jeans/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "2942ff33b524f8647cb452cf84cd501da95c5f3eb8021e849958a36e1c742379"
+    },
+    {
+      "id": "06_jeans_oraclev3_10",
+      "query_family": "category_description",
+      "instruction": "High-waisted slim straight-leg street denim jeans made with comfortable stretch tailoring for everyday casual style.",
+      "instruction_zh": "高腰修身直筒潮流牛仔长裤，日常弹力舒适且展现利落街头版型。",
+      "source_row_id": "B08VDLC82P",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/06_jeans/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "6212aa01749ec6e72bd6869d361c0f80ae313663e88c29e602e13337c9e49b89"
+    },
+    {
+      "id": "06_jeans_oraclev3_11",
+      "query_family": "model_paraphrase",
+      "instruction": "Find stretchy flare women jeans crafted with comfortable pockets and breathable cotton weave.",
+      "instruction_zh": "找一条透气棉弹、配经典口袋的全长修身微喇女士牛仔裤。",
+      "source_row_id": "paraphrase_018",
+      "source_file": "data/public/visual_inception_inputs_v5/06_jeans/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "4c807ad3b2499b79592e53cc13653ba58707ccf6848632476f81a252f6e975f8"
+    },
+    {
+      "id": "06_jeans_oraclev3_12",
+      "query_family": "model_paraphrase",
+      "instruction": "Find casual comfortable low-waist pull-on street pants tailored for relaxed everyday outfits.",
+      "instruction_zh": "寻一款日常穿脱自如的低腰宽松潮流风舒适街头休闲长裤。",
+      "source_row_id": "paraphrase_022",
+      "source_file": "data/public/visual_inception_inputs_v5/06_jeans/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "db76c91eedda29da6f7642a3ea29daf257c7fc62eb750ca926599c4e80367fda"
+    },
+    {
+      "id": "06_jeans_oraclev3_13",
+      "query_family": "model_paraphrase",
+      "instruction": "Find casual full-length wide-leg printed women street pants offering relaxed everyday comfort.",
+      "instruction_zh": "想找剪裁舒适随性、全长阔腿印花设计的女士日常休闲街拍裤。",
+      "source_row_id": "paraphrase_014",
+      "source_file": "data/public/visual_inception_inputs_v5/06_jeans/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "e57ea355d43f525fb480c8d5cd0418d58a9326f6e18d476fecd6709fd0f879f9"
+    },
+    {
+      "id": "06_jeans_oraclev3_14",
+      "query_family": "model_paraphrase",
+      "instruction": "Find high-waisted tapered stretch jeans built with deep pockets for daily styling.",
+      "instruction_zh": "想要一条贴合身形的高腰微锥弹力女士口袋牛仔长裤。",
+      "source_row_id": "paraphrase_010",
+      "source_file": "data/public/visual_inception_inputs_v5/06_jeans/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "32696a768257ae30ec9bc89bbb546a5f4cf65ab3e8861f8e38a0b25e2174ca38"
+    },
+    {
+      "id": "06_jeans_oraclev3_15",
+      "query_family": "model_paraphrase",
+      "instruction": "Seeking lightweight breathable stretch denim pants suited for daily travel and office wear.",
+      "instruction_zh": "求推荐透气轻盈的弹力牛仔裤，适合通勤上班与长途旅行舒适穿着。",
+      "source_row_id": "paraphrase_003",
+      "source_file": "data/public/visual_inception_inputs_v5/06_jeans/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "cf9a06f9f342843d67eedc07891edfae822d33e9b5c288ef5fb513db3f2686a2"
+    },
+    {
+      "id": "06_jeans_oraclev3_16",
+      "query_family": "model_paraphrase",
+      "instruction": "Find plus-size mid-rise skinny women jeans offering gentle stretch and zipper closure.",
+      "instruction_zh": "找一款合身显瘦、拉链门襟配舒适微弹面料的女士大码中腰小脚牛仔裤。",
+      "source_row_id": "paraphrase_013",
+      "source_file": "data/public/visual_inception_inputs_v5/06_jeans/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "9e6a3abdf2e05c9442f33f029e9ebc3eedb2a962943fbc978914a82ed3ea02dd"
+    },
+    {
+      "id": "06_jeans_oraclev3_17",
+      "query_family": "heldout_search_query",
+      "instruction": "plus size jeans",
+      "instruction_zh": "真实搜索原句（esci_train_81516）：大码牛仔裤",
+      "source_row_id": "esci_train_81516",
+      "source_file": "data/public/visual_inception_inputs_v5/06_jeans/heldout_queries.jsonl",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "06_jeans_oraclev3_18",
+      "query_family": "heldout_search_query",
+      "instruction": "woman's jeans low rise",
+      "instruction_zh": "真实搜索原句（esci_train_112416）：女士低腰牛仔裤",
+      "source_row_id": "esci_train_112416",
+      "source_file": "data/public/visual_inception_inputs_v5/06_jeans/heldout_queries.jsonl",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "06_jeans_oraclev3_19",
+      "query_family": "heldout_search_query",
+      "instruction": "ladies jeans",
+      "instruction_zh": "真实搜索原句（esci_train_59568）：女式牛仔裤",
+      "source_row_id": "esci_train_59568",
+      "source_file": "data/public/visual_inception_inputs_v5/06_jeans/heldout_queries.jsonl",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "06_jeans_oraclev3_20",
+      "query_family": "heldout_search_query",
+      "instruction": "curvy jeans for women high waist",
+      "instruction_zh": "真实搜索原句（esci_train_30892）：女士高腰修饰曲线牛仔裤",
+      "source_row_id": "esci_train_30892",
+      "source_file": "data/public/visual_inception_inputs_v5/06_jeans/heldout_queries.jsonl",
+      "implicit_anchor_free": false
+    }
+  ],
+  "query_family_counts": {
+    "category_description": 10,
+    "model_paraphrase": 6,
+    "heldout_search_query": 4
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false,
+  "sampling": {
+    "algorithm": "stratified_sha256_hash_order_v1",
+    "seed": 42,
+    "quotas": {
+      "category_description": 10,
+      "model_paraphrase": 6,
+      "heldout_search_query": 4
+    }
+  },
+  "training_overlap": {
+    "normalization": "unicode_nfkc_whitespace_casefold",
+    "normalized_exact_overlap_count": 20,
+    "expected_overlap_count": 20,
+    "semantic_independence_claimed": false,
+    "oracle_overlap_protocol": "paper_table1_table6_100pct_oracle",
+    "checked_against_training_source_manifest": "../manifest.json"
+  },
+  "authoring": {
+    "kind": "stratified_sample_from_frozen_training_sources",
+    "basis": "paper_table1_oracle_100pct_overlap_50_30_20_quotas_v1",
+    "target_brand_or_model_specified": false,
+    "formal_memory_contents_read": false,
+    "selection_by_retrieval_outcomes": false
+  }
+}

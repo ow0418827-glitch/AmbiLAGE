@@ -1,0 +1,206 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "category_query_overlap_30_v2",
+  "group": "06_jeans",
+  "query_mode": "text",
+  "target_public_id": "B09HH96NJY",
+  "category": "jeans",
+  "source_type": "mixed_30pct_training_oracle_70pct_non_overlap",
+  "language": "en",
+  "instruction_policy": "category_query_overlap_30_v2",
+  "instructions": [
+    "Stretch cotton-lyocell pull-on women's straight-leg jeans designed with a slimming crisscross front panel, classic back pockets, and figure-flattering mid waist.",
+    "Plus-size mid-rise wide-leg flared bell-bottom women's denim jeans cut for soft casual comfort and easy pairing with everyday tees.",
+    "100% cotton soft denim women's mid-waisted bell-bottom jeans styled with a tie belt waistband, dual side mini pockets, and zipper closure.",
+    "Find full-length stretchy bell-bottom flare jeans for women in light blue, black, or dark denim, with back pockets, frayed hems, and a breathable cotton-blend-spandex construction.",
+    "Find low-waist light polyester pull-on pants with a butterfly embroidery design in Korean hip-hop, Y2K, Harajuku, or streetwear style for S, M, or L.",
+    "mens high waisted jeans",
+    "Find high-rise straight jeans that still leave some room through the thighs.",
+    "I need dark denim jeans that look polished enough for a casual office.",
+    "Show me relaxed-fit jeans with a short inseam for someone who is petite.",
+    "Which bootcut jeans have a little stretch through the seat without a tight waist?",
+    "I want light-wash loose jeans for warm days when heavy denim feels stuffy.",
+    "Compare rigid cotton jeans and stretch denim for wearing on a long flight.",
+    "Find straight-leg jeans with front pockets deep enough to hold a phone.",
+    "What wide-leg jeans have a fitted waistband and a full-length hem?",
+    "Which pull-on straight-fit indigo bottoms use a slimming front crisscross panel for smoother waist lines?",
+    "Compare Y2K high-waisted baggy cargo streetwear bottoms against vintage bell-bottom belted flares.",
+    "Find durable stretchy climbing twill bottoms built to flex smoothly without pinching under sport harnesses.",
+    "I want 100% cotton black low-rise straight punk bottoms accented with subtle metallic side chains.",
+    "Suggest light-wash stretchy bootcut five-pocket bottoms featuring detailed Southwestern rear-pocket embroidery.",
+    "What deep-pocketed relaxed baggy wide-leg streetwear bottoms pair best with chunky sneakers all year?"
+  ],
+  "instructions_sha256": "e89b24507838ccc946e72558bb56a0bdc231775e8155a7cd922d010383429f36",
+  "query_records": [
+    {
+      "id": "06_jeans_overlap30v2_01",
+      "query_family": "category_description",
+      "instruction": "Stretch cotton-lyocell pull-on women's straight-leg jeans designed with a slimming crisscross front panel, classic back pockets, and figure-flattering mid waist.",
+      "instruction_zh": "提炼公开描述（B07JMZQT4B）：女式弹力棉莱赛尔套穿直筒牛仔裤，前片交叉塑形提臀配经典后袋设计。",
+      "source_row_id": "B07JMZQT4B",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/06_jeans/descriptions.jsonl",
+      "reused_oracle_id": "06_jeans_oracle_01",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "95ef2f88a3bb209f08a69e1ee7cb827279d5d259e25aa22d57d896f51bec62d2"
+    },
+    {
+      "id": "06_jeans_overlap30v2_02",
+      "query_family": "category_description",
+      "instruction": "Plus-size mid-rise wide-leg flared bell-bottom women's denim jeans cut for soft casual comfort and easy pairing with everyday tees.",
+      "instruction_zh": "提炼公开描述（B08PS1XYS9）：女式大码中腰阔腿微喇牛仔裤，剪裁舒适百搭日常上衣。",
+      "source_row_id": "B08PS1XYS9",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/06_jeans/descriptions.jsonl",
+      "reused_oracle_id": "06_jeans_oracle_02",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "6078d76e1a71a38fbf7fda5d2b09714b51d387798b1bc4dd63353cb554c3c852"
+    },
+    {
+      "id": "06_jeans_overlap30v2_03",
+      "query_family": "category_description",
+      "instruction": "100% cotton soft denim women's mid-waisted bell-bottom jeans styled with a tie belt waistband, dual side mini pockets, and zipper closure.",
+      "instruction_zh": "提炼公开描述（B094FVGLXQ）：纯棉中腰系带蝴蝶结喇叭牛仔裤，双侧小口袋与拉链门襟，亲肤休闲。",
+      "source_row_id": "B094FVGLXQ",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/06_jeans/descriptions.jsonl",
+      "reused_oracle_id": "06_jeans_oracle_03",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "98a1cd4c89f4a274eb44a51f33f12539f85e9fea543797357bd220f3936664df"
+    },
+    {
+      "id": "06_jeans_overlap30v2_04",
+      "query_family": "model_paraphrase",
+      "instruction": "Find full-length stretchy bell-bottom flare jeans for women in light blue, black, or dark denim, with back pockets, frayed hems, and a breathable cotton-blend-spandex construction.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_018，输入商品 B093QZKT2R）",
+      "source_row_id": "paraphrase_018",
+      "source_file": "data/public/visual_inception_inputs_v5/06_jeans/paraphrases/model_paraphrases.jsonl",
+      "reused_oracle_id": "06_jeans_oracle_11"
+    },
+    {
+      "id": "06_jeans_overlap30v2_05",
+      "query_family": "model_paraphrase",
+      "instruction": "Find low-waist light polyester pull-on pants with a butterfly embroidery design in Korean hip-hop, Y2K, Harajuku, or streetwear style for S, M, or L.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_022，输入商品 B09J8FXZ9X）",
+      "source_row_id": "paraphrase_022",
+      "source_file": "data/public/visual_inception_inputs_v5/06_jeans/paraphrases/model_paraphrases.jsonl",
+      "reused_oracle_id": "06_jeans_oracle_12"
+    },
+    {
+      "id": "06_jeans_overlap30v2_06",
+      "query_family": "heldout_search_query",
+      "instruction": "mens high waisted jeans",
+      "instruction_zh": "训练真实搜索原句（esci / esci_train_67658）：mens high waisted jeans",
+      "source_row_id": "esci_train_67658",
+      "source_file": "data/public/visual_inception_inputs_v5/06_jeans/heldout_queries.jsonl",
+      "reused_oracle_id": "06_jeans_oracle_17"
+    },
+    {
+      "id": "06_jeans_overlap30v2_07",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Find high-rise straight jeans that still leave some room through the thighs.",
+      "instruction_zh": "找一款高腰直筒但大腿处仍留有舒适活动空间的牛仔裤。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "06_jeans_overlap30v2_08",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "I need dark denim jeans that look polished enough for a casual office.",
+      "instruction_zh": "我需要一条版型利落、适合休闲办公室穿搭的深色牛仔裤。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "06_jeans_overlap30v2_09",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Show me relaxed-fit jeans with a short inseam for someone who is petite.",
+      "instruction_zh": "推荐几款适合小个子穿着的短裤长宽松版型牛仔裤。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "06_jeans_overlap30v2_10",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Which bootcut jeans have a little stretch through the seat without a tight waist?",
+      "instruction_zh": "哪些微喇牛仔裤臀部略带弹性而腰部不会过紧？",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "06_jeans_overlap30v2_11",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "I want light-wash loose jeans for warm days when heavy denim feels stuffy.",
+      "instruction_zh": "我想要一条浅水洗宽松牛仔裤，适合闷热天气替代厚重丹宁。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "06_jeans_overlap30v2_12",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Compare rigid cotton jeans and stretch denim for wearing on a long flight.",
+      "instruction_zh": "对比纯棉硬挺牛仔裤和弹力牛仔裤在长途飞行时的舒适度。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "06_jeans_overlap30v2_13",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Find straight-leg jeans with front pockets deep enough to hold a phone.",
+      "instruction_zh": "找一款前袋足够深、能稳妥装下手机的直筒牛仔裤。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "06_jeans_overlap30v2_14",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "What wide-leg jeans have a fitted waistband and a full-length hem?",
+      "instruction_zh": "哪款阔腿牛仔裤拥有合身腰头与全长裤脚设计？",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "06_jeans_overlap30v2_15",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Which pull-on straight-fit indigo bottoms use a slimming front crisscross panel for smoother waist lines?",
+      "instruction_zh": "哪款靛蓝套穿直筒常服裤带有前片交叉收腹结构、穿起来腰腹更显瘦？",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "06_jeans_overlap30v2_16",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Compare Y2K high-waisted baggy cargo streetwear bottoms against vintage bell-bottom belted flares.",
+      "instruction_zh": "对比Y2K复古高腰大阔腿工装街拍裤与中腰系带喇叭款长裤的垂坠版型。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "06_jeans_overlap30v2_17",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Find durable stretchy climbing twill bottoms built to flex smoothly without pinching under sport harnesses.",
+      "instruction_zh": "找一条弹性极佳且耐磨的户外攀岩靛蓝斜纹长裤，穿戴安全带仍可自由伸腿。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "06_jeans_overlap30v2_18",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "I want 100% cotton black low-rise straight punk bottoms accented with subtle metallic side chains.",
+      "instruction_zh": "想要一条点缀金属侧链的纯棉黑色低腰直筒暗黑街潮长裤。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "06_jeans_overlap30v2_19",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Suggest light-wash stretchy bootcut five-pocket bottoms featuring detailed Southwestern rear-pocket embroidery.",
+      "instruction_zh": "推荐后袋带有精致西南民族刺绣的浅水洗弹力五袋微喇休闲长裤。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "06_jeans_overlap30v2_20",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "What deep-pocketed relaxed baggy wide-leg streetwear bottoms pair best with chunky sneakers all year?",
+      "instruction_zh": "哪款带大容量工装侧袋的宽松阔腿街头长裤一年四季配老爹鞋最帅气？",
+      "implicit_anchor_free": true
+    }
+  ],
+  "query_family_counts": {
+    "category_description": 3,
+    "model_paraphrase": 2,
+    "heldout_search_query": 1,
+    "synthetic_non_overlap": 14
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false
+}

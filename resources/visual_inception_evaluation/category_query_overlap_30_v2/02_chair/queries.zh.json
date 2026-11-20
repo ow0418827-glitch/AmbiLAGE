@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "language": "zh",
+  "purpose": "仅供人工阅读，不传给检索编码器",
+  "group": "02_chair",
+  "category": "barber chair",
+  "query_records": [
+    {
+      "id": "02_chair_overlap30v2_01",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "提炼公开描述（B084KKKSQK）：复古重型液压可躺理发椅，缝线仿皮软包、铝合金框架、27英寸镀铬底座、可拆卸头枕及140度后倾靠背。"
+    },
+    {
+      "id": "02_chair_overlap30v2_02",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "提炼公开描述（B09NKCPT92）：不锈钢与防水皮革液压美发椅，高密度回弹海绵坐垫、平稳升降及可锁定360度旋转。"
+    },
+    {
+      "id": "02_chair_overlap30v2_03",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "提炼公开描述（B09LLV2DRD）：PU皮革可倾倒剃须理发椅，加厚海绵防水坐垫、不锈钢包皮扶手及135度宽靠背调节。"
+    },
+    {
+      "id": "02_chair_overlap30v2_04",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "复用模型改写查询(10%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_005，输入商品 B09C3XYMBP）"
+    },
+    {
+      "id": "02_chair_overlap30v2_05",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "复用模型改写查询(10%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_001，输入商品 B09SPQH3J5）"
+    },
+    {
+      "id": "02_chair_overlap30v2_06",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "复用独立真实搜索(5%)",
+      "instruction": "训练真实搜索原句（msmarco_websearch / msmarco_websearch_train_2098274）：koken barber chairs for sale"
+    },
+    {
+      "id": "02_chair_overlap30v2_07",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一款理发时能顺滑旋转并可锁定的理发椅。"
+    },
+    {
+      "id": "02_chair_overlap30v2_08",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我需要一款适合窄过道店铺的紧凑型液压理发椅。"
+    },
+    {
+      "id": "02_chair_overlap30v2_09",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪些理发椅的脚踏板对身高较矮的顾客也很舒适？"
+    },
+    {
+      "id": "02_chair_overlap30v2_10",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "推荐几款带可拆卸软垫头枕的可躺式理发椅。"
+    },
+    {
+      "id": "02_chair_overlap30v2_11",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款理发椅能够降到足够低以方便顾客轻松坐下？"
+    },
+    {
+      "id": "02_chair_overlap30v2_12",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我想要一款易擦拭清洁的深色面料经典理发椅。"
+    },
+    {
+      "id": "02_chair_overlap30v2_13",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "对比方形底座和圆形底座理发椅在瓷砖地面上的稳定性。"
+    },
+    {
+      "id": "02_chair_overlap30v2_14",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "推荐一款适合长时间护理服务的宽扶手理发椅。"
+    },
+    {
+      "id": "02_chair_overlap30v2_15",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一款带皮质扶手与镀铬底盘的360度液压理发工位座椅。"
+    },
+    {
+      "id": "02_chair_overlap30v2_16",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款沙龙后仰工位座配备左右双侧拨杆与140度靠背倾角调节？"
+    },
+    {
+      "id": "02_chair_overlap30v2_17",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "想要一款铺满厚实高密度记忆海绵且易擦洗PVC材质的理容工作客座。"
+    },
+    {
+      "id": "02_chair_overlap30v2_18",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "对比圆盘镀铬款造型座与精品方底座仿皮沙龙座椅的稳定性。"
+    },
+    {
+      "id": "02_chair_overlap30v2_19",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "推荐带可拆卸软头枕的不锈钢骨架纹身修面工作室专用座。"
+    },
+    {
+      "id": "02_chair_overlap30v2_20",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款复古商用美发客座承重达400磅且能任意角度顺滑旋转锁定？"
+    }
+  ]
+}

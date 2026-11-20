@@ -1,0 +1,283 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "visual_inception_training_oracle_v3",
+  "group": "03_cookies",
+  "query_mode": "text",
+  "target_public_id": "B08Z8MHWVS",
+  "category": "cookie dough",
+  "source_type": "training_oracle_stratified_sample",
+  "language": "en",
+  "instruction_policy": "training_oracle_v3_denoised_aligned_20",
+  "instructions": [
+    "Gluten-free refrigerated chocolate chunk cookie dough made with wholesome ingredients for warm soft homemade desserts.",
+    "Edible ready-to-eat chocolate chip cookie dough chunks packed conveniently for quick sweet snacking anytime.",
+    "Pre-portioned frozen triple chocolate chip cookie dough ready to bake into soft bakery-style chocolate treats.",
+    "Eggless edible frozen cookie dough packaged for safe scooping straight out of the snack container.",
+    "Peanut butter cookie dough blended with rich chocolate peanut butter candy pieces in convenient portions.",
+    "Handmade ready-to-bake butterscotch chip cookie dough blended with butter, eggs, chocolate chips, and crunchy nuts.",
+    "Oversized peanut butter cookie dough loaded with chopped peanut butter candy pieces and sweet chips.",
+    "Gourmet semi-sweet chocolate chunk cookie dough blended with butter and molasses for soft chewy cookies.",
+    "Pre-portioned classic chocolate chip cookie dough rounds ready for fast oven baking into crisp desserts.",
+    "Classic chocolate chip cookie dough prepared with fresh butter, eggs, and rich chocolate morsels for baking.",
+    "Want ready-to-bake chocolate chip cookie dough portioned cleanly for quick oven baking.",
+    "Want gourmet chocolate chunk cookie dough made with butter, vanilla, molasses, and salt.",
+    "Seeking certified vegan frozen cookie dough chunks made for cold sweet dessert bowls.",
+    "Need refrigerated chocolate chip cookie dough crafted without preservatives or artificial flavors.",
+    "Where can shoppers buy effortless ready-to-bake sugar cookie dough without kitchen mixing?",
+    "Need pre-portioned frozen chocolate cookie dough baked easily into soft homemade desserts.",
+    "butter cookie dough",
+    "frozen cookie dough",
+    "raw cookie dough",
+    "chocolate chip cookie dough"
+  ],
+  "instructions_sha256": "09bd7d7859ddf9b24e64d6d72673c189f7a6ccc244bdec1d3b111851a0161cb3",
+  "query_records": [
+    {
+      "id": "03_cookies_oraclev3_01",
+      "query_family": "category_description",
+      "instruction": "Gluten-free refrigerated chocolate chunk cookie dough made with wholesome ingredients for warm soft homemade desserts.",
+      "instruction_zh": "无麸质冷藏黑巧块曲奇面团，采用天然烘焙原料制成松软美味点心。",
+      "source_row_id": "B00B049CB8:BulletPoints:array_item:3",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/03_cookies/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "eed6131607e46eb2c647df5778fc8035c6e255751bb4657a75a298afe097879e"
+    },
+    {
+      "id": "03_cookies_oraclev3_02",
+      "query_family": "category_description",
+      "instruction": "Edible ready-to-eat chocolate chip cookie dough chunks packed conveniently for quick sweet snacking anytime.",
+      "instruction_zh": "可直接食用的巧克力豆曲奇面团块，开袋即享便捷甜品零食。",
+      "source_row_id": "B07SDN84R6:BulletPoints:array_item:5",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/03_cookies/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "8f6fd09e302f166d7fec272f880f0fc72fe81465e158349568316cc89a9d26a3"
+    },
+    {
+      "id": "03_cookies_oraclev3_03",
+      "query_family": "category_description",
+      "instruction": "Pre-portioned frozen triple chocolate chip cookie dough ready to bake into soft bakery-style chocolate treats.",
+      "instruction_zh": "冷冻分装三重巧克力豆曲奇面团，轻松烤出烘焙坊般浓郁软心曲奇。",
+      "source_row_id": "B00CHU1RGC:BulletPoints:array_item:0",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/03_cookies/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "17731471fa0bff31467bc9968c0e9cdca121c65ce5a7486ea7051329ddb23299"
+    },
+    {
+      "id": "03_cookies_oraclev3_04",
+      "query_family": "category_description",
+      "instruction": "Eggless edible frozen cookie dough packaged for safe scooping straight out of the snack container.",
+      "instruction_zh": "无蛋可生食冷冻曲奇面团，支持开盖用勺直接挖取享用安全美味。",
+      "source_row_id": "B08Z6FD458:BulletPoints:array_item:4",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/03_cookies/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "856af75e4cb5b97d08cc045e38197f03a05755df0d43de5602d732a5a599f2b8"
+    },
+    {
+      "id": "03_cookies_oraclev3_05",
+      "query_family": "category_description",
+      "instruction": "Peanut butter cookie dough blended with rich chocolate peanut butter candy pieces in convenient portions.",
+      "instruction_zh": "混入浓郁花生酱糖果碎块的分装花生酱曲奇烘焙面团。",
+      "source_row_id": "B00CHU1RPI:Description:sentence:1",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/03_cookies/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "1a176284d0710fb43779a774036302da25901c905114fbda87806a48638ecd18"
+    },
+    {
+      "id": "03_cookies_oraclev3_06",
+      "query_family": "category_description",
+      "instruction": "Handmade ready-to-bake butterscotch chip cookie dough blended with butter, eggs, chocolate chips, and crunchy nuts.",
+      "instruction_zh": "手工现烤奶油糖果豆曲奇面团，融合黄油、鲜蛋、巧克力碎和坚果。",
+      "source_row_id": "B01N05V944:Description:whole_field:0",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/03_cookies/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "793ac102650c824286b6c22a0b83be1cb01a7fd0de7fb9d785f0348bb80529e7"
+    },
+    {
+      "id": "03_cookies_oraclev3_07",
+      "query_family": "category_description",
+      "instruction": "Oversized peanut butter cookie dough loaded with chopped peanut butter candy pieces and sweet chips.",
+      "instruction_zh": "大份量花生酱曲奇面团，拌入浓郁花生酱夹心碎与香甜烘焙豆。",
+      "source_row_id": "B00CHU1RPI:Description:sentence:2",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/03_cookies/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "f4ea365ff7b728b474d2db5926236e11958d131e02c7ba4e0a448a5c0be7ba55"
+    },
+    {
+      "id": "03_cookies_oraclev3_08",
+      "query_family": "category_description",
+      "instruction": "Gourmet semi-sweet chocolate chunk cookie dough blended with butter and molasses for soft chewy cookies.",
+      "instruction_zh": "精选半甜黑巧块曲奇面团，揉合黄油与糖蜜烤出松软有嚼劲曲奇。",
+      "source_row_id": "B00B046VTO:Description:whole_field:0",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/03_cookies/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "f56520fbb86356e95d76c066fdaf7bcad97d5c734e246a4c7bd7be0e60637d33"
+    },
+    {
+      "id": "03_cookies_oraclev3_09",
+      "query_family": "category_description",
+      "instruction": "Pre-portioned classic chocolate chip cookie dough rounds ready for fast oven baking into crisp desserts.",
+      "instruction_zh": "预分装经典巧克力豆曲奇圆面团，省去揉面快速烤出香酥曲奇。",
+      "source_row_id": "B00CHU03DA:BulletPoints:array_item:0",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/03_cookies/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "301c94b0ebb8c89fbd095532f1b9ae42725fe21bef2e8eb312f3afb635655559"
+    },
+    {
+      "id": "03_cookies_oraclev3_10",
+      "query_family": "category_description",
+      "instruction": "Classic chocolate chip cookie dough prepared with fresh butter, eggs, and rich chocolate morsels for baking.",
+      "instruction_zh": "使用鲜黄油、鸡蛋与香浓巧克力豆调制的经典家庭烘焙曲奇面团。",
+      "source_row_id": "B00CHU03DA:Description:sentence:1",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/03_cookies/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "092d4415789a8790a0d4279803f512ceff3331bd9d951c9ce08682c5b629e43e"
+    },
+    {
+      "id": "03_cookies_oraclev3_11",
+      "query_family": "model_paraphrase",
+      "instruction": "Want ready-to-bake chocolate chip cookie dough portioned cleanly for quick oven baking.",
+      "instruction_zh": "想要预先分装好、随时直接放进烤箱烘烤的巧克力豆曲奇面团。",
+      "source_row_id": "paraphrase_002",
+      "source_file": "data/public/visual_inception_inputs_v5/03_cookies/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "6b296d859627bddd17a420d37c99b17bfef6169b0c31af52548993244698edb3"
+    },
+    {
+      "id": "03_cookies_oraclev3_12",
+      "query_family": "model_paraphrase",
+      "instruction": "Want gourmet chocolate chunk cookie dough made with butter, vanilla, molasses, and salt.",
+      "instruction_zh": "想吃用黄油、香草、糖蜜与海盐调制的浓郁黑巧块曲奇烘焙面团。",
+      "source_row_id": "paraphrase_009",
+      "source_file": "data/public/visual_inception_inputs_v5/03_cookies/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "bf114e9697b392987e84977a7e80e8487bfbc5a91ee850cc9b06c2bad55ef264"
+    },
+    {
+      "id": "03_cookies_oraclev3_13",
+      "query_family": "model_paraphrase",
+      "instruction": "Seeking certified vegan frozen cookie dough chunks made for cold sweet dessert bowls.",
+      "instruction_zh": "在找纯素认证、适合搭配冷饮甜点享用的冷冻曲奇生面团块。",
+      "source_row_id": "paraphrase_025",
+      "source_file": "data/public/visual_inception_inputs_v5/03_cookies/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "f72ae07a0d33e1b338f2020d7afc15186984dc63934df3d04e238487a5b116b5"
+    },
+    {
+      "id": "03_cookies_oraclev3_14",
+      "query_family": "model_paraphrase",
+      "instruction": "Need refrigerated chocolate chip cookie dough crafted without preservatives or artificial flavors.",
+      "instruction_zh": "需要不含防腐剂与人工香精的天然配方冷藏巧克力豆曲奇面团。",
+      "source_row_id": "paraphrase_021",
+      "source_file": "data/public/visual_inception_inputs_v5/03_cookies/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "20df8bc5b8dc9d01fedba62edee3927843adb42cc69beb0f5598a028845c6edf"
+    },
+    {
+      "id": "03_cookies_oraclev3_15",
+      "query_family": "model_paraphrase",
+      "instruction": "Where can shoppers buy effortless ready-to-bake sugar cookie dough without kitchen mixing?",
+      "instruction_zh": "哪里能买到不用自己调配称重、省心干净即可开烤的香甜曲奇面团？",
+      "source_row_id": "paraphrase_029",
+      "source_file": "data/public/visual_inception_inputs_v5/03_cookies/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "5f3277041998eaed1bac7f596740e0da0de427561daecf5be178e4e9e082bb3c"
+    },
+    {
+      "id": "03_cookies_oraclev3_16",
+      "query_family": "model_paraphrase",
+      "instruction": "Need pre-portioned frozen chocolate cookie dough baked easily into soft homemade desserts.",
+      "instruction_zh": "需要分装规整的冷冻巧克力曲奇烘焙坯，方便在家烤制松软甜点。",
+      "source_row_id": "paraphrase_017",
+      "source_file": "data/public/visual_inception_inputs_v5/03_cookies/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "594718938973704884f51c66ef1a3b073734644870053815273a4e9c93f0509a"
+    },
+    {
+      "id": "03_cookies_oraclev3_17",
+      "query_family": "heldout_search_query",
+      "instruction": "butter cookie dough",
+      "instruction_zh": "真实搜索原句（orcas_5305269）：黄油曲奇面团",
+      "source_row_id": "orcas_orcas-doctrain_5305269",
+      "source_file": "data/public/visual_inception_inputs_v5/03_cookies/heldout_queries.jsonl",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "03_cookies_oraclev3_18",
+      "query_family": "heldout_search_query",
+      "instruction": "frozen cookie dough",
+      "instruction_zh": "真实搜索原句（orcas_10565019）：冷冻曲奇面团",
+      "source_row_id": "orcas_orcas-doctrain_10565019",
+      "source_file": "data/public/visual_inception_inputs_v5/03_cookies/heldout_queries.jsonl",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "03_cookies_oraclev3_19",
+      "query_family": "heldout_search_query",
+      "instruction": "raw cookie dough",
+      "instruction_zh": "真实搜索原句（orcas_4076126）：可生食曲奇面团",
+      "source_row_id": "orcas_orcas-doctrain_4076126",
+      "source_file": "data/public/visual_inception_inputs_v5/03_cookies/heldout_queries.jsonl",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "03_cookies_oraclev3_20",
+      "query_family": "heldout_search_query",
+      "instruction": "chocolate chip cookie dough",
+      "instruction_zh": "真实搜索原句（orcas_6365129）：巧克力豆曲奇面团",
+      "source_row_id": "orcas_orcas-doctrain_6365129",
+      "source_file": "data/public/visual_inception_inputs_v5/03_cookies/heldout_queries.jsonl",
+      "implicit_anchor_free": false
+    }
+  ],
+  "query_family_counts": {
+    "category_description": 10,
+    "model_paraphrase": 6,
+    "heldout_search_query": 4
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false,
+  "sampling": {
+    "algorithm": "stratified_sha256_hash_order_v1",
+    "seed": 42,
+    "quotas": {
+      "category_description": 10,
+      "model_paraphrase": 6,
+      "heldout_search_query": 4
+    }
+  },
+  "training_overlap": {
+    "normalization": "unicode_nfkc_whitespace_casefold",
+    "normalized_exact_overlap_count": 20,
+    "expected_overlap_count": 20,
+    "semantic_independence_claimed": false,
+    "oracle_overlap_protocol": "paper_table1_table6_100pct_oracle",
+    "checked_against_training_source_manifest": "../manifest.json"
+  },
+  "authoring": {
+    "kind": "stratified_sample_from_frozen_training_sources",
+    "basis": "paper_table1_oracle_100pct_overlap_50_30_20_quotas_v1",
+    "target_brand_or_model_specified": false,
+    "formal_memory_contents_read": false,
+    "selection_by_retrieval_outcomes": false
+  }
+}

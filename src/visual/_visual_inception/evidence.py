@@ -128,16 +128,25 @@ def _finite(value):
 
 
 def _validate_enhanced_mechanisms(metadata, ready, config, bundle, candidate_vectors):
-    from .pipeline import mechanism_parameters
+    from .pipeline import LEGACY_MECHANISM_FIELDS, mechanism_parameters
     from .negative_sampling import build_negative_policy, validate_negative_selection_audit
     from .enhanced_objective import (
         QUERY_AUGMENTATION_KIND, MARGIN_KIND, TOP_HARD_COMPETITOR_LIMIT,
-        HARD_MARGIN_SHARPNESS, BANK_LOSS_BLEND, HARD_MARGIN_LOSS_BLEND,
+        HARD_MARGIN_SHARPNESS,
+    )
+    raw_cfg = metadata.get('config', {})
+    legacy_blend_record = (
+        'bank_loss_blend' not in raw_cfg and 'hard_margin_loss_blend' not in raw_cfg
+    )
+    expected_params = (
+        {name: getattr(config, name) for name in LEGACY_MECHANISM_FIELDS}
+        if legacy_blend_record
+        else mechanism_parameters(config)
     )
     execution = metadata.get('enhanced_mechanisms', {})
     body = {k: v for k, v in execution.items() if k != 'execution_sha256'}
     _require(execution.get('schema_version') == 2 and execution.get('kind') == ENHANCED_OBJECTIVE_KIND
-             and execution.get('parameters') == mechanism_parameters(config)
+             and execution.get('parameters') == expected_params
              and execution.get('execution_sha256') == content_sha256(body)
              == ready.get('enhanced_mechanisms_sha256'), '增强机制执行审计摘要或配置不一致')
     _require(ready.get('mechanism_profile') == 'enhanced_v3'
@@ -147,7 +156,7 @@ def _validate_enhanced_mechanisms(metadata, ready, config, bundle, candidate_vec
              '增强机制不得冒称作者未公开细节的精确复现')
     objective = metadata['training_objective']
     _require(objective.get('mechanism_profile') == 'enhanced_v3'
-             and objective.get('mechanism_parameters') == mechanism_parameters(config)
+             and objective.get('mechanism_parameters') == expected_params
              and objective.get('hard_negative_pool_size') == len(bundle['candidates'])
              and objective.get('hard_negative_limit') == config.hard_negative_count
              and objective.get('contrastive_margin') == config.contrastive_margin
@@ -184,8 +193,8 @@ def _validate_enhanced_mechanisms(metadata, ready, config, bundle, candidate_vec
                  and audit.get('retrieval_temperature') == config.retrieval_temperature
                  and audit.get('top_hard_competitor_limit') == TOP_HARD_COMPETITOR_LIMIT
                  and audit.get('hard_margin_sharpness') == HARD_MARGIN_SHARPNESS
-                 and audit.get('bank_loss_blend') == BANK_LOSS_BLEND
-                 and audit.get('hard_margin_loss_blend') == HARD_MARGIN_LOSS_BLEND
+                 and audit.get('bank_loss_blend') == float(config.bank_loss_blend)
+                 and audit.get('hard_margin_loss_blend') == float(config.hard_margin_loss_blend)
                  and audit.get('full_bank_denominator_preserved') is True
                  and audit.get('reduction') == 'query_mean_of_clean_adversarial_weighted_losses'
                  and audit.get('paper_exact_missing_mechanisms_reproduced') is False,
@@ -304,6 +313,9 @@ def validate_ready(root, ready=None, *, require_production=True):
     interpretation = dict(raw_config)
     if 'objective_mode' not in interpretation and not retrieval_enabled:
         interpretation['objective_mode'] = 'semantic_perceptual'
+    if 'bank_loss_blend' not in interpretation and 'hard_margin_loss_blend' not in interpretation:
+        interpretation['bank_loss_blend'] = 0.3
+        interpretation['hard_margin_loss_blend'] = 0.7
     config = VisualInceptionConfig.from_dict(interpretation)
     if retrieval_enabled:
         _require((kind == ENHANCED_OBJECTIVE_KIND) is (config.mechanism_profile == 'enhanced_v3'),

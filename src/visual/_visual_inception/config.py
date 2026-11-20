@@ -33,6 +33,8 @@ class VisualInceptionConfig:
     query_adversarial_steps: int = 3
     query_adversarial_step_size: float = 0.10
     query_adversarial_mix: float = 0.5
+    bank_loss_blend: float = 0.8
+    hard_margin_loss_blend: float = 0.2
 
     def validate(self):
         if type(self.steps) is not int or self.steps < 1:
@@ -56,10 +58,13 @@ class VisualInceptionConfig:
         if self.mechanism_profile not in ('legacy_v2', 'enhanced_v3'):
             raise ValueError('未知视觉记忆植入机制版本')
         for name, upper in (('contrastive_margin', 2.0), ('query_adversarial_radius', 1.0),
-                            ('query_adversarial_mix', 1.0)):
+                            ('query_adversarial_mix', 1.0), ('bank_loss_blend', 1.0),
+                            ('hard_margin_loss_blend', 1.0)):
             value = getattr(self, name)
             if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or not 0 <= value <= upper:
                 raise ValueError(name + ' 超出合法范围')
+        if abs((float(self.bank_loss_blend) + float(self.hard_margin_loss_blend)) - 1.0) > 1e-6:
+            raise ValueError('bank_loss_blend 与 hard_margin_loss_blend 之和必须等于 1.0')
         for name in ('hard_negative_count', 'query_adversarial_steps'):
             if type(getattr(self, name)) is not int or getattr(self, name) < 1:
                 raise ValueError(name + ' 必须为正整数')

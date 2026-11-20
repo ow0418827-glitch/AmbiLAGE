@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "language": "zh",
+  "purpose": "仅供人工阅读，不传给检索编码器",
+  "group": "08_speaker",
+  "category": "Bluetooth speaker",
+  "query_records": [
+    {
+      "id": "08_speaker_oracle_01",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B093GJCJQJ）：清新马卡龙绿迷你便携蓝牙音箱，附挂绳、一键通话、收音机及USB接口。"
+    },
+    {
+      "id": "08_speaker_oracle_02",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B09B48YFQV）：15英寸便携派对PA蓝牙音箱，内置8英寸低音与高音单元、律动彩灯及有线麦克风。"
+    },
+    {
+      "id": "08_speaker_oracle_03",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B0967T22YR）：无线蓝牙双音箱套装，包含增强低音款桌面音箱与防水户外运动款音箱。"
+    },
+    {
+      "id": "08_speaker_oracle_04",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B07KDYPR1D）：黑色便携无线蓝牙音箱，横竖可放防滑硅胶脚垫、内置免提通话麦及12小时续航。"
+    },
+    {
+      "id": "08_speaker_oracle_05",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B07X8W4WN8）：蓝色便携蓝牙5.0立体声无线音箱，支持TF卡直读、FM调频及AUX音频线接入。"
+    },
+    {
+      "id": "08_speaker_oracle_06",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B072MFY2T5）：超迷你2英寸银色圆柱蓝牙小音箱，支持快速自动回连与USB充电。"
+    },
+    {
+      "id": "08_speaker_oracle_07",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B086JD8V3Q）：IP55防泼水30瓦室内外无线氛围灯音箱，双分频低音、仿真摇曳火焰灯与150英尺传输。"
+    },
+    {
+      "id": "08_speaker_oracle_08",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B09FRB9PN2）：掌心大小便携无线立体声蓝牙音箱，高清晰音质并内置免提通话麦克风。"
+    },
+    {
+      "id": "08_speaker_oracle_09",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B08F1X8ZYY）：天然榉木壳复古收音机造型无线蓝牙音箱，支持FM/AM调频、可换面板及12小时长续航。"
+    },
+    {
+      "id": "08_speaker_oracle_10",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B098F1ZFV5）：防水圆柱形户外便携蓝牙音箱，双45mm扬声器、炫彩RGB灯效及FM/TF卡播放。"
+    },
+    {
+      "id": "08_speaker_oracle_11",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_007，输入商品 B097WMPMGV）"
+    },
+    {
+      "id": "08_speaker_oracle_12",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_021，输入商品 B07X8W4WN8）"
+    },
+    {
+      "id": "08_speaker_oracle_13",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_013，输入商品 B00NLHPRRK）"
+    },
+    {
+      "id": "08_speaker_oracle_14",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_002，输入商品 B09FGVZ5CS）"
+    },
+    {
+      "id": "08_speaker_oracle_15",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_019，输入商品 B07G2QSW2N）"
+    },
+    {
+      "id": "08_speaker_oracle_16",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_018，输入商品 B07V6BJLX8）"
+    },
+    {
+      "id": "08_speaker_oracle_17",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_112249）：wireless soundbar with speakers and sound woofer"
+    },
+    {
+      "id": "08_speaker_oracle_18",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_17636）：bluetooth speakers with lights"
+    },
+    {
+      "id": "08_speaker_oracle_19",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_96573）：speakers bluetooth wireless"
+    },
+    {
+      "id": "08_speaker_oracle_20",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_55607）：jbl bluetooth speaker waterproof color"
+    }
+  ]
+}

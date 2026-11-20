@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "language": "zh",
+  "purpose": "仅供人工阅读，不传给检索编码器",
+  "group": "06_jeans",
+  "category": "jeans",
+  "query_records": [
+    {
+      "id": "06_jeans_oracle_01",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B07JMZQT4B）：女式弹力棉莱赛尔套穿直筒牛仔裤，前片交叉塑形提臀配经典后袋设计。"
+    },
+    {
+      "id": "06_jeans_oracle_02",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B08PS1XYS9）：女式大码中腰阔腿微喇牛仔裤，剪裁舒适百搭日常上衣。"
+    },
+    {
+      "id": "06_jeans_oracle_03",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B094FVGLXQ）：纯棉中腰系带蝴蝶结喇叭牛仔裤，双侧小口袋与拉链门襟，亲肤休闲。"
+    },
+    {
+      "id": "06_jeans_oracle_04",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B07N95CH33）：轻量强韧女式户外攀岩弹性牛仔裤，适配安全带且活动自如、透气调温。"
+    },
+    {
+      "id": "06_jeans_oracle_05",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B08TH8SFQW）：90年代复古风高腰宽腿微喇弹力牛仔裤，微破洞拼布街头版型。"
+    },
+    {
+      "id": "06_jeans_oracle_06",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B09MZCG7JD）：复古Y2K高腰宽松直筒男友风工装牛仔裤，标准厚度柔软牛仔面料。"
+    },
+    {
+      "id": "06_jeans_oracle_07",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B09MQTFP11）：高腰宽松Y2K风女式直筒工装牛仔裤，配大容量翻盖实用贴袋。"
+    },
+    {
+      "id": "06_jeans_oracle_08",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B09Q2QW66Q）：纯棉黑色低腰宽松直筒暗黑朋克风牛仔裤，点缀金属链条配饰。"
+    },
+    {
+      "id": "06_jeans_oracle_09",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B07PQYS7SY）：浅水洗低腰弹力微喇五袋女式牛仔裤，后袋带有精致西南风刺绣与猫须做旧。"
+    },
+    {
+      "id": "06_jeans_oracle_10",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B08VDLC82P）：高腰修身直筒Y2K扎染印花女式街头风牛仔长裤，日常舒适合身。"
+    },
+    {
+      "id": "06_jeans_oracle_11",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_018，输入商品 B093QZKT2R）"
+    },
+    {
+      "id": "06_jeans_oracle_12",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_022，输入商品 B09J8FXZ9X）"
+    },
+    {
+      "id": "06_jeans_oracle_13",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_014，输入商品 B09PGYQPG4）"
+    },
+    {
+      "id": "06_jeans_oracle_14",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_010，输入商品 B098K2BWPH）"
+    },
+    {
+      "id": "06_jeans_oracle_15",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_003，输入商品 B08RZ58HLZ）"
+    },
+    {
+      "id": "06_jeans_oracle_16",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_013，输入商品 B07RTQG35B）"
+    },
+    {
+      "id": "06_jeans_oracle_17",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_67658）：mens high waisted jeans"
+    },
+    {
+      "id": "06_jeans_oracle_18",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_108474）：vibrant jeans for girls"
+    },
+    {
+      "id": "06_jeans_oracle_19",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_112922）：womens columbian jeans"
+    },
+    {
+      "id": "06_jeans_oracle_20",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_57220）：keneth cole jeans for men"
+    }
+  ]
+}

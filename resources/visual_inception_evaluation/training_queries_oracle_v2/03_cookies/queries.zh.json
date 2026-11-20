@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "language": "zh",
+  "purpose": "仅供人工阅读，不传给检索编码器",
+  "group": "03_cookies",
+  "category": "cookie dough",
+  "query_records": [
+    {
+      "id": "03_cookies_oracle_01",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B00B049CB8）：无麸质冷藏黑巧块曲奇面团，采用天然烘焙原料，烤后松软浓郁。"
+    },
+    {
+      "id": "03_cookies_oracle_02",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B07SDN84R6）：非转基因可生食一口装巧克力豆曲奇面团块，开袋即食。"
+    },
+    {
+      "id": "03_cookies_oracle_03",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B00CHU1RGC）：三重巧克力豆冷冻预分装曲奇面团饼，适合烘焙坊级浓郁巧克力的现烤曲奇。"
+    },
+    {
+      "id": "03_cookies_oracle_04",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B08Z6FD458）：品脱杯装无蛋安全可生食冷冻曲奇面团，用勺挖取即可直接享用。"
+    },
+    {
+      "id": "03_cookies_oracle_05",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B00CHU1RPI）：花生酱风味分装烘焙曲奇面团，融入切碎花生酱夹心杯与香浓花生粒。"
+    },
+    {
+      "id": "03_cookies_oracle_06",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B01N05V944）：手工奶油糖果豆现烤曲奇面团桶，由真实黄油、鲜蛋、巧克力与坚果调制而成。"
+    },
+    {
+      "id": "03_cookies_oracle_07",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B00CHU1RPI）：大尺寸花生酱曲奇面团，混合真实花生酱杯碎块与香醇花生酱豆。"
+    },
+    {
+      "id": "03_cookies_oracle_08",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B00B046VTO）：美食级半甜大黑巧块曲奇面团，融合黄油、糖蜜与小麦粉制成有嚼劲的烘焙饼干。"
+    },
+    {
+      "id": "03_cookies_oracle_09",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B00CHU03DA）：批量分装1.33盎司经典巧克力豆曲奇面团球，烤制金黄酥脆曲奇。"
+    },
+    {
+      "id": "03_cookies_oracle_10",
+      "query_family": "category_description",
+      "query_family_zh": "同类商品公开描述(50%)",
+      "instruction": "提炼公开描述（B00CHU03DA）：选用农场新鲜黄油、鸡蛋与半甜巧克力豆制成的经典家庭烘焙曲奇面团。"
+    },
+    {
+      "id": "03_cookies_oracle_11",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_002，输入商品 B00CHU0TD4:Description:sentence:0）"
+    },
+    {
+      "id": "03_cookies_oracle_12",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_009，输入商品 B089TRM2ZC:BulletPoints:array_item:0）"
+    },
+    {
+      "id": "03_cookies_oracle_13",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_025，输入商品 B085GLF7ZJ:Description:whole_field:0）"
+    },
+    {
+      "id": "03_cookies_oracle_14",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_021，输入商品 B0010XXNWI:Description:sentence:2）"
+    },
+    {
+      "id": "03_cookies_oracle_15",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_029，输入商品 B0042PARUC:Description:sentence:2）"
+    },
+    {
+      "id": "03_cookies_oracle_16",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "模型改写查询(30%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_017，输入商品 B00CHU1RGC:BulletPoints:array_item:0）"
+    },
+    {
+      "id": "03_cookies_oracle_17",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（orcas / orcas_orcas-doctrain_4076126）：raw cookie dough"
+    },
+    {
+      "id": "03_cookies_oracle_18",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（orcas / orcas_orcas-doctrain_2861113）：simple cookie dough"
+    },
+    {
+      "id": "03_cookies_oracle_19",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（orcas / orcas_orcas-doctrain_2267750）：costco frozen cookie dough"
+    },
+    {
+      "id": "03_cookies_oracle_20",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "独立真实搜索查询(20%)",
+      "instruction": "训练真实搜索原句（orcas / orcas_orcas-doctrain_8841978）：pillsbury refrigerated cookie dough"
+    }
+  ]
+}

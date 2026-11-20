@@ -1,0 +1,204 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "visual_inception_category_diversity_v2",
+  "group": "06_jeans",
+  "query_mode": "text",
+  "target_public_id": "B09HH96NJY",
+  "category": "jeans",
+  "source_type": "curated_evaluation",
+  "language": "en",
+  "instruction_policy": "zero_overlap_v2_10explicit_10implicit_20",
+  "instructions": [
+    "womens high-waisted stretch straight-leg denim jeans",
+    "Y2K 90s baggy wide-leg boyfriend jeans for women and teen girls",
+    "high-waisted baggy wide-leg streetwear cargo bottoms in washed cotton weave",
+    "stretch cotton-lyocell pull-on women straight-fit everyday bottoms with back pockets",
+    "I want to buy comfortable stretch cotton-blend womens jeans in a mid-rise or high-rise straight fit.",
+    "Help me order relaxed-fit wide-leg denim trousers suitable for casual streetwear and school.",
+    "I want to buy comfortable slimming pull-on indigo bottoms featuring a crisscross tummy-smoothing front panel.",
+    "Help me order high-rise bell-bottom streetwear bottoms with deep cargo flap pockets and zipper fly.",
+    "I need breathable lightweight denim jeans made with cotton and spandex comfortable for travel and office Fridays.",
+    "Suggest loose baggy boyfriend jeans with deep practical pockets easy to pair with sneakers on weekends.",
+    "I need tough stretchy climbing-grade indigo twill bottoms engineered to move freely under a sport harness.",
+    "Suggest relaxed Y2K grunge baggy straight bottoms easy to wear daily with chunky sneakers and cropped tees.",
+    "Looking for womens jeans with four-way stretch recovery so knees never bag out after all-day sitting.",
+    "I need high-waisted baggy straight-leg jeans featuring functional flap cargo pockets and sturdy zipper closure.",
+    "Looking for curve-flattering bootcut cotton-spandex bottoms accented with Southwestern back-pocket embroidery.",
+    "Which high-waisted belted flare wide-leg bottoms stay wrinkle-soft after washing and offer real front key pockets?",
+    "Compare high-waisted baggy wide-leg jeans against mid-rise straight-leg stretch denim pants.",
+    "Show me 90s loose boyfriend jeans side by side with high-rise bell-bottom flare denim.",
+    "Compare heavy 90s baggy cargo cotton bottoms against fitted stretch straight-leg pull-on styles for travel comfort.",
+    "Which low-rise punk chain streetwear bottoms hold deep black dye cleanest without shrinking after laundry?"
+  ],
+  "instructions_sha256": "7544a0ade22c78138827439868d8b2b9a7de6f83d10797a7049d6db632eed74c",
+  "query_records": [
+    {
+      "id": "06_jeans_zerov2_01",
+      "query_family": "category_direct",
+      "instruction": "womens high-waisted stretch straight-leg denim jeans",
+      "instruction_zh": "女式高腰弹力直筒牛仔长裤",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "06_jeans_zerov2_02",
+      "query_family": "category_direct",
+      "instruction": "Y2K 90s baggy wide-leg boyfriend jeans for women and teen girls",
+      "instruction_zh": "女式与少女千禧复古 90 年代宽松阔腿男友牛仔裤",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "06_jeans_zerov2_03",
+      "query_family": "category_direct",
+      "instruction": "high-waisted baggy wide-leg streetwear cargo bottoms in washed cotton weave",
+      "instruction_zh": "水洗纯棉高腰宽松大阔腿街头工装长裤",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "06_jeans_zerov2_04",
+      "query_family": "category_direct",
+      "instruction": "stretch cotton-lyocell pull-on women straight-fit everyday bottoms with back pockets",
+      "instruction_zh": "带经典后袋的女式棉莱赛尔弹力套穿直筒常服长裤",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "06_jeans_zerov2_05",
+      "query_family": "purchase_intent",
+      "instruction": "I want to buy comfortable stretch cotton-blend womens jeans in a mid-rise or high-rise straight fit.",
+      "instruction_zh": "我想买一条采用舒适弹力棉混纺面料的中高腰直筒女式牛仔裤。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "06_jeans_zerov2_06",
+      "query_family": "purchase_intent",
+      "instruction": "Help me order relaxed-fit wide-leg denim trousers suitable for casual streetwear and school.",
+      "instruction_zh": "帮我订购一条适合日常街头穿搭与校园通勤的宽松阔腿牛仔长裤。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "06_jeans_zerov2_07",
+      "query_family": "purchase_intent",
+      "instruction": "I want to buy comfortable slimming pull-on indigo bottoms featuring a crisscross tummy-smoothing front panel.",
+      "instruction_zh": "想买前片带交叉收腹塑形结构、穿脱舒服的深蓝修身直筒休闲长裤。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "06_jeans_zerov2_08",
+      "query_family": "purchase_intent",
+      "instruction": "Help me order high-rise bell-bottom streetwear bottoms with deep cargo flap pockets and zipper fly.",
+      "instruction_zh": "帮我选一条高腰喇叭脚街头风长裤，要带深口袋翻盖和稳固拉链门襟。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "06_jeans_zerov2_09",
+      "query_family": "use_case",
+      "instruction": "I need breathable lightweight denim jeans made with cotton and spandex comfortable for travel and office Fridays.",
+      "instruction_zh": "我需要一条棉与氨纶混纺的透气轻盈牛仔裤，适合旅行和休闲办公日穿着。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "06_jeans_zerov2_10",
+      "query_family": "use_case",
+      "instruction": "Suggest loose baggy boyfriend jeans with deep practical pockets easy to pair with sneakers on weekends.",
+      "instruction_zh": "推荐一条带实用深口袋、周末搭配运动鞋很随性的宽松男友风牛仔裤。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "06_jeans_zerov2_11",
+      "query_family": "use_case",
+      "instruction": "I need tough stretchy climbing-grade indigo twill bottoms engineered to move freely under a sport harness.",
+      "instruction_zh": "需要能贴合攀岩安全带又透气高弹的结实靛蓝工装户外长裤。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "06_jeans_zerov2_12",
+      "query_family": "use_case",
+      "instruction": "Suggest relaxed Y2K grunge baggy straight bottoms easy to wear daily with chunky sneakers and cropped tees.",
+      "instruction_zh": "推荐配厚底运动鞋和短上衣都好看的复古Y2K宽松做旧直筒男孩子风长裤。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "06_jeans_zerov2_13",
+      "query_family": "functional_need",
+      "instruction": "Looking for womens jeans with four-way stretch recovery so knees never bag out after all-day sitting.",
+      "instruction_zh": "寻找具有高回弹四面弹力的女式牛仔裤，久坐一整天膝盖也不易鼓包变形。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "06_jeans_zerov2_14",
+      "query_family": "functional_need",
+      "instruction": "I need high-waisted baggy straight-leg jeans featuring functional flap cargo pockets and sturdy zipper closure.",
+      "instruction_zh": "我需要一条带实用翻盖工装口袋和耐用拉链门襟的高腰宽松直筒牛仔裤。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "06_jeans_zerov2_15",
+      "query_family": "functional_need",
+      "instruction": "Looking for curve-flattering bootcut cotton-spandex bottoms accented with Southwestern back-pocket embroidery.",
+      "instruction_zh": "寻找带西部风后袋刺绣花纹、修身微喇显腿长的棉氨纶弹性长裤。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "06_jeans_zerov2_16",
+      "query_family": "functional_need",
+      "instruction": "Which high-waisted belted flare wide-leg bottoms stay wrinkle-soft after washing and offer real front key pockets?",
+      "instruction_zh": "哪款高腰系带微喇阔腿裤洗后依然柔软有型，且配有实用侧兜？",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "06_jeans_zerov2_17",
+      "query_family": "selection_comparison",
+      "instruction": "Compare high-waisted baggy wide-leg jeans against mid-rise straight-leg stretch denim pants.",
+      "instruction_zh": "对比高腰宽松阔腿牛仔裤与中腰直筒弹力牛仔裤。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "06_jeans_zerov2_18",
+      "query_family": "selection_comparison",
+      "instruction": "Show me 90s loose boyfriend jeans side by side with high-rise bell-bottom flare denim.",
+      "instruction_zh": "把 90 年代宽松男友牛仔裤和高腰喇叭微喇牛仔裤放在一起对比。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "06_jeans_zerov2_19",
+      "query_family": "selection_comparison",
+      "instruction": "Compare heavy 90s baggy cargo cotton bottoms against fitted stretch straight-leg pull-on styles for travel comfort.",
+      "instruction_zh": "从旅行穿着舒适度对比90年代厚实工装阔腿款与套穿直筒弹力修身款。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "06_jeans_zerov2_20",
+      "query_family": "selection_comparison",
+      "instruction": "Which low-rise punk chain streetwear bottoms hold deep black dye cleanest without shrinking after laundry?",
+      "instruction_zh": "哪类暗黑低腰链条街头长裤洗后更不易缩水掉色？",
+      "implicit_anchor_free": true
+    }
+  ],
+  "query_family_counts": {
+    "category_direct": 4,
+    "purchase_intent": 4,
+    "use_case": 4,
+    "functional_need": 4,
+    "selection_comparison": 4
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false,
+  "training_overlap": {
+    "normalization": "unicode_nfkc_whitespace_casefold",
+    "normalized_exact_overlap_count": 0,
+    "semantic_independence_claimed": false,
+    "checked_against_training_source_manifest": "../manifest.json"
+  },
+  "authoring": {
+    "kind": "assistant_curated_static_evaluation",
+    "basis": "empirical_training_category_distribution_calibrated_zero_exact_overlap_v3",
+    "target_brand_or_model_specified": false,
+    "all_target_core_attributes_required": false,
+    "existing_formal_query_texts_read": false,
+    "formal_memory_contents_read": false,
+    "selection_by_retrieval_outcomes": false
+  }
+}

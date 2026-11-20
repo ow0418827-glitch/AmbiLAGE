@@ -1,0 +1,204 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "visual_inception_category_diversity_v2",
+  "group": "09_toothbrush",
+  "query_mode": "text",
+  "target_public_id": "B09J81RMLD",
+  "category": "toothbrush",
+  "source_type": "curated_evaluation",
+  "language": "en",
+  "instruction_policy": "zero_overlap_v2_10explicit_10implicit_20",
+  "instructions": [
+    "extra soft bristle manual toothbrushes for sensitive gums",
+    "kids rechargeable electric toothbrush with gentle brushing timer",
+    "360-degree U-shaped food-grade soft silicone kids oral cleaner for ages 2 to 6",
+    "waterproof octopus cartoon kids ultrasonic oral care wand with gentle timer",
+    "I want to buy a multi-pack of ultra-soft manual toothbrushes for sensitive teeth and gum care.",
+    "Help me order a waterproof sonic electric toothbrush with replaceable soft brush heads.",
+    "I want to buy a multi-pack of cartoon U-shaped soft-silica mouth cleaners sized gently for toddlers learning daily hygiene.",
+    "Help me order an IPX7 waterproof three-mode electric kid oral cleaner supplied with replaceable U-shaped heads and cup cover.",
+    "I need a gentle charcoal or fine-bristle manual toothbrush for daily stain removal and teeth whitening.",
+    "Suggest a compact toddler training toothbrush with an easy-hold non-slip handle for ages 1 to 4.",
+    "I need an adorable donut-handle manual baby cleaner soft enough to clean first teeth without irritating tender gums.",
+    "Suggest a natural wheat-straw eco toddler gum cleaner with an anti-slip grip sized nicely for one-to-four-year-old hands.",
+    "Looking for a toothbrush with 10,000 ultra-fine micro-nano bristles that clean deeply without hurting gums.",
+    "I need an electric kids toothbrush featuring two-minute smart timers, multiple gentle modes, and USB charging.",
+    "Looking for boil-disinfectable food-grade silicone U-arch mouth cleaners that wrap front and back enamel simultaneously.",
+    "Which dual-mode cartoon kids ultrasonic oral wands run quietly at up to 31,000 gentle pulses per minute for sensitive teeth?",
+    "Compare ultra-soft nano-bristle manual toothbrushes against sonic electric toothbrushes for gum sensitivity.",
+    "Show me traditional soft-bristle toddler toothbrushes side by side with 360-degree U-shaped silicone models.",
+    "Compare cute cow-patterned U-shaped silicone manual toddler cleaners against ultrasonic three-head electric wands.",
+    "Which small-arch silicone children oral cleaners fit 2-to-6-year-old mouths more comfortably than older-kid frames?"
+  ],
+  "instructions_sha256": "583ec05bd2f99aa045b422082fbed50c8cb03ad69c1180b8f7dc6e8747e3f65b",
+  "query_records": [
+    {
+      "id": "09_toothbrush_zerov2_01",
+      "query_family": "category_direct",
+      "instruction": "extra soft bristle manual toothbrushes for sensitive gums",
+      "instruction_zh": "适合敏感牙龈的超软毛手动牙刷",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "09_toothbrush_zerov2_02",
+      "query_family": "category_direct",
+      "instruction": "kids rechargeable electric toothbrush with gentle brushing timer",
+      "instruction_zh": "带温和刷牙计时器的儿童充电式电动牙刷",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "09_toothbrush_zerov2_03",
+      "query_family": "category_direct",
+      "instruction": "360-degree U-shaped food-grade soft silicone kids oral cleaner for ages 2 to 6",
+      "instruction_zh": "适合2至6岁幼童的360度U形食品级软硅胶口腔清洁器",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "09_toothbrush_zerov2_04",
+      "query_family": "category_direct",
+      "instruction": "waterproof octopus cartoon kids ultrasonic oral care wand with gentle timer",
+      "instruction_zh": "带轻柔洁齿定时器的章鱼卡通防水儿童超声波口腔洁具",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "09_toothbrush_zerov2_05",
+      "query_family": "purchase_intent",
+      "instruction": "I want to buy a multi-pack of ultra-soft manual toothbrushes for sensitive teeth and gum care.",
+      "instruction_zh": "我想买一套多支装护龈超软毛手动牙刷，适合敏感牙齿日常使用。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "09_toothbrush_zerov2_06",
+      "query_family": "purchase_intent",
+      "instruction": "Help me order a waterproof sonic electric toothbrush with replaceable soft brush heads.",
+      "instruction_zh": "帮我订购一支带可替换软毛刷头的防水声波电动牙刷。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "09_toothbrush_zerov2_07",
+      "query_family": "purchase_intent",
+      "instruction": "I want to buy a multi-pack of cartoon U-shaped soft-silica mouth cleaners sized gently for toddlers learning daily hygiene.",
+      "instruction_zh": "想买一套多支装卡通U形软硅胶口咬洁牙器，方便低龄宝宝自己动手学护齿。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "09_toothbrush_zerov2_08",
+      "query_family": "purchase_intent",
+      "instruction": "Help me order an IPX7 waterproof three-mode electric kid oral cleaner supplied with replaceable U-shaped heads and cup cover.",
+      "instruction_zh": "帮我买一款IPX7防水三档模式、附带替换U形软硅胶头与杯盖的儿童电动护齿器。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "09_toothbrush_zerov2_09",
+      "query_family": "use_case",
+      "instruction": "I need a gentle charcoal or fine-bristle manual toothbrush for daily stain removal and teeth whitening.",
+      "instruction_zh": "我需要一支日常清洁去渍、有助于温和亮白牙齿的细软竹炭或纤细刷毛手动牙刷。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "09_toothbrush_zerov2_10",
+      "query_family": "use_case",
+      "instruction": "Suggest a compact toddler training toothbrush with an easy-hold non-slip handle for ages 1 to 4.",
+      "instruction_zh": "推荐一款手柄防滑好握、适合 1 至 4 岁宝宝练习刷牙的儿童训练牙刷。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "09_toothbrush_zerov2_11",
+      "query_family": "use_case",
+      "instruction": "I need an adorable donut-handle manual baby cleaner soft enough to clean first teeth without irritating tender gums.",
+      "instruction_zh": "需要一款防滑甜甜圈手柄、硅胶头超柔软、不伤宝宝娇嫩牙龈的手动洁牙器具。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "09_toothbrush_zerov2_12",
+      "query_family": "use_case",
+      "instruction": "Suggest a natural wheat-straw eco toddler gum cleaner with an anti-slip grip sized nicely for one-to-four-year-old hands.",
+      "instruction_zh": "推荐采用天然小麦秸秆环保材质、防滑小手柄专为1到4岁宝宝设计的温和乳牙护洁具。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "09_toothbrush_zerov2_13",
+      "query_family": "functional_need",
+      "instruction": "Looking for a toothbrush with 10,000 ultra-fine micro-nano bristles that clean deeply without hurting gums.",
+      "instruction_zh": "寻找拥有万根级超细微米刷毛、能深入清洁牙缝又不伤牙龈的牙刷。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "09_toothbrush_zerov2_14",
+      "query_family": "functional_need",
+      "instruction": "I need an electric kids toothbrush featuring two-minute smart timers, multiple gentle modes, and USB charging.",
+      "instruction_zh": "我需要一支带两分钟智能计时、多档轻柔模式和 USB 充电的儿童电动牙刷。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "09_toothbrush_zerov2_15",
+      "query_family": "functional_need",
+      "instruction": "Looking for boil-disinfectable food-grade silicone U-arch mouth cleaners that wrap front and back enamel simultaneously.",
+      "instruction_zh": "寻找可用热水烫洗消毒、能一次贴合清洁牙面内外两侧的食品级U形硅胶护齿器。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "09_toothbrush_zerov2_16",
+      "query_family": "functional_need",
+      "instruction": "Which dual-mode cartoon kids ultrasonic oral wands run quietly at up to 31,000 gentle pulses per minute for sensitive teeth?",
+      "instruction_zh": "哪款卡通双模式儿童声波洁牙棒震感轻柔静音、每分钟高达31000次保护敏感乳牙？",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "09_toothbrush_zerov2_17",
+      "query_family": "selection_comparison",
+      "instruction": "Compare ultra-soft nano-bristle manual toothbrushes against sonic electric toothbrushes for gum sensitivity.",
+      "instruction_zh": "对比适合敏感牙龈的超软万毛手动牙刷与声波电动牙刷。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "09_toothbrush_zerov2_18",
+      "query_family": "selection_comparison",
+      "instruction": "Show me traditional soft-bristle toddler toothbrushes side by side with 360-degree U-shaped silicone models.",
+      "instruction_zh": "把传统软毛幼儿牙刷和 360 度 U 型硅胶儿童牙刷放在一起对比。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "09_toothbrush_zerov2_19",
+      "query_family": "selection_comparison",
+      "instruction": "Compare cute cow-patterned U-shaped silicone manual toddler cleaners against ultrasonic three-head electric wands.",
+      "instruction_zh": "对比可爱奶牛造型U形手动硅胶宝宝洁牙器与三替换头超声波电动护齿棒的实用性。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "09_toothbrush_zerov2_20",
+      "query_family": "selection_comparison",
+      "instruction": "Which small-arch silicone children oral cleaners fit 2-to-6-year-old mouths more comfortably than older-kid frames?",
+      "instruction_zh": "哪款小号U形硅胶儿童洁齿器比大龄款更贴合2到6岁幼童牙弓轮廓？",
+      "implicit_anchor_free": true
+    }
+  ],
+  "query_family_counts": {
+    "category_direct": 4,
+    "purchase_intent": 4,
+    "use_case": 4,
+    "functional_need": 4,
+    "selection_comparison": 4
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false,
+  "training_overlap": {
+    "normalization": "unicode_nfkc_whitespace_casefold",
+    "normalized_exact_overlap_count": 0,
+    "semantic_independence_claimed": false,
+    "checked_against_training_source_manifest": "../manifest.json"
+  },
+  "authoring": {
+    "kind": "assistant_curated_static_evaluation",
+    "basis": "empirical_training_category_distribution_calibrated_zero_exact_overlap_v3",
+    "target_brand_or_model_specified": false,
+    "all_target_core_attributes_required": false,
+    "existing_formal_query_texts_read": false,
+    "formal_memory_contents_read": false,
+    "selection_by_retrieval_outcomes": false
+  }
+}

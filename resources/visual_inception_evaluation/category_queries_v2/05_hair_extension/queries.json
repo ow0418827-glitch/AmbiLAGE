@@ -1,0 +1,204 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "visual_inception_category_diversity_v2",
+  "group": "05_hair_extension",
+  "query_mode": "text",
+  "target_public_id": "B01460C2I2",
+  "category": "hair extensions",
+  "source_type": "curated_evaluation",
+  "language": "en",
+  "instruction_policy": "zero_overlap_v2_10explicit_10implicit_20",
+  "instructions": [
+    "silky straight real human hair clip-in extensions for natural volume",
+    "heat-resistant synthetic crochet passion twist braiding hair packs",
+    "100% Virgin Brazilian straight human hair bundles in 14 to 18 inches",
+    "pre-looped Kanekalon box-braiding crochet synthetic hair strands in ombre tones",
+    "I want to buy 100% real human hair clip-in extensions in jet black to add length and thickness.",
+    "Help me order soft bouncy water-wave crochet braid hair bundles with a latch hook included.",
+    "I want to buy soft double-wefted real human tresses with silicone-lined metal clips for instant crown fullness.",
+    "Help me order heat-resistant water-wave crochet twists gentle enough for a full protective scalp style.",
+    "I need lightweight tape-in Remy human hair extensions that lie flat against fine roots for everyday office wear.",
+    "Suggest pre-twisted Kanekalon crochet braids gentle on the scalp and light enough for a full-head protective style.",
+    "I need lightweight Remy straight snap-on strands in #18-613 blonde that attach in five minutes before work.",
+    "Suggest vibrant 30-piece multicolored curly snap-on highlight locks for festival outfits without bleaching natural roots.",
+    "Looking for human hair extensions with intact cuticles so strands resist tangling, shedding, and dryness.",
+    "I need odorless flame-retardant synthetic braiding hair that seals neatly in hot water without fraying.",
+    "Looking for 3C-4A kinky-curly double-wefted virgin locks that match tight coils and hold curls after flat-iron or dye styling.",
+    "Which invisible PU tape-in real hair pieces lie flattest against fine thin strands without bumpy weft ridges?",
+    "Compare seamless clip-in human hair extensions against PU tape-in extensions for fine hair.",
+    "Show me 14-inch Senegalese twist crochet braids alongside spring passion twist synthetic hair packs.",
+    "Compare pre-looped synthetic passion-twist packs against virgin human hair bundles by daily styling heat tolerance.",
+    "Which stainless-clip real human hair strands keep fuller thickness at the ends without heavy root pulling?"
+  ],
+  "instructions_sha256": "07dec8740a65395bb3bcdaa6e708803aea8157c148bff9669ae144f2ce200242",
+  "query_records": [
+    {
+      "id": "05_hair_extension_zerov2_01",
+      "query_family": "category_direct",
+      "instruction": "silky straight real human hair clip-in extensions for natural volume",
+      "instruction_zh": "顺滑直发自然增发量真发卡扣式接发片",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "05_hair_extension_zerov2_02",
+      "query_family": "category_direct",
+      "instruction": "heat-resistant synthetic crochet passion twist braiding hair packs",
+      "instruction_zh": "耐热合成纤维激情扭搏钩针编发假发束",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "05_hair_extension_zerov2_03",
+      "query_family": "category_direct",
+      "instruction": "100% Virgin Brazilian straight human hair bundles in 14 to 18 inches",
+      "instruction_zh": "14到18英寸100%巴西原生直顺发束真发片",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "05_hair_extension_zerov2_04",
+      "query_family": "category_direct",
+      "instruction": "pre-looped Kanekalon box-braiding crochet synthetic hair strands in ombre tones",
+      "instruction_zh": "渐变色卡尼卡伦预打圈钩针麻花辫化纤发束",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "05_hair_extension_zerov2_05",
+      "query_family": "purchase_intent",
+      "instruction": "I want to buy 100% real human hair clip-in extensions in jet black to add length and thickness.",
+      "instruction_zh": "我想买一套乌黑色百分百真人发卡扣接发片来增加头发长度和厚度。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "05_hair_extension_zerov2_06",
+      "query_family": "purchase_intent",
+      "instruction": "Help me order soft bouncy water-wave crochet braid hair bundles with a latch hook included.",
+      "instruction_zh": "帮我订购附带钩针的蓬松水波纹钩针编发发束。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "05_hair_extension_zerov2_07",
+      "query_family": "purchase_intent",
+      "instruction": "I want to buy soft double-wefted real human tresses with silicone-lined metal clips for instant crown fullness.",
+      "instruction_zh": "想买带护发硅胶夹的双层真人发条，夹上即可瞬间增加头顶和两鬓发量。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "05_hair_extension_zerov2_08",
+      "query_family": "purchase_intent",
+      "instruction": "Help me order heat-resistant water-wave crochet twists gentle enough for a full protective scalp style.",
+      "instruction_zh": "帮我选一套轻柔水波纹耐热合成螺旋辫束，做全头护发编发不压头皮。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "05_hair_extension_zerov2_09",
+      "query_family": "use_case",
+      "instruction": "I need lightweight tape-in Remy human hair extensions that lie flat against fine roots for everyday office wear.",
+      "instruction_zh": "我需要发根服帖轻薄、适合细软发质日常通勤佩戴的隐形贴片真发接发。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "05_hair_extension_zerov2_10",
+      "query_family": "use_case",
+      "instruction": "Suggest pre-twisted Kanekalon crochet braids gentle on the scalp and light enough for a full-head protective style.",
+      "instruction_zh": "推荐对头皮温和、轻盈不坠头皮的卡尼卡伦预拧钩针编发做整头保护性造型。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "05_hair_extension_zerov2_11",
+      "query_family": "use_case",
+      "instruction": "I need lightweight Remy straight snap-on strands in #18-613 blonde that attach in five minutes before work.",
+      "instruction_zh": "需要轻便的#18-613浅金色顺滑真发暗夹发束，上班前五分钟即可快速戴稳。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "05_hair_extension_zerov2_12",
+      "query_family": "use_case",
+      "instruction": "Suggest vibrant 30-piece multicolored curly snap-on highlight locks for festival outfits without bleaching natural roots.",
+      "instruction_zh": "推荐30片装彩色卷曲即夹即用挑染假发束，去音乐节不漂染也有亮眼发色。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "05_hair_extension_zerov2_13",
+      "query_family": "functional_need",
+      "instruction": "Looking for human hair extensions with intact cuticles so strands resist tangling, shedding, and dryness.",
+      "instruction_zh": "寻找保留完整毛鳞片的真人发接发，洗护后不易打结、掉发或毛躁。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "05_hair_extension_zerov2_14",
+      "query_family": "functional_need",
+      "instruction": "I need odorless flame-retardant synthetic braiding hair that seals neatly in hot water without fraying.",
+      "instruction_zh": "我需要无异味阻燃合成编发丝，热水定型封尾整齐且不易毛躁散开。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "05_hair_extension_zerov2_15",
+      "query_family": "functional_need",
+      "instruction": "Looking for 3C-4A kinky-curly double-wefted virgin locks that match tight coils and hold curls after flat-iron or dye styling.",
+      "instruction_zh": "寻找双层缝制3C-4A紧卷原生发条，卷度自然匹配且可安心烫染造型。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "05_hair_extension_zerov2_16",
+      "query_family": "functional_need",
+      "instruction": "Which invisible PU tape-in real hair pieces lie flattest against fine thin strands without bumpy weft ridges?",
+      "instruction_zh": "哪类隐形胶条接发片能紧贴细软发根不显接缝凸起？",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "05_hair_extension_zerov2_17",
+      "query_family": "selection_comparison",
+      "instruction": "Compare seamless clip-in human hair extensions against PU tape-in extensions for fine hair.",
+      "instruction_zh": "对比细软发质适用的无痕卡扣真发接发与 PU 无痕贴片接发。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "05_hair_extension_zerov2_18",
+      "query_family": "selection_comparison",
+      "instruction": "Show me 14-inch Senegalese twist crochet braids alongside spring passion twist synthetic hair packs.",
+      "instruction_zh": "把 14 英寸塞内加尔扭搏钩针发与弹簧波纹扭搏合成发束对比看看。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "05_hair_extension_zerov2_19",
+      "query_family": "selection_comparison",
+      "instruction": "Compare pre-looped synthetic passion-twist packs against virgin human hair bundles by daily styling heat tolerance.",
+      "instruction_zh": "按耐高温造型和寿命对比预打圈化纤扭辫包与原生真发束。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "05_hair_extension_zerov2_20",
+      "query_family": "selection_comparison",
+      "instruction": "Which stainless-clip real human hair strands keep fuller thickness at the ends without heavy root pulling?",
+      "instruction_zh": "哪款不锈钢夹真人发片发尾够丰盈又不会把头皮扯痛？",
+      "implicit_anchor_free": true
+    }
+  ],
+  "query_family_counts": {
+    "category_direct": 4,
+    "purchase_intent": 4,
+    "use_case": 4,
+    "functional_need": 4,
+    "selection_comparison": 4
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false,
+  "training_overlap": {
+    "normalization": "unicode_nfkc_whitespace_casefold",
+    "normalized_exact_overlap_count": 0,
+    "semantic_independence_claimed": false,
+    "checked_against_training_source_manifest": "../manifest.json"
+  },
+  "authoring": {
+    "kind": "assistant_curated_static_evaluation",
+    "basis": "empirical_training_category_distribution_calibrated_zero_exact_overlap_v3",
+    "target_brand_or_model_specified": false,
+    "all_target_core_attributes_required": false,
+    "existing_formal_query_texts_read": false,
+    "formal_memory_contents_read": false,
+    "selection_by_retrieval_outcomes": false
+  }
+}

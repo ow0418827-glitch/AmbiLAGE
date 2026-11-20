@@ -1,0 +1,204 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "visual_inception_category_diversity_v2",
+  "group": "04_curtain",
+  "query_mode": "text",
+  "target_public_id": "B086PW7TWX",
+  "category": "curtains",
+  "source_type": "curated_evaluation",
+  "language": "en",
+  "instruction_policy": "zero_overlap_v2_10explicit_10implicit_20",
+  "instructions": [
+    "blackout thermal insulated polyester curtain panels for bedroom",
+    "rod pocket window drapes with light filtering and privacy protection",
+    "triple-weave thermal room-darkening sliding glass door fabric panels",
+    "heavy 300gsm navy velvet rod-pocket window coverings for bedroom insulation",
+    "I want to buy a pair of room-darkening blackout curtains that keep summer heat and winter drafts out.",
+    "Help me order machine-washable microfiber or polyester window curtains for a living room.",
+    "I want to buy a wide grommet-top blackout fabric panel to block morning glare across bedroom patio glass.",
+    "Help me order lightweight semi-sheer floral printed chiffon window hangings for soft filtered living room sunlight.",
+    "I need heavy triple-weave blackout panels to darken a bedroom completely for daytime sleeping and shift work.",
+    "Suggest sheer or semi-sheer window curtains that soften bright afternoon glare while maintaining daytime privacy.",
+    "I work night shifts and need dense 99%-light-blocking insulated bedroom window fabric to keep the room cool and dark.",
+    "Suggest machine-washable short kitchen cafe panels in warm plaid patterns that maintain privacy near the sink.",
+    "Looking for thermal insulated window curtains engineered to block UV rays, reduce street noise, and save energy.",
+    "I need fade-resistant printed satin polyester drapes that stay smooth and wrinkle-free after machine washing.",
+    "Looking for wrinkle-free microfiber triple-interwoven window textiles that dampen street traffic sound and prevent sun fading.",
+    "Which extra-wide sliding patio door coverings hang smoothly on steel rods and work well as temporary room dividers?",
+    "Compare triple-weave blackout curtain panels against double-layer thermal velvet drapes.",
+    "Show me rod pocket waterfall curtains side by side with metal grommet room-darkening panels.",
+    "Compare thick velvet rod-pocket light blockers against matte polyester grommet window panels by noise reduction.",
+    "Which semi-sheer voile window textiles allow better summer breeze flow while softening afternoon harshness?"
+  ],
+  "instructions_sha256": "748f16ac3fd77b5a7bae97f9507bb33bfc875f61ecc7c1d8fa7f074e67a5a261",
+  "query_records": [
+    {
+      "id": "04_curtain_zerov2_01",
+      "query_family": "category_direct",
+      "instruction": "blackout thermal insulated polyester curtain panels for bedroom",
+      "instruction_zh": "卧室用涤纶隔热遮光窗帘布片",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "04_curtain_zerov2_02",
+      "query_family": "category_direct",
+      "instruction": "rod pocket window drapes with light filtering and privacy protection",
+      "instruction_zh": "兼顾透光柔和与隐私保护的穿杆式窗帘",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "04_curtain_zerov2_03",
+      "query_family": "category_direct",
+      "instruction": "triple-weave thermal room-darkening sliding glass door fabric panels",
+      "instruction_zh": "三层梭织隔热防晒推拉落地窗遮光布艺片",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "04_curtain_zerov2_04",
+      "query_family": "category_direct",
+      "instruction": "heavy 300gsm navy velvet rod-pocket window coverings for bedroom insulation",
+      "instruction_zh": "厚重300gsm藏青丝绒穿杆卧室遮光保温窗布",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "04_curtain_zerov2_05",
+      "query_family": "purchase_intent",
+      "instruction": "I want to buy a pair of room-darkening blackout curtains that keep summer heat and winter drafts out.",
+      "instruction_zh": "我想买一对能隔绝夏日热浪与冬季冷风的强遮光窗帘。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "04_curtain_zerov2_06",
+      "query_family": "purchase_intent",
+      "instruction": "Help me order machine-washable microfiber or polyester window curtains for a living room.",
+      "instruction_zh": "帮我订购一套适合客厅使用的可机洗超细纤维或涤纶窗帘。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "04_curtain_zerov2_07",
+      "query_family": "purchase_intent",
+      "instruction": "I want to buy a wide grommet-top blackout fabric panel to block morning glare across bedroom patio glass.",
+      "instruction_zh": "想买一面宽幅金属圈顶遮光布，用来挡住卧室玻璃门的刺眼晨光。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "04_curtain_zerov2_08",
+      "query_family": "purchase_intent",
+      "instruction": "Help me order lightweight semi-sheer floral printed chiffon window hangings for soft filtered living room sunlight.",
+      "instruction_zh": "帮我买一对轻盈半透的印花雪纺挂饰布，柔和过滤客厅日光。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "04_curtain_zerov2_09",
+      "query_family": "use_case",
+      "instruction": "I need heavy triple-weave blackout panels to darken a bedroom completely for daytime sleeping and shift work.",
+      "instruction_zh": "我需要厚实三层梭织遮光窗帘，让需要白天补觉的卧室彻底暗下来。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "04_curtain_zerov2_10",
+      "query_family": "use_case",
+      "instruction": "Suggest sheer or semi-sheer window curtains that soften bright afternoon glare while maintaining daytime privacy.",
+      "instruction_zh": "推荐能柔和午后强光同时保障白天隐私的轻纱或半透光窗帘。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "04_curtain_zerov2_11",
+      "query_family": "use_case",
+      "instruction": "I work night shifts and need dense 99%-light-blocking insulated bedroom window fabric to keep the room cool and dark.",
+      "instruction_zh": "上夜班需要高密度全遮光隔热布料挂窗，让卧室大白天也能保持凉爽昏暗。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "04_curtain_zerov2_12",
+      "query_family": "use_case",
+      "instruction": "Suggest machine-washable short kitchen cafe panels in warm plaid patterns that maintain privacy near the sink.",
+      "instruction_zh": "推荐方便机洗的厨房小格纹短窗护布，既能保护隐私又耐油烟易打理。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "04_curtain_zerov2_13",
+      "query_family": "functional_need",
+      "instruction": "Looking for thermal insulated window curtains engineered to block UV rays, reduce street noise, and save energy.",
+      "instruction_zh": "寻找能够阻挡紫外线、降低街道噪音并节能保温的隔热窗帘。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "04_curtain_zerov2_14",
+      "query_family": "functional_need",
+      "instruction": "I need fade-resistant printed satin polyester drapes that stay smooth and wrinkle-free after machine washing.",
+      "instruction_zh": "我需要经机洗后依然垂顺少皱、不易褪色的印花缎面涤纶窗帘。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "04_curtain_zerov2_15",
+      "query_family": "functional_need",
+      "instruction": "Looking for wrinkle-free microfiber triple-interwoven window textiles that dampen street traffic sound and prevent sun fading.",
+      "instruction_zh": "寻找抗皱超细纤维三层织物窗面隔音布，能隔绝马路噪音并减少家具晒褪色。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "04_curtain_zerov2_16",
+      "query_family": "functional_need",
+      "instruction": "Which extra-wide sliding patio door coverings hang smoothly on steel rods and work well as temporary room dividers?",
+      "instruction_zh": "哪些加宽落地门遮蔽布拉动顺滑，还能顺便当卧室或客厅隔断使用？",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "04_curtain_zerov2_17",
+      "query_family": "selection_comparison",
+      "instruction": "Compare triple-weave blackout curtain panels against double-layer thermal velvet drapes.",
+      "instruction_zh": "对比三层梭织遮光窗帘布片与双层隔热丝绒窗帘。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "04_curtain_zerov2_18",
+      "query_family": "selection_comparison",
+      "instruction": "Show me rod pocket waterfall curtains side by side with metal grommet room-darkening panels.",
+      "instruction_zh": "把穿杆瀑布帘头窗帘和金属孔眼遮光窗帘放在一起对比。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "04_curtain_zerov2_19",
+      "query_family": "selection_comparison",
+      "instruction": "Compare thick velvet rod-pocket light blockers against matte polyester grommet window panels by noise reduction.",
+      "instruction_zh": "对比厚丝绒穿杆遮光布与哑光涤纶打孔挂帘的室内降噪表现。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "04_curtain_zerov2_20",
+      "query_family": "selection_comparison",
+      "instruction": "Which semi-sheer voile window textiles allow better summer breeze flow while softening afternoon harshness?",
+      "instruction_zh": "哪款半透薄纱窗织物既能保证夏季通风，又能把下午强光柔化？",
+      "implicit_anchor_free": true
+    }
+  ],
+  "query_family_counts": {
+    "category_direct": 4,
+    "purchase_intent": 4,
+    "use_case": 4,
+    "functional_need": 4,
+    "selection_comparison": 4
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false,
+  "training_overlap": {
+    "normalization": "unicode_nfkc_whitespace_casefold",
+    "normalized_exact_overlap_count": 0,
+    "semantic_independence_claimed": false,
+    "checked_against_training_source_manifest": "../manifest.json"
+  },
+  "authoring": {
+    "kind": "assistant_curated_static_evaluation",
+    "basis": "empirical_training_category_distribution_calibrated_zero_exact_overlap_v3",
+    "target_brand_or_model_specified": false,
+    "all_target_core_attributes_required": false,
+    "existing_formal_query_texts_read": false,
+    "formal_memory_contents_read": false,
+    "selection_by_retrieval_outcomes": false
+  }
+}

@@ -205,3 +205,70 @@ def test_final_diagnostics_under_no_grad_still_run_inner_ascent():
     assert audit['query_augmentation']['enabled'] is True
     assert audit['query_augmentation']['max_l2_perturbation'] > 0
     assert image.grad is concept.grad is queries.grad is negatives.grad is None
+
+
+@pytest.mark.parametrize('bank_blend,comp_blend', [(1.0, 0.0), (0.8, 0.2), (0.0, 1.0)])
+def test_configurable_comp_loss_blend_matches_closed_form(bank_blend, comp_blend):
+    image, concept, queries, negatives, policy = inputs(gradients=True)
+    cfg = config(query_adversarial_radius=0, hard_negative_count=6,
+                 hard_negative_same_category_count=0, hard_negative_proxy_memory_count=0,
+                 hard_negative_popularity_count=0,
+                 bank_loss_blend=bank_blend, hard_margin_loss_blend=comp_blend)
+    _, loss, audit = enhanced_retrieval_semantic_losses(
+        image, concept, queries, negatives, negative_policy=policy, config=cfg)
+
+    q = F.normalize(queries, dim=-1)
+    n = F.normalize(negatives, dim=-1)
+    im = F.normalize(image, dim=-1)
+    tau, margin = 0.07, 0.3
+    pos_logit = (q @ im.T)[:, 0] / tau
+    all_neg_cos = q @ n.T
+    neg_logits = all_neg_cos / tau + margin
+    bank_loss = torch.logsumexp(torch.cat((pos_logit[:, None], neg_logits), dim=1), dim=1) - pos_logit
+    top_r = min(TOP_HARD_COMPETITOR_LIMIT, n.shape[0])
+    top_cos = all_neg_cos.topk(top_r, dim=1).values
+    comp_logit = torch.logsumexp(top_cos / tau, dim=1) - math.log(float(top_r))
+    comp_loss = F.softplus(HARD_MARGIN_SHARPNESS * (comp_logit - pos_logit + margin)) / HARD_MARGIN_SHARPNESS
+    expected = (bank_blend * bank_loss + comp_blend * comp_loss).mean()
+
+    assert torch.allclose(loss, expected, atol=1e-12)
+    assert audit['bank_loss_blend'] == bank_blend
+    assert audit['hard_margin_loss_blend'] == comp_blend
+    loss.backward()
+    assert torch.isfinite(image.grad).all() and image.grad.norm() > 0
+
+
+@pytest.mark.parametrize('bank_blend,comp_blend', [(-0.1, 1.1), (0.5, 0.4), (0.8, 0.8), (True, False)])
+def test_invalid_comp_loss_blend_rejected(bank_blend, comp_blend):
+    with pytest.raises(ValueError):
+        VisualInceptionConfig(bank_loss_blend=bank_blend, hard_margin_loss_blend=comp_blend).validate()
+
+
+def test_custom_blend_pipeline_and_legacy_frozen_evidence_validation(tmp_path):
+    from PIL import Image
+    from src.paths import PROJECT
+    from src.tests.test_visual_inception_retrieval import make_training_fixture, public_definition
+    from src.visual._visual_inception.evidence import validate_ready
+    from src.visual._visual_inception.pipeline import generate_visual_inception
+
+    source, target = tmp_path / 'source.png', tmp_path / 'target.png'
+    Image.new('RGB', (16, 16), (180, 100, 75)).save(source)
+    Image.new('RGB', (16, 16), (80, 170, 150)).save(target)
+    manifest, _, _ = make_training_fixture(tmp_path / 'bundle', (source, target))
+    cfg = VisualInceptionConfig(
+        steps=2, gradient_restarts=2, smoke_test=True, surrogate_set='clip_l14',
+        training_manifest=str(manifest), bank_loss_blend=1.0, hard_margin_loss_blend=0.0,
+    )
+    out_img, metadata = generate_visual_inception(
+        source, target, tmp_path / 'generated_pure_bank', config=cfg,
+        device='cpu', definition=public_definition(),
+    )
+    assert metadata['enhanced_mechanisms']['parameters']['bank_loss_blend'] == 1.0
+    assert metadata['enhanced_mechanisms']['parameters']['hard_margin_loss_blend'] == 0.0
+    validated = validate_ready(out_img.parent, require_production=False)
+    assert validated['config']['bank_loss_blend'] == 1.0
+
+    legacy_dir = PROJECT / 'output/vi_single_clip_l14_9groups_20261118/07_shampoo/visual_inception/generation'
+    if legacy_dir.is_dir():
+        legacy_meta = validate_ready(legacy_dir, require_production=True)
+        assert legacy_meta['method'] == 'visual_inception'

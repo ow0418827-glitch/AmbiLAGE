@@ -1,0 +1,206 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "category_query_overlap_30_v2",
+  "group": "02_chair",
+  "query_mode": "text",
+  "target_public_id": "B09CYFD5BX",
+  "category": "barber chair",
+  "source_type": "mixed_30pct_training_oracle_70pct_non_overlap",
+  "language": "en",
+  "instruction_policy": "category_query_overlap_30_v2",
+  "instructions": [
+    "Heavy-duty vintage hydraulic reclining barber chair upholstered in stitched faux leather with an aluminum alloy frame, 27-inch chrome base, headrest, and 140-degree backrest recline.",
+    "Stainless steel and waterproof leather hydraulic barber chair featuring high-density rebound sponge cushions, smooth up-and-down lifting, and lockable 360-degree swivel for salon cutting.",
+    "PU leather reclining barbershop chair with waterproof thick sponge seat cushion, stainless steel and padded armrests, and a wide 135-degree tilting backrest for shaving.",
+    "Looking for a compact barber chair for a salon or tattoo shop with high-density sponge, 360-degree rotation that locks at any angle, adjustable height, and an adjustable footrest.",
+    "Looking for a retro-style barber chair with a solid wood frame, waterproof leather, high-density sponge cushion, 360-degree rotation, adjustable height, and a stainless steel base for my barbershop.",
+    "koken barber chairs for sale",
+    "Find a barber chair that can swivel smoothly and lock while I cut hair.",
+    "I need a compact hydraulic barber chair for a shop with a narrow aisle.",
+    "Which barber chairs have a footrest that is comfortable for shorter clients?",
+    "Show me reclining barber chairs with a removable padded headrest.",
+    "What barber chair can lower far enough for clients to sit down easily?",
+    "I want a classic barber chair with dark upholstery that is easy to wipe clean.",
+    "Compare square and round bases for a barber chair on a tile floor.",
+    "Recommend a barber chair with wide armrests for longer grooming appointments.",
+    "Find a heavy hydraulic 360-degree swivel barbershop seat built with leatherette armrests and chrome base.",
+    "Which salon reclining workstations provide dual left-and-right height levers and 140-degree backrest tilt?",
+    "I want an easy-wipe PVC styling pedestal seat cushioned with thick high-density memory sponge.",
+    "Compare round-chrome-base styling loungers against boutique square-base leatherette salon seats.",
+    "Suggest a stainless-steel frame tattoo and shave workstation with removable padded headrest.",
+    "What retro commercial client lounger handles up to 400 pounds while rotating smoothly at any angle?"
+  ],
+  "instructions_sha256": "3c539674ff245c399e31f6291052cf0cb3d519738665123d0a8e38cf58fb6efc",
+  "query_records": [
+    {
+      "id": "02_chair_overlap30v2_01",
+      "query_family": "category_description",
+      "instruction": "Heavy-duty vintage hydraulic reclining barber chair upholstered in stitched faux leather with an aluminum alloy frame, 27-inch chrome base, headrest, and 140-degree backrest recline.",
+      "instruction_zh": "提炼公开描述（B084KKKSQK）：复古重型液压可躺理发椅，缝线仿皮软包、铝合金框架、27英寸镀铬底座、可拆卸头枕及140度后倾靠背。",
+      "source_row_id": "B084KKKSQK",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/02_chair/descriptions.jsonl",
+      "reused_oracle_id": "02_chair_oracle_01",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "f461f1f4d91f1d37e9913b82541509b756185152d45f420bfab618fa03022c3f"
+    },
+    {
+      "id": "02_chair_overlap30v2_02",
+      "query_family": "category_description",
+      "instruction": "Stainless steel and waterproof leather hydraulic barber chair featuring high-density rebound sponge cushions, smooth up-and-down lifting, and lockable 360-degree swivel for salon cutting.",
+      "instruction_zh": "提炼公开描述（B09NKCPT92）：不锈钢与防水皮革液压美发椅，高密度回弹海绵坐垫、平稳升降及可锁定360度旋转。",
+      "source_row_id": "B09NKCPT92",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/02_chair/descriptions.jsonl",
+      "reused_oracle_id": "02_chair_oracle_02",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "1150f3df658691aa6cad94eb117e019fdf2652a92d4820fc8dbde8f165f04ef4"
+    },
+    {
+      "id": "02_chair_overlap30v2_03",
+      "query_family": "category_description",
+      "instruction": "PU leather reclining barbershop chair with waterproof thick sponge seat cushion, stainless steel and padded armrests, and a wide 135-degree tilting backrest for shaving.",
+      "instruction_zh": "提炼公开描述（B09LLV2DRD）：PU皮革可倾倒剃须理发椅，加厚海绵防水坐垫、不锈钢包皮扶手及135度宽靠背调节。",
+      "source_row_id": "B09LLV2DRD",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/02_chair/descriptions.jsonl",
+      "reused_oracle_id": "02_chair_oracle_03",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "f34974697e11968f29cad50baf51365eea3c6bd4f7eed03622398036b03151f4"
+    },
+    {
+      "id": "02_chair_overlap30v2_04",
+      "query_family": "model_paraphrase",
+      "instruction": "Looking for a compact barber chair for a salon or tattoo shop with high-density sponge, 360-degree rotation that locks at any angle, adjustable height, and an adjustable footrest.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_005，输入商品 B09C3XYMBP）",
+      "source_row_id": "paraphrase_005",
+      "source_file": "data/public/visual_inception_inputs_v5/02_chair/paraphrases/model_paraphrases.jsonl",
+      "reused_oracle_id": "02_chair_oracle_11"
+    },
+    {
+      "id": "02_chair_overlap30v2_05",
+      "query_family": "model_paraphrase",
+      "instruction": "Looking for a retro-style barber chair with a solid wood frame, waterproof leather, high-density sponge cushion, 360-degree rotation, adjustable height, and a stainless steel base for my barbershop.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_001，输入商品 B09SPQH3J5）",
+      "source_row_id": "paraphrase_001",
+      "source_file": "data/public/visual_inception_inputs_v5/02_chair/paraphrases/model_paraphrases.jsonl",
+      "reused_oracle_id": "02_chair_oracle_12"
+    },
+    {
+      "id": "02_chair_overlap30v2_06",
+      "query_family": "heldout_search_query",
+      "instruction": "koken barber chairs for sale",
+      "instruction_zh": "训练真实搜索原句（msmarco_websearch / msmarco_websearch_train_2098274）：koken barber chairs for sale",
+      "source_row_id": "msmarco_websearch_train_2098274",
+      "source_file": "data/public/visual_inception_inputs_v5/02_chair/heldout_queries.jsonl",
+      "reused_oracle_id": "02_chair_oracle_17"
+    },
+    {
+      "id": "02_chair_overlap30v2_07",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Find a barber chair that can swivel smoothly and lock while I cut hair.",
+      "instruction_zh": "找一款理发时能顺滑旋转并可锁定的理发椅。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "02_chair_overlap30v2_08",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "I need a compact hydraulic barber chair for a shop with a narrow aisle.",
+      "instruction_zh": "我需要一款适合窄过道店铺的紧凑型液压理发椅。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "02_chair_overlap30v2_09",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Which barber chairs have a footrest that is comfortable for shorter clients?",
+      "instruction_zh": "哪些理发椅的脚踏板对身高较矮的顾客也很舒适？",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "02_chair_overlap30v2_10",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Show me reclining barber chairs with a removable padded headrest.",
+      "instruction_zh": "推荐几款带可拆卸软垫头枕的可躺式理发椅。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "02_chair_overlap30v2_11",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "What barber chair can lower far enough for clients to sit down easily?",
+      "instruction_zh": "哪款理发椅能够降到足够低以方便顾客轻松坐下？",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "02_chair_overlap30v2_12",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "I want a classic barber chair with dark upholstery that is easy to wipe clean.",
+      "instruction_zh": "我想要一款易擦拭清洁的深色面料经典理发椅。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "02_chair_overlap30v2_13",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Compare square and round bases for a barber chair on a tile floor.",
+      "instruction_zh": "对比方形底座和圆形底座理发椅在瓷砖地面上的稳定性。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "02_chair_overlap30v2_14",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Recommend a barber chair with wide armrests for longer grooming appointments.",
+      "instruction_zh": "推荐一款适合长时间护理服务的宽扶手理发椅。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "02_chair_overlap30v2_15",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Find a heavy hydraulic 360-degree swivel barbershop seat built with leatherette armrests and chrome base.",
+      "instruction_zh": "找一款带皮质扶手与镀铬底盘的360度液压理发工位座椅。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "02_chair_overlap30v2_16",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Which salon reclining workstations provide dual left-and-right height levers and 140-degree backrest tilt?",
+      "instruction_zh": "哪款沙龙后仰工位座配备左右双侧拨杆与140度靠背倾角调节？",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "02_chair_overlap30v2_17",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "I want an easy-wipe PVC styling pedestal seat cushioned with thick high-density memory sponge.",
+      "instruction_zh": "想要一款铺满厚实高密度记忆海绵且易擦洗PVC材质的理容工作客座。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "02_chair_overlap30v2_18",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Compare round-chrome-base styling loungers against boutique square-base leatherette salon seats.",
+      "instruction_zh": "对比圆盘镀铬款造型座与精品方底座仿皮沙龙座椅的稳定性。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "02_chair_overlap30v2_19",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Suggest a stainless-steel frame tattoo and shave workstation with removable padded headrest.",
+      "instruction_zh": "推荐带可拆卸软头枕的不锈钢骨架纹身修面工作室专用座。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "02_chair_overlap30v2_20",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "What retro commercial client lounger handles up to 400 pounds while rotating smoothly at any angle?",
+      "instruction_zh": "哪款复古商用美发客座承重达400磅且能任意角度顺滑旋转锁定？",
+      "implicit_anchor_free": true
+    }
+  ],
+  "query_family_counts": {
+    "category_description": 3,
+    "model_paraphrase": 2,
+    "heldout_search_query": 1,
+    "synthetic_non_overlap": 14
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false
+}

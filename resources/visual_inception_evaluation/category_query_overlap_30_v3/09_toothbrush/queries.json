@@ -1,0 +1,249 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "category_query_overlap_30_v3",
+  "group": "09_toothbrush",
+  "query_mode": "text",
+  "target_public_id": "B09J81RMLD",
+  "category": "toothbrush",
+  "source_type": "strict_nested_30pct_oracle_v3_70pct_zero_v3",
+  "language": "en",
+  "instruction_policy": "category_query_overlap_30_v3_nested",
+  "instructions": [
+    "Cute cartoon soft silicone children manual toothbrush designed for gentle gum cleaning and comfortable toddler grip.",
+    "Ergonomic U-shaped manual children toothbrush made with soft silica bristles wrapping teeth safely without hurting gums.",
+    "U-shaped soft silicone kids manual toothbrush designed to clean front and back tooth surfaces gently.",
+    "Ultra-soft bristle manual toothbrushes protecting tender swollen gums cleanly during gentle daily brushing.",
+    "Quiet rechargeable motor toothbrush built cleanly with smooth gentle vibration and ventilated cap.",
+    "Compact toddler training toothbrush engineered with chubby easy-grip non-slip handle fitting tiny fingers.",
+    "U-shaped soft silicone kids toothbrush gently wrapping baby molars clean without awkward gagging.",
+    "Boil-safe food-grade soft silicone U-arch mouth cleaner cleaning top and bottom rows together gently.",
+    "Gentle ultrasonic pediatric oral wand offering soft vibration speeds tailored for sensitive growing gums.",
+    "Natural plant-fiber kids dental care brush fitted with cushioned bristle heads safe for first teeth.",
+    "Find ultra-fine soft bristle manual toothbrushes gentle enough for adults and young children.",
+    "Find a waterproof electric U-shaped toothbrush offering soft bristles and multiple gentle modes.",
+    "Which ultra-soft manual toothbrush removes gumline plaque gently without irritating bleeding gums?",
+    "What quiet pediatric sonic oral wand cleans gently with helpful timer alerts?",
+    "Want an eco bamboo toddler grip brush featuring chubby easy-hold handle shapes.",
+    "Which boil-safe soft mouth cleaners reach back baby molars cleanly every morning?",
+    "baby finger toothbrush",
+    "soft silicone kids toothbrush",
+    "toddler training oral toothbrush",
+    "ultra soft sensitive toothbrush"
+  ],
+  "instructions_sha256": "5b5fb87e32539ff83dd822e5c6bd5dbcaa8a489a026a4eaea5c62a1687188ac4",
+  "query_records": [
+    {
+      "id": "09_toothbrush_overlap30v3_01",
+      "query_family": "category_description",
+      "instruction": "Cute cartoon soft silicone children manual toothbrush designed for gentle gum cleaning and comfortable toddler grip.",
+      "instruction_zh": "卡通趣味儿童手动软硅胶牙刷，呵护稚嫩牙龈并方便宝宝小手平稳握持。",
+      "source_row_id": "B09QKHK4NP",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/09_toothbrush/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "4cd183c2728c25d2105dd9d84b7f07793baa4e0bfb32320ccd45fba9d2b578fa",
+      "overlap_source": "oracle_v3",
+      "reused_oracle_id": "09_toothbrush_oraclev3_01"
+    },
+    {
+      "id": "09_toothbrush_overlap30v3_02",
+      "query_family": "category_description",
+      "instruction": "Ergonomic U-shaped manual children toothbrush made with soft silica bristles wrapping teeth safely without hurting gums.",
+      "instruction_zh": "人体工学U形儿童手动牙刷，食品级软胶毛环绕洁齿并细心保护牙龈。",
+      "source_row_id": "B09Q5MBQK3",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/09_toothbrush/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "8958cad560322b7a064b03bd48aa6eebc65496761504b2882cb4f1d09f18c5ad",
+      "overlap_source": "oracle_v3",
+      "reused_oracle_id": "09_toothbrush_oraclev3_02"
+    },
+    {
+      "id": "09_toothbrush_overlap30v3_03",
+      "query_family": "category_description",
+      "instruction": "U-shaped soft silicone kids manual toothbrush designed to clean front and back tooth surfaces gently.",
+      "instruction_zh": "U形全包覆儿童手动硅胶牙刷，温和清洁乳牙内外表面适合日常护齿。",
+      "source_row_id": "B09R1HJWSY",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/09_toothbrush/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "1f322f8b9bd0badf0ca15b71ad6970a92200cd7aab95098e1e658d45ff5cf629",
+      "overlap_source": "oracle_v3",
+      "reused_oracle_id": "09_toothbrush_oraclev3_03"
+    },
+    {
+      "id": "09_toothbrush_overlap30v3_04",
+      "query_family": "category_description",
+      "instruction": "Ultra-soft bristle manual toothbrushes protecting tender swollen gums cleanly during gentle daily brushing.",
+      "instruction_zh": "极细柔软刷毛细心呵护敏感红肿牙龈、温柔带走日常口腔污渍的手动护龈牙刷。",
+      "implicit_anchor_free": false,
+      "overlap_source": "zero_overlap_v3",
+      "reused_zero_id": "09_toothbrush_zerov3_01"
+    },
+    {
+      "id": "09_toothbrush_overlap30v3_05",
+      "query_family": "category_description",
+      "instruction": "Quiet rechargeable motor toothbrush built cleanly with smooth gentle vibration and ventilated cap.",
+      "instruction_zh": "马达安静低噪且贴心附带防尘旅行护帽的可充电日常家用声波电动牙刷。",
+      "implicit_anchor_free": false,
+      "overlap_source": "zero_overlap_v3",
+      "reused_zero_id": "09_toothbrush_zerov3_02"
+    },
+    {
+      "id": "09_toothbrush_overlap30v3_06",
+      "query_family": "category_description",
+      "instruction": "Compact toddler training toothbrush engineered with chubby easy-grip non-slip handle fitting tiny fingers.",
+      "instruction_zh": "圆胖防滑握柄方便低龄宝宝一手紧抓练习刷牙的入门训练安全小牙刷。",
+      "implicit_anchor_free": false,
+      "overlap_source": "zero_overlap_v3",
+      "reused_zero_id": "09_toothbrush_zerov3_03"
+    },
+    {
+      "id": "09_toothbrush_overlap30v3_07",
+      "query_family": "category_description",
+      "instruction": "U-shaped soft silicone kids toothbrush gently wrapping baby molars clean without awkward gagging.",
+      "instruction_zh": "柔软硅胶材质温柔包覆幼童后槽乳牙清洁、减少干呕不适的儿童U形牙刷。",
+      "implicit_anchor_free": false,
+      "overlap_source": "zero_overlap_v3",
+      "reused_zero_id": "09_toothbrush_zerov3_04"
+    },
+    {
+      "id": "09_toothbrush_overlap30v3_08",
+      "query_family": "category_description",
+      "instruction": "Boil-safe food-grade soft silicone U-arch mouth cleaner cleaning top and bottom rows together gently.",
+      "instruction_zh": "可直接沸水烫洗消毒且一次温和包覆上下整排乳牙洁齿的U形硅胶洁牙器。",
+      "implicit_anchor_free": true,
+      "overlap_source": "zero_overlap_v3",
+      "reused_zero_id": "09_toothbrush_zerov3_07"
+    },
+    {
+      "id": "09_toothbrush_overlap30v3_09",
+      "query_family": "category_description",
+      "instruction": "Gentle ultrasonic pediatric oral wand offering soft vibration speeds tailored for sensitive growing gums.",
+      "instruction_zh": "针对幼嫩发育期牙龈调校多档轻柔声波节奏的儿童舒适护齿清洁电动棒。",
+      "implicit_anchor_free": true,
+      "overlap_source": "zero_overlap_v3",
+      "reused_zero_id": "09_toothbrush_zerov3_08"
+    },
+    {
+      "id": "09_toothbrush_overlap30v3_10",
+      "query_family": "category_description",
+      "instruction": "Natural plant-fiber kids dental care brush fitted with cushioned bristle heads safe for first teeth.",
+      "instruction_zh": "选用自然植物纤维环保柄配高柔护齿小圆头保护宝宝初萌乳牙的儿童洁牙具。",
+      "implicit_anchor_free": true,
+      "overlap_source": "zero_overlap_v3",
+      "reused_zero_id": "09_toothbrush_zerov3_09"
+    },
+    {
+      "id": "09_toothbrush_overlap30v3_11",
+      "query_family": "model_paraphrase",
+      "instruction": "Find ultra-fine soft bristle manual toothbrushes gentle enough for adults and young children.",
+      "instruction_zh": "找适合全家成人和儿童使用、配超细柔护刷毛的手动护龈牙刷。",
+      "source_row_id": "paraphrase_029",
+      "source_file": "data/public/visual_inception_inputs_v5/09_toothbrush/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "007981dff844b717e9986fda92343a81c0aec876850aae842ea0dbaa4fc2e23a",
+      "overlap_source": "oracle_v3",
+      "reused_oracle_id": "09_toothbrush_oraclev3_11"
+    },
+    {
+      "id": "09_toothbrush_overlap30v3_12",
+      "query_family": "model_paraphrase",
+      "instruction": "Find a waterproof electric U-shaped toothbrush offering soft bristles and multiple gentle modes.",
+      "instruction_zh": "求带多种清洁模式、全身防水与柔软刷毛的U形电动牙刷。",
+      "source_row_id": "paraphrase_003",
+      "source_file": "data/public/visual_inception_inputs_v5/09_toothbrush/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "fa59c92f111d564f46f46ed810a1fac5b297372ddca410c672e79496587528d2",
+      "overlap_source": "oracle_v3",
+      "reused_oracle_id": "09_toothbrush_oraclev3_12"
+    },
+    {
+      "id": "09_toothbrush_overlap30v3_13",
+      "query_family": "model_paraphrase",
+      "instruction": "Which ultra-soft manual toothbrush removes gumline plaque gently without irritating bleeding gums?",
+      "instruction_zh": "哪款极细超软毛手动牙刷能干净清走牙龈沟软垢，同时毫不扎痛脆弱出血牙龈？",
+      "implicit_anchor_free": false,
+      "overlap_source": "zero_overlap_v3",
+      "reused_zero_id": "09_toothbrush_zerov3_11"
+    },
+    {
+      "id": "09_toothbrush_overlap30v3_14",
+      "query_family": "model_paraphrase",
+      "instruction": "What quiet pediatric sonic oral wand cleans gently with helpful timer alerts?",
+      "instruction_zh": "有什么震动静音轻柔、带有定时引导的儿童充电护齿声波棒？",
+      "implicit_anchor_free": true,
+      "overlap_source": "zero_overlap_v3",
+      "reused_zero_id": "09_toothbrush_zerov3_13"
+    },
+    {
+      "id": "09_toothbrush_overlap30v3_15",
+      "query_family": "model_paraphrase",
+      "instruction": "Want an eco bamboo toddler grip brush featuring chubby easy-hold handle shapes.",
+      "instruction_zh": "想要小巧防滑粗柄设计方便幼童小手握持的天然植物柄宝宝洁齿小刷。",
+      "implicit_anchor_free": true,
+      "overlap_source": "zero_overlap_v3",
+      "reused_zero_id": "09_toothbrush_zerov3_14"
+    },
+    {
+      "id": "09_toothbrush_overlap30v3_16",
+      "query_family": "model_paraphrase",
+      "instruction": "Which boil-safe soft mouth cleaners reach back baby molars cleanly every morning?",
+      "instruction_zh": "哪款能开水放心高温杀菌的食品级硅胶洁齿器可轻松贴合宝宝大牙洗净？",
+      "implicit_anchor_free": true,
+      "overlap_source": "zero_overlap_v3",
+      "reused_zero_id": "09_toothbrush_zerov3_15"
+    },
+    {
+      "id": "09_toothbrush_overlap30v3_17",
+      "query_family": "heldout_search_query",
+      "instruction": "baby finger toothbrush",
+      "instruction_zh": "真实搜索原句（esci_train_11919）：婴儿指套牙刷",
+      "source_row_id": "esci_train_11919",
+      "source_file": "data/public/visual_inception_inputs_v5/09_toothbrush/heldout_queries.jsonl",
+      "implicit_anchor_free": false,
+      "overlap_source": "oracle_v3",
+      "reused_oracle_id": "09_toothbrush_oraclev3_17"
+    },
+    {
+      "id": "09_toothbrush_overlap30v3_18",
+      "query_family": "heldout_search_query",
+      "instruction": "soft silicone kids toothbrush",
+      "instruction_zh": "软硅胶儿童牙刷",
+      "implicit_anchor_free": false,
+      "overlap_source": "zero_overlap_v3",
+      "reused_zero_id": "09_toothbrush_zerov3_17"
+    },
+    {
+      "id": "09_toothbrush_overlap30v3_19",
+      "query_family": "heldout_search_query",
+      "instruction": "toddler training oral toothbrush",
+      "instruction_zh": "幼童护齿训练牙刷",
+      "implicit_anchor_free": false,
+      "overlap_source": "zero_overlap_v3",
+      "reused_zero_id": "09_toothbrush_zerov3_18"
+    },
+    {
+      "id": "09_toothbrush_overlap30v3_20",
+      "query_family": "heldout_search_query",
+      "instruction": "ultra soft sensitive toothbrush",
+      "instruction_zh": "超细软毛抗敏牙刷",
+      "implicit_anchor_free": false,
+      "overlap_source": "zero_overlap_v3",
+      "reused_zero_id": "09_toothbrush_zerov3_19"
+    }
+  ],
+  "query_family_counts": {
+    "category_description": 10,
+    "model_paraphrase": 6,
+    "heldout_search_query": 4
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false
+}

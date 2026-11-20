@@ -214,6 +214,9 @@ class AmbiLAGEConfig:
     public_query_adv_radius: float = 0.15
     public_query_adv_steps: int = 2
     public_query_adv_mix: float = 0.50
+    joint_key_aux_mix: float = 0.0
+    joint_grad_protect: bool = False
+    joint_grad_cap: float = 0.35
 
     def validate(self) -> None:
         """严格校验配置参数有效性，杜绝越界或无效数值。"""
@@ -457,6 +460,10 @@ class AmbiLAGEConfig:
             raise ValueError("公开检索对抗查询步数 public_query_adv_steps 必须位于 [0, 10]")
         if not (0.0 <= self.public_query_adv_mix <= 1.0):
             raise ValueError("公开检索对抗查询混合权重 public_query_adv_mix 必须位于 [0.0, 1.0]")
+        if not math.isfinite(self.joint_key_aux_mix) or not (0.0 <= self.joint_key_aux_mix <= 1.0):
+            raise ValueError("辅助联合记忆键混合比例 joint_key_aux_mix 必须位于 [0.0, 1.0]")
+        if not math.isfinite(self.joint_grad_cap) or self.joint_grad_cap <= 0.0:
+            raise ValueError("联合梯度投影范数上限 joint_grad_cap 必须大于 0")
 
         # 检查有限实数
         for key, val in asdict(self).items():

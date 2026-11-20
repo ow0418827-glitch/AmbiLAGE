@@ -16,6 +16,8 @@
   "query_adversarial_steps": 3,
   "query_adversarial_step_size": 0.1,
   "query_adversarial_mix": 0.5,
+  "bank_loss_blend": 0.8,
+  "hard_margin_loss_blend": 0.2,
   "training_manifest": null,
   "retrieval_weight": 1.0,
   "retrieval_temperature": 0.07,

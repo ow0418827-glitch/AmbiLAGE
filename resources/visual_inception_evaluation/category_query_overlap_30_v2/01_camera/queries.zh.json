@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "language": "zh",
+  "purpose": "仅供人工阅读，不传给检索编码器",
+  "group": "01_camera",
+  "category": "security camera",
+  "query_records": [
+    {
+      "id": "01_camera_overlap30v2_01",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "提炼公开描述（B097445J2Y）：800万像素4K户外PoE枪机，2.8mm广角镜头、降噪麦克风、98英尺红外夜视及IP67防水金属机身。"
+    },
+    {
+      "id": "01_camera_overlap30v2_02",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "提炼公开描述（B010DC7TQW）：1080p IP67铝壳枪式监控，3.6mm镜头、36颗红外灯支持100英尺夜视及四合一模拟视频输出。"
+    },
+    {
+      "id": "01_camera_overlap30v2_03",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "提炼公开描述（B09JB9QKV7）：无线1080p电池供电户外安防套件，IP65防水、彩色夜视、双向语音、移动提醒及无线门窗感应器。"
+    },
+    {
+      "id": "01_camera_overlap30v2_04",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "复用模型改写查询(10%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_018，输入商品 B09SBHCWR4）"
+    },
+    {
+      "id": "01_camera_overlap30v2_05",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "复用模型改写查询(10%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_023，输入商品 B0170B95U2）"
+    },
+    {
+      "id": "01_camera_overlap30v2_06",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "复用独立真实搜索(5%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_21901）：camera security light"
+    },
+    {
+      "id": "01_camera_overlap30v2_07",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款门廊安防摄像头在门口逆光时也能拍出清晰画面？"
+    },
+    {
+      "id": "01_camera_overlap30v2_08",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一款带手动隐私遮挡盖的小型室内安防摄像头。"
+    },
+    {
+      "id": "01_camera_overlap30v2_09",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我想找一款无需付费订阅即可保存录像片段的车库安防摄像头。"
+    },
+    {
+      "id": "01_camera_overlap30v2_10",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款户外摄像头能完整拍到窄车道的全宽视野？"
+    },
+    {
+      "id": "01_camera_overlap30v2_11",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我需要一台可以从屋檐向下俯拍的家用安防摄像头。"
+    },
+    {
+      "id": "01_camera_overlap30v2_12",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "推荐几款适合租房族安装在有遮挡前门的免打孔安防摄像头。"
+    },
+    {
+      "id": "01_camera_overlap30v2_13",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪些家用监控摄像头支持与另一位家庭成员共享实时画面？"
+    },
+    {
+      "id": "01_camera_overlap30v2_14",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我想要一款可用于侧院且支持自定义移动侦测区域的摄像头。"
+    },
+    {
+      "id": "01_camera_overlap30v2_15",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "需要一款无需月费即可高清夜视录制门口动静的户外防水监控装置。"
+    },
+    {
+      "id": "01_camera_overlap30v2_16",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款无线门厅视频看护设备能在有人靠近走廊时往手机发实时快照？"
+    },
+    {
+      "id": "01_camera_overlap30v2_17",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一款带双向语音对讲与照明警示的电池续航户外看护器。"
+    },
+    {
+      "id": "01_camera_overlap30v2_18",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "推荐一款可手动变焦看清停车区域细节的300万像素高清院落监测装置。"
+    },
+    {
+      "id": "01_camera_overlap30v2_19",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "对比太阳能屋檐户外监控机与插电室内看宠视频设备的夜视清晰度。"
+    },
+    {
+      "id": "01_camera_overlap30v2_20",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款防水紧凑型安防之眼能将1080p视频直接存在128GB本地存储卡中？"
+    }
+  ]
+}

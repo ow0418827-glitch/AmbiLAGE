@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "language": "zh",
+  "purpose": "仅供人工阅读，不传给检索编码器",
+  "group": "07_shampoo",
+  "category": "shampoo",
+  "query_records": [
+    {
+      "id": "07_shampoo_overlap30v2_01",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "提炼公开描述（B08GLB5W72）：无硫酸盐无硅油椰子木槿保湿洗发护发套装，温和洁净头皮并改善毛躁干枯发丝。"
+    },
+    {
+      "id": "07_shampoo_overlap30v2_02",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "提炼公开描述（B08HYBPD5Q）：含维B5五效合一保湿洗发水，不含矿物油与尼泊金酯，滋润顺滑并护色强韧。"
+    },
+    {
+      "id": "07_shampoo_overlap30v2_03",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "提炼公开描述（B004D9DKVA）：针对干痒头屑头皮研制的滋润洗发露，舒缓瘙痒同时温和清洁、减少发丝摩擦。"
+    },
+    {
+      "id": "07_shampoo_overlap30v2_04",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "复用模型改写查询(10%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_021，输入商品 B08P9HG48G）"
+    },
+    {
+      "id": "07_shampoo_overlap30v2_05",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "复用模型改写查询(10%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_028，输入商品 B01MYU55QJ）"
+    },
+    {
+      "id": "07_shampoo_overlap30v2_06",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "复用独立真实搜索(5%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_11876）：baby curly hair shampoo and conditioner"
+    },
+    {
+      "id": "07_shampoo_overlap30v2_07",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一款适合发根易出油细软发质、可频繁使用的温和洗发水。"
+    },
+    {
+      "id": "07_shampoo_overlap30v2_08",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款无香精洗发水适合不喜欢洗护产品有香味的人？"
+    },
+    {
+      "id": "07_shampoo_overlap30v2_09",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我需要一款针对洗后容易干涩粗硬卷发的保湿洗发水。"
+    },
+    {
+      "id": "07_shampoo_overlap30v2_10",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "推荐几款能保持染后红色头发鲜亮不褪色的护色洗发水。"
+    },
+    {
+      "id": "07_shampoo_overlap30v2_11",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款洗发水适合经常游泳后清除泳池水残留物？"
+    },
+    {
+      "id": "07_shampoo_overlap30v2_12",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我想要一款冲洗干净且不留蜡感残留的轻盈蓬松洗发水。"
+    },
+    {
+      "id": "07_shampoo_overlap30v2_13",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "对比深层清洁洗发水和日常温和洗发水对定型产品残留的清洁效果。"
+    },
+    {
+      "id": "07_shampoo_overlap30v2_14",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一款能装进小型旅行铁盒的无香固体洗发皂。"
+    },
+    {
+      "id": "07_shampoo_overlap30v2_15",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款无盐无硫酸盐椰子油洁发露能让沙龙角蛋白拉直护发效果维持得更久？"
+    },
+    {
+      "id": "07_shampoo_overlap30v2_16",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一款含阿甘油的紫色无硫酸盐洁发乳，专为漂染金发去黄亮泽。"
+    },
+    {
+      "id": "07_shampoo_overlap30v2_17",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "需要一款舒缓干痒头屑头皮且不拔干天然皮脂的温和护发洗液。"
+    },
+    {
+      "id": "07_shampoo_overlap30v2_18",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "对比五合一维B5日常润发露与1000ml大容量沙龙护色洁发液的修护力。"
+    },
+    {
+      "id": "07_shampoo_overlap30v2_19",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "推荐32盎司大瓶无防腐剂椰油竹萃绿茶草本洗头水，洗后清爽蓬松。"
+    },
+    {
+      "id": "07_shampoo_overlap30v2_20",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款黑石榴檀香三合一洁发沐浴露适合运动后一步搞定洗发和淋浴？"
+    }
+  ]
+}

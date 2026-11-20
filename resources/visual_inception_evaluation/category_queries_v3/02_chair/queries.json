@@ -1,0 +1,187 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "visual_inception_category_diversity_v3",
+  "group": "02_chair",
+  "query_mode": "text",
+  "target_public_id": "B09CYFD5BX",
+  "category": "barber chair",
+  "source_type": "zero_overlap_isomorphic_10_6_4_non_overlap",
+  "language": "en",
+  "instruction_policy": "zero_overlap_v3_isomorphic_10_6_4_20",
+  "instructions": [
+    "Swivel barber chair upholstered for simple hair-clipping cleanup between back-to-back client appointments.",
+    "Cushioned stylist salon chair providing lumbar support through lengthy hair-coloring appointments.",
+    "Space-saving boutique barbershop chair engineered cleanly to fit tight single booths in studios.",
+    "Commercial salon chair featuring stable swivel locking and smooth elevation for taller stylists.",
+    "Adjustable salon shampoo and cutting chair constructed for steady balance on tiled studio floors.",
+    "Traditional grooming barber chair offering reclining comfort during hot-towel beard trimming sessions.",
+    "Commercial hairstyling workstation seat equipped with easy-step elevation pump for smooth client height shifts.",
+    "Washable client grooming recliner built for quick daily wiping across studio tattoo and beard work.",
+    "Swivel studio seating unit featuring cushioned elbow rests and balanced support for long sessions.",
+    "Durable salon workstation lounger crafted with padded back support to ease neck strain gently.",
+    "Which reclining barber chair offers steadier steel frame support across busy shifts?",
+    "What compact hydraulic salon seating chair moves smoothly upward without squeaking noise?",
+    "Could you recommend easy-wipe vinyl hairstyling workstation seating with sturdy footrest support?",
+    "Which commercial grooming recliner feels cushioned enough through lengthy haircoloring appointments cleanly?",
+    "Want a steady swivel client station seat fitting neatly inside tight booths.",
+    "What hydraulic studio lounger rotates cleanly and locks securely at any client angle?",
+    "reclining swivel barber chair",
+    "salon styling swivel chair",
+    "vintage swivel barber chair",
+    "barbershop styling reclining chair"
+  ],
+  "instructions_sha256": "692792d911c1409616cc5809e630092356259865ba07533dd37190e27d578d33",
+  "query_records": [
+    {
+      "id": "02_chair_zerov3_01",
+      "query_family": "category_description",
+      "instruction": "Swivel barber chair upholstered for simple hair-clipping cleanup between back-to-back client appointments.",
+      "instruction_zh": "顺滑旋转理发椅，便于忙碌剪发客流间隙快速清理落发并维持整洁。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "02_chair_zerov3_02",
+      "query_family": "category_description",
+      "instruction": "Cushioned stylist salon chair providing lumbar support through lengthy hair-coloring appointments.",
+      "instruction_zh": "配护腰软包支撑的美发沙龙造型椅，久坐染烫护理依然自在惬意。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "02_chair_zerov3_03",
+      "query_family": "category_description",
+      "instruction": "Space-saving boutique barbershop chair engineered cleanly to fit tight single booths in studios.",
+      "instruction_zh": "为小型精品工位打造的高效紧凑款理发椅，节省走廊通道占地面积。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "02_chair_zerov3_04",
+      "query_family": "category_description",
+      "instruction": "Commercial salon chair featuring stable swivel locking and smooth elevation for taller stylists.",
+      "instruction_zh": "配稳定旋转锁定与大行程升降的商用美发师工位座椅，适配不同身高操作。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "02_chair_zerov3_05",
+      "query_family": "category_description",
+      "instruction": "Adjustable salon shampoo and cutting chair constructed for steady balance on tiled studio floors.",
+      "instruction_zh": "立足稳固防滑的洗剪吹多用可调美发椅，在光滑沙龙地砖上平稳安心。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "02_chair_zerov3_06",
+      "query_family": "category_description",
+      "instruction": "Traditional grooming barber chair offering reclining comfort during hot-towel beard trimming sessions.",
+      "instruction_zh": "兼顾经典造型与舒适仰卧角度的传统修面胡须护理理发专座椅。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "02_chair_zerov3_07",
+      "query_family": "category_description",
+      "instruction": "Commercial hairstyling workstation seat equipped with easy-step elevation pump for smooth client height shifts.",
+      "instruction_zh": "配备轻松脚踩液压泵的美发工位客座，安静平稳调整顾客坐姿高度。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "02_chair_zerov3_08",
+      "query_family": "category_description",
+      "instruction": "Washable client grooming recliner built for quick daily wiping across studio tattoo and beard work.",
+      "instruction_zh": "易拭洗表面材质打造的理容纹身修面工作室专用后仰躺座，日常省心。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "02_chair_zerov3_09",
+      "query_family": "category_description",
+      "instruction": "Swivel studio seating unit featuring cushioned elbow rests and balanced support for long sessions.",
+      "instruction_zh": "配有舒适扶手垫与稳妥支撑结构的工作室旋转座椅，缓解长时间等待疲劳。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "02_chair_zerov3_10",
+      "query_family": "category_description",
+      "instruction": "Durable salon workstation lounger crafted with padded back support to ease neck strain gently.",
+      "instruction_zh": "专注承托颈肩与腰背的厚垫工位工作躺座，让顾客护理体验更放松。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "02_chair_zerov3_11",
+      "query_family": "model_paraphrase",
+      "instruction": "Which reclining barber chair offers steadier steel frame support across busy shifts?",
+      "instruction_zh": "哪款可后仰理发椅在全天客流高峰时拥有更稳固扎实的钢架承托力？",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "02_chair_zerov3_12",
+      "query_family": "model_paraphrase",
+      "instruction": "What compact hydraulic salon seating chair moves smoothly upward without squeaking noise?",
+      "instruction_zh": "什么紧凑型液压沙龙美发椅在踩踏调高降落时安静丝滑不发出异响？",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "02_chair_zerov3_13",
+      "query_family": "model_paraphrase",
+      "instruction": "Could you recommend easy-wipe vinyl hairstyling workstation seating with sturdy footrest support?",
+      "instruction_zh": "能否推荐一款配结实踏板且一擦即净皮面的沙龙美发工位专用客座？",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "02_chair_zerov3_14",
+      "query_family": "model_paraphrase",
+      "instruction": "Which commercial grooming recliner feels cushioned enough through lengthy haircoloring appointments cleanly?",
+      "instruction_zh": "哪款商用理容后仰工作躺座的泡棉垫厚实舒适，久坐染发剃须不累？",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "02_chair_zerov3_15",
+      "query_family": "model_paraphrase",
+      "instruction": "Want a steady swivel client station seat fitting neatly inside tight booths.",
+      "instruction_zh": "想找一款不占地、能轻松摆进狭小单人理容间里的稳妥旋转工作客座。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "02_chair_zerov3_16",
+      "query_family": "model_paraphrase",
+      "instruction": "What hydraulic studio lounger rotates cleanly and locks securely at any client angle?",
+      "instruction_zh": "有什么沙龙液压造型躺座能在任意角度顺滑转动并牢牢锁死位置？",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "02_chair_zerov3_17",
+      "query_family": "heldout_search_query",
+      "instruction": "reclining swivel barber chair",
+      "instruction_zh": "后仰旋转理发椅",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "02_chair_zerov3_18",
+      "query_family": "heldout_search_query",
+      "instruction": "salon styling swivel chair",
+      "instruction_zh": "沙龙造型旋转椅",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "02_chair_zerov3_19",
+      "query_family": "heldout_search_query",
+      "instruction": "vintage swivel barber chair",
+      "instruction_zh": "复古旋转理发椅",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "02_chair_zerov3_20",
+      "query_family": "heldout_search_query",
+      "instruction": "barbershop styling reclining chair",
+      "instruction_zh": "理发店后仰造型椅",
+      "implicit_anchor_free": false
+    }
+  ],
+  "query_family_counts": {
+    "category_description": 10,
+    "model_paraphrase": 6,
+    "heldout_search_query": 4
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false
+}

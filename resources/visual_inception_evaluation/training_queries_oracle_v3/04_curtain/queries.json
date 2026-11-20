@@ -1,0 +1,283 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "visual_inception_training_oracle_v3",
+  "group": "04_curtain",
+  "query_mode": "text",
+  "target_public_id": "B086PW7TWX",
+  "category": "curtains",
+  "source_type": "training_oracle_stratified_sample",
+  "language": "en",
+  "instruction_policy": "training_oracle_v3_denoised_aligned_20",
+  "instructions": [
+    "Light-filtering semi-sheer window curtains with a rod pocket top to brighten rooms and soften glare.",
+    "Wrinkle-free printed blackout grommet curtains designed to block sunlight, dampen outdoor noise, and insulate rooms.",
+    "Thermal insulated blackout window curtains designed for effective room darkening, noise reduction, and home comfort.",
+    "Short microfiber blackout window covering built with thermal insulation and easy slip-on rod pocket design.",
+    "Decorative printed blackout window curtains with wash-resistant fabric and simple rod-pocket installation for kitchens.",
+    "Wide triple-weave blackout sliding patio door curtain engineered to block harsh sunlight and divide spaces.",
+    "Soft decorative window curtains offering bedroom privacy protection, bright style, and universal rod compatibility.",
+    "Lightweight semi-sheer printed window curtains allowing gentle daylight filtering and comfortable indoor airflow.",
+    "Thick soft blackout window curtains tailored with rod pockets for rich drape, privacy, and insulation.",
+    "Heavy-duty thermal blackout window curtains compatible with hanging rings to reduce sunlight glare and heat.",
+    "Want textured semi-sheer curtains that brighten rooms naturally while preserving daytime home privacy.",
+    "Need soft draped curtains with rod pocket headers for cozy bedroom windows.",
+    "Seeking lightweight semi-sheer window curtains filtering daylight softly while allowing room airflow.",
+    "Find decorative printed bedroom curtains suited cleanly for living rooms or dorms.",
+    "Find compact thermal blackout window panels offering noise reduction and smooth woven texture.",
+    "Find outdoor patio curtains made with weatherproof fabric and rust-resistant grommet tops.",
+    "cute curtains for bedroom",
+    "matching curtain sets",
+    "kids curtain",
+    "fancy curtain"
+  ],
+  "instructions_sha256": "8a917ed2739ef29951fe0ab5968c4bd0fb256e59a658d37fa173bd279a9f1268",
+  "query_records": [
+    {
+      "id": "04_curtain_oraclev3_01",
+      "query_family": "category_description",
+      "instruction": "Light-filtering semi-sheer window curtains with a rod pocket top to brighten rooms and soften glare.",
+      "instruction_zh": "穿杆式半透光窗帘，柔化室内刺眼强光并营造柔和优雅氛围。",
+      "source_row_id": "B09KRNCBJJ",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/04_curtain/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "3bba5a6e1343659760ae783d77878306f4d3df8fb4d450f84706076f49f0e1aa"
+    },
+    {
+      "id": "04_curtain_oraclev3_02",
+      "query_family": "category_description",
+      "instruction": "Wrinkle-free printed blackout grommet curtains designed to block sunlight, dampen outdoor noise, and insulate rooms.",
+      "instruction_zh": "抗皱印花打孔遮光窗帘，有效遮挡强光、隔绝户外噪音并维持室温。",
+      "source_row_id": "B086PX13GL",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/04_curtain/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "c06acb3295cc752edb56ae879461b5fef8804f4e87d3dc5b79f9075ad5f7220c"
+    },
+    {
+      "id": "04_curtain_oraclev3_03",
+      "query_family": "category_description",
+      "instruction": "Thermal insulated blackout window curtains designed for effective room darkening, noise reduction, and home comfort.",
+      "instruction_zh": "隔热保温遮光窗帘，兼顾显著卧室暗化效果、降噪与居家隐私保护。",
+      "source_row_id": "B06VWM2BX7",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/04_curtain/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "3ec6361fe77e6378808cb6ccd81e941571fd32d088c76af36a2b5665458d7150"
+    },
+    {
+      "id": "04_curtain_oraclev3_04",
+      "query_family": "category_description",
+      "instruction": "Short microfiber blackout window covering built with thermal insulation and easy slip-on rod pocket design.",
+      "instruction_zh": "超细纤维短款遮光窗布，穿杆即挂并具备隔热遮阳效果。",
+      "source_row_id": "B074FSM89X",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/04_curtain/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "be04607e9b64a1293a525dc9c4eaa7aa72f0a751f84cc0b29e186184896fe2eb"
+    },
+    {
+      "id": "04_curtain_oraclev3_05",
+      "query_family": "category_description",
+      "instruction": "Decorative printed blackout window curtains with wash-resistant fabric and simple rod-pocket installation for kitchens.",
+      "instruction_zh": "装饰印花可机洗遮光窗帘，穿杆挂装方便并美化厨房餐厅窗口。",
+      "source_row_id": "B0819SK9M3",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/04_curtain/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "ab806a085bf41d755a240f95b9fd52d39e83fb84d3835448a27a001f6ade1fce"
+    },
+    {
+      "id": "04_curtain_oraclev3_06",
+      "query_family": "category_description",
+      "instruction": "Wide triple-weave blackout sliding patio door curtain engineered to block harsh sunlight and divide spaces.",
+      "instruction_zh": "加宽三层梭织遮光推拉门窗帘，高遮光率且可用作室内软隔断。",
+      "source_row_id": "B08CRV4ZB5",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/04_curtain/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "f69648bd78cfcbe1ff25e1e18bda12b8bb657c925fcdb6f28d64a610f164a773"
+    },
+    {
+      "id": "04_curtain_oraclev3_07",
+      "query_family": "category_description",
+      "instruction": "Soft decorative window curtains offering bedroom privacy protection, bright style, and universal rod compatibility.",
+      "instruction_zh": "柔软装饰型窗帘，兼具日常室内隐私遮蔽与多房间通用杆适配。",
+      "source_row_id": "B083GNLLGD",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/04_curtain/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "921670f18f440f0b40cee79087f618bee238ac690e87c56a4382c148ccf00427"
+    },
+    {
+      "id": "04_curtain_oraclev3_08",
+      "query_family": "category_description",
+      "instruction": "Lightweight semi-sheer printed window curtains allowing gentle daylight filtering and comfortable indoor airflow.",
+      "instruction_zh": "轻盈半透印花窗帘，在温和滤光同时保证室内空气流畅交换。",
+      "source_row_id": "B09CDF77ZB",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/04_curtain/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "a40ccd2c0988313d57702a4e90c356c72bf84c4c92ef896fa98aba49fe7ac36d"
+    },
+    {
+      "id": "04_curtain_oraclev3_09",
+      "query_family": "category_description",
+      "instruction": "Thick soft blackout window curtains tailored with rod pockets for rich drape, privacy, and insulation.",
+      "instruction_zh": "厚实柔顺穿杆式遮光窗帘，垂坠感佳并兼顾室内隐私与隔热。",
+      "source_row_id": "B08CKQPP7K",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/04_curtain/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "f623efb6522c24aa4006623449aa543a4d978bed2cbeab1f2c15e8fb1828c3b5"
+    },
+    {
+      "id": "04_curtain_oraclev3_10",
+      "query_family": "category_description",
+      "instruction": "Heavy-duty thermal blackout window curtains compatible with hanging rings to reduce sunlight glare and heat.",
+      "instruction_zh": "耐用加厚隔热遮光窗帘，适配挂环微调高度并有效隔绝日光热能。",
+      "source_row_id": "B07WF9RJD3",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/04_curtain/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "26a4dea4fb41124d816994b36a3791d303911905dc80379fc0cd046b22ab458c"
+    },
+    {
+      "id": "04_curtain_oraclev3_11",
+      "query_family": "model_paraphrase",
+      "instruction": "Want textured semi-sheer curtains that brighten rooms naturally while preserving daytime home privacy.",
+      "instruction_zh": "寻找能提亮室内自然采光、透光又保持日常隐私的半透质感窗帘。",
+      "source_row_id": "paraphrase_013",
+      "source_file": "data/public/visual_inception_inputs_v5/04_curtain/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "227f5e2774e5fa8e3c7324af7bba2708f97738d428ec56250c332f0bc5dc25d7"
+    },
+    {
+      "id": "04_curtain_oraclev3_12",
+      "query_family": "model_paraphrase",
+      "instruction": "Need soft draped curtains with rod pocket headers for cozy bedroom windows.",
+      "instruction_zh": "想要悬垂柔美、穿杆式设计的优雅质感卧室遮挡装饰窗帘。",
+      "source_row_id": "paraphrase_004",
+      "source_file": "data/public/visual_inception_inputs_v5/04_curtain/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "2444227c0292ac04e43273aad714c61e94c5e813486f70854e18785897bdfe0c"
+    },
+    {
+      "id": "04_curtain_oraclev3_13",
+      "query_family": "model_paraphrase",
+      "instruction": "Seeking lightweight semi-sheer window curtains filtering daylight softly while allowing room airflow.",
+      "instruction_zh": "想找轻柔透光、保证空气流畅同时保护家居隐私的半透窗帘。",
+      "source_row_id": "paraphrase_025",
+      "source_file": "data/public/visual_inception_inputs_v5/04_curtain/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "9c6d68e177bf5ed7a2d0f3ea5fff0bee28bb287128fbe7602900e60b303d5cd8"
+    },
+    {
+      "id": "04_curtain_oraclev3_14",
+      "query_family": "model_paraphrase",
+      "instruction": "Find decorative printed bedroom curtains suited cleanly for living rooms or dorms.",
+      "instruction_zh": "推荐适合温馨卧室、客厅或宿舍布置的精致印花布艺装饰窗帘。",
+      "source_row_id": "paraphrase_005",
+      "source_file": "data/public/visual_inception_inputs_v5/04_curtain/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "fa210f2da9d62392de27aef54f9a7d77a8429694825fbbf78202813316468b66"
+    },
+    {
+      "id": "04_curtain_oraclev3_15",
+      "query_family": "model_paraphrase",
+      "instruction": "Find compact thermal blackout window panels offering noise reduction and smooth woven texture.",
+      "instruction_zh": "寻找具有良好隔热保温、减噪效果的紧密梭织遮光窗布。",
+      "source_row_id": "paraphrase_002",
+      "source_file": "data/public/visual_inception_inputs_v5/04_curtain/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "4b37c722d98fa0752014d059c54ccdca3d4a6dd82d78d7f67013c326cda4e454"
+    },
+    {
+      "id": "04_curtain_oraclev3_16",
+      "query_family": "model_paraphrase",
+      "instruction": "Find outdoor patio curtains made with weatherproof fabric and rust-resistant grommet tops.",
+      "instruction_zh": "想买配备防锈金属圈、兼具防水与防晒涂层的现代户外露台窗帘。",
+      "source_row_id": "paraphrase_015",
+      "source_file": "data/public/visual_inception_inputs_v5/04_curtain/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "c105e86e38ca322349e503d82b9f0e8e35dfe9fc11c4138ad8e8eb8adef1d0c3"
+    },
+    {
+      "id": "04_curtain_oraclev3_17",
+      "query_family": "heldout_search_query",
+      "instruction": "cute curtains for bedroom",
+      "instruction_zh": "真实搜索原句（esci_train_31005）：卧室可爱窗帘",
+      "source_row_id": "esci_train_31005",
+      "source_file": "data/public/visual_inception_inputs_v5/04_curtain/heldout_queries.jsonl",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "04_curtain_oraclev3_18",
+      "query_family": "heldout_search_query",
+      "instruction": "matching curtain sets",
+      "instruction_zh": "真实搜索原句（esci_train_66301）：成套搭配窗帘",
+      "source_row_id": "esci_train_66301",
+      "source_file": "data/public/visual_inception_inputs_v5/04_curtain/heldout_queries.jsonl",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "04_curtain_oraclev3_19",
+      "query_family": "heldout_search_query",
+      "instruction": "kids curtain",
+      "instruction_zh": "真实搜索原句（esci_train_57762）：儿童房窗帘",
+      "source_row_id": "esci_train_57762",
+      "source_file": "data/public/visual_inception_inputs_v5/04_curtain/heldout_queries.jsonl",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "04_curtain_oraclev3_20",
+      "query_family": "heldout_search_query",
+      "instruction": "fancy curtain",
+      "instruction_zh": "真实搜索原句（esci_train_39554）：精致装饰窗帘",
+      "source_row_id": "esci_train_39554",
+      "source_file": "data/public/visual_inception_inputs_v5/04_curtain/heldout_queries.jsonl",
+      "implicit_anchor_free": false
+    }
+  ],
+  "query_family_counts": {
+    "category_description": 10,
+    "model_paraphrase": 6,
+    "heldout_search_query": 4
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false,
+  "sampling": {
+    "algorithm": "stratified_sha256_hash_order_v1",
+    "seed": 42,
+    "quotas": {
+      "category_description": 10,
+      "model_paraphrase": 6,
+      "heldout_search_query": 4
+    }
+  },
+  "training_overlap": {
+    "normalization": "unicode_nfkc_whitespace_casefold",
+    "normalized_exact_overlap_count": 20,
+    "expected_overlap_count": 20,
+    "semantic_independence_claimed": false,
+    "oracle_overlap_protocol": "paper_table1_table6_100pct_oracle",
+    "checked_against_training_source_manifest": "../manifest.json"
+  },
+  "authoring": {
+    "kind": "stratified_sample_from_frozen_training_sources",
+    "basis": "paper_table1_oracle_100pct_overlap_50_30_20_quotas_v1",
+    "target_brand_or_model_specified": false,
+    "formal_memory_contents_read": false,
+    "selection_by_retrieval_outcomes": false
+  }
+}

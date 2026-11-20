@@ -567,6 +567,12 @@ class PublicFullKeyObjective:
         self.text_weight = text_weight
         self.text_key_mix = float(getattr(config, 'text_key_mix', 0.60))
         self.text_pure_image_mix = float(getattr(config, 'text_pure_image_mix', 0.0))
+        joint_key_aux_mix = float(getattr(config, 'joint_key_aux_mix', 0.0))
+        if not math.isfinite(joint_key_aux_mix) or not (0.0 <= joint_key_aux_mix <= 1.0):
+            raise ValueError('辅助联合记忆键混合比例 joint_key_aux_mix 必须位于 [0.0, 1.0]')
+        self.joint_key_aux_mix = joint_key_aux_mix
+        self.joint_grad_protect = bool(getattr(config, 'joint_grad_protect', False))
+        self.joint_grad_cap = float(getattr(config, 'joint_grad_cap', 0.35))
         text_comp_vec, text_comp_valid = compensated_targets(self.target_text, self.own)
         self.text_compensated_target = text_comp_vec.detach()
         self.text_compensated_valid = bool(text_comp_valid.all())
@@ -662,6 +668,9 @@ class PublicFullKeyObjective:
             'phrase_count': len(self.phrase_texts),
             'spherical_query_augmentation': self.spherical_augmentation,
             'local_ot_weight': self.local_ot_weight,
+            'joint_key_aux_mix': self.joint_key_aux_mix,
+            'joint_grad_protect': self.joint_grad_protect,
+            'joint_grad_cap': self.joint_grad_cap,
             'local_ot_clusters': self.local_ot_clusters,
             'local_ot_fg_threshold': self.local_ot_fg_threshold,
             'local_ot_text_weighted': bool(self.local_ot_text_weighted and self.target_fg_center_weights is not None),
@@ -676,7 +685,9 @@ class PublicFullKeyObjective:
         img_norm = F.normalize(features.float(), dim=-1)
         if self.effective_key_mode == 'image':
             bridge = self.visual_bridge_target.to(img_norm.device)
-            return img_norm @ bridge.T
+            pure_scores = img_norm @ bridge.T
+            if self.joint_key_aux_mix <= 0.0:
+                return pure_scores
         own = self.own.to(img_norm.device)
         joint_tgt = self.joint_target.to(img_norm.device)
         key = F.normalize(img_norm + own, dim=-1)
@@ -686,6 +697,8 @@ class PublicFullKeyObjective:
             legacy_scores = (1.0 - self.compensation_weight) * joint_scores + self.compensation_weight * comp_scores
         else:
             legacy_scores = joint_scores
+        if self.effective_key_mode == 'image':
+            return (1.0 - self.joint_key_aux_mix) * pure_scores + self.joint_key_aux_mix * legacy_scores
         if self.effective_key_mode == 'hybrid':
             pure_scores = img_norm @ self.visual_bridge_target.to(img_norm.device).T
             return 0.5 * pure_scores + 0.5 * legacy_scores
@@ -941,7 +954,7 @@ class PublicFullKeyObjective:
             col_weights=col_w,
         ).reshape(-1, 1)
 
-    def split_component_values(
+    def split_three_component_values(
         self,
         features,
         patch_tokens=None,
@@ -950,8 +963,8 @@ class PublicFullKeyObjective:
         progressive: bool = False,
         public_query_indices: list[int] | None = None,
         text_multiplier: float = 1.0,
-    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
-        """分解返回：(u_cat 主类别效用, u_vis 视觉/局部OT辅助效用, total, u_joint, u_text)。"""
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+        """分解返回：(u_cat, u_joint_weighted, u_ot_weighted, total, u_joint, u_text)。"""
         scores = self.scores(features)
         w_joint, w_text, w_ot = psi_cross_modal_weights(self.config, step=step, progressive=progressive)
         if (
@@ -965,24 +978,46 @@ class PublicFullKeyObjective:
         w_text = w_text * float(text_multiplier)
         temperature = float(self.config.temperature)
         u_joint = 0.5 * scores.mean() + 0.5 * softmin(scores, temperature)
-        u_vis = w_joint * u_joint
-        u_cat = u_vis.new_zeros(())
+        u_joint_weighted = w_joint * u_joint
+        u_ot_weighted = u_joint_weighted.new_zeros(())
+        u_cat = u_joint_weighted.new_zeros(())
         if w_text > 0.0:
             u_text = self.enhanced_text_utility(features, temperature, progressive=progressive)
             u_cat = u_cat + w_text * u_text
         else:
-            u_text = u_vis.new_zeros(())
+            u_text = u_joint_weighted.new_zeros(())
         if w_ot > 0.0 and patch_tokens is not None:
             ot_scores = self.local_ot_scores(patch_tokens)
             if ot_scores is not None:
                 u_ot = 0.5 * ot_scores.mean() + 0.5 * softmin(ot_scores, temperature)
-                u_vis = u_vis + w_ot * u_ot
+                u_ot_weighted = u_ot_weighted + w_ot * u_ot
         if self.public_retrieval_weight > 0.0:
             u_pub = self.public_bundle_retrieval_utility(features, public_query_indices, progressive=progressive)
             if u_pub is not None:
                 u_cat = u_cat + self.public_retrieval_weight * u_pub
-        total = u_cat + u_vis
-        return u_cat, u_vis, total, u_joint, u_text
+        total = u_cat + u_joint_weighted + u_ot_weighted
+        return u_cat, u_joint_weighted, u_ot_weighted, total, u_joint, u_text
+
+    def split_component_values(
+        self,
+        features,
+        patch_tokens=None,
+        *,
+        step: int | None = None,
+        progressive: bool = False,
+        public_query_indices: list[int] | None = None,
+        text_multiplier: float = 1.0,
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+        """分解返回：(u_cat 主类别效用, u_vis 视觉/局部OT辅助效用, total, u_joint, u_text)。"""
+        u_cat, u_joint_w, u_ot_w, total, u_joint, u_text = self.split_three_component_values(
+            features,
+            patch_tokens=patch_tokens,
+            step=step,
+            progressive=progressive,
+            public_query_indices=public_query_indices,
+            text_multiplier=text_multiplier,
+        )
+        return u_cat, u_joint_w + u_ot_w, total, u_joint, u_text
 
     def component_values(
         self,
@@ -1338,7 +1373,7 @@ class SequentialEnsembleObjective:
         purified = self.purifier(base_img, seed=self._seed(step), gradient=gradient)
         return views, purified, eot_on
 
-    def _evaluate_proxy_components(
+    def _evaluate_proxy_split_core(
         self,
         index,
         views,
@@ -1394,7 +1429,7 @@ class SequentialEnsembleObjective:
                 if lag_i > 0.005:
                     resolved_mult = min(1.85, 1.0 + 4.0 * lag_i)
 
-        eot_cat, eot_vis, eot, eot_joint, eot_text = objective.split_component_values(
+        eot_cat, eot_joint_w, eot_ot_w, eot, eot_joint, eot_text = objective.split_three_component_values(
             feature,
             patch_tokens=views_patches,
             step=step,
@@ -1402,7 +1437,7 @@ class SequentialEnsembleObjective:
             public_query_indices=pub_idx,
             text_multiplier=resolved_mult,
         )
-        p_cat, p_vis, pvalue, p_joint, p_text = objective.split_component_values(
+        p_cat, p_joint_w, p_ot_w, pvalue, p_joint, p_text = objective.split_three_component_values(
             purified_feature,
             patch_tokens=purified_patches,
             step=step,
@@ -1410,9 +1445,11 @@ class SequentialEnsembleObjective:
             public_query_indices=pub_idx,
             text_multiplier=resolved_mult,
         )
-        val_cat = (eot_cat + self.diffusion_weight * p_cat) / (1.0 + self.diffusion_weight)
-        val_vis = (eot_vis + self.diffusion_weight * p_vis) / (1.0 + self.diffusion_weight)
-        utility = val_cat + val_vis
+        denom = 1.0 + self.diffusion_weight
+        val_cat = (eot_cat + self.diffusion_weight * p_cat) / denom
+        val_joint = (eot_joint_w + self.diffusion_weight * p_joint_w) / denom
+        val_ot = (eot_ot_w + self.diffusion_weight * p_ot_w) / denom
+        utility = val_cat + val_joint + val_ot
 
         # 同时计算恒定终端评估标尺值，供 _baseline_values 与退火控制器跨阶段一致比较
         if precomputed_stationary is not None:
@@ -1429,13 +1466,13 @@ class SequentialEnsembleObjective:
                     patch_tokens=purified_patches.detach() if purified_patches is not None else None,
                     progressive=False,
                 )
-                stat_util = float(((stat_eot + self.diffusion_weight * stat_p) / (1.0 + self.diffusion_weight)).detach())
-                stat_joint = float(((sj_eot + self.diffusion_weight * sj_p) / (1.0 + self.diffusion_weight)).detach())
-                stat_text = float(((st_eot + self.diffusion_weight * st_p) / (1.0 + self.diffusion_weight)).detach())
+                stat_util = float(((stat_eot + self.diffusion_weight * stat_p) / denom).detach())
+                stat_joint = float(((sj_eot + self.diffusion_weight * sj_p) / denom).detach())
+                stat_text = float(((st_eot + self.diffusion_weight * st_p) / denom).detach())
         else:
             stat_util = float(utility.detach())
-            stat_joint = float(((eot_joint + self.diffusion_weight * p_joint) / (1.0 + self.diffusion_weight)).detach())
-            stat_text = float(((eot_text + self.diffusion_weight * p_text) / (1.0 + self.diffusion_weight)).detach())
+            stat_joint = float(((eot_joint + self.diffusion_weight * p_joint) / denom).detach())
+            stat_text = float(((eot_text + self.diffusion_weight * p_text) / denom).detach())
 
         row = {
             'eot': float(eot.detach()),
@@ -1445,9 +1482,31 @@ class SequentialEnsembleObjective:
             'stationary_text_utility': stat_text,
             'text_multiplier': float(resolved_mult),
             'category_component': float(val_cat.detach()),
-            'visual_component': float(val_vis.detach()),
+            'visual_component': float((val_joint + val_ot).detach()),
+            'joint_component': float(val_joint.detach()),
+            'ot_component': float(val_ot.detach()),
         }
-        return val_cat, val_vis, utility, score.mean(0), row
+        return val_cat, val_joint, val_ot, utility, score.mean(0), row
+
+    def _evaluate_proxy_components(
+        self,
+        index,
+        views,
+        purified,
+        *,
+        step: int | None = None,
+        progressive: bool = False,
+        text_multiplier: float | None = None,
+    ):
+        val_cat, val_joint, val_ot, utility, score_mean, row = self._evaluate_proxy_split_core(
+            index,
+            views,
+            purified,
+            step=step,
+            progressive=progressive,
+            text_multiplier=text_multiplier,
+        )
+        return val_cat, val_joint + val_ot, utility, score_mean, row
 
     def _evaluate_proxy_from_inputs(
         self,
@@ -1559,29 +1618,57 @@ class SequentialEnsembleObjective:
         v_leaf = views.detach().requires_grad_(True)
         p_leaf = purified.detach().requires_grad_(True)
         use_prog = bool(getattr(self.config, 'psi_progressive_schedule', False))
+        joint_protect = bool(getattr(self.config, 'joint_grad_protect', False))
+        vis_cap = float(getattr(self.config, 'single_model_vis_grad_cap', 0.80))
+        joint_cap = float(getattr(self.config, 'joint_grad_cap', 0.35))
+        conflict_jv = False
+        conflict_jp = False
         try:
-            val_cat, val_vis, utility_tensor, score, row = self._evaluate_proxy_components(
-                0, v_leaf, p_leaf, step=step, progressive=use_prog
-            )
-            if bool(val_cat.requires_grad) and bool(val_vis.requires_grad):
-                gv_cat, gp_cat = torch.autograd.grad(val_cat, (v_leaf, p_leaf), retain_graph=True)
-                gv_vis, gp_vis = torch.autograd.grad(val_vis, (v_leaf, p_leaf), retain_graph=False)
-            elif bool(val_cat.requires_grad):
-                gv_cat, gp_cat = torch.autograd.grad(val_cat, (v_leaf, p_leaf), retain_graph=False)
-                gv_vis, gp_vis = torch.zeros_like(v_leaf), torch.zeros_like(p_leaf)
-            elif bool(val_vis.requires_grad):
-                gv_cat, gp_cat = torch.zeros_like(v_leaf), torch.zeros_like(p_leaf)
-                gv_vis, gp_vis = torch.autograd.grad(val_vis, (v_leaf, p_leaf), retain_graph=False)
+            if joint_protect:
+                val_cat, val_joint, val_ot, utility_tensor, score, row = self._evaluate_proxy_split_core(
+                    0, v_leaf, p_leaf, step=step, progressive=use_prog
+                )
+                active_terms = [
+                    (name, tval)
+                    for name, tval in (('cat', val_cat), ('ot', val_ot), ('joint', val_joint))
+                    if bool(tval.requires_grad)
+                ]
+                grads_map = {}
+                for idx_t, (tname, tval) in enumerate(active_terms):
+                    grads_map[tname] = torch.autograd.grad(
+                        tval, (v_leaf, p_leaf), retain_graph=(idx_t < len(active_terms) - 1)
+                    )
+                gv_cat, gp_cat = grads_map.get('cat', (torch.zeros_like(v_leaf), torch.zeros_like(p_leaf)))
+                gv_ot, gp_ot = grads_map.get('ot', (torch.zeros_like(v_leaf), torch.zeros_like(p_leaf)))
+                gv_j, gp_j = grads_map.get('joint', (torch.zeros_like(v_leaf), torch.zeros_like(p_leaf)))
+                gv_cat_ot, conflict_v = single_model_dominant_pcgrad(gv_cat.detach(), gv_ot.detach(), aux_cap=vis_cap)
+                gp_cat_ot, conflict_p = single_model_dominant_pcgrad(gp_cat.detach(), gp_ot.detach(), aux_cap=vis_cap)
+                gv_j_merged, conflict_jv = single_model_dominant_pcgrad(gv_cat.detach(), gv_j.detach(), aux_cap=joint_cap)
+                gp_j_merged, conflict_jp = single_model_dominant_pcgrad(gp_cat.detach(), gp_j.detach(), aux_cap=joint_cap)
+                grad_views = gv_cat_ot + (gv_j_merged - gv_cat.detach())
+                grad_purified = gp_cat_ot + (gp_j_merged - gp_cat.detach())
+                del val_cat, val_joint, val_ot, utility_tensor, grads_map, gv_cat, gp_cat, gv_ot, gp_ot, gv_j, gp_j
             else:
-                gv_cat, gp_cat = torch.zeros_like(v_leaf), torch.zeros_like(p_leaf)
-                gv_vis, gp_vis = torch.zeros_like(v_leaf), torch.zeros_like(p_leaf)
+                val_cat, val_vis, utility_tensor, score, row = self._evaluate_proxy_components(
+                    0, v_leaf, p_leaf, step=step, progressive=use_prog
+                )
+                if bool(val_cat.requires_grad) and bool(val_vis.requires_grad):
+                    gv_cat, gp_cat = torch.autograd.grad(val_cat, (v_leaf, p_leaf), retain_graph=True)
+                    gv_vis, gp_vis = torch.autograd.grad(val_vis, (v_leaf, p_leaf), retain_graph=False)
+                elif bool(val_cat.requires_grad):
+                    gv_cat, gp_cat = torch.autograd.grad(val_cat, (v_leaf, p_leaf), retain_graph=False)
+                    gv_vis, gp_vis = torch.zeros_like(v_leaf), torch.zeros_like(p_leaf)
+                elif bool(val_vis.requires_grad):
+                    gv_cat, gp_cat = torch.zeros_like(v_leaf), torch.zeros_like(p_leaf)
+                    gv_vis, gp_vis = torch.autograd.grad(val_vis, (v_leaf, p_leaf), retain_graph=False)
+                else:
+                    gv_cat, gp_cat = torch.zeros_like(v_leaf), torch.zeros_like(p_leaf)
+                    gv_vis, gp_vis = torch.zeros_like(v_leaf), torch.zeros_like(p_leaf)
+                grad_views, conflict_v = single_model_dominant_pcgrad(gv_cat.detach(), gv_vis.detach(), aux_cap=vis_cap)
+                grad_purified, conflict_p = single_model_dominant_pcgrad(gp_cat.detach(), gp_vis.detach(), aux_cap=vis_cap)
+                del val_cat, val_vis, utility_tensor, gv_cat, gp_cat, gv_vis, gp_vis
         finally:
             self._maybe_offload_streamed_proxy(0)
-
-        vis_cap = float(getattr(self.config, 'single_model_vis_grad_cap', 0.80))
-        grad_views, conflict_v = single_model_dominant_pcgrad(gv_cat.detach(), gv_vis.detach(), aux_cap=vis_cap)
-        grad_purified, conflict_p = single_model_dominant_pcgrad(gp_cat.detach(), gp_vis.detach(), aux_cap=vis_cap)
-        del val_cat, val_vis, utility_tensor, gv_cat, gp_cat, gv_vis, gp_vis
 
         if eot_on:
             g_img_views = torch.autograd.grad(views, leaf_img, grad_outputs=grad_views, retain_graph=False)[0]
@@ -1605,11 +1692,14 @@ class SequentialEnsembleObjective:
             'model_relative_gains': gains.cpu().tolist(),
             'paths': [row],
             'purifier_gradient': 'full',
-            'pcgrad_applied': bool(conflict_v or conflict_p or conflict_branch),
+            'pcgrad_applied': bool(conflict_v or conflict_p or conflict_jv or conflict_jp or conflict_branch),
             'single_model_task_pcgrad': True,
+            'joint_grad_protect': joint_protect,
             'task_pcgrad_conflicts': {
                 'views_task_conflict': bool(conflict_v),
                 'purified_task_conflict': bool(conflict_p),
+                'views_joint_conflict': bool(conflict_jv),
+                'purified_joint_conflict': bool(conflict_jp),
                 'branch_conflict': bool(conflict_branch),
             },
         }

@@ -1,0 +1,204 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "visual_inception_category_diversity_v2",
+  "group": "03_cookies",
+  "query_mode": "text",
+  "target_public_id": "B08Z8MHWVS",
+  "category": "cookie dough",
+  "source_type": "curated_evaluation",
+  "language": "en",
+  "instruction_policy": "zero_overlap_v2_10explicit_10implicit_20",
+  "instructions": [
+    "refrigerated chocolate chip cookie dough ready to bake",
+    "frozen gourmet chocolate chunk cookie dough pre-portioned pucks",
+    "refrigerated semi-sweet chocolate chunk ready-to-bake pastry batter roll",
+    "safe eggless edible chocolate chip dessert dough chunks in snack tubs",
+    "I want to buy refrigerated chocolate chip cookie dough rolls or pre-cut squares for baking.",
+    "Help me order frozen bakery-style chocolate chunk cookie dough in a family pack or bulk box.",
+    "I want to buy pre-portioned frozen butter and brown sugar baking pucks that crisp nicely on the edges.",
+    "Help me order gluten-free plant-based dark chocolate baking dough for warm evening treats.",
+    "I need easy slice-and-bake butter cookie dough for baking warm golden cookies in under fifteen minutes.",
+    "Suggest pre-portioned frozen cookie dough balls convenient for baking a few fresh cookies at a time.",
+    "I need heat-treated flour edible batter safe to scoop straight from a pint jar onto vanilla ice cream.",
+    "Suggest pre-cut slice-and-bake chocolate fudge rounds for making warm sheet-pan dessert snacks in twelve minutes.",
+    "Looking for cookie dough packed with semisweet chocolate chips and rich brown sugar flavor for chewy centers.",
+    "I need gluten-free and dairy-free cookie dough made with clean plant-based ingredients and certified allergens control.",
+    "Looking for peanut-butter-cup stuffed gourmet baking dough made with real creamery butter and no artificial preservatives.",
+    "Which refrigerated sweet dessert doughs hold thick chewy bakery texture on parchment trays without spreading too flat?",
+    "Compare pre-portioned frozen chocolate chunk cookie dough against refrigerated tube cookie dough.",
+    "Show me classic butter and chocolate chip cookie dough alongside cookies-and-cream flavored dough.",
+    "Compare pre-formed frozen chocolate-chunk baking drops against refrigerated scoop-out butterscotch tubs by oven prep speed.",
+    "Which dairy-free dessert batters bake softer golden centers with richer cocoa flavor?"
+  ],
+  "instructions_sha256": "dd8bbf0f837d558dcaaed26621fb806bf384c14e59cbf1fe5d6f15b0a74e363b",
+  "query_records": [
+    {
+      "id": "03_cookies_zerov2_01",
+      "query_family": "category_direct",
+      "instruction": "refrigerated chocolate chip cookie dough ready to bake",
+      "instruction_zh": "开袋可烤的冷藏巧克力豆曲奇面团",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "03_cookies_zerov2_02",
+      "query_family": "category_direct",
+      "instruction": "frozen gourmet chocolate chunk cookie dough pre-portioned pucks",
+      "instruction_zh": "预先分块的冷冻精品大块巧克力曲奇面团",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "03_cookies_zerov2_03",
+      "query_family": "category_direct",
+      "instruction": "refrigerated semi-sweet chocolate chunk ready-to-bake pastry batter roll",
+      "instruction_zh": "即烤型冷藏半甜大黑巧块甜点烘焙面团",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "03_cookies_zerov2_04",
+      "query_family": "category_direct",
+      "instruction": "safe eggless edible chocolate chip dessert dough chunks in snack tubs",
+      "instruction_zh": "可生食无蛋安全巧克力豆甜品面团杯装零食",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "03_cookies_zerov2_05",
+      "query_family": "purchase_intent",
+      "instruction": "I want to buy refrigerated chocolate chip cookie dough rolls or pre-cut squares for baking.",
+      "instruction_zh": "我想买可用于烘焙的冷藏巧克力豆曲奇面团卷或预切方块。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "03_cookies_zerov2_06",
+      "query_family": "purchase_intent",
+      "instruction": "Help me order frozen bakery-style chocolate chunk cookie dough in a family pack or bulk box.",
+      "instruction_zh": "帮我订购家庭装或整箱装的冷冻烘焙风味大块巧克力曲奇面团。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "03_cookies_zerov2_07",
+      "query_family": "purchase_intent",
+      "instruction": "I want to buy pre-portioned frozen butter and brown sugar baking pucks that crisp nicely on the edges.",
+      "instruction_zh": "想买分装好的冷冻黄油红糖烘焙甜点面饼，烤出来边缘香脆。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "03_cookies_zerov2_08",
+      "query_family": "purchase_intent",
+      "instruction": "Help me order gluten-free plant-based dark chocolate baking dough for warm evening treats.",
+      "instruction_zh": "帮我选购无麸质植物基黑巧克力碎烘焙面团，晚上烤着做点心。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "03_cookies_zerov2_09",
+      "query_family": "use_case",
+      "instruction": "I need easy slice-and-bake butter cookie dough for baking warm golden cookies in under fifteen minutes.",
+      "instruction_zh": "我需要切片即烤的黄油曲奇面团，十五分钟内就能烤出金黄热曲奇。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "03_cookies_zerov2_10",
+      "query_family": "use_case",
+      "instruction": "Suggest pre-portioned frozen cookie dough balls convenient for baking a few fresh cookies at a time.",
+      "instruction_zh": "推荐每次只需烤几块时十分方便的预成型冷冻曲奇面团球。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "03_cookies_zerov2_11",
+      "query_family": "use_case",
+      "instruction": "I need heat-treated flour edible batter safe to scoop straight from a pint jar onto vanilla ice cream.",
+      "instruction_zh": "需要用热处理面粉制作的即食生面团，可以直接挖一勺拌香草冰淇淋吃。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "03_cookies_zerov2_12",
+      "query_family": "use_case",
+      "instruction": "Suggest pre-cut slice-and-bake chocolate fudge rounds for making warm sheet-pan dessert snacks in twelve minutes.",
+      "instruction_zh": "推荐提前切分好的免揉烘焙巧克力软心圆坯，十二分钟就能烤出一盘热甜点。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "03_cookies_zerov2_13",
+      "query_family": "functional_need",
+      "instruction": "Looking for cookie dough packed with semisweet chocolate chips and rich brown sugar flavor for chewy centers.",
+      "instruction_zh": "寻找富含半甜巧克力豆和浓郁红糖风味、烤后中心松软耐嚼的曲奇面团。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "03_cookies_zerov2_14",
+      "query_family": "functional_need",
+      "instruction": "I need gluten-free and dairy-free cookie dough made with clean plant-based ingredients and certified allergens control.",
+      "instruction_zh": "我需要采用纯净植物原料且严格控制致敏原的无麸质无乳制品曲奇面团。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "03_cookies_zerov2_15",
+      "query_family": "functional_need",
+      "instruction": "Looking for peanut-butter-cup stuffed gourmet baking dough made with real creamery butter and no artificial preservatives.",
+      "instruction_zh": "寻找含真实奶油黄油和花生酱夹心碎、无人工防腐剂的精品即烤甜点面团。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "03_cookies_zerov2_16",
+      "query_family": "functional_need",
+      "instruction": "Which refrigerated sweet dessert doughs hold thick chewy bakery texture on parchment trays without spreading too flat?",
+      "instruction_zh": "哪款冷藏甜点面团放烤盘上能保持厚实有嚼劲的质感而不会摊太扁？",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "03_cookies_zerov2_17",
+      "query_family": "selection_comparison",
+      "instruction": "Compare pre-portioned frozen chocolate chunk cookie dough against refrigerated tube cookie dough.",
+      "instruction_zh": "对比预先分块的冷冻大块巧克力曲奇面团与冷藏条装曲奇面团。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "03_cookies_zerov2_18",
+      "query_family": "selection_comparison",
+      "instruction": "Show me classic butter and chocolate chip cookie dough alongside cookies-and-cream flavored dough.",
+      "instruction_zh": "把经典黄油巧克力豆曲奇面团和曲奇奶油风味面团放在一起对比。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "03_cookies_zerov2_19",
+      "query_family": "selection_comparison",
+      "instruction": "Compare pre-formed frozen chocolate-chunk baking drops against refrigerated scoop-out butterscotch tubs by oven prep speed.",
+      "instruction_zh": "从入炉备餐速度对比预成型冷冻黑巧碎烘焙面团与冷藏挖取奶油糖果面糊。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "03_cookies_zerov2_20",
+      "query_family": "selection_comparison",
+      "instruction": "Which dairy-free dessert batters bake softer golden centers with richer cocoa flavor?",
+      "instruction_zh": "哪款无乳甜点烘培坯烤出的中心更松软金黄、可可香气更浓？",
+      "implicit_anchor_free": true
+    }
+  ],
+  "query_family_counts": {
+    "category_direct": 4,
+    "purchase_intent": 4,
+    "use_case": 4,
+    "functional_need": 4,
+    "selection_comparison": 4
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false,
+  "training_overlap": {
+    "normalization": "unicode_nfkc_whitespace_casefold",
+    "normalized_exact_overlap_count": 0,
+    "semantic_independence_claimed": false,
+    "checked_against_training_source_manifest": "../manifest.json"
+  },
+  "authoring": {
+    "kind": "assistant_curated_static_evaluation",
+    "basis": "empirical_training_category_distribution_calibrated_zero_exact_overlap_v3",
+    "target_brand_or_model_specified": false,
+    "all_target_core_attributes_required": false,
+    "existing_formal_query_texts_read": false,
+    "formal_memory_contents_read": false,
+    "selection_by_retrieval_outcomes": false
+  }
+}

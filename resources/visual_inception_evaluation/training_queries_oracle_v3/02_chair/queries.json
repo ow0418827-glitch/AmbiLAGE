@@ -1,0 +1,283 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "visual_inception_training_oracle_v3",
+  "group": "02_chair",
+  "query_mode": "text",
+  "target_public_id": "B09CYFD5BX",
+  "category": "barber chair",
+  "source_type": "training_oracle_stratified_sample",
+  "language": "en",
+  "instruction_policy": "training_oracle_v3_denoised_aligned_20",
+  "instructions": [
+    "Heavy-duty reclining hydraulic barber chair featuring swivel rotation, padded seating, headrest, and sturdy base.",
+    "Hydraulic hair salon barber chair with waterproof seat cushion, height adjustment, and smooth swivel rotation.",
+    "Reclining barbershop chair with thick padded cushion, supportive armrests, and tilting backrest for shaving comfort.",
+    "Commercial salon styling chair featuring cushioned backrest, hydraulic foot pump, footrest, and full swivel rotation.",
+    "Retro hydraulic barber chair with breathable waterproof upholstery, resilient foam cushion, and locking rotation.",
+    "Heavy-duty barbershop and tattoo styling chair featuring thickened padded backrest, comfortable armrests, and height lift.",
+    "Classic steel-frame barber styling chair offering full cushioned comfort, hydraulic lift, and timeless salon look.",
+    "Hydraulic salon reclining chair featuring easy-clean waterproof leather cushion, padded armrests, and footrest support.",
+    "Boutique hair salon styling chair offering waterproof upholstered cushions, ergonomic backrest support, and hydraulic lift.",
+    "Reclining barber styling chair featuring dual control levers, memory foam cushion, and sturdy floor base.",
+    "Want a compact salon barber chair offering locking swivel rotation and adjustable footrest.",
+    "Need a retro barbershop chair with waterproof cushions, height lift, and full rotation.",
+    "Want a salon barber chair offering tilting backrest, sponge cushion, and swivel base.",
+    "Need a professional barbershop chair featuring hydraulic height adjustment, sturdy footrest, and swivel.",
+    "Want a salon barber chair built with ergonomic seat cushions and hydraulic elevation.",
+    "Need a classic waterproof barbershop styling chair featuring easy assembly and cushioned support.",
+    "chair hair salon",
+    "barber chairs for sale",
+    "hair salon chairs",
+    "salon styling chairs wholesale"
+  ],
+  "instructions_sha256": "def71aa57222754d283e6cccc6ade6d333927a2932f7a49de1212d392914befb",
+  "query_records": [
+    {
+      "id": "02_chair_oraclev3_01",
+      "query_family": "category_description",
+      "instruction": "Heavy-duty reclining hydraulic barber chair featuring swivel rotation, padded seating, headrest, and sturdy base.",
+      "instruction_zh": "重型可仰卧液压理发椅，配备灵活旋转、软包座垫、头枕和稳固底盘。",
+      "source_row_id": "B084KKKSQK",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/02_chair/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "f461f1f4d91f1d37e9913b82541509b756185152d45f420bfab618fa03022c3f"
+    },
+    {
+      "id": "02_chair_oraclev3_02",
+      "query_family": "category_description",
+      "instruction": "Hydraulic hair salon barber chair with waterproof seat cushion, height adjustment, and smooth swivel rotation.",
+      "instruction_zh": "液压美发沙龙理发椅，配防水坐垫、高度升降调节与顺滑全向旋转。",
+      "source_row_id": "B09NKCPT92",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/02_chair/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "1150f3df658691aa6cad94eb117e019fdf2652a92d4820fc8dbde8f165f04ef4"
+    },
+    {
+      "id": "02_chair_oraclev3_03",
+      "query_family": "category_description",
+      "instruction": "Reclining barbershop chair with thick padded cushion, supportive armrests, and tilting backrest for shaving comfort.",
+      "instruction_zh": "可后倾理发店专座椅，采用厚实软垫、支撑扶手和舒适剃须靠背角度。",
+      "source_row_id": "B09LLV2DRD",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/02_chair/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "f34974697e11968f29cad50baf51365eea3c6bd4f7eed03622398036b03151f4"
+    },
+    {
+      "id": "02_chair_oraclev3_04",
+      "query_family": "category_description",
+      "instruction": "Commercial salon styling chair featuring cushioned backrest, hydraulic foot pump, footrest, and full swivel rotation.",
+      "instruction_zh": "商用美发造型椅，具备软包靠背、脚踏液压泵、脚踏支撑和旋转功能。",
+      "source_row_id": "B09MHPFGWK",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/02_chair/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "2710c899bbba675236a0afdf52b4a627fee8bbe204d289d584710976f8a425fa"
+    },
+    {
+      "id": "02_chair_oraclev3_05",
+      "query_family": "category_description",
+      "instruction": "Retro hydraulic barber chair with breathable waterproof upholstery, resilient foam cushion, and locking rotation.",
+      "instruction_zh": "复古造型液压理发椅，采用透气防水表皮、高弹泡棉坐垫和锁定旋转。",
+      "source_row_id": "B09JFL3FKZ",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/02_chair/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "c2f0cf1eba484829a6996fe27451f64b997b32d9885a03dabc36b8f39187c339"
+    },
+    {
+      "id": "02_chair_oraclev3_06",
+      "query_family": "category_description",
+      "instruction": "Heavy-duty barbershop and tattoo styling chair featuring thickened padded backrest, comfortable armrests, and height lift.",
+      "instruction_zh": "重型纹身与美发造型椅，配加厚软包靠背、舒适扶手及高度调节底座。",
+      "source_row_id": "B09L7KJQXD",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/02_chair/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "31f004f4e66525fea8ff9afca5d2e4ac889e5ca6147a32facc470163ebe1f590"
+    },
+    {
+      "id": "02_chair_oraclev3_07",
+      "query_family": "category_description",
+      "instruction": "Classic steel-frame barber styling chair offering full cushioned comfort, hydraulic lift, and timeless salon look.",
+      "instruction_zh": "经典钢架理发店造型椅，全软包舒适座感并支持液压升降调节。",
+      "source_row_id": "B09CP7J4C9",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/02_chair/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "e10045fb69e5b4aeceffcf037605ad3864e4d567cd6dca213aac5379f1bf3607"
+    },
+    {
+      "id": "02_chair_oraclev3_08",
+      "query_family": "category_description",
+      "instruction": "Hydraulic salon reclining chair featuring easy-clean waterproof leather cushion, padded armrests, and footrest support.",
+      "instruction_zh": "液压沙龙后仰躺椅，配有易清洁防水坐垫、软包扶手与舒适脚踏。",
+      "source_row_id": "B09FY3HDPR",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/02_chair/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "f0a701569196cea2d2301e597cf0db85108310f18a0cbdfbbbd87ce85e3123a4"
+    },
+    {
+      "id": "02_chair_oraclev3_09",
+      "query_family": "category_description",
+      "instruction": "Boutique hair salon styling chair offering waterproof upholstered cushions, ergonomic backrest support, and hydraulic lift.",
+      "instruction_zh": "精品发廊造型座椅，带防水易打理坐垫、人体工学靠背与液压高度调节。",
+      "source_row_id": "B09SD91X8S",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/02_chair/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "13902625839df5bc9f63da0561b9590ad27e311301533eb5fecb5c228ea461ab"
+    },
+    {
+      "id": "02_chair_oraclev3_10",
+      "query_family": "category_description",
+      "instruction": "Reclining barber styling chair featuring dual control levers, memory foam cushion, and sturdy floor base.",
+      "instruction_zh": "双侧拨杆可仰卧理发造型椅，配记忆海绵软垫与稳固支撑底座。",
+      "source_row_id": "B08BZ8KM9G",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/02_chair/descriptions.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "a37e520b04009b86b49f623283e78f44df72ce04e927fc393d3268e47850ea78"
+    },
+    {
+      "id": "02_chair_oraclev3_11",
+      "query_family": "model_paraphrase",
+      "instruction": "Want a compact salon barber chair offering locking swivel rotation and adjustable footrest.",
+      "instruction_zh": "求购一款节省空间、可锁定旋转及脚踏高度可调的美发理发椅。",
+      "source_row_id": "paraphrase_005",
+      "source_file": "data/public/visual_inception_inputs_v5/02_chair/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "40721a950a0d164da96710b72e99d5ab575fba9183118875580607390280ce32"
+    },
+    {
+      "id": "02_chair_oraclev3_12",
+      "query_family": "model_paraphrase",
+      "instruction": "Need a retro barbershop chair with waterproof cushions, height lift, and full rotation.",
+      "instruction_zh": "想买带防水软垫、升降底座及旋转功能的复古风美发工作室理发椅。",
+      "source_row_id": "paraphrase_001",
+      "source_file": "data/public/visual_inception_inputs_v5/02_chair/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "b5ea1747dc1028c852a9c524af24613b2648e1e70e03385ab6984709154f83b9"
+    },
+    {
+      "id": "02_chair_oraclev3_13",
+      "query_family": "model_paraphrase",
+      "instruction": "Want a salon barber chair offering tilting backrest, sponge cushion, and swivel base.",
+      "instruction_zh": "需要带大角度后倾靠背、厚海绵垫与稳固旋转底座的发廊理发椅。",
+      "source_row_id": "paraphrase_025",
+      "source_file": "data/public/visual_inception_inputs_v5/02_chair/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "2d79bf0a9eeb2a96a8d36225f74edfbc3a6c95d174bfb47694b168aac9f7c5b7"
+    },
+    {
+      "id": "02_chair_oraclev3_14",
+      "query_family": "model_paraphrase",
+      "instruction": "Need a professional barbershop chair featuring hydraulic height adjustment, sturdy footrest, and swivel.",
+      "instruction_zh": "寻找配备顺滑液压升降、耐用脚踏与旋转功能的专业理发工作室座椅。",
+      "source_row_id": "paraphrase_026",
+      "source_file": "data/public/visual_inception_inputs_v5/02_chair/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "aee11aad83cb9fbeb567e88af9ef51b4620066e5884a94fc6a2dbda68d4e3005"
+    },
+    {
+      "id": "02_chair_oraclev3_15",
+      "query_family": "model_paraphrase",
+      "instruction": "Want a salon barber chair built with ergonomic seat cushions and hydraulic elevation.",
+      "instruction_zh": "想要带有舒适人体工学软包坐垫和稳固液压升降结构的沙龙理发椅。",
+      "source_row_id": "paraphrase_022",
+      "source_file": "data/public/visual_inception_inputs_v5/02_chair/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "b217cb860ddda315764d4d2d13ec114164108d33cead090e01200e351e4caa4b"
+    },
+    {
+      "id": "02_chair_oraclev3_16",
+      "query_family": "model_paraphrase",
+      "instruction": "Need a classic waterproof barbershop styling chair featuring easy assembly and cushioned support.",
+      "instruction_zh": "想选一款经典防水表皮、支撑舒适且组装省心的发廊造型理发椅。",
+      "source_row_id": "paraphrase_018",
+      "source_file": "data/public/visual_inception_inputs_v5/02_chair/paraphrases/model_paraphrases.jsonl",
+      "implicit_anchor_free": false,
+      "distilled_from_raw_paraphrase": true,
+      "raw_source_text_sha256": "2c5f938f579111ff45aa8eb3e0d5c0e2738e31565bf7623d576a423711b8fecc"
+    },
+    {
+      "id": "02_chair_oraclev3_17",
+      "query_family": "heldout_search_query",
+      "instruction": "chair hair salon",
+      "instruction_zh": "真实搜索原句（msmarco_websearch_train_4796412）：美发沙龙椅",
+      "source_row_id": "msmarco_websearch_train_4796412",
+      "source_file": "data/public/visual_inception_inputs_v5/02_chair/heldout_queries.jsonl",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "02_chair_oraclev3_18",
+      "query_family": "heldout_search_query",
+      "instruction": "barber chairs for sale",
+      "instruction_zh": "真实搜索原句（msmarco_websearch_train_1643831）：待售理发椅",
+      "source_row_id": "msmarco_websearch_train_1643831",
+      "source_file": "data/public/visual_inception_inputs_v5/02_chair/heldout_queries.jsonl",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "02_chair_oraclev3_19",
+      "query_family": "heldout_search_query",
+      "instruction": "hair salon chairs",
+      "instruction_zh": "真实搜索原句（msmarco_websearch_train_8108306）：发廊椅",
+      "source_row_id": "msmarco_websearch_train_8108306",
+      "source_file": "data/public/visual_inception_inputs_v5/02_chair/heldout_queries.jsonl",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "02_chair_oraclev3_20",
+      "query_family": "heldout_search_query",
+      "instruction": "salon styling chairs wholesale",
+      "instruction_zh": "真实搜索原句（msmarco_websearch_train_5472019）：批发美发造型椅",
+      "source_row_id": "msmarco_websearch_train_5472019",
+      "source_file": "data/public/visual_inception_inputs_v5/02_chair/heldout_queries.jsonl",
+      "implicit_anchor_free": false
+    }
+  ],
+  "query_family_counts": {
+    "category_description": 10,
+    "model_paraphrase": 6,
+    "heldout_search_query": 4
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false,
+  "sampling": {
+    "algorithm": "stratified_sha256_hash_order_v1",
+    "seed": 42,
+    "quotas": {
+      "category_description": 10,
+      "model_paraphrase": 6,
+      "heldout_search_query": 4
+    }
+  },
+  "training_overlap": {
+    "normalization": "unicode_nfkc_whitespace_casefold",
+    "normalized_exact_overlap_count": 20,
+    "expected_overlap_count": 20,
+    "semantic_independence_claimed": false,
+    "oracle_overlap_protocol": "paper_table1_table6_100pct_oracle",
+    "checked_against_training_source_manifest": "../manifest.json"
+  },
+  "authoring": {
+    "kind": "stratified_sample_from_frozen_training_sources",
+    "basis": "paper_table1_oracle_100pct_overlap_50_30_20_quotas_v1",
+    "target_brand_or_model_specified": false,
+    "formal_memory_contents_read": false,
+    "selection_by_retrieval_outcomes": false
+  }
+}

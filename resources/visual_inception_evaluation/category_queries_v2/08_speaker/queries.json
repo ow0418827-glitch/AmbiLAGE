@@ -1,0 +1,204 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "visual_inception_category_diversity_v2",
+  "group": "08_speaker",
+  "query_mode": "text",
+  "target_public_id": "B01N47U1VI",
+  "category": "Bluetooth speaker",
+  "source_type": "curated_evaluation",
+  "language": "en",
+  "instruction_policy": "zero_overlap_v2_10explicit_10implicit_20",
+  "instructions": [
+    "portable waterproof Bluetooth 5.0 speaker with 12 hour battery life",
+    "compact wireless stereo speaker with deep bass and built-in microphone",
+    "waterproof portable wireless Bluetooth audio cylinder with RGB light rings",
+    "vintage natural beech-wood wireless stereo radio player with 12-hour battery",
+    "I want to buy a compact portable Bluetooth speaker offering at least 10 hours of continuous playback.",
+    "Help me order a waterproof outdoor wireless speaker with dual full-range drivers and stereo pairing.",
+    "I want to buy a compact pocket wireless music box with a lanyard and one-touch call button for picnics.",
+    "Help me order an indoor-outdoor 30-watt patio acoustic unit featuring flickering warm lantern flame glow.",
+    "I need a waterproof wireless speaker loud enough for pool parties and beach gatherings without distortion.",
+    "Suggest a compact lightweight Bluetooth speaker with 100-foot wireless range for moving around the yard.",
+    "I need a 15-inch portable karaoke PA system with wired mic, 8-inch woofer, and pulsing LEDs for weekend backyard parties.",
+    "Suggest an IP55 weather-resistant wireless pool music player that stays steady horizontally or vertically on wet tiles.",
+    "Looking for a portable Bluetooth speaker engineered with passive bass radiators and crisp stereo separation.",
+    "I need an IPX7 waterproof wireless speaker featuring shock-resistant silicone casing and fast USB-C charging.",
+    "Looking for a rugged Bluetooth 5.0 wireless player offering TF memory-card MP3 playback, FM tuner, and clear calls.",
+    "Which ultra-small cylindrical silver audio players pair automatically on startup and recharge smoothly via USB?",
+    "Compare pocket-sized travel Bluetooth speakers against larger stereo boombox wireless speakers.",
+    "Show me rugged IPX7 waterproof speakers side by side with multi-room 360-degree party speakers.",
+    "Compare retro wooden FM desktop audio boxes against dual-driver IPX7 waterproof cylindrical travel players by bass punch.",
+    "Which compact wireless stereo players hold clearer hands-free call voice quality beyond thirty feet outdoors?"
+  ],
+  "instructions_sha256": "0576980c04e2adb9780769a068f18a950c16dbce747bc5b01cc09d0fc927ea6a",
+  "query_records": [
+    {
+      "id": "08_speaker_zerov2_01",
+      "query_family": "category_direct",
+      "instruction": "portable waterproof Bluetooth 5.0 speaker with 12 hour battery life",
+      "instruction_zh": "12 小时续航的便携防水蓝牙 5.0 音箱",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "08_speaker_zerov2_02",
+      "query_family": "category_direct",
+      "instruction": "compact wireless stereo speaker with deep bass and built-in microphone",
+      "instruction_zh": "带重低音与内置麦克风的便携无线立体声音箱",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "08_speaker_zerov2_03",
+      "query_family": "category_direct",
+      "instruction": "waterproof portable wireless Bluetooth audio cylinder with RGB light rings",
+      "instruction_zh": "带炫彩RGB灯圈的防水便携圆柱无线蓝牙音频播放盒",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "08_speaker_zerov2_04",
+      "query_family": "category_direct",
+      "instruction": "vintage natural beech-wood wireless stereo radio player with 12-hour battery",
+      "instruction_zh": "天然榉木外壳配12小时长续航的复古无线调频立体声播放器",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "08_speaker_zerov2_05",
+      "query_family": "purchase_intent",
+      "instruction": "I want to buy a compact portable Bluetooth speaker offering at least 10 hours of continuous playback.",
+      "instruction_zh": "我想买一台单次续航至少 10 小时的便携蓝牙音箱。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "08_speaker_zerov2_06",
+      "query_family": "purchase_intent",
+      "instruction": "Help me order a waterproof outdoor wireless speaker with dual full-range drivers and stereo pairing.",
+      "instruction_zh": "帮我订购一款带双全频单元、支持立体声配对的防水户外无线音箱。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "08_speaker_zerov2_07",
+      "query_family": "purchase_intent",
+      "instruction": "I want to buy a compact pocket wireless music box with a lanyard and one-touch call button for picnics.",
+      "instruction_zh": "想买一只带挂绳、支持一键免提接听的掌心大小野餐无线音乐小盒子。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "08_speaker_zerov2_08",
+      "query_family": "purchase_intent",
+      "instruction": "Help me order an indoor-outdoor 30-watt patio acoustic unit featuring flickering warm lantern flame glow.",
+      "instruction_zh": "帮我选购一台30瓦带仿真温暖火焰氛围灯的庭院防水无线音频播放器。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "08_speaker_zerov2_09",
+      "query_family": "use_case",
+      "instruction": "I need a waterproof wireless speaker loud enough for pool parties and beach gatherings without distortion.",
+      "instruction_zh": "我需要一台在泳池派对和海滩聚会上音量够大且不破音的防水无线音箱。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "08_speaker_zerov2_10",
+      "query_family": "use_case",
+      "instruction": "Suggest a compact lightweight Bluetooth speaker with 100-foot wireless range for moving around the yard.",
+      "instruction_zh": "推荐一款无线连接距离可达 100 英尺、在院子里走动不断连的轻巧蓝牙音箱。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "08_speaker_zerov2_11",
+      "query_family": "use_case",
+      "instruction": "I need a 15-inch portable karaoke PA system with wired mic, 8-inch woofer, and pulsing LEDs for weekend backyard parties.",
+      "instruction_zh": "需要一台带8英寸低音单元、有线麦和律动灯效的15英寸户外派对移动功放音响。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "08_speaker_zerov2_12",
+      "query_family": "use_case",
+      "instruction": "Suggest an IP55 weather-resistant wireless pool music player that stays steady horizontally or vertically on wet tiles.",
+      "instruction_zh": "推荐一款IP55防泼水、在泳池边横放竖放都稳固防滑的无线音乐播放设备。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "08_speaker_zerov2_13",
+      "query_family": "functional_need",
+      "instruction": "Looking for a portable Bluetooth speaker engineered with passive bass radiators and crisp stereo separation.",
+      "instruction_zh": "寻找配有被动低音辐射器、立体声分离度清晰的便携蓝牙音箱。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "08_speaker_zerov2_14",
+      "query_family": "functional_need",
+      "instruction": "I need an IPX7 waterproof wireless speaker featuring shock-resistant silicone casing and fast USB-C charging.",
+      "instruction_zh": "我需要一台具备 IPX7 级防水、防摔硅胶机身和快充接口的无线音箱。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "08_speaker_zerov2_15",
+      "query_family": "functional_need",
+      "instruction": "Looking for a rugged Bluetooth 5.0 wireless player offering TF memory-card MP3 playback, FM tuner, and clear calls.",
+      "instruction_zh": "寻找支持蓝牙5.0、插卡直放MP3、FM调频以及高清免提通话的耐用无线播放器。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "08_speaker_zerov2_16",
+      "query_family": "functional_need",
+      "instruction": "Which ultra-small cylindrical silver audio players pair automatically on startup and recharge smoothly via USB?",
+      "instruction_zh": "哪款迷你银色圆柱无线音频小钢炮开机自动回连且USB充电方便？",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "08_speaker_zerov2_17",
+      "query_family": "selection_comparison",
+      "instruction": "Compare pocket-sized travel Bluetooth speakers against larger stereo boombox wireless speakers.",
+      "instruction_zh": "对比口袋便携旅行蓝牙音箱与大体积立体声手提无线音箱。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "08_speaker_zerov2_18",
+      "query_family": "selection_comparison",
+      "instruction": "Show me rugged IPX7 waterproof speakers side by side with multi-room 360-degree party speakers.",
+      "instruction_zh": "把 IPX7 三防户外音箱与 360 度环绕派对蓝牙音箱放在一起对比。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "08_speaker_zerov2_19",
+      "query_family": "selection_comparison",
+      "instruction": "Compare retro wooden FM desktop audio boxes against dual-driver IPX7 waterproof cylindrical travel players by bass punch.",
+      "instruction_zh": "从低音下潜表现对比木质复古桌面收音播放器与双单元防水圆柱旅行音响。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "08_speaker_zerov2_20",
+      "query_family": "selection_comparison",
+      "instruction": "Which compact wireless stereo players hold clearer hands-free call voice quality beyond thirty feet outdoors?",
+      "instruction_zh": "哪款便携立体声无线音频设备在户外十米外通话拾音仍清晰稳定？",
+      "implicit_anchor_free": true
+    }
+  ],
+  "query_family_counts": {
+    "category_direct": 4,
+    "purchase_intent": 4,
+    "use_case": 4,
+    "functional_need": 4,
+    "selection_comparison": 4
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false,
+  "training_overlap": {
+    "normalization": "unicode_nfkc_whitespace_casefold",
+    "normalized_exact_overlap_count": 0,
+    "semantic_independence_claimed": false,
+    "checked_against_training_source_manifest": "../manifest.json"
+  },
+  "authoring": {
+    "kind": "assistant_curated_static_evaluation",
+    "basis": "empirical_training_category_distribution_calibrated_zero_exact_overlap_v3",
+    "target_brand_or_model_specified": false,
+    "all_target_core_attributes_required": false,
+    "existing_formal_query_texts_read": false,
+    "formal_memory_contents_read": false,
+    "selection_by_retrieval_outcomes": false
+  }
+}

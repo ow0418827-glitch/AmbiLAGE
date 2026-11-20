@@ -1,0 +1,251 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "visual_inception_training_oracle_v2",
+  "group": "04_curtain",
+  "query_mode": "text",
+  "target_public_id": "B086PW7TWX",
+  "category": "curtains",
+  "source_type": "training_oracle_stratified_sample",
+  "language": "en",
+  "instruction_policy": "training_oracle_v2_distilled_descriptions_20",
+  "instructions": [
+    "Two-panel semi-sheer polyester voile window curtains with a rod pocket top, printed wood-grain sports motif, and gentle light-filtering drape.",
+    "Wrinkle-free 3D mermaid-scale printed polyester blackout grommet curtain panel designed to block harsh sunlight, dampen outdoor noise, and insulate bedroom windows.",
+    "Two-panel purple floral insulated blackout window curtains offering noise reduction, energy-saving thermal blocking, and dark room shading for cozy living rooms.",
+    "Teal Moroccan-patterned microfiber blackout short window valance with a 3-inch rod pocket and triple-weave thermal insulation for kitchen or bathroom.",
+    "Holiday reindeer and snowflake printed polyester blackout window curtain panels with a rod pocket header, vibrant wash-resistant graphics, and easy care.",
+    "Extra-wide light grey triple-weaved blackout grommet patio door curtain panel engineered to block up to 99% of light and divide room space.",
+    "Ultra-soft polyester printed window curtain panels featuring minimalist abstract art motifs, light privacy screening, and universal rod compatibility for kids bedrooms.",
+    "Two-panel lightweight chiffon semi-sheer window curtains printed in purple and black plaid Halloween motifs that softly filter daylight and allow airflow.",
+    "Heavy 300gsm navy blue soft velvet blackout curtain pair tailored with rod-pocket headers for rich window drape, privacy, and thermal insulation.",
+    "Heavy-duty navy blue polyester blackout curtain pair featuring rod pockets and hanging ring compatibility to adjust height and block bright window light.",
+    "Looking for semi-sheer textured chiffon curtain panels in a chosen size that brighten the room, allow air circulation, and maintain privacy.",
+    "Looking for a 79-inch-wide cotton velvet waterfall valance with a rod pocket, wavy hem, and matching velvet curtain design for an elegant window treatment.",
+    "Looking for a pair of semi-sheer textured chiffon curtain panels in a chosen size that filter light, allow air circulation, and protect privacy.",
+    "Find decorative printed satin polyester curtain panels with custom or personalized designs, suitable for a bedroom, living room, or dorm.",
+    "Find a single microfiber blackout window valance with a geometric woven design, thermal insulation, noise reduction, and a 52 by 18 inch size.",
+    "Find modern outdoor curtain panels with water-repellent, UV-protected fabric and stainless steel grommets for a pergola, cabana, patio, gazebo, or deck.",
+    "cute curtains for bedroom",
+    "aqua and gray curtains",
+    "curtains 40 inch length",
+    "multicolored curtains"
+  ],
+  "instructions_sha256": "eb4f2b25479db9faf48c75d3eea78ea1b3a80af2ac3d11e3b6c4277dfead2ad1",
+  "query_records": [
+    {
+      "id": "04_curtain_oracle_01",
+      "query_family": "category_description",
+      "instruction": "Two-panel semi-sheer polyester voile window curtains with a rod pocket top, printed wood-grain sports motif, and gentle light-filtering drape.",
+      "instruction_zh": "提炼公开描述（B09KRNCBJJ）：双片穿杆式半透涤纶薄纱窗帘，复古木纹运动球类印花，柔和透光。",
+      "source_row_id": "B09KRNCBJJ",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/04_curtain/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "3bba5a6e1343659760ae783d77878306f4d3df8fb4d450f84706076f49f0e1aa"
+    },
+    {
+      "id": "04_curtain_oracle_02",
+      "query_family": "category_description",
+      "instruction": "Wrinkle-free 3D mermaid-scale printed polyester blackout grommet curtain panel designed to block harsh sunlight, dampen outdoor noise, and insulate bedroom windows.",
+      "instruction_zh": "提炼公开描述（B086PX13GL）：抗皱3D美人鱼鳞印花涤纶打孔遮光窗帘，阻隔强光紫外线、降噪并平衡室温。",
+      "source_row_id": "B086PX13GL",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/04_curtain/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "c06acb3295cc752edb56ae879461b5fef8804f4e87d3dc5b79f9075ad5f7220c"
+    },
+    {
+      "id": "04_curtain_oracle_03",
+      "query_family": "category_description",
+      "instruction": "Two-panel purple floral insulated blackout window curtains offering noise reduction, energy-saving thermal blocking, and dark room shading for cozy living rooms.",
+      "instruction_zh": "提炼公开描述（B06VWM2BX7）：两片装紫色花卉隔热遮光窗帘，兼具隔音降噪、节能保温与客厅遮光保护隐私效果。",
+      "source_row_id": "B06VWM2BX7",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/04_curtain/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "3ec6361fe77e6378808cb6ccd81e941571fd32d088c76af36a2b5665458d7150"
+    },
+    {
+      "id": "04_curtain_oracle_04",
+      "query_family": "category_description",
+      "instruction": "Teal Moroccan-patterned microfiber blackout short window valance with a 3-inch rod pocket and triple-weave thermal insulation for kitchen or bathroom.",
+      "instruction_zh": "提炼公开描述（B074FSM89X）：蓝绿色摩洛哥图案超细纤维三层梭织遮光短窗幔，3英寸穿杆袋，适合厨房或浴室。",
+      "source_row_id": "B074FSM89X",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/04_curtain/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "be04607e9b64a1293a525dc9c4eaa7aa72f0a751f84cc0b29e186184896fe2eb"
+    },
+    {
+      "id": "04_curtain_oracle_05",
+      "query_family": "category_description",
+      "instruction": "Holiday reindeer and snowflake printed polyester blackout window curtain panels with a rod pocket header, vibrant wash-resistant graphics, and easy care.",
+      "instruction_zh": "提炼公开描述（B0819SK9M3）：木纹背景圣诞驯鹿雪花印花涤纶穿杆遮光窗帘套装，色彩鲜明耐水洗。",
+      "source_row_id": "B0819SK9M3",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/04_curtain/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "ab806a085bf41d755a240f95b9fd52d39e83fb84d3835448a27a001f6ade1fce"
+    },
+    {
+      "id": "04_curtain_oracle_06",
+      "query_family": "category_description",
+      "instruction": "Extra-wide light grey triple-weaved blackout grommet patio door curtain panel engineered to block up to 99% of light and divide room space.",
+      "instruction_zh": "提炼公开描述（B08CRV4ZB5）：超宽浅灰三层梭织打孔露台推拉门遮光帘，高达85%-99%遮光率并可作空间隔断。",
+      "source_row_id": "B08CRV4ZB5",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/04_curtain/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "f69648bd78cfcbe1ff25e1e18bda12b8bb657c925fcdb6f28d64a610f164a773"
+    },
+    {
+      "id": "04_curtain_oracle_07",
+      "query_family": "category_description",
+      "instruction": "Ultra-soft polyester printed window curtain panels featuring minimalist abstract art motifs, light privacy screening, and universal rod compatibility for kids bedrooms.",
+      "instruction_zh": "提炼公开描述（B083GNLLGD）：极简抽象人物建筑印花超柔布艺窗帘两片装，兼顾室内隐私遮蔽与儿童房装饰。",
+      "source_row_id": "B083GNLLGD",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/04_curtain/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "921670f18f440f0b40cee79087f618bee238ac690e87c56a4382c148ccf00427"
+    },
+    {
+      "id": "04_curtain_oracle_08",
+      "query_family": "category_description",
+      "instruction": "Two-panel lightweight chiffon semi-sheer window curtains printed in purple and black plaid Halloween motifs that softly filter daylight and allow airflow.",
+      "instruction_zh": "提炼公开描述（B09CDF77ZB）：紫黑格纹万圣元素印花雪纺半透窗帘两片装，轻盈透气并柔化刺眼日光。",
+      "source_row_id": "B09CDF77ZB",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/04_curtain/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "a40ccd2c0988313d57702a4e90c356c72bf84c4c92ef896fa98aba49fe7ac36d"
+    },
+    {
+      "id": "04_curtain_oracle_09",
+      "query_family": "category_description",
+      "instruction": "Heavy 300gsm navy blue soft velvet blackout curtain pair tailored with rod-pocket headers for rich window drape, privacy, and thermal insulation.",
+      "instruction_zh": "提炼公开描述（B08CKQPP7K）：厚实300gsm藏青色丝绒穿杆遮光窗帘对装，垂坠质感佳并阻挡强光及热量散失。",
+      "source_row_id": "B08CKQPP7K",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/04_curtain/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "f623efb6522c24aa4006623449aa543a4d978bed2cbeab1f2c15e8fb1828c3b5"
+    },
+    {
+      "id": "04_curtain_oracle_10",
+      "query_family": "category_description",
+      "instruction": "Heavy-duty navy blue polyester blackout curtain pair featuring rod pockets and hanging ring compatibility to adjust height and block bright window light.",
+      "instruction_zh": "提炼公开描述（B07WF9RJD3）：藏青色厚实涤纶穿杆遮光帘对装，可配挂环微调高度并有效隔热挡光。",
+      "source_row_id": "B07WF9RJD3",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/04_curtain/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "26a4dea4fb41124d816994b36a3791d303911905dc80379fc0cd046b22ab458c"
+    },
+    {
+      "id": "04_curtain_oracle_11",
+      "query_family": "model_paraphrase",
+      "instruction": "Looking for semi-sheer textured chiffon curtain panels in a chosen size that brighten the room, allow air circulation, and maintain privacy.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_013，输入商品 B09LCNFGX6）",
+      "source_row_id": "paraphrase_013",
+      "source_file": "data/public/visual_inception_inputs_v5/04_curtain/paraphrases/model_paraphrases.jsonl"
+    },
+    {
+      "id": "04_curtain_oracle_12",
+      "query_family": "model_paraphrase",
+      "instruction": "Looking for a 79-inch-wide cotton velvet waterfall valance with a rod pocket, wavy hem, and matching velvet curtain design for an elegant window treatment.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_004，输入商品 B09FYZPTLB）",
+      "source_row_id": "paraphrase_004",
+      "source_file": "data/public/visual_inception_inputs_v5/04_curtain/paraphrases/model_paraphrases.jsonl"
+    },
+    {
+      "id": "04_curtain_oracle_13",
+      "query_family": "model_paraphrase",
+      "instruction": "Looking for a pair of semi-sheer textured chiffon curtain panels in a chosen size that filter light, allow air circulation, and protect privacy.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_025，输入商品 B09P1GMRQX）",
+      "source_row_id": "paraphrase_025",
+      "source_file": "data/public/visual_inception_inputs_v5/04_curtain/paraphrases/model_paraphrases.jsonl"
+    },
+    {
+      "id": "04_curtain_oracle_14",
+      "query_family": "model_paraphrase",
+      "instruction": "Find decorative printed satin polyester curtain panels with custom or personalized designs, suitable for a bedroom, living room, or dorm.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_005，输入商品 B071QYD6TV）",
+      "source_row_id": "paraphrase_005",
+      "source_file": "data/public/visual_inception_inputs_v5/04_curtain/paraphrases/model_paraphrases.jsonl"
+    },
+    {
+      "id": "04_curtain_oracle_15",
+      "query_family": "model_paraphrase",
+      "instruction": "Find a single microfiber blackout window valance with a geometric woven design, thermal insulation, noise reduction, and a 52 by 18 inch size.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_002，输入商品 B074FSM89X）",
+      "source_row_id": "paraphrase_002",
+      "source_file": "data/public/visual_inception_inputs_v5/04_curtain/paraphrases/model_paraphrases.jsonl"
+    },
+    {
+      "id": "04_curtain_oracle_16",
+      "query_family": "model_paraphrase",
+      "instruction": "Find modern outdoor curtain panels with water-repellent, UV-protected fabric and stainless steel grommets for a pergola, cabana, patio, gazebo, or deck.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_015，输入商品 B07Q33HMW2）",
+      "source_row_id": "paraphrase_015",
+      "source_file": "data/public/visual_inception_inputs_v5/04_curtain/paraphrases/model_paraphrases.jsonl"
+    },
+    {
+      "id": "04_curtain_oracle_17",
+      "query_family": "heldout_search_query",
+      "instruction": "cute curtains for bedroom",
+      "instruction_zh": "训练真实搜索原句（esci / esci_train_31005）：cute curtains for bedroom",
+      "source_row_id": "esci_train_31005",
+      "source_file": "data/public/visual_inception_inputs_v5/04_curtain/heldout_queries.jsonl"
+    },
+    {
+      "id": "04_curtain_oracle_18",
+      "query_family": "heldout_search_query",
+      "instruction": "aqua and gray curtains",
+      "instruction_zh": "训练真实搜索原句（esci / esci_train_9986）：aqua and gray curtains",
+      "source_row_id": "esci_train_9986",
+      "source_file": "data/public/visual_inception_inputs_v5/04_curtain/heldout_queries.jsonl"
+    },
+    {
+      "id": "04_curtain_oracle_19",
+      "query_family": "heldout_search_query",
+      "instruction": "curtains 40 inch length",
+      "instruction_zh": "训练真实搜索原句（esci / esci_train_30861）：curtains 40 inch length",
+      "source_row_id": "esci_train_30861",
+      "source_file": "data/public/visual_inception_inputs_v5/04_curtain/heldout_queries.jsonl"
+    },
+    {
+      "id": "04_curtain_oracle_20",
+      "query_family": "heldout_search_query",
+      "instruction": "multicolored curtains",
+      "instruction_zh": "训练真实搜索原句（esci / esci_train_71537）：multicolored curtains",
+      "source_row_id": "esci_train_71537",
+      "source_file": "data/public/visual_inception_inputs_v5/04_curtain/heldout_queries.jsonl"
+    }
+  ],
+  "query_family_counts": {
+    "category_description": 10,
+    "model_paraphrase": 6,
+    "heldout_search_query": 4
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false,
+  "sampling": {
+    "algorithm": "stratified_sha256_hash_order_v1",
+    "seed": 42,
+    "quotas": {
+      "category_description": 10,
+      "model_paraphrase": 6,
+      "heldout_search_query": 4
+    }
+  },
+  "training_overlap": {
+    "normalization": "unicode_nfkc_whitespace_casefold",
+    "normalized_exact_overlap_count": 20,
+    "expected_overlap_count": 20,
+    "semantic_independence_claimed": false,
+    "oracle_overlap_protocol": "paper_table1_table6_100pct_oracle",
+    "checked_against_training_source_manifest": "../manifest.json"
+  },
+  "authoring": {
+    "kind": "stratified_sample_from_frozen_training_sources",
+    "basis": "paper_table1_oracle_100pct_overlap_50_30_20_quotas_v1",
+    "target_brand_or_model_specified": false,
+    "formal_memory_contents_read": false,
+    "selection_by_retrieval_outcomes": false
+  }
+}

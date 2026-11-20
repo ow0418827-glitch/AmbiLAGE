@@ -1,0 +1,206 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "category_query_overlap_30_v2",
+  "group": "01_camera",
+  "query_mode": "text",
+  "target_public_id": "B08V134QWR",
+  "category": "security camera",
+  "source_type": "mixed_30pct_training_oracle_70pct_non_overlap",
+  "language": "en",
+  "instruction_policy": "category_query_overlap_30_v2",
+  "instructions": [
+    "8MP 4K outdoor PoE IP bullet security camera featuring a 2.8mm wide-angle lens, built-in noise-filtering microphone, 98-foot infrared night vision, and weatherproof IP67 metal housing.",
+    "1080p weatherproof IP67 aluminum bullet surveillance camera with a 3.6mm lens, 36 infrared LEDs for 100-foot night vision, and four-in-one hybrid analog video output.",
+    "Wire-free 1080p battery-powered outdoor security camera with IP65 weatherproof casing, SmartSens color night vision, two-way audio, motion alerts, and wireless door entry sensors.",
+    "I want a solar-powered 1080p outdoor security camera with motion notifications, adjustable detection sensitivity, two-way audio, loop recording, and IP66 waterproofing.",
+    "I need an outdoor security camera with 3MP image quality, 30-foot infrared night vision, an IP66 weather-resistant case, and a 2.8–12mm varifocal lens.",
+    "camera security light",
+    "Which porch security camera gives me a clear view when the doorway is backlit?",
+    "Find a small indoor security camera with a privacy shutter I can close by hand.",
+    "I am looking for a garage security camera that saves clips without a paid plan.",
+    "What outdoor camera can show the full width of a narrow driveway?",
+    "I need a home security camera that can be aimed downward from an eave.",
+    "Show me renter-friendly security cameras for a covered front entrance.",
+    "Which home monitoring cameras let me share live view with another household member?",
+    "I want a camera for my side yard with an adjustable motion detection area.",
+    "I need a weatherproof front-door motion sentinel that saves clear night footage without monthly fees.",
+    "Which wireless entryway video guardians send phone snapshots when a person reaches the porch?",
+    "Find a compact battery-powered perimeter watcher with two-way voice intercom and spotlight alerts.",
+    "Suggest a high-definition 3MP varifocal yard monitor able to zoom cleanly toward a parked car.",
+    "Compare solar-panel rooftop guardians against plug-in indoor pet video watchers for night clarity.",
+    "What compact weather-resistant surveillance eye records 1080p clips locally onto a 128GB SD card?"
+  ],
+  "instructions_sha256": "8218160cfb696296268782c44e5f4fde01d3e7b645aa2d0ee5f2014e7fbd4221",
+  "query_records": [
+    {
+      "id": "01_camera_overlap30v2_01",
+      "query_family": "category_description",
+      "instruction": "8MP 4K outdoor PoE IP bullet security camera featuring a 2.8mm wide-angle lens, built-in noise-filtering microphone, 98-foot infrared night vision, and weatherproof IP67 metal housing.",
+      "instruction_zh": "提炼公开描述（B097445J2Y）：800万像素4K户外PoE枪机，2.8mm广角镜头、降噪麦克风、98英尺红外夜视及IP67防水金属机身。",
+      "source_row_id": "B097445J2Y",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/01_camera/descriptions.jsonl",
+      "reused_oracle_id": "01_camera_oracle_01",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "191a44230f53af89e0a68009204b84479bbfda2518fbeeeb31247118a21fdd11"
+    },
+    {
+      "id": "01_camera_overlap30v2_02",
+      "query_family": "category_description",
+      "instruction": "1080p weatherproof IP67 aluminum bullet surveillance camera with a 3.6mm lens, 36 infrared LEDs for 100-foot night vision, and four-in-one hybrid analog video output.",
+      "instruction_zh": "提炼公开描述（B010DC7TQW）：1080p IP67铝壳枪式监控，3.6mm镜头、36颗红外灯支持100英尺夜视及四合一模拟视频输出。",
+      "source_row_id": "B010DC7TQW",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/01_camera/descriptions.jsonl",
+      "reused_oracle_id": "01_camera_oracle_02",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "7bf0efc135da3fc4f0a8d29fadee4688b02d08c14b42d30b903fe207916e5224"
+    },
+    {
+      "id": "01_camera_overlap30v2_03",
+      "query_family": "category_description",
+      "instruction": "Wire-free 1080p battery-powered outdoor security camera with IP65 weatherproof casing, SmartSens color night vision, two-way audio, motion alerts, and wireless door entry sensors.",
+      "instruction_zh": "提炼公开描述（B09JB9QKV7）：无线1080p电池供电户外安防套件，IP65防水、彩色夜视、双向语音、移动提醒及无线门窗感应器。",
+      "source_row_id": "B09JB9QKV7",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/01_camera/descriptions.jsonl",
+      "reused_oracle_id": "01_camera_oracle_03",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "bffcab2fdf5fe0c243fa66a2a8d834d7802e62f78e778589c5f59f6464288614"
+    },
+    {
+      "id": "01_camera_overlap30v2_04",
+      "query_family": "model_paraphrase",
+      "instruction": "I want a solar-powered 1080p outdoor security camera with motion notifications, adjustable detection sensitivity, two-way audio, loop recording, and IP66 waterproofing.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_018，输入商品 B09SBHCWR4）",
+      "source_row_id": "paraphrase_018",
+      "source_file": "data/public/visual_inception_inputs_v5/01_camera/paraphrases/model_paraphrases.jsonl",
+      "reused_oracle_id": "01_camera_oracle_11"
+    },
+    {
+      "id": "01_camera_overlap30v2_05",
+      "query_family": "model_paraphrase",
+      "instruction": "I need an outdoor security camera with 3MP image quality, 30-foot infrared night vision, an IP66 weather-resistant case, and a 2.8–12mm varifocal lens.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_023，输入商品 B0170B95U2）",
+      "source_row_id": "paraphrase_023",
+      "source_file": "data/public/visual_inception_inputs_v5/01_camera/paraphrases/model_paraphrases.jsonl",
+      "reused_oracle_id": "01_camera_oracle_12"
+    },
+    {
+      "id": "01_camera_overlap30v2_06",
+      "query_family": "heldout_search_query",
+      "instruction": "camera security light",
+      "instruction_zh": "训练真实搜索原句（esci / esci_train_21901）：camera security light",
+      "source_row_id": "esci_train_21901",
+      "source_file": "data/public/visual_inception_inputs_v5/01_camera/heldout_queries.jsonl",
+      "reused_oracle_id": "01_camera_oracle_17"
+    },
+    {
+      "id": "01_camera_overlap30v2_07",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Which porch security camera gives me a clear view when the doorway is backlit?",
+      "instruction_zh": "哪款门廊安防摄像头在门口逆光时也能拍出清晰画面？",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "01_camera_overlap30v2_08",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Find a small indoor security camera with a privacy shutter I can close by hand.",
+      "instruction_zh": "找一款带手动隐私遮挡盖的小型室内安防摄像头。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "01_camera_overlap30v2_09",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "I am looking for a garage security camera that saves clips without a paid plan.",
+      "instruction_zh": "我想找一款无需付费订阅即可保存录像片段的车库安防摄像头。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "01_camera_overlap30v2_10",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "What outdoor camera can show the full width of a narrow driveway?",
+      "instruction_zh": "哪款户外摄像头能完整拍到窄车道的全宽视野？",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "01_camera_overlap30v2_11",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "I need a home security camera that can be aimed downward from an eave.",
+      "instruction_zh": "我需要一台可以从屋檐向下俯拍的家用安防摄像头。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "01_camera_overlap30v2_12",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Show me renter-friendly security cameras for a covered front entrance.",
+      "instruction_zh": "推荐几款适合租房族安装在有遮挡前门的免打孔安防摄像头。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "01_camera_overlap30v2_13",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Which home monitoring cameras let me share live view with another household member?",
+      "instruction_zh": "哪些家用监控摄像头支持与另一位家庭成员共享实时画面？",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "01_camera_overlap30v2_14",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "I want a camera for my side yard with an adjustable motion detection area.",
+      "instruction_zh": "我想要一款可用于侧院且支持自定义移动侦测区域的摄像头。",
+      "implicit_anchor_free": false
+    },
+    {
+      "id": "01_camera_overlap30v2_15",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "I need a weatherproof front-door motion sentinel that saves clear night footage without monthly fees.",
+      "instruction_zh": "需要一款无需月费即可高清夜视录制门口动静的户外防水监控装置。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "01_camera_overlap30v2_16",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Which wireless entryway video guardians send phone snapshots when a person reaches the porch?",
+      "instruction_zh": "哪款无线门厅视频看护设备能在有人靠近走廊时往手机发实时快照？",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "01_camera_overlap30v2_17",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Find a compact battery-powered perimeter watcher with two-way voice intercom and spotlight alerts.",
+      "instruction_zh": "找一款带双向语音对讲与照明警示的电池续航户外看护器。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "01_camera_overlap30v2_18",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Suggest a high-definition 3MP varifocal yard monitor able to zoom cleanly toward a parked car.",
+      "instruction_zh": "推荐一款可手动变焦看清停车区域细节的300万像素高清院落监测装置。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "01_camera_overlap30v2_19",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "Compare solar-panel rooftop guardians against plug-in indoor pet video watchers for night clarity.",
+      "instruction_zh": "对比太阳能屋檐户外监控机与插电室内看宠视频设备的夜视清晰度。",
+      "implicit_anchor_free": true
+    },
+    {
+      "id": "01_camera_overlap30v2_20",
+      "query_family": "synthetic_non_overlap",
+      "instruction": "What compact weather-resistant surveillance eye records 1080p clips locally onto a 128GB SD card?",
+      "instruction_zh": "哪款防水紧凑型安防之眼能将1080p视频直接存在128GB本地存储卡中？",
+      "implicit_anchor_free": true
+    }
+  ],
+  "query_family_counts": {
+    "category_description": 3,
+    "model_paraphrase": 2,
+    "heldout_search_query": 1,
+    "synthetic_non_overlap": 14
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false
+}

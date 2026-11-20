@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "language": "zh",
+  "purpose": "仅供人工阅读，不传给检索编码器",
+  "group": "09_toothbrush",
+  "category": "toothbrush",
+  "query_records": [
+    {
+      "id": "09_toothbrush_overlap30v2_01",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "提炼公开描述（B09QKHK4NP）：可爱卡通甜甜圈造型儿童硅胶软毛牙刷，轻柔护龈且便于宝宝小手握持。"
+    },
+    {
+      "id": "09_toothbrush_overlap30v2_02",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "提炼公开描述（B09Q5MBQK3）：人体工学360度U形儿童手动硅胶牙刷，食品级软胶毛温和包裹牙齿保护乳牙牙龈。"
+    },
+    {
+      "id": "09_toothbrush_overlap30v2_03",
+      "query_family": "category_description",
+      "query_family_zh": "复用同类公开描述(15%)",
+      "instruction": "提炼公开描述（B09R1HJWSY）：四支装耐高温PP+硅胶U形儿童口腔清洁牙刷，分2-6岁与6-12岁大小号贴合齿列。"
+    },
+    {
+      "id": "09_toothbrush_overlap30v2_04",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "复用模型改写查询(10%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_029，输入商品 B08PVNNFMR）"
+    },
+    {
+      "id": "09_toothbrush_overlap30v2_05",
+      "query_family": "model_paraphrase",
+      "query_family_zh": "复用模型改写查询(10%)",
+      "instruction": "训练模型改写原句（MiniMax-M3 / paraphrase_003，输入商品 B09NMBRQS1）"
+    },
+    {
+      "id": "09_toothbrush_overlap30v2_06",
+      "query_family": "heldout_search_query",
+      "query_family_zh": "复用独立真实搜索(5%)",
+      "instruction": "训练真实搜索原句（esci / esci_train_12893）：bamboo toothbrush"
+    },
+    {
+      "id": "09_toothbrush_overlap30v2_07",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一款带轻柔挡位和小巧刷头的电动牙刷。"
+    },
+    {
+      "id": "09_toothbrush_overlap30v2_08",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我需要一支刷头颈部纤细、方便清洁大牙后侧的超软毛手动牙刷。"
+    },
+    {
+      "id": "09_toothbrush_overlap30v2_09",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "推荐几款附带旅行收纳盒与基础计时功能的可充电牙刷。"
+    },
+    {
+      "id": "09_toothbrush_overlap30v2_10",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款电动牙刷在刷牙用力过猛时会给出明显提示？"
+    },
+    {
+      "id": "09_toothbrush_overlap30v2_11",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "我想要一支刷毛柔软、手柄沾水后依然防滑的日常基础牙刷。"
+    },
+    {
+      "id": "09_toothbrush_overlap30v2_12",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "对比可替换刷头手动牙刷与入门级可充电电动牙刷的性价比。"
+    },
+    {
+      "id": "09_toothbrush_overlap30v2_13",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一款电池仓开启轻松方便的干电池驱动牙刷。"
+    },
+    {
+      "id": "09_toothbrush_overlap30v2_14",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款紧凑型电动牙刷适合外出旅行一周随身携带？"
+    },
+    {
+      "id": "09_toothbrush_overlap30v2_15",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款360度U形食品级软硅胶儿童护齿清洁器在2至12岁不同年龄段都好咬合？"
+    },
+    {
+      "id": "09_toothbrush_overlap30v2_16",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "对比蓝色小章鱼双模式防水儿童声波洁牙棒与奶牛造型手动U形软胶护齿器。"
+    },
+    {
+      "id": "09_toothbrush_overlap30v2_17",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "找一款竹纤维小麦秸秆环保柄、不伤宝宝娇嫩牙龈的超柔毛乳牙训练器。"
+    },
+    {
+      "id": "09_toothbrush_overlap30v2_18",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "需要耐热水烫洗消毒、温和包裹宝宝全口乳牙的粉色卡通硅胶清洁器。"
+    },
+    {
+      "id": "09_toothbrush_overlap30v2_19",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "推荐配漱口杯盖与三枚替换头、IPX7全身防水的三档儿童超声波护齿器。"
+    },
+    {
+      "id": "09_toothbrush_overlap30v2_20",
+      "query_family": "synthetic_non_overlap",
+      "query_family_zh": "非重合新查询(70%)",
+      "instruction": "哪款甜甜圈防滑造型的软硅胶婴儿口腔洁具最方便宝宝小手握住自己清洁？"
+    }
+  ]
+}

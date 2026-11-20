@@ -1,0 +1,251 @@
+{
+  "schema_version": 2,
+  "status": "ready",
+  "method": "visual_inception",
+  "evaluation_protocol": "visual_inception_training_oracle_v2",
+  "group": "07_shampoo",
+  "query_mode": "text",
+  "target_public_id": "B00BDJODWI",
+  "category": "shampoo",
+  "source_type": "training_oracle_stratified_sample",
+  "language": "en",
+  "instruction_policy": "training_oracle_v2_distilled_descriptions_20",
+  "instructions": [
+    "Sulfate-, silicone-, and paraben-free coconut and hibiscus moisturizing shampoo and conditioner set that gently cleanses scalps and restores dry brittle hair shine.",
+    "Pro-vitamin B5 five-in-one moisturizing shampoo formulated without parabens or mineral oils to gently cleanse, strengthen, smooth, and protect color-treated hair.",
+    "Medicated moisturizing shampoo designed to cleanse hair gently, relieve dry itchy scalp flakiness, and reduce fiber friction on natural or treated hair.",
+    "Sulfate-free violet argan oil brightening shampoo and conditioner infused with hydrolyzed proteins to neutralize brassy yellow tones in blonde or curly hair.",
+    "Salon-inspired hair repair shampoo formulated to clean gently while reinforcing weakened inner hair fibers and smoothing rough cuticles.",
+    "Salt-, sodium-, and sulfate-free gentle cleansing coconut-oil shampoo created specifically to protect keratin smoothing treatments and color-treated hair.",
+    "Vegan paraben-free and sulfate-free nourishing repair shampoo blended with natural macadamia lipids to cleanse gently and restore soft healthy hair.",
+    "Large 1000ml color-protecting shampoo formulated to gently wash dyed hair while preserving vibrant pigment tone and natural luminous shine.",
+    "32-ounce paraben-free nourishing shampoo enriched with coconut oil, bamboo, chamomile, green tea, and ginseng extracts for soft daily volume.",
+    "Dark pomegranate and sandalwood scented 3-in-1 shampoo, conditioner, and body wash delivering rich odor-fighting shower lather for daily freshness.",
+    "Find a pack of six plastic-free, biodegradable shampoo and conditioner bars in lemon, coconut, purple, and orange scents for travel and the whole family.",
+    "Find a vegan, cruelty-free shampoo and conditioner set for all hair types with hydrolyzed whey protein, amino acids, panthenol, coconut, and avocado.",
+    "Find a paraben-free and cruelty-free hair care shampoo.",
+    "Find a natural, vegan, cruelty-free shampoo for normal to oily hair made with organic lemon, tea tree oil, and SLS-free formula.",
+    "Find a lightweight, sulfate-free and paraben-free hydrating shampoo for dry, fine hair with coconut water, nutrient electrolytes, and coconut oil.",
+    "Find a salt-, sodium-, sulfate-, and paraben-free shampoo for all hair types that helps preserve keratin treatments, hair bonds, color, permanent waves, and extensions.",
+    "baby curly hair shampoo and conditioner",
+    "shampoo for oily hair women",
+    "lice shampoo that kills eggs and lice",
+    "lice shampoo"
+  ],
+  "instructions_sha256": "490aaa14a00990d4806bcc138bc4fd949995b621a5107461556121b26251c7e6",
+  "query_records": [
+    {
+      "id": "07_shampoo_oracle_01",
+      "query_family": "category_description",
+      "instruction": "Sulfate-, silicone-, and paraben-free coconut and hibiscus moisturizing shampoo and conditioner set that gently cleanses scalps and restores dry brittle hair shine.",
+      "instruction_zh": "提炼公开描述（B08GLB5W72）：无硫酸盐无硅油椰子木槿保湿洗发护发套装，温和洁净头皮并改善毛躁干枯发丝。",
+      "source_row_id": "B08GLB5W72",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/07_shampoo/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "514f7fb5578c4c89be3ff11df913aa0fcf8c08f4a20b55acdcb8820f4b46cd03"
+    },
+    {
+      "id": "07_shampoo_oracle_02",
+      "query_family": "category_description",
+      "instruction": "Pro-vitamin B5 five-in-one moisturizing shampoo formulated without parabens or mineral oils to gently cleanse, strengthen, smooth, and protect color-treated hair.",
+      "instruction_zh": "提炼公开描述（B08HYBPD5Q）：含维B5五效合一保湿洗发水，不含矿物油与尼泊金酯，滋润顺滑并护色强韧。",
+      "source_row_id": "B08HYBPD5Q",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/07_shampoo/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "fa4a89668540bbe844ffa621da3425cb164f58b4dede26722fc21f644ebe9acb"
+    },
+    {
+      "id": "07_shampoo_oracle_03",
+      "query_family": "category_description",
+      "instruction": "Medicated moisturizing shampoo designed to cleanse hair gently, relieve dry itchy scalp flakiness, and reduce fiber friction on natural or treated hair.",
+      "instruction_zh": "提炼公开描述（B004D9DKVA）：针对干痒头屑头皮研制的滋润洗发露，舒缓瘙痒同时温和清洁、减少发丝摩擦。",
+      "source_row_id": "B004D9DKVA",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/07_shampoo/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "82172ade05e90adf3c122ee3f276442c6cc22d9d968ed3124ca031298f6b67f4"
+    },
+    {
+      "id": "07_shampoo_oracle_04",
+      "query_family": "category_description",
+      "instruction": "Sulfate-free violet argan oil brightening shampoo and conditioner infused with hydrolyzed proteins to neutralize brassy yellow tones in blonde or curly hair.",
+      "instruction_zh": "提炼公开描述（B08Q77XBC7）：无硫酸盐阿甘油去黄提亮紫色洗护套装，含水解蛋白中和漂染泛黄并修护卷发。",
+      "source_row_id": "B08Q77XBC7",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/07_shampoo/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "8a9b2b5bf0df1c706f5d90aa57bde5c6715b7c65908fa35ca47ab60aa6ee911a"
+    },
+    {
+      "id": "07_shampoo_oracle_05",
+      "query_family": "category_description",
+      "instruction": "Salon-inspired hair repair shampoo formulated to clean gently while reinforcing weakened inner hair fibers and smoothing rough cuticles.",
+      "instruction_zh": "提炼公开描述（B0791Y9749）：沙龙级发丝纤维修护洗发水，洁净同时强韧受损发芯结构。",
+      "source_row_id": "B0791Y9749",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/07_shampoo/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "8162f4e2d32d80c6055f4c821741c029d32e27c65766f54d6a7cc0fbdae90f8d"
+    },
+    {
+      "id": "07_shampoo_oracle_06",
+      "query_family": "category_description",
+      "instruction": "Salt-, sodium-, and sulfate-free gentle cleansing coconut-oil shampoo created specifically to protect keratin smoothing treatments and color-treated hair.",
+      "instruction_zh": "提炼公开描述（B01LLT790C）：无盐无钠无硫酸盐温和椰子油洁净洗发水，专为延长角蛋白柔顺及染后护色设计。",
+      "source_row_id": "B01LLT790C",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/07_shampoo/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "569d0a6293aa093b6114ea12e21478d9d2186b74927a0247386f03db51711afd"
+    },
+    {
+      "id": "07_shampoo_oracle_07",
+      "query_family": "category_description",
+      "instruction": "Vegan paraben-free and sulfate-free nourishing repair shampoo blended with natural macadamia lipids to cleanse gently and restore soft healthy hair.",
+      "instruction_zh": "提炼公开描述（B00VAIO8XG）：零残忍纯素无硫酸盐澳洲坚果修护滋养洗发水，令干燥发质恢复水润柔亮。",
+      "source_row_id": "B00VAIO8XG",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/07_shampoo/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "9b5f1f616127c2666bfce2b98d3f7a851278f0638a8c2035bf5f16cf75ae7568"
+    },
+    {
+      "id": "07_shampoo_oracle_08",
+      "query_family": "category_description",
+      "instruction": "Large 1000ml color-protecting shampoo formulated to gently wash dyed hair while preserving vibrant pigment tone and natural luminous shine.",
+      "instruction_zh": "提炼公开描述（B00G6JFV6M）：1000ml大容量亮彩护色洗发露，温和洁发并锁住染后鲜亮色泽。",
+      "source_row_id": "B00G6JFV6M",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/07_shampoo/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "30d52f19f649194e8bb76d356e7f578fa5d3678e907299b5bb549134ca7132e6"
+    },
+    {
+      "id": "07_shampoo_oracle_09",
+      "query_family": "category_description",
+      "instruction": "32-ounce paraben-free nourishing shampoo enriched with coconut oil, bamboo, chamomile, green tea, and ginseng extracts for soft daily volume.",
+      "instruction_zh": "提炼公开描述（B07KFPMP18）：32盎司植物精粹营养洗发水，蕴含椰子油、竹萃、洋甘菊、绿茶与人参成分。",
+      "source_row_id": "B07KFPMP18",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/07_shampoo/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "4a4a1d7852edfacabf88943117c741a694b8dc100f589d2f324b16b1ba748378"
+    },
+    {
+      "id": "07_shampoo_oracle_10",
+      "query_family": "category_description",
+      "instruction": "Dark pomegranate and sandalwood scented 3-in-1 shampoo, conditioner, and body wash delivering rich odor-fighting shower lather for daily freshness.",
+      "instruction_zh": "提炼公开描述（B086M9RW2X）：黑石榴檀香型男士三合一洗发护发沐浴露，泡沫丰盈带来持久清新。",
+      "source_row_id": "B086M9RW2X",
+      "source_file": "data/public/visual_inception_inputs/catalog_v5/07_shampoo/descriptions.jsonl",
+      "distilled_from_raw_description": true,
+      "raw_source_text_sha256": "c2395b7805f7f181870868309bd5425466b87aacc7c7919f427a832116c31a5e"
+    },
+    {
+      "id": "07_shampoo_oracle_11",
+      "query_family": "model_paraphrase",
+      "instruction": "Find a pack of six plastic-free, biodegradable shampoo and conditioner bars in lemon, coconut, purple, and orange scents for travel and the whole family.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_021，输入商品 B08P9HG48G）",
+      "source_row_id": "paraphrase_021",
+      "source_file": "data/public/visual_inception_inputs_v5/07_shampoo/paraphrases/model_paraphrases.jsonl"
+    },
+    {
+      "id": "07_shampoo_oracle_12",
+      "query_family": "model_paraphrase",
+      "instruction": "Find a vegan, cruelty-free shampoo and conditioner set for all hair types with hydrolyzed whey protein, amino acids, panthenol, coconut, and avocado.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_028，输入商品 B01MYU55QJ）",
+      "source_row_id": "paraphrase_028",
+      "source_file": "data/public/visual_inception_inputs_v5/07_shampoo/paraphrases/model_paraphrases.jsonl"
+    },
+    {
+      "id": "07_shampoo_oracle_13",
+      "query_family": "model_paraphrase",
+      "instruction": "Find a paraben-free and cruelty-free hair care shampoo.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_016，输入商品 B00VAIO8XG）",
+      "source_row_id": "paraphrase_016",
+      "source_file": "data/public/visual_inception_inputs_v5/07_shampoo/paraphrases/model_paraphrases.jsonl"
+    },
+    {
+      "id": "07_shampoo_oracle_14",
+      "query_family": "model_paraphrase",
+      "instruction": "Find a natural, vegan, cruelty-free shampoo for normal to oily hair made with organic lemon, tea tree oil, and SLS-free formula.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_009，输入商品 B00YMZAJDW）",
+      "source_row_id": "paraphrase_009",
+      "source_file": "data/public/visual_inception_inputs_v5/07_shampoo/paraphrases/model_paraphrases.jsonl"
+    },
+    {
+      "id": "07_shampoo_oracle_15",
+      "query_family": "model_paraphrase",
+      "instruction": "Find a lightweight, sulfate-free and paraben-free hydrating shampoo for dry, fine hair with coconut water, nutrient electrolytes, and coconut oil.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_013，输入商品 B00HVKAYL2）",
+      "source_row_id": "paraphrase_013",
+      "source_file": "data/public/visual_inception_inputs_v5/07_shampoo/paraphrases/model_paraphrases.jsonl"
+    },
+    {
+      "id": "07_shampoo_oracle_16",
+      "query_family": "model_paraphrase",
+      "instruction": "Find a salt-, sodium-, sulfate-, and paraben-free shampoo for all hair types that helps preserve keratin treatments, hair bonds, color, permanent waves, and extensions.",
+      "instruction_zh": "训练模型改写原句（MiniMax-M3 / paraphrase_019，输入商品 B01LLT790C）",
+      "source_row_id": "paraphrase_019",
+      "source_file": "data/public/visual_inception_inputs_v5/07_shampoo/paraphrases/model_paraphrases.jsonl"
+    },
+    {
+      "id": "07_shampoo_oracle_17",
+      "query_family": "heldout_search_query",
+      "instruction": "baby curly hair shampoo and conditioner",
+      "instruction_zh": "训练真实搜索原句（esci / esci_train_11876）：baby curly hair shampoo and conditioner",
+      "source_row_id": "esci_train_11876",
+      "source_file": "data/public/visual_inception_inputs_v5/07_shampoo/heldout_queries.jsonl"
+    },
+    {
+      "id": "07_shampoo_oracle_18",
+      "query_family": "heldout_search_query",
+      "instruction": "shampoo for oily hair women",
+      "instruction_zh": "训练真实搜索原句（esci / esci_train_92234）：shampoo for oily hair women",
+      "source_row_id": "esci_train_92234",
+      "source_file": "data/public/visual_inception_inputs_v5/07_shampoo/heldout_queries.jsonl"
+    },
+    {
+      "id": "07_shampoo_oracle_19",
+      "query_family": "heldout_search_query",
+      "instruction": "lice shampoo that kills eggs and lice",
+      "instruction_zh": "训练真实搜索原句（esci / esci_train_62060）：lice shampoo that kills eggs and lice",
+      "source_row_id": "esci_train_62060",
+      "source_file": "data/public/visual_inception_inputs_v5/07_shampoo/heldout_queries.jsonl"
+    },
+    {
+      "id": "07_shampoo_oracle_20",
+      "query_family": "heldout_search_query",
+      "instruction": "lice shampoo",
+      "instruction_zh": "训练真实搜索原句（esci / esci_train_62059）：lice shampoo",
+      "source_row_id": "esci_train_62059",
+      "source_file": "data/public/visual_inception_inputs_v5/07_shampoo/heldout_queries.jsonl"
+    }
+  ],
+  "query_family_counts": {
+    "category_description": 10,
+    "model_paraphrase": 6,
+    "heldout_search_query": 4
+  },
+  "query_image_required": false,
+  "query_images_generated": false,
+  "is_real_search_log": false,
+  "training_use_allowed": false,
+  "sampling": {
+    "algorithm": "stratified_sha256_hash_order_v1",
+    "seed": 42,
+    "quotas": {
+      "category_description": 10,
+      "model_paraphrase": 6,
+      "heldout_search_query": 4
+    }
+  },
+  "training_overlap": {
+    "normalization": "unicode_nfkc_whitespace_casefold",
+    "normalized_exact_overlap_count": 20,
+    "expected_overlap_count": 20,
+    "semantic_independence_claimed": false,
+    "oracle_overlap_protocol": "paper_table1_table6_100pct_oracle",
+    "checked_against_training_source_manifest": "../manifest.json"
+  },
+  "authoring": {
+    "kind": "stratified_sample_from_frozen_training_sources",
+    "basis": "paper_table1_oracle_100pct_overlap_50_30_20_quotas_v1",
+    "target_brand_or_model_specified": false,
+    "formal_memory_contents_read": false,
+    "selection_by_retrieval_outcomes": false
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "natural": true,
+  "text_preserved": true,
+  "artifact_free": true,
+  "reasons": [
+    "strict_mathematical_naturalness_gate_passed"
+  ],
+  "category": "styling chair",
+  "metrics": {
+    "source_ssim": 0.9416184846475223,
+    "rgb_source_ssim": 0.9416184846475223,
+    "luma_source_ssim": 0.9569155747379248,
+    "source_mae_levels": 7.293449401855469,
+    "rgb_source_mae_levels": 7.293449401855469,
+    "luma_source_mae_levels": 5.511192798614502,
+    "fg_rgb_source_mae_levels": 5.180240154266357,
+    "fg_chroma_tv_levels": 1.111945629119873,
+    "halo_error": 1.872631549835205,
+    "roi_max_abs_diff": 0.0
+  },
+  "thresholds": {
+    "source_ssim_floor": 0.85,
+    "source_mae_ceiling": 22.0,
+    "fg_source_mae_ceiling": 10.0,
+    "fg_chroma_tv_ceiling": 2.5,
+    "halo_ceiling": 10.0,
+    "roi_max_abs_diff": 0.0
+  },
+  "model": "mathematical_rgb_oklab_dual_gate_v2",
+  "precision": "float32",
+  "candidate_sha256": "3b16fb6f30d0c20b8f83244eb325caf83620e136fbebd5453a05e3efa131b44f"
+}

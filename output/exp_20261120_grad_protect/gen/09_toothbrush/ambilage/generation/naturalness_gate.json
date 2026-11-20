@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "natural": true,
+  "text_preserved": true,
+  "artifact_free": true,
+  "reasons": [
+    "strict_mathematical_naturalness_gate_passed"
+  ],
+  "category": "toothbrush",
+  "metrics": {
+    "source_ssim": 0.9755663528511733,
+    "rgb_source_ssim": 0.9755663528511733,
+    "luma_source_ssim": 0.9885798645078321,
+    "source_mae_levels": 11.887443542480469,
+    "rgb_source_mae_levels": 11.887443542480469,
+    "luma_source_mae_levels": 7.575835704803467,
+    "fg_rgb_source_mae_levels": 7.129667282104492,
+    "fg_chroma_tv_levels": 1.2042734622955322,
+    "halo_error": 3.7801361083984375,
+    "roi_max_abs_diff": 0.0
+  },
+  "thresholds": {
+    "source_ssim_floor": 0.85,
+    "source_mae_ceiling": 22.0,
+    "fg_source_mae_ceiling": 10.0,
+    "fg_chroma_tv_ceiling": 2.5,
+    "halo_ceiling": 10.0,
+    "roi_max_abs_diff": 0.0
+  },
+  "model": "mathematical_rgb_oklab_dual_gate_v2",
+  "precision": "float32",
+  "candidate_sha256": "784740d4d4beb810778ff7d95d7cd852c164a8893f53a552491ffb8a5e895756"
+}

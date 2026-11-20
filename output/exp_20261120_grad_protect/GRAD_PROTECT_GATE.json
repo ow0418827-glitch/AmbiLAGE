@@ -1,0 +1,86 @@
+{
+  "gate_pass": true,
+  "env4_wb_t3_delta_pp": 20.0,
+  "env4_wb_t5_delta_pp": 0.0,
+  "stage1_deltas": {
+    "training_oracle_v4": {
+      "wb_t5_delta_pp": 0.0,
+      "bb_t5_delta_pp": 0.0
+    },
+    "overlap_30_v4": {
+      "wb_t5_delta_pp": 0.0,
+      "bb_t5_delta_pp": -1.6666666666666607
+    },
+    "zero_overlap_v4": {
+      "wb_t5_delta_pp": 0.0,
+      "bb_t5_delta_pp": -0.8333333333333304
+    }
+  },
+  "nat_all_pass": true,
+  "naturalness": {
+    "baseline": [
+      {
+        "group": "02_chair",
+        "passed": true,
+        "ssim": 0.9419799984494553,
+        "lpips": 0.08105728030204773,
+        "psnr": 28.450315782932535,
+        "fg_mae": 5.143738269805908,
+        "roi_max_abs_diff": 0.0,
+        "halo_error": 2.1438467502593994
+      },
+      {
+        "group": "05_hair_extension",
+        "passed": true,
+        "ssim": 0.8999644105964889,
+        "lpips": 0.07510554790496826,
+        "psnr": 28.070683453045167,
+        "fg_mae": 7.522510051727295,
+        "roi_max_abs_diff": 0.0,
+        "halo_error": 2.844442129135132
+      },
+      {
+        "group": "09_toothbrush",
+        "passed": true,
+        "ssim": 0.9761652895895834,
+        "lpips": 0.02061568573117256,
+        "psnr": 25.091019243130226,
+        "fg_mae": 7.1668782234191895,
+        "roi_max_abs_diff": 0.0,
+        "halo_error": 3.6991779804229736
+      }
+    ],
+    "gp_pilot3": [
+      {
+        "group": "02_chair",
+        "passed": true,
+        "ssim": 0.9416184846475223,
+        "lpips": 0.07921890169382095,
+        "psnr": 28.942594727697095,
+        "fg_mae": 5.180240154266357,
+        "roi_max_abs_diff": 0.0,
+        "halo_error": 1.872631549835205
+      },
+      {
+        "group": "05_hair_extension",
+        "passed": true,
+        "ssim": 0.9004890960733685,
+        "lpips": 0.0746661052107811,
+        "psnr": 27.95018663489303,
+        "fg_mae": 7.690183639526367,
+        "roi_max_abs_diff": 0.0,
+        "halo_error": 2.547916889190674
+      },
+      {
+        "group": "09_toothbrush",
+        "passed": true,
+        "ssim": 0.9755663528511733,
+        "lpips": 0.02038566768169403,
+        "psnr": 25.1650413959441,
+        "fg_mae": 7.129667282104492,
+        "roi_max_abs_diff": 0.0,
+        "halo_error": 3.7801361083984375
+      }
+    ]
+  }
+}

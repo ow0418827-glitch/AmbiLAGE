@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "diagnostic_environment": "env4_feature_text_plus_target_image",
+  "variant": "gp_pilot3",
+  "method": "ambilage",
+  "encoder_slug": "03_siglip_so400m",
+  "encoder_label": "SigLIP-SO400M",
+  "key_mode": "joint",
+  "key_image_weight": 0.5,
+  "query_mode": "joint",
+  "query_image_weight": 0.5,
+  "groups": [
+    "02_chair",
+    "05_hair_extension",
+    "09_toothbrush"
+  ]
+}

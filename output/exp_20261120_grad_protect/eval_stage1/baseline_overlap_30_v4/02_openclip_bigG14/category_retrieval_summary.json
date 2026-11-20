@@ -1,0 +1,2118 @@
+{
+  "schema_version": 1,
+  "protocol": "visual_inception_overlap_30_v4_exact",
+  "query_suite": "overlap_30_v4",
+  "training_overlap_mode": "overlap_30_v4",
+  "method": "ambilage",
+  "query_mode": "text",
+  "key_mode": "image",
+  "key_image_weight": 1.0,
+  "defense_mode": "none",
+  "primary_condition": "none",
+  "group_count": 3,
+  "queries_per_group": 20,
+  "total_queries": 60,
+  "pool_count": 189,
+  "simultaneous_replacement_count": 3,
+  "query_families": [
+    "category_description",
+    "model_paraphrase",
+    "heldout_search_query"
+  ],
+  "query_family_labels_zh": {
+    "category_description": "同类商品原文",
+    "model_paraphrase": "改写查询",
+    "heldout_search_query": "短搜索查询"
+  },
+  "overall": {
+    "query_count": 60,
+    "mean_rank_clean": 6.966666666666667,
+    "mean_rank_modified": 3.5166666666666666,
+    "mean_rank_gain": 3.45,
+    "top1": {
+      "clean_hits": 5,
+      "modified_hits": 13,
+      "clean_rate": 0.08333333333333333,
+      "modified_rate": 0.21666666666666667,
+      "gain": 0.13333333333333333,
+      "new_hits": 11,
+      "lost_hits": 3
+    },
+    "top3": {
+      "clean_hits": 19,
+      "modified_hits": 37,
+      "clean_rate": 0.31666666666666665,
+      "modified_rate": 0.6166666666666667,
+      "gain": 0.3,
+      "new_hits": 19,
+      "lost_hits": 1
+    },
+    "top5": {
+      "clean_hits": 34,
+      "modified_hits": 53,
+      "clean_rate": 0.5666666666666667,
+      "modified_rate": 0.8833333333333333,
+      "gain": 0.31666666666666665,
+      "new_hits": 19,
+      "lost_hits": 0
+    }
+  },
+  "by_family": {
+    "category_description": {
+      "query_family": "category_description",
+      "query_family_zh": "同类商品原文",
+      "query_count": 30,
+      "mean_rank_clean": 9.166666666666666,
+      "mean_rank_modified": 4.966666666666667,
+      "mean_rank_gain": 4.2,
+      "top1": {
+        "clean_hits": 3,
+        "modified_hits": 1,
+        "clean_rate": 0.1,
+        "modified_rate": 0.03333333333333333,
+        "gain": -0.06666666666666667,
+        "new_hits": 1,
+        "lost_hits": 3
+      },
+      "top3": {
+        "clean_hits": 7,
+        "modified_hits": 11,
+        "clean_rate": 0.23333333333333334,
+        "modified_rate": 0.36666666666666664,
+        "gain": 0.13333333333333333,
+        "new_hits": 5,
+        "lost_hits": 1
+      },
+      "top5": {
+        "clean_hits": 13,
+        "modified_hits": 23,
+        "clean_rate": 0.43333333333333335,
+        "modified_rate": 0.7666666666666667,
+        "gain": 0.3333333333333333,
+        "new_hits": 10,
+        "lost_hits": 0
+      }
+    },
+    "model_paraphrase": {
+      "query_family": "model_paraphrase",
+      "query_family_zh": "改写查询",
+      "query_count": 18,
+      "mean_rank_clean": 4.222222222222222,
+      "mean_rank_modified": 1.7777777777777777,
+      "mean_rank_gain": 2.4444444444444446,
+      "top1": {
+        "clean_hits": 2,
+        "modified_hits": 10,
+        "clean_rate": 0.1111111111111111,
+        "modified_rate": 0.5555555555555556,
+        "gain": 0.4444444444444444,
+        "new_hits": 8,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 9,
+        "modified_hits": 17,
+        "clean_rate": 0.5,
+        "modified_rate": 0.9444444444444444,
+        "gain": 0.4444444444444444,
+        "new_hits": 8,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 13,
+        "modified_hits": 18,
+        "clean_rate": 0.7222222222222222,
+        "modified_rate": 1.0,
+        "gain": 0.2777777777777778,
+        "new_hits": 5,
+        "lost_hits": 0
+      }
+    },
+    "heldout_search_query": {
+      "query_family": "heldout_search_query",
+      "query_family_zh": "短搜索查询",
+      "query_count": 12,
+      "mean_rank_clean": 5.583333333333333,
+      "mean_rank_modified": 2.5,
+      "mean_rank_gain": 3.0833333333333335,
+      "top1": {
+        "clean_hits": 0,
+        "modified_hits": 2,
+        "clean_rate": 0.0,
+        "modified_rate": 0.16666666666666666,
+        "gain": 0.16666666666666666,
+        "new_hits": 2,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 3,
+        "modified_hits": 9,
+        "clean_rate": 0.25,
+        "modified_rate": 0.75,
+        "gain": 0.5,
+        "new_hits": 6,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 8,
+        "modified_hits": 12,
+        "clean_rate": 0.6666666666666666,
+        "modified_rate": 1.0,
+        "gain": 0.3333333333333333,
+        "new_hits": 4,
+        "lost_hits": 0
+      }
+    }
+  },
+  "by_condition": {
+    "none": {
+      "overall": {
+        "query_count": 60,
+        "mean_rank_clean": 6.966666666666667,
+        "mean_rank_modified": 3.5166666666666666,
+        "mean_rank_gain": 3.45,
+        "top1": {
+          "clean_hits": 5,
+          "modified_hits": 13,
+          "clean_rate": 0.08333333333333333,
+          "modified_rate": 0.21666666666666667,
+          "gain": 0.13333333333333333,
+          "new_hits": 11,
+          "lost_hits": 3
+        },
+        "top3": {
+          "clean_hits": 19,
+          "modified_hits": 37,
+          "clean_rate": 0.31666666666666665,
+          "modified_rate": 0.6166666666666667,
+          "gain": 0.3,
+          "new_hits": 19,
+          "lost_hits": 1
+        },
+        "top5": {
+          "clean_hits": 34,
+          "modified_hits": 53,
+          "clean_rate": 0.5666666666666667,
+          "modified_rate": 0.8833333333333333,
+          "gain": 0.31666666666666665,
+          "new_hits": 19,
+          "lost_hits": 0
+        }
+      },
+      "by_family": {
+        "category_description": {
+          "query_family": "category_description",
+          "query_family_zh": "同类商品原文",
+          "query_count": 30,
+          "mean_rank_clean": 9.166666666666666,
+          "mean_rank_modified": 4.966666666666667,
+          "mean_rank_gain": 4.2,
+          "top1": {
+            "clean_hits": 3,
+            "modified_hits": 1,
+            "clean_rate": 0.1,
+            "modified_rate": 0.03333333333333333,
+            "gain": -0.06666666666666667,
+            "new_hits": 1,
+            "lost_hits": 3
+          },
+          "top3": {
+            "clean_hits": 7,
+            "modified_hits": 11,
+            "clean_rate": 0.23333333333333334,
+            "modified_rate": 0.36666666666666664,
+            "gain": 0.13333333333333333,
+            "new_hits": 5,
+            "lost_hits": 1
+          },
+          "top5": {
+            "clean_hits": 13,
+            "modified_hits": 23,
+            "clean_rate": 0.43333333333333335,
+            "modified_rate": 0.7666666666666667,
+            "gain": 0.3333333333333333,
+            "new_hits": 10,
+            "lost_hits": 0
+          }
+        },
+        "model_paraphrase": {
+          "query_family": "model_paraphrase",
+          "query_family_zh": "改写查询",
+          "query_count": 18,
+          "mean_rank_clean": 4.222222222222222,
+          "mean_rank_modified": 1.7777777777777777,
+          "mean_rank_gain": 2.4444444444444446,
+          "top1": {
+            "clean_hits": 2,
+            "modified_hits": 10,
+            "clean_rate": 0.1111111111111111,
+            "modified_rate": 0.5555555555555556,
+            "gain": 0.4444444444444444,
+            "new_hits": 8,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 9,
+            "modified_hits": 17,
+            "clean_rate": 0.5,
+            "modified_rate": 0.9444444444444444,
+            "gain": 0.4444444444444444,
+            "new_hits": 8,
+            "lost_hits": 0
+          },
+          "top5": {
+            "clean_hits": 13,
+            "modified_hits": 18,
+            "clean_rate": 0.7222222222222222,
+            "modified_rate": 1.0,
+            "gain": 0.2777777777777778,
+            "new_hits": 5,
+            "lost_hits": 0
+          }
+        },
+        "heldout_search_query": {
+          "query_family": "heldout_search_query",
+          "query_family_zh": "短搜索查询",
+          "query_count": 12,
+          "mean_rank_clean": 5.583333333333333,
+          "mean_rank_modified": 2.5,
+          "mean_rank_gain": 3.0833333333333335,
+          "top1": {
+            "clean_hits": 0,
+            "modified_hits": 2,
+            "clean_rate": 0.0,
+            "modified_rate": 0.16666666666666666,
+            "gain": 0.16666666666666666,
+            "new_hits": 2,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 3,
+            "modified_hits": 9,
+            "clean_rate": 0.25,
+            "modified_rate": 0.75,
+            "gain": 0.5,
+            "new_hits": 6,
+            "lost_hits": 0
+          },
+          "top5": {
+            "clean_hits": 8,
+            "modified_hits": 12,
+            "clean_rate": 0.6666666666666666,
+            "modified_rate": 1.0,
+            "gain": 0.3333333333333333,
+            "new_hits": 4,
+            "lost_hits": 0
+          }
+        }
+      }
+    }
+  },
+  "by_table_group": {
+    "无防御": {
+      "overall": {
+        "query_count": 60,
+        "mean_rank_clean": 6.966666666666667,
+        "mean_rank_modified": 3.5166666666666666,
+        "mean_rank_gain": 3.45,
+        "top1": {
+          "clean_hits": 5,
+          "modified_hits": 13,
+          "clean_rate": 0.08333333333333333,
+          "modified_rate": 0.21666666666666667,
+          "gain": 0.13333333333333333,
+          "new_hits": 11,
+          "lost_hits": 3
+        },
+        "top3": {
+          "clean_hits": 19,
+          "modified_hits": 37,
+          "clean_rate": 0.31666666666666665,
+          "modified_rate": 0.6166666666666667,
+          "gain": 0.3,
+          "new_hits": 19,
+          "lost_hits": 1
+        },
+        "top5": {
+          "clean_hits": 34,
+          "modified_hits": 53,
+          "clean_rate": 0.5666666666666667,
+          "modified_rate": 0.8833333333333333,
+          "gain": 0.31666666666666665,
+          "new_hits": 19,
+          "lost_hits": 0
+        }
+      },
+      "by_family": {
+        "category_description": {
+          "query_family": "category_description",
+          "query_family_zh": "同类商品原文",
+          "query_count": 30,
+          "mean_rank_clean": 9.166666666666666,
+          "mean_rank_modified": 4.966666666666667,
+          "mean_rank_gain": 4.2,
+          "top1": {
+            "clean_hits": 3,
+            "modified_hits": 1,
+            "clean_rate": 0.1,
+            "modified_rate": 0.03333333333333333,
+            "gain": -0.06666666666666667,
+            "new_hits": 1,
+            "lost_hits": 3
+          },
+          "top3": {
+            "clean_hits": 7,
+            "modified_hits": 11,
+            "clean_rate": 0.23333333333333334,
+            "modified_rate": 0.36666666666666664,
+            "gain": 0.13333333333333333,
+            "new_hits": 5,
+            "lost_hits": 1
+          },
+          "top5": {
+            "clean_hits": 13,
+            "modified_hits": 23,
+            "clean_rate": 0.43333333333333335,
+            "modified_rate": 0.7666666666666667,
+            "gain": 0.3333333333333333,
+            "new_hits": 10,
+            "lost_hits": 0
+          }
+        },
+        "model_paraphrase": {
+          "query_family": "model_paraphrase",
+          "query_family_zh": "改写查询",
+          "query_count": 18,
+          "mean_rank_clean": 4.222222222222222,
+          "mean_rank_modified": 1.7777777777777777,
+          "mean_rank_gain": 2.4444444444444446,
+          "top1": {
+            "clean_hits": 2,
+            "modified_hits": 10,
+            "clean_rate": 0.1111111111111111,
+            "modified_rate": 0.5555555555555556,
+            "gain": 0.4444444444444444,
+            "new_hits": 8,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 9,
+            "modified_hits": 17,
+            "clean_rate": 0.5,
+            "modified_rate": 0.9444444444444444,
+            "gain": 0.4444444444444444,
+            "new_hits": 8,
+            "lost_hits": 0
+          },
+          "top5": {
+            "clean_hits": 13,
+            "modified_hits": 18,
+            "clean_rate": 0.7222222222222222,
+            "modified_rate": 1.0,
+            "gain": 0.2777777777777778,
+            "new_hits": 5,
+            "lost_hits": 0
+          }
+        },
+        "heldout_search_query": {
+          "query_family": "heldout_search_query",
+          "query_family_zh": "短搜索查询",
+          "query_count": 12,
+          "mean_rank_clean": 5.583333333333333,
+          "mean_rank_modified": 2.5,
+          "mean_rank_gain": 3.0833333333333335,
+          "top1": {
+            "clean_hits": 0,
+            "modified_hits": 2,
+            "clean_rate": 0.0,
+            "modified_rate": 0.16666666666666666,
+            "gain": 0.16666666666666666,
+            "new_hits": 2,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 3,
+            "modified_hits": 9,
+            "clean_rate": 0.25,
+            "modified_rate": 0.75,
+            "gain": 0.5,
+            "new_hits": 6,
+            "lost_hits": 0
+          },
+          "top5": {
+            "clean_hits": 8,
+            "modified_hits": 12,
+            "clean_rate": 0.6666666666666666,
+            "modified_rate": 1.0,
+            "gain": 0.3333333333333333,
+            "new_hits": 4,
+            "lost_hits": 0
+          }
+        }
+      }
+    }
+  },
+  "groups": {
+    "02_chair": {
+      "group": "02_chair",
+      "category": "seating",
+      "target_public_id": "B09CYFD5BX",
+      "source_memory_id": "groups9_reference_02_chair_B08GCSRXKS",
+      "overall": {
+        "query_count": 20,
+        "mean_rank_clean": 8.65,
+        "mean_rank_modified": 3.6,
+        "mean_rank_gain": 5.05,
+        "top1": {
+          "clean_hits": 0,
+          "modified_hits": 5,
+          "clean_rate": 0.0,
+          "modified_rate": 0.25,
+          "gain": 0.25,
+          "new_hits": 5,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 5,
+          "modified_hits": 11,
+          "clean_rate": 0.25,
+          "modified_rate": 0.55,
+          "gain": 0.3,
+          "new_hits": 7,
+          "lost_hits": 1
+        },
+        "top5": {
+          "clean_hits": 15,
+          "modified_hits": 17,
+          "clean_rate": 0.75,
+          "modified_rate": 0.85,
+          "gain": 0.1,
+          "new_hits": 2,
+          "lost_hits": 0
+        }
+      },
+      "by_family": {
+        "category_description": {
+          "query_family": "category_description",
+          "query_family_zh": "同类商品原文",
+          "query_count": 10,
+          "mean_rank_clean": 13.8,
+          "mean_rank_modified": 5.4,
+          "mean_rank_gain": 8.4,
+          "top1": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 1,
+            "modified_hits": 1,
+            "clean_rate": 0.1,
+            "modified_rate": 0.1,
+            "gain": 0.0,
+            "new_hits": 1,
+            "lost_hits": 1
+          },
+          "top5": {
+            "clean_hits": 5,
+            "modified_hits": 7,
+            "clean_rate": 0.5,
+            "modified_rate": 0.7,
+            "gain": 0.2,
+            "new_hits": 2,
+            "lost_hits": 0
+          }
+        },
+        "model_paraphrase": {
+          "query_family": "model_paraphrase",
+          "query_family_zh": "改写查询",
+          "query_count": 6,
+          "mean_rank_clean": 3.3333333333333335,
+          "mean_rank_modified": 1.6666666666666667,
+          "mean_rank_gain": 1.6666666666666667,
+          "top1": {
+            "clean_hits": 0,
+            "modified_hits": 4,
+            "clean_rate": 0.0,
+            "modified_rate": 0.6666666666666666,
+            "gain": 0.6666666666666666,
+            "new_hits": 4,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 3,
+            "modified_hits": 6,
+            "clean_rate": 0.5,
+            "modified_rate": 1.0,
+            "gain": 0.5,
+            "new_hits": 3,
+            "lost_hits": 0
+          },
+          "top5": {
+            "clean_hits": 6,
+            "modified_hits": 6,
+            "clean_rate": 1.0,
+            "modified_rate": 1.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          }
+        },
+        "heldout_search_query": {
+          "query_family": "heldout_search_query",
+          "query_family_zh": "短搜索查询",
+          "query_count": 4,
+          "mean_rank_clean": 3.75,
+          "mean_rank_modified": 2.0,
+          "mean_rank_gain": 1.75,
+          "top1": {
+            "clean_hits": 0,
+            "modified_hits": 1,
+            "clean_rate": 0.0,
+            "modified_rate": 0.25,
+            "gain": 0.25,
+            "new_hits": 1,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 1,
+            "modified_hits": 4,
+            "clean_rate": 0.25,
+            "modified_rate": 1.0,
+            "gain": 0.75,
+            "new_hits": 3,
+            "lost_hits": 0
+          },
+          "top5": {
+            "clean_hits": 4,
+            "modified_hits": 4,
+            "clean_rate": 1.0,
+            "modified_rate": 1.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          }
+        }
+      },
+      "by_condition": {
+        "none": {
+          "overall": {
+            "query_count": 20,
+            "mean_rank_clean": 8.65,
+            "mean_rank_modified": 3.6,
+            "mean_rank_gain": 5.05,
+            "top1": {
+              "clean_hits": 0,
+              "modified_hits": 5,
+              "clean_rate": 0.0,
+              "modified_rate": 0.25,
+              "gain": 0.25,
+              "new_hits": 5,
+              "lost_hits": 0
+            },
+            "top3": {
+              "clean_hits": 5,
+              "modified_hits": 11,
+              "clean_rate": 0.25,
+              "modified_rate": 0.55,
+              "gain": 0.3,
+              "new_hits": 7,
+              "lost_hits": 1
+            },
+            "top5": {
+              "clean_hits": 15,
+              "modified_hits": 17,
+              "clean_rate": 0.75,
+              "modified_rate": 0.85,
+              "gain": 0.1,
+              "new_hits": 2,
+              "lost_hits": 0
+            }
+          },
+          "by_family": {
+            "category_description": {
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "query_count": 10,
+              "mean_rank_clean": 13.8,
+              "mean_rank_modified": 5.4,
+              "mean_rank_gain": 8.4,
+              "top1": {
+                "clean_hits": 0,
+                "modified_hits": 0,
+                "clean_rate": 0.0,
+                "modified_rate": 0.0,
+                "gain": 0.0,
+                "new_hits": 0,
+                "lost_hits": 0
+              },
+              "top3": {
+                "clean_hits": 1,
+                "modified_hits": 1,
+                "clean_rate": 0.1,
+                "modified_rate": 0.1,
+                "gain": 0.0,
+                "new_hits": 1,
+                "lost_hits": 1
+              },
+              "top5": {
+                "clean_hits": 5,
+                "modified_hits": 7,
+                "clean_rate": 0.5,
+                "modified_rate": 0.7,
+                "gain": 0.2,
+                "new_hits": 2,
+                "lost_hits": 0
+              }
+            },
+            "model_paraphrase": {
+              "query_family": "model_paraphrase",
+              "query_family_zh": "改写查询",
+              "query_count": 6,
+              "mean_rank_clean": 3.3333333333333335,
+              "mean_rank_modified": 1.6666666666666667,
+              "mean_rank_gain": 1.6666666666666667,
+              "top1": {
+                "clean_hits": 0,
+                "modified_hits": 4,
+                "clean_rate": 0.0,
+                "modified_rate": 0.6666666666666666,
+                "gain": 0.6666666666666666,
+                "new_hits": 4,
+                "lost_hits": 0
+              },
+              "top3": {
+                "clean_hits": 3,
+                "modified_hits": 6,
+                "clean_rate": 0.5,
+                "modified_rate": 1.0,
+                "gain": 0.5,
+                "new_hits": 3,
+                "lost_hits": 0
+              },
+              "top5": {
+                "clean_hits": 6,
+                "modified_hits": 6,
+                "clean_rate": 1.0,
+                "modified_rate": 1.0,
+                "gain": 0.0,
+                "new_hits": 0,
+                "lost_hits": 0
+              }
+            },
+            "heldout_search_query": {
+              "query_family": "heldout_search_query",
+              "query_family_zh": "短搜索查询",
+              "query_count": 4,
+              "mean_rank_clean": 3.75,
+              "mean_rank_modified": 2.0,
+              "mean_rank_gain": 1.75,
+              "top1": {
+                "clean_hits": 0,
+                "modified_hits": 1,
+                "clean_rate": 0.0,
+                "modified_rate": 0.25,
+                "gain": 0.25,
+                "new_hits": 1,
+                "lost_hits": 0
+              },
+              "top3": {
+                "clean_hits": 1,
+                "modified_hits": 4,
+                "clean_rate": 0.25,
+                "modified_rate": 1.0,
+                "gain": 0.75,
+                "new_hits": 3,
+                "lost_hits": 0
+              },
+              "top5": {
+                "clean_hits": 4,
+                "modified_hits": 4,
+                "clean_rate": 1.0,
+                "modified_rate": 1.0,
+                "gain": 0.0,
+                "new_hits": 0,
+                "lost_hits": 0
+              }
+            }
+          },
+          "queries": [
+            {
+              "task_id": "feature_01",
+              "query_id": "02_chair_pair_01",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "Polyurethane Arms for Durability and Ease of Cleaning",
+              "instruction_zh": "",
+              "clean_rank": 17,
+              "modified_rank": 5,
+              "rank_gain": 12,
+              "clean_score": 0.24086351692676544,
+              "modified_score": 0.2710191607475281
+            },
+            {
+              "task_id": "feature_02",
+              "query_id": "02_chair_pair_02",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "✅【ERGONOMIC DESIGN & COMFORTABLE】The ergonomic design gives the user a better support on the back, reduces the pressure on the spine, is not tired for a long time sit in the styling chair, and enjoys a pleasant hairdressing experience.Barber chair salon chair hair salon chair.",
+              "instruction_zh": "",
+              "clean_rank": 4,
+              "modified_rank": 4,
+              "rank_gain": 0,
+              "clean_score": 0.41271543502807617,
+              "modified_score": 0.3932963013648987
+            },
+            {
+              "task_id": "feature_03",
+              "query_id": "02_chair_pair_03",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "▲Rotating lift, can lift up and down, Comfortable pedals to release leg.",
+              "instruction_zh": "",
+              "clean_rank": 46,
+              "modified_rank": 5,
+              "rank_gain": 41,
+              "clean_score": 0.20102529227733612,
+              "modified_score": 0.2789415717124939
+            },
+            {
+              "task_id": "feature_04",
+              "query_id": "02_chair_pair_04",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "Explosion-proof hydraulic pump,safe and harmless,High resilience,sitting for a long time without pressure.",
+              "instruction_zh": "",
+              "clean_rank": 21,
+              "modified_rank": 6,
+              "rank_gain": 15,
+              "clean_score": 0.1784834861755371,
+              "modified_score": 0.2066398411989212
+            },
+            {
+              "task_id": "feature_05",
+              "query_id": "02_chair_pair_05",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "Specification: 💈 Condition: Brand-new 💈 Style: Modern 💈 Material: PVC leather; High Density Sponge 💈 Product Dimension: 25*23*35/39 in 💈 Loading capacity:330lbs 💈 Cushion size: 18\" x 19.60\" 💈 Adjustable height : 34\"-41\" 💈 Pump lifting height : 6.70\" Package Includes: 💈 1 x Hydraulic barber chair",
+              "instruction_zh": "",
+              "clean_rank": 3,
+              "modified_rank": 5,
+              "rank_gain": -2,
+              "clean_score": 0.4377032518386841,
+              "modified_score": 0.40981927514076233
+            },
+            {
+              "task_id": "feature_06",
+              "query_id": "02_chair_pair_06",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "This chair does not take up too much space and is very easy to move around.",
+              "instruction_zh": "",
+              "clean_rank": 20,
+              "modified_rank": 7,
+              "rank_gain": 13,
+              "clean_score": 0.29113948345184326,
+              "modified_score": 0.3410363793373108
+            },
+            {
+              "task_id": "feature_07",
+              "query_id": "02_chair_pair_07",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "Ergonomic design-the high-density foam cushion is designed to fit the natural contours of the human body, and provides ideal close support for the lower back, torso and neck. The chair is decorated with high-quality PU leather, which is waterproof, stain-proof and easy to clean.",
+              "instruction_zh": "",
+              "clean_rank": 15,
+              "modified_rank": 11,
+              "rank_gain": 4,
+              "clean_score": 0.27185046672821045,
+              "modified_score": 0.30561795830726624
+            },
+            {
+              "task_id": "feature_08",
+              "query_id": "02_chair_pair_08",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "This beauty chair is a hairdressing and beauty chair for men and women. The backrest can be adjusted in angle. The maximum tilting angle is about 150 degrees. It can be used to shave after being tilted down. Lockable hydraulic pump, just lift the pedal slightly. 360 degrees swiveling hair style barber chairs feature. Heavy-duty hydraulic pump make height adjustment easier. Reclining lever is on the right side of the seat.",
+              "instruction_zh": "",
+              "clean_rank": 4,
+              "modified_rank": 3,
+              "rank_gain": 1,
+              "clean_score": 0.39069128036499023,
+              "modified_score": 0.42685288190841675
+            },
+            {
+              "task_id": "feature_09",
+              "query_id": "02_chair_pair_09",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "Introduction:Square Base Boutique Hair Salon Special Hairdressing Chair can give you a sense of comfort and satisfy every hairdressers needs.With a heavy construction, it can withstand up to 300 pounds of load.Soft PVC leather surfaces and ergonomic design ensure ultimate comfort.Back seat can provide an extra comfortable sense of your client.Versatile and easy to use, it will suit all needs at the barber shop.And its easy to clean.Quality assurance, affordable price, absolutely worth your investment.Click order!Specifications：1.Main Material: PVC Leather, High Density sponge, Stainless Steel 2.Backrest Size:(18.90 x 14.96 x 3.15) / (48 x 38 x 8)cm (L x W x H)3.Cushion Size: (19.29 x 20.47 x 4.33) / (49 x 52 x 11)cm (L x W x H)4.Stainless Steel Handrail Size: (18.11 x 2.36 ) / (46 x 6)cm (L x W)5.Foot Size: (11.81 x 1.57) / (30 x 4)cm (L x W)6.Cushion Height From Ground: 18.90 / 48cm7.Oil Pump Stroke: 6.30 / 16cm8.Square Chassis size: (19.29 x 19.29) / (49 x 49)cm (L x W)9.Package Size: (25.98 x 22.05 x 15.75) / (66 x 56 x 40)cm (L x W x H)10.Product Size: (31.10 x 25.20 x (35.04 - 41.34) / (79 x 64 x (89-105))cm (L x W x H)11.Net Weight: 59.52lb / 27kg12.Bearing Capacity: 300lb / 136.08kg13.Color: BlackPackage Includes:1 x Barber Chair1 x Manual",
+              "instruction_zh": "",
+              "clean_rank": 4,
+              "modified_rank": 4,
+              "rank_gain": 0,
+              "clean_score": 0.3930606245994568,
+              "modified_score": 0.40062427520751953
+            },
+            {
+              "task_id": "feature_10",
+              "query_id": "02_chair_pair_10",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "★ CLASSIC BARBER CHAIR ★✿ The stylish retro design and professional quality of barber chair make it a welcome addition to your barbershop, salon, or beauty spa.✿ It can even serve as a helpful and comfortable leather accent chair or vanity chair for mid-century modern homes!★ Click ‘Add to Cart’ now! ★Specification:Material: high density sponge, PU leatherBackrest: 48x53cm (width x height)/18.8x20.8 inchesHandrail length: 50cm/19.6 inchesCushion size: 51cmx54cm/20x21.2 inchesAdjustable height: 41-52cm/16-20.4 inchesOverall seat height: 84-94cm/33-37 inchesBearing weight: 330 pounds / 150kgChassis diameter: 53cm/20.8 inchesFeatures:--360 degree rotating barber chair--High quality steel frame and safety gas rod--High density foam cushion, comfortable seat--Heavy-duty hydraulic pump, pedal type, easy to lift--Sturdy stainless steel disc, stable and firm--The electroplated steel footrest provides extra comfort●∨● 【Professional Service Team】√ Each product has undergone strict quality control.√ If you have any questions about our products or problems caused by transportation, please email us. √ Our professional service team will serve you wholeheartedly. √ Reply to any message within 12 hours.√ Add to cart now！",
+              "instruction_zh": "",
+              "clean_rank": 4,
+              "modified_rank": 4,
+              "rank_gain": 0,
+              "clean_score": 0.42456987500190735,
+              "modified_score": 0.42978787422180176
+            },
+            {
+              "task_id": "feature_11",
+              "query_id": "02_chair_pair_11",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "改写查询",
+              "instruction": "I am looking for a hydraulic haircut chair with a pedal to raise and lower the seat.",
+              "instruction_zh": "",
+              "clean_rank": 4,
+              "modified_rank": 1,
+              "rank_gain": 3,
+              "clean_score": 0.33474209904670715,
+              "modified_score": 0.3739330470561981
+            },
+            {
+              "task_id": "feature_12",
+              "query_id": "02_chair_pair_12",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "改写查询",
+              "instruction": "Find a full-swivel hydraulic chair I can use for haircuts or shaving at the salon.",
+              "instruction_zh": "",
+              "clean_rank": 4,
+              "modified_rank": 1,
+              "rank_gain": 3,
+              "clean_score": 0.3643531799316406,
+              "modified_score": 0.4013855457305908
+            },
+            {
+              "task_id": "feature_13",
+              "query_id": "02_chair_pair_13",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "改写查询",
+              "instruction": "Show me a contemporary styling chair that will still look right in a vintage barbershop.",
+              "instruction_zh": "",
+              "clean_rank": 2,
+              "modified_rank": 1,
+              "rank_gain": 1,
+              "clean_score": 0.36359503865242004,
+              "modified_score": 0.41365790367126465
+            },
+            {
+              "task_id": "feature_14",
+              "query_id": "02_chair_pair_14",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "改写查询",
+              "instruction": "I need a long-lasting steel and faux leather hydraulic barber chair that wipes clean easily.",
+              "instruction_zh": "",
+              "clean_rank": 4,
+              "modified_rank": 1,
+              "rank_gain": 3,
+              "clean_score": 0.38314396142959595,
+              "modified_score": 0.4131532907485962
+            },
+            {
+              "task_id": "feature_15",
+              "query_id": "02_chair_pair_15",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "改写查询",
+              "instruction": "Looking for a classic luxurious hydraulic barber chair made with steel, foam, and PVC leather, featuring height adjustment, a comfortable backrest, armrests, and footrest for a salon or tattoo shop.",
+              "instruction_zh": "",
+              "clean_rank": 3,
+              "modified_rank": 3,
+              "rank_gain": 0,
+              "clean_score": 0.39588356018066406,
+              "modified_score": 0.39894792437553406
+            },
+            {
+              "task_id": "feature_16",
+              "query_id": "02_chair_pair_16",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "改写查询",
+              "instruction": "Looking for a retro red barber chair with PU leather, a plated base, high-density sponge, 360-degree rotation that stops at any angle, and adjustable height.",
+              "instruction_zh": "",
+              "clean_rank": 3,
+              "modified_rank": 3,
+              "rank_gain": 0,
+              "clean_score": 0.33908069133758545,
+              "modified_score": 0.3525277078151703
+            },
+            {
+              "task_id": "feature_17",
+              "query_id": "02_chair_pair_17",
+              "query_family": "heldout_search_query",
+              "query_family_zh": "短搜索查询",
+              "instruction": "swivel haircut chair with armrests",
+              "instruction_zh": "",
+              "clean_rank": 4,
+              "modified_rank": 2,
+              "rank_gain": 2,
+              "clean_score": 0.29629626870155334,
+              "modified_score": 0.33950352668762207
+            },
+            {
+              "task_id": "feature_18",
+              "query_id": "02_chair_pair_18",
+              "query_family": "heldout_search_query",
+              "query_family_zh": "短搜索查询",
+              "instruction": "low profile hydraulic barber chair",
+              "instruction_zh": "",
+              "clean_rank": 3,
+              "modified_rank": 2,
+              "rank_gain": 1,
+              "clean_score": 0.39541804790496826,
+              "modified_score": 0.41007086634635925
+            },
+            {
+              "task_id": "feature_19",
+              "query_id": "02_chair_pair_19",
+              "query_family": "heldout_search_query",
+              "query_family_zh": "短搜索查询",
+              "instruction": "barber's chair",
+              "instruction_zh": "",
+              "clean_rank": 4,
+              "modified_rank": 1,
+              "rank_gain": 3,
+              "clean_score": 0.34504514932632446,
+              "modified_score": 0.38758864998817444
+            },
+            {
+              "task_id": "feature_20",
+              "query_id": "02_chair_pair_20",
+              "query_family": "heldout_search_query",
+              "query_family_zh": "短搜索查询",
+              "instruction": "heavy duty barber chair footrest",
+              "instruction_zh": "",
+              "clean_rank": 4,
+              "modified_rank": 3,
+              "rank_gain": 1,
+              "clean_score": 0.3413566052913666,
+              "modified_score": 0.35991954803466797
+            }
+          ]
+        }
+      }
+    },
+    "05_hair_extension": {
+      "group": "05_hair_extension",
+      "category": "hair_extensions",
+      "target_public_id": "B01460C2I2",
+      "source_memory_id": "groups9_reference_05_hair_extension_B07Z7MQSM1",
+      "overall": {
+        "query_count": 20,
+        "mean_rank_clean": 6.45,
+        "mean_rank_modified": 2.9,
+        "mean_rank_gain": 3.55,
+        "top1": {
+          "clean_hits": 1,
+          "modified_hits": 5,
+          "clean_rate": 0.05,
+          "modified_rate": 0.25,
+          "gain": 0.2,
+          "new_hits": 4,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 5,
+          "modified_hits": 15,
+          "clean_rate": 0.25,
+          "modified_rate": 0.75,
+          "gain": 0.5,
+          "new_hits": 10,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 9,
+          "modified_hits": 19,
+          "clean_rate": 0.45,
+          "modified_rate": 0.95,
+          "gain": 0.5,
+          "new_hits": 10,
+          "lost_hits": 0
+        }
+      },
+      "by_family": {
+        "category_description": {
+          "query_family": "category_description",
+          "query_family_zh": "同类商品原文",
+          "query_count": 10,
+          "mean_rank_clean": 7.3,
+          "mean_rank_modified": 4.1,
+          "mean_rank_gain": 3.2,
+          "top1": {
+            "clean_hits": 0,
+            "modified_hits": 1,
+            "clean_rate": 0.0,
+            "modified_rate": 0.1,
+            "gain": 0.1,
+            "new_hits": 1,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 2,
+            "modified_hits": 5,
+            "clean_rate": 0.2,
+            "modified_rate": 0.5,
+            "gain": 0.3,
+            "new_hits": 3,
+            "lost_hits": 0
+          },
+          "top5": {
+            "clean_hits": 4,
+            "modified_hits": 9,
+            "clean_rate": 0.4,
+            "modified_rate": 0.9,
+            "gain": 0.5,
+            "new_hits": 5,
+            "lost_hits": 0
+          }
+        },
+        "model_paraphrase": {
+          "query_family": "model_paraphrase",
+          "query_family_zh": "改写查询",
+          "query_count": 6,
+          "mean_rank_clean": 6.833333333333333,
+          "mean_rank_modified": 1.6666666666666667,
+          "mean_rank_gain": 5.166666666666667,
+          "top1": {
+            "clean_hits": 1,
+            "modified_hits": 3,
+            "clean_rate": 0.16666666666666666,
+            "modified_rate": 0.5,
+            "gain": 0.3333333333333333,
+            "new_hits": 2,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 1,
+            "modified_hits": 6,
+            "clean_rate": 0.16666666666666666,
+            "modified_rate": 1.0,
+            "gain": 0.8333333333333334,
+            "new_hits": 5,
+            "lost_hits": 0
+          },
+          "top5": {
+            "clean_hits": 1,
+            "modified_hits": 6,
+            "clean_rate": 0.16666666666666666,
+            "modified_rate": 1.0,
+            "gain": 0.8333333333333334,
+            "new_hits": 5,
+            "lost_hits": 0
+          }
+        },
+        "heldout_search_query": {
+          "query_family": "heldout_search_query",
+          "query_family_zh": "短搜索查询",
+          "query_count": 4,
+          "mean_rank_clean": 3.75,
+          "mean_rank_modified": 1.75,
+          "mean_rank_gain": 2.0,
+          "top1": {
+            "clean_hits": 0,
+            "modified_hits": 1,
+            "clean_rate": 0.0,
+            "modified_rate": 0.25,
+            "gain": 0.25,
+            "new_hits": 1,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 2,
+            "modified_hits": 4,
+            "clean_rate": 0.5,
+            "modified_rate": 1.0,
+            "gain": 0.5,
+            "new_hits": 2,
+            "lost_hits": 0
+          },
+          "top5": {
+            "clean_hits": 4,
+            "modified_hits": 4,
+            "clean_rate": 1.0,
+            "modified_rate": 1.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          }
+        }
+      },
+      "by_condition": {
+        "none": {
+          "overall": {
+            "query_count": 20,
+            "mean_rank_clean": 6.45,
+            "mean_rank_modified": 2.9,
+            "mean_rank_gain": 3.55,
+            "top1": {
+              "clean_hits": 1,
+              "modified_hits": 5,
+              "clean_rate": 0.05,
+              "modified_rate": 0.25,
+              "gain": 0.2,
+              "new_hits": 4,
+              "lost_hits": 0
+            },
+            "top3": {
+              "clean_hits": 5,
+              "modified_hits": 15,
+              "clean_rate": 0.25,
+              "modified_rate": 0.75,
+              "gain": 0.5,
+              "new_hits": 10,
+              "lost_hits": 0
+            },
+            "top5": {
+              "clean_hits": 9,
+              "modified_hits": 19,
+              "clean_rate": 0.45,
+              "modified_rate": 0.95,
+              "gain": 0.5,
+              "new_hits": 10,
+              "lost_hits": 0
+            }
+          },
+          "by_family": {
+            "category_description": {
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "query_count": 10,
+              "mean_rank_clean": 7.3,
+              "mean_rank_modified": 4.1,
+              "mean_rank_gain": 3.2,
+              "top1": {
+                "clean_hits": 0,
+                "modified_hits": 1,
+                "clean_rate": 0.0,
+                "modified_rate": 0.1,
+                "gain": 0.1,
+                "new_hits": 1,
+                "lost_hits": 0
+              },
+              "top3": {
+                "clean_hits": 2,
+                "modified_hits": 5,
+                "clean_rate": 0.2,
+                "modified_rate": 0.5,
+                "gain": 0.3,
+                "new_hits": 3,
+                "lost_hits": 0
+              },
+              "top5": {
+                "clean_hits": 4,
+                "modified_hits": 9,
+                "clean_rate": 0.4,
+                "modified_rate": 0.9,
+                "gain": 0.5,
+                "new_hits": 5,
+                "lost_hits": 0
+              }
+            },
+            "model_paraphrase": {
+              "query_family": "model_paraphrase",
+              "query_family_zh": "改写查询",
+              "query_count": 6,
+              "mean_rank_clean": 6.833333333333333,
+              "mean_rank_modified": 1.6666666666666667,
+              "mean_rank_gain": 5.166666666666667,
+              "top1": {
+                "clean_hits": 1,
+                "modified_hits": 3,
+                "clean_rate": 0.16666666666666666,
+                "modified_rate": 0.5,
+                "gain": 0.3333333333333333,
+                "new_hits": 2,
+                "lost_hits": 0
+              },
+              "top3": {
+                "clean_hits": 1,
+                "modified_hits": 6,
+                "clean_rate": 0.16666666666666666,
+                "modified_rate": 1.0,
+                "gain": 0.8333333333333334,
+                "new_hits": 5,
+                "lost_hits": 0
+              },
+              "top5": {
+                "clean_hits": 1,
+                "modified_hits": 6,
+                "clean_rate": 0.16666666666666666,
+                "modified_rate": 1.0,
+                "gain": 0.8333333333333334,
+                "new_hits": 5,
+                "lost_hits": 0
+              }
+            },
+            "heldout_search_query": {
+              "query_family": "heldout_search_query",
+              "query_family_zh": "短搜索查询",
+              "query_count": 4,
+              "mean_rank_clean": 3.75,
+              "mean_rank_modified": 1.75,
+              "mean_rank_gain": 2.0,
+              "top1": {
+                "clean_hits": 0,
+                "modified_hits": 1,
+                "clean_rate": 0.0,
+                "modified_rate": 0.25,
+                "gain": 0.25,
+                "new_hits": 1,
+                "lost_hits": 0
+              },
+              "top3": {
+                "clean_hits": 2,
+                "modified_hits": 4,
+                "clean_rate": 0.5,
+                "modified_rate": 1.0,
+                "gain": 0.5,
+                "new_hits": 2,
+                "lost_hits": 0
+              },
+              "top5": {
+                "clean_hits": 4,
+                "modified_hits": 4,
+                "clean_rate": 1.0,
+                "modified_rate": 1.0,
+                "gain": 0.0,
+                "new_hits": 0,
+                "lost_hits": 0
+              }
+            }
+          },
+          "queries": [
+            {
+              "task_id": "feature_01",
+              "query_id": "05_hair_extension_pair_01",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "Feature: Type: Wave wig Colour: Black Size: 16/18/20 inch The hair is realistic, the  is soft, not easy. Natural black, can be dyed and bleached. Make you younger, active, attracted and elegant. Packing content: 1xWave wig",
+              "instruction_zh": "",
+              "clean_rank": 7,
+              "modified_rank": 3,
+              "rank_gain": 4,
+              "clean_score": 0.3098409175872803,
+              "modified_score": 0.3348734676837921
+            },
+            {
+              "task_id": "feature_02",
+              "query_id": "05_hair_extension_pair_02",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "18 Inch New Style Soft Faux Locs Crochet Hair Material: 100% High Quality Low Temperature Synthetic Fiber Quantity: 1pack=11 strands, usually 5~7 packs can full a head. Goddess Messy Soft Locs Crochet Hair Advantage Can be extended to super long hair Pre-looped & Pre-Twisted Easy to technique, Save time Super Soft & Neat, Tangle-Free No smell & No Shedding Light Weight & Long Lasting",
+              "instruction_zh": "",
+              "clean_rank": 13,
+              "modified_rank": 3,
+              "rank_gain": 10,
+              "clean_score": 0.281884104013443,
+              "modified_score": 0.3332443833351135
+            },
+            {
+              "task_id": "feature_03",
+              "query_id": "05_hair_extension_pair_03",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "These 6 piece optional hat & hair extensions add volume and flair to your hair in an instant to ensure a natural look and feel!",
+              "instruction_zh": "",
+              "clean_rank": 9,
+              "modified_rank": 4,
+              "rank_gain": 5,
+              "clean_score": 0.2933451235294342,
+              "modified_score": 0.3192601203918457
+            },
+            {
+              "task_id": "feature_04",
+              "query_id": "05_hair_extension_pair_04",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "🌺Hair Quality: Crochet Braids Hair Spring Twist, Light Weight, Smooth, Tight Shiny and Silky, Compact, Very Soft, Not Rough, No harm to the Skin,No Smell, No Tangle,Easy to Separate, Easy to Install,Look natural, Last Long Time.And harmless to the baby, Same as the touch and feel of human hair, you can rest assured that use.",
+              "instruction_zh": "",
+              "clean_rank": 6,
+              "modified_rank": 4,
+              "rank_gain": 2,
+              "clean_score": 0.33211466670036316,
+              "modified_score": 0.35431963205337524
+            },
+            {
+              "task_id": "feature_05",
+              "query_id": "05_hair_extension_pair_05",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "Hair Specifications: Material: 100% kanekalon Synthetic Fiber Water Wave Crochet Hair Length: 14inch, 60g/pack, 22strands/pack Color: 1B#, T27#, T30#, T350#, 530#, 53# Hair Features: Super soft; No odor; Tangle-free; Shedding-free; Itch-free; Natural looking; Easy to braid and install; already separated into small pieces. It makes the process go much faster not having to pull apart pieces. Perfect Protective Hairstyle For daily use or party. About Nursing: You should wash your hair with mild shampoo and conditioner weekly, don't use hair dryer.The passion twist hair usually 5-6 weeks can be used,Please take care of your hair, you can use for longer. Warm Tips: We suggest you wear a wig cap when you wear the passion twist hair, before you are going to bed. Colors may vary slightly depending on your personal computer or cellphone monitor settings. We do try our best to accurately represent colors on all of our products. Package Included: 7 packs passion twist 5 crochet needle some colorful beads",
+              "instruction_zh": "",
+              "clean_rank": 11,
+              "modified_rank": 4,
+              "rank_gain": 7,
+              "clean_score": 0.3679904341697693,
+              "modified_score": 0.40356218814849854
+            },
+            {
+              "task_id": "feature_06",
+              "query_id": "05_hair_extension_pair_06",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "【Hair Material】:Pre Stretched Braiding Hair Made Of High Quality Low Temperature Flame-Retardant Synthetic Fiber.Yaki Texture,Natural Looking And Soft Touch As Human Hair.",
+              "instruction_zh": "",
+              "clean_rank": 4,
+              "modified_rank": 3,
+              "rank_gain": 1,
+              "clean_score": 0.38650864362716675,
+              "modified_score": 0.39887797832489014
+            },
+            {
+              "task_id": "feature_07",
+              "query_id": "05_hair_extension_pair_07",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "Real Human Hair Extensions: Made of 100% human hair, tangle and shedding free. It can last 3-4 monthes with good care.\nSpecification of Hair Extensions: The 120 gram clip-in hair extensions come in 7 pieces set that is incredibly easy to apply and has been specially designed to cover your entire head.\nComfortable & Secure to Wear: Clips are sewed stably, covered with a layer of soft rubber to carefully protect your scalp and hair, you can easily to apply and remove the clip on hair extensions by yourself to change hairstyle for different occasions.\nFast Delivery Time£ºAmazon prime shipping, stock on USA, enjoy prime customer serivce. Expedited delivery: 2 days arrive, ordinary delivery: 3-4 days arrive.\nWarm tips and guarantees: No reason refunds and exchanges within 30 days of payment. The slight color difference may exist because of different monitors of computers or phones and light difference.",
+              "instruction_zh": "",
+              "clean_rank": 5,
+              "modified_rank": 4,
+              "rank_gain": 1,
+              "clean_score": 0.40807127952575684,
+              "modified_score": 0.4134860038757324
+            },
+            {
+              "task_id": "feature_08",
+              "query_id": "05_hair_extension_pair_08",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "Sensationnel Textured Clip-Ins Weave Curls Kinks N Co Boss Lady 10\"(9Pcs)",
+              "instruction_zh": "",
+              "clean_rank": 2,
+              "modified_rank": 1,
+              "rank_gain": 1,
+              "clean_score": 0.33562153577804565,
+              "modified_score": 0.3558655381202698
+            },
+            {
+              "task_id": "feature_09",
+              "query_id": "05_hair_extension_pair_09",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "Sensationnel Textured Clip-Ins Weave Curls Kinks N Co Game Changer 10\"(9Pcs)",
+              "instruction_zh": "",
+              "clean_rank": 2,
+              "modified_rank": 2,
+              "rank_gain": 0,
+              "clean_score": 0.3142284154891968,
+              "modified_score": 0.3307065963745117
+            },
+            {
+              "task_id": "feature_10",
+              "query_id": "05_hair_extension_pair_10",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "5.Great Gift for Kids - You will never regret since they are ideal hairpieces choice for all holiday events & daily dress up to be amazing without any hurt to your own hair. and these colorful hair extension are good gifts for kids too!",
+              "instruction_zh": "",
+              "clean_rank": 14,
+              "modified_rank": 13,
+              "rank_gain": 1,
+              "clean_score": 0.32634711265563965,
+              "modified_score": 0.33591729402542114
+            },
+            {
+              "task_id": "feature_11",
+              "query_id": "05_hair_extension_pair_11",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "改写查询",
+              "instruction": "Which burgundy human-hair extensions can I straighten, curl and color myself?",
+              "instruction_zh": "",
+              "clean_rank": 7,
+              "modified_rank": 1,
+              "rank_gain": 6,
+              "clean_score": 0.3159375786781311,
+              "modified_score": 0.36526066064834595
+            },
+            {
+              "task_id": "feature_12",
+              "query_id": "05_hair_extension_pair_12",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "改写查询",
+              "instruction": "I need lightweight extensions that feel soft and look natural for daily wear or parties.",
+              "instruction_zh": "",
+              "clean_rank": 12,
+              "modified_rank": 2,
+              "rank_gain": 10,
+              "clean_score": 0.3393247425556183,
+              "modified_score": 0.36503785848617554
+            },
+            {
+              "task_id": "feature_13",
+              "query_id": "05_hair_extension_pair_13",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "改写查询",
+              "instruction": "Find bouncy, aligned-cuticle hair bundles with enough volume for a full head.",
+              "instruction_zh": "",
+              "clean_rank": 6,
+              "modified_rank": 1,
+              "rank_gain": 5,
+              "clean_score": 0.34045207500457764,
+              "modified_score": 0.36752521991729736
+            },
+            {
+              "task_id": "feature_14",
+              "query_id": "05_hair_extension_pair_14",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "改写查询",
+              "instruction": "Which pre-stretched braiding extensions can be styled by dipping them in hot water?",
+              "instruction_zh": "",
+              "clean_rank": 7,
+              "modified_rank": 3,
+              "rank_gain": 4,
+              "clean_score": 0.29173436760902405,
+              "modified_score": 0.32760894298553467
+            },
+            {
+              "task_id": "feature_15",
+              "query_id": "05_hair_extension_pair_15",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "改写查询",
+              "instruction": "I want Brazilian kinky straight virgin human hair in natural color, available from 10 to 28 inches, with bundle or closure options for a full head and dyeable shades.",
+              "instruction_zh": "",
+              "clean_rank": 1,
+              "modified_rank": 1,
+              "rank_gain": 0,
+              "clean_score": 0.3765612542629242,
+              "modified_score": 0.3950369358062744
+            },
+            {
+              "task_id": "feature_16",
+              "query_id": "05_hair_extension_pair_16",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "改写查询",
+              "instruction": "I’m looking for Indi Remi weaving hair made from healthy, shiny, bouncy strands with high elasticity and minimal processing for long-lasting wear.",
+              "instruction_zh": "",
+              "clean_rank": 8,
+              "modified_rank": 2,
+              "rank_gain": 6,
+              "clean_score": 0.3236347436904907,
+              "modified_score": 0.3572342097759247
+            },
+            {
+              "task_id": "feature_17",
+              "query_id": "05_hair_extension_pair_17",
+              "query_family": "heldout_search_query",
+              "query_family_zh": "短搜索查询",
+              "instruction": "affordable hair extensions",
+              "instruction_zh": "",
+              "clean_rank": 3,
+              "modified_rank": 1,
+              "rank_gain": 2,
+              "clean_score": 0.3622795343399048,
+              "modified_score": 0.37778449058532715
+            },
+            {
+              "task_id": "feature_18",
+              "query_id": "05_hair_extension_pair_18",
+              "query_family": "heldout_search_query",
+              "query_family_zh": "短搜索查询",
+              "instruction": "clip in human hair extensions",
+              "instruction_zh": "",
+              "clean_rank": 4,
+              "modified_rank": 2,
+              "rank_gain": 2,
+              "clean_score": 0.36730697751045227,
+              "modified_score": 0.38839349150657654
+            },
+            {
+              "task_id": "feature_19",
+              "query_id": "05_hair_extension_pair_19",
+              "query_family": "heldout_search_query",
+              "query_family_zh": "短搜索查询",
+              "instruction": "bead hair extensions",
+              "instruction_zh": "",
+              "clean_rank": 3,
+              "modified_rank": 2,
+              "rank_gain": 1,
+              "clean_score": 0.34902578592300415,
+              "modified_score": 0.3779246211051941
+            },
+            {
+              "task_id": "feature_20",
+              "query_id": "05_hair_extension_pair_20",
+              "query_family": "heldout_search_query",
+              "query_family_zh": "短搜索查询",
+              "instruction": "buy hair extensions",
+              "instruction_zh": "",
+              "clean_rank": 5,
+              "modified_rank": 2,
+              "rank_gain": 3,
+              "clean_score": 0.36894655227661133,
+              "modified_score": 0.38425976037979126
+            }
+          ]
+        }
+      }
+    },
+    "09_toothbrush": {
+      "group": "09_toothbrush",
+      "category": "oral_care",
+      "target_public_id": "B09J81RMLD",
+      "source_memory_id": "groups9_reference_09_toothbrush_B09PNNXYJ4",
+      "overall": {
+        "query_count": 20,
+        "mean_rank_clean": 5.8,
+        "mean_rank_modified": 4.05,
+        "mean_rank_gain": 1.75,
+        "top1": {
+          "clean_hits": 4,
+          "modified_hits": 3,
+          "clean_rate": 0.2,
+          "modified_rate": 0.15,
+          "gain": -0.05,
+          "new_hits": 2,
+          "lost_hits": 3
+        },
+        "top3": {
+          "clean_hits": 9,
+          "modified_hits": 11,
+          "clean_rate": 0.45,
+          "modified_rate": 0.55,
+          "gain": 0.1,
+          "new_hits": 2,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 10,
+          "modified_hits": 17,
+          "clean_rate": 0.5,
+          "modified_rate": 0.85,
+          "gain": 0.35,
+          "new_hits": 7,
+          "lost_hits": 0
+        }
+      },
+      "by_family": {
+        "category_description": {
+          "query_family": "category_description",
+          "query_family_zh": "同类商品原文",
+          "query_count": 10,
+          "mean_rank_clean": 6.4,
+          "mean_rank_modified": 5.4,
+          "mean_rank_gain": 1.0,
+          "top1": {
+            "clean_hits": 3,
+            "modified_hits": 0,
+            "clean_rate": 0.3,
+            "modified_rate": 0.0,
+            "gain": -0.3,
+            "new_hits": 0,
+            "lost_hits": 3
+          },
+          "top3": {
+            "clean_hits": 4,
+            "modified_hits": 5,
+            "clean_rate": 0.4,
+            "modified_rate": 0.5,
+            "gain": 0.1,
+            "new_hits": 1,
+            "lost_hits": 0
+          },
+          "top5": {
+            "clean_hits": 4,
+            "modified_hits": 7,
+            "clean_rate": 0.4,
+            "modified_rate": 0.7,
+            "gain": 0.3,
+            "new_hits": 3,
+            "lost_hits": 0
+          }
+        },
+        "model_paraphrase": {
+          "query_family": "model_paraphrase",
+          "query_family_zh": "改写查询",
+          "query_count": 6,
+          "mean_rank_clean": 2.5,
+          "mean_rank_modified": 2.0,
+          "mean_rank_gain": 0.5,
+          "top1": {
+            "clean_hits": 1,
+            "modified_hits": 3,
+            "clean_rate": 0.16666666666666666,
+            "modified_rate": 0.5,
+            "gain": 0.3333333333333333,
+            "new_hits": 2,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 5,
+            "modified_hits": 5,
+            "clean_rate": 0.8333333333333334,
+            "modified_rate": 0.8333333333333334,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          },
+          "top5": {
+            "clean_hits": 6,
+            "modified_hits": 6,
+            "clean_rate": 1.0,
+            "modified_rate": 1.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          }
+        },
+        "heldout_search_query": {
+          "query_family": "heldout_search_query",
+          "query_family_zh": "短搜索查询",
+          "query_count": 4,
+          "mean_rank_clean": 9.25,
+          "mean_rank_modified": 3.75,
+          "mean_rank_gain": 5.5,
+          "top1": {
+            "clean_hits": 0,
+            "modified_hits": 0,
+            "clean_rate": 0.0,
+            "modified_rate": 0.0,
+            "gain": 0.0,
+            "new_hits": 0,
+            "lost_hits": 0
+          },
+          "top3": {
+            "clean_hits": 0,
+            "modified_hits": 1,
+            "clean_rate": 0.0,
+            "modified_rate": 0.25,
+            "gain": 0.25,
+            "new_hits": 1,
+            "lost_hits": 0
+          },
+          "top5": {
+            "clean_hits": 0,
+            "modified_hits": 4,
+            "clean_rate": 0.0,
+            "modified_rate": 1.0,
+            "gain": 1.0,
+            "new_hits": 4,
+            "lost_hits": 0
+          }
+        }
+      },
+      "by_condition": {
+        "none": {
+          "overall": {
+            "query_count": 20,
+            "mean_rank_clean": 5.8,
+            "mean_rank_modified": 4.05,
+            "mean_rank_gain": 1.75,
+            "top1": {
+              "clean_hits": 4,
+              "modified_hits": 3,
+              "clean_rate": 0.2,
+              "modified_rate": 0.15,
+              "gain": -0.05,
+              "new_hits": 2,
+              "lost_hits": 3
+            },
+            "top3": {
+              "clean_hits": 9,
+              "modified_hits": 11,
+              "clean_rate": 0.45,
+              "modified_rate": 0.55,
+              "gain": 0.1,
+              "new_hits": 2,
+              "lost_hits": 0
+            },
+            "top5": {
+              "clean_hits": 10,
+              "modified_hits": 17,
+              "clean_rate": 0.5,
+              "modified_rate": 0.85,
+              "gain": 0.35,
+              "new_hits": 7,
+              "lost_hits": 0
+            }
+          },
+          "by_family": {
+            "category_description": {
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "query_count": 10,
+              "mean_rank_clean": 6.4,
+              "mean_rank_modified": 5.4,
+              "mean_rank_gain": 1.0,
+              "top1": {
+                "clean_hits": 3,
+                "modified_hits": 0,
+                "clean_rate": 0.3,
+                "modified_rate": 0.0,
+                "gain": -0.3,
+                "new_hits": 0,
+                "lost_hits": 3
+              },
+              "top3": {
+                "clean_hits": 4,
+                "modified_hits": 5,
+                "clean_rate": 0.4,
+                "modified_rate": 0.5,
+                "gain": 0.1,
+                "new_hits": 1,
+                "lost_hits": 0
+              },
+              "top5": {
+                "clean_hits": 4,
+                "modified_hits": 7,
+                "clean_rate": 0.4,
+                "modified_rate": 0.7,
+                "gain": 0.3,
+                "new_hits": 3,
+                "lost_hits": 0
+              }
+            },
+            "model_paraphrase": {
+              "query_family": "model_paraphrase",
+              "query_family_zh": "改写查询",
+              "query_count": 6,
+              "mean_rank_clean": 2.5,
+              "mean_rank_modified": 2.0,
+              "mean_rank_gain": 0.5,
+              "top1": {
+                "clean_hits": 1,
+                "modified_hits": 3,
+                "clean_rate": 0.16666666666666666,
+                "modified_rate": 0.5,
+                "gain": 0.3333333333333333,
+                "new_hits": 2,
+                "lost_hits": 0
+              },
+              "top3": {
+                "clean_hits": 5,
+                "modified_hits": 5,
+                "clean_rate": 0.8333333333333334,
+                "modified_rate": 0.8333333333333334,
+                "gain": 0.0,
+                "new_hits": 0,
+                "lost_hits": 0
+              },
+              "top5": {
+                "clean_hits": 6,
+                "modified_hits": 6,
+                "clean_rate": 1.0,
+                "modified_rate": 1.0,
+                "gain": 0.0,
+                "new_hits": 0,
+                "lost_hits": 0
+              }
+            },
+            "heldout_search_query": {
+              "query_family": "heldout_search_query",
+              "query_family_zh": "短搜索查询",
+              "query_count": 4,
+              "mean_rank_clean": 9.25,
+              "mean_rank_modified": 3.75,
+              "mean_rank_gain": 5.5,
+              "top1": {
+                "clean_hits": 0,
+                "modified_hits": 0,
+                "clean_rate": 0.0,
+                "modified_rate": 0.0,
+                "gain": 0.0,
+                "new_hits": 0,
+                "lost_hits": 0
+              },
+              "top3": {
+                "clean_hits": 0,
+                "modified_hits": 1,
+                "clean_rate": 0.0,
+                "modified_rate": 0.25,
+                "gain": 0.25,
+                "new_hits": 1,
+                "lost_hits": 0
+              },
+              "top5": {
+                "clean_hits": 0,
+                "modified_hits": 4,
+                "clean_rate": 0.0,
+                "modified_rate": 1.0,
+                "gain": 1.0,
+                "new_hits": 4,
+                "lost_hits": 0
+              }
+            }
+          },
+          "queries": [
+            {
+              "task_id": "feature_01",
+              "query_id": "09_toothbrush_pair_01",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "The brush head is made of food-grade soft silicone material, safe and secure.",
+              "instruction_zh": "",
+              "clean_rank": 2,
+              "modified_rank": 2,
+              "rank_gain": 0,
+              "clean_score": 0.38692498207092285,
+              "modified_score": 0.38822928071022034
+            },
+            {
+              "task_id": "feature_02",
+              "query_id": "09_toothbrush_pair_02",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "GENTLE & EFFECTIVE CLEANING: The BPA free replaceable brush heads and 2 power modes provide gentle sonic variables that help to quickly clean teeth.",
+              "instruction_zh": "",
+              "clean_rank": 7,
+              "modified_rank": 2,
+              "rank_gain": 5,
+              "clean_score": 0.3898465037345886,
+              "modified_score": 0.41565847396850586
+            },
+            {
+              "task_id": "feature_03",
+              "query_id": "09_toothbrush_pair_03",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "Feature:1. The product adopts all‑round waterproof and sealed design, IPX7 waterproof, convenient, durable and clean.2. U‑shaped toothbrush design, using soft food‑grade silicone material, safe, protect the child's delicate oral skin.3. 360‑degree contact with gums and teeth, every brushing can bring a quick and comfortable teeth cleaning experience to the mouth.4. Can effectively protect the gums, promote periodontal blood circulation, and reduce the occurrence of periodontal diseases.5. The two brush heads can be switched at will to meet different tooth brushing needs.Specification:Item Type: U-Shaped Automatic ToothbrushHost Power: 2WRated Charging Input: 5V/1ACharging Time: About 2 hoursLithium Battery: 450mAh (included)Instructions:Step 1: Insert the brush head carefully into the output shaft and fix it.Step 2: Squeeze the toothpaste into the toothbrush head. Liquid toothpaste or ordinary toothpaste can be used. Ordinary toothpaste must be wetted with braces before putting it in the mouthStep 3: Gently place the upper and lower teeth on the alveolar, then press the switch, shake the toothbrush left and right with your hands to touch the teeth on both sides.Step 4: Complete the tooth cleaning, clean the toothbrush, and dry it. Package List:1 x Main Machine 1 x U-Shaped Brush Head1 x Brush Head 1 x USB Charging Cable Note:When the product is not used for a long time or stored for a long time, it is recommended to charge and discharge once within three months",
+              "instruction_zh": "",
+              "clean_rank": 6,
+              "modified_rank": 5,
+              "rank_gain": 1,
+              "clean_score": 0.4511939287185669,
+              "modified_score": 0.45574361085891724
+            },
+            {
+              "task_id": "feature_04",
+              "query_id": "09_toothbrush_pair_04",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "This ergonomic toothbrush is lightweight and easy to carry wherever you need it",
+              "instruction_zh": "",
+              "clean_rank": 13,
+              "modified_rank": 5,
+              "rank_gain": 8,
+              "clean_score": 0.34567153453826904,
+              "modified_score": 0.37380433082580566
+            },
+            {
+              "task_id": "feature_05",
+              "query_id": "09_toothbrush_pair_05",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "Let your baby fall in love with brushing teeth ! HOW TO USE: Shake the toothpaste before use to ensure squeezing even toothpaste. Toothpaste to the front and back sides. Shake the U-shape toothbrush to the left and right. Just rinse the toothbrush after use. SPECIFICATIONS: Material: Silicone + PP Disinfection Method: Wash in warm water Heat-resisting Temperature: 100°C Applicable Age：1-8,8-12 years old PACKAGE INCLUDED: 1PC U-shape Toothbrush",
+              "instruction_zh": "",
+              "clean_rank": 1,
+              "modified_rank": 2,
+              "rank_gain": -1,
+              "clean_score": 0.4917728304862976,
+              "modified_score": 0.47083014249801636
+            },
+            {
+              "task_id": "feature_06",
+              "query_id": "09_toothbrush_pair_06",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "Multi height bristles clean between teeth and along the gumline. Plant based handle 99 percent made from renewable castor oil plants No artificial colors dye free bristles, handle uses mineral based pigments",
+              "instruction_zh": "",
+              "clean_rank": 6,
+              "modified_rank": 11,
+              "rank_gain": -5,
+              "clean_score": 0.3704308867454529,
+              "modified_score": 0.3359701931476593
+            },
+            {
+              "task_id": "feature_07",
+              "query_id": "09_toothbrush_pair_07",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "Description:Material: Silicone + PPSize: Brush head: 49.34mm x 30.34mm, handle: 46mm x 64mmColor: green/orange/purple/yellowPackage List:1 x Baby toothbrush",
+              "instruction_zh": "",
+              "clean_rank": 1,
+              "modified_rank": 2,
+              "rank_gain": -1,
+              "clean_score": 0.42493560910224915,
+              "modified_score": 0.401517391204834
+            },
+            {
+              "task_id": "feature_08",
+              "query_id": "09_toothbrush_pair_08",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "IPX7 Waterproof & 4 Dupont Brush Heads - High-density bristles and design in \"W\" shape can go into the gum thoroughly, removes the stubborn tooth stains deeply. Reminder bristle will fade in color to let you know it's time to change the brush head.",
+              "instruction_zh": "",
+              "clean_rank": 9,
+              "modified_rank": 6,
+              "rank_gain": 3,
+              "clean_score": 0.3559834957122803,
+              "modified_score": 0.3831503987312317
+            },
+            {
+              "task_id": "feature_09",
+              "query_id": "09_toothbrush_pair_09",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "The GUM travel toothbrush is ideal for carrying a toothbrush wherever you go with the confidence of always being able to freshen your mouth and remove dental plaque. 3 Blister packs of 2 brushes each",
+              "instruction_zh": "",
+              "clean_rank": 18,
+              "modified_rank": 17,
+              "rank_gain": 1,
+              "clean_score": 0.25249814987182617,
+              "modified_score": 0.27469027042388916
+            },
+            {
+              "task_id": "feature_10",
+              "query_id": "09_toothbrush_pair_10",
+              "query_family": "category_description",
+              "query_family_zh": "同类商品原文",
+              "instruction": "Children's U-shaped toothbrush 360° thorough cleaning, suitable for ages 2-12 years oldFeature: ✿【High quality material】Made of food grade silicone. The material is safe, no peculiar smell, and the baby is healthier to use.  ✿[Special U-shaped design] Different from traditional toothbrushes, we use a unique U-shaped brush head design, which fits the teeth better. The U-shaped design fits the mouth better, allowing babies to accept it. Babies can brush their teeth while playing. ✿[Healthier Care] U-shaped brush head design, 360° cleaning baby teeth. It is easier for babies to clean their teeth. Clean teeth in all directions to make the oral cavity healthier. ✿【Let babies love to brush their teeth】Easy to use. Put toothpaste in your mouth and shake to clean your teeth. The brush head can be cleaned in all directions, making it easy to brush your teeth.how to use:Shake the toothpaste well before use to ensure that the toothpaste is squeezed out evenly.The front and back of the toothpaste.Shake the U-shaped toothbrush from side to side.Just rinse the toothbrush after use.Specification: Material: Silicone+PPDisinfection method: wash with warm waterHeat resistance temperature: 100°CApplicable age: 0-12 years oldType & Size: Small (2~6 years old), Large (7~12 years old)Package Included: 1 U-shaped toothbrush",
+              "instruction_zh": "",
+              "clean_rank": 1,
+              "modified_rank": 2,
+              "rank_gain": -1,
+              "clean_score": 0.5045375823974609,
+              "modified_score": 0.4823934733867645
+            },
+            {
+              "task_id": "feature_11",
+              "query_id": "09_toothbrush_pair_11",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "改写查询",
+              "instruction": "Find a U-shaped toothbrush for a preschooler that can be washed in warm water.",
+              "instruction_zh": "",
+              "clean_rank": 3,
+              "modified_rank": 1,
+              "rank_gain": 2,
+              "clean_score": 0.3822062015533447,
+              "modified_score": 0.3998170495033264
+            },
+            {
+              "task_id": "feature_12",
+              "query_id": "09_toothbrush_pair_12",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "改写查询",
+              "instruction": "Find a children’s toothbrush with a heat-resistant silicone head I can disinfect.",
+              "instruction_zh": "",
+              "clean_rank": 1,
+              "modified_rank": 1,
+              "rank_gain": 0,
+              "clean_score": 0.41911715269088745,
+              "modified_score": 0.4398793578147888
+            },
+            {
+              "task_id": "feature_13",
+              "query_id": "09_toothbrush_pair_13",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "改写查询",
+              "instruction": "Show me a soft silicone U-shaped toothbrush for kids that feels gentle on the gums.",
+              "instruction_zh": "",
+              "clean_rank": 2,
+              "modified_rank": 2,
+              "rank_gain": 0,
+              "clean_score": 0.41694849729537964,
+              "modified_score": 0.4270145297050476
+            },
+            {
+              "task_id": "feature_14",
+              "query_id": "09_toothbrush_pair_14",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "改写查询",
+              "instruction": "Find a 4-piece set of silicone and PP U-shaped toothbrushes with pink and blue heart and oval styles for ages 0-6 and 6-12.",
+              "instruction_zh": "",
+              "clean_rank": 3,
+              "modified_rank": 3,
+              "rank_gain": 0,
+              "clean_score": 0.41462916135787964,
+              "modified_score": 0.41669800877571106
+            },
+            {
+              "task_id": "feature_15",
+              "query_id": "09_toothbrush_pair_15",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "改写查询",
+              "instruction": "I want an all-around toothbrush with a flexible head for a child with sensitive teeth.",
+              "instruction_zh": "",
+              "clean_rank": 2,
+              "modified_rank": 1,
+              "rank_gain": 1,
+              "clean_score": 0.40072327852249146,
+              "modified_score": 0.42211467027664185
+            },
+            {
+              "task_id": "feature_16",
+              "query_id": "09_toothbrush_pair_16",
+              "query_family": "model_paraphrase",
+              "query_family_zh": "改写查询",
+              "instruction": "Find a portable children's U-shaped toothbrush made from PP and silicone, available in pink or blue and in peach-heart or long-handle designs.",
+              "instruction_zh": "",
+              "clean_rank": 4,
+              "modified_rank": 4,
+              "rank_gain": 0,
+              "clean_score": 0.46241915225982666,
+              "modified_score": 0.4579547643661499
+            },
+            {
+              "task_id": "feature_17",
+              "query_id": "09_toothbrush_pair_17",
+              "query_family": "heldout_search_query",
+              "query_family_zh": "短搜索查询",
+              "instruction": "banana toothbrush",
+              "instruction_zh": "",
+              "clean_rank": 11,
+              "modified_rank": 5,
+              "rank_gain": 6,
+              "clean_score": 0.306882381439209,
+              "modified_score": 0.3250204920768738
+            },
+            {
+              "task_id": "feature_18",
+              "query_id": "09_toothbrush_pair_18",
+              "query_family": "heldout_search_query",
+              "query_family_zh": "短搜索查询",
+              "instruction": "light toothbrush",
+              "instruction_zh": "",
+              "clean_rank": 9,
+              "modified_rank": 2,
+              "rank_gain": 7,
+              "clean_score": 0.365344375371933,
+              "modified_score": 0.4115806221961975
+            },
+            {
+              "task_id": "feature_19",
+              "query_id": "09_toothbrush_pair_19",
+              "query_family": "heldout_search_query",
+              "query_family_zh": "短搜索查询",
+              "instruction": "oral-b electric toothbrush",
+              "instruction_zh": "",
+              "clean_rank": 10,
+              "modified_rank": 4,
+              "rank_gain": 6,
+              "clean_score": 0.2967444062232971,
+              "modified_score": 0.3464511036872864
+            },
+            {
+              "task_id": "feature_20",
+              "query_id": "09_toothbrush_pair_20",
+              "query_family": "heldout_search_query",
+              "query_family_zh": "短搜索查询",
+              "instruction": "baby finger toothbrush",
+              "instruction_zh": "",
+              "clean_rank": 7,
+              "modified_rank": 4,
+              "rank_gain": 3,
+              "clean_score": 0.3594868779182434,
+              "modified_score": 0.3656863868236542
+            }
+          ]
+        }
+      }
+    }
+  },
+  "scope_notice": {
+    "retrieval_coverage_only": true,
+    "recommendation_or_shopping_executed": false,
+    "interpretation": "本结果仅反映不同测试查询下的记忆检索覆盖情况（Top-1/Top-3/Top-5 召回与名次变化）；最终推荐或购买决策是否受到影响，须在下游推荐/购物阶段单独验证。"
+  }
+}

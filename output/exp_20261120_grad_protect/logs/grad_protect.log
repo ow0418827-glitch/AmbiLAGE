@@ -1,0 +1,109 @@
+[START] 2026-11-20T06:45:40Z GEN gp_pilot3
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  20%|██        | 150/741 [00:00<00:00, 1477.56it/s]Loading weights:  40%|████      | 298/741 [00:00<00:00, 1053.77it/s]Loading weights:  55%|█████▌    | 411/741 [00:00<00:00, 933.11it/s] Loading weights:  69%|██████▊   | 509/741 [00:00<00:00, 910.54it/s]Loading weights:  81%|████████▏ | 603/741 [00:00<00:00, 888.68it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 1149.40it/s]
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  66%|██████▋   | 491/741 [00:00<00:00, 4904.70it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 5124.81it/s]
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+Loading weights:   0%|          | 0/196 [00:00<?, ?it/s]Loading weights:   1%|          | 2/196 [00:01<01:52,  1.73it/s]Loading weights:  53%|█████▎    | 104/196 [00:01<00:00, 113.21it/s]Loading weights:  83%|████████▎ | 163/196 [00:01<00:00, 126.02it/s]Loading weights: 100%|██████████| 196/196 [00:01<00:00, 105.76it/s]
+The config attributes {'skip_prk_steps': True} were passed to DDIMInverseScheduler, but are not expected and will be ignored. Please verify your scheduler_config.json configuration file.
+AmbiLAGE 细化 [10/250] Utility=0.6659 SSIM=0.9639 MAE=8.35 LR=1.000 (Accepted=10, Rejected=0)
+AmbiLAGE 细化 [20/250] Utility=0.6919 SSIM=0.9553 MAE=8.63 LR=0.996 (Accepted=20, Rejected=0)
+AmbiLAGE 细化 [30/250] Utility=0.7069 SSIM=0.9534 MAE=7.14 LR=0.984 (Accepted=30, Rejected=0)
+AmbiLAGE 细化 [40/250] Utility=0.7119 SSIM=0.9520 MAE=7.47 LR=0.965 (Accepted=40, Rejected=0)
+AmbiLAGE 细化 [50/250] Utility=0.7225 SSIM=0.9508 MAE=8.11 LR=0.938 (Accepted=50, Rejected=0)
+AmbiLAGE 细化 [60/250] Utility=0.7305 SSIM=0.9503 MAE=8.44 LR=0.905 (Accepted=60, Rejected=0)
+AmbiLAGE 细化 [70/250] Utility=0.7365 SSIM=0.9503 MAE=8.01 LR=0.865 (Accepted=70, Rejected=0)
+AmbiLAGE 细化 [80/250] Utility=0.7429 SSIM=0.9494 MAE=8.27 LR=0.820 (Accepted=80, Rejected=0)
+AmbiLAGE 细化 [90/250] Utility=0.7490 SSIM=0.9489 MAE=8.15 LR=0.770 (Accepted=90, Rejected=0)
+AmbiLAGE 细化 [100/250] Utility=0.7516 SSIM=0.9485 MAE=8.21 LR=0.716 (Accepted=100, Rejected=0)
+AmbiLAGE 细化 [110/250] Utility=0.7591 SSIM=0.9475 MAE=8.59 LR=0.659 (Accepted=110, Rejected=0)
+AmbiLAGE 细化 [120/250] Utility=0.7617 SSIM=0.9473 MAE=8.19 LR=0.600 (Accepted=120, Rejected=0)
+AmbiLAGE 细化 [130/250] Utility=0.7655 SSIM=0.9473 MAE=8.35 LR=0.540 (Accepted=130, Rejected=0)
+AmbiLAGE 细化 [140/250] Utility=0.7675 SSIM=0.9466 MAE=8.30 LR=0.480 (Accepted=140, Rejected=0)
+AmbiLAGE 细化 [150/250] Utility=0.7657 SSIM=0.9465 MAE=8.05 LR=0.421 (Accepted=150, Rejected=0)
+AmbiLAGE 细化 [160/250] Utility=0.7693 SSIM=0.9463 MAE=8.35 LR=0.364 (Accepted=160, Rejected=0)
+AmbiLAGE 细化 [170/250] Utility=0.7709 SSIM=0.9461 MAE=8.28 LR=0.310 (Accepted=170, Rejected=0)
+AmbiLAGE 细化 [180/250] Utility=0.7744 SSIM=0.9458 MAE=8.52 LR=0.260 (Accepted=180, Rejected=0)
+AmbiLAGE 细化 [190/250] Utility=0.7773 SSIM=0.9456 MAE=8.67 LR=0.215 (Accepted=190, Rejected=0)
+AmbiLAGE 细化 [200/250] Utility=0.7781 SSIM=0.9454 MAE=8.60 LR=0.175 (Accepted=200, Rejected=0)
+AmbiLAGE 细化 [210/250] Utility=0.7786 SSIM=0.9454 MAE=8.52 LR=0.142 (Accepted=210, Rejected=0)
+AmbiLAGE 细化 [220/250] Utility=0.7801 SSIM=0.9456 MAE=8.55 LR=0.115 (Accepted=220, Rejected=0)
+AmbiLAGE 细化 [230/250] Utility=0.7807 SSIM=0.9453 MAE=8.68 LR=0.096 (Accepted=230, Rejected=0)
+AmbiLAGE 细化 [240/250] Utility=0.7831 SSIM=0.9454 MAE=8.70 LR=0.084 (Accepted=240, Rejected=0)
+AmbiLAGE 细化 [250/250] Utility=0.7813 SSIM=0.9453 MAE=8.72 LR=0.080 (Accepted=250, Rejected=0)
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  35%|███▍      | 258/741 [00:00<00:00, 2575.62it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 4896.01it/s]
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  34%|███▍      | 252/741 [00:00<00:00, 2512.95it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 5221.28it/s]
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+Loading weights:   0%|          | 0/196 [00:00<?, ?it/s]Loading weights: 100%|██████████| 196/196 [00:00<00:00, 2935.67it/s]
+The config attributes {'skip_prk_steps': True} were passed to DDIMInverseScheduler, but are not expected and will be ignored. Please verify your scheduler_config.json configuration file.
+AmbiLAGE 细化 [10/250] Utility=0.6678 SSIM=0.9219 MAE=7.26 LR=1.000 (Accepted=10, Rejected=0)
+AmbiLAGE 细化 [20/250] Utility=0.6859 SSIM=0.9213 MAE=7.20 LR=0.996 (Accepted=20, Rejected=0)
+AmbiLAGE 细化 [30/250] Utility=0.6969 SSIM=0.9201 MAE=7.23 LR=0.984 (Accepted=30, Rejected=0)
+AmbiLAGE 细化 [40/250] Utility=0.7078 SSIM=0.9181 MAE=7.38 LR=0.965 (Accepted=40, Rejected=0)
+AmbiLAGE 细化 [50/250] Utility=0.7165 SSIM=0.9171 MAE=7.41 LR=0.938 (Accepted=50, Rejected=0)
+AmbiLAGE 细化 [60/250] Utility=0.7205 SSIM=0.9164 MAE=7.43 LR=0.905 (Accepted=60, Rejected=0)
+AmbiLAGE 细化 [70/250] Utility=0.7278 SSIM=0.9141 MAE=7.49 LR=0.865 (Accepted=70, Rejected=0)
+AmbiLAGE 细化 [80/250] Utility=0.7308 SSIM=0.9148 MAE=7.42 LR=0.820 (Accepted=80, Rejected=0)
+AmbiLAGE 细化 [90/250] Utility=0.7376 SSIM=0.9126 MAE=7.45 LR=0.770 (Accepted=90, Rejected=0)
+AmbiLAGE 细化 [100/250] Utility=0.7415 SSIM=0.9115 MAE=7.51 LR=0.716 (Accepted=100, Rejected=0)
+AmbiLAGE 细化 [110/250] Utility=0.7450 SSIM=0.9110 MAE=7.49 LR=0.659 (Accepted=110, Rejected=0)
+AmbiLAGE 细化 [120/250] Utility=0.7457 SSIM=0.9102 MAE=7.52 LR=0.600 (Accepted=120, Rejected=0)
+AmbiLAGE 细化 [130/250] Utility=0.7515 SSIM=0.9097 MAE=7.41 LR=0.540 (Accepted=130, Rejected=0)
+AmbiLAGE 细化 [140/250] Utility=0.7537 SSIM=0.9087 MAE=7.46 LR=0.480 (Accepted=140, Rejected=0)
+AmbiLAGE 细化 [150/250] Utility=0.7577 SSIM=0.9077 MAE=7.47 LR=0.421 (Accepted=150, Rejected=0)
+AmbiLAGE 细化 [160/250] Utility=0.7572 SSIM=0.9064 MAE=7.40 LR=0.364 (Accepted=160, Rejected=0)
+AmbiLAGE 细化 [170/250] Utility=0.7602 SSIM=0.9065 MAE=7.36 LR=0.310 (Accepted=170, Rejected=0)
+AmbiLAGE 细化 [180/250] Utility=0.7599 SSIM=0.9069 MAE=7.34 LR=0.260 (Accepted=180, Rejected=0)
+AmbiLAGE 细化 [190/250] Utility=0.7649 SSIM=0.9057 MAE=7.40 LR=0.215 (Accepted=190, Rejected=0)
+AmbiLAGE 细化 [200/250] Utility=0.7664 SSIM=0.9059 MAE=7.38 LR=0.175 (Accepted=200, Rejected=0)
+AmbiLAGE 细化 [210/250] Utility=0.7677 SSIM=0.9058 MAE=7.34 LR=0.142 (Accepted=210, Rejected=0)
+AmbiLAGE 细化 [220/250] Utility=0.7686 SSIM=0.9053 MAE=7.39 LR=0.115 (Accepted=220, Rejected=0)
+AmbiLAGE 细化 [230/250] Utility=0.7698 SSIM=0.9048 MAE=7.42 LR=0.096 (Accepted=230, Rejected=0)
+AmbiLAGE 细化 [240/250] Utility=0.7704 SSIM=0.9048 MAE=7.36 LR=0.084 (Accepted=240, Rejected=0)
+AmbiLAGE 细化 [250/250] Utility=0.7707 SSIM=0.9041 MAE=7.47 LR=0.080 (Accepted=250, Rejected=0)
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  49%|████▊     | 361/741 [00:00<00:00, 3603.48it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 5801.22it/s]
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  62%|██████▏   | 463/741 [00:00<00:00, 4604.76it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 4509.54it/s]
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+Loading weights:   0%|          | 0/196 [00:00<?, ?it/s]Loading weights: 100%|██████████| 196/196 [00:00<00:00, 2857.64it/s]
+The config attributes {'skip_prk_steps': True} were passed to DDIMInverseScheduler, but are not expected and will be ignored. Please verify your scheduler_config.json configuration file.
+AmbiLAGE 细化 [10/250] Utility=0.6129 SSIM=0.9840 MAE=11.22 LR=1.000 (Accepted=10, Rejected=0)
+AmbiLAGE 细化 [20/250] Utility=0.6316 SSIM=0.9804 MAE=12.59 LR=0.996 (Accepted=20, Rejected=0)
+AmbiLAGE 细化 [30/250] Utility=0.6448 SSIM=0.9801 MAE=10.72 LR=0.984 (Accepted=30, Rejected=0)
+AmbiLAGE 细化 [40/250] Utility=0.6551 SSIM=0.9790 MAE=11.35 LR=0.965 (Accepted=40, Rejected=0)
+AmbiLAGE 细化 [50/250] Utility=0.6571 SSIM=0.9775 MAE=12.53 LR=0.938 (Accepted=50, Rejected=0)
+AmbiLAGE 细化 [60/250] Utility=0.6600 SSIM=0.9784 MAE=10.40 LR=0.905 (Accepted=60, Rejected=0)
+AmbiLAGE 细化 [70/250] Utility=0.6650 SSIM=0.9785 MAE=10.14 LR=0.865 (Accepted=70, Rejected=0)
+AmbiLAGE 细化 [80/250] Utility=0.6661 SSIM=0.9781 MAE=10.40 LR=0.820 (Accepted=80, Rejected=0)
+AmbiLAGE 细化 [90/250] Utility=0.6706 SSIM=0.9777 MAE=10.26 LR=0.770 (Accepted=90, Rejected=0)
+AmbiLAGE 细化 [100/250] Utility=0.6691 SSIM=0.9775 MAE=10.36 LR=0.716 (Accepted=100, Rejected=0)
+AmbiLAGE 细化 [110/250] Utility=0.6746 SSIM=0.9774 MAE=10.22 LR=0.659 (Accepted=110, Rejected=0)
+AmbiLAGE 细化 [120/250] Utility=0.6720 SSIM=0.9766 MAE=11.24 LR=0.600 (Accepted=120, Rejected=0)
+AmbiLAGE 细化 [130/250] Utility=0.6818 SSIM=0.9766 MAE=10.91 LR=0.540 (Accepted=130, Rejected=0)
+Traceback (most recent call last):
+  File "/content/AmbiLAGE/tools/run_experiment.py", line 8, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/content/AmbiLAGE/src/experiments/base_workflow.py", line 314, in main
+    generate_group(base, group, args.method, output / group / args.method, device=args.device,
+  File "/content/AmbiLAGE/src/experiments/base_workflow.py", line 228, in generate_group
+    image, metadata = generate_attack(inputs['source']['image'], inputs['target']['image'],
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/content/AmbiLAGE/src/visual/optimization.py", line 116, in generate_attack
+    image, metadata = run_ambilage_attack(
+                      ^^^^^^^^^^^^^^^^^^^^
+  File "/content/AmbiLAGE/src/visual/_ambilage/pipeline.py", line 445, in run_attack
+    return generate_ambilage(source,target,output_dir,definition=definition,config=ambilage_config,device=device,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/content/AmbiLAGE/src/visual/_ambilage/pipeline.py", line 430, in generate_ambilage
+    return AmbiLAGEPipeline(cfg,device).execute(source,target,output_dir,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/content/AmbiLAGE/src/visual/_ambilage/pipeline.py", line 347, in execute
+    final, refinement = refine_ambient_coop_latent(anchor_t, source_tensor, envelopes,
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/content/AmbiLAGE/src/visual/_ambilage/latent_refinement.py", line 893, in refine_ambient_coop_latent
+    raise InterruptedError(f"收到中断信号 ({interrupt_requested['name']})，已保存完整断点至第 {step} 步")
+InterruptedError: 收到中断信号 (SIGTERM)，已保存完整断点至第 138 步

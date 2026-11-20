@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "protocol": "visual_inception_training_oracle_v4_exact",
+  "query_suite": "training_oracle_v4",
+  "method": "ambilage",
+  "query_mode": "text",
+  "key_mode": "image",
+  "key_image_weight": 1.0,
+  "defense_mode": "none",
+  "selected_conditions": [
+    {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    }
+  ],
+  "base_path": "/content/AmbiLAGE/resources/evaluation_base",
+  "base_manifest_sha256": "ad8370e3e32ab4fa85a079adc1980586c5e0e4b664ea652a166d5b54472283a1",
+  "query_root": "/content/AmbiLAGE/resources/visual_inception_evaluation/exact_overlap_v4/training_oracle_v4",
+  "query_root_manifest_sha256": "e26dffd6d8f3b0d66eaad97b4098586f2260ec70bad44133b706cae71acbfcbb",
+  "query_validation_sha256": "1a896aa644e3703d39e43508003f1b6e917751140068cd7cd1da67248035f36f",
+  "pool_path": "/content/AmbiLAGE/resources/evaluation_base/shared_memory/shared_memory.json",
+  "pool_sha256": "bfd8964a4477b694796787ffe2fc746c5eb19a389c23c904ebccc81975cd77a8",
+  "pool_count": 189,
+  "encoder_config": "/content/AmbiLAGE/src/visual/config/evaluator.clip_l14.matched.json",
+  "encoder_config_sha256": "18523d5f64d9689c3fc5095758948bac6edd721b40673b6fb831f1dd1508bff5",
+  "groups": [
+    "02_chair",
+    "05_hair_extension",
+    "09_toothbrush"
+  ],
+  "simultaneous_replacement_count": 3,
+  "shared_pool_scope": "simultaneous_3_group_replacement",
+  "shopping_allowed": false,
+  "recommendation_executed": false,
+  "frozen_images": {
+    "02_chair": {
+      "image": "/content/AmbiLAGE/output/exp_20261120_grad_protect/gen/02_chair/ambilage/frozen.png",
+      "image_sha256": "3b16fb6f30d0c20b8f83244eb325caf83620e136fbebd5453a05e3efa131b44f",
+      "source_memory_id": "groups9_reference_02_chair_B08GCSRXKS",
+      "source_id": "B08GCSRXKS",
+      "target_id": "B09CYFD5BX",
+      "requested_steps": 250,
+      "objective_kind": "sequential_public_joint_text_fg_ot_psi_v4"
+    },
+    "05_hair_extension": {
+      "image": "/content/AmbiLAGE/output/exp_20261120_grad_protect/gen/05_hair_extension/ambilage/frozen.png",
+      "image_sha256": "701ffd5a5cb8591f7db919a6d9a1aa71fbee71bf7e40b2690b728f307ce01fae",
+      "source_memory_id": "groups9_reference_05_hair_extension_B07Z7MQSM1",
+      "source_id": "B07Z7MQSM1",
+      "target_id": "B01460C2I2",
+      "requested_steps": 250,
+      "objective_kind": "sequential_public_joint_text_fg_ot_psi_v4"
+    },
+    "09_toothbrush": {
+      "image": "/content/AmbiLAGE/output/exp_20261120_grad_protect/gen/09_toothbrush/ambilage/frozen.png",
+      "image_sha256": "784740d4d4beb810778ff7d95d7cd852c164a8893f53a552491ffb8a5e895756",
+      "source_memory_id": "groups9_reference_09_toothbrush_B09PNNXYJ4",
+      "source_id": "B09PNNXYJ4",
+      "target_id": "B09J81RMLD",
+      "requested_steps": 250,
+      "objective_kind": "sequential_public_joint_text_fg_ot_psi_v4"
+    }
+  }
+}

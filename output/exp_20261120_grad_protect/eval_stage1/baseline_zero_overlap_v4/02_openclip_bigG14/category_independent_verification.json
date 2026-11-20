@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "protocol": "visual_inception_zero_overlap_v4_exact",
+  "query_suite": "zero_overlap_v4",
+  "status": "passed",
+  "groups_verified": 3,
+  "rankings_recomputed": 120,
+  "candidate_scores_recomputed": 22680,
+  "max_score_error": 0.0,
+  "all_candidate_scores_checked": true,
+  "summary_sha256": "20c582ae835daa373089e3a37366177687c8174b1a95e2692812d46bd70836bd",
+  "groups": {
+    "02_chair": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "965a834f315c0bf27fcdbf1361a9c2f2f568a94adaf00d2ddd2540bd563f55b1",
+      "scores_sha256": "7b84f720d1d547b2835f92155a3f646c5297da63e10df513c9edab5991a93a13"
+    },
+    "05_hair_extension": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "45a22e17874b7e6006e6f157fb979fc42c7d379bb5118ca6df35509f0406862f",
+      "scores_sha256": "b2396bda7fdcc8cdcdf234d5a705cc348bccee50968a861259af87d76249510d"
+    },
+    "09_toothbrush": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "17b1214bb9c83a7dcfcb0f1ce94d9b4806b0130e6a51ac09b51cb9465b09f67f",
+      "scores_sha256": "d37a12afa6868dcbf74b065f1973962da15d54b462aa7e660fadb056424206b3"
+    }
+  }
+}

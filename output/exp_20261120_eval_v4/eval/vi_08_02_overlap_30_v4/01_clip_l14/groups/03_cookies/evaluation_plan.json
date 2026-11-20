@@ -1,0 +1,349 @@
+{
+  "schema_version": 1,
+  "scope": "shared",
+  "pool_path": "/content/AmbiLAGE/resources/evaluation_base/shared_memory/shared_memory.json",
+  "pool_sha256": "bfd8964a4477b694796787ffe2fc746c5eb19a389c23c904ebccc81975cd77a8",
+  "pool_count": 189,
+  "source_memory_id": "groups9_reference_03_cookies_B07BBLWTLM",
+  "frozen_image_sha256": "7cc9136b918330ad6520b27cf7ae3897e146e193964e48a3392797cdc948abfa",
+  "source_public_id": "B07BBLWTLM",
+  "method": "visual_inception",
+  "queries": [
+    {
+      "task_id": "feature_01",
+      "instruction": "Simply spoon heaping teaspoons of Nestle Toll House cookie dough onto an ungreased baking sheet and bake until golden brown.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_02",
+      "instruction": "Enjoy one Nestle Toll House chocolate chip cookie with a cup of nonfat milk for a delicious snack",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_03",
+      "instruction": "Ready To Bake Sugar Cookies are super simple — just place and bake for cookies in minutes.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_04",
+      "instruction": "GET YOUR HOMEMADE COOKIE WITHOUT ALL THE MESS.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_05",
+      "instruction": "OTIS SPUNKMEYER IS THE NAME FOR BAKED GOODS: Dedicated to baking, experimenting, and creating delicious treats for over 40 years. Always committed to use fewer ingredients and none of the funky stuff.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_06",
+      "instruction": "GLUTEN FREE COOKIES: Chocolate chunk cookies are certified gluten free with no bleached flour, artificial flavors or preservatives; Non-dairy recipe",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_07",
+      "instruction": "Makes about 36 Nestle Toll House cookies packed with semi sweet chocolate morsels",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_08",
+      "instruction": "Classic chocolate chip cookie Dough, as featured in our Caramel Chocolate double dough ice cream!",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_09",
+      "instruction": "Once you’ve discovered the coolest ever cache of Ben & Jerry's cookie dough chunks you can grab straight from the package, we think you’ll agree it’s the direct est route to dough phoria you can get",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_10",
+      "instruction": "This refrigerated cookie dough contains no preservatives, artificial flavors, or colors, and the chocolate chips are made with 100% real chocolate.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_11",
+      "instruction": "I want ready-made cookie dough so I can bake without having to mix it from scratch.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_12",
+      "instruction": "Find refrigerated cookie dough I can slice and bake without using a mixing bowl.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_13",
+      "instruction": "I need cookie dough I can keep chilled or freeze to use later.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_14",
+      "instruction": "Where can I buy ready-to-bake chocolate chip cookie dough that bakes quickly for warm cookies?",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_15",
+      "instruction": "Where can I find freezer-to-oven cookie dough that is already portioned?",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_16",
+      "instruction": "What cookie dough requires a special order and cannot be canceled, returned, or refunded?",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_17",
+      "instruction": "refrigerated cookie dough",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_18",
+      "instruction": "tollhouse cookie dough",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_19",
+      "instruction": "frozen cookie dough wholesale",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_20",
+      "instruction": "toll house cookie dough",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    }
+  ],
+  "conditions": [
+    {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    }
+  ],
+  "training_surrogate_context": {
+    "schema_version": 1,
+    "scope": "all_frozen_images_in_modified_bank",
+    "images": [
+      {
+        "method": "visual_inception",
+        "source_id": "B07BBLWTLM",
+        "image_sha256": "7cc9136b918330ad6520b27cf7ae3897e146e193964e48a3392797cdc948abfa",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B071ZFHTZN",
+        "image_sha256": "1008b2fbf0a6ba279e531ab0e5bd64d45d5a82c7fe8721e31d0312cf214eb656",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B08GCSRXKS",
+        "image_sha256": "4b506b0e46d40b69c43d9b0246a10dbfef9532db584f44d656f672b1418e9285",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B09PHLS2QD",
+        "image_sha256": "4deada105c81b09461da228e601a52ff2934e3c0cfe6157f616ae5780978e2ce",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B07Z7MQSM1",
+        "image_sha256": "a1b6402d015bb5050879cd9b4858c287e4d3f8bb21a9af12c09db8b1b1c72d12",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B07FRKQNFV",
+        "image_sha256": "38033cf15b6f8abcd3a5dd217f0583c46b8918c87f4e13d4dcab1b652a111bca",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B09B63YYCW",
+        "image_sha256": "fe56c83b8ed8ac46338635c42fb38a570dbece823512d838bb9f9adbf1ce5325",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B01590FHS0",
+        "image_sha256": "3e4649db5a41c1e26d7afd64d6acecc845a1658579308f880b37f212a550c206",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B09PNNXYJ4",
+        "image_sha256": "75eecd1bb1d8bd18b6141dcc22dead3878d8390b5765023d72e9772dc21503dc",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      }
+    ],
+    "context_sha256": "5ea92ddc0c81ec1d1d61f4c254bf6f32ce04e1a2e9b3e0dff1879cd1b8f5e808"
+  },
+  "training_identity_policy": "actual_frozen_surrogates_v1",
+  "simultaneous_replacements": [
+    {
+      "source_id": "B071ZFHTZN",
+      "image_sha256": "1008b2fbf0a6ba279e531ab0e5bd64d45d5a82c7fe8721e31d0312cf214eb656",
+      "source_memory_id": "groups9_reference_01_camera_B071ZFHTZN"
+    },
+    {
+      "source_id": "B08GCSRXKS",
+      "image_sha256": "4b506b0e46d40b69c43d9b0246a10dbfef9532db584f44d656f672b1418e9285",
+      "source_memory_id": "groups9_reference_02_chair_B08GCSRXKS"
+    },
+    {
+      "source_id": "B07BBLWTLM",
+      "image_sha256": "7cc9136b918330ad6520b27cf7ae3897e146e193964e48a3392797cdc948abfa",
+      "source_memory_id": "groups9_reference_03_cookies_B07BBLWTLM"
+    },
+    {
+      "source_id": "B09PHLS2QD",
+      "image_sha256": "4deada105c81b09461da228e601a52ff2934e3c0cfe6157f616ae5780978e2ce",
+      "source_memory_id": "groups9_reference_04_curtain_B09PHLS2QD"
+    },
+    {
+      "source_id": "B07Z7MQSM1",
+      "image_sha256": "a1b6402d015bb5050879cd9b4858c287e4d3f8bb21a9af12c09db8b1b1c72d12",
+      "source_memory_id": "groups9_reference_05_hair_extension_B07Z7MQSM1"
+    },
+    {
+      "source_id": "B07FRKQNFV",
+      "image_sha256": "38033cf15b6f8abcd3a5dd217f0583c46b8918c87f4e13d4dcab1b652a111bca",
+      "source_memory_id": "groups9_reference_06_jeans_B07FRKQNFV"
+    },
+    {
+      "source_id": "B09B63YYCW",
+      "image_sha256": "fe56c83b8ed8ac46338635c42fb38a570dbece823512d838bb9f9adbf1ce5325",
+      "source_memory_id": "groups9_reference_07_shampoo_B09B63YYCW"
+    },
+    {
+      "source_id": "B01590FHS0",
+      "image_sha256": "3e4649db5a41c1e26d7afd64d6acecc845a1658579308f880b37f212a550c206",
+      "source_memory_id": "groups9_reference_08_speaker_B01590FHS0"
+    },
+    {
+      "source_id": "B09PNNXYJ4",
+      "image_sha256": "75eecd1bb1d8bd18b6141dcc22dead3878d8390b5765023d72e9772dc21503dc",
+      "source_memory_id": "groups9_reference_09_toothbrush_B09PNNXYJ4"
+    }
+  ],
+  "memory_vector_cache_policy": "content_model_decoder_text_fusion_bound_v1",
+  "encoder_config": "/content/AmbiLAGE/src/visual/config/evaluator.clip_l14.matched.json",
+  "encoder_config_sha256": "18523d5f64d9689c3fc5095758948bac6edd721b40673b6fb831f1dd1508bff5",
+  "key_mode": "image",
+  "key_image_weight": 1.0,
+  "query_image_weight": 0.0,
+  "query_mode": "text",
+  "query_manifest": "/content/AmbiLAGE/resources/visual_inception_evaluation/exact_overlap_v4/overlap_30_v4/03_cookies/queries.json",
+  "query_manifest_sha256": "1adb7cd9a4fad3d1fb3b4f23d5086277f45a72f4e286da8f2861ec927f239096",
+  "index_text": "product_feature",
+  "query_image_defended": false,
+  "all_memory_images_equally_defended": true,
+  "shopping_allowed": false,
+  "record_kinds": {
+    "purchase_memory": 51,
+    "simulated_gallery": 138
+  }
+}

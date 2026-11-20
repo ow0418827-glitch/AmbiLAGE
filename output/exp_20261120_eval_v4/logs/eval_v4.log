@@ -1,0 +1,984 @@
+[START] 2026-11-20T10:11:54Z eval_v4 (AmbiLAGE + VI-0.8/0.2 across training_oracle_v4, overlap_30_v4, zero_overlap_v4)
+
+=== [ENCODER 01_clip_l14] panels=['ambilage_training_oracle_v4', 'vi_08_02_training_oracle_v4', 'ambilage_overlap_30_v4', 'vi_08_02_overlap_30_v4', 'ambilage_zero_overlap_v4', 'vi_08_02_zero_overlap_v4'] unique_images=207 unique_texts=360 batch_size=16 text_batch_size=64 verify=in_process ===
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+none clean: 前三 5/20；前五 12/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 5/20；前五 19/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 20/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 4/20；前五 10/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 2/20；前五 4/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 4/20；前五 6/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 2/20；前五 4/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 20/20；前五 20/20
+[EVAL DONE] ambilage_training_oracle_v4/01_clip_l14
+none clean: 前三 5/20；前五 12/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 5/20；前五 19/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 20/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 4/20；前五 10/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 2/20；前五 4/20
+none modified: 前三 16/20；前五 19/20
+none clean: 前三 4/20；前五 6/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 2/20；前五 4/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 20/20；前五 20/20
+[EVAL DONE] vi_08_02_training_oracle_v4/01_clip_l14
+none clean: 前三 3/20；前五 9/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 6/20；前五 14/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 15/20；前五 17/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 3/20；前五 8/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 2/20；前五 4/20
+none modified: 前三 18/20；前五 20/20
+none clean: 前三 3/20；前五 5/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 4/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 19/20；前五 20/20
+[EVAL DONE] ambilage_overlap_30_v4/01_clip_l14
+none clean: 前三 3/20；前五 9/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 6/20；前五 14/20
+none modified: 前三 18/20；前五 19/20
+none clean: 前三 15/20；前五 17/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 3/20；前五 8/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 2/20；前五 4/20
+none modified: 前三 10/20；前五 14/20
+none clean: 前三 3/20；前五 5/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 4/20
+none modified: 前三 16/20；前五 18/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 15/20；前五 17/20
+[EVAL DONE] vi_08_02_overlap_30_v4/01_clip_l14
+none clean: 前三 1/20；前五 3/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 6/20；前五 10/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 14/20；前五 17/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 18/20；前五 19/20
+none clean: 前三 4/20；前五 7/20
+none modified: 前三 19/20；前五 19/20
+none clean: 前三 1/20；前五 2/20
+none modified: 前三 17/20；前五 20/20
+none clean: 前三 1/20；前五 2/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 18/20；前五 20/20
+[EVAL DONE] ambilage_zero_overlap_v4/01_clip_l14
+none clean: 前三 1/20；前五 3/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 6/20；前五 10/20
+none modified: 前三 15/20；前五 18/20
+none clean: 前三 14/20；前五 17/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 17/20；前五 18/20
+none clean: 前三 4/20；前五 7/20
+none modified: 前三 19/20；前五 19/20
+none clean: 前三 1/20；前五 2/20
+none modified: 前三 8/20；前五 13/20
+none clean: 前三 1/20；前五 2/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 13/20；前五 15/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 12/20；前五 16/20
+[EVAL DONE] vi_08_02_zero_overlap_v4/01_clip_l14
+[VERIFY 01_clip_l14] prewarmed 207 unique images (batch=16), 360 unique texts (text_batch=64)
+[VERIFIED] ambilage_training_oracle_v4/01_clip_l14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] vi_08_02_training_oracle_v4/01_clip_l14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] ambilage_overlap_30_v4/01_clip_l14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] vi_08_02_overlap_30_v4/01_clip_l14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] ambilage_zero_overlap_v4/01_clip_l14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] vi_08_02_zero_overlap_v4/01_clip_l14: rankings=360 scores=68040 max_error=0.00e+00
+
+=== [ENCODER 02_openclip_bigG14] panels=['ambilage_training_oracle_v4', 'vi_08_02_training_oracle_v4', 'ambilage_overlap_30_v4', 'vi_08_02_overlap_30_v4', 'ambilage_zero_overlap_v4', 'vi_08_02_zero_overlap_v4'] unique_images=207 unique_texts=360 batch_size=16 text_batch_size=64 verify=in_process ===
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+none clean: 前三 8/20；前五 16/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 7/20；前五 19/20
+none modified: 前三 16/20；前五 20/20
+none clean: 前三 20/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 4/20；前五 11/20
+none modified: 前三 11/20；前五 15/20
+none clean: 前三 8/20；前五 12/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 0/20；前五 2/20
+none modified: 前三 13/20；前五 15/20
+none clean: 前三 8/20；前五 10/20
+none modified: 前三 12/20；前五 15/20
+none clean: 前三 5/20；前五 5/20
+none modified: 前三 7/20；前五 11/20
+none clean: 前三 15/20；前五 17/20
+none modified: 前三 17/20；前五 20/20
+[EVAL DONE] ambilage_training_oracle_v4/02_openclip_bigG14
+none clean: 前三 8/20；前五 16/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 7/20；前五 19/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 20/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 4/20；前五 11/20
+none modified: 前三 4/20；前五 8/20
+none clean: 前三 8/20；前五 12/20
+none modified: 前三 18/20；前五 19/20
+none clean: 前三 0/20；前五 2/20
+none modified: 前三 7/20；前五 11/20
+none clean: 前三 8/20；前五 10/20
+none modified: 前三 13/20；前五 16/20
+none clean: 前三 5/20；前五 5/20
+none modified: 前三 4/20；前五 9/20
+none clean: 前三 15/20；前五 17/20
+none modified: 前三 10/20；前五 14/20
+[EVAL DONE] vi_08_02_training_oracle_v4/02_openclip_bigG14
+none clean: 前三 2/20；前五 9/20
+none modified: 前三 11/20；前五 17/20
+none clean: 前三 5/20；前五 15/20
+none modified: 前三 11/20；前五 17/20
+none clean: 前三 17/20；前五 18/20
+none modified: 前三 16/20；前五 19/20
+none clean: 前三 4/20；前五 6/20
+none modified: 前三 7/20；前五 10/20
+none clean: 前三 5/20；前五 9/20
+none modified: 前三 15/20；前五 19/20
+none clean: 前三 0/20；前五 2/20
+none modified: 前三 12/20；前五 14/20
+none clean: 前三 8/20；前五 9/20
+none modified: 前三 10/20；前五 13/20
+none clean: 前三 1/20；前五 2/20
+none modified: 前三 4/20；前五 11/20
+none clean: 前三 9/20；前五 10/20
+none modified: 前三 11/20；前五 17/20
+[EVAL DONE] ambilage_overlap_30_v4/02_openclip_bigG14
+none clean: 前三 2/20；前五 9/20
+none modified: 前三 10/20；前五 10/20
+none clean: 前三 5/20；前五 15/20
+none modified: 前三 13/20；前五 17/20
+none clean: 前三 17/20；前五 18/20
+none modified: 前三 17/20；前五 19/20
+none clean: 前三 4/20；前五 6/20
+none modified: 前三 3/20；前五 5/20
+none clean: 前三 5/20；前五 9/20
+none modified: 前三 11/20；前五 11/20
+none clean: 前三 0/20；前五 2/20
+none modified: 前三 4/20；前五 6/20
+none clean: 前三 8/20；前五 9/20
+none modified: 前三 10/20；前五 11/20
+none clean: 前三 1/20；前五 2/20
+none modified: 前三 3/20；前五 6/20
+none clean: 前三 9/20；前五 10/20
+none modified: 前三 4/20；前五 7/20
+[EVAL DONE] vi_08_02_overlap_30_v4/02_openclip_bigG14
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 5/20；前五 13/20
+none clean: 前三 4/20；前五 12/20
+none modified: 前三 10/20；前五 14/20
+none clean: 前三 14/20；前五 15/20
+none modified: 前三 13/20；前五 16/20
+none clean: 前三 2/20；前五 3/20
+none modified: 前三 3/20；前五 6/20
+none clean: 前三 2/20；前五 6/20
+none modified: 前三 12/20；前五 15/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 8/20；前五 12/20
+none clean: 前三 5/20；前五 5/20
+none modified: 前三 5/20；前五 9/20
+none clean: 前三 1/20；前五 2/20
+none modified: 前三 4/20；前五 11/20
+none clean: 前三 6/20；前五 6/20
+none modified: 前三 8/20；前五 13/20
+[EVAL DONE] ambilage_zero_overlap_v4/02_openclip_bigG14
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 4/20；前五 5/20
+none clean: 前三 4/20；前五 12/20
+none modified: 前三 10/20；前五 14/20
+none clean: 前三 14/20；前五 15/20
+none modified: 前三 15/20；前五 18/20
+none clean: 前三 2/20；前五 3/20
+none modified: 前三 1/20；前五 3/20
+none clean: 前三 2/20；前五 6/20
+none modified: 前三 7/20；前五 7/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 1/20；前五 2/20
+none clean: 前三 5/20；前五 5/20
+none modified: 前三 5/20；前五 6/20
+none clean: 前三 1/20；前五 2/20
+none modified: 前三 3/20；前五 4/20
+none clean: 前三 6/20；前五 6/20
+none modified: 前三 1/20；前五 2/20
+[EVAL DONE] vi_08_02_zero_overlap_v4/02_openclip_bigG14
+[VERIFY 02_openclip_bigG14] prewarmed 207 unique images (batch=16), 360 unique texts (text_batch=64)
+[VERIFIED] ambilage_training_oracle_v4/02_openclip_bigG14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] vi_08_02_training_oracle_v4/02_openclip_bigG14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] ambilage_overlap_30_v4/02_openclip_bigG14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] vi_08_02_overlap_30_v4/02_openclip_bigG14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] ambilage_zero_overlap_v4/02_openclip_bigG14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] vi_08_02_zero_overlap_v4/02_openclip_bigG14: rankings=360 scores=68040 max_error=0.00e+00
+
+=== [ENCODER 03_siglip_so400m] panels=['ambilage_training_oracle_v4', 'vi_08_02_training_oracle_v4', 'ambilage_overlap_30_v4', 'vi_08_02_overlap_30_v4', 'ambilage_zero_overlap_v4', 'vi_08_02_zero_overlap_v4'] unique_images=207 unique_texts=360 batch_size=16 text_batch_size=64 verify=in_process ===
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+none clean: 前三 15/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 6/20；前五 17/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 20/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 8/20；前五 12/20
+none modified: 前三 15/20；前五 17/20
+none clean: 前三 3/20；前五 5/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 2/20；前五 4/20
+none modified: 前三 5/20；前五 6/20
+none clean: 前三 5/20；前五 8/20
+none modified: 前三 18/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 9/20；前五 13/20
+none clean: 前三 16/20；前五 19/20
+none modified: 前三 17/20；前五 19/20
+[EVAL DONE] ambilage_training_oracle_v4/03_siglip_so400m
+none clean: 前三 15/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 6/20；前五 17/20
+none modified: 前三 18/20；前五 20/20
+none clean: 前三 20/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 8/20；前五 12/20
+none modified: 前三 12/20；前五 15/20
+none clean: 前三 3/20；前五 5/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 2/20；前五 4/20
+none modified: 前三 4/20；前五 5/20
+none clean: 前三 5/20；前五 8/20
+none modified: 前三 9/20；前五 18/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 2/20；前五 6/20
+none clean: 前三 16/20；前五 19/20
+none modified: 前三 16/20；前五 19/20
+[EVAL DONE] vi_08_02_training_oracle_v4/03_siglip_so400m
+none clean: 前三 7/20；前五 10/20
+none modified: 前三 8/20；前五 12/20
+none clean: 前三 4/20；前五 14/20
+none modified: 前三 16/20；前五 17/20
+none clean: 前三 17/20；前五 20/20
+none modified: 前三 18/20；前五 20/20
+none clean: 前三 4/20；前五 5/20
+none modified: 前三 5/20；前五 9/20
+none clean: 前三 4/20；前五 4/20
+none modified: 前三 14/20；前五 18/20
+none clean: 前三 2/20；前五 3/20
+none modified: 前三 4/20；前五 7/20
+none clean: 前三 4/20；前五 7/20
+none modified: 前三 14/20；前五 17/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 7/20；前五 11/20
+none clean: 前三 10/20；前五 11/20
+none modified: 前三 11/20；前五 12/20
+[EVAL DONE] ambilage_overlap_30_v4/03_siglip_so400m
+none clean: 前三 7/20；前五 10/20
+none modified: 前三 9/20；前五 13/20
+none clean: 前三 4/20；前五 14/20
+none modified: 前三 14/20；前五 17/20
+none clean: 前三 17/20；前五 20/20
+none modified: 前三 18/20；前五 20/20
+none clean: 前三 4/20；前五 5/20
+none modified: 前三 7/20；前五 8/20
+none clean: 前三 4/20；前五 4/20
+none modified: 前三 13/20；前五 14/20
+none clean: 前三 2/20；前五 3/20
+none modified: 前三 3/20；前五 4/20
+none clean: 前三 4/20；前五 7/20
+none modified: 前三 5/20；前五 9/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 3/20；前五 5/20
+none clean: 前三 10/20；前五 11/20
+none modified: 前三 11/20；前五 12/20
+[EVAL DONE] vi_08_02_overlap_30_v4/03_siglip_so400m
+none clean: 前三 1/20；前五 4/20
+none modified: 前三 2/20；前五 7/20
+none clean: 前三 5/20；前五 11/20
+none modified: 前三 13/20；前五 14/20
+none clean: 前三 13/20；前五 17/20
+none modified: 前三 14/20；前五 17/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 1/20；前五 6/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 9/20；前五 13/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 1/20；前五 5/20
+none clean: 前三 2/20；前五 4/20
+none modified: 前三 13/20；前五 15/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 5/20；前五 8/20
+none clean: 前三 5/20；前五 6/20
+none modified: 前三 7/20；前五 8/20
+[EVAL DONE] ambilage_zero_overlap_v4/03_siglip_so400m
+none clean: 前三 1/20；前五 4/20
+none modified: 前三 4/20；前五 9/20
+none clean: 前三 5/20；前五 11/20
+none modified: 前三 11/20；前五 14/20
+none clean: 前三 13/20；前五 17/20
+none modified: 前三 15/20；前五 17/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 3/20；前五 4/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 8/20；前五 10/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 1/20
+none clean: 前三 2/20；前五 4/20
+none modified: 前三 3/20；前五 4/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 2/20；前五 3/20
+none clean: 前三 5/20；前五 6/20
+none modified: 前三 8/20；前五 8/20
+[EVAL DONE] vi_08_02_zero_overlap_v4/03_siglip_so400m
+[VERIFY 03_siglip_so400m] prewarmed 207 unique images (batch=16), 360 unique texts (text_batch=64)
+[VERIFIED] ambilage_training_oracle_v4/03_siglip_so400m: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] vi_08_02_training_oracle_v4/03_siglip_so400m: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] ambilage_overlap_30_v4/03_siglip_so400m: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] vi_08_02_overlap_30_v4/03_siglip_so400m: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] ambilage_zero_overlap_v4/03_siglip_so400m: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] vi_08_02_zero_overlap_v4/03_siglip_so400m: rankings=360 scores=68040 max_error=0.00e+00
+{
+  "ambilage_training_oracle_v4": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 9.46111111111111,
+      "mean_rank_modified": 1.05,
+      "mean_rank_gain": 8.411111111111111,
+      "top1": {
+        "clean_hits": 19,
+        "modified_hits": 174,
+        "clean_rate": 0.10555555555555556,
+        "modified_rate": 0.9666666666666667,
+        "gain": 0.8611111111111112,
+        "new_hits": 155,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 42,
+        "modified_hits": 180,
+        "clean_rate": 0.23333333333333334,
+        "modified_rate": 1.0,
+        "gain": 0.7666666666666667,
+        "new_hits": 138,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 77,
+        "modified_hits": 180,
+        "clean_rate": 0.42777777777777776,
+        "modified_rate": 1.0,
+        "gain": 0.5722222222222222,
+        "new_hits": 103,
+        "lost_hits": 0
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 5.961111111111111,
+      "mean_rank_modified": 3.0555555555555554,
+      "mean_rank_gain": 2.9055555555555554,
+      "top1": {
+        "clean_hits": 37,
+        "modified_hits": 78,
+        "clean_rate": 0.20555555555555555,
+        "modified_rate": 0.43333333333333335,
+        "gain": 0.22777777777777777,
+        "new_hits": 45,
+        "lost_hits": 4
+      },
+      "top3": {
+        "clean_hits": 75,
+        "modified_hits": 135,
+        "clean_rate": 0.4166666666666667,
+        "modified_rate": 0.75,
+        "gain": 0.3333333333333333,
+        "new_hits": 60,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 112,
+        "modified_hits": 156,
+        "clean_rate": 0.6222222222222222,
+        "modified_rate": 0.8666666666666667,
+        "gain": 0.24444444444444444,
+        "new_hits": 44,
+        "lost_hits": 0
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 7.133333333333334,
+      "mean_rank_modified": 2.811111111111111,
+      "mean_rank_gain": 4.322222222222222,
+      "top1": {
+        "clean_hits": 39,
+        "modified_hits": 106,
+        "clean_rate": 0.21666666666666667,
+        "modified_rate": 0.5888888888888889,
+        "gain": 0.37222222222222223,
+        "new_hits": 68,
+        "lost_hits": 1
+      },
+      "top3": {
+        "clean_hits": 75,
+        "modified_hits": 144,
+        "clean_rate": 0.4166666666666667,
+        "modified_rate": 0.8,
+        "gain": 0.38333333333333336,
+        "new_hits": 69,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 105,
+        "modified_hits": 155,
+        "clean_rate": 0.5833333333333334,
+        "modified_rate": 0.8611111111111112,
+        "gain": 0.2777777777777778,
+        "new_hits": 50,
+        "lost_hits": 0
+      }
+    }
+  },
+  "vi_08_02_training_oracle_v4": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 9.46111111111111,
+      "mean_rank_modified": 1.1666666666666667,
+      "mean_rank_gain": 8.294444444444444,
+      "top1": {
+        "clean_hits": 19,
+        "modified_hits": 168,
+        "clean_rate": 0.10555555555555556,
+        "modified_rate": 0.9333333333333333,
+        "gain": 0.8277777777777777,
+        "new_hits": 149,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 42,
+        "modified_hits": 176,
+        "clean_rate": 0.23333333333333334,
+        "modified_rate": 0.9777777777777777,
+        "gain": 0.7444444444444445,
+        "new_hits": 135,
+        "lost_hits": 1
+      },
+      "top5": {
+        "clean_hits": 77,
+        "modified_hits": 179,
+        "clean_rate": 0.42777777777777776,
+        "modified_rate": 0.9944444444444445,
+        "gain": 0.5666666666666667,
+        "new_hits": 103,
+        "lost_hits": 1
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 5.961111111111111,
+      "mean_rank_modified": 4.177777777777778,
+      "mean_rank_gain": 1.7833333333333334,
+      "top1": {
+        "clean_hits": 37,
+        "modified_hits": 62,
+        "clean_rate": 0.20555555555555555,
+        "modified_rate": 0.34444444444444444,
+        "gain": 0.1388888888888889,
+        "new_hits": 37,
+        "lost_hits": 12
+      },
+      "top3": {
+        "clean_hits": 75,
+        "modified_hits": 115,
+        "clean_rate": 0.4166666666666667,
+        "modified_rate": 0.6388888888888888,
+        "gain": 0.2222222222222222,
+        "new_hits": 47,
+        "lost_hits": 7
+      },
+      "top5": {
+        "clean_hits": 112,
+        "modified_hits": 137,
+        "clean_rate": 0.6222222222222222,
+        "modified_rate": 0.7611111111111111,
+        "gain": 0.1388888888888889,
+        "new_hits": 31,
+        "lost_hits": 6
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 7.133333333333334,
+      "mean_rank_modified": 3.8666666666666667,
+      "mean_rank_gain": 3.2666666666666666,
+      "top1": {
+        "clean_hits": 39,
+        "modified_hits": 88,
+        "clean_rate": 0.21666666666666667,
+        "modified_rate": 0.4888888888888889,
+        "gain": 0.2722222222222222,
+        "new_hits": 52,
+        "lost_hits": 3
+      },
+      "top3": {
+        "clean_hits": 75,
+        "modified_hits": 121,
+        "clean_rate": 0.4166666666666667,
+        "modified_rate": 0.6722222222222223,
+        "gain": 0.25555555555555554,
+        "new_hits": 47,
+        "lost_hits": 1
+      },
+      "top5": {
+        "clean_hits": 105,
+        "modified_hits": 143,
+        "clean_rate": 0.5833333333333334,
+        "modified_rate": 0.7944444444444444,
+        "gain": 0.2111111111111111,
+        "new_hits": 39,
+        "lost_hits": 1
+      }
+    }
+  },
+  "ambilage_overlap_30_v4": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 13.622222222222222,
+      "mean_rank_modified": 1.1666666666666667,
+      "mean_rank_gain": 12.455555555555556,
+      "top1": {
+        "clean_hits": 19,
+        "modified_hits": 165,
+        "clean_rate": 0.10555555555555556,
+        "modified_rate": 0.9166666666666666,
+        "gain": 0.8111111111111111,
+        "new_hits": 146,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 33,
+        "modified_hits": 176,
+        "clean_rate": 0.18333333333333332,
+        "modified_rate": 0.9777777777777777,
+        "gain": 0.7944444444444444,
+        "new_hits": 143,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 63,
+        "modified_hits": 180,
+        "clean_rate": 0.35,
+        "modified_rate": 1.0,
+        "gain": 0.65,
+        "new_hits": 117,
+        "lost_hits": 0
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 9.094444444444445,
+      "mean_rank_modified": 4.705555555555556,
+      "mean_rank_gain": 4.388888888888889,
+      "top1": {
+        "clean_hits": 24,
+        "modified_hits": 43,
+        "clean_rate": 0.13333333333333333,
+        "modified_rate": 0.2388888888888889,
+        "gain": 0.10555555555555556,
+        "new_hits": 22,
+        "lost_hits": 3
+      },
+      "top3": {
+        "clean_hits": 51,
+        "modified_hits": 97,
+        "clean_rate": 0.2833333333333333,
+        "modified_rate": 0.5388888888888889,
+        "gain": 0.25555555555555554,
+        "new_hits": 48,
+        "lost_hits": 2
+      },
+      "top5": {
+        "clean_hits": 80,
+        "modified_hits": 137,
+        "clean_rate": 0.4444444444444444,
+        "modified_rate": 0.7611111111111111,
+        "gain": 0.31666666666666665,
+        "new_hits": 57,
+        "lost_hits": 0
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 9.494444444444444,
+      "mean_rank_modified": 4.844444444444444,
+      "mean_rank_gain": 4.65,
+      "top1": {
+        "clean_hits": 29,
+        "modified_hits": 56,
+        "clean_rate": 0.16111111111111112,
+        "modified_rate": 0.3111111111111111,
+        "gain": 0.15,
+        "new_hits": 29,
+        "lost_hits": 2
+      },
+      "top3": {
+        "clean_hits": 53,
+        "modified_hits": 97,
+        "clean_rate": 0.29444444444444445,
+        "modified_rate": 0.5388888888888889,
+        "gain": 0.24444444444444444,
+        "new_hits": 44,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 75,
+        "modified_hits": 123,
+        "clean_rate": 0.4166666666666667,
+        "modified_rate": 0.6833333333333333,
+        "gain": 0.26666666666666666,
+        "new_hits": 48,
+        "lost_hits": 0
+      }
+    }
+  },
+  "vi_08_02_overlap_30_v4": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 13.622222222222222,
+      "mean_rank_modified": 1.8333333333333333,
+      "mean_rank_gain": 11.78888888888889,
+      "top1": {
+        "clean_hits": 19,
+        "modified_hits": 141,
+        "clean_rate": 0.10555555555555556,
+        "modified_rate": 0.7833333333333333,
+        "gain": 0.6777777777777778,
+        "new_hits": 122,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 33,
+        "modified_hits": 157,
+        "clean_rate": 0.18333333333333332,
+        "modified_rate": 0.8722222222222222,
+        "gain": 0.6888888888888889,
+        "new_hits": 126,
+        "lost_hits": 2
+      },
+      "top5": {
+        "clean_hits": 63,
+        "modified_hits": 168,
+        "clean_rate": 0.35,
+        "modified_rate": 0.9333333333333333,
+        "gain": 0.5833333333333334,
+        "new_hits": 106,
+        "lost_hits": 1
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 9.094444444444445,
+      "mean_rank_modified": 7.072222222222222,
+      "mean_rank_gain": 2.022222222222222,
+      "top1": {
+        "clean_hits": 24,
+        "modified_hits": 36,
+        "clean_rate": 0.13333333333333333,
+        "modified_rate": 0.2,
+        "gain": 0.06666666666666667,
+        "new_hits": 16,
+        "lost_hits": 4
+      },
+      "top3": {
+        "clean_hits": 51,
+        "modified_hits": 75,
+        "clean_rate": 0.2833333333333333,
+        "modified_rate": 0.4166666666666667,
+        "gain": 0.13333333333333333,
+        "new_hits": 32,
+        "lost_hits": 8
+      },
+      "top5": {
+        "clean_hits": 80,
+        "modified_hits": 92,
+        "clean_rate": 0.4444444444444444,
+        "modified_rate": 0.5111111111111111,
+        "gain": 0.06666666666666667,
+        "new_hits": 17,
+        "lost_hits": 5
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 9.494444444444444,
+      "mean_rank_modified": 6.344444444444444,
+      "mean_rank_gain": 3.15,
+      "top1": {
+        "clean_hits": 29,
+        "modified_hits": 52,
+        "clean_rate": 0.16111111111111112,
+        "modified_rate": 0.28888888888888886,
+        "gain": 0.12777777777777777,
+        "new_hits": 24,
+        "lost_hits": 1
+      },
+      "top3": {
+        "clean_hits": 53,
+        "modified_hits": 83,
+        "clean_rate": 0.29444444444444445,
+        "modified_rate": 0.46111111111111114,
+        "gain": 0.16666666666666666,
+        "new_hits": 30,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 75,
+        "modified_hits": 102,
+        "clean_rate": 0.4166666666666667,
+        "modified_rate": 0.5666666666666667,
+        "gain": 0.15,
+        "new_hits": 27,
+        "lost_hits": 0
+      }
+    }
+  },
+  "ambilage_zero_overlap_v4": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 17.8,
+      "mean_rank_modified": 1.3666666666666667,
+      "mean_rank_gain": 16.433333333333334,
+      "top1": {
+        "clean_hits": 14,
+        "modified_hits": 159,
+        "clean_rate": 0.07777777777777778,
+        "modified_rate": 0.8833333333333333,
+        "gain": 0.8055555555555556,
+        "new_hits": 145,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 27,
+        "modified_hits": 172,
+        "clean_rate": 0.15,
+        "modified_rate": 0.9555555555555556,
+        "gain": 0.8055555555555556,
+        "new_hits": 145,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 44,
+        "modified_hits": 178,
+        "clean_rate": 0.24444444444444444,
+        "modified_rate": 0.9888888888888889,
+        "gain": 0.7444444444444445,
+        "new_hits": 134,
+        "lost_hits": 0
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 13.327777777777778,
+      "mean_rank_modified": 6.911111111111111,
+      "mean_rank_gain": 6.416666666666667,
+      "top1": {
+        "clean_hits": 13,
+        "modified_hits": 30,
+        "clean_rate": 0.07222222222222222,
+        "modified_rate": 0.16666666666666666,
+        "gain": 0.09444444444444444,
+        "new_hits": 17,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 34,
+        "modified_hits": 68,
+        "clean_rate": 0.18888888888888888,
+        "modified_rate": 0.37777777777777777,
+        "gain": 0.18888888888888888,
+        "new_hits": 36,
+        "lost_hits": 2
+      },
+      "top5": {
+        "clean_hits": 52,
+        "modified_hits": 109,
+        "clean_rate": 0.28888888888888886,
+        "modified_rate": 0.6055555555555555,
+        "gain": 0.31666666666666665,
+        "new_hits": 57,
+        "lost_hits": 0
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 12.911111111111111,
+      "mean_rank_modified": 6.5777777777777775,
+      "mean_rank_gain": 6.333333333333333,
+      "top1": {
+        "clean_hits": 16,
+        "modified_hits": 30,
+        "clean_rate": 0.08888888888888889,
+        "modified_rate": 0.16666666666666666,
+        "gain": 0.07777777777777778,
+        "new_hits": 15,
+        "lost_hits": 1
+      },
+      "top3": {
+        "clean_hits": 28,
+        "modified_hits": 65,
+        "clean_rate": 0.15555555555555556,
+        "modified_rate": 0.3611111111111111,
+        "gain": 0.20555555555555555,
+        "new_hits": 37,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 45,
+        "modified_hits": 93,
+        "clean_rate": 0.25,
+        "modified_rate": 0.5166666666666667,
+        "gain": 0.26666666666666666,
+        "new_hits": 48,
+        "lost_hits": 0
+      }
+    }
+  },
+  "vi_08_02_zero_overlap_v4": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 17.8,
+      "mean_rank_modified": 2.577777777777778,
+      "mean_rank_gain": 15.222222222222221,
+      "top1": {
+        "clean_hits": 14,
+        "modified_hits": 124,
+        "clean_rate": 0.07777777777777778,
+        "modified_rate": 0.6888888888888889,
+        "gain": 0.6111111111111112,
+        "new_hits": 110,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 27,
+        "modified_hits": 142,
+        "clean_rate": 0.15,
+        "modified_rate": 0.7888888888888889,
+        "gain": 0.6388888888888888,
+        "new_hits": 116,
+        "lost_hits": 1
+      },
+      "top5": {
+        "clean_hits": 44,
+        "modified_hits": 159,
+        "clean_rate": 0.24444444444444444,
+        "modified_rate": 0.8833333333333333,
+        "gain": 0.6388888888888888,
+        "new_hits": 115,
+        "lost_hits": 0
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 13.327777777777778,
+      "mean_rank_modified": 9.577777777777778,
+      "mean_rank_gain": 3.75,
+      "top1": {
+        "clean_hits": 13,
+        "modified_hits": 19,
+        "clean_rate": 0.07222222222222222,
+        "modified_rate": 0.10555555555555556,
+        "gain": 0.03333333333333333,
+        "new_hits": 8,
+        "lost_hits": 2
+      },
+      "top3": {
+        "clean_hits": 34,
+        "modified_hits": 47,
+        "clean_rate": 0.18888888888888888,
+        "modified_rate": 0.2611111111111111,
+        "gain": 0.07222222222222222,
+        "new_hits": 22,
+        "lost_hits": 9
+      },
+      "top5": {
+        "clean_hits": 52,
+        "modified_hits": 61,
+        "clean_rate": 0.28888888888888886,
+        "modified_rate": 0.3388888888888889,
+        "gain": 0.05,
+        "new_hits": 15,
+        "lost_hits": 6
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 12.911111111111111,
+      "mean_rank_modified": 8.144444444444444,
+      "mean_rank_gain": 4.766666666666667,
+      "top1": {
+        "clean_hits": 16,
+        "modified_hits": 29,
+        "clean_rate": 0.08888888888888889,
+        "modified_rate": 0.16111111111111112,
+        "gain": 0.07222222222222222,
+        "new_hits": 13,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 28,
+        "modified_hits": 54,
+        "clean_rate": 0.15555555555555556,
+        "modified_rate": 0.3,
+        "gain": 0.14444444444444443,
+        "new_hits": 26,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 45,
+        "modified_hits": 70,
+        "clean_rate": 0.25,
+        "modified_rate": 0.3888888888888889,
+        "gain": 0.1388888888888889,
+        "new_hits": 25,
+        "lost_hits": 0
+      }
+    }
+  }
+}
+[DONE] 2026-11-20T10:18:45Z eval_v4 elapsed=411.263955s
+[SUMMARY WRITTEN] /content/AmbiLAGE/output/exp_20261120_eval_v4/EVAL_V4_SUMMARY.md
+[ALL_DONE] 2026-11-20T10:18:45Z

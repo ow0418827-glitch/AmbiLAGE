@@ -1,0 +1,349 @@
+{
+  "schema_version": 1,
+  "scope": "shared",
+  "pool_path": "/content/AmbiLAGE/resources/evaluation_base/shared_memory/shared_memory.json",
+  "pool_sha256": "bfd8964a4477b694796787ffe2fc746c5eb19a389c23c904ebccc81975cd77a8",
+  "pool_count": 189,
+  "source_memory_id": "groups9_reference_07_shampoo_B09B63YYCW",
+  "frozen_image_sha256": "fe56c83b8ed8ac46338635c42fb38a570dbece823512d838bb9f9adbf1ce5325",
+  "source_public_id": "B09B63YYCW",
+  "method": "visual_inception",
+  "queries": [
+    {
+      "task_id": "feature_01",
+      "instruction": "sulfate-free gentle moisturizing shampoo for dry and sensitive scalp",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_02",
+      "instruction": "tea tree and rosemary anti-dandruff scalp care shampoo",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_03",
+      "instruction": "sulfate-free coconut hibiscus moisturizing scalp and hair cleanser bottle",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_04",
+      "instruction": "pro-vitamin B5 color-protecting botanical hair wash free of parabens and silicones",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_05",
+      "instruction": "I want to buy a volumizing shampoo infused with bamboo or biotin for fine flat hair.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_06",
+      "instruction": "Help me order a salon-size bottle of gentle scalp-balancing shampoo made with plant-based cleansers.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_07",
+      "instruction": "I want to buy a purple argan-oil hair cleanser that tones down brassy yellow warmth on bleached blonde strands.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_08",
+      "instruction": "Help me order a 32-ounce botanical moisturizing hair wash formulated with green tea, bamboo, and coconut extracts.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_09",
+      "instruction": "I need a gentle fragrance-free shampoo with aloe and oat milk for soothing an itchy flaky scalp.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_10",
+      "instruction": "Suggest a purple or color-safe moisturizing shampoo for keeping bleached blonde hair bright and soft.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_11",
+      "instruction": "I need a salt- and sodium-free gentle cleansing hair wash safe to protect salon keratin straightening longevity.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_12",
+      "instruction": "Suggest a dark pomegranate and sandalwood 3-in-1 shower cleanser convenient for gym bags and quick post-workout washes.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_13",
+      "instruction": "Looking for a sulfate-free repairing shampoo enriched with argan oil and keratin to mend split ends.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_14",
+      "instruction": "I need a clarifying scalp cleanser that lifts product buildup and excess oil without stripping natural shine.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_15",
+      "instruction": "Looking for a dry-and-itchy scalp calming cleanser that removes flaky buildup while reducing brittle strand friction.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_16",
+      "instruction": "Which vegan cruelty-free macadamia hair-repair washes restore shine to split ends without weighing down fine roots?",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_17",
+      "instruction": "Compare keratin damage-repair shampoos against biotin thickening shampoos for fragile strands.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_18",
+      "instruction": "Show me tea tree oil anti-dandruff shampoos alongside sulfate-free aloe vera sensitive-scalp cleansers.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_19",
+      "instruction": "Compare 1000ml color-lock salon hair cleansers against five-in-one pro-vitamin B5 daily washes by lather richness.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_20",
+      "instruction": "Which sulfate-free keratin aftercare cleansers preserve glossy smoothness longer in humid weather?",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    }
+  ],
+  "conditions": [
+    {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    }
+  ],
+  "training_surrogate_context": {
+    "schema_version": 1,
+    "scope": "all_frozen_images_in_modified_bank",
+    "images": [
+      {
+        "method": "visual_inception",
+        "source_id": "B09B63YYCW",
+        "image_sha256": "fe56c83b8ed8ac46338635c42fb38a570dbece823512d838bb9f9adbf1ce5325",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B071ZFHTZN",
+        "image_sha256": "1008b2fbf0a6ba279e531ab0e5bd64d45d5a82c7fe8721e31d0312cf214eb656",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B08GCSRXKS",
+        "image_sha256": "4b506b0e46d40b69c43d9b0246a10dbfef9532db584f44d656f672b1418e9285",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B07BBLWTLM",
+        "image_sha256": "7cc9136b918330ad6520b27cf7ae3897e146e193964e48a3392797cdc948abfa",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B09PHLS2QD",
+        "image_sha256": "4deada105c81b09461da228e601a52ff2934e3c0cfe6157f616ae5780978e2ce",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B07Z7MQSM1",
+        "image_sha256": "a1b6402d015bb5050879cd9b4858c287e4d3f8bb21a9af12c09db8b1b1c72d12",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B07FRKQNFV",
+        "image_sha256": "38033cf15b6f8abcd3a5dd217f0583c46b8918c87f4e13d4dcab1b652a111bca",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B01590FHS0",
+        "image_sha256": "3e4649db5a41c1e26d7afd64d6acecc845a1658579308f880b37f212a550c206",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B09PNNXYJ4",
+        "image_sha256": "75eecd1bb1d8bd18b6141dcc22dead3878d8390b5765023d72e9772dc21503dc",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      }
+    ],
+    "context_sha256": "07d8f33df6e8b066bfa069f62ede87ba69783bea982c142a5272d72416a269a6"
+  },
+  "training_identity_policy": "actual_frozen_surrogates_v1",
+  "simultaneous_replacements": [
+    {
+      "source_id": "B071ZFHTZN",
+      "image_sha256": "1008b2fbf0a6ba279e531ab0e5bd64d45d5a82c7fe8721e31d0312cf214eb656",
+      "source_memory_id": "groups9_reference_01_camera_B071ZFHTZN"
+    },
+    {
+      "source_id": "B08GCSRXKS",
+      "image_sha256": "4b506b0e46d40b69c43d9b0246a10dbfef9532db584f44d656f672b1418e9285",
+      "source_memory_id": "groups9_reference_02_chair_B08GCSRXKS"
+    },
+    {
+      "source_id": "B07BBLWTLM",
+      "image_sha256": "7cc9136b918330ad6520b27cf7ae3897e146e193964e48a3392797cdc948abfa",
+      "source_memory_id": "groups9_reference_03_cookies_B07BBLWTLM"
+    },
+    {
+      "source_id": "B09PHLS2QD",
+      "image_sha256": "4deada105c81b09461da228e601a52ff2934e3c0cfe6157f616ae5780978e2ce",
+      "source_memory_id": "groups9_reference_04_curtain_B09PHLS2QD"
+    },
+    {
+      "source_id": "B07Z7MQSM1",
+      "image_sha256": "a1b6402d015bb5050879cd9b4858c287e4d3f8bb21a9af12c09db8b1b1c72d12",
+      "source_memory_id": "groups9_reference_05_hair_extension_B07Z7MQSM1"
+    },
+    {
+      "source_id": "B07FRKQNFV",
+      "image_sha256": "38033cf15b6f8abcd3a5dd217f0583c46b8918c87f4e13d4dcab1b652a111bca",
+      "source_memory_id": "groups9_reference_06_jeans_B07FRKQNFV"
+    },
+    {
+      "source_id": "B09B63YYCW",
+      "image_sha256": "fe56c83b8ed8ac46338635c42fb38a570dbece823512d838bb9f9adbf1ce5325",
+      "source_memory_id": "groups9_reference_07_shampoo_B09B63YYCW"
+    },
+    {
+      "source_id": "B01590FHS0",
+      "image_sha256": "3e4649db5a41c1e26d7afd64d6acecc845a1658579308f880b37f212a550c206",
+      "source_memory_id": "groups9_reference_08_speaker_B01590FHS0"
+    },
+    {
+      "source_id": "B09PNNXYJ4",
+      "image_sha256": "75eecd1bb1d8bd18b6141dcc22dead3878d8390b5765023d72e9772dc21503dc",
+      "source_memory_id": "groups9_reference_09_toothbrush_B09PNNXYJ4"
+    }
+  ],
+  "memory_vector_cache_policy": "content_model_decoder_text_fusion_bound_v1",
+  "encoder_config": "/content/AmbiLAGE/src/visual/config/evaluator.clip_l14.matched.json",
+  "encoder_config_sha256": "18523d5f64d9689c3fc5095758948bac6edd721b40673b6fb831f1dd1508bff5",
+  "key_mode": "image",
+  "key_image_weight": 1.0,
+  "query_image_weight": 0.0,
+  "query_mode": "text",
+  "query_manifest": "/content/AmbiLAGE/resources/visual_inception_evaluation/category_queries_v2/07_shampoo/queries.json",
+  "query_manifest_sha256": "46a9b58eaaf04e2d7590917197db9900fffad33c51f7ae0256aca5a75d7140bc",
+  "index_text": "product_feature",
+  "query_image_defended": false,
+  "all_memory_images_equally_defended": true,
+  "shopping_allowed": false,
+  "record_kinds": {
+    "purchase_memory": 51,
+    "simulated_gallery": 138
+  }
+}

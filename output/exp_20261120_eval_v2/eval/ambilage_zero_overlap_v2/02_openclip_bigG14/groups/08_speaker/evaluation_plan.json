@@ -1,0 +1,349 @@
+{
+  "schema_version": 1,
+  "scope": "shared",
+  "pool_path": "/content/AmbiLAGE/resources/evaluation_base/shared_memory/shared_memory.json",
+  "pool_sha256": "bfd8964a4477b694796787ffe2fc746c5eb19a389c23c904ebccc81975cd77a8",
+  "pool_count": 189,
+  "source_memory_id": "groups9_reference_08_speaker_B01590FHS0",
+  "frozen_image_sha256": "638829a0d45b80f95afd4865a4bc58dc526b1568a70d0b13134049f5d61d0e2f",
+  "source_public_id": "B01590FHS0",
+  "method": "ambilage",
+  "queries": [
+    {
+      "task_id": "feature_01",
+      "instruction": "portable waterproof Bluetooth 5.0 speaker with 12 hour battery life",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_02",
+      "instruction": "compact wireless stereo speaker with deep bass and built-in microphone",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_03",
+      "instruction": "waterproof portable wireless Bluetooth audio cylinder with RGB light rings",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_04",
+      "instruction": "vintage natural beech-wood wireless stereo radio player with 12-hour battery",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_05",
+      "instruction": "I want to buy a compact portable Bluetooth speaker offering at least 10 hours of continuous playback.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_06",
+      "instruction": "Help me order a waterproof outdoor wireless speaker with dual full-range drivers and stereo pairing.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_07",
+      "instruction": "I want to buy a compact pocket wireless music box with a lanyard and one-touch call button for picnics.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_08",
+      "instruction": "Help me order an indoor-outdoor 30-watt patio acoustic unit featuring flickering warm lantern flame glow.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_09",
+      "instruction": "I need a waterproof wireless speaker loud enough for pool parties and beach gatherings without distortion.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_10",
+      "instruction": "Suggest a compact lightweight Bluetooth speaker with 100-foot wireless range for moving around the yard.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_11",
+      "instruction": "I need a 15-inch portable karaoke PA system with wired mic, 8-inch woofer, and pulsing LEDs for weekend backyard parties.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_12",
+      "instruction": "Suggest an IP55 weather-resistant wireless pool music player that stays steady horizontally or vertically on wet tiles.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_13",
+      "instruction": "Looking for a portable Bluetooth speaker engineered with passive bass radiators and crisp stereo separation.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_14",
+      "instruction": "I need an IPX7 waterproof wireless speaker featuring shock-resistant silicone casing and fast USB-C charging.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_15",
+      "instruction": "Looking for a rugged Bluetooth 5.0 wireless player offering TF memory-card MP3 playback, FM tuner, and clear calls.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_16",
+      "instruction": "Which ultra-small cylindrical silver audio players pair automatically on startup and recharge smoothly via USB?",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_17",
+      "instruction": "Compare pocket-sized travel Bluetooth speakers against larger stereo boombox wireless speakers.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_18",
+      "instruction": "Show me rugged IPX7 waterproof speakers side by side with multi-room 360-degree party speakers.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_19",
+      "instruction": "Compare retro wooden FM desktop audio boxes against dual-driver IPX7 waterproof cylindrical travel players by bass punch.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_20",
+      "instruction": "Which compact wireless stereo players hold clearer hands-free call voice quality beyond thirty feet outdoors?",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    }
+  ],
+  "conditions": [
+    {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    }
+  ],
+  "training_surrogate_context": {
+    "schema_version": 1,
+    "scope": "all_frozen_images_in_modified_bank",
+    "images": [
+      {
+        "method": "ambilage",
+        "source_id": "B01590FHS0",
+        "image_sha256": "638829a0d45b80f95afd4865a4bc58dc526b1568a70d0b13134049f5d61d0e2f",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "ambilage",
+        "source_id": "B071ZFHTZN",
+        "image_sha256": "5d31f6ee75c38b65d7c391fc4e43334c6557fcca69c49e2f6e1b37819e415a45",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "ambilage",
+        "source_id": "B08GCSRXKS",
+        "image_sha256": "9a2f0b7d9510cad120e239148cd0c3751bda204dd4f7e687be3535e5aecf6649",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "ambilage",
+        "source_id": "B07BBLWTLM",
+        "image_sha256": "6d5b2a68a373d8144dab432ba86f9a9a086479abd3627e256bef77bbab00a265",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "ambilage",
+        "source_id": "B09PHLS2QD",
+        "image_sha256": "371548ba353f01c59fbbf239e028396934a593a61a8f07db8029cb1e22d1e774",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "ambilage",
+        "source_id": "B07Z7MQSM1",
+        "image_sha256": "dba13c7141b0f54d3d4f659b82c0c7f0cd91c68c80b84193d7030002f6781329",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "ambilage",
+        "source_id": "B07FRKQNFV",
+        "image_sha256": "82c8fcb2effd92b82c04d07f55c7ee9493322a3974b51332230a95341314acb1",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "ambilage",
+        "source_id": "B09B63YYCW",
+        "image_sha256": "5f97239ab3394681f93ab3948c118547f8832090d78ef182b026d80475906af8",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "ambilage",
+        "source_id": "B09PNNXYJ4",
+        "image_sha256": "1d89e569b904f7b69e75890f2db7ba3aa054f338d7610e6cc967b527a937b711",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      }
+    ],
+    "context_sha256": "93cf9aaf78c34a85f4b7ceeecf04a61a9a6746198daa7d518796b3ec1cd32bc5"
+  },
+  "training_identity_policy": "actual_frozen_surrogates_v1",
+  "simultaneous_replacements": [
+    {
+      "source_id": "B071ZFHTZN",
+      "image_sha256": "5d31f6ee75c38b65d7c391fc4e43334c6557fcca69c49e2f6e1b37819e415a45",
+      "source_memory_id": "groups9_reference_01_camera_B071ZFHTZN"
+    },
+    {
+      "source_id": "B08GCSRXKS",
+      "image_sha256": "9a2f0b7d9510cad120e239148cd0c3751bda204dd4f7e687be3535e5aecf6649",
+      "source_memory_id": "groups9_reference_02_chair_B08GCSRXKS"
+    },
+    {
+      "source_id": "B07BBLWTLM",
+      "image_sha256": "6d5b2a68a373d8144dab432ba86f9a9a086479abd3627e256bef77bbab00a265",
+      "source_memory_id": "groups9_reference_03_cookies_B07BBLWTLM"
+    },
+    {
+      "source_id": "B09PHLS2QD",
+      "image_sha256": "371548ba353f01c59fbbf239e028396934a593a61a8f07db8029cb1e22d1e774",
+      "source_memory_id": "groups9_reference_04_curtain_B09PHLS2QD"
+    },
+    {
+      "source_id": "B07Z7MQSM1",
+      "image_sha256": "dba13c7141b0f54d3d4f659b82c0c7f0cd91c68c80b84193d7030002f6781329",
+      "source_memory_id": "groups9_reference_05_hair_extension_B07Z7MQSM1"
+    },
+    {
+      "source_id": "B07FRKQNFV",
+      "image_sha256": "82c8fcb2effd92b82c04d07f55c7ee9493322a3974b51332230a95341314acb1",
+      "source_memory_id": "groups9_reference_06_jeans_B07FRKQNFV"
+    },
+    {
+      "source_id": "B09B63YYCW",
+      "image_sha256": "5f97239ab3394681f93ab3948c118547f8832090d78ef182b026d80475906af8",
+      "source_memory_id": "groups9_reference_07_shampoo_B09B63YYCW"
+    },
+    {
+      "source_id": "B01590FHS0",
+      "image_sha256": "638829a0d45b80f95afd4865a4bc58dc526b1568a70d0b13134049f5d61d0e2f",
+      "source_memory_id": "groups9_reference_08_speaker_B01590FHS0"
+    },
+    {
+      "source_id": "B09PNNXYJ4",
+      "image_sha256": "1d89e569b904f7b69e75890f2db7ba3aa054f338d7610e6cc967b527a937b711",
+      "source_memory_id": "groups9_reference_09_toothbrush_B09PNNXYJ4"
+    }
+  ],
+  "memory_vector_cache_policy": "content_model_decoder_text_fusion_bound_v1",
+  "encoder_config": "/content/AmbiLAGE/src/visual/config/evaluator.clip_bigG14.heldout.json",
+  "encoder_config_sha256": "a7a7da0b205e7f814af790bf6227a055e35795a6e3a3248c1b0f1c07b1eae1ac",
+  "key_mode": "image",
+  "key_image_weight": 1.0,
+  "query_image_weight": 0.0,
+  "query_mode": "text",
+  "query_manifest": "/content/AmbiLAGE/resources/visual_inception_evaluation/category_queries_v2/08_speaker/queries.json",
+  "query_manifest_sha256": "04c88ccd468fb52c6e7fa01858231e0cdf025f341fa3d5a6115b706a36e59b3a",
+  "index_text": "product_feature",
+  "query_image_defended": false,
+  "all_memory_images_equally_defended": true,
+  "shopping_allowed": false,
+  "record_kinds": {
+    "purchase_memory": 51,
+    "simulated_gallery": 138
+  }
+}

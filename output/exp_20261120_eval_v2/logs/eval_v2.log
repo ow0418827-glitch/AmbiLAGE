@@ -1,0 +1,3572 @@
+[START] 2026-11-20T05:42:42Z EVAL ambilage on training_oracle_v2
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+none clean: 前三 4/20；前五 12/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 13/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 20/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 3/20；前五 8/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 18/20；前五 19/20
+none clean: 前三 3/20；前五 4/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 18/20；前五 19/20
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+none clean: 前三 1/20；前五 9/20
+none modified: 前三 6/20；前五 11/20
+none clean: 前三 11/20；前五 20/20
+none modified: 前三 14/20；前五 20/20
+none clean: 前三 19/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 4/20；前五 5/20
+none modified: 前三 5/20；前五 7/20
+none clean: 前三 4/20；前五 9/20
+none modified: 前三 13/20；前五 16/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 6/20；前五 14/20
+none clean: 前三 2/20；前五 5/20
+none modified: 前三 7/20；前五 8/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 1/20；前五 5/20
+none clean: 前三 9/20；前五 12/20
+none modified: 前三 11/20；前五 12/20
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+none clean: 前三 3/20；前五 10/20
+none modified: 前三 4/20；前五 9/20
+none clean: 前三 11/20；前五 20/20
+none modified: 前三 15/20；前五 20/20
+none clean: 前三 20/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 5/20
+none modified: 前三 6/20；前五 6/20
+none clean: 前三 2/20；前五 4/20
+none modified: 前三 8/20；前五 13/20
+none clean: 前三 0/20；前五 2/20
+none modified: 前三 2/20；前五 3/20
+none clean: 前三 5/20；前五 5/20
+none modified: 前三 5/20；前五 7/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 2/20；前五 3/20
+none clean: 前三 5/20；前五 10/20
+none modified: 前三 3/20；前五 11/20
+{
+  "output": "/content/AmbiLAGE/output/exp_20261120_eval_v2/eval/ambilage_training_oracle_v2",
+  "method": "ambilage",
+  "key_mode": "image",
+  "query_suite": "training_oracle_v2",
+  "encoders": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 11.955555555555556,
+      "mean_rank_modified": 1.2833333333333334,
+      "mean_rank_gain": 10.672222222222222,
+      "top1": {
+        "clean_hits": 22,
+        "modified_hits": 169,
+        "clean_rate": 0.12222222222222222,
+        "modified_rate": 0.9388888888888889,
+        "gain": 0.8166666666666667,
+        "new_hits": 147,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 44,
+        "modified_hits": 176,
+        "clean_rate": 0.24444444444444444,
+        "modified_rate": 0.9777777777777777,
+        "gain": 0.7333333333333333,
+        "new_hits": 132,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 66,
+        "modified_hits": 178,
+        "clean_rate": 0.36666666666666664,
+        "modified_rate": 0.9888888888888889,
+        "gain": 0.6222222222222222,
+        "new_hits": 112,
+        "lost_hits": 0
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 9.827777777777778,
+      "mean_rank_modified": 5.777777777777778,
+      "mean_rank_gain": 4.05,
+      "top1": {
+        "clean_hits": 25,
+        "modified_hits": 38,
+        "clean_rate": 0.1388888888888889,
+        "modified_rate": 0.2111111111111111,
+        "gain": 0.07222222222222222,
+        "new_hits": 16,
+        "lost_hits": 3
+      },
+      "top3": {
+        "clean_hits": 50,
+        "modified_hits": 83,
+        "clean_rate": 0.2777777777777778,
+        "modified_rate": 0.46111111111111114,
+        "gain": 0.18333333333333332,
+        "new_hits": 33,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 81,
+        "modified_hits": 113,
+        "clean_rate": 0.45,
+        "modified_rate": 0.6277777777777778,
+        "gain": 0.17777777777777778,
+        "new_hits": 33,
+        "lost_hits": 1
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 11.316666666666666,
+      "mean_rank_modified": 7.694444444444445,
+      "mean_rank_gain": 3.6222222222222222,
+      "top1": {
+        "clean_hits": 23,
+        "modified_hits": 40,
+        "clean_rate": 0.12777777777777777,
+        "modified_rate": 0.2222222222222222,
+        "gain": 0.09444444444444444,
+        "new_hits": 19,
+        "lost_hits": 2
+      },
+      "top3": {
+        "clean_hits": 47,
+        "modified_hits": 65,
+        "clean_rate": 0.2611111111111111,
+        "modified_rate": 0.3611111111111111,
+        "gain": 0.1,
+        "new_hits": 21,
+        "lost_hits": 3
+      },
+      "top5": {
+        "clean_hits": 76,
+        "modified_hits": 92,
+        "clean_rate": 0.4222222222222222,
+        "modified_rate": 0.5111111111111111,
+        "gain": 0.08888888888888889,
+        "new_hits": 18,
+        "lost_hits": 2
+      }
+    }
+  },
+  "encoders_by_family": {
+    "01_clip_l14": {
+      "category_description": {
+        "query_family": "category_description",
+        "query_family_zh": "同类商品公开描述(50%)",
+        "query_count": 90,
+        "mean_rank_clean": 11.455555555555556,
+        "mean_rank_modified": 1.0888888888888888,
+        "mean_rank_gain": 10.366666666666667,
+        "top1": {
+          "clean_hits": 12,
+          "modified_hits": 85,
+          "clean_rate": 0.13333333333333333,
+          "modified_rate": 0.9444444444444444,
+          "gain": 0.8111111111111111,
+          "new_hits": 73,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 23,
+          "modified_hits": 90,
+          "clean_rate": 0.25555555555555554,
+          "modified_rate": 1.0,
+          "gain": 0.7444444444444445,
+          "new_hits": 67,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 33,
+          "modified_hits": 90,
+          "clean_rate": 0.36666666666666664,
+          "modified_rate": 1.0,
+          "gain": 0.6333333333333333,
+          "new_hits": 57,
+          "lost_hits": 0
+        }
+      },
+      "model_paraphrase": {
+        "query_family": "model_paraphrase",
+        "query_family_zh": "模型改写查询(30%)",
+        "query_count": 54,
+        "mean_rank_clean": 13.037037037037036,
+        "mean_rank_modified": 1.6666666666666667,
+        "mean_rank_gain": 11.37037037037037,
+        "top1": {
+          "clean_hits": 5,
+          "modified_hits": 50,
+          "clean_rate": 0.09259259259259259,
+          "modified_rate": 0.9259259259259259,
+          "gain": 0.8333333333333334,
+          "new_hits": 45,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 11,
+          "modified_hits": 51,
+          "clean_rate": 0.2037037037037037,
+          "modified_rate": 0.9444444444444444,
+          "gain": 0.7407407407407407,
+          "new_hits": 40,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 18,
+          "modified_hits": 53,
+          "clean_rate": 0.3333333333333333,
+          "modified_rate": 0.9814814814814815,
+          "gain": 0.6481481481481481,
+          "new_hits": 35,
+          "lost_hits": 0
+        }
+      },
+      "heldout_search_query": {
+        "query_family": "heldout_search_query",
+        "query_family_zh": "独立真实搜索查询(20%)",
+        "query_count": 36,
+        "mean_rank_clean": 11.583333333333334,
+        "mean_rank_modified": 1.1944444444444444,
+        "mean_rank_gain": 10.38888888888889,
+        "top1": {
+          "clean_hits": 5,
+          "modified_hits": 34,
+          "clean_rate": 0.1388888888888889,
+          "modified_rate": 0.9444444444444444,
+          "gain": 0.8055555555555556,
+          "new_hits": 29,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 10,
+          "modified_hits": 35,
+          "clean_rate": 0.2777777777777778,
+          "modified_rate": 0.9722222222222222,
+          "gain": 0.6944444444444444,
+          "new_hits": 25,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 15,
+          "modified_hits": 35,
+          "clean_rate": 0.4166666666666667,
+          "modified_rate": 0.9722222222222222,
+          "gain": 0.5555555555555556,
+          "new_hits": 20,
+          "lost_hits": 0
+        }
+      }
+    },
+    "02_openclip_bigG14": {
+      "category_description": {
+        "query_family": "category_description",
+        "query_family_zh": "同类商品公开描述(50%)",
+        "query_count": 90,
+        "mean_rank_clean": 9.488888888888889,
+        "mean_rank_modified": 6.366666666666666,
+        "mean_rank_gain": 3.1222222222222222,
+        "top1": {
+          "clean_hits": 14,
+          "modified_hits": 17,
+          "clean_rate": 0.15555555555555556,
+          "modified_rate": 0.18888888888888888,
+          "gain": 0.03333333333333333,
+          "new_hits": 6,
+          "lost_hits": 3
+        },
+        "top3": {
+          "clean_hits": 29,
+          "modified_hits": 39,
+          "clean_rate": 0.32222222222222224,
+          "modified_rate": 0.43333333333333335,
+          "gain": 0.1111111111111111,
+          "new_hits": 10,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 41,
+          "modified_hits": 54,
+          "clean_rate": 0.45555555555555555,
+          "modified_rate": 0.6,
+          "gain": 0.14444444444444443,
+          "new_hits": 14,
+          "lost_hits": 1
+        }
+      },
+      "model_paraphrase": {
+        "query_family": "model_paraphrase",
+        "query_family_zh": "模型改写查询(30%)",
+        "query_count": 54,
+        "mean_rank_clean": 11.722222222222221,
+        "mean_rank_modified": 5.537037037037037,
+        "mean_rank_gain": 6.185185185185185,
+        "top1": {
+          "clean_hits": 6,
+          "modified_hits": 9,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.16666666666666666,
+          "gain": 0.05555555555555555,
+          "new_hits": 3,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 12,
+          "modified_hits": 21,
+          "clean_rate": 0.2222222222222222,
+          "modified_rate": 0.3888888888888889,
+          "gain": 0.16666666666666666,
+          "new_hits": 9,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 23,
+          "modified_hits": 35,
+          "clean_rate": 0.42592592592592593,
+          "modified_rate": 0.6481481481481481,
+          "gain": 0.2222222222222222,
+          "new_hits": 12,
+          "lost_hits": 0
+        }
+      },
+      "heldout_search_query": {
+        "query_family": "heldout_search_query",
+        "query_family_zh": "独立真实搜索查询(20%)",
+        "query_count": 36,
+        "mean_rank_clean": 7.833333333333333,
+        "mean_rank_modified": 4.666666666666667,
+        "mean_rank_gain": 3.1666666666666665,
+        "top1": {
+          "clean_hits": 5,
+          "modified_hits": 12,
+          "clean_rate": 0.1388888888888889,
+          "modified_rate": 0.3333333333333333,
+          "gain": 0.19444444444444445,
+          "new_hits": 7,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 9,
+          "modified_hits": 23,
+          "clean_rate": 0.25,
+          "modified_rate": 0.6388888888888888,
+          "gain": 0.3888888888888889,
+          "new_hits": 14,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 17,
+          "modified_hits": 24,
+          "clean_rate": 0.4722222222222222,
+          "modified_rate": 0.6666666666666666,
+          "gain": 0.19444444444444445,
+          "new_hits": 7,
+          "lost_hits": 0
+        }
+      }
+    },
+    "03_siglip_so400m": {
+      "category_description": {
+        "query_family": "category_description",
+        "query_family_zh": "同类商品公开描述(50%)",
+        "query_count": 90,
+        "mean_rank_clean": 9.38888888888889,
+        "mean_rank_modified": 7.3,
+        "mean_rank_gain": 2.088888888888889,
+        "top1": {
+          "clean_hits": 13,
+          "modified_hits": 14,
+          "clean_rate": 0.14444444444444443,
+          "modified_rate": 0.15555555555555556,
+          "gain": 0.011111111111111112,
+          "new_hits": 3,
+          "lost_hits": 2
+        },
+        "top3": {
+          "clean_hits": 29,
+          "modified_hits": 28,
+          "clean_rate": 0.32222222222222224,
+          "modified_rate": 0.3111111111111111,
+          "gain": -0.011111111111111112,
+          "new_hits": 2,
+          "lost_hits": 3
+        },
+        "top5": {
+          "clean_hits": 41,
+          "modified_hits": 46,
+          "clean_rate": 0.45555555555555555,
+          "modified_rate": 0.5111111111111111,
+          "gain": 0.05555555555555555,
+          "new_hits": 7,
+          "lost_hits": 2
+        }
+      },
+      "model_paraphrase": {
+        "query_family": "model_paraphrase",
+        "query_family_zh": "模型改写查询(30%)",
+        "query_count": 54,
+        "mean_rank_clean": 15.092592592592593,
+        "mean_rank_modified": 8.351851851851851,
+        "mean_rank_gain": 6.7407407407407405,
+        "top1": {
+          "clean_hits": 6,
+          "modified_hits": 15,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.2777777777777778,
+          "gain": 0.16666666666666666,
+          "new_hits": 9,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 11,
+          "modified_hits": 23,
+          "clean_rate": 0.2037037037037037,
+          "modified_rate": 0.42592592592592593,
+          "gain": 0.2222222222222222,
+          "new_hits": 12,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 22,
+          "modified_hits": 29,
+          "clean_rate": 0.4074074074074074,
+          "modified_rate": 0.5370370370370371,
+          "gain": 0.12962962962962962,
+          "new_hits": 7,
+          "lost_hits": 0
+        }
+      },
+      "heldout_search_query": {
+        "query_family": "heldout_search_query",
+        "query_family_zh": "独立真实搜索查询(20%)",
+        "query_count": 36,
+        "mean_rank_clean": 10.472222222222221,
+        "mean_rank_modified": 7.694444444444445,
+        "mean_rank_gain": 2.7777777777777777,
+        "top1": {
+          "clean_hits": 4,
+          "modified_hits": 11,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.3055555555555556,
+          "gain": 0.19444444444444445,
+          "new_hits": 7,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 7,
+          "modified_hits": 14,
+          "clean_rate": 0.19444444444444445,
+          "modified_rate": 0.3888888888888889,
+          "gain": 0.19444444444444445,
+          "new_hits": 7,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 13,
+          "modified_hits": 17,
+          "clean_rate": 0.3611111111111111,
+          "modified_rate": 0.4722222222222222,
+          "gain": 0.1111111111111111,
+          "new_hits": 4,
+          "lost_hits": 0
+        }
+      }
+    }
+  },
+  "report_path": "/content/AmbiLAGE/output/exp_20261120_eval_v2/eval/ambilage_training_oracle_v2/TRANSFER_PANEL_REPORT.md"
+}
+[DONE] 2026-11-20T05:49:21Z EVAL ambilage on training_oracle_v2
+[START] 2026-11-20T05:49:32Z EVAL vi_08_02 on training_oracle_v2
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+none clean: 前三 4/20；前五 12/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 13/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 20/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 3/20；前五 8/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 14/20；前五 17/20
+none clean: 前三 3/20；前五 4/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 17/20；前五 17/20
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+none clean: 前三 1/20；前五 9/20
+none modified: 前三 3/20；前五 11/20
+none clean: 前三 11/20；前五 20/20
+none modified: 前三 14/20；前五 20/20
+none clean: 前三 19/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 4/20；前五 5/20
+none modified: 前三 2/20；前五 3/20
+none clean: 前三 4/20；前五 9/20
+none modified: 前三 12/20；前五 14/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 2/20；前五 5/20
+none clean: 前三 2/20；前五 5/20
+none modified: 前三 8/20；前五 10/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 0/20
+none clean: 前三 9/20；前五 12/20
+none modified: 前三 1/20；前五 5/20
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+none clean: 前三 3/20；前五 10/20
+none modified: 前三 4/20；前五 10/20
+none clean: 前三 11/20；前五 20/20
+none modified: 前三 15/20；前五 20/20
+none clean: 前三 20/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 5/20
+none modified: 前三 4/20；前五 5/20
+none clean: 前三 2/20；前五 4/20
+none modified: 前三 9/20；前五 12/20
+none clean: 前三 0/20；前五 2/20
+none modified: 前三 1/20；前五 2/20
+none clean: 前三 5/20；前五 5/20
+none modified: 前三 2/20；前五 4/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 1/20
+none clean: 前三 5/20；前五 10/20
+none modified: 前三 3/20；前五 12/20
+{
+  "output": "/content/AmbiLAGE/output/exp_20261120_eval_v2/eval/vi_08_02_training_oracle_v2",
+  "method": "visual_inception",
+  "key_mode": "image",
+  "query_suite": "training_oracle_v2",
+  "encoders": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 11.955555555555556,
+      "mean_rank_modified": 1.8166666666666667,
+      "mean_rank_gain": 10.13888888888889,
+      "top1": {
+        "clean_hits": 22,
+        "modified_hits": 154,
+        "clean_rate": 0.12222222222222222,
+        "modified_rate": 0.8555555555555555,
+        "gain": 0.7333333333333333,
+        "new_hits": 132,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 44,
+        "modified_hits": 171,
+        "clean_rate": 0.24444444444444444,
+        "modified_rate": 0.95,
+        "gain": 0.7055555555555556,
+        "new_hits": 127,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 66,
+        "modified_hits": 174,
+        "clean_rate": 0.36666666666666664,
+        "modified_rate": 0.9666666666666667,
+        "gain": 0.6,
+        "new_hits": 108,
+        "lost_hits": 0
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 9.827777777777778,
+      "mean_rank_modified": 8.316666666666666,
+      "mean_rank_gain": 1.511111111111111,
+      "top1": {
+        "clean_hits": 25,
+        "modified_hits": 29,
+        "clean_rate": 0.1388888888888889,
+        "modified_rate": 0.16111111111111112,
+        "gain": 0.022222222222222223,
+        "new_hits": 9,
+        "lost_hits": 5
+      },
+      "top3": {
+        "clean_hits": 50,
+        "modified_hits": 62,
+        "clean_rate": 0.2777777777777778,
+        "modified_rate": 0.34444444444444444,
+        "gain": 0.06666666666666667,
+        "new_hits": 22,
+        "lost_hits": 10
+      },
+      "top5": {
+        "clean_hits": 81,
+        "modified_hits": 88,
+        "clean_rate": 0.45,
+        "modified_rate": 0.4888888888888889,
+        "gain": 0.03888888888888889,
+        "new_hits": 16,
+        "lost_hits": 9
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 11.316666666666666,
+      "mean_rank_modified": 8.994444444444444,
+      "mean_rank_gain": 2.3222222222222224,
+      "top1": {
+        "clean_hits": 23,
+        "modified_hits": 37,
+        "clean_rate": 0.12777777777777777,
+        "modified_rate": 0.20555555555555555,
+        "gain": 0.07777777777777778,
+        "new_hits": 15,
+        "lost_hits": 1
+      },
+      "top3": {
+        "clean_hits": 47,
+        "modified_hits": 58,
+        "clean_rate": 0.2611111111111111,
+        "modified_rate": 0.32222222222222224,
+        "gain": 0.06111111111111111,
+        "new_hits": 16,
+        "lost_hits": 5
+      },
+      "top5": {
+        "clean_hits": 76,
+        "modified_hits": 86,
+        "clean_rate": 0.4222222222222222,
+        "modified_rate": 0.4777777777777778,
+        "gain": 0.05555555555555555,
+        "new_hits": 13,
+        "lost_hits": 3
+      }
+    }
+  },
+  "encoders_by_family": {
+    "01_clip_l14": {
+      "category_description": {
+        "query_family": "category_description",
+        "query_family_zh": "同类商品公开描述(50%)",
+        "query_count": 90,
+        "mean_rank_clean": 11.455555555555556,
+        "mean_rank_modified": 1.2555555555555555,
+        "mean_rank_gain": 10.2,
+        "top1": {
+          "clean_hits": 12,
+          "modified_hits": 80,
+          "clean_rate": 0.13333333333333333,
+          "modified_rate": 0.8888888888888888,
+          "gain": 0.7555555555555555,
+          "new_hits": 68,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 23,
+          "modified_hits": 87,
+          "clean_rate": 0.25555555555555554,
+          "modified_rate": 0.9666666666666667,
+          "gain": 0.7111111111111111,
+          "new_hits": 64,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 33,
+          "modified_hits": 89,
+          "clean_rate": 0.36666666666666664,
+          "modified_rate": 0.9888888888888889,
+          "gain": 0.6222222222222222,
+          "new_hits": 56,
+          "lost_hits": 0
+        }
+      },
+      "model_paraphrase": {
+        "query_family": "model_paraphrase",
+        "query_family_zh": "模型改写查询(30%)",
+        "query_count": 54,
+        "mean_rank_clean": 13.037037037037036,
+        "mean_rank_modified": 3.0185185185185186,
+        "mean_rank_gain": 10.018518518518519,
+        "top1": {
+          "clean_hits": 5,
+          "modified_hits": 42,
+          "clean_rate": 0.09259259259259259,
+          "modified_rate": 0.7777777777777778,
+          "gain": 0.6851851851851852,
+          "new_hits": 37,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 11,
+          "modified_hits": 49,
+          "clean_rate": 0.2037037037037037,
+          "modified_rate": 0.9074074074074074,
+          "gain": 0.7037037037037037,
+          "new_hits": 38,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 18,
+          "modified_hits": 50,
+          "clean_rate": 0.3333333333333333,
+          "modified_rate": 0.9259259259259259,
+          "gain": 0.5925925925925926,
+          "new_hits": 32,
+          "lost_hits": 0
+        }
+      },
+      "heldout_search_query": {
+        "query_family": "heldout_search_query",
+        "query_family_zh": "独立真实搜索查询(20%)",
+        "query_count": 36,
+        "mean_rank_clean": 11.583333333333334,
+        "mean_rank_modified": 1.4166666666666667,
+        "mean_rank_gain": 10.166666666666666,
+        "top1": {
+          "clean_hits": 5,
+          "modified_hits": 32,
+          "clean_rate": 0.1388888888888889,
+          "modified_rate": 0.8888888888888888,
+          "gain": 0.75,
+          "new_hits": 27,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 10,
+          "modified_hits": 35,
+          "clean_rate": 0.2777777777777778,
+          "modified_rate": 0.9722222222222222,
+          "gain": 0.6944444444444444,
+          "new_hits": 25,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 15,
+          "modified_hits": 35,
+          "clean_rate": 0.4166666666666667,
+          "modified_rate": 0.9722222222222222,
+          "gain": 0.5555555555555556,
+          "new_hits": 20,
+          "lost_hits": 0
+        }
+      }
+    },
+    "02_openclip_bigG14": {
+      "category_description": {
+        "query_family": "category_description",
+        "query_family_zh": "同类商品公开描述(50%)",
+        "query_count": 90,
+        "mean_rank_clean": 9.488888888888889,
+        "mean_rank_modified": 8.2,
+        "mean_rank_gain": 1.288888888888889,
+        "top1": {
+          "clean_hits": 14,
+          "modified_hits": 12,
+          "clean_rate": 0.15555555555555556,
+          "modified_rate": 0.13333333333333333,
+          "gain": -0.022222222222222223,
+          "new_hits": 3,
+          "lost_hits": 5
+        },
+        "top3": {
+          "clean_hits": 29,
+          "modified_hits": 30,
+          "clean_rate": 0.32222222222222224,
+          "modified_rate": 0.3333333333333333,
+          "gain": 0.011111111111111112,
+          "new_hits": 7,
+          "lost_hits": 6
+        },
+        "top5": {
+          "clean_hits": 41,
+          "modified_hits": 41,
+          "clean_rate": 0.45555555555555555,
+          "modified_rate": 0.45555555555555555,
+          "gain": 0.0,
+          "new_hits": 5,
+          "lost_hits": 5
+        }
+      },
+      "model_paraphrase": {
+        "query_family": "model_paraphrase",
+        "query_family_zh": "模型改写查询(30%)",
+        "query_count": 54,
+        "mean_rank_clean": 11.722222222222221,
+        "mean_rank_modified": 9.518518518518519,
+        "mean_rank_gain": 2.2037037037037037,
+        "top1": {
+          "clean_hits": 6,
+          "modified_hits": 9,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.16666666666666666,
+          "gain": 0.05555555555555555,
+          "new_hits": 3,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 12,
+          "modified_hits": 15,
+          "clean_rate": 0.2222222222222222,
+          "modified_rate": 0.2777777777777778,
+          "gain": 0.05555555555555555,
+          "new_hits": 5,
+          "lost_hits": 2
+        },
+        "top5": {
+          "clean_hits": 23,
+          "modified_hits": 27,
+          "clean_rate": 0.42592592592592593,
+          "modified_rate": 0.5,
+          "gain": 0.07407407407407407,
+          "new_hits": 5,
+          "lost_hits": 1
+        }
+      },
+      "heldout_search_query": {
+        "query_family": "heldout_search_query",
+        "query_family_zh": "独立真实搜索查询(20%)",
+        "query_count": 36,
+        "mean_rank_clean": 7.833333333333333,
+        "mean_rank_modified": 6.805555555555555,
+        "mean_rank_gain": 1.0277777777777777,
+        "top1": {
+          "clean_hits": 5,
+          "modified_hits": 8,
+          "clean_rate": 0.1388888888888889,
+          "modified_rate": 0.2222222222222222,
+          "gain": 0.08333333333333333,
+          "new_hits": 3,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 9,
+          "modified_hits": 17,
+          "clean_rate": 0.25,
+          "modified_rate": 0.4722222222222222,
+          "gain": 0.2222222222222222,
+          "new_hits": 10,
+          "lost_hits": 2
+        },
+        "top5": {
+          "clean_hits": 17,
+          "modified_hits": 20,
+          "clean_rate": 0.4722222222222222,
+          "modified_rate": 0.5555555555555556,
+          "gain": 0.08333333333333333,
+          "new_hits": 6,
+          "lost_hits": 3
+        }
+      }
+    },
+    "03_siglip_so400m": {
+      "category_description": {
+        "query_family": "category_description",
+        "query_family_zh": "同类商品公开描述(50%)",
+        "query_count": 90,
+        "mean_rank_clean": 9.38888888888889,
+        "mean_rank_modified": 8.066666666666666,
+        "mean_rank_gain": 1.3222222222222222,
+        "top1": {
+          "clean_hits": 13,
+          "modified_hits": 12,
+          "clean_rate": 0.14444444444444443,
+          "modified_rate": 0.13333333333333333,
+          "gain": -0.011111111111111112,
+          "new_hits": 0,
+          "lost_hits": 1
+        },
+        "top3": {
+          "clean_hits": 29,
+          "modified_hits": 25,
+          "clean_rate": 0.32222222222222224,
+          "modified_rate": 0.2777777777777778,
+          "gain": -0.044444444444444446,
+          "new_hits": 1,
+          "lost_hits": 5
+        },
+        "top5": {
+          "clean_hits": 41,
+          "modified_hits": 43,
+          "clean_rate": 0.45555555555555555,
+          "modified_rate": 0.4777777777777778,
+          "gain": 0.022222222222222223,
+          "new_hits": 4,
+          "lost_hits": 2
+        }
+      },
+      "model_paraphrase": {
+        "query_family": "model_paraphrase",
+        "query_family_zh": "模型改写查询(30%)",
+        "query_count": 54,
+        "mean_rank_clean": 15.092592592592593,
+        "mean_rank_modified": 11.703703703703704,
+        "mean_rank_gain": 3.388888888888889,
+        "top1": {
+          "clean_hits": 6,
+          "modified_hits": 13,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.24074074074074073,
+          "gain": 0.12962962962962962,
+          "new_hits": 7,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 11,
+          "modified_hits": 20,
+          "clean_rate": 0.2037037037037037,
+          "modified_rate": 0.37037037037037035,
+          "gain": 0.16666666666666666,
+          "new_hits": 9,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 22,
+          "modified_hits": 27,
+          "clean_rate": 0.4074074074074074,
+          "modified_rate": 0.5,
+          "gain": 0.09259259259259259,
+          "new_hits": 6,
+          "lost_hits": 1
+        }
+      },
+      "heldout_search_query": {
+        "query_family": "heldout_search_query",
+        "query_family_zh": "独立真实搜索查询(20%)",
+        "query_count": 36,
+        "mean_rank_clean": 10.472222222222221,
+        "mean_rank_modified": 7.25,
+        "mean_rank_gain": 3.2222222222222223,
+        "top1": {
+          "clean_hits": 4,
+          "modified_hits": 12,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.3333333333333333,
+          "gain": 0.2222222222222222,
+          "new_hits": 8,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 7,
+          "modified_hits": 13,
+          "clean_rate": 0.19444444444444445,
+          "modified_rate": 0.3611111111111111,
+          "gain": 0.16666666666666666,
+          "new_hits": 6,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 13,
+          "modified_hits": 16,
+          "clean_rate": 0.3611111111111111,
+          "modified_rate": 0.4444444444444444,
+          "gain": 0.08333333333333333,
+          "new_hits": 3,
+          "lost_hits": 0
+        }
+      }
+    }
+  },
+  "report_path": "/content/AmbiLAGE/output/exp_20261120_eval_v2/eval/vi_08_02_training_oracle_v2/TRANSFER_PANEL_REPORT.md"
+}
+[DONE] 2026-11-20T06:02:27Z EVAL vi_08_02 on training_oracle_v2
+[START] 2026-11-20T06:02:29Z EVAL ambilage on overlap_30_v2
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+none clean: 前三 9/20；前五 12/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 14/20；前五 18/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 18/20；前五 19/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 3/20；前五 7/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 2/20
+none modified: 前三 14/20；前五 18/20
+none clean: 前三 2/20；前五 4/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 2/20；前五 3/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 0/20；前五 2/20
+none modified: 前三 17/20；前五 18/20
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+none clean: 前三 0/20；前五 4/20
+none modified: 前三 6/20；前五 13/20
+none clean: 前三 8/20；前五 19/20
+none modified: 前三 16/20；前五 20/20
+none clean: 前三 19/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 4/20；前五 7/20
+none modified: 前三 6/20；前五 8/20
+none clean: 前三 2/20；前五 5/20
+none modified: 前三 8/20；前五 13/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 9/20；前五 13/20
+none clean: 前三 3/20；前五 7/20
+none modified: 前三 9/20；前五 9/20
+none clean: 前三 3/20；前五 4/20
+none modified: 前三 8/20；前五 10/20
+none clean: 前三 8/20；前五 10/20
+none modified: 前三 9/20；前五 14/20
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+none clean: 前三 4/20；前五 11/20
+none modified: 前三 7/20；前五 14/20
+none clean: 前三 10/20；前五 20/20
+none modified: 前三 18/20；前五 20/20
+none clean: 前三 20/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 2/20；前五 4/20
+none modified: 前三 5/20；前五 5/20
+none clean: 前三 2/20；前五 3/20
+none modified: 前三 12/20；前五 15/20
+none clean: 前三 1/20；前五 3/20
+none modified: 前三 5/20；前五 8/20
+none clean: 前三 2/20；前五 5/20
+none modified: 前三 8/20；前五 13/20
+none clean: 前三 2/20；前五 2/20
+none modified: 前三 6/20；前五 8/20
+none clean: 前三 5/20；前五 8/20
+none modified: 前三 3/20；前五 9/20
+{
+  "output": "/content/AmbiLAGE/output/exp_20261120_eval_v2/eval/ambilage_overlap_30_v2",
+  "method": "ambilage",
+  "key_mode": "image",
+  "query_suite": "overlap_30_v2",
+  "encoders": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 13.666666666666666,
+      "mean_rank_modified": 1.4111111111111112,
+      "mean_rank_gain": 12.255555555555556,
+      "top1": {
+        "clean_hits": 16,
+        "modified_hits": 151,
+        "clean_rate": 0.08888888888888889,
+        "modified_rate": 0.8388888888888889,
+        "gain": 0.75,
+        "new_hits": 135,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 49,
+        "modified_hits": 169,
+        "clean_rate": 0.2722222222222222,
+        "modified_rate": 0.9388888888888889,
+        "gain": 0.6666666666666666,
+        "new_hits": 120,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 67,
+        "modified_hits": 176,
+        "clean_rate": 0.37222222222222223,
+        "modified_rate": 0.9777777777777777,
+        "gain": 0.6055555555555555,
+        "new_hits": 109,
+        "lost_hits": 0
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 9.794444444444444,
+      "mean_rank_modified": 5.122222222222222,
+      "mean_rank_gain": 4.6722222222222225,
+      "top1": {
+        "clean_hits": 26,
+        "modified_hits": 41,
+        "clean_rate": 0.14444444444444443,
+        "modified_rate": 0.22777777777777777,
+        "gain": 0.08333333333333333,
+        "new_hits": 17,
+        "lost_hits": 2
+      },
+      "top3": {
+        "clean_hits": 47,
+        "modified_hits": 91,
+        "clean_rate": 0.2611111111111111,
+        "modified_rate": 0.5055555555555555,
+        "gain": 0.24444444444444444,
+        "new_hits": 44,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 77,
+        "modified_hits": 120,
+        "clean_rate": 0.42777777777777776,
+        "modified_rate": 0.6666666666666666,
+        "gain": 0.2388888888888889,
+        "new_hits": 44,
+        "lost_hits": 1
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 9.866666666666667,
+      "mean_rank_modified": 5.9222222222222225,
+      "mean_rank_gain": 3.9444444444444446,
+      "top1": {
+        "clean_hits": 20,
+        "modified_hits": 42,
+        "clean_rate": 0.1111111111111111,
+        "modified_rate": 0.23333333333333334,
+        "gain": 0.12222222222222222,
+        "new_hits": 23,
+        "lost_hits": 1
+      },
+      "top3": {
+        "clean_hits": 48,
+        "modified_hits": 84,
+        "clean_rate": 0.26666666666666666,
+        "modified_rate": 0.4666666666666667,
+        "gain": 0.2,
+        "new_hits": 38,
+        "lost_hits": 2
+      },
+      "top5": {
+        "clean_hits": 76,
+        "modified_hits": 112,
+        "clean_rate": 0.4222222222222222,
+        "modified_rate": 0.6222222222222222,
+        "gain": 0.2,
+        "new_hits": 37,
+        "lost_hits": 1
+      }
+    }
+  },
+  "encoders_by_family": {
+    "01_clip_l14": {
+      "category_description": {
+        "query_family": "category_description",
+        "query_family_zh": "复用同类公开描述(15%)",
+        "query_count": 27,
+        "mean_rank_clean": 12.777777777777779,
+        "mean_rank_modified": 1.1481481481481481,
+        "mean_rank_gain": 11.62962962962963,
+        "top1": {
+          "clean_hits": 4,
+          "modified_hits": 25,
+          "clean_rate": 0.14814814814814814,
+          "modified_rate": 0.9259259259259259,
+          "gain": 0.7777777777777778,
+          "new_hits": 21,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 11,
+          "modified_hits": 27,
+          "clean_rate": 0.4074074074074074,
+          "modified_rate": 1.0,
+          "gain": 0.5925925925925926,
+          "new_hits": 16,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 13,
+          "modified_hits": 27,
+          "clean_rate": 0.48148148148148145,
+          "modified_rate": 1.0,
+          "gain": 0.5185185185185185,
+          "new_hits": 14,
+          "lost_hits": 0
+        }
+      },
+      "model_paraphrase": {
+        "query_family": "model_paraphrase",
+        "query_family_zh": "复用模型改写查询(10%)",
+        "query_count": 18,
+        "mean_rank_clean": 12.833333333333334,
+        "mean_rank_modified": 1.0555555555555556,
+        "mean_rank_gain": 11.777777777777779,
+        "top1": {
+          "clean_hits": 1,
+          "modified_hits": 17,
+          "clean_rate": 0.05555555555555555,
+          "modified_rate": 0.9444444444444444,
+          "gain": 0.8888888888888888,
+          "new_hits": 16,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 5,
+          "modified_hits": 18,
+          "clean_rate": 0.2777777777777778,
+          "modified_rate": 1.0,
+          "gain": 0.7222222222222222,
+          "new_hits": 13,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 7,
+          "modified_hits": 18,
+          "clean_rate": 0.3888888888888889,
+          "modified_rate": 1.0,
+          "gain": 0.6111111111111112,
+          "new_hits": 11,
+          "lost_hits": 0
+        }
+      },
+      "heldout_search_query": {
+        "query_family": "heldout_search_query",
+        "query_family_zh": "复用独立真实搜索(5%)",
+        "query_count": 9,
+        "mean_rank_clean": 8.666666666666666,
+        "mean_rank_modified": 1.0,
+        "mean_rank_gain": 7.666666666666667,
+        "top1": {
+          "clean_hits": 1,
+          "modified_hits": 9,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 1.0,
+          "gain": 0.8888888888888888,
+          "new_hits": 8,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 4,
+          "modified_hits": 9,
+          "clean_rate": 0.4444444444444444,
+          "modified_rate": 1.0,
+          "gain": 0.5555555555555556,
+          "new_hits": 5,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 5,
+          "modified_hits": 9,
+          "clean_rate": 0.5555555555555556,
+          "modified_rate": 1.0,
+          "gain": 0.4444444444444444,
+          "new_hits": 4,
+          "lost_hits": 0
+        }
+      },
+      "synthetic_non_overlap": {
+        "query_family": "synthetic_non_overlap",
+        "query_family_zh": "非重合新查询(70%)",
+        "query_count": 126,
+        "mean_rank_clean": 14.333333333333334,
+        "mean_rank_modified": 1.5476190476190477,
+        "mean_rank_gain": 12.785714285714286,
+        "top1": {
+          "clean_hits": 10,
+          "modified_hits": 100,
+          "clean_rate": 0.07936507936507936,
+          "modified_rate": 0.7936507936507936,
+          "gain": 0.7142857142857143,
+          "new_hits": 90,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 29,
+          "modified_hits": 115,
+          "clean_rate": 0.23015873015873015,
+          "modified_rate": 0.9126984126984127,
+          "gain": 0.6825396825396826,
+          "new_hits": 86,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 42,
+          "modified_hits": 122,
+          "clean_rate": 0.3333333333333333,
+          "modified_rate": 0.9682539682539683,
+          "gain": 0.6349206349206349,
+          "new_hits": 80,
+          "lost_hits": 0
+        }
+      }
+    },
+    "02_openclip_bigG14": {
+      "category_description": {
+        "query_family": "category_description",
+        "query_family_zh": "复用同类公开描述(15%)",
+        "query_count": 27,
+        "mean_rank_clean": 9.444444444444445,
+        "mean_rank_modified": 5.518518518518518,
+        "mean_rank_gain": 3.925925925925926,
+        "top1": {
+          "clean_hits": 5,
+          "modified_hits": 3,
+          "clean_rate": 0.18518518518518517,
+          "modified_rate": 0.1111111111111111,
+          "gain": -0.07407407407407407,
+          "new_hits": 0,
+          "lost_hits": 2
+        },
+        "top3": {
+          "clean_hits": 10,
+          "modified_hits": 11,
+          "clean_rate": 0.37037037037037035,
+          "modified_rate": 0.4074074074074074,
+          "gain": 0.037037037037037035,
+          "new_hits": 1,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 14,
+          "modified_hits": 18,
+          "clean_rate": 0.5185185185185185,
+          "modified_rate": 0.6666666666666666,
+          "gain": 0.14814814814814814,
+          "new_hits": 4,
+          "lost_hits": 0
+        }
+      },
+      "model_paraphrase": {
+        "query_family": "model_paraphrase",
+        "query_family_zh": "复用模型改写查询(10%)",
+        "query_count": 18,
+        "mean_rank_clean": 11.777777777777779,
+        "mean_rank_modified": 6.111111111111111,
+        "mean_rank_gain": 5.666666666666667,
+        "top1": {
+          "clean_hits": 2,
+          "modified_hits": 3,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.16666666666666666,
+          "gain": 0.05555555555555555,
+          "new_hits": 1,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 3,
+          "modified_hits": 6,
+          "clean_rate": 0.16666666666666666,
+          "modified_rate": 0.3333333333333333,
+          "gain": 0.16666666666666666,
+          "new_hits": 3,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 9,
+          "modified_hits": 12,
+          "clean_rate": 0.5,
+          "modified_rate": 0.6666666666666666,
+          "gain": 0.16666666666666666,
+          "new_hits": 3,
+          "lost_hits": 0
+        }
+      },
+      "heldout_search_query": {
+        "query_family": "heldout_search_query",
+        "query_family_zh": "复用独立真实搜索(5%)",
+        "query_count": 9,
+        "mean_rank_clean": 6.888888888888889,
+        "mean_rank_modified": 4.0,
+        "mean_rank_gain": 2.888888888888889,
+        "top1": {
+          "clean_hits": 2,
+          "modified_hits": 3,
+          "clean_rate": 0.2222222222222222,
+          "modified_rate": 0.3333333333333333,
+          "gain": 0.1111111111111111,
+          "new_hits": 1,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 3,
+          "modified_hits": 6,
+          "clean_rate": 0.3333333333333333,
+          "modified_rate": 0.6666666666666666,
+          "gain": 0.3333333333333333,
+          "new_hits": 3,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 4,
+          "modified_hits": 6,
+          "clean_rate": 0.4444444444444444,
+          "modified_rate": 0.6666666666666666,
+          "gain": 0.2222222222222222,
+          "new_hits": 2,
+          "lost_hits": 0
+        }
+      },
+      "synthetic_non_overlap": {
+        "query_family": "synthetic_non_overlap",
+        "query_family_zh": "非重合新查询(70%)",
+        "query_count": 126,
+        "mean_rank_clean": 9.793650793650794,
+        "mean_rank_modified": 4.976190476190476,
+        "mean_rank_gain": 4.817460317460317,
+        "top1": {
+          "clean_hits": 17,
+          "modified_hits": 32,
+          "clean_rate": 0.1349206349206349,
+          "modified_rate": 0.25396825396825395,
+          "gain": 0.11904761904761904,
+          "new_hits": 15,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 31,
+          "modified_hits": 68,
+          "clean_rate": 0.24603174603174602,
+          "modified_rate": 0.5396825396825397,
+          "gain": 0.29365079365079366,
+          "new_hits": 37,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 50,
+          "modified_hits": 84,
+          "clean_rate": 0.3968253968253968,
+          "modified_rate": 0.6666666666666666,
+          "gain": 0.2698412698412698,
+          "new_hits": 35,
+          "lost_hits": 1
+        }
+      }
+    },
+    "03_siglip_so400m": {
+      "category_description": {
+        "query_family": "category_description",
+        "query_family_zh": "复用同类公开描述(15%)",
+        "query_count": 27,
+        "mean_rank_clean": 9.814814814814815,
+        "mean_rank_modified": 6.925925925925926,
+        "mean_rank_gain": 2.888888888888889,
+        "top1": {
+          "clean_hits": 3,
+          "modified_hits": 4,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.14814814814814814,
+          "gain": 0.037037037037037035,
+          "new_hits": 1,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 9,
+          "modified_hits": 8,
+          "clean_rate": 0.3333333333333333,
+          "modified_rate": 0.2962962962962963,
+          "gain": -0.037037037037037035,
+          "new_hits": 0,
+          "lost_hits": 1
+        },
+        "top5": {
+          "clean_hits": 15,
+          "modified_hits": 15,
+          "clean_rate": 0.5555555555555556,
+          "modified_rate": 0.5555555555555556,
+          "gain": 0.0,
+          "new_hits": 1,
+          "lost_hits": 1
+        }
+      },
+      "model_paraphrase": {
+        "query_family": "model_paraphrase",
+        "query_family_zh": "复用模型改写查询(10%)",
+        "query_count": 18,
+        "mean_rank_clean": 13.777777777777779,
+        "mean_rank_modified": 6.444444444444445,
+        "mean_rank_gain": 7.333333333333333,
+        "top1": {
+          "clean_hits": 1,
+          "modified_hits": 4,
+          "clean_rate": 0.05555555555555555,
+          "modified_rate": 0.2222222222222222,
+          "gain": 0.16666666666666666,
+          "new_hits": 3,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 3,
+          "modified_hits": 7,
+          "clean_rate": 0.16666666666666666,
+          "modified_rate": 0.3888888888888889,
+          "gain": 0.2222222222222222,
+          "new_hits": 4,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 8,
+          "modified_hits": 11,
+          "clean_rate": 0.4444444444444444,
+          "modified_rate": 0.6111111111111112,
+          "gain": 0.16666666666666666,
+          "new_hits": 3,
+          "lost_hits": 0
+        }
+      },
+      "heldout_search_query": {
+        "query_family": "heldout_search_query",
+        "query_family_zh": "复用独立真实搜索(5%)",
+        "query_count": 9,
+        "mean_rank_clean": 10.11111111111111,
+        "mean_rank_modified": 8.222222222222221,
+        "mean_rank_gain": 1.8888888888888888,
+        "top1": {
+          "clean_hits": 1,
+          "modified_hits": 3,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.3333333333333333,
+          "gain": 0.2222222222222222,
+          "new_hits": 2,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 1,
+          "modified_hits": 4,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.4444444444444444,
+          "gain": 0.3333333333333333,
+          "new_hits": 3,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 4,
+          "modified_hits": 4,
+          "clean_rate": 0.4444444444444444,
+          "modified_rate": 0.4444444444444444,
+          "gain": 0.0,
+          "new_hits": 0,
+          "lost_hits": 0
+        }
+      },
+      "synthetic_non_overlap": {
+        "query_family": "synthetic_non_overlap",
+        "query_family_zh": "非重合新查询(70%)",
+        "query_count": 126,
+        "mean_rank_clean": 9.301587301587302,
+        "mean_rank_modified": 5.468253968253968,
+        "mean_rank_gain": 3.8333333333333335,
+        "top1": {
+          "clean_hits": 15,
+          "modified_hits": 31,
+          "clean_rate": 0.11904761904761904,
+          "modified_rate": 0.24603174603174602,
+          "gain": 0.12698412698412698,
+          "new_hits": 17,
+          "lost_hits": 1
+        },
+        "top3": {
+          "clean_hits": 35,
+          "modified_hits": 65,
+          "clean_rate": 0.2777777777777778,
+          "modified_rate": 0.5158730158730159,
+          "gain": 0.23809523809523808,
+          "new_hits": 31,
+          "lost_hits": 1
+        },
+        "top5": {
+          "clean_hits": 49,
+          "modified_hits": 82,
+          "clean_rate": 0.3888888888888889,
+          "modified_rate": 0.6507936507936508,
+          "gain": 0.2619047619047619,
+          "new_hits": 33,
+          "lost_hits": 0
+        }
+      }
+    }
+  },
+  "report_path": "/content/AmbiLAGE/output/exp_20261120_eval_v2/eval/ambilage_overlap_30_v2/TRANSFER_PANEL_REPORT.md"
+}
+[DONE] 2026-11-20T06:09:10Z EVAL ambilage on overlap_30_v2
+[START] 2026-11-20T06:09:12Z EVAL vi_08_02 on overlap_30_v2
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+none clean: 前三 9/20；前五 12/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 14/20；前五 18/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 18/20；前五 19/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 3/20；前五 7/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 2/20
+none modified: 前三 11/20；前五 13/20
+none clean: 前三 2/20；前五 4/20
+none modified: 前三 18/20；前五 19/20
+none clean: 前三 2/20；前五 3/20
+none modified: 前三 15/20；前五 19/20
+none clean: 前三 0/20；前五 2/20
+none modified: 前三 7/20；前五 9/20
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+none clean: 前三 0/20；前五 4/20
+none modified: 前三 4/20；前五 11/20
+none clean: 前三 8/20；前五 19/20
+none modified: 前三 15/20；前五 20/20
+none clean: 前三 19/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 4/20；前五 7/20
+none modified: 前三 2/20；前五 4/20
+none clean: 前三 2/20；前五 5/20
+none modified: 前三 6/20；前五 11/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 1/20；前五 5/20
+none clean: 前三 3/20；前五 7/20
+none modified: 前三 9/20；前五 9/20
+none clean: 前三 3/20；前五 4/20
+none modified: 前三 4/20；前五 6/20
+none clean: 前三 8/20；前五 10/20
+none modified: 前三 3/20；前五 4/20
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+none clean: 前三 4/20；前五 11/20
+none modified: 前三 9/20；前五 18/20
+none clean: 前三 10/20；前五 20/20
+none modified: 前三 18/20；前五 20/20
+none clean: 前三 20/20；前五 20/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 2/20；前五 4/20
+none modified: 前三 5/20；前五 6/20
+none clean: 前三 2/20；前五 3/20
+none modified: 前三 13/20；前五 15/20
+none clean: 前三 1/20；前五 3/20
+none modified: 前三 4/20；前五 8/20
+none clean: 前三 2/20；前五 5/20
+none modified: 前三 1/20；前五 6/20
+none clean: 前三 2/20；前五 2/20
+none modified: 前三 3/20；前五 6/20
+none clean: 前三 5/20；前五 8/20
+none modified: 前三 4/20；前五 9/20
+{
+  "output": "/content/AmbiLAGE/output/exp_20261120_eval_v2/eval/vi_08_02_overlap_30_v2",
+  "method": "visual_inception",
+  "key_mode": "image",
+  "query_suite": "overlap_30_v2",
+  "encoders": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 13.666666666666666,
+      "mean_rank_modified": 2.283333333333333,
+      "mean_rank_gain": 11.383333333333333,
+      "top1": {
+        "clean_hits": 16,
+        "modified_hits": 124,
+        "clean_rate": 0.08888888888888889,
+        "modified_rate": 0.6888888888888889,
+        "gain": 0.6,
+        "new_hits": 108,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 49,
+        "modified_hits": 150,
+        "clean_rate": 0.2722222222222222,
+        "modified_rate": 0.8333333333333334,
+        "gain": 0.5611111111111111,
+        "new_hits": 102,
+        "lost_hits": 1
+      },
+      "top5": {
+        "clean_hits": 67,
+        "modified_hits": 160,
+        "clean_rate": 0.37222222222222223,
+        "modified_rate": 0.8888888888888888,
+        "gain": 0.5166666666666667,
+        "new_hits": 95,
+        "lost_hits": 2
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 9.794444444444444,
+      "mean_rank_modified": 7.233333333333333,
+      "mean_rank_gain": 2.561111111111111,
+      "top1": {
+        "clean_hits": 26,
+        "modified_hits": 36,
+        "clean_rate": 0.14444444444444443,
+        "modified_rate": 0.2,
+        "gain": 0.05555555555555555,
+        "new_hits": 13,
+        "lost_hits": 3
+      },
+      "top3": {
+        "clean_hits": 47,
+        "modified_hits": 64,
+        "clean_rate": 0.2611111111111111,
+        "modified_rate": 0.35555555555555557,
+        "gain": 0.09444444444444444,
+        "new_hits": 24,
+        "lost_hits": 7
+      },
+      "top5": {
+        "clean_hits": 77,
+        "modified_hits": 90,
+        "clean_rate": 0.42777777777777776,
+        "modified_rate": 0.5,
+        "gain": 0.07222222222222222,
+        "new_hits": 22,
+        "lost_hits": 9
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 9.866666666666667,
+      "mean_rank_modified": 6.8277777777777775,
+      "mean_rank_gain": 3.0388888888888888,
+      "top1": {
+        "clean_hits": 20,
+        "modified_hits": 37,
+        "clean_rate": 0.1111111111111111,
+        "modified_rate": 0.20555555555555555,
+        "gain": 0.09444444444444444,
+        "new_hits": 17,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 48,
+        "modified_hits": 77,
+        "clean_rate": 0.26666666666666666,
+        "modified_rate": 0.42777777777777776,
+        "gain": 0.16111111111111112,
+        "new_hits": 32,
+        "lost_hits": 3
+      },
+      "top5": {
+        "clean_hits": 76,
+        "modified_hits": 108,
+        "clean_rate": 0.4222222222222222,
+        "modified_rate": 0.6,
+        "gain": 0.17777777777777778,
+        "new_hits": 33,
+        "lost_hits": 1
+      }
+    }
+  },
+  "encoders_by_family": {
+    "01_clip_l14": {
+      "category_description": {
+        "query_family": "category_description",
+        "query_family_zh": "复用同类公开描述(15%)",
+        "query_count": 27,
+        "mean_rank_clean": 12.777777777777779,
+        "mean_rank_modified": 1.4444444444444444,
+        "mean_rank_gain": 11.333333333333334,
+        "top1": {
+          "clean_hits": 4,
+          "modified_hits": 23,
+          "clean_rate": 0.14814814814814814,
+          "modified_rate": 0.8518518518518519,
+          "gain": 0.7037037037037037,
+          "new_hits": 19,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 11,
+          "modified_hits": 26,
+          "clean_rate": 0.4074074074074074,
+          "modified_rate": 0.9629629629629629,
+          "gain": 0.5555555555555556,
+          "new_hits": 15,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 13,
+          "modified_hits": 26,
+          "clean_rate": 0.48148148148148145,
+          "modified_rate": 0.9629629629629629,
+          "gain": 0.48148148148148145,
+          "new_hits": 13,
+          "lost_hits": 0
+        }
+      },
+      "model_paraphrase": {
+        "query_family": "model_paraphrase",
+        "query_family_zh": "复用模型改写查询(10%)",
+        "query_count": 18,
+        "mean_rank_clean": 12.833333333333334,
+        "mean_rank_modified": 1.7222222222222223,
+        "mean_rank_gain": 11.11111111111111,
+        "top1": {
+          "clean_hits": 1,
+          "modified_hits": 14,
+          "clean_rate": 0.05555555555555555,
+          "modified_rate": 0.7777777777777778,
+          "gain": 0.7222222222222222,
+          "new_hits": 13,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 5,
+          "modified_hits": 17,
+          "clean_rate": 0.2777777777777778,
+          "modified_rate": 0.9444444444444444,
+          "gain": 0.6666666666666666,
+          "new_hits": 12,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 7,
+          "modified_hits": 17,
+          "clean_rate": 0.3888888888888889,
+          "modified_rate": 0.9444444444444444,
+          "gain": 0.5555555555555556,
+          "new_hits": 10,
+          "lost_hits": 0
+        }
+      },
+      "heldout_search_query": {
+        "query_family": "heldout_search_query",
+        "query_family_zh": "复用独立真实搜索(5%)",
+        "query_count": 9,
+        "mean_rank_clean": 8.666666666666666,
+        "mean_rank_modified": 1.2222222222222223,
+        "mean_rank_gain": 7.444444444444445,
+        "top1": {
+          "clean_hits": 1,
+          "modified_hits": 7,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.7777777777777778,
+          "gain": 0.6666666666666666,
+          "new_hits": 6,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 4,
+          "modified_hits": 9,
+          "clean_rate": 0.4444444444444444,
+          "modified_rate": 1.0,
+          "gain": 0.5555555555555556,
+          "new_hits": 5,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 5,
+          "modified_hits": 9,
+          "clean_rate": 0.5555555555555556,
+          "modified_rate": 1.0,
+          "gain": 0.4444444444444444,
+          "new_hits": 4,
+          "lost_hits": 0
+        }
+      },
+      "synthetic_non_overlap": {
+        "query_family": "synthetic_non_overlap",
+        "query_family_zh": "非重合新查询(70%)",
+        "query_count": 126,
+        "mean_rank_clean": 14.333333333333334,
+        "mean_rank_modified": 2.619047619047619,
+        "mean_rank_gain": 11.714285714285714,
+        "top1": {
+          "clean_hits": 10,
+          "modified_hits": 80,
+          "clean_rate": 0.07936507936507936,
+          "modified_rate": 0.6349206349206349,
+          "gain": 0.5555555555555556,
+          "new_hits": 70,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 29,
+          "modified_hits": 98,
+          "clean_rate": 0.23015873015873015,
+          "modified_rate": 0.7777777777777778,
+          "gain": 0.5476190476190477,
+          "new_hits": 70,
+          "lost_hits": 1
+        },
+        "top5": {
+          "clean_hits": 42,
+          "modified_hits": 108,
+          "clean_rate": 0.3333333333333333,
+          "modified_rate": 0.8571428571428571,
+          "gain": 0.5238095238095238,
+          "new_hits": 68,
+          "lost_hits": 2
+        }
+      }
+    },
+    "02_openclip_bigG14": {
+      "category_description": {
+        "query_family": "category_description",
+        "query_family_zh": "复用同类公开描述(15%)",
+        "query_count": 27,
+        "mean_rank_clean": 9.444444444444445,
+        "mean_rank_modified": 7.62962962962963,
+        "mean_rank_gain": 1.8148148148148149,
+        "top1": {
+          "clean_hits": 5,
+          "modified_hits": 4,
+          "clean_rate": 0.18518518518518517,
+          "modified_rate": 0.14814814814814814,
+          "gain": -0.037037037037037035,
+          "new_hits": 1,
+          "lost_hits": 2
+        },
+        "top3": {
+          "clean_hits": 10,
+          "modified_hits": 8,
+          "clean_rate": 0.37037037037037035,
+          "modified_rate": 0.2962962962962963,
+          "gain": -0.07407407407407407,
+          "new_hits": 1,
+          "lost_hits": 3
+        },
+        "top5": {
+          "clean_hits": 14,
+          "modified_hits": 13,
+          "clean_rate": 0.5185185185185185,
+          "modified_rate": 0.48148148148148145,
+          "gain": -0.037037037037037035,
+          "new_hits": 1,
+          "lost_hits": 2
+        }
+      },
+      "model_paraphrase": {
+        "query_family": "model_paraphrase",
+        "query_family_zh": "复用模型改写查询(10%)",
+        "query_count": 18,
+        "mean_rank_clean": 11.777777777777779,
+        "mean_rank_modified": 8.666666666666666,
+        "mean_rank_gain": 3.111111111111111,
+        "top1": {
+          "clean_hits": 2,
+          "modified_hits": 2,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.1111111111111111,
+          "gain": 0.0,
+          "new_hits": 0,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 3,
+          "modified_hits": 3,
+          "clean_rate": 0.16666666666666666,
+          "modified_rate": 0.16666666666666666,
+          "gain": 0.0,
+          "new_hits": 1,
+          "lost_hits": 1
+        },
+        "top5": {
+          "clean_hits": 9,
+          "modified_hits": 9,
+          "clean_rate": 0.5,
+          "modified_rate": 0.5,
+          "gain": 0.0,
+          "new_hits": 1,
+          "lost_hits": 1
+        }
+      },
+      "heldout_search_query": {
+        "query_family": "heldout_search_query",
+        "query_family_zh": "复用独立真实搜索(5%)",
+        "query_count": 9,
+        "mean_rank_clean": 6.888888888888889,
+        "mean_rank_modified": 6.777777777777778,
+        "mean_rank_gain": 0.1111111111111111,
+        "top1": {
+          "clean_hits": 2,
+          "modified_hits": 2,
+          "clean_rate": 0.2222222222222222,
+          "modified_rate": 0.2222222222222222,
+          "gain": 0.0,
+          "new_hits": 0,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 3,
+          "modified_hits": 4,
+          "clean_rate": 0.3333333333333333,
+          "modified_rate": 0.4444444444444444,
+          "gain": 0.1111111111111111,
+          "new_hits": 2,
+          "lost_hits": 1
+        },
+        "top5": {
+          "clean_hits": 4,
+          "modified_hits": 5,
+          "clean_rate": 0.4444444444444444,
+          "modified_rate": 0.5555555555555556,
+          "gain": 0.1111111111111111,
+          "new_hits": 2,
+          "lost_hits": 1
+        }
+      },
+      "synthetic_non_overlap": {
+        "query_family": "synthetic_non_overlap",
+        "query_family_zh": "非重合新查询(70%)",
+        "query_count": 126,
+        "mean_rank_clean": 9.793650793650794,
+        "mean_rank_modified": 6.976190476190476,
+        "mean_rank_gain": 2.8174603174603177,
+        "top1": {
+          "clean_hits": 17,
+          "modified_hits": 28,
+          "clean_rate": 0.1349206349206349,
+          "modified_rate": 0.2222222222222222,
+          "gain": 0.0873015873015873,
+          "new_hits": 12,
+          "lost_hits": 1
+        },
+        "top3": {
+          "clean_hits": 31,
+          "modified_hits": 49,
+          "clean_rate": 0.24603174603174602,
+          "modified_rate": 0.3888888888888889,
+          "gain": 0.14285714285714285,
+          "new_hits": 20,
+          "lost_hits": 2
+        },
+        "top5": {
+          "clean_hits": 50,
+          "modified_hits": 63,
+          "clean_rate": 0.3968253968253968,
+          "modified_rate": 0.5,
+          "gain": 0.10317460317460317,
+          "new_hits": 18,
+          "lost_hits": 5
+        }
+      }
+    },
+    "03_siglip_so400m": {
+      "category_description": {
+        "query_family": "category_description",
+        "query_family_zh": "复用同类公开描述(15%)",
+        "query_count": 27,
+        "mean_rank_clean": 9.814814814814815,
+        "mean_rank_modified": 8.0,
+        "mean_rank_gain": 1.8148148148148149,
+        "top1": {
+          "clean_hits": 3,
+          "modified_hits": 3,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.1111111111111111,
+          "gain": 0.0,
+          "new_hits": 0,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 9,
+          "modified_hits": 7,
+          "clean_rate": 0.3333333333333333,
+          "modified_rate": 0.25925925925925924,
+          "gain": -0.07407407407407407,
+          "new_hits": 0,
+          "lost_hits": 2
+        },
+        "top5": {
+          "clean_hits": 15,
+          "modified_hits": 15,
+          "clean_rate": 0.5555555555555556,
+          "modified_rate": 0.5555555555555556,
+          "gain": 0.0,
+          "new_hits": 0,
+          "lost_hits": 0
+        }
+      },
+      "model_paraphrase": {
+        "query_family": "model_paraphrase",
+        "query_family_zh": "复用模型改写查询(10%)",
+        "query_count": 18,
+        "mean_rank_clean": 13.777777777777779,
+        "mean_rank_modified": 9.88888888888889,
+        "mean_rank_gain": 3.888888888888889,
+        "top1": {
+          "clean_hits": 1,
+          "modified_hits": 3,
+          "clean_rate": 0.05555555555555555,
+          "modified_rate": 0.16666666666666666,
+          "gain": 0.1111111111111111,
+          "new_hits": 2,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 3,
+          "modified_hits": 7,
+          "clean_rate": 0.16666666666666666,
+          "modified_rate": 0.3888888888888889,
+          "gain": 0.2222222222222222,
+          "new_hits": 4,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 8,
+          "modified_hits": 11,
+          "clean_rate": 0.4444444444444444,
+          "modified_rate": 0.6111111111111112,
+          "gain": 0.16666666666666666,
+          "new_hits": 3,
+          "lost_hits": 0
+        }
+      },
+      "heldout_search_query": {
+        "query_family": "heldout_search_query",
+        "query_family_zh": "复用独立真实搜索(5%)",
+        "query_count": 9,
+        "mean_rank_clean": 10.11111111111111,
+        "mean_rank_modified": 6.888888888888889,
+        "mean_rank_gain": 3.2222222222222223,
+        "top1": {
+          "clean_hits": 1,
+          "modified_hits": 4,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.4444444444444444,
+          "gain": 0.3333333333333333,
+          "new_hits": 3,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 1,
+          "modified_hits": 4,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.4444444444444444,
+          "gain": 0.3333333333333333,
+          "new_hits": 3,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 4,
+          "modified_hits": 4,
+          "clean_rate": 0.4444444444444444,
+          "modified_rate": 0.4444444444444444,
+          "gain": 0.0,
+          "new_hits": 0,
+          "lost_hits": 0
+        }
+      },
+      "synthetic_non_overlap": {
+        "query_family": "synthetic_non_overlap",
+        "query_family_zh": "非重合新查询(70%)",
+        "query_count": 126,
+        "mean_rank_clean": 9.301587301587302,
+        "mean_rank_modified": 6.134920634920635,
+        "mean_rank_gain": 3.1666666666666665,
+        "top1": {
+          "clean_hits": 15,
+          "modified_hits": 27,
+          "clean_rate": 0.11904761904761904,
+          "modified_rate": 0.21428571428571427,
+          "gain": 0.09523809523809523,
+          "new_hits": 12,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 35,
+          "modified_hits": 59,
+          "clean_rate": 0.2777777777777778,
+          "modified_rate": 0.46825396825396826,
+          "gain": 0.19047619047619047,
+          "new_hits": 25,
+          "lost_hits": 1
+        },
+        "top5": {
+          "clean_hits": 49,
+          "modified_hits": 78,
+          "clean_rate": 0.3888888888888889,
+          "modified_rate": 0.6190476190476191,
+          "gain": 0.23015873015873015,
+          "new_hits": 30,
+          "lost_hits": 1
+        }
+      }
+    }
+  },
+  "report_path": "/content/AmbiLAGE/output/exp_20261120_eval_v2/eval/vi_08_02_overlap_30_v2/TRANSFER_PANEL_REPORT.md"
+}
+[DONE] 2026-11-20T06:22:05Z EVAL vi_08_02 on overlap_30_v2
+[START] 2026-11-20T06:22:07Z EVAL ambilage on zero_overlap_v2
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+none clean: 前三 1/20；前五 3/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 10/20；前五 16/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 19/20；前五 19/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 18/20；前五 19/20
+none clean: 前三 4/20；前五 6/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 2/20；前五 3/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 2/20；前五 2/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 1/20；前五 3/20
+none modified: 前三 18/20；前五 19/20
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+none clean: 前三 0/20；前五 2/20
+none modified: 前三 6/20；前五 9/20
+none clean: 前三 5/20；前五 19/20
+none modified: 前三 17/20；前五 20/20
+none clean: 前三 17/20；前五 19/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 1/20；前五 3/20
+none modified: 前三 3/20；前五 4/20
+none clean: 前三 2/20；前五 4/20
+none modified: 前三 9/20；前五 16/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 8/20；前五 12/20
+none clean: 前三 5/20；前五 8/20
+none modified: 前三 9/20；前五 10/20
+none clean: 前三 3/20；前五 5/20
+none modified: 前三 10/20；前五 14/20
+none clean: 前三 6/20；前五 11/20
+none modified: 前三 9/20；前五 16/20
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+none clean: 前三 3/20；前五 9/20
+none modified: 前三 6/20；前五 10/20
+none clean: 前三 12/20；前五 20/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 18/20；前五 18/20
+none modified: 前三 18/20；前五 19/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 2/20；前五 4/20
+none clean: 前三 1/20；前五 5/20
+none modified: 前三 12/20；前五 13/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 1/20；前五 2/20
+none clean: 前三 5/20；前五 8/20
+none modified: 前三 10/20；前五 14/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 8/20；前五 10/20
+none clean: 前三 5/20；前五 9/20
+none modified: 前三 5/20；前五 11/20
+{
+  "output": "/content/AmbiLAGE/output/exp_20261120_eval_v2/eval/ambilage_zero_overlap_v2",
+  "method": "ambilage",
+  "key_mode": "image",
+  "query_suite": "zero_overlap_v2",
+  "encoders": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 14.933333333333334,
+      "mean_rank_modified": 1.261111111111111,
+      "mean_rank_gain": 13.672222222222222,
+      "top1": {
+        "clean_hits": 16,
+        "modified_hits": 158,
+        "clean_rate": 0.08888888888888889,
+        "modified_rate": 0.8777777777777778,
+        "gain": 0.7888888888888889,
+        "new_hits": 142,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 40,
+        "modified_hits": 173,
+        "clean_rate": 0.2222222222222222,
+        "modified_rate": 0.9611111111111111,
+        "gain": 0.7388888888888889,
+        "new_hits": 133,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 53,
+        "modified_hits": 178,
+        "clean_rate": 0.29444444444444445,
+        "modified_rate": 0.9888888888888889,
+        "gain": 0.6944444444444444,
+        "new_hits": 125,
+        "lost_hits": 0
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 10.244444444444444,
+      "mean_rank_modified": 5.35,
+      "mean_rank_gain": 4.894444444444445,
+      "top1": {
+        "clean_hits": 23,
+        "modified_hits": 46,
+        "clean_rate": 0.12777777777777777,
+        "modified_rate": 0.25555555555555554,
+        "gain": 0.12777777777777777,
+        "new_hits": 25,
+        "lost_hits": 2
+      },
+      "top3": {
+        "clean_hits": 39,
+        "modified_hits": 90,
+        "clean_rate": 0.21666666666666667,
+        "modified_rate": 0.5,
+        "gain": 0.2833333333333333,
+        "new_hits": 51,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 71,
+        "modified_hits": 121,
+        "clean_rate": 0.39444444444444443,
+        "modified_rate": 0.6722222222222223,
+        "gain": 0.2777777777777778,
+        "new_hits": 50,
+        "lost_hits": 0
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 9.972222222222221,
+      "mean_rank_modified": 5.95,
+      "mean_rank_gain": 4.022222222222222,
+      "top1": {
+        "clean_hits": 20,
+        "modified_hits": 46,
+        "clean_rate": 0.1111111111111111,
+        "modified_rate": 0.25555555555555554,
+        "gain": 0.14444444444444443,
+        "new_hits": 26,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 45,
+        "modified_hits": 81,
+        "clean_rate": 0.25,
+        "modified_rate": 0.45,
+        "gain": 0.2,
+        "new_hits": 36,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 72,
+        "modified_hits": 103,
+        "clean_rate": 0.4,
+        "modified_rate": 0.5722222222222222,
+        "gain": 0.17222222222222222,
+        "new_hits": 32,
+        "lost_hits": 1
+      }
+    }
+  },
+  "encoders_by_family": {
+    "01_clip_l14": {
+      "category_direct": {
+        "query_family": "category_direct",
+        "query_family_zh": "类别直接询问",
+        "query_count": 36,
+        "mean_rank_clean": 15.194444444444445,
+        "mean_rank_modified": 1.1666666666666667,
+        "mean_rank_gain": 14.027777777777779,
+        "top1": {
+          "clean_hits": 4,
+          "modified_hits": 33,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.9166666666666666,
+          "gain": 0.8055555555555556,
+          "new_hits": 29,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 6,
+          "modified_hits": 35,
+          "clean_rate": 0.16666666666666666,
+          "modified_rate": 0.9722222222222222,
+          "gain": 0.8055555555555556,
+          "new_hits": 29,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 11,
+          "modified_hits": 36,
+          "clean_rate": 0.3055555555555556,
+          "modified_rate": 1.0,
+          "gain": 0.6944444444444444,
+          "new_hits": 25,
+          "lost_hits": 0
+        }
+      },
+      "purchase_intent": {
+        "query_family": "purchase_intent",
+        "query_family_zh": "购买意图",
+        "query_count": 36,
+        "mean_rank_clean": 12.75,
+        "mean_rank_modified": 1.1111111111111112,
+        "mean_rank_gain": 11.63888888888889,
+        "top1": {
+          "clean_hits": 3,
+          "modified_hits": 34,
+          "clean_rate": 0.08333333333333333,
+          "modified_rate": 0.9444444444444444,
+          "gain": 0.8611111111111112,
+          "new_hits": 31,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 8,
+          "modified_hits": 35,
+          "clean_rate": 0.2222222222222222,
+          "modified_rate": 0.9722222222222222,
+          "gain": 0.75,
+          "new_hits": 27,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 10,
+          "modified_hits": 36,
+          "clean_rate": 0.2777777777777778,
+          "modified_rate": 1.0,
+          "gain": 0.7222222222222222,
+          "new_hits": 26,
+          "lost_hits": 0
+        }
+      },
+      "use_case": {
+        "query_family": "use_case",
+        "query_family_zh": "使用场景",
+        "query_count": 36,
+        "mean_rank_clean": 14.88888888888889,
+        "mean_rank_modified": 1.6666666666666667,
+        "mean_rank_gain": 13.222222222222221,
+        "top1": {
+          "clean_hits": 2,
+          "modified_hits": 28,
+          "clean_rate": 0.05555555555555555,
+          "modified_rate": 0.7777777777777778,
+          "gain": 0.7222222222222222,
+          "new_hits": 26,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 11,
+          "modified_hits": 32,
+          "clean_rate": 0.3055555555555556,
+          "modified_rate": 0.8888888888888888,
+          "gain": 0.5833333333333334,
+          "new_hits": 21,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 12,
+          "modified_hits": 34,
+          "clean_rate": 0.3333333333333333,
+          "modified_rate": 0.9444444444444444,
+          "gain": 0.6111111111111112,
+          "new_hits": 22,
+          "lost_hits": 0
+        }
+      },
+      "functional_need": {
+        "query_family": "functional_need",
+        "query_family_zh": "功能需求",
+        "query_count": 36,
+        "mean_rank_clean": 16.555555555555557,
+        "mean_rank_modified": 1.0833333333333333,
+        "mean_rank_gain": 15.472222222222221,
+        "top1": {
+          "clean_hits": 3,
+          "modified_hits": 33,
+          "clean_rate": 0.08333333333333333,
+          "modified_rate": 0.9166666666666666,
+          "gain": 0.8333333333333334,
+          "new_hits": 30,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 6,
+          "modified_hits": 36,
+          "clean_rate": 0.16666666666666666,
+          "modified_rate": 1.0,
+          "gain": 0.8333333333333334,
+          "new_hits": 30,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 8,
+          "modified_hits": 36,
+          "clean_rate": 0.2222222222222222,
+          "modified_rate": 1.0,
+          "gain": 0.7777777777777778,
+          "new_hits": 28,
+          "lost_hits": 0
+        }
+      },
+      "selection_comparison": {
+        "query_family": "selection_comparison",
+        "query_family_zh": "选择比较",
+        "query_count": 36,
+        "mean_rank_clean": 15.277777777777779,
+        "mean_rank_modified": 1.2777777777777777,
+        "mean_rank_gain": 14.0,
+        "top1": {
+          "clean_hits": 4,
+          "modified_hits": 30,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.8333333333333334,
+          "gain": 0.7222222222222222,
+          "new_hits": 26,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 9,
+          "modified_hits": 35,
+          "clean_rate": 0.25,
+          "modified_rate": 0.9722222222222222,
+          "gain": 0.7222222222222222,
+          "new_hits": 26,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 12,
+          "modified_hits": 36,
+          "clean_rate": 0.3333333333333333,
+          "modified_rate": 1.0,
+          "gain": 0.6666666666666666,
+          "new_hits": 24,
+          "lost_hits": 0
+        }
+      }
+    },
+    "02_openclip_bigG14": {
+      "category_direct": {
+        "query_family": "category_direct",
+        "query_family_zh": "类别直接询问",
+        "query_count": 36,
+        "mean_rank_clean": 12.722222222222221,
+        "mean_rank_modified": 6.916666666666667,
+        "mean_rank_gain": 5.805555555555555,
+        "top1": {
+          "clean_hits": 4,
+          "modified_hits": 3,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.08333333333333333,
+          "gain": -0.027777777777777776,
+          "new_hits": 0,
+          "lost_hits": 1
+        },
+        "top3": {
+          "clean_hits": 7,
+          "modified_hits": 11,
+          "clean_rate": 0.19444444444444445,
+          "modified_rate": 0.3055555555555556,
+          "gain": 0.1111111111111111,
+          "new_hits": 4,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 13,
+          "modified_hits": 20,
+          "clean_rate": 0.3611111111111111,
+          "modified_rate": 0.5555555555555556,
+          "gain": 0.19444444444444445,
+          "new_hits": 7,
+          "lost_hits": 0
+        }
+      },
+      "purchase_intent": {
+        "query_family": "purchase_intent",
+        "query_family_zh": "购买意图",
+        "query_count": 36,
+        "mean_rank_clean": 8.11111111111111,
+        "mean_rank_modified": 4.694444444444445,
+        "mean_rank_gain": 3.4166666666666665,
+        "top1": {
+          "clean_hits": 7,
+          "modified_hits": 11,
+          "clean_rate": 0.19444444444444445,
+          "modified_rate": 0.3055555555555556,
+          "gain": 0.1111111111111111,
+          "new_hits": 4,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 12,
+          "modified_hits": 20,
+          "clean_rate": 0.3333333333333333,
+          "modified_rate": 0.5555555555555556,
+          "gain": 0.2222222222222222,
+          "new_hits": 8,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 16,
+          "modified_hits": 26,
+          "clean_rate": 0.4444444444444444,
+          "modified_rate": 0.7222222222222222,
+          "gain": 0.2777777777777778,
+          "new_hits": 10,
+          "lost_hits": 0
+        }
+      },
+      "use_case": {
+        "query_family": "use_case",
+        "query_family_zh": "使用场景",
+        "query_count": 36,
+        "mean_rank_clean": 11.5,
+        "mean_rank_modified": 6.111111111111111,
+        "mean_rank_gain": 5.388888888888889,
+        "top1": {
+          "clean_hits": 3,
+          "modified_hits": 7,
+          "clean_rate": 0.08333333333333333,
+          "modified_rate": 0.19444444444444445,
+          "gain": 0.1111111111111111,
+          "new_hits": 5,
+          "lost_hits": 1
+        },
+        "top3": {
+          "clean_hits": 7,
+          "modified_hits": 17,
+          "clean_rate": 0.19444444444444445,
+          "modified_rate": 0.4722222222222222,
+          "gain": 0.2777777777777778,
+          "new_hits": 10,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 14,
+          "modified_hits": 23,
+          "clean_rate": 0.3888888888888889,
+          "modified_rate": 0.6388888888888888,
+          "gain": 0.25,
+          "new_hits": 9,
+          "lost_hits": 0
+        }
+      },
+      "functional_need": {
+        "query_family": "functional_need",
+        "query_family_zh": "功能需求",
+        "query_count": 36,
+        "mean_rank_clean": 9.75,
+        "mean_rank_modified": 4.611111111111111,
+        "mean_rank_gain": 5.138888888888889,
+        "top1": {
+          "clean_hits": 3,
+          "modified_hits": 11,
+          "clean_rate": 0.08333333333333333,
+          "modified_rate": 0.3055555555555556,
+          "gain": 0.2222222222222222,
+          "new_hits": 8,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 4,
+          "modified_hits": 20,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.5555555555555556,
+          "gain": 0.4444444444444444,
+          "new_hits": 16,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 12,
+          "modified_hits": 25,
+          "clean_rate": 0.3333333333333333,
+          "modified_rate": 0.6944444444444444,
+          "gain": 0.3611111111111111,
+          "new_hits": 13,
+          "lost_hits": 0
+        }
+      },
+      "selection_comparison": {
+        "query_family": "selection_comparison",
+        "query_family_zh": "选择比较",
+        "query_count": 36,
+        "mean_rank_clean": 9.13888888888889,
+        "mean_rank_modified": 4.416666666666667,
+        "mean_rank_gain": 4.722222222222222,
+        "top1": {
+          "clean_hits": 6,
+          "modified_hits": 14,
+          "clean_rate": 0.16666666666666666,
+          "modified_rate": 0.3888888888888889,
+          "gain": 0.2222222222222222,
+          "new_hits": 8,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 9,
+          "modified_hits": 22,
+          "clean_rate": 0.25,
+          "modified_rate": 0.6111111111111112,
+          "gain": 0.3611111111111111,
+          "new_hits": 13,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 16,
+          "modified_hits": 27,
+          "clean_rate": 0.4444444444444444,
+          "modified_rate": 0.75,
+          "gain": 0.3055555555555556,
+          "new_hits": 11,
+          "lost_hits": 0
+        }
+      }
+    },
+    "03_siglip_so400m": {
+      "category_direct": {
+        "query_family": "category_direct",
+        "query_family_zh": "类别直接询问",
+        "query_count": 36,
+        "mean_rank_clean": 11.777777777777779,
+        "mean_rank_modified": 7.25,
+        "mean_rank_gain": 4.527777777777778,
+        "top1": {
+          "clean_hits": 3,
+          "modified_hits": 5,
+          "clean_rate": 0.08333333333333333,
+          "modified_rate": 0.1388888888888889,
+          "gain": 0.05555555555555555,
+          "new_hits": 2,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 9,
+          "modified_hits": 12,
+          "clean_rate": 0.25,
+          "modified_rate": 0.3333333333333333,
+          "gain": 0.08333333333333333,
+          "new_hits": 3,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 13,
+          "modified_hits": 15,
+          "clean_rate": 0.3611111111111111,
+          "modified_rate": 0.4166666666666667,
+          "gain": 0.05555555555555555,
+          "new_hits": 2,
+          "lost_hits": 0
+        }
+      },
+      "purchase_intent": {
+        "query_family": "purchase_intent",
+        "query_family_zh": "购买意图",
+        "query_count": 36,
+        "mean_rank_clean": 9.75,
+        "mean_rank_modified": 4.944444444444445,
+        "mean_rank_gain": 4.805555555555555,
+        "top1": {
+          "clean_hits": 4,
+          "modified_hits": 13,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.3611111111111111,
+          "gain": 0.25,
+          "new_hits": 9,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 8,
+          "modified_hits": 17,
+          "clean_rate": 0.2222222222222222,
+          "modified_rate": 0.4722222222222222,
+          "gain": 0.25,
+          "new_hits": 9,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 15,
+          "modified_hits": 25,
+          "clean_rate": 0.4166666666666667,
+          "modified_rate": 0.6944444444444444,
+          "gain": 0.2777777777777778,
+          "new_hits": 10,
+          "lost_hits": 0
+        }
+      },
+      "use_case": {
+        "query_family": "use_case",
+        "query_family_zh": "使用场景",
+        "query_count": 36,
+        "mean_rank_clean": 9.555555555555555,
+        "mean_rank_modified": 6.5,
+        "mean_rank_gain": 3.0555555555555554,
+        "top1": {
+          "clean_hits": 4,
+          "modified_hits": 9,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.25,
+          "gain": 0.1388888888888889,
+          "new_hits": 5,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 9,
+          "modified_hits": 15,
+          "clean_rate": 0.25,
+          "modified_rate": 0.4166666666666667,
+          "gain": 0.16666666666666666,
+          "new_hits": 6,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 14,
+          "modified_hits": 20,
+          "clean_rate": 0.3888888888888889,
+          "modified_rate": 0.5555555555555556,
+          "gain": 0.16666666666666666,
+          "new_hits": 7,
+          "lost_hits": 1
+        }
+      },
+      "functional_need": {
+        "query_family": "functional_need",
+        "query_family_zh": "功能需求",
+        "query_count": 36,
+        "mean_rank_clean": 9.722222222222221,
+        "mean_rank_modified": 5.5,
+        "mean_rank_gain": 4.222222222222222,
+        "top1": {
+          "clean_hits": 4,
+          "modified_hits": 9,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.25,
+          "gain": 0.1388888888888889,
+          "new_hits": 5,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 9,
+          "modified_hits": 18,
+          "clean_rate": 0.25,
+          "modified_rate": 0.5,
+          "gain": 0.25,
+          "new_hits": 9,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 14,
+          "modified_hits": 21,
+          "clean_rate": 0.3888888888888889,
+          "modified_rate": 0.5833333333333334,
+          "gain": 0.19444444444444445,
+          "new_hits": 7,
+          "lost_hits": 0
+        }
+      },
+      "selection_comparison": {
+        "query_family": "selection_comparison",
+        "query_family_zh": "选择比较",
+        "query_count": 36,
+        "mean_rank_clean": 9.055555555555555,
+        "mean_rank_modified": 5.555555555555555,
+        "mean_rank_gain": 3.5,
+        "top1": {
+          "clean_hits": 5,
+          "modified_hits": 10,
+          "clean_rate": 0.1388888888888889,
+          "modified_rate": 0.2777777777777778,
+          "gain": 0.1388888888888889,
+          "new_hits": 5,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 10,
+          "modified_hits": 19,
+          "clean_rate": 0.2777777777777778,
+          "modified_rate": 0.5277777777777778,
+          "gain": 0.25,
+          "new_hits": 9,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 16,
+          "modified_hits": 22,
+          "clean_rate": 0.4444444444444444,
+          "modified_rate": 0.6111111111111112,
+          "gain": 0.16666666666666666,
+          "new_hits": 6,
+          "lost_hits": 0
+        }
+      }
+    }
+  },
+  "report_path": "/content/AmbiLAGE/output/exp_20261120_eval_v2/eval/ambilage_zero_overlap_v2/TRANSFER_PANEL_REPORT.md"
+}
+[DONE] 2026-11-20T06:28:47Z EVAL ambilage on zero_overlap_v2
+[START] 2026-11-20T06:28:49Z EVAL vi_08_02 on zero_overlap_v2
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+none clean: 前三 1/20；前五 3/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 10/20；前五 16/20
+none modified: 前三 19/20；前五 19/20
+none clean: 前三 19/20；前五 19/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 4/20；前五 6/20
+none modified: 前三 17/20；前五 19/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 12/20；前五 15/20
+none clean: 前三 2/20；前五 3/20
+none modified: 前三 18/20；前五 19/20
+none clean: 前三 2/20；前五 2/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 1/20；前五 3/20
+none modified: 前三 10/20；前五 12/20
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+none clean: 前三 0/20；前五 2/20
+none modified: 前三 6/20；前五 7/20
+none clean: 前三 5/20；前五 19/20
+none modified: 前三 16/20；前五 20/20
+none clean: 前三 17/20；前五 19/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 1/20；前五 3/20
+none modified: 前三 1/20；前五 3/20
+none clean: 前三 2/20；前五 4/20
+none modified: 前三 8/20；前五 11/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 1/20；前五 4/20
+none clean: 前三 5/20；前五 8/20
+none modified: 前三 10/20；前五 12/20
+none clean: 前三 3/20；前五 5/20
+none modified: 前三 5/20；前五 8/20
+none clean: 前三 6/20；前五 11/20
+none modified: 前三 2/20；前五 5/20
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+none clean: 前三 3/20；前五 9/20
+none modified: 前三 7/20；前五 13/20
+none clean: 前三 12/20；前五 20/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 18/20；前五 18/20
+none modified: 前三 18/20；前五 19/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 1/20；前五 3/20
+none clean: 前三 1/20；前五 5/20
+none modified: 前三 10/20；前五 12/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 1/20；前五 1/20
+none clean: 前三 5/20；前五 8/20
+none modified: 前三 5/20；前五 7/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 3/20；前五 5/20
+none clean: 前三 5/20；前五 9/20
+none modified: 前三 6/20；前五 11/20
+{
+  "output": "/content/AmbiLAGE/output/exp_20261120_eval_v2/eval/vi_08_02_zero_overlap_v2",
+  "method": "visual_inception",
+  "key_mode": "image",
+  "query_suite": "zero_overlap_v2",
+  "encoders": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 14.933333333333334,
+      "mean_rank_modified": 2.1666666666666665,
+      "mean_rank_gain": 12.766666666666667,
+      "top1": {
+        "clean_hits": 16,
+        "modified_hits": 128,
+        "clean_rate": 0.08888888888888889,
+        "modified_rate": 0.7111111111111111,
+        "gain": 0.6222222222222222,
+        "new_hits": 112,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 40,
+        "modified_hits": 153,
+        "clean_rate": 0.2222222222222222,
+        "modified_rate": 0.85,
+        "gain": 0.6277777777777778,
+        "new_hits": 113,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 53,
+        "modified_hits": 164,
+        "clean_rate": 0.29444444444444445,
+        "modified_rate": 0.9111111111111111,
+        "gain": 0.6166666666666667,
+        "new_hits": 111,
+        "lost_hits": 0
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 10.244444444444444,
+      "mean_rank_modified": 8.066666666666666,
+      "mean_rank_gain": 2.1777777777777776,
+      "top1": {
+        "clean_hits": 23,
+        "modified_hits": 37,
+        "clean_rate": 0.12777777777777777,
+        "modified_rate": 0.20555555555555555,
+        "gain": 0.07777777777777778,
+        "new_hits": 19,
+        "lost_hits": 5
+      },
+      "top3": {
+        "clean_hits": 39,
+        "modified_hits": 68,
+        "clean_rate": 0.21666666666666667,
+        "modified_rate": 0.37777777777777777,
+        "gain": 0.16111111111111112,
+        "new_hits": 34,
+        "lost_hits": 5
+      },
+      "top5": {
+        "clean_hits": 71,
+        "modified_hits": 90,
+        "clean_rate": 0.39444444444444443,
+        "modified_rate": 0.5,
+        "gain": 0.10555555555555556,
+        "new_hits": 25,
+        "lost_hits": 6
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 9.972222222222221,
+      "mean_rank_modified": 7.4,
+      "mean_rank_gain": 2.5722222222222224,
+      "top1": {
+        "clean_hits": 20,
+        "modified_hits": 41,
+        "clean_rate": 0.1111111111111111,
+        "modified_rate": 0.22777777777777777,
+        "gain": 0.11666666666666667,
+        "new_hits": 21,
+        "lost_hits": 0
+      },
+      "top3": {
+        "clean_hits": 45,
+        "modified_hits": 70,
+        "clean_rate": 0.25,
+        "modified_rate": 0.3888888888888889,
+        "gain": 0.1388888888888889,
+        "new_hits": 25,
+        "lost_hits": 0
+      },
+      "top5": {
+        "clean_hits": 72,
+        "modified_hits": 91,
+        "clean_rate": 0.4,
+        "modified_rate": 0.5055555555555555,
+        "gain": 0.10555555555555556,
+        "new_hits": 20,
+        "lost_hits": 1
+      }
+    }
+  },
+  "encoders_by_family": {
+    "01_clip_l14": {
+      "category_direct": {
+        "query_family": "category_direct",
+        "query_family_zh": "类别直接询问",
+        "query_count": 36,
+        "mean_rank_clean": 15.194444444444445,
+        "mean_rank_modified": 1.5833333333333333,
+        "mean_rank_gain": 13.61111111111111,
+        "top1": {
+          "clean_hits": 4,
+          "modified_hits": 29,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.8055555555555556,
+          "gain": 0.6944444444444444,
+          "new_hits": 25,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 6,
+          "modified_hits": 32,
+          "clean_rate": 0.16666666666666666,
+          "modified_rate": 0.8888888888888888,
+          "gain": 0.7222222222222222,
+          "new_hits": 26,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 11,
+          "modified_hits": 35,
+          "clean_rate": 0.3055555555555556,
+          "modified_rate": 0.9722222222222222,
+          "gain": 0.6666666666666666,
+          "new_hits": 24,
+          "lost_hits": 0
+        }
+      },
+      "purchase_intent": {
+        "query_family": "purchase_intent",
+        "query_family_zh": "购买意图",
+        "query_count": 36,
+        "mean_rank_clean": 12.75,
+        "mean_rank_modified": 2.1666666666666665,
+        "mean_rank_gain": 10.583333333333334,
+        "top1": {
+          "clean_hits": 3,
+          "modified_hits": 27,
+          "clean_rate": 0.08333333333333333,
+          "modified_rate": 0.75,
+          "gain": 0.6666666666666666,
+          "new_hits": 24,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 8,
+          "modified_hits": 32,
+          "clean_rate": 0.2222222222222222,
+          "modified_rate": 0.8888888888888888,
+          "gain": 0.6666666666666666,
+          "new_hits": 24,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 10,
+          "modified_hits": 33,
+          "clean_rate": 0.2777777777777778,
+          "modified_rate": 0.9166666666666666,
+          "gain": 0.6388888888888888,
+          "new_hits": 23,
+          "lost_hits": 0
+        }
+      },
+      "use_case": {
+        "query_family": "use_case",
+        "query_family_zh": "使用场景",
+        "query_count": 36,
+        "mean_rank_clean": 14.88888888888889,
+        "mean_rank_modified": 2.388888888888889,
+        "mean_rank_gain": 12.5,
+        "top1": {
+          "clean_hits": 2,
+          "modified_hits": 23,
+          "clean_rate": 0.05555555555555555,
+          "modified_rate": 0.6388888888888888,
+          "gain": 0.5833333333333334,
+          "new_hits": 21,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 11,
+          "modified_hits": 29,
+          "clean_rate": 0.3055555555555556,
+          "modified_rate": 0.8055555555555556,
+          "gain": 0.5,
+          "new_hits": 18,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 12,
+          "modified_hits": 32,
+          "clean_rate": 0.3333333333333333,
+          "modified_rate": 0.8888888888888888,
+          "gain": 0.5555555555555556,
+          "new_hits": 20,
+          "lost_hits": 0
+        }
+      },
+      "functional_need": {
+        "query_family": "functional_need",
+        "query_family_zh": "功能需求",
+        "query_count": 36,
+        "mean_rank_clean": 16.555555555555557,
+        "mean_rank_modified": 2.3055555555555554,
+        "mean_rank_gain": 14.25,
+        "top1": {
+          "clean_hits": 3,
+          "modified_hits": 27,
+          "clean_rate": 0.08333333333333333,
+          "modified_rate": 0.75,
+          "gain": 0.6666666666666666,
+          "new_hits": 24,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 6,
+          "modified_hits": 30,
+          "clean_rate": 0.16666666666666666,
+          "modified_rate": 0.8333333333333334,
+          "gain": 0.6666666666666666,
+          "new_hits": 24,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 8,
+          "modified_hits": 31,
+          "clean_rate": 0.2222222222222222,
+          "modified_rate": 0.8611111111111112,
+          "gain": 0.6388888888888888,
+          "new_hits": 23,
+          "lost_hits": 0
+        }
+      },
+      "selection_comparison": {
+        "query_family": "selection_comparison",
+        "query_family_zh": "选择比较",
+        "query_count": 36,
+        "mean_rank_clean": 15.277777777777779,
+        "mean_rank_modified": 2.388888888888889,
+        "mean_rank_gain": 12.88888888888889,
+        "top1": {
+          "clean_hits": 4,
+          "modified_hits": 22,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.6111111111111112,
+          "gain": 0.5,
+          "new_hits": 18,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 9,
+          "modified_hits": 30,
+          "clean_rate": 0.25,
+          "modified_rate": 0.8333333333333334,
+          "gain": 0.5833333333333334,
+          "new_hits": 21,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 12,
+          "modified_hits": 33,
+          "clean_rate": 0.3333333333333333,
+          "modified_rate": 0.9166666666666666,
+          "gain": 0.5833333333333334,
+          "new_hits": 21,
+          "lost_hits": 0
+        }
+      }
+    },
+    "02_openclip_bigG14": {
+      "category_direct": {
+        "query_family": "category_direct",
+        "query_family_zh": "类别直接询问",
+        "query_count": 36,
+        "mean_rank_clean": 12.722222222222221,
+        "mean_rank_modified": 10.833333333333334,
+        "mean_rank_gain": 1.8888888888888888,
+        "top1": {
+          "clean_hits": 4,
+          "modified_hits": 3,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.08333333333333333,
+          "gain": -0.027777777777777776,
+          "new_hits": 0,
+          "lost_hits": 1
+        },
+        "top3": {
+          "clean_hits": 7,
+          "modified_hits": 8,
+          "clean_rate": 0.19444444444444445,
+          "modified_rate": 0.2222222222222222,
+          "gain": 0.027777777777777776,
+          "new_hits": 3,
+          "lost_hits": 2
+        },
+        "top5": {
+          "clean_hits": 13,
+          "modified_hits": 14,
+          "clean_rate": 0.3611111111111111,
+          "modified_rate": 0.3888888888888889,
+          "gain": 0.027777777777777776,
+          "new_hits": 1,
+          "lost_hits": 0
+        }
+      },
+      "purchase_intent": {
+        "query_family": "purchase_intent",
+        "query_family_zh": "购买意图",
+        "query_count": 36,
+        "mean_rank_clean": 8.11111111111111,
+        "mean_rank_modified": 5.833333333333333,
+        "mean_rank_gain": 2.2777777777777777,
+        "top1": {
+          "clean_hits": 7,
+          "modified_hits": 11,
+          "clean_rate": 0.19444444444444445,
+          "modified_rate": 0.3055555555555556,
+          "gain": 0.1111111111111111,
+          "new_hits": 5,
+          "lost_hits": 1
+        },
+        "top3": {
+          "clean_hits": 12,
+          "modified_hits": 17,
+          "clean_rate": 0.3333333333333333,
+          "modified_rate": 0.4722222222222222,
+          "gain": 0.1388888888888889,
+          "new_hits": 6,
+          "lost_hits": 1
+        },
+        "top5": {
+          "clean_hits": 16,
+          "modified_hits": 21,
+          "clean_rate": 0.4444444444444444,
+          "modified_rate": 0.5833333333333334,
+          "gain": 0.1388888888888889,
+          "new_hits": 5,
+          "lost_hits": 0
+        }
+      },
+      "use_case": {
+        "query_family": "use_case",
+        "query_family_zh": "使用场景",
+        "query_count": 36,
+        "mean_rank_clean": 11.5,
+        "mean_rank_modified": 8.666666666666666,
+        "mean_rank_gain": 2.8333333333333335,
+        "top1": {
+          "clean_hits": 3,
+          "modified_hits": 6,
+          "clean_rate": 0.08333333333333333,
+          "modified_rate": 0.16666666666666666,
+          "gain": 0.08333333333333333,
+          "new_hits": 4,
+          "lost_hits": 1
+        },
+        "top3": {
+          "clean_hits": 7,
+          "modified_hits": 14,
+          "clean_rate": 0.19444444444444445,
+          "modified_rate": 0.3888888888888889,
+          "gain": 0.19444444444444445,
+          "new_hits": 8,
+          "lost_hits": 1
+        },
+        "top5": {
+          "clean_hits": 14,
+          "modified_hits": 18,
+          "clean_rate": 0.3888888888888889,
+          "modified_rate": 0.5,
+          "gain": 0.1111111111111111,
+          "new_hits": 7,
+          "lost_hits": 3
+        }
+      },
+      "functional_need": {
+        "query_family": "functional_need",
+        "query_family_zh": "功能需求",
+        "query_count": 36,
+        "mean_rank_clean": 9.75,
+        "mean_rank_modified": 8.166666666666666,
+        "mean_rank_gain": 1.5833333333333333,
+        "top1": {
+          "clean_hits": 3,
+          "modified_hits": 6,
+          "clean_rate": 0.08333333333333333,
+          "modified_rate": 0.16666666666666666,
+          "gain": 0.08333333333333333,
+          "new_hits": 3,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 4,
+          "modified_hits": 13,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.3611111111111111,
+          "gain": 0.25,
+          "new_hits": 9,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 12,
+          "modified_hits": 17,
+          "clean_rate": 0.3333333333333333,
+          "modified_rate": 0.4722222222222222,
+          "gain": 0.1388888888888889,
+          "new_hits": 7,
+          "lost_hits": 2
+        }
+      },
+      "selection_comparison": {
+        "query_family": "selection_comparison",
+        "query_family_zh": "选择比较",
+        "query_count": 36,
+        "mean_rank_clean": 9.13888888888889,
+        "mean_rank_modified": 6.833333333333333,
+        "mean_rank_gain": 2.3055555555555554,
+        "top1": {
+          "clean_hits": 6,
+          "modified_hits": 11,
+          "clean_rate": 0.16666666666666666,
+          "modified_rate": 0.3055555555555556,
+          "gain": 0.1388888888888889,
+          "new_hits": 7,
+          "lost_hits": 2
+        },
+        "top3": {
+          "clean_hits": 9,
+          "modified_hits": 16,
+          "clean_rate": 0.25,
+          "modified_rate": 0.4444444444444444,
+          "gain": 0.19444444444444445,
+          "new_hits": 8,
+          "lost_hits": 1
+        },
+        "top5": {
+          "clean_hits": 16,
+          "modified_hits": 20,
+          "clean_rate": 0.4444444444444444,
+          "modified_rate": 0.5555555555555556,
+          "gain": 0.1111111111111111,
+          "new_hits": 5,
+          "lost_hits": 1
+        }
+      }
+    },
+    "03_siglip_so400m": {
+      "category_direct": {
+        "query_family": "category_direct",
+        "query_family_zh": "类别直接询问",
+        "query_count": 36,
+        "mean_rank_clean": 11.777777777777779,
+        "mean_rank_modified": 9.0,
+        "mean_rank_gain": 2.7777777777777777,
+        "top1": {
+          "clean_hits": 3,
+          "modified_hits": 5,
+          "clean_rate": 0.08333333333333333,
+          "modified_rate": 0.1388888888888889,
+          "gain": 0.05555555555555555,
+          "new_hits": 2,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 9,
+          "modified_hits": 11,
+          "clean_rate": 0.25,
+          "modified_rate": 0.3055555555555556,
+          "gain": 0.05555555555555555,
+          "new_hits": 2,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 13,
+          "modified_hits": 14,
+          "clean_rate": 0.3611111111111111,
+          "modified_rate": 0.3888888888888889,
+          "gain": 0.027777777777777776,
+          "new_hits": 2,
+          "lost_hits": 1
+        }
+      },
+      "purchase_intent": {
+        "query_family": "purchase_intent",
+        "query_family_zh": "购买意图",
+        "query_count": 36,
+        "mean_rank_clean": 9.75,
+        "mean_rank_modified": 6.027777777777778,
+        "mean_rank_gain": 3.7222222222222223,
+        "top1": {
+          "clean_hits": 4,
+          "modified_hits": 13,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.3611111111111111,
+          "gain": 0.25,
+          "new_hits": 9,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 8,
+          "modified_hits": 14,
+          "clean_rate": 0.2222222222222222,
+          "modified_rate": 0.3888888888888889,
+          "gain": 0.16666666666666666,
+          "new_hits": 6,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 15,
+          "modified_hits": 22,
+          "clean_rate": 0.4166666666666667,
+          "modified_rate": 0.6111111111111112,
+          "gain": 0.19444444444444445,
+          "new_hits": 7,
+          "lost_hits": 0
+        }
+      },
+      "use_case": {
+        "query_family": "use_case",
+        "query_family_zh": "使用场景",
+        "query_count": 36,
+        "mean_rank_clean": 9.555555555555555,
+        "mean_rank_modified": 7.277777777777778,
+        "mean_rank_gain": 2.2777777777777777,
+        "top1": {
+          "clean_hits": 4,
+          "modified_hits": 6,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.16666666666666666,
+          "gain": 0.05555555555555555,
+          "new_hits": 2,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 9,
+          "modified_hits": 13,
+          "clean_rate": 0.25,
+          "modified_rate": 0.3611111111111111,
+          "gain": 0.1111111111111111,
+          "new_hits": 4,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 14,
+          "modified_hits": 18,
+          "clean_rate": 0.3888888888888889,
+          "modified_rate": 0.5,
+          "gain": 0.1111111111111111,
+          "new_hits": 4,
+          "lost_hits": 0
+        }
+      },
+      "functional_need": {
+        "query_family": "functional_need",
+        "query_family_zh": "功能需求",
+        "query_count": 36,
+        "mean_rank_clean": 9.722222222222221,
+        "mean_rank_modified": 7.638888888888889,
+        "mean_rank_gain": 2.0833333333333335,
+        "top1": {
+          "clean_hits": 4,
+          "modified_hits": 8,
+          "clean_rate": 0.1111111111111111,
+          "modified_rate": 0.2222222222222222,
+          "gain": 0.1111111111111111,
+          "new_hits": 4,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 9,
+          "modified_hits": 17,
+          "clean_rate": 0.25,
+          "modified_rate": 0.4722222222222222,
+          "gain": 0.2222222222222222,
+          "new_hits": 8,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 14,
+          "modified_hits": 18,
+          "clean_rate": 0.3888888888888889,
+          "modified_rate": 0.5,
+          "gain": 0.1111111111111111,
+          "new_hits": 4,
+          "lost_hits": 0
+        }
+      },
+      "selection_comparison": {
+        "query_family": "selection_comparison",
+        "query_family_zh": "选择比较",
+        "query_count": 36,
+        "mean_rank_clean": 9.055555555555555,
+        "mean_rank_modified": 7.055555555555555,
+        "mean_rank_gain": 2.0,
+        "top1": {
+          "clean_hits": 5,
+          "modified_hits": 9,
+          "clean_rate": 0.1388888888888889,
+          "modified_rate": 0.25,
+          "gain": 0.1111111111111111,
+          "new_hits": 4,
+          "lost_hits": 0
+        },
+        "top3": {
+          "clean_hits": 10,
+          "modified_hits": 15,
+          "clean_rate": 0.2777777777777778,
+          "modified_rate": 0.4166666666666667,
+          "gain": 0.1388888888888889,
+          "new_hits": 5,
+          "lost_hits": 0
+        },
+        "top5": {
+          "clean_hits": 16,
+          "modified_hits": 19,
+          "clean_rate": 0.4444444444444444,
+          "modified_rate": 0.5277777777777778,
+          "gain": 0.08333333333333333,
+          "new_hits": 3,
+          "lost_hits": 0
+        }
+      }
+    }
+  },
+  "report_path": "/content/AmbiLAGE/output/exp_20261120_eval_v2/eval/vi_08_02_zero_overlap_v2/TRANSFER_PANEL_REPORT.md"
+}
+[DONE] 2026-11-20T06:41:42Z EVAL vi_08_02 on zero_overlap_v2
+[SUMMARY WRITTEN] /content/AmbiLAGE/output/exp_20261120_eval_v2/EVAL_V2_SUMMARY.md
+[ALL_DONE] 2026-11-20T06:41:44Z

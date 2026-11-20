@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "scope": "shared",
+  "pool_path": "/content/AmbiLAGE/resources/evaluation_base/shared_memory/shared_memory.json",
+  "pool_sha256": "bfd8964a4477b694796787ffe2fc746c5eb19a389c23c904ebccc81975cd77a8",
+  "pool_count": 189,
+  "source_memory_id": "groups9_reference_07_shampoo_B09B63YYCW",
+  "frozen_image_sha256": "c83f0fac200100a0ec4e75f5f7101278898003ae8958856c62b0135afc2225e5",
+  "source_public_id": "B09B63YYCW",
+  "method": "visual_inception",
+  "queries": [
+    {
+      "task_id": "feature_01",
+      "instruction": "sulfate-free gentle moisturizing shampoo for dry and sensitive scalp",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_02",
+      "instruction": "tea tree and rosemary anti-dandruff scalp care shampoo",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_03",
+      "instruction": "keratin protein repairing shampoo for damaged and color-treated hair",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_04",
+      "instruction": "plant-based balancing shampoo with botanical flower essences for scalp care",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_05",
+      "instruction": "I want to buy a volumizing shampoo infused with bamboo or biotin for fine flat hair.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_06",
+      "instruction": "Help me order a salon-size bottle of gentle scalp-balancing shampoo made with plant-based cleansers.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_07",
+      "instruction": "I am shopping to purchase a coconut oil and shea butter hydrating shampoo for coarse curly hair.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_08",
+      "instruction": "Please find a dandruff-control shampoo with salicylic acid or green tea extract that I can buy online.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_09",
+      "instruction": "I need a gentle fragrance-free shampoo with aloe and oat milk for soothing an itchy flaky scalp.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_10",
+      "instruction": "Suggest a purple or color-safe moisturizing shampoo for keeping bleached blonde hair bright and soft.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_11",
+      "instruction": "I want an invigorating mint and tea tree daily shampoo refreshing to use after morning workouts.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_12",
+      "instruction": "Find a mild tear-free botanical hair wash suitable for both kids and adults with delicate skin.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_13",
+      "instruction": "Looking for a sulfate-free repairing shampoo enriched with argan oil and keratin to mend split ends.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_14",
+      "instruction": "I need a clarifying scalp cleanser that lifts product buildup and excess oil without stripping natural shine.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_15",
+      "instruction": "Recommend lightweight volumizing shampoos free of silicones and parabens that boost root lift in humid weather.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_16",
+      "instruction": "Which vegan shampoos combine soothing herbal extracts with balanced pH to calm scalp redness?",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_17",
+      "instruction": "Compare keratin damage-repair shampoos against biotin thickening shampoos for fragile strands.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_18",
+      "instruction": "Show me tea tree oil anti-dandruff shampoos alongside sulfate-free aloe vera sensitive-scalp cleansers.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_19",
+      "instruction": "Contrast salon-size moisturizing hair washes by lather richness, silicone-free formula, and humidity frizz control.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_20",
+      "instruction": "Which botanical scalp-balancing shampoos clean oily roots cleanly without drying out hair ends?",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    }
+  ],
+  "conditions": [
+    {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    }
+  ],
+  "training_surrogate_context": {
+    "schema_version": 1,
+    "scope": "all_frozen_images_in_modified_bank",
+    "images": [
+      {
+        "method": "visual_inception",
+        "source_id": "B09B63YYCW",
+        "image_sha256": "c83f0fac200100a0ec4e75f5f7101278898003ae8958856c62b0135afc2225e5",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B09PHLS2QD",
+        "image_sha256": "ad82e55237903573007246759ef1fff15c983cf1a29021074a0f5d68154eda49",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B09PNNXYJ4",
+        "image_sha256": "c6b2695fd99a7b78870c60ea51c38431befe24d29ddce8abedc930ec9046ac11",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      }
+    ],
+    "context_sha256": "9872555ef5c44927df3137c360ab92ca670e3400a3cde4e023610cb47623e79b"
+  },
+  "training_identity_policy": "actual_frozen_surrogates_v1",
+  "simultaneous_replacements": [
+    {
+      "source_id": "B09PHLS2QD",
+      "image_sha256": "ad82e55237903573007246759ef1fff15c983cf1a29021074a0f5d68154eda49",
+      "source_memory_id": "groups9_reference_04_curtain_B09PHLS2QD"
+    },
+    {
+      "source_id": "B09B63YYCW",
+      "image_sha256": "c83f0fac200100a0ec4e75f5f7101278898003ae8958856c62b0135afc2225e5",
+      "source_memory_id": "groups9_reference_07_shampoo_B09B63YYCW"
+    },
+    {
+      "source_id": "B09PNNXYJ4",
+      "image_sha256": "c6b2695fd99a7b78870c60ea51c38431befe24d29ddce8abedc930ec9046ac11",
+      "source_memory_id": "groups9_reference_09_toothbrush_B09PNNXYJ4"
+    }
+  ],
+  "memory_vector_cache_policy": "content_model_decoder_text_fusion_bound_v1",
+  "encoder_config": "/content/AmbiLAGE/src/visual/config/evaluator.clip_l14.matched.json",
+  "encoder_config_sha256": "18523d5f64d9689c3fc5095758948bac6edd721b40673b6fb831f1dd1508bff5",
+  "key_mode": "image",
+  "key_image_weight": 1.0,
+  "query_image_weight": 0.0,
+  "query_mode": "text",
+  "query_manifest": "/content/AmbiLAGE/resources/visual_inception_evaluation/category_queries_v1/07_shampoo/queries.json",
+  "query_manifest_sha256": "7c3a49aea9e1925e4c4ffe312617babe4140b3ceb893c7fcfdd4b8d577188a8f",
+  "index_text": "product_feature",
+  "query_image_defended": false,
+  "all_memory_images_equally_defended": true,
+  "shopping_allowed": false,
+  "record_kinds": {
+    "purchase_memory": 51,
+    "simulated_gallery": 138
+  }
+}

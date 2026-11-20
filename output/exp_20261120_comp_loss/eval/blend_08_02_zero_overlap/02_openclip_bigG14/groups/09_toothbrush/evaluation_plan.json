@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "scope": "shared",
+  "pool_path": "/content/AmbiLAGE/resources/evaluation_base/shared_memory/shared_memory.json",
+  "pool_sha256": "bfd8964a4477b694796787ffe2fc746c5eb19a389c23c904ebccc81975cd77a8",
+  "pool_count": 189,
+  "source_memory_id": "groups9_reference_09_toothbrush_B09PNNXYJ4",
+  "frozen_image_sha256": "75eecd1bb1d8bd18b6141dcc22dead3878d8390b5765023d72e9772dc21503dc",
+  "source_public_id": "B09PNNXYJ4",
+  "method": "visual_inception",
+  "queries": [
+    {
+      "task_id": "feature_01",
+      "instruction": "extra soft bristle manual toothbrushes for sensitive gums",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_02",
+      "instruction": "kids rechargeable electric toothbrush with gentle brushing timer",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_03",
+      "instruction": "toddler U-shaped soft silicone toothbrush for ages 2 to 6",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_04",
+      "instruction": "360-degree U-shape silicone kids toothbrush with small easy-grip handle",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_05",
+      "instruction": "I want to buy a multi-pack of ultra-soft manual toothbrushes for sensitive teeth and gum care.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_06",
+      "instruction": "Help me order a waterproof sonic electric toothbrush with replaceable soft brush heads.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_07",
+      "instruction": "I am shopping to purchase a colorful kids toothbrush set sized for toddlers and young children.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_08",
+      "instruction": "Please find a cute U-shaped food-grade silicone children toothbrush with 360-degree cleaning to buy.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_09",
+      "instruction": "I need a gentle charcoal or fine-bristle manual toothbrush for daily stain removal and teeth whitening.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_10",
+      "instruction": "Suggest a compact toddler training toothbrush with an easy-hold non-slip handle for ages 1 to 4.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_11",
+      "instruction": "I want a 360-degree U-shaped silicone mouthpiece toothbrush so a preschooler can clean all teeth without gagging.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_12",
+      "instruction": "Find a travel-friendly electric or manual toothbrush with a ventilated protective head cap.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_13",
+      "instruction": "Looking for a toothbrush with 10,000 ultra-fine micro-nano bristles that clean deeply without hurting gums.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_14",
+      "instruction": "I need an electric kids toothbrush featuring two-minute smart timers, multiple gentle modes, and USB charging.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_15",
+      "instruction": "Recommend a manual U-shaped children toothbrush built from warm-water-washable soft silicone and PP handle.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_16",
+      "instruction": "Which toothbrushes offer ergonomic textured grips for small hands and effective plaque removal along the gumline?",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_17",
+      "instruction": "Compare ultra-soft nano-bristle manual toothbrushes against sonic electric toothbrushes for gum sensitivity.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_18",
+      "instruction": "Show me traditional soft-bristle toddler toothbrushes side by side with 360-degree U-shaped silicone models.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_19",
+      "instruction": "Contrast kids U-shaped silicone toothbrushes sized for ages 2-6 versus ages 6-12 by head fit and handle grip.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_20",
+      "instruction": "Which waterproof electric toothbrushes deliver quieter motor vibration and longer battery life per charge?",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    }
+  ],
+  "conditions": [
+    {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    }
+  ],
+  "training_surrogate_context": {
+    "schema_version": 1,
+    "scope": "all_frozen_images_in_modified_bank",
+    "images": [
+      {
+        "method": "visual_inception",
+        "source_id": "B09PNNXYJ4",
+        "image_sha256": "75eecd1bb1d8bd18b6141dcc22dead3878d8390b5765023d72e9772dc21503dc",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B09PHLS2QD",
+        "image_sha256": "ff58fc72ae04d9652d556c99dc570592a2d94ca0612f6bb2c507f30a1b326cd7",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B09B63YYCW",
+        "image_sha256": "fe56c83b8ed8ac46338635c42fb38a570dbece823512d838bb9f9adbf1ce5325",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      }
+    ],
+    "context_sha256": "6570ef37b31782c54ff0333b7fc89433a2ebd318e700580fbfc2ab1c19d0d61a"
+  },
+  "training_identity_policy": "actual_frozen_surrogates_v1",
+  "simultaneous_replacements": [
+    {
+      "source_id": "B09PHLS2QD",
+      "image_sha256": "ff58fc72ae04d9652d556c99dc570592a2d94ca0612f6bb2c507f30a1b326cd7",
+      "source_memory_id": "groups9_reference_04_curtain_B09PHLS2QD"
+    },
+    {
+      "source_id": "B09B63YYCW",
+      "image_sha256": "fe56c83b8ed8ac46338635c42fb38a570dbece823512d838bb9f9adbf1ce5325",
+      "source_memory_id": "groups9_reference_07_shampoo_B09B63YYCW"
+    },
+    {
+      "source_id": "B09PNNXYJ4",
+      "image_sha256": "75eecd1bb1d8bd18b6141dcc22dead3878d8390b5765023d72e9772dc21503dc",
+      "source_memory_id": "groups9_reference_09_toothbrush_B09PNNXYJ4"
+    }
+  ],
+  "memory_vector_cache_policy": "content_model_decoder_text_fusion_bound_v1",
+  "encoder_config": "/content/AmbiLAGE/src/visual/config/evaluator.clip_bigG14.heldout.json",
+  "encoder_config_sha256": "a7a7da0b205e7f814af790bf6227a055e35795a6e3a3248c1b0f1c07b1eae1ac",
+  "key_mode": "image",
+  "key_image_weight": 1.0,
+  "query_image_weight": 0.0,
+  "query_mode": "text",
+  "query_manifest": "/content/AmbiLAGE/resources/visual_inception_evaluation/category_queries_v1/09_toothbrush/queries.json",
+  "query_manifest_sha256": "e60f636ea413879609c500263c57d4ea77f828b28feb6a893fea1799073e6ac1",
+  "index_text": "product_feature",
+  "query_image_defended": false,
+  "all_memory_images_equally_defended": true,
+  "shopping_allowed": false,
+  "record_kinds": {
+    "purchase_memory": 51,
+    "simulated_gallery": 138
+  }
+}

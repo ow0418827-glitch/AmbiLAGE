@@ -1,0 +1,36 @@
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+{
+  "schema_version": 1,
+  "protocol": "visual_inception_training_oracle_v1",
+  "query_suite": "training_oracle",
+  "status": "passed",
+  "groups_verified": 3,
+  "rankings_recomputed": 120,
+  "candidate_scores_recomputed": 22680,
+  "max_score_error": 0.0,
+  "all_candidate_scores_checked": true,
+  "summary_sha256": "8addfed007e95b9bf4e6b6f0f51b4867b7f34a96aae1b635d21be205d81d3027",
+  "groups": {
+    "04_curtain": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "50f671fb40290fd07d2a3606d7d04ea62beb54745182a6bde93cc60ee145e83f",
+      "scores_sha256": "6df97966ab81410860129d21bbb3d10ac146830524da0de4ef9e3b0bae62f001"
+    },
+    "07_shampoo": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "5ca19fafe28afce0d77361c51cc63b9ee9d95a539f5f2caaffcba6653db8981f",
+      "scores_sha256": "995075cf6a5dae3d4978225246a29c9a30faff0a5e52a98f261417675260c066"
+    },
+    "09_toothbrush": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "d5cdb3e89cc60a85f97f9cfa6cbc866525f260bd61167a10b0946136ea5274e4",
+      "scores_sha256": "f3b29ddd4fab58f6ff0e5546f05e767dccb9f978e89222634a9a03838e36c75b"
+    }
+  }
+}

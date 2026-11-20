@@ -1,0 +1,36 @@
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+{
+  "schema_version": 1,
+  "protocol": "visual_inception_training_oracle_v1",
+  "query_suite": "training_oracle",
+  "status": "passed",
+  "groups_verified": 3,
+  "rankings_recomputed": 120,
+  "candidate_scores_recomputed": 22680,
+  "max_score_error": 0.0,
+  "all_candidate_scores_checked": true,
+  "summary_sha256": "b4f4bbddac5c1b6b39970efcf8a7d0197df46ac5213427a27550c6615e27ca66",
+  "groups": {
+    "04_curtain": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "d8971e4aec820290bf08ba03d59a2e38c8805a43c8b4a41811944142f38b0d32",
+      "scores_sha256": "a139fcf7a9a19ff0b9a5ae395a3846efb68b920a23436ad5e6b81d4575b697ae"
+    },
+    "07_shampoo": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "d42f37a8e7af32c2f0cdd9432ccd4689a63f4fe2dfa37db8b97f8c5250508826",
+      "scores_sha256": "5cb030e5c15282a355f237b361b869c82f69339e42285b4e6fdd3515906c1b86"
+    },
+    "09_toothbrush": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "7180c2cf19508945208d1235da6e112b33c31b821f8cd1493cd9942cc5c3fb42",
+      "scores_sha256": "e57fdc60d32fa12d08db6006dc28119e7d7ce95e0e9e6d0b9ef88b37aeb84321"
+    }
+  }
+}

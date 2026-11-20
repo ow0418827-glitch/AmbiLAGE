@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "protocol": "visual_inception_training_oracle_v1",
+  "query_suite": "training_oracle",
+  "method": "visual_inception",
+  "query_mode": "text",
+  "key_mode": "image",
+  "key_image_weight": 1.0,
+  "defense_mode": "none",
+  "selected_conditions": [
+    {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    }
+  ],
+  "base_path": "/content/AmbiLAGE/resources/evaluation_base",
+  "base_manifest_sha256": "ad8370e3e32ab4fa85a079adc1980586c5e0e4b664ea652a166d5b54472283a1",
+  "query_root": "/content/AmbiLAGE/resources/visual_inception_evaluation/training_queries_oracle_v1",
+  "query_root_manifest_sha256": "2a9a0b3f6625c35f716fd67c2c71767e60a73507aab0f05b879aa670e78be2cf",
+  "query_validation_sha256": "a6ec09e87a1130fccc190d03ed781a78217b8863d3f91c6add83f1ffa57cc23f",
+  "pool_path": "/content/AmbiLAGE/resources/evaluation_base/shared_memory/shared_memory.json",
+  "pool_sha256": "bfd8964a4477b694796787ffe2fc746c5eb19a389c23c904ebccc81975cd77a8",
+  "pool_count": 189,
+  "encoder_config": "/content/AmbiLAGE/src/visual/config/evaluator.clip_l14.matched.json",
+  "encoder_config_sha256": "18523d5f64d9689c3fc5095758948bac6edd721b40673b6fb831f1dd1508bff5",
+  "groups": [
+    "04_curtain",
+    "07_shampoo",
+    "09_toothbrush"
+  ],
+  "simultaneous_replacement_count": 3,
+  "shared_pool_scope": "simultaneous_3_group_replacement",
+  "shopping_allowed": false,
+  "recommendation_executed": false,
+  "frozen_images": {
+    "04_curtain": {
+      "image": "/content/AmbiLAGE/output/exp_20261120_comp_loss/vi_08_02/04_curtain/visual_inception/frozen.png",
+      "image_sha256": "ff58fc72ae04d9652d556c99dc570592a2d94ca0612f6bb2c507f30a1b326cd7",
+      "source_memory_id": "groups9_reference_04_curtain_B09PHLS2QD",
+      "source_id": "B09PHLS2QD",
+      "target_id": "B086PW7TWX",
+      "requested_steps": 100,
+      "objective_kind": "visual_inception_retrieval_semantic_perceptual_hardneg_advquery_v3"
+    },
+    "07_shampoo": {
+      "image": "/content/AmbiLAGE/output/exp_20261120_comp_loss/vi_08_02/07_shampoo/visual_inception/frozen.png",
+      "image_sha256": "fe56c83b8ed8ac46338635c42fb38a570dbece823512d838bb9f9adbf1ce5325",
+      "source_memory_id": "groups9_reference_07_shampoo_B09B63YYCW",
+      "source_id": "B09B63YYCW",
+      "target_id": "B00BDJODWI",
+      "requested_steps": 100,
+      "objective_kind": "visual_inception_retrieval_semantic_perceptual_hardneg_advquery_v3"
+    },
+    "09_toothbrush": {
+      "image": "/content/AmbiLAGE/output/exp_20261120_comp_loss/vi_08_02/09_toothbrush/visual_inception/frozen.png",
+      "image_sha256": "75eecd1bb1d8bd18b6141dcc22dead3878d8390b5765023d72e9772dc21503dc",
+      "source_memory_id": "groups9_reference_09_toothbrush_B09PNNXYJ4",
+      "source_id": "B09PNNXYJ4",
+      "target_id": "B09J81RMLD",
+      "requested_steps": 100,
+      "objective_kind": "visual_inception_retrieval_semantic_perceptual_hardneg_advquery_v3"
+    }
+  }
+}

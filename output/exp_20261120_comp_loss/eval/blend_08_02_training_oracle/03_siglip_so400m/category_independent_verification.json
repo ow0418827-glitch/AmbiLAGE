@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "protocol": "visual_inception_training_oracle_v1",
+  "query_suite": "training_oracle",
+  "status": "passed",
+  "groups_verified": 3,
+  "rankings_recomputed": 120,
+  "candidate_scores_recomputed": 22680,
+  "max_score_error": 0.0,
+  "all_candidate_scores_checked": true,
+  "summary_sha256": "2fd1505c1f2320c34a0325d031a7c55880200fb5ba3e61f29b62a9d9196eb8f6",
+  "groups": {
+    "04_curtain": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "24b6649d756e65626de611748426cee5ba6cfc0eb74b9ec614bfdd76ccb46929",
+      "scores_sha256": "ea5cdbca7b3d352fc3461f1fd938fb9d1e11f9027067a59fa9c386c8e71dc661"
+    },
+    "07_shampoo": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "7a54e02f44e8fc1c2630121ae53080654b204f93286770e510df12c42e0d437c",
+      "scores_sha256": "624ed3cffe4e709985a74ec079bce4d967f91d9c5ad807c8657fb52f8ebcb5b1"
+    },
+    "09_toothbrush": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "4f6dd82e21cb6ea18da78eed6a66a9bdd544ed65d443cf8fbfca4820f677742e",
+      "scores_sha256": "e958394a7d76bd7a0667dc706a3515f78cddf0d2e0301021666d000944c497e2"
+    }
+  }
+}

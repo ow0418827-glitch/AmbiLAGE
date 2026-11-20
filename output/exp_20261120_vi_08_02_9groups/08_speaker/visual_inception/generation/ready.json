@@ -1,0 +1,32 @@
+{
+  "schema_version": 3,
+  "method": "visual_inception",
+  "status": "completed",
+  "test_fixture": false,
+  "production_backend": true,
+  "output_image": "/content/AmbiLAGE/output/exp_20261120_vi_08_02_9groups/08_speaker/visual_inception/generation/adversarial.png",
+  "output_image_sha256": "3e4649db5a41c1e26d7afd64d6acecc845a1658579308f880b37f212a550c206",
+  "source_image": "/content/AmbiLAGE/resources/evaluation_base/groups/08_speaker/source.jpg",
+  "source_image_sha256": "ead324b33b443daba5e0abe9c6ed59157e164d67b302f65a7661d53810be6390",
+  "target_image": "/content/AmbiLAGE/resources/evaluation_base/groups/08_speaker/target.jpg",
+  "target_image_sha256": "808882d53dd322b2a319a83f9ec29ec406cae6b93558ea98f60a5444b4eed928",
+  "metadata_sha256": "119199bfea91cdc1c906db5c396e548b1eb8115c058678ccb07471093048d848",
+  "attack_metrics_sha256": "119199bfea91cdc1c906db5c396e548b1eb8115c058678ccb07471093048d848",
+  "config_sha256": "ff1aa7f10733f2ea97eb6e7505cee968716838eeb32d287d57a3034c728faf29",
+  "steps_requested": 100,
+  "steps_completed": 100,
+  "epsilon": 0.03137254901960784,
+  "epsilon_levels": 8,
+  "training_objective_kind": "visual_inception_retrieval_semantic_perceptual_hardneg_advquery_v3",
+  "retrieval_loss_omitted": false,
+  "candidates": {
+    "final": {
+      "image": "/content/AmbiLAGE/output/exp_20261120_vi_08_02_9groups/08_speaker/visual_inception/generation/adversarial.png",
+      "sha256": "3e4649db5a41c1e26d7afd64d6acecc845a1658579308f880b37f212a550c206"
+    }
+  },
+  "training_bundle_sha256": "9dbd18baa8d3768ccab00bb2a014bb101ae46ad782e042d47b62724c0ef2bdb3",
+  "training_manifest_sha256": "f204443dbdeb311e00d461f2fcad3d9ac98f18dee0813b11857cdeacd646a3ee",
+  "mechanism_profile": "enhanced_v3",
+  "enhanced_mechanisms_sha256": "e5541390c8c3b99d62a1bfb8080ac84ccac51aa244da074059e431cd21d96f5c"
+}

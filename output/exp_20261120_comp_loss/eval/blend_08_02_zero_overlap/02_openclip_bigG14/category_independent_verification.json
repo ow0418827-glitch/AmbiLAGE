@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "protocol": "visual_inception_category_diversity_v1",
+  "query_suite": "zero_overlap",
+  "status": "passed",
+  "groups_verified": 3,
+  "rankings_recomputed": 120,
+  "candidate_scores_recomputed": 22680,
+  "max_score_error": 0.0,
+  "all_candidate_scores_checked": true,
+  "summary_sha256": "e7a7ae6cda7d2649db1f63e6db11111215b40c8ed531ea9ff28cc66b298c0910",
+  "groups": {
+    "04_curtain": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "86ccb421bbd1f9d03475d6bad5130151a1b858901ecfec9d03e9dd3765e4d548",
+      "scores_sha256": "f77534e5c7383bfe84240f5d71031a0a91c724620e3a7c5771eb143a5fd99cf9"
+    },
+    "07_shampoo": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "2c02543c8e8916e36b8d73094de15e8479397c531348f26339bf62b706239dd0",
+      "scores_sha256": "3f1eeaeddc597a25e025d5c792a72b8c02d464d6cf927168e69b3a2a9b682bd5"
+    },
+    "09_toothbrush": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "275efbcddfc71ab7b6f7ce25a04f6ed049fdb2facfd59380a4ba4ba2fb034b4b",
+      "scores_sha256": "2653c63b91ad84ec7ec112e6052eb70f46aeb1d11aa2d0ad5c5c1bc997f00156"
+    }
+  }
+}

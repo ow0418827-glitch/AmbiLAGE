@@ -107,59 +107,36 @@ def test_frozen_suite_rejects_wrong_identity_or_changed_image(tmp_path, monkeypa
 def test_frozen_category_query_suite_v1_integrity():
     from src.experiments import visual_inception_category_evaluation as category
     from src.paths import EVALUATION_BASE
+    from tools.build_visual_inception_eval_v4_suites import acceptable
 
     result = category.validate_category_query_suite(
         category.CATEGORY_QUERY_ROOT, base=EVALUATION_BASE, verify_training_snapshots=True
     )
     assert result['status'] == 'passed'
+    assert result['protocol'] == 'visual_inception_zero_overlap_v4_exact'
+    assert result['query_suite'] == 'zero_overlap_v4'
     assert result['group_count'] == 9
     assert result['queries_per_group'] == 20
     assert result['total_queries'] == 180
-    assert result['queries_per_family'] == 4
+    assert result['queries_per_family'] == {
+        'category_description': 10,
+        'model_paraphrase': 6,
+        'heldout_search_query': 4,
+    }
     assert result['training_overlap_checked'] is True
-    assert result['training_snapshot_count'] == 27
-    assert result['unique_training_text_count'] == 891
+    assert result['training_snapshot_count'] == 9
     assert result['training_normalized_exact_overlap_count'] == 0
-    assert result['existing_formal_query_overlap_count'] == 0
-
-    semantic_anchors = {
-        '01_camera': ('zoom', 'motion', 'night', 'waterproof', 'weather-resistant', 'ip66', 'outdoor', '1080p', '2k', 'audio', 'voice', 'sd', 'wifi', 'battery', 'mini', 'dome'),
-        '02_chair': ('hydraulic', '360', 'swivel', 'height', 'foam', 'sponge', 'cushion', 'steel', 'heavy-duty', 'heavy duty', 'leather', 'pvc', 'reclining', 'footrest'),
-        '03_cookies': ('chocolate', 'butter', 'sugar', 'oatmeal', 'frozen', 'refrigerated', 'bake', 'egg', 'gluten', 'vegan', 'edible', 'natural', 'ready-to-eat'),
-        '04_curtain': ('blackout', 'darkening', 'thermal', 'insulated', 'privacy', 'noise', 'polyester', 'velvet', 'cotton-linen', 'grommet', 'rod pocket', 'valance', 'wood'),
-        '05_hair_extension': ('human hair', 'real hair', 'synthetic', 'crochet', 'kanekalon', 'clip-in', 'tape-in', 'wig', 'weft', 'ponytail', 'halo', 'wavy', 'curly'),
-        '06_jeans': ('high waist', 'high-waist', 'high-waisted', 'high-rise', 'mid-rise', 'wide-leg', 'straight-leg', 'straight', 'baggy', 'boyfriend', 'flare', 'bootcut', 'stretch', 'spandex', 'relaxed-fit', 'y2k', 'pocket'),
-        '07_shampoo': ('scalp', 'moisturizing', 'hydrating', 'repairing', 'volumizing', 'thickening', 'dandruff', 'sulfate-free', 'tea tree', 'botanical', 'plant', 'aloe', 'purple', 'vegan'),
-        '08_speaker': ('waterproof', 'splashproof', 'ipx7', 'portable', 'stereo', 'bass', 'battery', 'playback', 'hour', 'mic', 'hands-free', 'fm', 'microsd', 'tf card', 'solar', 'bluetooth 5.0', 'range'),
-        '09_toothbrush': ('u-shaped', 'u-shape', 'silicone', 'soft', 'ultra-soft', 'nano-bristle', 'electric', 'sonic', 'manual', 'kids', 'toddler', 'gum', 'whitening'),
-    }
-    rare_niche_ceilings = {
-        '01_camera': (('optical zoom', 3),),
-        '03_cookies': (('egg', 4),),
-        '04_curtain': (('wood', 3),),
-        '05_hair_extension': (('double weft', 3), ('double-weft', 3)),
-        '06_jeans': (('flap', 3),),
-        '07_shampoo': (('plant', 3),),
-        '08_speaker': (('solar', 3),),
-        '09_toothbrush': (('u-shape', 9),),
-    }
-    banned_meta = ('what should i consider', 'how should i choose', 'how do i choose',
-                   'worth putting on a shortlist', 'worth adding to', 'useful shopping shortlist', 'first purchase')
-    banned_brands = ('hxview', 'lthdd', 'big dipper', 's-noilite', 'aveda', 'touch of eco', 'buytvproducts4less')
 
     for group in GROUPS:
         assert result['groups'][group]['query_family_counts'] == {
-            family: 4 for family in category.QUERY_FAMILIES
+            'category_description': 10,
+            'model_paraphrase': 6,
+            'heldout_search_query': 4,
         }
         q_doc = json.loads((category.CATEGORY_QUERY_ROOT / group / 'queries.json').read_text(encoding='utf-8'))
-        anchors = semantic_anchors[group]
-        lows = [category.normalize_query_text(text) for text in q_doc['instructions']]
-        for text, low in zip(q_doc['instructions'], lows):
-            assert any(anchor in low for anchor in anchors), (group, text)
-            assert not any(meta in low for meta in banned_meta), (group, text)
-            assert not any(brand in low for brand in banned_brands), (group, text)
-        for token, max_hits in rare_niche_ceilings.get(group, ()):
-            assert sum(token in low for low in lows) <= max_hits, (group, token)
+        for rec in q_doc['query_records']:
+            if rec['query_family'] != 'heldout_search_query':
+                assert acceptable(group, rec['instruction']), (group, rec['id'], rec['instruction'])
 
 
 def _tiny_category_query_root(tmp_path, base_manifest, publics):
@@ -402,16 +379,15 @@ def test_frozen_training_oracle_query_suite_v1_integrity():
     assert category.DEFAULT_QUERY_SUITE == 'training_oracle'
     result = category.validate_category_query_suite(base=EVALUATION_BASE, verify_training_snapshots=True)
     assert result['status'] == 'passed'
-    assert result['protocol'] == category.ORACLE_PROTOCOL
-    assert result['query_suite'] == 'training_oracle'
-    assert result['training_overlap_mode'] == 'oracle_100pct'
+    assert result['protocol'] == 'visual_inception_training_oracle_v4_exact'
+    assert result['query_suite'] == 'training_oracle_v4'
+    assert result['training_overlap_mode'] == 'training_oracle_v4'
     assert result['group_count'] == 9
     assert result['queries_per_group'] == 20
     assert result['total_queries'] == 180
     assert result['queries_per_family'] == {'category_description': 10, 'model_paraphrase': 6, 'heldout_search_query': 4}
     assert result['training_overlap_checked'] is True
-    assert result['training_snapshot_count'] == 27
-    assert result['unique_training_text_count'] == 891
+    assert result['training_snapshot_count'] == 9
     assert result['training_normalized_exact_overlap_count'] == 180
     for group in GROUPS:
         assert result['groups'][group]['query_family_counts'] == {
@@ -423,8 +399,8 @@ def test_frozen_training_oracle_query_suite_v1_integrity():
     zero_res = category.validate_category_query_suite(
         query_suite='zero_overlap', base=EVALUATION_BASE, verify_training_snapshots=True
     )
-    assert zero_res['protocol'] == category.PROTOCOL
-    assert zero_res['query_suite'] == 'zero_overlap'
+    assert zero_res['protocol'] == 'visual_inception_zero_overlap_v4_exact'
+    assert zero_res['query_suite'] == 'zero_overlap_v4'
     assert zero_res['training_normalized_exact_overlap_count'] == 0
 
 
@@ -838,14 +814,13 @@ def test_frozen_category_query_overlap_30_v1_integrity():
 
     report = category.validate_category_query_suite(query_suite='overlap_30')
     assert report['status'] == 'passed'
-    assert report['protocol'] == 'category_query_overlap_30_v1'
+    assert report['protocol'] == 'visual_inception_overlap_30_v4_exact'
     assert report['total_queries'] == 180
     assert report['training_normalized_exact_overlap_count'] == 54
     assert report['queries_per_family'] == {
-        'category_description': 3,
-        'model_paraphrase': 2,
-        'heldout_search_query': 1,
-        'synthetic_non_overlap': 14,
+        'category_description': 10,
+        'model_paraphrase': 6,
+        'heldout_search_query': 4,
     }
 
 

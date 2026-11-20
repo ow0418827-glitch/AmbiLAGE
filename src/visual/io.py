@@ -43,12 +43,32 @@ def save_json(path: str | Path, data: Any, *, indent: int = 2) -> Path:
     return output
 
 
+_SHA256_FILE_CACHE: dict[tuple[str, int, int, int, int], str] = {}
+_SHA256_CACHE_MIN_BYTES = 65536
+_SHA256_CACHE_MAX_ENTRIES = 4096
+
+
 def sha256_file(path: str | Path, *, chunk_size: int = 1024 * 1024) -> str:
+    target = Path(path)
+    resolved = target.resolve()
+    cache_key = None
+    if resolved.is_file():
+        st = resolved.stat()
+        if st.st_size >= _SHA256_CACHE_MIN_BYTES:
+            cache_key = (str(resolved), st.st_size, st.st_mtime_ns, st.st_ctime_ns, st.st_ino)
+            cached = _SHA256_FILE_CACHE.get(cache_key)
+            if cached is not None:
+                return cached
     digest = hashlib.sha256()
-    with Path(path).open("rb") as handle:
+    with target.open("rb") as handle:
         for chunk in iter(lambda: handle.read(chunk_size), b""):
             digest.update(chunk)
-    return digest.hexdigest()
+    value = digest.hexdigest()
+    if cache_key is not None:
+        if len(_SHA256_FILE_CACHE) >= _SHA256_CACHE_MAX_ENTRIES:
+            _SHA256_FILE_CACHE.clear()
+        _SHA256_FILE_CACHE[cache_key] = value
+    return value
 
 
 def stable_key(parts: Iterable[str]) -> str:

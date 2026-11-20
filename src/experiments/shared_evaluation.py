@@ -231,36 +231,63 @@ class InProcessFreshCachedEncoder:
         return None
 
 
+def _validate_attack_completion_cached(metadata, requested_steps, expected, cache):
+    from src.visual.attack_completion import validate_attack_completion
+    if cache is None or not isinstance(metadata, dict):
+        return validate_attack_completion(metadata, requested_steps, expected)
+    raw_out = metadata.get('output_image', '')
+    output_path = Path(raw_out) if raw_out else None
+    if output_path is None or not output_path.is_file():
+        return validate_attack_completion(metadata, requested_steps, expected)
+    resolved = output_path.resolve()
+    st = resolved.stat()
+    key = (
+        str(resolved),
+        st.st_size,
+        st.st_mtime_ns,
+        st.st_ctime_ns,
+        st.st_ino,
+        metadata.get('output_image_sha256'),
+        digest(metadata),
+        requested_steps,
+        tuple(sorted((expected or {}).items())),
+    )
+    if key in cache:
+        return None
+    validate_attack_completion(metadata, requested_steps, expected)
+    cache.add(key)
+    return None
+
+
 def evaluate(frozen, output, *, pool_path=SHARED_MEMORY, query_manifest,
              source_memory_id=None, device='cuda', encoder_factory=None,
              defense_factory=None, selected_conditions=None, encoder_config=None, query_mode=None,
              key_mode=None, replacement_frozens=None, bank_root=None, memory_vector_cache_dir=None,
              defer_verification=False, shared_encoder=None,
              _shared_defender=None, _shared_bank_memo=None, _shared_pool=None,
-             _path_sha_cache=None, _bank_digest_cache=None):
+             _path_sha_cache=None, _bank_digest_cache=None, _validated_completion_cache=None):
     """只有此模块读取共享库；对照和修改图始终面对同一个完整共享池。"""
     output = Path(output)
     effective_key_mode = default_key_mode_for_method(frozen.get('method')) if key_mode is None else key_mode
     if effective_key_mode not in KEY_MODES:
         raise ValueError('记忆库检索键模式只能为 image 或 joint')
     effective_key_image_weight = 1.0 if effective_key_mode == 'image' else 0.5
-    from src.visual.attack_completion import validate_attack_completion
     if frozen.get('status') != 'frozen':
         raise ValueError('只能评估完成且已经冻结的最终图片')
     if frozen.get('metadata', {}).get('test_fixture') is True:
         raise ValueError('离线测试夹具不能进入正式共享池评估')
-    validate_attack_completion(frozen['metadata'], frozen['requested_steps'], dict(
+    _validate_attack_completion_cached(frozen['metadata'], frozen['requested_steps'], dict(
         method=frozen['method'], source_image_sha256=frozen['source']['image_sha256'],
-        target_image_sha256=frozen['target']['image_sha256']))
+        target_image_sha256=frozen['target']['image_sha256']), _validated_completion_cache)
     replacement_inputs = None
     if replacement_frozens is not None:
         replacement_inputs = []
         for item in replacement_frozens:
             if item.get('status') != 'frozen' or item['method'] != frozen['method']:
                 raise ValueError('统一修改库只接受同一方法的全部冻结成图')
-            validate_attack_completion(item['metadata'], item['requested_steps'], dict(
+            _validate_attack_completion_cached(item['metadata'], item['requested_steps'], dict(
                 method=item['method'], source_image_sha256=item['source']['image_sha256'],
-                target_image_sha256=item['target']['image_sha256']))
+                target_image_sha256=item['target']['image_sha256']), _validated_completion_cache)
             if sha256_file(item['image']) != item['image_sha256']:
                 raise ValueError('统一修改库中的冻结图片摘要改变')
             replacement_inputs.append(dict(source=item['source'], image=item['image'],

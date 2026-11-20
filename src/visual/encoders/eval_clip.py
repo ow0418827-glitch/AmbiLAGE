@@ -7,6 +7,7 @@ or compute spatial patch tokens used only during attack optimization.
 from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor
+import copy
 import gc
 import importlib.metadata
 import json
@@ -227,38 +228,77 @@ class StandaloneEvalClipEncoder:
     def encode(self, path: str | Path) -> np.ndarray:
         return self.encode_batch([path], batch_size=1)[0]
 
+    def _tokenize_text_chunks(self, text: str) -> tuple[str, list[int], list[list[int]]]:
+        norm_text = str(text or ' ')
+        ids = list(self._encode_tokens(norm_text))
+        chunks = [
+            ids[start:start + self.payload_tokens]
+            for start in range(0, len(ids), self.payload_tokens)
+        ] or [[]]
+        return norm_text, ids, chunks
+
+    def _encode_token_chunk_batch(self, batch: list[list[int]]) -> np.ndarray:
+        tokens = torch.full((len(batch), self.context_length), self.pad_token, dtype=torch.long, device=self.device)
+        for row, chunk in enumerate(batch):
+            body = ([self.sot_token] if self.sot_token is not None else []) + chunk
+            if self.eot_token is not None:
+                body.append(self.eot_token)
+            tokens[row, :len(body)] = torch.tensor(body, dtype=torch.long, device=self.device)
+        features = self.model.encode_text(tokens).float()
+        return F.normalize(features, dim=-1).cpu().numpy()
+
     @torch.no_grad()
-    def encode_text(self, text: str) -> np.ndarray:
+    def encode_text_batch(
+        self,
+        texts: Iterable[str],
+        *,
+        batch_size: int = 64,
+    ) -> list[tuple[np.ndarray, dict]]:
+        """Batch-encode arbitrary-length texts with exact non-truncating token chunking."""
         self._assert_open()
-        text = str(text or ' ')
-        ids = list(self._encode_tokens(text))
-        chunks = [ids[start:start + self.payload_tokens] for start in range(0, len(ids), self.payload_tokens)] or [[]]
-        weighted = None
-        weights = []
-        for start in range(0, len(chunks), 16):
-            batch = chunks[start:start + 16]
-            tokens = torch.full((len(batch), self.context_length), self.pad_token, dtype=torch.long, device=self.device)
-            for row, chunk in enumerate(batch):
-                body = ([self.sot_token] if self.sot_token is not None else []) + chunk
-                if self.eot_token is not None:
-                    body.append(self.eot_token)
-                tokens[row, :len(body)] = torch.tensor(body, dtype=torch.long, device=self.device)
-            features = self.model.encode_text(tokens).float()
-            features = F.normalize(features, dim=-1).cpu().numpy()
-            for chunk, vector in zip(batch, features):
+        text_list = list(texts)
+        if not text_list:
+            return []
+        bs = max(1, int(batch_size))
+        tokenized = [self._tokenize_text_chunks(t) for t in text_list]
+        flat_chunks: list[list[int]] = []
+        chunk_spans: list[tuple[int, int]] = []
+        for _norm_text, _ids, chunks in tokenized:
+            start_idx = len(flat_chunks)
+            flat_chunks.extend(chunks)
+            chunk_spans.append((start_idx, len(flat_chunks)))
+
+        flat_vectors: list[np.ndarray] = []
+        for start in range(0, len(flat_chunks), bs):
+            batch = flat_chunks[start:start + bs]
+            features = self._encode_token_chunk_batch(batch)
+            flat_vectors.extend(features)
+
+        results: list[tuple[np.ndarray, dict]] = []
+        for (norm_text, ids, chunks), (span_start, span_end) in zip(tokenized, chunk_spans):
+            weighted = None
+            total_weight = 0
+            for chunk, vector in zip(chunks, flat_vectors[span_start:span_end]):
                 weight = max(1, len(chunk))
                 weighted = vector * weight if weighted is None else weighted + vector * weight
-                weights.append(weight)
-        self.last_encoding_audit = {
-            'text_sha256': _text_digest(text),
-            'input_tokens': len(ids),
-            'encoded_tokens': sum(len(chunk) for chunk in chunks),
-            'chunks': len(chunks),
-            'payload_tokens_per_chunk': self.payload_tokens,
-            'chunk_token_counts': [len(chunk) for chunk in chunks],
-            'truncated': False,
-        }
-        return normalized(weighted / sum(weights))
+                total_weight += weight
+            audit = {
+                'text_sha256': _text_digest(norm_text),
+                'input_tokens': len(ids),
+                'encoded_tokens': sum(len(chunk) for chunk in chunks),
+                'chunks': len(chunks),
+                'payload_tokens_per_chunk': self.payload_tokens,
+                'chunk_token_counts': [len(chunk) for chunk in chunks],
+                'truncated': False,
+            }
+            results.append((normalized(weighted / total_weight), audit))
+        return results
+
+    @torch.no_grad()
+    def encode_text(self, text: str) -> np.ndarray:
+        vector, audit = self.encode_text_batch([text], batch_size=16)[0]
+        self.last_encoding_audit = audit
+        return vector
 
     def encode_joint(self, text: str, path: str | Path, image_weight: float = 0.5) -> np.ndarray:
         self._assert_open()
@@ -331,6 +371,26 @@ class BatchedFreshCachedEncoder(shared_evaluation.InProcessFreshCachedEncoder):
             st = path.stat()
             self._stat_hashes[(str(path), st.st_mtime_ns, st.st_size)] = img_sha
         return len(ordered)
+
+    def prewarm_texts(
+        self,
+        texts: Iterable[str],
+        *,
+        batch_size: int = 64,
+    ) -> int:
+        unique_missing = sorted({str(t or ' ') for t in texts} - set(self._text_cache))
+        if not unique_missing:
+            return 0
+        if callable(getattr(self._base, 'encode_text_batch', None)):
+            pairs = self._base.encode_text_batch(unique_missing, batch_size=batch_size)
+            for s, (vec, audit) in zip(unique_missing, pairs):
+                self._text_cache[s] = (vec, audit)
+        else:
+            for s in unique_missing:
+                vec = self._base.encode_text(s)
+                audit = copy.deepcopy(getattr(self._base, 'last_encoding_audit', None))
+                self._text_cache[s] = (vec, audit)
+        return len(unique_missing)
 
 
 def make_standalone_eval_encoder(

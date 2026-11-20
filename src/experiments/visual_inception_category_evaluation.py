@@ -35,17 +35,9 @@ from src.visual.optimization import METHODS, normalize_method
 PROTOCOL = 'visual_inception_category_diversity_v1'
 ORACLE_PROTOCOL = 'visual_inception_training_oracle_v1'
 OVERLAP_30_PROTOCOL = 'category_query_overlap_30_v1'
-PROTOCOL_V2 = 'visual_inception_category_diversity_v2'
-ORACLE_PROTOCOL_V2 = 'visual_inception_training_oracle_v2'
-OVERLAP_30_PROTOCOL_V2 = 'category_query_overlap_30_v2'
-PROTOCOL_V3 = 'visual_inception_category_diversity_v3'
-ORACLE_PROTOCOL_V3 = 'visual_inception_training_oracle_v3'
-OVERLAP_30_PROTOCOL_V3 = 'category_query_overlap_30_v3'
-ZERO_OVERLAP_PROTOCOLS = (PROTOCOL, PROTOCOL_V2, PROTOCOL_V3)
-ORACLE_PROTOCOLS = (ORACLE_PROTOCOL, ORACLE_PROTOCOL_V2, ORACLE_PROTOCOL_V3)
-OVERLAP_30_PROTOCOLS = (OVERLAP_30_PROTOCOL, OVERLAP_30_PROTOCOL_V2, OVERLAP_30_PROTOCOL_V3)
-V2_PROTOCOLS = (PROTOCOL_V2, ORACLE_PROTOCOL_V2, OVERLAP_30_PROTOCOL_V2)
-V3_PROTOCOLS = (PROTOCOL_V3, ORACLE_PROTOCOL_V3, OVERLAP_30_PROTOCOL_V3)
+ZERO_OVERLAP_PROTOCOLS = (PROTOCOL, 'visual_inception_zero_overlap_v4_exact')
+ORACLE_PROTOCOLS = (ORACLE_PROTOCOL, 'visual_inception_training_oracle_v4_exact')
+OVERLAP_30_PROTOCOLS = (OVERLAP_30_PROTOCOL, 'visual_inception_overlap_30_v4_exact')
 REQUIRED_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_v2'
 ENHANCED_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_hardneg_advquery_v3'
 SUPPORTED_OBJECTIVE_KINDS = (REQUIRED_OBJECTIVE_KIND, ENHANCED_OBJECTIVE_KIND)
@@ -58,32 +50,20 @@ TRANSFER_PANEL_ENCODERS = (
      'evaluator.siglip_so400m.matched.json', 'evaluator.siglip_so400m.heldout.json'),
 )
 
-TRAINING_ORACLE_QUERY_ROOT = RESOURCES / 'visual_inception_evaluation/training_queries_oracle_v1'
-TRAINING_ORACLE_V2_QUERY_ROOT = RESOURCES / 'visual_inception_evaluation/training_queries_oracle_v2'
-TRAINING_ORACLE_V3_QUERY_ROOT = RESOURCES / 'visual_inception_evaluation/training_queries_oracle_v3'
-OVERLAP_30_QUERY_ROOT = RESOURCES / 'visual_inception_evaluation/category_query_overlap_30_v1'
-OVERLAP_30_V2_QUERY_ROOT = RESOURCES / 'visual_inception_evaluation/category_query_overlap_30_v2'
-OVERLAP_30_V3_QUERY_ROOT = RESOURCES / 'visual_inception_evaluation/category_query_overlap_30_v3'
-OVERLAP_30_SOURCE_MANIFEST = RESOURCES / 'visual_inception_evaluation/category_query_overlap_30_v1.json'
-ZERO_OVERLAP_QUERY_ROOT = RESOURCES / 'visual_inception_evaluation/category_queries_v1'
-ZERO_OVERLAP_V2_QUERY_ROOT = RESOURCES / 'visual_inception_evaluation/category_queries_v2'
-ZERO_OVERLAP_V3_QUERY_ROOT = RESOURCES / 'visual_inception_evaluation/category_queries_v3'
+TRAINING_ORACLE_QUERY_ROOT = exact_overlap_queries.ROOT / 'training_oracle_v4'
+OVERLAP_30_QUERY_ROOT = exact_overlap_queries.ROOT / 'overlap_30_v4'
+ZERO_OVERLAP_QUERY_ROOT = exact_overlap_queries.ROOT / 'zero_overlap_v4'
 CATEGORY_QUERY_ROOT = ZERO_OVERLAP_QUERY_ROOT
 QUERY_SUITE_ROOTS = {
     'training_oracle': TRAINING_ORACLE_QUERY_ROOT,
     'overlap_30': OVERLAP_30_QUERY_ROOT,
     'zero_overlap': ZERO_OVERLAP_QUERY_ROOT,
-    'training_oracle_v2': TRAINING_ORACLE_V2_QUERY_ROOT,
-    'overlap_30_v2': OVERLAP_30_V2_QUERY_ROOT,
-    'zero_overlap_v2': ZERO_OVERLAP_V2_QUERY_ROOT,
-    'training_oracle_v3': TRAINING_ORACLE_V3_QUERY_ROOT,
-    'overlap_30_v3': OVERLAP_30_V3_QUERY_ROOT,
-    'zero_overlap_v3': ZERO_OVERLAP_V3_QUERY_ROOT,
     **{suite: exact_overlap_queries.ROOT / suite for suite in exact_overlap_queries.SUITES},
 }
 DEFAULT_QUERY_SUITE = 'training_oracle'
 KEY_MODES = ('image', 'joint')
 DEFAULT_KEY_MODE = 'image'
+VERIFY_MODES = ('subprocess', 'in_process')
 
 QUERY_FAMILIES = (
     'category_direct',
@@ -135,80 +115,6 @@ OVERLAP_30_FAMILY_LABELS_ZH = {
     'synthetic_non_overlap': '非重合新查询(70%)',
 }
 
-GROUP_CORE_CATEGORY_BANS = {
-    '01_camera': re.compile(r'\b(?:camera|cameras|cctv|cam)\b', re.IGNORECASE),
-    '02_chair': re.compile(r'\b(?:chair|chairs|stool|stools)\b', re.IGNORECASE),
-    '03_cookies': re.compile(r'\b(?:cookie|cookies)\b', re.IGNORECASE),
-    '04_curtain': re.compile(r'\b(?:curtain|curtains|drape|drapes|drapery|draperies|valance)\b', re.IGNORECASE),
-    '05_hair_extension': re.compile(
-        r'\b(?:hair\s+extensions?|extensions?|weaves?|wigs?|hairpieces?)\b', re.IGNORECASE
-    ),
-    '06_jeans': re.compile(r'\b(?:jeans|denim|trousers|pants)\b', re.IGNORECASE),
-    '07_shampoo': re.compile(r'\b(?:shampoo|shampoos)\b', re.IGNORECASE),
-    '08_speaker': re.compile(r'\b(?:speaker|speakers|soundbox|boombox)\b', re.IGNORECASE),
-    '09_toothbrush': re.compile(r'\b(?:toothbrush|toothbrushes|tooth\s*brush|tooth\s*brushes)\b', re.IGNORECASE),
-}
-
-V2_DISTILLED_BOILERPLATE_RE = re.compile(
-    r'(?:https?://|www\.|\.store\b|\.com\b|<p>|<br\b|&nbsp;|'
-    r'amazon\s+renewed|operation\s+mode|package\s+contents|package\s+dimensions|'
-    r'cannot\s+be\s+cancelled|return\s+policy|\brefund\b|shipping\s+fees|\bwarranty\b)',
-    re.IGNORECASE,
-)
-
-ZERO_V3_FAMILY_LABELS_ZH = {
-    'category_description': '品类功能摘要(50%)',
-    'model_paraphrase': '自然改写问句(30%)',
-    'heldout_search_query': '短搜索查询(20%)',
-}
-
-OVERLAP_30_V3_FAMILY_LABELS_ZH = {
-    'category_description': '功能描述/摘要(50%=3+7)',
-    'model_paraphrase': '改写问句(30%=2+4)',
-    'heldout_search_query': '短搜索查询(20%=1+3)',
-}
-
-V3_SINGLE_ITEM_NOISE_RE = re.compile(
-    r'(?:'
-    # Colors
-    r'\b(?:black|white|silver|gold|golden|rose\s+gold|navy|beige|blonde|ombre|'
-    r'purple|teal|blue|pink|red|green|yellow|grey|gray|brown|multicolor(?:ed)?|'
-    r'aqua|violet|cyan|dark\s+denim|dark\s+brown)\b|'
-    # Patterns & single-item motifs
-    r'\b(?:floral|striped|plaid|distressed|ripped|mermaid|reindeer|snowflake|'
-    r'cow|octopus|donut|butterfly|southwestern|embroidery|embroidered|patchwork|'
-    r'tie-dye|sequined|camouflage|whisker)\b|'
-    # Single-item exterior details / finishes
-    r'\b(?:aluminum\s+(?:shell|casing|alloy|frame)|wooden\s+(?:legs|board|frame|plank)|'
-    r'beech\s+wood|velvet(?:\s+fabric)?|chrome\s+(?:base|footrest|round)|square\s+base|'
-    r'round\s+base|chiffon|voile|wheat\s+straw|bamboo\s+fiber|stainless\s+steel\s+trim|'
-    r'satin|faux\s+leather|pvc\s+leather|pu\s+leather|leatherette)\b|'
-    # Exact numeric specs, units, counts, resolutions, ratings
-    r'\b\d+(?:\.\d+)?\s*(?:mm|cm|m|ft|foot|feet|in|inch|inches|oz|ounce|ounces|'
-    r'lb|lbs|pound|pounds|g|gram|grams|kg|ml|mah|mp|k|p|dbi|db|spm|gsm|w|watt|watts|'
-    r'hz|khz|mhz|ghz|gb|tb|pack|packs|piece|pieces|pcs|roots|degree|degrees)\b|'
-    r'\b(?:1080p|2k|4k|8mp|3mp|2mp|100%|99%|85%|3c|4a|3c-4a|4b|4c|ip6[567]|ipx7|ip55|'
-    r'hd-tvi|ahd|cvi|cvbs|poe|onvif|h\.?26[45]|bluetooth\s*5\.\d|set\s+of\s+\d+|'
-    r'dual\s+kit|two-pack|four-pack|two-panel|four\s+bundles|thirty-piece|'
-    r'nine-piece|eight-piece|four-piece|10-piece)\b|'
-    # Single-item bundled accessories / ports
-    r'\b(?:entry\s+sensors?|mounting\s+stand|dvr\s+output|carrying\s+pouch|lanyard|'
-    r'extra\s+brush\s+heads|cup\s+cover|wired\s+microphone|microsd|sd\s+slot|'
-    r'latch\s+hook|removable\s+headrest|tie\s+belt|door\s+entry)\b|'
-    # Brands, proprietary tech, platforms
-    r'\b(?:hikvision|zosi|kami|lorex|wyze|annke|vcamdo|eufy|barberpub|danyel|'
-    r'zhangna|fmogg|sarttivis|davids|immaculate|big\s+dipper|otis\s+spunkmeyer|'
-    r'reeses?|duck\s+river|homeideas|warm\s+tour|nicetown|leyoo|sensationnel|'
-    r'lhnhair|vanalia|winsky|nydj|andongnywell|utcoco|black\s+diamond|stetson|'
-    r'fudule|pantene|keracare|luxliss|gliss|nyk1|macadamia|maria\s+nila|'
-    r'cocomagic|doss|insignia|suliper|trenbader|puregear|healifty|wsvvmqy|'
-    r'exceart|dikla|caralin|lroveb|auitroncare|smartsens|starlight\s+cmos|'
-    r'sony\s+cmos|alexa|google\s+home|google\s+assistant|ifttt|apple\s+tv|'
-    r'android|ios|y2k|harajuku|soundbox|tg-157|cloudedge|danale)\b'
-    r')',
-    re.IGNORECASE,
-)
-
 SCOPE_INTERPRETATION = (
     '本结果仅反映不同测试查询下的记忆检索覆盖情况（Top-1/Top-3/Top-5 召回与名次变化）；'
     '最终推荐或购买决策是否受到影响，须在下游推荐/购物阶段单独验证。'
@@ -241,22 +147,10 @@ def _protocol_spec(protocol):
         return tuple(families), dict(families), exact_overlap_queries.LABELS, exact_overlap_queries.PROTOCOLS[protocol]
     if protocol == PROTOCOL:
         return QUERY_FAMILIES, {f: 4 for f in QUERY_FAMILIES}, QUERY_FAMILY_LABELS_ZH, 'zero_overlap'
-    if protocol == PROTOCOL_V2:
-        return QUERY_FAMILIES, {f: 4 for f in QUERY_FAMILIES}, QUERY_FAMILY_LABELS_ZH, 'zero_overlap_v2'
-    if protocol == PROTOCOL_V3:
-        return ORACLE_FAMILIES, dict(ORACLE_FAMILY_COUNTS), ZERO_V3_FAMILY_LABELS_ZH, 'zero_overlap_v3'
     if protocol == ORACLE_PROTOCOL:
         return ORACLE_FAMILIES, dict(ORACLE_FAMILY_COUNTS), ORACLE_FAMILY_LABELS_ZH, 'training_oracle'
-    if protocol == ORACLE_PROTOCOL_V2:
-        return ORACLE_FAMILIES, dict(ORACLE_FAMILY_COUNTS), ORACLE_FAMILY_LABELS_ZH, 'training_oracle_v2'
-    if protocol == ORACLE_PROTOCOL_V3:
-        return ORACLE_FAMILIES, dict(ORACLE_FAMILY_COUNTS), ORACLE_FAMILY_LABELS_ZH, 'training_oracle_v3'
     if protocol == OVERLAP_30_PROTOCOL:
         return OVERLAP_30_FAMILIES, dict(OVERLAP_30_FAMILY_COUNTS), OVERLAP_30_FAMILY_LABELS_ZH, 'overlap_30'
-    if protocol == OVERLAP_30_PROTOCOL_V2:
-        return OVERLAP_30_FAMILIES, dict(OVERLAP_30_FAMILY_COUNTS), OVERLAP_30_FAMILY_LABELS_ZH, 'overlap_30_v2'
-    if protocol == OVERLAP_30_PROTOCOL_V3:
-        return ORACLE_FAMILIES, dict(ORACLE_FAMILY_COUNTS), OVERLAP_30_V3_FAMILY_LABELS_ZH, 'overlap_30_v3'
     raise ValueError('未知测试查询协议标识：' + str(protocol))
 
 
@@ -375,94 +269,9 @@ def _load_training_snapshot_texts(snapshots):
     return texts
 
 
-def _validate_v2_distilled_description(rec, group, raw_index=None, *, check_snapshot=False):
-    _require(rec.get('distilled_from_raw_description') is True,
-             f'{group} v2 公开描述摘要缺少 distilled_from_raw_description=True：{rec.get("id")}')
-    raw_sha = rec.get('raw_source_text_sha256')
-    _require(isinstance(raw_sha, str) and len(raw_sha) == 64
-             and all(c in '0123456789abcdef' for c in raw_sha.lower()),
-             f'{group} v2 公开描述摘要缺少有效 raw_source_text_sha256：{rec.get("id")}')
-    instr = str(rec.get('instruction', ''))
-    word_count = len(instr.split())
-    _require(1 <= word_count <= 35,
-             f'{group} v2 公开描述摘要词数({word_count})须在 1~35 之间：{rec.get("id")}')
-    _require(not V2_DISTILLED_BOILERPLATE_RE.search(instr),
-             f'{group} v2 公开描述摘要包含 URL/HTML/模板噪声：{rec.get("id")}')
-    if check_snapshot and raw_index is not None:
-        snap_key = (Path(str(rec.get('source_file', ''))).as_posix(), str(rec.get('source_row_id', '')))
-        _require(snap_key in raw_index, f'{group} v2 公开描述未命中冻结训练快照行：{rec.get("id")}')
-        _require(raw_index[snap_key] == raw_sha,
-                 f'{group} v2 raw_source_text_sha256 与冻结原文不符：{rec.get("id")}')
-
-
-def _validate_implicit_anchor_free_records(records, group, min_count, max_count=None):
-    implicit = [r for r in records if r.get('implicit_anchor_free') is True]
-    _require(len(implicit) >= min_count,
-             f'{group} 无品类锚词查询数量({len(implicit)})不足最低要求 {min_count}')
-    if max_count is not None:
-        _require(len(implicit) <= max_count,
-                 f'{group} 无品类锚词查询数量({len(implicit)})超过上限 {max_count}')
-    ban_re = GROUP_CORE_CATEGORY_BANS.get(group)
-    if ban_re is not None:
-        for r in implicit:
-            _require(not ban_re.search(str(r.get('instruction', ''))),
-                     f'{group} 无品类锚词查询包含禁用核心品类词：{r.get("id")}')
-
-
-def _token_3grams(text: str) -> set[tuple[str, str, str]]:
-    tokens = re.findall(r'[a-z0-9]+', normalize_query_text(text))
-    if len(tokens) < 3:
-        return set()
-    return {(tokens[i], tokens[i + 1], tokens[i + 2]) for i in range(len(tokens) - 2)}
-
-
-def _validate_v3_distilled_record(rec, group, raw_index=None, *, flag_key='distilled_from_raw_description', check_snapshot=False):
-    _require(rec.get(flag_key) is True,
-             f'{group} v3 提炼记录缺少 {flag_key}=True：{rec.get("id")}')
-    raw_sha = rec.get('raw_source_text_sha256')
-    _require(isinstance(raw_sha, str) and len(raw_sha) == 64
-             and all(c in '0123456789abcdef' for c in raw_sha.lower()),
-             f'{group} v3 提炼记录缺少有效 raw_source_text_sha256：{rec.get("id")}')
-    if check_snapshot and raw_index is not None:
-        snap_key = (Path(str(rec.get('source_file', ''))).as_posix(), str(rec.get('source_row_id', '')))
-        _require(snap_key in raw_index, f'{group} v3 原文未命中冻结训练快照行：{rec.get("id")}')
-        _require(raw_index[snap_key] == raw_sha,
-                 f'{group} v3 raw_source_text_sha256 与冻结原文不符：{rec.get("id")}')
-
-
-def _validate_v3_group_structure(records, group):
-    cd_wcs, mp_wcs, hs_wcs = [], [], []
-    for rec in records:
-        fam = rec['query_family']
-        instr = str(rec.get('instruction', ''))
-        wc = len(instr.split())
-        if fam == 'category_description':
-            _require(10 <= wc <= 18, f'{group} v3 category_description 词数({wc})须在 10~18：{rec.get("id")}')
-            _require(not V2_DISTILLED_BOILERPLATE_RE.search(instr),
-                     f'{group} v3 category_description 含模板噪声：{rec.get("id")}')
-            _require(not V3_SINGLE_ITEM_NOISE_RE.search(instr),
-                     f'{group} v3 category_description 含单品外观/规格/品牌噪声：{rec.get("id")}')
-            cd_wcs.append(wc)
-        elif fam == 'model_paraphrase':
-            _require(8 <= wc <= 16, f'{group} v3 model_paraphrase 词数({wc})须在 8~16：{rec.get("id")}')
-            _require(not V2_DISTILLED_BOILERPLATE_RE.search(instr),
-                     f'{group} v3 model_paraphrase 含模板噪声：{rec.get("id")}')
-            _require(not V3_SINGLE_ITEM_NOISE_RE.search(instr),
-                     f'{group} v3 model_paraphrase 含单品外观/规格/品牌噪声：{rec.get("id")}')
-            mp_wcs.append(wc)
-        elif fam == 'heldout_search_query':
-            _require(2 <= wc <= 6, f'{group} v3 heldout_search_query 词数({wc})须在 2~6：{rec.get("id")}')
-            hs_wcs.append(wc)
-    cd_mean = sum(cd_wcs) / len(cd_wcs)
-    mp_mean = sum(mp_wcs) / len(mp_wcs)
-    _require(12.0 <= cd_mean <= 15.0, f'{group} v3 category_description 组均值({cd_mean:.2f})须在 12~15')
-    _require(10.0 <= mp_mean <= 13.0, f'{group} v3 model_paraphrase 组均值({mp_mean:.2f})须在 10~13')
-    return (sum(cd_wcs) + sum(mp_wcs) + sum(hs_wcs)) / len(records)
-
-
 def validate_category_query_suite(query_root=None, *, query_suite=DEFAULT_QUERY_SUITE,
                                   base=EVALUATION_BASE, verify_training_snapshots=True):
-    """校验九组测试查询集（training_oracle 或 zero_overlap）的结构、摘要、配额及与训练查询的关系。"""
+    """校验九组测试查询集（training_oracle / overlap_30 / zero_overlap）的结构、摘要、配额及与训练查询的关系。"""
     query_root = resolve_query_root(query_root, query_suite)
     base = Path(base).resolve()
     if query_suite in exact_overlap_queries.SUITES:
@@ -490,7 +299,7 @@ def validate_category_query_suite(query_root=None, *, query_suite=DEFAULT_QUERY_
     _require(manifest.get('queries_per_group') == 20, '每组测试查询数量必须为二十条')
     _require(manifest.get('total_queries') == len(base_groups) * 20, '测试查询总条数与组数不匹配')
     _require(manifest.get('query_families') == list(families), '测试查询分类列表不符')
-    expected_manifest_qpf = 4 if protocol in (PROTOCOL, PROTOCOL_V2) else expected_family_counts
+    expected_manifest_qpf = 4 if protocol == PROTOCOL else expected_family_counts
     _require(manifest.get('queries_per_family') == expected_manifest_qpf, '测试查询分类配额不符')
     _require(manifest.get('optimization_may_read') is False
              and manifest.get('is_real_search_log') is False
@@ -502,7 +311,6 @@ def validate_category_query_suite(query_root=None, *, query_suite=DEFAULT_QUERY_
 
     all_norm_queries = set()
     group_audits = {}
-    group_records_by_group = {}
     group_norm_queries = {}
     group_reused_norms = {}
     group_new_norms = {}
@@ -553,58 +361,11 @@ def validate_category_query_suite(query_root=None, *, query_suite=DEFAULT_QUERY_
                          and isinstance(r.get('source_file'), str) and bool(r['source_file'].strip())
                          for r in records),
                      f'{group} 训练抽样明细缺少来源行号或来源文件')
-            if protocol == ORACLE_PROTOCOL_V2:
-                for rec in records:
-                    if rec['query_family'] == 'category_description':
-                        _validate_v2_distilled_description(rec, group, check_snapshot=False)
-            elif protocol == ORACLE_PROTOCOL_V3:
-                _validate_v3_group_structure(records, group)
-                for rec in records:
-                    if rec['query_family'] == 'category_description':
-                        _validate_v3_distilled_record(rec, group, flag_key='distilled_from_raw_description', check_snapshot=False)
-                    elif rec['query_family'] == 'model_paraphrase':
-                        _validate_v3_distilled_record(rec, group, flag_key='distilled_from_raw_paraphrase', check_snapshot=False)
         elif protocol in OVERLAP_30_PROTOCOLS:
             _require(all(isinstance(r.get('source_row_id'), str) and bool(r['source_row_id'].strip())
                          and isinstance(r.get('source_file'), str) and bool(r['source_file'].strip())
-                         for r in records if (
-                             (protocol != OVERLAP_30_PROTOCOL_V3 and r['query_family'] in ORACLE_FAMILIES)
-                             or (protocol == OVERLAP_30_PROTOCOL_V3 and r.get('overlap_source') == 'oracle_v3')
-                         )),
+                         for r in records if r['query_family'] in ORACLE_FAMILIES),
                      f'{group} 三成重合复用明细缺少来源行号或来源文件')
-            if protocol == OVERLAP_30_PROTOCOL_V2:
-                for rec in records:
-                    if rec['query_family'] == 'category_description':
-                        _validate_v2_distilled_description(rec, group, check_snapshot=False)
-                _validate_implicit_anchor_free_records(
-                    [r for r in records if r['query_family'] == 'synthetic_non_overlap'], group, min_count=4
-                )
-            elif protocol == OVERLAP_30_PROTOCOL_V3:
-                _validate_v3_group_structure(records, group)
-                src_counts = Counter(r.get('overlap_source') for r in records)
-                _require(dict(src_counts) == {'oracle_v3': 6, 'zero_overlap_v3': 14},
-                         f'{group} overlap_30_v3 重合来源比例须为 oracle_v3=6 / zero_overlap_v3=14')
-                reused_o_fams = Counter(r['query_family'] for r in records if r.get('overlap_source') == 'oracle_v3')
-                reused_z_fams = Counter(r['query_family'] for r in records if r.get('overlap_source') == 'zero_overlap_v3')
-                _require(dict(reused_o_fams) == {'category_description': 3, 'model_paraphrase': 2, 'heldout_search_query': 1},
-                         f'{group} overlap_30_v3 oracle_v3 抽样子池配比须为 3/2/1')
-                _require(dict(reused_z_fams) == {'category_description': 7, 'model_paraphrase': 4, 'heldout_search_query': 3},
-                         f'{group} overlap_30_v3 zero_overlap_v3 抽样子池配比须为 7/4/3')
-                _require(all(isinstance(r.get('reused_oracle_id'), str) and r['reused_oracle_id'].strip()
-                             for r in records if r.get('overlap_source') == 'oracle_v3'),
-                         f'{group} overlap_30_v3 缺少 reused_oracle_id')
-                _require(all(isinstance(r.get('reused_zero_id'), str) and r['reused_zero_id'].strip()
-                             for r in records if r.get('overlap_source') == 'zero_overlap_v3'),
-                         f'{group} overlap_30_v3 缺少 reused_zero_id')
-                _validate_implicit_anchor_free_records(records, group, min_count=5, max_count=7)
-        elif protocol == PROTOCOL_V2:
-            _validate_implicit_anchor_free_records(records, group, min_count=8)
-        elif protocol == PROTOCOL_V3:
-            _validate_v3_group_structure(records, group)
-            _validate_implicit_anchor_free_records(records, group, min_count=8, max_count=10)
-            imp_fams = Counter(r['query_family'] for r in records if r.get('implicit_anchor_free') is True)
-            _require(imp_fams.get('category_description', 0) >= 4 and imp_fams.get('model_paraphrase', 0) >= 4,
-                     f'{group} zero_overlap_v3 隐晦无锚词查询须在描述(>=4)与改写(>=4)中均有分布')
         counts = dict(Counter(r['query_family'] for r in records))
         _require(counts == expected_family_counts
                  and q_doc.get('query_family_counts') == expected_family_counts
@@ -630,16 +391,8 @@ def validate_category_query_suite(query_root=None, *, query_suite=DEFAULT_QUERY_
                 _require(not overlap_existing, f'{group} 类别查询与既有特征评估查询存在重合')
 
         all_norm_queries.update(norm_instructions)
-        group_records_by_group[group] = records
         group_norm_queries[group] = norm_instructions
-        if protocol == OVERLAP_30_PROTOCOL_V3:
-            group_reused_norms[group] = [
-                normalize_query_text(r['instruction']) for r in records if r.get('overlap_source') == 'oracle_v3'
-            ]
-            group_new_norms[group] = [
-                normalize_query_text(r['instruction']) for r in records if r.get('overlap_source') == 'zero_overlap_v3'
-            ]
-        elif protocol in OVERLAP_30_PROTOCOLS:
+        if protocol in OVERLAP_30_PROTOCOLS:
             group_reused_norms[group] = [
                 normalize_query_text(r['instruction']) for r in records if r['query_family'] in ORACLE_FAMILIES
             ]
@@ -663,37 +416,9 @@ def validate_category_query_suite(query_root=None, *, query_suite=DEFAULT_QUERY_
         None if protocol in ORACLE_PROTOCOLS else (54 if protocol in OVERLAP_30_PROTOCOLS else 0)
     )
     if verify_training_snapshots and snapshots:
-        training_texts, raw_index = _load_training_snapshot_index(snapshots)
+        training_texts, _ = _load_training_snapshot_index(snapshots)
         overlap = sorted(all_norm_queries & training_texts)
-
-        def _bundle_norms_and_3grams(grp):
-            bpath = (PROJECT / 'data/public/visual_inception' / grp / 'training_bundle.json').resolve()
-            if not bpath.is_file():
-                return None, set()
-            bdoc = read_json(bpath)
-            btexts = [q['text'] for q in bdoc.get('queries', []) if isinstance(q.get('text'), str)]
-            tconcept = bdoc.get('target_concept_text')
-            if isinstance(tconcept, str) and tconcept.strip():
-                btexts.append(tconcept)
-            bnorms = {normalize_query_text(t) for t in btexts}
-            b3grams = set()
-            for t in btexts:
-                b3grams.update(_token_3grams(t))
-            return bnorms, b3grams
-
-        if protocol == PROTOCOL_V3:
-            _require(not overlap, 'zero_overlap_v3 测试查询与公开训练查询存在精确重合')
-            for group, records in group_records_by_group.items():
-                bnorms, b3grams = _bundle_norms_and_3grams(group)
-                for rec in records:
-                    instr = rec['instruction']
-                    norm = normalize_query_text(instr)
-                    if bnorms is not None:
-                        _require(norm not in bnorms, f'{group} zero_overlap_v3 与 training_bundle/target_concept_text 存在字面重合：{rec["id"]}')
-                    hit_3grams = _token_3grams(instr) & b3grams
-                    _require(not hit_3grams, f'{group} zero_overlap_v3 存在 3-gram 重合 {sorted(hit_3grams)[:3]}：{rec["id"]}')
-            overlap_count = 0
-        elif protocol in ZERO_OVERLAP_PROTOCOLS:
+        if protocol in ZERO_OVERLAP_PROTOCOLS:
             _require(not overlap, '零重合测试查询与公开训练查询存在精确重合')
             overlap_count = 0
         elif protocol == OVERLAP_30_PROTOCOL:
@@ -704,110 +429,7 @@ def validate_category_query_suite(query_root=None, *, query_suite=DEFAULT_QUERY_
                 _require(not missing, f'{group} 三成重合复用查询未全部命中冻结训练快照')
                 leaked = [t for t in new_norms if t in training_texts]
                 _require(not leaked, f'{group} 三成重合新查询与冻结训练快照存在重合')
-            if OVERLAP_30_SOURCE_MANIFEST.is_file() and query_root == OVERLAP_30_QUERY_ROOT.resolve():
-                source_overlap = read_json(OVERLAP_30_SOURCE_MANIFEST)
-                for group in base_groups:
-                    expected_new = [normalize_query_text(t) for t in source_overlap['groups'][group]['new_queries']]
-                    _require(group_new_norms[group] == expected_new, f'{group} 新查询与三成重合源清单不一致')
             overlap_count = sum(len(norms) for norms in group_reused_norms.values())
-        elif protocol == OVERLAP_30_PROTOCOL_V2:
-            for group in base_groups:
-                records = group_records_by_group[group]
-                oracle_v2_by_id = {}
-                oracle_v2_q = TRAINING_ORACLE_V2_QUERY_ROOT / group / 'queries.json'
-                if oracle_v2_q.is_file() and query_root == OVERLAP_30_V2_QUERY_ROOT.resolve():
-                    oracle_v2_by_id = {r['id']: r for r in read_json(oracle_v2_q).get('query_records', [])}
-                for rec in records:
-                    if rec['query_family'] == 'category_description':
-                        _validate_v2_distilled_description(rec, group, raw_index, check_snapshot=True)
-                    elif rec['query_family'] in ('model_paraphrase', 'heldout_search_query'):
-                        _require(normalize_query_text(rec['instruction']) in training_texts,
-                                 f'{group} v2 三成重合复用查询未命中冻结训练快照：{rec["id"]}')
-                    if rec['query_family'] in ORACLE_FAMILIES and oracle_v2_by_id:
-                        roid = rec.get('reused_oracle_id')
-                        _require(isinstance(roid, str) and roid in oracle_v2_by_id
-                                 and oracle_v2_by_id[roid]['instruction'] == rec['instruction'],
-                                 f'{group} overlap_30_v2 复用查询与 training_queries_oracle_v2 不一致：{rec["id"]}')
-                leaked = [t for t in group_new_norms[group] if t in training_texts]
-                _require(not leaked, f'{group} v2 三成重合新查询与冻结训练快照存在重合')
-            overlap_count = sum(len(norms) for norms in group_reused_norms.values())
-        elif protocol == OVERLAP_30_PROTOCOL_V3:
-            for group in base_groups:
-                records = group_records_by_group[group]
-                bnorms, b3grams = _bundle_norms_and_3grams(group)
-                o3_q = TRAINING_ORACLE_V3_QUERY_ROOT / group / 'queries.json'
-                z3_q = ZERO_OVERLAP_V3_QUERY_ROOT / group / 'queries.json'
-                check_prod_nested = o3_q.is_file() and z3_q.is_file() and query_root == OVERLAP_30_V3_QUERY_ROOT.resolve()
-                o3_recs = read_json(o3_q).get('query_records', []) if check_prod_nested else []
-                z3_recs = read_json(z3_q).get('query_records', []) if check_prod_nested else []
-                o3_by_id = {r['id']: r for r in o3_recs}
-                z3_by_id = {r['id']: r for r in z3_recs}
-                for rec in records:
-                    if rec.get('overlap_source') == 'oracle_v3':
-                        if rec['query_family'] == 'category_description':
-                            _validate_v3_distilled_record(rec, group, raw_index, flag_key='distilled_from_raw_description', check_snapshot=True)
-                        elif rec['query_family'] == 'model_paraphrase':
-                            _validate_v3_distilled_record(rec, group, raw_index, flag_key='distilled_from_raw_paraphrase', check_snapshot=True)
-                        else:
-                            _require(normalize_query_text(rec['instruction']) in training_texts,
-                                     f'{group} overlap_30_v3 复用搜索词未命中冻结训练快照：{rec["id"]}')
-                        if check_prod_nested:
-                            oid = rec['reused_oracle_id']
-                            _require(oid in o3_by_id and o3_by_id[oid]['instruction'] == rec['instruction']
-                                     and o3_by_id[oid]['query_family'] == rec['query_family'],
-                                     f'{group} overlap_30_v3 与 oracle_v3 ({oid}) 字节/分类不一致：{rec["id"]}')
-                    else:
-                        instr = rec['instruction']
-                        norm = normalize_query_text(instr)
-                        _require(norm not in training_texts,
-                                 f'{group} overlap_30_v3 非重合查询与冻结训练快照存在重合：{rec["id"]}')
-                        if bnorms is not None:
-                            _require(norm not in bnorms, f'{group} overlap_30_v3 非重合查询与 training_bundle 重合：{rec["id"]}')
-                        _require(not (_token_3grams(instr) & b3grams),
-                                 f'{group} overlap_30_v3 非重合查询存在 3-gram 重合：{rec["id"]}')
-                        if check_prod_nested:
-                            zid = rec['reused_zero_id']
-                            _require(zid in z3_by_id and z3_by_id[zid]['instruction'] == rec['instruction']
-                                     and z3_by_id[zid]['query_family'] == rec['query_family']
-                                     and bool(z3_by_id[zid].get('implicit_anchor_free')) == bool(rec.get('implicit_anchor_free')),
-                                     f'{group} overlap_30_v3 与 zero_overlap_v3 ({zid}) 不一致：{rec["id"]}')
-                if check_prod_nested:
-                    m_o = sum(len(r['instruction'].split()) for r in o3_recs) / len(o3_recs)
-                    m_z = sum(len(r['instruction'].split()) for r in z3_recs) / len(z3_recs)
-                    m_ov = sum(len(r['instruction'].split()) for r in records) / len(records)
-                    _require(max(m_o, m_ov, m_z) - min(m_o, m_ov, m_z) <= 1.5,
-                             f'{group} v3 三档总平均词长差超过 1.5 词 (o={m_o:.2f}, ov={m_ov:.2f}, z={m_z:.2f})')
-            overlap_count = sum(len(norms) for norms in group_reused_norms.values())
-        elif protocol == ORACLE_PROTOCOL_V3:
-            for group, records in group_records_by_group.items():
-                bnorms, _ = _bundle_norms_and_3grams(group)
-                for rec in records:
-                    if rec['query_family'] == 'category_description':
-                        _validate_v3_distilled_record(rec, group, raw_index, flag_key='distilled_from_raw_description', check_snapshot=True)
-                    elif rec['query_family'] == 'model_paraphrase':
-                        _validate_v3_distilled_record(rec, group, raw_index, flag_key='distilled_from_raw_paraphrase', check_snapshot=True)
-                    else:
-                        norm = normalize_query_text(rec['instruction'])
-                        _require(norm in training_texts, f'{group} v3 搜索查询未命中冻结训练快照：{rec["id"]}')
-                        if bnorms is not None:
-                            _require(norm in bnorms, f'{group} v3 搜索查询未落在冻结训练包内：{rec["id"]}')
-            overlap_count = sum(len(norms) for norms in group_norm_queries.values())
-        elif protocol == ORACLE_PROTOCOL_V2:
-            for group, records in group_records_by_group.items():
-                bundle_path = (PROJECT / 'data/public/visual_inception' / group / 'training_bundle.json').resolve()
-                bundle_norms = None
-                if bundle_path.is_file():
-                    bundle_doc = read_json(bundle_path)
-                    bundle_norms = {normalize_query_text(q['text']) for q in bundle_doc.get('queries', [])}
-                for rec in records:
-                    if rec['query_family'] == 'category_description':
-                        _validate_v2_distilled_description(rec, group, raw_index, check_snapshot=True)
-                    else:
-                        norm = normalize_query_text(rec['instruction'])
-                        _require(norm in training_texts, f'{group} v2 训练抽样查询未命中冻结训练快照：{rec["id"]}')
-                        if bundle_norms is not None:
-                            _require(norm in bundle_norms, f'{group} v2 训练抽样查询未落在冻结训练包内：{rec["id"]}')
-            overlap_count = sum(len(norms) for norms in group_norm_queries.values())
         else:
             for group, norms in group_norm_queries.items():
                 missing = [t for t in norms if t not in training_texts]
@@ -1112,6 +734,7 @@ def evaluate_category_suite(
     defended_cache_dir=None,
     memory_vector_cache_dir=None,
     verify_training_snapshots=True,
+    verify_mode='subprocess',
 ):
     """在完整共享记忆库上执行类别查询检索评估（支持 visual_inception、ambilage、lucid 跨方法公平同库对比）。"""
     method = normalize_method(method)
@@ -1119,6 +742,8 @@ def evaluate_category_suite(
         raise ValueError('防御范围只能为已登记模式：' + ', '.join(DEFENSE_MODES))
     if replacement_groups not in ('all', 'selected'):
         raise ValueError('替换组范围只能为 all 或 selected')
+    if verify_mode not in VERIFY_MODES:
+        raise ValueError('复算验证模式只能为 subprocess 或 in_process')
     effective_key_mode = shared_evaluation.default_key_mode_for_method(method) if key_mode is None else key_mode
     if effective_key_mode not in KEY_MODES:
         raise ValueError('记忆库检索键模式只能为 image 或 joint')
@@ -1240,6 +865,7 @@ def evaluate_category_suite(
     shared_bank_memo = {}
     path_sha_cache = {}
     bank_digest_cache = {}
+    validated_completion_cache = set()
     bank_root = output / 'shared_banks'
     shared_defender = (
         effective_defense_factory(bank_root / 'defended', device)
@@ -1283,12 +909,23 @@ def evaluate_category_suite(
                         _shared_pool=shared_pool,
                         _path_sha_cache=path_sha_cache,
                         _bank_digest_cache=bank_digest_cache,
+                        _validated_completion_cache=validated_completion_cache,
+                    )
+                summary = build_category_summary(output)
+                freeze_json(output / 'category_retrieval_summary.json', summary)
+                if verify_mode == 'in_process':
+                    # Use a brand-new empty cache wrapper so every image/text is recomputed cleanly.
+                    verify_wrapper = shared_evaluation.InProcessFreshCachedEncoder(base_encoder)
+                    _verify_category_suite_in_process(
+                        output,
+                        device=device,
+                        encoder_factory=lambda w=verify_wrapper: w,
+                        isolated_process=False,
                     )
             finally:
                 base_encoder.close()
-            summary = build_category_summary(output)
-            freeze_json(output / 'category_retrieval_summary.json', summary)
-            verify_category_suite(output, device=device, isolated_process=True)
+            if verify_mode == 'subprocess':
+                verify_category_suite(output, device=device, isolated_process=True)
             for item in eval_items:
                 shared_evaluation.report(output / 'groups' / item['group'])
         else:
@@ -1317,6 +954,7 @@ def evaluate_category_suite(
                     _shared_pool=shared_pool,
                     _path_sha_cache=path_sha_cache,
                     _bank_digest_cache=bank_digest_cache,
+                    _validated_completion_cache=validated_completion_cache,
                 )
                 shared_evaluation.report(group_eval_dir)
             summary = build_category_summary(output)
@@ -1488,7 +1126,8 @@ def report_category_suite(output):
     labels_zh = summary['query_family_labels_zh']
     is_oracle = summary['protocol'] in ORACLE_PROTOCOLS
     is_overlap30 = summary['protocol'] in OVERLAP_30_PROTOCOLS
-    v_suffix = '（v3 严格嵌套对齐版）' if summary['protocol'] in V3_PROTOCOLS else ('（v2 清洗版）' if summary['protocol'] in V2_PROTOCOLS else '')
+    is_v4 = summary['protocol'] in exact_overlap_queries.PROTOCOLS
+    v_suffix = '（v4 单调校准版）' if is_v4 else ''
     key_mode = summary.get('key_mode', DEFAULT_KEY_MODE)
     key_weight = summary.get('key_image_weight', 1.0 if key_mode == 'image' else 0.5)
     key_mode_desc = (
@@ -1505,17 +1144,17 @@ def report_category_suite(output):
     elif is_overlap30:
         title = f'# 视觉记忆植入三成训练重合（30% Overlap{v_suffix}）检索评估报告'
         query_desc = (
-            f"- 测试查询（30% 严格嵌套重合{v_suffix}）：{summary['group_count']} 组 × {summary['queries_per_group']} 条 = {summary['total_queries']} 条纯文字查询，每组 6 条来自 `oracle_v3`（3+2+1）与 14 条来自 `zero_overlap_v3`（7+4+3），三档子池比例恒定 10/6/4。"
-            if summary['protocol'] == OVERLAP_30_PROTOCOL_V3 else
+            f"- 测试查询（30% 配对嵌套重合{v_suffix}）：{summary['group_count']} 组 × {summary['queries_per_group']} 条 = {summary['total_queries']} 条纯文字查询，每组 6 条复用训练原题（3+2+1）与 14 条留出非重合查询（7+4+3），三档子池比例恒定 10/6/4。"
+            if is_v4 else
             f"- 测试查询（30% 训练重合混合{v_suffix}）：{summary['group_count']} 组 × {summary['queries_per_group']} 条 = {summary['total_queries']} 条纯文字查询，每组含 6 条复用训练查询（3 公开描述 / 2 模型改写 / 1 真实搜索，占 30%）与 14 条零重合新查询（占 70%）。"
         )
-        breakdown_heading = '## 按查询来源分类汇总（10 功能摘要 / 6 改写问句 / 4 短搜索词）' if summary['protocol'] == OVERLAP_30_PROTOCOL_V3 else '## 按查询重合与来源分类汇总（30% 训练重合 / 70% 非重合新查询）'
+        breakdown_heading = '## 按查询来源分类汇总（10 同类商品原文 / 6 改写查询 / 4 短搜索查询）' if is_v4 else '## 按查询重合与来源分类汇总（30% 训练重合 / 70% 非重合新查询）'
         breakdown_col = '查询来源类别'
-    elif summary['protocol'] == PROTOCOL_V3:
+    elif is_v4:
         title = f'# 视觉记忆植入同构零重合（0% 重合{v_suffix}）检索评估报告'
-        query_desc = f"- 测试查询（0% 重合同构分布{v_suffix}）：{summary['group_count']} 组 × {summary['queries_per_group']} 条 = {summary['total_queries']} 条纯文字查询（与 Oracle 同构 10 条品类功能摘要 / 6 条自然改写问句 / 4 条短搜索词，含 8 条无核心锚词隐晦查询，3-gram 重合率为 0）。"
-        breakdown_heading = f"## 按同构风格子池汇总（10 功能摘要 / 6 改写问句 / 4 短搜索词）"
-        breakdown_col = '查询风格子池'
+        query_desc = f"- 测试查询（0% 重合同构分布{v_suffix}）：{summary['group_count']} 组 × {summary['queries_per_group']} 条 = {summary['total_queries']} 条纯文字查询（与 Oracle 同构 10 条同类商品原文 / 6 条改写查询 / 4 条短搜索查询，与全部训练文本及候选规范化重合数为 0）。"
+        breakdown_heading = '## 按查询来源分类汇总（10 同类商品原文 / 6 改写查询 / 4 短搜索查询）'
+        breakdown_col = '查询来源类别'
     else:
         title = f'# 视觉记忆植入类别多样化（0% 重合{v_suffix}）检索评估报告'
         query_desc = f"- 测试查询（0% 字面重合泛化{v_suffix}）：{summary['group_count']} 组 × {summary['queries_per_group']} 条 = {summary['total_queries']} 条纯文字查询（每组含 5 类问法各 4 条：类别直接询问、购买意图、使用场景、功能需求、选择比较），与训练查询（50/30/20）及原特点评估查询规范化精确重合数均为 0。"
@@ -1628,9 +1267,12 @@ def evaluate_transfer_panel(
     defended_cache_dir=None,
     memory_vector_cache_dir=None,
     verify_training_snapshots=True,
+    verify_mode='subprocess',
 ):
     """依次在 CLIP-ViT-L/14 (白盒)、OpenCLIP-bigG-14 (黑盒)、SigLIP-SO400M (黑盒) 上运行完整评估与独立复算。"""
     method = normalize_method(method)
+    if verify_mode not in VERIFY_MODES:
+        raise ValueError('复算验证模式只能为 subprocess 或 in_process')
     effective_key_mode = DEFAULT_KEY_MODE if key_mode is None else key_mode
     output = Path(output).resolve()
     if not output.is_relative_to(Path(OUTPUT).resolve()):
@@ -1666,10 +1308,14 @@ def evaluate_transfer_panel(
             defended_cache_dir=defended_cache_dir,
             memory_vector_cache_dir=memory_vector_cache_dir,
             verify_training_snapshots=verify_training_snapshots,
+            verify_mode=verify_mode,
         )
         ver_path = sub_out / 'category_independent_verification.json'
         verification = read_json(ver_path) if ver_path.is_file() else verify_category_suite(
-            sub_out, device=device, encoder_factory=encoder_factory, isolated_process=(encoder_factory is None)
+            sub_out,
+            device=device,
+            encoder_factory=encoder_factory,
+            isolated_process=(encoder_factory is None and verify_mode == 'subprocess'),
         )
         summary = res['summary']
         entry = dict(
@@ -1822,6 +1468,7 @@ def main(argv=None):
     p_eval.add_argument('--encoder-config', type=Path)
     p_eval.add_argument('--defended-cache-dir', type=Path, default=None)
     p_eval.add_argument('--memory-vectors-dir', type=Path, default=None)
+    p_eval.add_argument('--verify-mode', choices=VERIFY_MODES, default='subprocess')
 
     p_panel = subparsers.add_parser('evaluate-transfer-panel', help='依次使用 CLIP-ViT-L/14、OpenCLIP-bigG-14、SigLIP-SO400M 完成迁移评估与独立复算')
     p_panel.add_argument('--images-root', type=Path, required=True)
@@ -1837,6 +1484,7 @@ def main(argv=None):
     p_panel.add_argument('--defense-mode', choices=DEFENSE_MODES, default='none')
     p_panel.add_argument('--defended-cache-dir', type=Path, default=None)
     p_panel.add_argument('--memory-vectors-dir', type=Path, default=None)
+    p_panel.add_argument('--verify-mode', choices=VERIFY_MODES, default='subprocess')
 
     p_verify = subparsers.add_parser('verify', help='独立进程复算全部组别全库候选分数及汇总')
     p_verify.add_argument('--output', type=Path, required=True)
@@ -1883,6 +1531,7 @@ def main(argv=None):
             encoder_config=args.encoder_config,
             defended_cache_dir=args.defended_cache_dir,
             memory_vector_cache_dir=args.memory_vectors_dir,
+            verify_mode=args.verify_mode,
         )
         print(json.dumps(dict(
             output=result['output'],
@@ -1912,6 +1561,7 @@ def main(argv=None):
             defense_mode=args.defense_mode,
             defended_cache_dir=args.defended_cache_dir,
             memory_vector_cache_dir=args.memory_vectors_dir,
+            verify_mode=args.verify_mode,
         )
         print(json.dumps({
             'output': str(args.output),

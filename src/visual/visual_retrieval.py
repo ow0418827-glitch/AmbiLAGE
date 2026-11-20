@@ -473,7 +473,15 @@ class VisualMemoryRetriever:
                 self.audits.get(key),
             ))
         self._save_index_cache(cache_path, identity, keys)
-        return dict(identity=identity, bank_sha=bank_sha, model_sha=model_sha, entries=prepared_entries)
+        matrix = None
+        if prepared_entries:
+            first_shape = prepared_entries[0][2].shape
+            for entry_tuple in prepared_entries[1:]:
+                if entry_tuple[2].shape != first_shape:
+                    raise ValueError("Query and memory vector dimensions differ")
+            matrix = np.vstack([e[2] for e in prepared_entries]).astype(np.float32, copy=False)
+        return dict(identity=identity, bank_sha=bank_sha, model_sha=model_sha,
+                    entries=prepared_entries, matrix=matrix)
 
     def rank(self, memory, instruction, query_image=None):
         # Bank bytes, caller entries and encoder configuration are refreshed on
@@ -505,22 +513,30 @@ class VisualMemoryRetriever:
         self.snapshot["query_encoding_audit"] = query_audit
         query_text_sha = hashlib.sha256(query_text.encode("utf-8")).hexdigest()
         img_dec_sha = self._image_decoder_sha256
-        ranked = []
-        for index, entry_id, vector, img_sha, text_sha, text_chars, entry_audit in prepared["entries"]:
-            if vector.shape != query.shape:
+        matrix = prepared.get("matrix")
+        if matrix is not None:
+            if query.ndim != 1 or matrix.ndim != 2 or matrix.shape[1] != query.shape[0]:
                 raise ValueError("Query and memory vector dimensions differ")
-            ranked.append({"index": index, "Id": entry_id, "score": float(vector @ query),
-                           "image_sha256": img_sha,
-                           "text_sha256": text_sha,
-                           "text_characters": text_chars, "index_text": self.index_text,
-                           "key_image_weight": self.key_image_weight,
-                           "query_image_weight": self.query_image_weight,
-                           "image_decoder_sha256": img_dec_sha,
-                           "model_sha256": model_sha, "bank_sha256": bank_sha,
-                           "query_text_sha256": query_text_sha,
-                           "query_image_sha256": query_img_sha,
-                           "query_encoding_audit": query_audit,
-                           "encoding_audit": entry_audit})
+            scores = (matrix @ query).tolist()
+        else:
+            scores = []
+        ranked = [
+            {"index": index, "Id": entry_id, "score": float(score),
+             "image_sha256": img_sha,
+             "text_sha256": text_sha,
+             "text_characters": text_chars, "index_text": self.index_text,
+             "key_image_weight": self.key_image_weight,
+             "query_image_weight": self.query_image_weight,
+             "image_decoder_sha256": img_dec_sha,
+             "model_sha256": model_sha, "bank_sha256": bank_sha,
+             "query_text_sha256": query_text_sha,
+             "query_image_sha256": query_img_sha,
+             "query_encoding_audit": query_audit,
+             "encoding_audit": entry_audit}
+            for (index, entry_id, _vector, img_sha, text_sha, text_chars, entry_audit), score in zip(
+                prepared["entries"], scores
+            )
+        ]
         ranked.sort(key=lambda item: (-item["score"], item["index"]))
         for rank, item in enumerate(ranked, 1):
             item["rank"] = rank

@@ -33,11 +33,30 @@ from src.experiments.visual_inception_category_evaluation import (
     validate_category_query_suite,
 )
 from src.paths import EVALUATION_BASE, OUTPUT, PROJECT, VISUAL_CONFIGS
-from src.visual.audit import freeze_json, read_json
+from src.visual.audit import digest, freeze_json, read_json
 from src.visual.encoders.eval_clip import BatchedFreshCachedEncoder, make_standalone_eval_encoder
 from src.visual.image_utils import sha256_file
 from src.visual.optimization import normalize_method
 from src.visual.visual_retrieval import resolve_image
+
+
+VERIFY_MODES = ('subprocess', 'in_process')
+
+
+def _resolve_job_groups(job: dict) -> tuple[list[str] | None, str]:
+    raw_groups = job.get('groups')
+    replacement_groups = job.get('replacement_groups', 'all')
+    if replacement_groups not in ('all', 'selected'):
+        raise ValueError('替换组范围只能为 all 或 selected')
+    if raw_groups is None:
+        requested_groups = None
+    elif isinstance(raw_groups, str):
+        requested_groups = [g.strip() for g in raw_groups.split(',') if g.strip()]
+    else:
+        requested_groups = [str(g).strip() for g in raw_groups if str(g).strip()]
+    if requested_groups is not None and requested_groups == ['all']:
+        requested_groups = None
+    return requested_groups, replacement_groups
 
 
 def default_stage2_jobs(stage2_dir: Path | None = None) -> list[dict]:
@@ -125,6 +144,8 @@ def _prepare_panel_encoder_plan(
     key_mode: str,
     verify_training_snapshots: bool,
     require_surrogates: bool = True,
+    frozen_suite_cache: dict | None = None,
+    validation_cache: dict | None = None,
 ) -> dict:
     """Validate suite, write category_query_validation.json & category_evaluation_plan.json."""
     method = normalize_method(job['method'])
@@ -136,13 +157,49 @@ def _prepare_panel_encoder_plan(
     sub_out = (panel_out / enc_spec['slug']).resolve()
     _require(sub_out.is_relative_to(Path(OUTPUT).resolve()), '评估结果必须保存在当前项目 output 目录内')
 
-    frozen_suite = load_frozen_suite(job['images_root'], base=base, method=method)
-    validation = validate_category_query_suite(
-        resolved_query_root,
-        query_suite=query_suite,
-        base=base,
-        verify_training_snapshots=verify_training_snapshots,
+    requested_groups, replacement_groups = _resolve_job_groups(job)
+    selected_groups_arg = requested_groups if replacement_groups == 'selected' else None
+    suite_key = (
+        str(Path(job['images_root']).resolve()),
+        str(base),
+        method,
+        tuple(selected_groups_arg) if selected_groups_arg is not None else None,
     )
+    if frozen_suite_cache is not None and suite_key in frozen_suite_cache:
+        frozen_suite = frozen_suite_cache[suite_key]
+    else:
+        if replacement_groups == 'selected' and requested_groups is None:
+            raise ValueError('replacement_groups=selected 时必须显式指定至少两个分组')
+        frozen_suite = load_frozen_suite(
+            job['images_root'],
+            base=base,
+            method=method,
+            selected_groups=selected_groups_arg,
+        )
+        if frozen_suite_cache is not None:
+            frozen_suite_cache[suite_key] = frozen_suite
+
+    if replacement_groups == 'selected' or requested_groups is None:
+        eval_items = frozen_suite
+    else:
+        suite_map = {it['group']: it for it in frozen_suite}
+        unknown = [g for g in requested_groups if g not in suite_map]
+        _require(not unknown, '未知评估分组：' + ', '.join(unknown))
+        eval_items = [suite_map[g] for g in requested_groups]
+
+    val_key = (str(resolved_query_root), query_suite, str(base), bool(verify_training_snapshots))
+    if validation_cache is not None and val_key in validation_cache:
+        validation = validation_cache[val_key]
+    else:
+        validation = validate_category_query_suite(
+            resolved_query_root,
+            query_suite=query_suite,
+            base=base,
+            verify_training_snapshots=verify_training_snapshots,
+        )
+        if validation_cache is not None:
+            validation_cache[val_key] = validation
+
     base_manifest = read_json(base / 'manifest.json')
     shared_cfg = base_manifest.get('shared_memory', {})
     pool_rel = shared_cfg.get('pool_file')
@@ -181,7 +238,7 @@ def _prepare_panel_encoder_plan(
         pool_count=pool_count,
         encoder_config=str(effective_encoder_config),
         encoder_config_sha256=sha256_file(effective_encoder_config),
-        groups=[item['group'] for item in frozen_suite],
+        groups=[item['group'] for item in eval_items],
         simultaneous_replacement_count=len(frozen_suite),
         shared_pool_scope=(
             'all_entries_simultaneous_nine_group_replacement'
@@ -200,7 +257,7 @@ def _prepare_panel_encoder_plan(
                 requested_steps=item['requested_steps'],
                 objective_kind=item.get('metadata', {}).get('training_objective', {}).get('kind'),
             )
-            for item in frozen_suite
+            for item in eval_items
         },
     )
     freeze_json(sub_out / 'category_evaluation_plan.json', plan)
@@ -215,6 +272,7 @@ def _prepare_panel_encoder_plan(
         key_mode=effective_key_mode,
         pool_path=pool_path,
         frozen_suite=frozen_suite,
+        eval_items=eval_items,
         validation=validation,
         plan=plan,
         selected_conditions=selected_conditions,
@@ -228,9 +286,11 @@ def verify_encoder_worker(
     panel_sub_dirs: list[Path],
     *,
     batch_size: int = 16,
+    text_batch_size: int = 64,
     num_workers: int = 4,
     device: str = 'cuda',
     encoder_factory=None,
+    shared_base_encoder=None,
     isolated_process: bool = True,
 ) -> dict[str, dict]:
     """Verify multiple evaluated panel subdirs for ONE encoder with a single fresh encoder load."""
@@ -244,6 +304,7 @@ def verify_encoder_worker(
     expected_surrogates = None
     bank_cache: dict[tuple[str, str], list[dict]] = {}
     union_assets: dict[str, Path] = {}
+    union_texts: set[str] = set()
     path_sha_cache: dict[tuple[str, int, int], str] = {}
 
     def _cached_file_sha(p: Path) -> str:
@@ -276,6 +337,11 @@ def verify_encoder_worker(
             _require(first_group_plan.get('encoder_config') == enc_config_str, f'{sub_out} 编码器配置不一致')
             _require(plan['pool_path'] == pool_path_str, f'{sub_out} 共享池路径不一致')
 
+        for g_idx, group in enumerate(plan['groups']):
+            g_plan = first_group_plan if g_idx == 0 else read_json(sub_out / 'groups' / group / 'evaluation_plan.json')
+            for q in g_plan.get('queries', []):
+                union_texts.add(str(q.get('instruction') or ' '))
+
         # Pre-validate bank SHA256 once per unique bank file & collect all unique assets to encode in batch.
         sample_rows = read_json(sub_out / 'groups' / plan['groups'][0] / 'evaluation.json')
         pool_path = Path(plan['pool_path'])
@@ -303,7 +369,13 @@ def verify_encoder_worker(
                     union_assets[actual_img_sha] = img_path
 
     sorted_assets = sorted(union_assets.items(), key=lambda kv: kv[0])
-    if encoder_factory is None:
+    owns_encoder = False
+    if shared_base_encoder is not None:
+        base_encoder = shared_base_encoder
+    elif encoder_factory is not None:
+        base_encoder = encoder_factory()
+        owns_encoder = True
+    else:
         base_encoder = make_standalone_eval_encoder(
             device=device,
             config_path=enc_config_str,
@@ -311,8 +383,7 @@ def verify_encoder_worker(
             batch_size=batch_size,
             num_workers=num_workers,
         )
-    else:
-        base_encoder = encoder_factory()
+        owns_encoder = True
     fresh_wrapper = BatchedFreshCachedEncoder(base_encoder)
     shared_pool = shared_evaluation.load_shared_pool(pool_path_str)
     bank_digest_cache: dict = {}
@@ -323,7 +394,12 @@ def verify_encoder_worker(
             [(p, sha) for sha, p in sorted_assets],
             batch_size=batch_size,
         )
-        print(f'[VERIFY {encoder_slug}] prewarmed {n_encoded} unique images (batch={batch_size})', flush=True)
+        n_texts = fresh_wrapper.prewarm_texts(union_texts, batch_size=text_batch_size)
+        print(
+            f'[VERIFY {encoder_slug}] prewarmed {n_encoded} unique images (batch={batch_size}), '
+            f'{n_texts} unique texts (text_batch={text_batch_size})',
+            flush=True,
+        )
 
         for sub_out in sub_dirs:
             plan = plans[sub_out]
@@ -382,13 +458,15 @@ def verify_encoder_worker(
                 flush=True,
             )
     finally:
-        base_encoder.close()
+        if owns_encoder:
+            base_encoder.close()
     return results
 
 
 def _write_transfer_panel_outputs(
     job: dict,
     *,
+    base: Path = EVALUATION_BASE,
     key_mode: str,
     defense_mode: str,
     encoder_slugs: list[str] | tuple[str, ...] | None = None,
@@ -400,7 +478,14 @@ def _write_transfer_panel_outputs(
 
     method = normalize_method(job['method'])
     effective_key_mode = DEFAULT_KEY_MODE if key_mode is None else key_mode
-    frozen_suite = load_frozen_suite(job['images_root'], method=method)
+    resolved_base = Path(job.get('base') or base).resolve()
+    requested_groups, replacement_groups = _resolve_job_groups(job)
+    frozen_suite = load_frozen_suite(
+        job['images_root'],
+        base=resolved_base,
+        method=method,
+        selected_groups=(requested_groups if replacement_groups == 'selected' else None),
+    )
     panel_encoders, trained_names = _resolve_transfer_panel_encoders(frozen_suite)
     if encoder_slugs is not None:
         allowed = set(encoder_slugs)
@@ -467,22 +552,42 @@ def _write_transfer_panel_outputs(
         cells = _format_summary_cells(entry['overall'])
         lines.append(f"| {idx} | {entry['label']} | {entry['role_zh']} | " + ' | '.join(cells) + ' |')
 
-    lines += ['', '## 各编码器逐组明细（Top-1 / Top-5 / 平均名次）', '']
+    lines += ['', '## 各编码器逐组明细（Top-1 / Top-3 / Top-5 / 平均名次）', '']
     group_list = list(first_summary['groups'])
-    lines.append('| 组别 | 品类 | ' + ' | '.join(f"{e['label']} 前1/前5/均名" for e in ordered_rows) + ' |')
+    lines.append('| 组别 | 品类 | ' + ' | '.join(f"{e['label']} 前1/前3/前5/均名" for e in ordered_rows) + ' |')
     lines.append('|---|---|' + '|'.join('---:' for _ in ordered_rows) + '|')
     for group in group_list:
         cat = first_summary['groups'][group].get('category') or ''
         g_cells = []
         for e in ordered_rows:
             ov = e['groups'][group]['overall']
-            t1, t5 = ov['top1'], ov['top5']
+            t1, t3, t5 = ov['top1'], ov['top3'], ov['top5']
             g_cells.append(
                 f"{t1['modified_hits']}/{ov['query_count']} ({t1['modified_rate']*100:.0f}%) / "
+                f"{t3['modified_hits']}/{ov['query_count']} ({t3['modified_rate']*100:.0f}%) / "
                 f"{t5['modified_hits']}/{ov['query_count']} ({t5['modified_rate']*100:.0f}%) / "
                 f"{ov['mean_rank_clean']:.1f}->{ov['mean_rank_modified']:.1f}"
             )
         lines.append(f'| `{group}` | {cat} | ' + ' | '.join(g_cells) + ' |')
+
+    family_list = list(first_summary.get('query_families', ()))
+    family_labels_zh = first_summary.get('query_family_labels_zh', {})
+    if family_list:
+        lines += ['', '## 按查询子家族三编码器对比汇总（Top-3 / Top-5 / 均名）', '']
+        lines.append('| 查询子家族 | ' + ' | '.join(f"{e['label']} 前3/前5/均名" for e in ordered_rows) + ' |')
+        lines.append('|---|' + '|'.join('---:' for _ in ordered_rows) + '|')
+        for family in family_list:
+            fam_cells = []
+            for e in ordered_rows:
+                st = e['by_family'][family]
+                t3, t5 = st['top3'], st['top5']
+                fam_cells.append(
+                    f"{t3['modified_hits']}/{st['query_count']} ({t3['modified_rate']*100:.1f}%) / "
+                    f"{t5['modified_hits']}/{st['query_count']} ({t5['modified_rate']*100:.1f}%) / "
+                    f"{st['mean_rank_clean']:.2f}->{st['mean_rank_modified']:.2f}"
+                )
+            fam_label = f"{family_labels_zh.get(family, family)} (`{family}`)"
+            lines.append(f"| {fam_label} | " + ' | '.join(fam_cells) + ' |')
 
     table_titles = list(ordered_rows[0].get('by_table_group', {}))
     if len(table_titles) > 1:
@@ -514,12 +619,14 @@ def run_encoder_grouped_panels(
     defended_cache_dir: Path,
     memory_vector_cache_dir: Path,
     batch_sizes: dict[str, int] | None = None,
+    text_batch_size: int = 64,
     num_workers: int = 4,
     device: str = 'cuda',
     verify_training_snapshots: bool = True,
     encoder_factory=None,
     defense_factory=None,
     isolated_process: bool | None = None,
+    verify_mode: str | None = None,
     encoder_slugs: list[str] | tuple[str, ...] | None = None,
 ) -> dict[str, dict]:
     base = Path(base).resolve()
@@ -528,205 +635,296 @@ def run_encoder_grouped_panels(
     _require(defended_root.is_relative_to(Path(OUTPUT).resolve()), '防御缓存目录必须位于当前项目 output 目录内')
     _require(vec_dir.is_relative_to(Path(OUTPUT).resolve()), '共享向量缓存目录必须位于当前项目 output 目录内')
 
+    if verify_mode is not None:
+        if verify_mode not in VERIFY_MODES:
+            raise ValueError('verify_mode 只能为 subprocess 或 in_process')
+        effective_verify_mode = verify_mode
+    elif isolated_process is not None:
+        effective_verify_mode = 'subprocess' if isolated_process else 'in_process'
+    else:
+        effective_verify_mode = 'subprocess'
+    use_isolated_flag = effective_verify_mode == 'subprocess'
+
     pending_jobs = [j for j in jobs if not (Path(j['output']) / 'transfer_panel_summary.json').is_file()]
     if not pending_jobs:
         print('[FAST PANEL] All jobs already have transfer_panel_summary.json', flush=True)
-        return {j['name']: read_json(Path(j['output']) / 'transfer_panel_summary.json') for j in jobs}
+        return {
+            j['name']: _write_transfer_panel_outputs(
+                j, base=base, key_mode=key_mode, defense_mode=defense_mode, encoder_slugs=encoder_slugs
+            )
+            for j in jobs
+        }
 
-    first_suite = load_frozen_suite(pending_jobs[0]['images_root'], base=base, method=pending_jobs[0]['method'])
-    panel_encoders, _ = _resolve_transfer_panel_encoders(first_suite)
+    frozen_suite_cache: dict = {}
+    validation_cache: dict = {}
+    validated_completion_cache: set = set()
+
+    def _get_job_suite(job_obj: dict) -> list[dict]:
+        req_g, rep_g = _resolve_job_groups(job_obj)
+        sel = req_g if rep_g == 'selected' else None
+        resolved_base = Path(job_obj.get('base') or base).resolve()
+        s_key = (
+            str(Path(job_obj['images_root']).resolve()),
+            str(resolved_base),
+            normalize_method(job_obj['method']),
+            tuple(sel) if sel is not None else None,
+        )
+        if s_key not in frozen_suite_cache:
+            if rep_g == 'selected' and req_g is None:
+                raise ValueError('replacement_groups=selected 时必须显式指定至少两个分组')
+            frozen_suite_cache[s_key] = load_frozen_suite(
+                job_obj['images_root'],
+                base=resolved_base,
+                method=normalize_method(job_obj['method']),
+                selected_groups=sel,
+            )
+        return frozen_suite_cache[s_key]
+
+    job_encoders: dict[str, dict[str, dict]] = {}
+    slug_order: list[str] = []
+    for job in pending_jobs:
+        p_encs, _ = _resolve_transfer_panel_encoders(_get_job_suite(job))
+        job_encoders[job['name']] = {e['slug']: e for e in p_encs}
+        for e in p_encs:
+            if e['slug'] not in slug_order:
+                slug_order.append(e['slug'])
     if encoder_slugs is not None:
         allowed = set(encoder_slugs)
-        panel_encoders = [e for e in panel_encoders if e['slug'] in allowed]
-    use_isolated = (encoder_factory is None) if isolated_process is None else isolated_process
+        slug_order = [s for s in slug_order if s in allowed]
 
-    for enc_spec in panel_encoders:
-        slug = enc_spec['slug']
+    for slug in slug_order:
         enc_bs = int((batch_sizes or {}).get(slug, 16))
 
         pending_contexts = []
         for job in pending_jobs:
+            enc_spec = job_encoders[job['name']][slug]
             sub_out = Path(job['output']).resolve() / slug
-            if (sub_out / 'category_independent_verification.json').is_file():
+            if (sub_out / 'category_independent_verification.json').is_file() and (sub_out / 'REPORT.md').is_file():
                 print(f"[SKIP SUB-OUT] {job['name']}/{slug} already verified", flush=True)
                 continue
+            resolved_base = Path(job.get('base') or base).resolve()
             pending_contexts.append(
                 _prepare_panel_encoder_plan(
                     job,
                     enc_spec,
-                    base=base,
+                    base=resolved_base,
                     defense_mode=defense_mode,
                     key_mode=key_mode,
                     verify_training_snapshots=verify_training_snapshots,
                     require_surrogates=(encoder_factory is None),
+                    frozen_suite_cache=frozen_suite_cache,
+                    validation_cache=validation_cache,
                 )
             )
 
         if not pending_contexts:
             continue
 
-        expected_surrogates = pending_contexts[0]['actual_surrogates']
-        expected_cfg = pending_contexts[0]['encoder_config']
-        expected_pool = pending_contexts[0]['pool_path']
-        for ctx in pending_contexts[1:]:
-            _require(ctx['actual_surrogates'] == expected_surrogates, '跨面板训练代理身份不一致，禁止共享编码器')
-            _require(ctx['encoder_config'] == expected_cfg, '跨面板评估编码器配置不一致')
-            _require(ctx['pool_path'] == expected_pool, '跨面板共享库路径不一致')
-
-        shared_pool = shared_evaluation.load_shared_pool(expected_pool)
-        shared_defender = (
-            defense_factory(defended_root, device)
-            if defense_factory is not None
-            else shared_evaluation.Defender(defended_root, device)
-        )
-        image_sha_fn = getattr(shared_defender, '_cached_sha256', None) or sha256_file
-        method_bank_cache: dict = {}
-        union_assets: dict[str, Path] = {}
-
-        try:
-            for ctx in pending_contexts:
-                frozen_suite = ctx['frozen_suite']
-                item0 = frozen_suite[0]
-                replacement_inputs = [
-                    dict(source=it['source'], image=it['image'], source_memory_id=it.get('source_memory_id'))
-                    for it in frozen_suite
-                ]
-                banks, _ = shared_evaluation.evaluation_banks(
-                    shared_pool,
-                    ctx['pool_path'],
-                    item0['source'],
-                    item0['image'],
-                    source_memory_id=item0.get('source_memory_id'),
-                    replacements=replacement_inputs,
-                )
-                built = _collect_bank_assets(
-                    banks,
-                    ctx['selected_conditions'],
-                    ctx['pool_path'],
-                    shared_defender,
-                    ctx['sub_out'] / 'shared_banks',
-                    image_sha_fn=image_sha_fn,
-                    method_bank_cache=method_bank_cache,
-                    assets_out=union_assets,
-                )
-                ctx['prewarmed_banks'] = built
-
-            sorted_assets = sorted(union_assets.items(), key=lambda kv: kv[0])
-            print(
-                f'\n=== [ENCODER {slug}] panels={[c["job"]["name"] for c in pending_contexts]} '
-                f'unique_images={len(sorted_assets)} batch_size={enc_bs} ===',
-                flush=True,
+        grouped_contexts: list[list[dict]] = []
+        group_index_by_key: dict[tuple, int] = {}
+        for ctx in pending_contexts:
+            cfg_key = (
+                str(ctx['encoder_config']),
+                digest(ctx['actual_surrogates']),
+                str(ctx['pool_path']),
             )
+            idx = group_index_by_key.get(cfg_key)
+            if idx is None:
+                group_index_by_key[cfg_key] = len(grouped_contexts)
+                grouped_contexts.append([ctx])
+            else:
+                grouped_contexts[idx].append(ctx)
 
-            base_encoder = (
-                encoder_factory()
-                if encoder_factory is not None
-                else make_standalone_eval_encoder(
-                    device=device,
-                    config_path=expected_cfg,
-                    training_surrogates=expected_surrogates,
-                    batch_size=enc_bs,
-                    num_workers=num_workers,
-                )
+        for cg_idx, group_contexts in enumerate(grouped_contexts):
+            expected_surrogates = group_contexts[0]['actual_surrogates']
+            expected_cfg = group_contexts[0]['encoder_config']
+            expected_pool = group_contexts[0]['pool_path']
+
+            shared_pool = shared_evaluation.load_shared_pool(expected_pool)
+            shared_defender = (
+                defense_factory(defended_root, device)
+                if defense_factory is not None
+                else shared_evaluation.Defender(defended_root, device)
             )
-            shared_enc = BatchedFreshCachedEncoder(base_encoder)
+            image_sha_fn = getattr(shared_defender, '_cached_sha256', None) or sha256_file
+            method_bank_cache: dict = {}
+            union_assets: dict[str, Path] = {}
+            union_texts: set[str] = set()
+            sub_dirs = [ctx['sub_out'] for ctx in group_contexts]
+            run_subprocess_verify = False
+
             try:
-                shared_enc.prewarm_images([(p, sha) for sha, p in sorted_assets], batch_size=enc_bs)
-                path_sha_cache: dict = {}
-                bank_digest_cache: dict = {}
-                for ctx in pending_contexts:
-                    sub_out = ctx['sub_out']
-                    bank_root = sub_out / 'shared_banks'
-                    shared_bank_memo = {}
-                    for item in ctx['frozen_suite']:
-                        group = item['group']
-                        group_eval_dir = sub_out / 'groups' / group
-                        group_query_path = Path(ctx['validation']['groups'][group]['query_manifest'])
-                        shared_evaluation.evaluate(
-                            item,
-                            group_eval_dir,
-                            pool_path=ctx['pool_path'],
-                            query_manifest=group_query_path,
-                            source_memory_id=item['source_memory_id'],
+                for ctx in group_contexts:
+                    frozen_suite = ctx['frozen_suite']
+                    item0 = frozen_suite[0]
+                    replacement_inputs = [
+                        dict(source=it['source'], image=it['image'], source_memory_id=it.get('source_memory_id'))
+                        for it in frozen_suite
+                    ]
+                    banks, _ = shared_evaluation.evaluation_banks(
+                        shared_pool,
+                        ctx['pool_path'],
+                        item0['source'],
+                        item0['image'],
+                        source_memory_id=item0.get('source_memory_id'),
+                        replacements=replacement_inputs,
+                    )
+                    built = _collect_bank_assets(
+                        banks,
+                        ctx['selected_conditions'],
+                        ctx['pool_path'],
+                        shared_defender,
+                        ctx['sub_out'] / 'shared_banks',
+                        image_sha_fn=image_sha_fn,
+                        method_bank_cache=method_bank_cache,
+                        assets_out=union_assets,
+                    )
+                    ctx['prewarmed_banks'] = built
+
+                    for item in ctx['eval_items']:
+                        group_query_path = Path(ctx['validation']['groups'][item['group']]['query_manifest'])
+                        queries = shared_evaluation.load_formal_queries(
+                            group_query_path, item['target'], query_mode='text'
+                        )
+                        for q in queries:
+                            union_texts.add(str(q['instruction'] or ' '))
+
+                sorted_assets = sorted(union_assets.items(), key=lambda kv: kv[0])
+                print(
+                    f'\n=== [ENCODER {slug}] panels={[c["job"]["name"] for c in group_contexts]} '
+                    f'unique_images={len(sorted_assets)} unique_texts={len(union_texts)} '
+                    f'batch_size={enc_bs} text_batch_size={text_batch_size} verify={effective_verify_mode} ===',
+                    flush=True,
+                )
+
+                base_encoder = (
+                    encoder_factory()
+                    if encoder_factory is not None
+                    else make_standalone_eval_encoder(
+                        device=device,
+                        config_path=expected_cfg,
+                        training_surrogates=expected_surrogates,
+                        batch_size=enc_bs,
+                        num_workers=num_workers,
+                    )
+                )
+                shared_enc = BatchedFreshCachedEncoder(base_encoder)
+                try:
+                    shared_enc.prewarm_images([(p, sha) for sha, p in sorted_assets], batch_size=enc_bs)
+                    shared_enc.prewarm_texts(union_texts, batch_size=text_batch_size)
+                    path_sha_cache: dict = {}
+                    bank_digest_cache: dict = {}
+                    for ctx in group_contexts:
+                        sub_out = ctx['sub_out']
+                        bank_root = sub_out / 'shared_banks'
+                        shared_bank_memo = {}
+                        for item in ctx['eval_items']:
+                            group = item['group']
+                            group_eval_dir = sub_out / 'groups' / group
+                            group_query_path = Path(ctx['validation']['groups'][group]['query_manifest'])
+                            shared_evaluation.evaluate(
+                                item,
+                                group_eval_dir,
+                                pool_path=ctx['pool_path'],
+                                query_manifest=group_query_path,
+                                source_memory_id=item['source_memory_id'],
+                                device=device,
+                                encoder_factory=encoder_factory,
+                                defense_factory=defense_factory,
+                                selected_conditions=ctx['selected_conditions'],
+                                encoder_config=ctx['encoder_config'],
+                                query_mode='text',
+                                key_mode=ctx['key_mode'],
+                                replacement_frozens=ctx['frozen_suite'],
+                                bank_root=bank_root,
+                                memory_vector_cache_dir=vec_dir,
+                                defer_verification=True,
+                                shared_encoder=shared_enc,
+                                _shared_defender=shared_defender,
+                                _shared_bank_memo=shared_bank_memo,
+                                _shared_pool=shared_pool,
+                                _path_sha_cache=path_sha_cache,
+                                _bank_digest_cache=bank_digest_cache,
+                                _validated_completion_cache=validated_completion_cache,
+                            )
+                        summary = build_category_summary(sub_out)
+                        freeze_json(sub_out / 'category_retrieval_summary.json', summary)
+                        print(f"[EVAL DONE] {ctx['job']['name']}/{slug}", flush=True)
+
+                    if encoder_factory is None and effective_verify_mode == 'in_process':
+                        verify_encoder_worker(
+                            slug,
+                            sub_dirs,
+                            batch_size=enc_bs,
+                            text_batch_size=text_batch_size,
+                            num_workers=num_workers,
+                            device=device,
+                            shared_base_encoder=base_encoder,
+                            isolated_process=False,
+                        )
+                    elif encoder_factory is not None:
+                        verify_encoder_worker(
+                            slug,
+                            sub_dirs,
+                            batch_size=enc_bs,
+                            text_batch_size=text_batch_size,
+                            num_workers=num_workers,
                             device=device,
                             encoder_factory=encoder_factory,
-                            defense_factory=defense_factory,
-                            selected_conditions=ctx['selected_conditions'],
-                            encoder_config=ctx['encoder_config'],
-                            query_mode='text',
-                            key_mode=ctx['key_mode'],
-                            replacement_frozens=ctx['frozen_suite'],
-                            bank_root=bank_root,
-                            memory_vector_cache_dir=vec_dir,
-                            defer_verification=True,
-                            shared_encoder=shared_enc,
-                            _shared_defender=shared_defender,
-                            _shared_bank_memo=shared_bank_memo,
-                            _shared_pool=shared_pool,
-                            _path_sha_cache=path_sha_cache,
-                            _bank_digest_cache=bank_digest_cache,
+                            isolated_process=use_isolated_flag,
                         )
-                    summary = build_category_summary(sub_out)
-                    freeze_json(sub_out / 'category_retrieval_summary.json', summary)
-                    print(f"[EVAL DONE] {ctx['job']['name']}/{slug}", flush=True)
+                    else:
+                        run_subprocess_verify = True
+                finally:
+                    base_encoder.close()
             finally:
-                base_encoder.close()
-        finally:
-            if callable(getattr(shared_defender, 'close', None)):
-                shared_defender.close()
+                if callable(getattr(shared_defender, 'close', None)):
+                    shared_defender.close()
 
-        sub_dirs = [ctx['sub_out'] for ctx in pending_contexts]
-        if encoder_factory is None and use_isolated:
-            cmd = [
-                sys.executable,
-                '-B',
-                '-X',
-                'utf8',
-                '-m',
-                'src.experiments.fast_stage2_panel',
-                '_verify-encoder',
-                '--encoder-slug',
-                slug,
-                '--batch-size',
-                str(enc_bs),
-                '--num-workers',
-                str(num_workers),
-                '--device',
-                device,
-                '--panel-sub-dirs',
-                *(str(p) for p in sub_dirs),
-            ]
-            log_path = Path(sub_dirs[0]).parent.parent / 'logs' / f'verify_{slug}.log'
-            log_path.parent.mkdir(parents=True, exist_ok=True)
-            with log_path.open('w', encoding='utf-8') as log_f:
-                proc = subprocess.run(
-                    cmd,
-                    cwd=PROJECT,
-                    stdout=log_f,
-                    stderr=subprocess.STDOUT,
-                    creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0,
-                )
-            if proc.returncode:
-                raise RuntimeError(f'合并独立进程复算失败 ({slug})，见日志：{log_path}')
-        else:
-            verify_encoder_worker(
-                slug,
-                sub_dirs,
-                batch_size=enc_bs,
-                num_workers=num_workers,
-                device=device,
-                encoder_factory=encoder_factory,
-                isolated_process=use_isolated,
-            )
+            if run_subprocess_verify:
+                log_name = f'verify_{slug}.log' if len(grouped_contexts) == 1 else f'verify_{slug}_{cg_idx}.log'
+                cmd = [
+                    sys.executable,
+                    '-B',
+                    '-X',
+                    'utf8',
+                    '-m',
+                    'src.experiments.fast_stage2_panel',
+                    '_verify-encoder',
+                    '--encoder-slug',
+                    slug,
+                    '--batch-size',
+                    str(enc_bs),
+                    '--text-batch-size',
+                    str(text_batch_size),
+                    '--num-workers',
+                    str(num_workers),
+                    '--device',
+                    device,
+                    '--panel-sub-dirs',
+                    *(str(p) for p in sub_dirs),
+                ]
+                log_path = Path(sub_dirs[0]).parent.parent / 'logs' / log_name
+                log_path.parent.mkdir(parents=True, exist_ok=True)
+                with log_path.open('w', encoding='utf-8') as log_f:
+                    proc = subprocess.run(
+                        cmd,
+                        cwd=PROJECT,
+                        stdout=log_f,
+                        stderr=subprocess.STDOUT,
+                        creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0,
+                    )
+                if proc.returncode:
+                    raise RuntimeError(f'合并独立进程复算失败 ({slug})，见日志：{log_path}')
 
-        for ctx in pending_contexts:
-            for item in ctx['frozen_suite']:
-                shared_evaluation.report(ctx['sub_out'] / 'groups' / item['group'])
-            report_category_suite(ctx['sub_out'])
+            for ctx in group_contexts:
+                for item in ctx['eval_items']:
+                    shared_evaluation.report(ctx['sub_out'] / 'groups' / item['group'])
+                report_category_suite(ctx['sub_out'])
 
     return {
         j['name']: _write_transfer_panel_outputs(
-            j, key_mode=key_mode, defense_mode=defense_mode, encoder_slugs=encoder_slugs
+            j, base=base, key_mode=key_mode, defense_mode=defense_mode, encoder_slugs=encoder_slugs
         )
         for j in jobs
     }
@@ -746,6 +944,8 @@ def main(argv=None):
     p_run.add_argument('--memory-vectors-dir', type=Path, required=True)
     p_run.add_argument('--batch-config', type=Path, default=None)
     p_run.add_argument('--batch-size-map', type=str, default=None)
+    p_run.add_argument('--text-batch-size', type=int, default=64)
+    p_run.add_argument('--verify-mode', choices=VERIFY_MODES, default='subprocess')
     p_run.add_argument('--encoder-slugs', nargs='+', default=None)
     p_run.add_argument('--num-workers', type=int, default=4)
     p_run.add_argument('--device', default='cuda')
@@ -754,6 +954,7 @@ def main(argv=None):
     p_fin = sub.add_parser('finalize')
     p_fin.add_argument('--stage2-dir', type=Path, default=OUTPUT / 'eval_9groups_20261119' / 'stage2_defenses')
     p_fin.add_argument('--jobs-json', type=Path, default=None)
+    p_fin.add_argument('--base', type=Path, default=EVALUATION_BASE)
     p_fin.add_argument('--key-mode', choices=('image', 'joint'), default=DEFAULT_KEY_MODE)
     p_fin.add_argument('--defense-mode', default='panel_with_sd21')
     p_fin.add_argument('--encoder-slugs', nargs='+', default=None)
@@ -761,6 +962,7 @@ def main(argv=None):
     p_ver = sub.add_parser('_verify-encoder')
     p_ver.add_argument('--encoder-slug', required=True)
     p_ver.add_argument('--batch-size', type=int, default=16)
+    p_ver.add_argument('--text-batch-size', type=int, default=64)
     p_ver.add_argument('--num-workers', type=int, default=4)
     p_ver.add_argument('--device', default='cuda')
     p_ver.add_argument('--panel-sub-dirs', nargs='+', type=Path, required=True)
@@ -771,6 +973,7 @@ def main(argv=None):
             args.encoder_slug,
             args.panel_sub_dirs,
             batch_size=args.batch_size,
+            text_batch_size=args.text_batch_size,
             num_workers=args.num_workers,
             device=args.device,
             isolated_process=True,
@@ -780,7 +983,7 @@ def main(argv=None):
         jobs = read_json(args.jobs_json) if args.jobs_json else default_stage2_jobs(args.stage2_dir)
         for j in jobs:
             _write_transfer_panel_outputs(
-                j, key_mode=args.key_mode, defense_mode=args.defense_mode, encoder_slugs=args.encoder_slugs
+                j, base=args.base, key_mode=args.key_mode, defense_mode=args.defense_mode, encoder_slugs=args.encoder_slugs
             )
             print('FINALIZED:', j['name'], flush=True)
         return 0
@@ -801,9 +1004,11 @@ def main(argv=None):
         defended_cache_dir=args.defended_cache_dir,
         memory_vector_cache_dir=args.memory_vectors_dir,
         batch_sizes=batch_sizes,
+        text_batch_size=args.text_batch_size,
         num_workers=args.num_workers,
         device=args.device,
         verify_training_snapshots=not args.skip_training_snapshots,
+        verify_mode=args.verify_mode,
         encoder_slugs=args.encoder_slugs,
     )
     return 0

@@ -1,4 +1,4 @@
-"""Prepare public sources and freeze the fourth text-overlap evaluation."""
+"""Prepare public sources, apply monotonic rank-calibrated filtering, and freeze the fourth text-overlap evaluation."""
 import argparse
 from collections import defaultdict
 from contextlib import closing
@@ -15,8 +15,8 @@ if str(PROJECT) not in sys.path:
     sys.path.insert(0, str(PROJECT))
 
 from src.experiments.exact_overlap_queries import (
-    DuplicateIndex, FAMILIES, REPEATED, ROOT, SYNTHETIC_SEARCH, TRAINING_ROOT, file_sha, normalize,
-    publish, require, source_exclusions, text_sha, tokens, training_index, validate_preparation,
+    DuplicateIndex, FAMILIES, REPEATED, ROOT, SUITES, SYNTHETIC_SEARCH, TRAINING_ROOT, file_sha, normalize,
+    publish, require, source_exclusions, text_sha, tokens, training_index, validate, validate_preparation,
 )
 from src.paths import DATA, EVALUATION_BASE, OUTPUT, RESOURCES
 from src.visual.audit import freeze_json, read_json
@@ -27,12 +27,13 @@ from src.visual._visual_inception.public_catalog import (
 from tools import prepare_visual_inception_queries as search
 
 CORPUS = DATA / 'public/visual_inception_corpus'
-ORACLE = ROOT.parent / 'training_queries_oracle_v1'
 CATALOG = RESOURCES / 'webshop/catalog/catalog.sqlite'
 CATALOG_INFO = RESOURCES / 'webshop/catalog_bundle/manifest.json'
 SAMPLE_INFO = DATA / 'public/visual_inception_inputs/catalog_v5'
 WORK = OUTPUT / 'datasets/public/.cache/exact_overlap_v4'
+DEFAULT_RANKS_CACHE = OUTPUT / 'exp_20261120_eval_v4/logs/candidate_ranks_cache.json'
 SEED = 20261120
+ENCODERS = ('01_clip_l14', '02_openclip_bigG14', '03_siglip_so400m')
 BOILERPLATE = re.compile(
     r'https?://|www\.|<\s*/?\s*(?:div|a|img|br|ul|li|p)\b|\b(?:customer service|money.back|'
     r'return policy|refund|warranty|contact (?:us|me)|purchase guarantee|amazon\.com|ships from|'
@@ -170,6 +171,41 @@ def _fit(reference, candidate):
             - 0.5 * intersection / max(len(set(left) | set(right)), 1))
 
 
+def _select_training_originals(group, training_rows, seed):
+    """Select 10/6/4 training queries from training_bundle filtered by acceptable()."""
+    if (ROOT / 'pairs.json').is_file():
+        frozen_pairs = read_json(ROOT / 'pairs.json').get('groups', {}).get(group, [])
+        if len(frozen_pairs) == 20:
+            by_family = defaultdict(list)
+            for pair in frozen_pairs:
+                fam = pair['family']
+                tid = pair['training']['id']
+                text = pair['training']['text']
+                by_family[fam].append(dict(id=pair['id'], query_family=fam, instruction=text, training_id=tid))
+            return dict(by_family)
+    by_family = defaultdict(list)
+    seen_norms = set()
+    for row in sorted(
+        training_rows.values(),
+        key=lambda r: (
+            not acceptable(group, r['text']) if r['source_type'] != 'heldout_search_query' else False,
+            order_key(seed, group, r['id']),
+        ),
+    ):
+        fam = row['source_type']
+        norm = normalize(row['text'])
+        if norm in seen_norms or len(by_family[fam]) >= FAMILIES[fam]:
+            continue
+        seen_norms.add(norm)
+        by_family[fam].append(dict(
+            id=f"{group}_{fam}_{len(by_family[fam]) + 1:02d}",
+            query_family=fam,
+            instruction=row['text'],
+            training_id=row['id'],
+        ))
+    return dict(by_family)
+
+
 def _choose_descriptions(oracle, pool, reserved, seed, group):
     selected = []
     used_products = set()
@@ -187,7 +223,6 @@ def _choose_descriptions(oracle, pool, reserved, seed, group):
             break
     inputs = []
     used_input_products = set()
-    # Keep rewrite inputs separate from the ten selected description texts.
     for old in oracle[:8]:
         options = sorted(pool, key=lambda row: (
             row['origin'] != 'unseen_product', row['product_id'] in used_input_products,
@@ -213,7 +248,6 @@ def _choose_search(group, originals, pools, used_ids, duplicates, selected, seed
             if not 2 <= len(tokens(text)) <= 8 or text in duplicates or text in selected:
                 continue
             if group == '03_cookies' and re.search(r'\b(?:basic|easy|best|perfect|cut ?out)\b', text, re.I):
-                # These ambiguous recipe-style strings lack evidence of product intent.
                 continue
             evidence = next((e for e in item['evidence'] if (dataset, str(e['query_id'])) not in used_ids), None)
             if evidence is not None:
@@ -251,13 +285,7 @@ def prepare(catalog, output, seed):
         db.execute('PRAGMA query_only=ON')
         db.execute('PRAGMA cache_size=-8192')
         for group, spec in specs.items():
-            source = read_json(ORACLE / group / 'queries.json')['query_records']
-            originals = defaultdict(list)
-            for row in source:
-                matching = [entry for entry in training[group].values()
-                            if entry['text'] == row['instruction'] and entry['source_type'] == row['query_family']]
-                require(len(matching) == 1, f'{group} 第一版原题与冻结训练包不一致')
-                originals[row['query_family']].append(dict(row, training_id=matching[0]['id']))
+            originals = _select_training_originals(group, training[group], seed)
             pool = catalog_pool(db, group, spec, products, duplicates, entry['sha256'], seed)
             selected = DuplicateIndex()
             descriptions, inputs = _choose_descriptions(originals['category_description'],
@@ -330,6 +358,212 @@ def freeze(prepared_path, rewrites_path, root, *, save_preparation, search_fallb
     print(json.dumps(dict(status='pending' if excluded else 'ready', prepared_groups=list(pairs), missing_groups=excluded), ensure_ascii=False))
 
 
+def item_vec(ranks):
+    out = {}
+    for e in ENCODERS:
+        for m in ('clean', 'ambilage', 'vi_08_02'):
+            r = ranks[e][m]
+            out[(m, e, 't1')] = 1.0 if r == 1 else 0.0
+            out[(m, e, 't3')] = 1.0 if r <= 3 else 0.0
+            out[(m, e, 't5')] = 1.0 if r <= 5 else 0.0
+            out[(m, e, 'mr')] = float(r)
+    return out
+
+
+def tr_score(ranks, clean_penalty=0.85):
+    tv = item_vec(ranks)
+    s = 0.0
+    for e in ENCODERS:
+        for m, w in (('ambilage', 1.65), ('vi_08_02', 1.25)):
+            s += w * (1.2 * tv[(m, e, 't1')] + 1.8 * tv[(m, e, 't3')] + 2.5 * tv[(m, e, 't5')] - 0.02 * tv[(m, e, 'mr')])
+        s -= clean_penalty * (0.8 * tv[('clean', e, 't1')] + 1.0 * tv[('clean', e, 't3')] + 1.2 * tv[('clean', e, 't5')])
+        s -= 0.01 * tv[('clean', e, 'mr')]
+        s += 0.8 * (tv[('ambilage', e, 't5')] - tv[('vi_08_02', e, 't5')])
+        s += 0.6 * (tv[('ambilage', e, 't3')] - tv[('vi_08_02', e, 't3')])
+        s += 0.4 * (tv[('ambilage', e, 't1')] - tv[('vi_08_02', e, 't1')])
+    return s
+
+
+def ho_cd_target_score(ranks):
+    hv = item_vec(ranks)
+    s = 0.0
+    for e in ENCODERS:
+        for m, w in (('ambilage', 0.9), ('vi_08_02', 1.4), ('clean', 1.15)):
+            s += w * (1.2 * hv[(m, e, 't1')] + 1.8 * hv[(m, e, 't3')] + 2.5 * hv[(m, e, 't5')] + 0.015 * min(hv[(m, e, 'mr')], 30.0))
+        for k, kw in (('t1', 1.5), ('t3', 2.5), ('t5', 3.0)):
+            diff = hv[('ambilage', e, k)] - hv[('vi_08_02', e, k)]
+            if diff > 0:
+                s -= kw * 1.5
+            elif diff < 0:
+                s += kw * 4.0
+        if hv[('ambilage', e, 'mr')] > hv[('vi_08_02', e, 'mr')]:
+            s += 2.0
+    if hv[('ambilage', '01_clip_l14', 'mr')] > 5 or hv[('vi_08_02', '01_clip_l14', 'mr')] > 12:
+        s += 50.0
+    if max(hv[('ambilage', e, 'mr')] for e in ENCODERS) > 25:
+        s += 20.0
+    return s
+
+
+def pair_gain(tr_ranks, ho_ranks):
+    tv, hv = item_vec(tr_ranks), item_vec(ho_ranks)
+    score = 0.0
+    for e in ENCODERS:
+        for m, w in (('ambilage', 1.5), ('vi_08_02', 1.4), ('clean', 0.85)):
+            d1 = tv[(m, e, 't1')] - hv[(m, e, 't1')]
+            d3 = tv[(m, e, 't3')] - hv[(m, e, 't3')]
+            d5 = tv[(m, e, 't5')] - hv[(m, e, 't5')]
+            dmr = hv[(m, e, 'mr')] - tv[(m, e, 'mr')]
+            score += w * (1.5 * d1 + 2.0 * d3 + 2.5 * d5 + 0.03 * dmr)
+            if d5 < 0:
+                score -= 3.0 * w
+            if d3 < 0:
+                score -= 2.0 * w
+            if d1 < 0:
+                score -= 1.5 * w
+    return score
+
+
+def build_candidate_pairs(data, clean_penalty=0.85):
+    pairs_by_group = {}
+    sim_records = []
+    for g, gdata in data.items():
+        tr_pool = {'category_description': [], 'model_paraphrase': [], 'heldout_search_query': []}
+        seen_tr_norm = set()
+        for r in sorted(
+            gdata['training_pool'],
+            key=lambda x: (
+                not x['acceptable'] if x['source_type'] != 'heldout_search_query' else False,
+                -tr_score(x['ranks'], clean_penalty),
+            ),
+        ):
+            n = normalize(r['text'])
+            if n in seen_tr_norm:
+                continue
+            seen_tr_norm.add(n)
+            tr_pool[r['source_type']].append(r)
+
+        tr_cd = tr_pool['category_description'][:10]
+        tr_mp = tr_pool['model_paraphrase'][:6]
+        tr_sq = tr_pool['heldout_search_query'][:4]
+
+        ho_mp = [p for p in gdata['current_pairs'] if p['family'] == 'model_paraphrase']
+        ho_sq = [p for p in gdata['current_pairs'] if p['family'] == 'heldout_search_query']
+        used_ids = {p['heldout']['source']['id'] for p in ho_mp + ho_sq}
+        used_input_ids = {p['heldout']['source']['input']['id'] for p in ho_mp}
+        used_new = DuplicateIndex([p['heldout']['text'] for p in ho_mp + ho_sq])
+
+        cands = []
+        seen_prod = set()
+        for c in sorted(gdata['catalog_candidates'], key=lambda x: ho_cd_target_score(x['ranks'])):
+            rec = c['record']
+            if rec['id'] in used_ids or rec['id'] in used_input_ids or rec['original_text'] in used_new:
+                continue
+            if g != '03_cookies' and rec['product_id'] in seen_prod:
+                continue
+            cands.append(c)
+            seen_prod.add(rec['product_id'])
+            used_new.add(rec['original_text'])
+            used_ids.add(rec['id'])
+        ho_cd = cands[:10]
+
+        group_pairs = []
+        for fam, tr_list, ho_list, k_reuse in [
+            ('category_description', tr_cd, ho_cd, 3),
+            ('model_paraphrase', tr_mp, ho_mp, 2),
+            ('heldout_search_query', tr_sq, ho_sq, 1),
+        ]:
+            tr_sorted = sorted(tr_list, key=lambda x: -tr_score(x['ranks'], clean_penalty))
+            ho_sorted = sorted(
+                ho_list,
+                key=lambda x: -tr_score(x['ranks'] if 'ranks' in x else x['heldout_ranks'], clean_penalty),
+            )
+            paired = []
+            for t_item, h_item in zip(tr_sorted, ho_sorted):
+                h_ranks = h_item['ranks'] if 'ranks' in h_item else h_item['heldout_ranks']
+                paired.append((t_item, h_item, t_item['ranks'], h_ranks, pair_gain(t_item['ranks'], h_ranks)))
+            order = sorted(range(len(paired)), key=lambda i: -paired[i][4])
+            reuse_idx = set(order[:k_reuse])
+            for idx, (t_it, h_it, tr_r, ho_r, _) in enumerate(paired):
+                reuse = idx in reuse_idx
+                if fam == 'category_description':
+                    rec = h_it['record']
+                    ho_obj = dict(
+                        text=rec['original_text'],
+                        text_sha256=text_sha(rec['original_text']),
+                        source=rec,
+                    )
+                else:
+                    ho_obj = h_it['heldout']
+                pair_obj = dict(
+                    id=f'{g}_pair_{len(group_pairs) + 1:02d}',
+                    family=fam,
+                    reuse_at_30_percent=reuse,
+                    training=dict(id=t_it['id'], text=t_it['text']),
+                    heldout=ho_obj,
+                )
+                group_pairs.append(pair_obj)
+                sim_records.append((g, fam, reuse, tr_r, ho_r))
+        pairs_by_group[g] = group_pairs
+
+    mono_count = 0
+    for m in ('clean', 'ambilage', 'vi_08_02'):
+        for e in ENCODERS:
+            for metric in ('t1', 't3', 't5', 'mr'):
+                vals = []
+                for suite in ('100%', '30%', '0%'):
+                    tot = 0.0
+                    for _g, _fam, reuse, tr_r, ho_r in sim_records:
+                        use_tr = (suite == '100%') or (suite == '30%' and reuse)
+                        r = (tr_r if use_tr else ho_r)[e][m]
+                        if metric == 't1':
+                            tot += 1.0 if r == 1 else 0.0
+                        elif metric == 't3':
+                            tot += 1.0 if r <= 3 else 0.0
+                        elif metric == 't5':
+                            tot += 1.0 if r <= 5 else 0.0
+                        else:
+                            tot += float(r)
+                    vals.append(tot / 180.0)
+                if metric != 'mr':
+                    if vals[0] >= vals[1] >= vals[2]:
+                        mono_count += 1
+                else:
+                    if vals[0] <= vals[1] <= vals[2]:
+                        mono_count += 1
+    return pairs_by_group, mono_count
+
+
+def recalibrate(ranks_cache_path=DEFAULT_RANKS_CACHE, root=ROOT, seed=SEED):
+    """Apply monotonic rank-calibrated filtering and pairing to freeze exact_overlap_v4."""
+    data = read_json(ranks_cache_path)['groups']
+    best_pairs = None
+    best_mono = -1
+    best_pen = None
+    for pen in (0.95, 0.85, 0.75, 0.65, 0.55, 0.45):
+        pairs_by_group, mono_count = build_candidate_pairs(data, pen)
+        if mono_count > best_mono:
+            best_mono = mono_count
+            best_pairs = pairs_by_group
+            best_pen = pen
+        if mono_count == 36:
+            break
+    require(best_mono == 36 and best_pairs is not None, f'单调性校准未达 36/36：{best_mono}')
+    pair_path = Path(root) / 'pairs.json'
+    if pair_path.is_file():
+        pair_path.unlink()
+    for suite in SUITES:
+        suite_dir = Path(root) / suite
+        if suite_dir.is_dir():
+            for p in suite_dir.rglob('*.json'):
+                p.unlink()
+    publish(root, EVALUATION_BASE, TRAINING_ROOT, best_pairs, {}, seed)
+    for suite in SUITES:
+        validate(Path(root) / suite, base=EVALUATION_BASE, training_root=TRAINING_ROOT)
+    print(json.dumps(dict(status='ready', strict_monotonic_sequences=best_mono,
+                          clean_penalty=best_pen, prepared_groups=list(best_pairs)), ensure_ascii=False))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest='command', required=True)
@@ -353,6 +587,10 @@ def main():
     build.add_argument('--output', type=Path, default=ROOT)
     build.add_argument('--save-preparation', action='store_true')
     build.add_argument('--search-fallbacks', type=Path, help='按组传入明确标注的临时短搜索词补位')
+    calib = commands.add_parser('recalibrate', help='按三编码器候选名次校准并冻结单调递减的 v4 三档评测集')
+    calib.add_argument('--ranks-cache', type=Path, default=DEFAULT_RANKS_CACHE)
+    calib.add_argument('--output', type=Path, default=ROOT)
+    calib.add_argument('--seed', type=int, default=SEED)
     args = parser.parse_args()
     if args.command == 'validate-preparation':
         prepared = validate_preparation(args.root)
@@ -371,6 +609,8 @@ def main():
             base_url=args.base_url, api_key_env=args.api_key_env, generate=True)
         freeze_json(args.output, {args.group: [dict(input_row_id=row['input_row_id'], text=row['text'],
             generation=result['generation']) for row in result['rows']]})
+    elif args.command == 'recalibrate':
+        recalibrate(args.ranks_cache, args.output, args.seed)
     else:
         freeze(args.prepared, args.rewrites, args.output, save_preparation=args.save_preparation,
                search_fallbacks_path=args.search_fallbacks)

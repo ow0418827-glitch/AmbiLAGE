@@ -17,11 +17,9 @@ def sha256_file(path: str | Path | None) -> str | None:
     p = Path(path)
     if not p.is_file():
         return None
-    hasher = hashlib.sha256()
-    with p.open("rb") as stream:
-        for block in iter(lambda: stream.read(65536), b""):
-            hasher.update(block)
-    return hasher.hexdigest()
+    from src.visual.io import sha256_file as _io_sha256_file
+
+    return _io_sha256_file(p, chunk_size=65536)
 
 
 def write_json(path: str | Path, data: Any) -> None:

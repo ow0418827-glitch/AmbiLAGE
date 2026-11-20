@@ -1,0 +1,8 @@
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+[VERIFY 01_clip_l14] prewarmed 207 unique images (batch=16), 360 unique texts (text_batch=64)
+[VERIFIED] ambilage_training_oracle_v3/01_clip_l14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] vi_08_02_training_oracle_v3/01_clip_l14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] ambilage_overlap_30_v3/01_clip_l14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] vi_08_02_overlap_30_v3/01_clip_l14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] ambilage_zero_overlap_v3/01_clip_l14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] vi_08_02_zero_overlap_v3/01_clip_l14: rankings=360 scores=68040 max_error=0.00e+00

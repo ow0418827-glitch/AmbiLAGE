@@ -1,0 +1,616 @@
+[
+  {
+    "condition": {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    },
+    "bank": "clean",
+    "bank_path": "/content/AmbiLAGE/output/exp_20261120_speedup_verify/plan_b_all6_inproc/ambilage_training_oracle_v3/03_siglip_so400m/shared_banks/banks/none/clean.json",
+    "bank_sha256": "bd76fcd4057fd63fa38e7ac2c2cad26b515baf5beee5f2a43d0f300825953145",
+    "queries": [
+      {
+        "task_id": "feature_01",
+        "rank": 3,
+        "score": 0.06032709777355194
+      },
+      {
+        "task_id": "feature_02",
+        "rank": 5,
+        "score": 0.09380649030208588
+      },
+      {
+        "task_id": "feature_03",
+        "rank": 5,
+        "score": 0.0656205490231514
+      },
+      {
+        "task_id": "feature_04",
+        "rank": 7,
+        "score": 0.08601254969835281
+      },
+      {
+        "task_id": "feature_05",
+        "rank": 7,
+        "score": 0.09932833164930344
+      },
+      {
+        "task_id": "feature_06",
+        "rank": 4,
+        "score": 0.08545131236314774
+      },
+      {
+        "task_id": "feature_07",
+        "rank": 3,
+        "score": 0.11076681315898895
+      },
+      {
+        "task_id": "feature_08",
+        "rank": 8,
+        "score": 0.05927211046218872
+      },
+      {
+        "task_id": "feature_09",
+        "rank": 6,
+        "score": 0.07007258385419846
+      },
+      {
+        "task_id": "feature_10",
+        "rank": 1,
+        "score": 0.0930318683385849
+      },
+      {
+        "task_id": "feature_11",
+        "rank": 4,
+        "score": 0.09894590824842453
+      },
+      {
+        "task_id": "feature_12",
+        "rank": 4,
+        "score": 0.11962641775608063
+      },
+      {
+        "task_id": "feature_13",
+        "rank": 2,
+        "score": 0.09809256345033646
+      },
+      {
+        "task_id": "feature_14",
+        "rank": 8,
+        "score": 0.07048636674880981
+      },
+      {
+        "task_id": "feature_15",
+        "rank": 5,
+        "score": 0.07916389405727386
+      },
+      {
+        "task_id": "feature_16",
+        "rank": 6,
+        "score": 0.10527798533439636
+      },
+      {
+        "task_id": "feature_17",
+        "rank": 4,
+        "score": 0.11699646711349487
+      },
+      {
+        "task_id": "feature_18",
+        "rank": 6,
+        "score": 0.08684411644935608
+      },
+      {
+        "task_id": "feature_19",
+        "rank": 9,
+        "score": 0.08642924576997757
+      },
+      {
+        "task_id": "feature_20",
+        "rank": 1,
+        "score": 0.14199858903884888
+      }
+    ],
+    "top3": 5,
+    "top5": 12,
+    "query_count": 20,
+    "score_archive_index": 0,
+    "retrieval_protocol": {
+      "encoder": {
+        "provider": "clip",
+        "loader": "standalone_eval_clip",
+        "role": "evaluation_only_encoder",
+        "decoupled_from_training_surrogate": true,
+        "uses_forward_intermediates": false,
+        "batch_size": 16,
+        "name": "ViT-SO400M-14-SigLIP-384",
+        "pretrained": "webli",
+        "hf_repo": "timm/ViT-SO400M-14-SigLIP-384",
+        "tokenizer_path": "/content/AmbiLAGE/models/siglip_so400m",
+        "weight_path": "/content/AmbiLAGE/models/siglip_so400m/open_clip_model.safetensors",
+        "weight_sha256": "97faeafa0576c1ba4c92bae739ca06ef5f5d0c2db92f86a6086653d82a262043",
+        "weight_revision": null,
+        "device": "cuda",
+        "precision": "float32",
+        "image_size": 384,
+        "preprocess": {
+          "resize": "bicubic_direct_square",
+          "align_corners": false,
+          "antialias": true,
+          "mean": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "std": [
+            0.5,
+            0.5,
+            0.5
+          ]
+        },
+        "open_clip_torch_version": "3.3.0",
+        "loading": {
+          "architecture": {
+            "embed_dim": 1152,
+            "init_logit_bias": -10,
+            "custom_text": true,
+            "vision_cfg": {
+              "image_size": 384,
+              "timm_model_name": "vit_so400m_patch14_siglip_384",
+              "timm_model_pretrained": false,
+              "timm_pool": "map",
+              "timm_proj": "none"
+            },
+            "text_cfg": {
+              "context_length": 64,
+              "vocab_size": 32000,
+              "hf_tokenizer_name": "timm/ViT-B-16-SigLIP",
+              "tokenizer_kwargs": {
+                "clean": "canonicalize"
+              },
+              "width": 1152,
+              "heads": 16,
+              "layers": 27,
+              "mlp_ratio": 3.7362,
+              "no_causal_mask": true,
+              "proj_bias": true,
+              "pool_type": "last",
+              "norm_kwargs": {
+                "eps": 1e-06
+              }
+            }
+          },
+          "quick_gelu": false,
+          "activation": "native",
+          "mean": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "std": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "metadata_source": "registered_pretrained_tag",
+          "registered_preprocess": {
+            "interpolation": "bicubic",
+            "resize_mode": "squash"
+          },
+          "strict_state_dict": true,
+          "actual_activation_modules": {
+            "QuickGELU": 0,
+            "GELU": 55
+          },
+          "loader_version": 3,
+          "loader_sha256": "562966bba1620c5b352d9f092bee56ce10fce48afa68cb91575094bd7ad47731"
+        },
+        "tokenizer_audit": {
+          "type": "HFTokenizer",
+          "special_tokens": {
+            "sot_token_id": null,
+            "eot_token_id": null,
+            "pad_token_id": null,
+            "context_length": 64
+          },
+          "content_sha256": "e71db1ac6bdfbb30baf3dbc203876d7a650afc0f864a4125c14b2929625025ca"
+        },
+        "fusion": "equal_unit_image_plus_unit_full_text",
+        "weighted_fusion": {
+          "algorithm": "unit_alpha_image_plus_one_minus_alpha_full_text_v1",
+          "default_image_weight": 0.5,
+          "equal_weight_path": "exact_legacy_image_plus_text",
+          "empty_text": "image_only_except_text_only_weight_rejected"
+        },
+        "text_policy": {
+          "algorithm": "contiguous_nonoverlapping_raw_token_chunks_v1",
+          "context_length": 64,
+          "payload_tokens_per_chunk": 63,
+          "special_tokens_per_chunk": 1,
+          "coverage": "all_token_ids_no_truncation",
+          "aggregation": "unit_token_count_weighted_mean_then_unit",
+          "tokenizer": "HFTokenizer"
+        },
+        "evaluation_protocol": {
+          "setting": "held_out_public_encoder",
+          "matches_training_surrogate": false,
+          "matching_training_surrogate_indices": [],
+          "black_box_transfer_claimed": true,
+          "tf32_enabled": false,
+          "precision": "float32",
+          "training_identity_scope": "actual_frozen_surrogates",
+          "training_surrogates_sha256": "17b7fc56d67ec8054603435c18d4b1d2e9632bb167f37953a014b6a3d118feae"
+        }
+      },
+      "key_mode": "image",
+      "query_mode": "text",
+      "index_text": "product_feature",
+      "index_text_policy": {
+        "version": 2,
+        "fields": [
+          "PrimaryImage.Title",
+          "Brand",
+          "Attributes",
+          "FeatureText"
+        ],
+        "coverage": "purchased_product_title_brand_and_features_only",
+        "purchase_binding": "primary_asin_must_match_final_asin",
+        "excluded": [
+          "Instruction",
+          "OriginalInstruction",
+          "Actions",
+          "FinalASIN",
+          "FinalOptions",
+          "FinalPrice",
+          "PolicyTrace",
+          "Reward",
+          "attack_metadata"
+        ]
+      },
+      "key_image_weight": 1.0,
+      "query_image_weight": 0.0,
+      "image_decoder": {
+        "schema_version": 1,
+        "scope": "local_encoder_process",
+        "library": "Pillow",
+        "verified": true,
+        "pillow_version": "12.3.0",
+        "jpeg_version": "6.2",
+        "libjpeg_turbo_enabled": true,
+        "libjpeg_turbo_version": "3.1.4.1"
+      },
+      "encoding_runtime": {
+        "torch": "2.14.1+cu126",
+        "numpy": "2.4.6",
+        "machine": "x86_64"
+      },
+      "cache_schema": 4,
+      "bank_sha256": "bd76fcd4057fd63fa38e7ac2c2cad26b515baf5beee5f2a43d0f300825953145",
+      "model_sha256": "92756acee79ec5ca52323d4d89e8564197094f4d6cf683f4ae3962b8f71c4d26",
+      "entries_sha256": "0c62e7e9f6e228c1d6d1380934a34c272602790e0626ffc5e71440fe10d542f5",
+      "query_encoding_audit": {
+        "text_sha256": "ee6ce6f85f97866470f6afb9598913b7eaf3a284b4bdf8a7bd327d162379a79b",
+        "input_tokens": 5,
+        "encoded_tokens": 5,
+        "chunks": 1,
+        "payload_tokens_per_chunk": 63,
+        "chunk_token_counts": [
+          5
+        ],
+        "truncated": false
+      },
+      "memory_vector_reuse": {
+        "hits": 0,
+        "misses": 189,
+        "writes": 189,
+        "rejected": 0
+      }
+    }
+  },
+  {
+    "condition": {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    },
+    "bank": "modified",
+    "bank_path": "/content/AmbiLAGE/output/exp_20261120_speedup_verify/plan_b_all6_inproc/ambilage_training_oracle_v3/03_siglip_so400m/shared_banks/banks/none/modified.json",
+    "bank_sha256": "d0301dc3c0250d1dc9bdb53a44b07c56bb0c126afee20fbcf555776839086e94",
+    "queries": [
+      {
+        "task_id": "feature_01",
+        "rank": 4,
+        "score": 0.05220212787389755
+      },
+      {
+        "task_id": "feature_02",
+        "rank": 4,
+        "score": 0.10158558934926987
+      },
+      {
+        "task_id": "feature_03",
+        "rank": 6,
+        "score": 0.056799277663230896
+      },
+      {
+        "task_id": "feature_04",
+        "rank": 7,
+        "score": 0.08518490195274353
+      },
+      {
+        "task_id": "feature_05",
+        "rank": 5,
+        "score": 0.10616949200630188
+      },
+      {
+        "task_id": "feature_06",
+        "rank": 4,
+        "score": 0.08755183964967728
+      },
+      {
+        "task_id": "feature_07",
+        "rank": 3,
+        "score": 0.1104697436094284
+      },
+      {
+        "task_id": "feature_08",
+        "rank": 8,
+        "score": 0.055453136563301086
+      },
+      {
+        "task_id": "feature_09",
+        "rank": 7,
+        "score": 0.06799037754535675
+      },
+      {
+        "task_id": "feature_10",
+        "rank": 3,
+        "score": 0.08696581423282623
+      },
+      {
+        "task_id": "feature_11",
+        "rank": 4,
+        "score": 0.10477800667285919
+      },
+      {
+        "task_id": "feature_12",
+        "rank": 3,
+        "score": 0.12535032629966736
+      },
+      {
+        "task_id": "feature_13",
+        "rank": 2,
+        "score": 0.09509405493736267
+      },
+      {
+        "task_id": "feature_14",
+        "rank": 5,
+        "score": 0.07915134727954865
+      },
+      {
+        "task_id": "feature_15",
+        "rank": 5,
+        "score": 0.09203851222991943
+      },
+      {
+        "task_id": "feature_16",
+        "rank": 5,
+        "score": 0.1090027242898941
+      },
+      {
+        "task_id": "feature_17",
+        "rank": 3,
+        "score": 0.11919860541820526
+      },
+      {
+        "task_id": "feature_18",
+        "rank": 3,
+        "score": 0.09834090620279312
+      },
+      {
+        "task_id": "feature_19",
+        "rank": 9,
+        "score": 0.08810651302337646
+      },
+      {
+        "task_id": "feature_20",
+        "rank": 1,
+        "score": 0.13989591598510742
+      }
+    ],
+    "top3": 7,
+    "top5": 15,
+    "query_count": 20,
+    "score_archive_index": 1,
+    "retrieval_protocol": {
+      "encoder": {
+        "provider": "clip",
+        "loader": "standalone_eval_clip",
+        "role": "evaluation_only_encoder",
+        "decoupled_from_training_surrogate": true,
+        "uses_forward_intermediates": false,
+        "batch_size": 16,
+        "name": "ViT-SO400M-14-SigLIP-384",
+        "pretrained": "webli",
+        "hf_repo": "timm/ViT-SO400M-14-SigLIP-384",
+        "tokenizer_path": "/content/AmbiLAGE/models/siglip_so400m",
+        "weight_path": "/content/AmbiLAGE/models/siglip_so400m/open_clip_model.safetensors",
+        "weight_sha256": "97faeafa0576c1ba4c92bae739ca06ef5f5d0c2db92f86a6086653d82a262043",
+        "weight_revision": null,
+        "device": "cuda",
+        "precision": "float32",
+        "image_size": 384,
+        "preprocess": {
+          "resize": "bicubic_direct_square",
+          "align_corners": false,
+          "antialias": true,
+          "mean": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "std": [
+            0.5,
+            0.5,
+            0.5
+          ]
+        },
+        "open_clip_torch_version": "3.3.0",
+        "loading": {
+          "architecture": {
+            "embed_dim": 1152,
+            "init_logit_bias": -10,
+            "custom_text": true,
+            "vision_cfg": {
+              "image_size": 384,
+              "timm_model_name": "vit_so400m_patch14_siglip_384",
+              "timm_model_pretrained": false,
+              "timm_pool": "map",
+              "timm_proj": "none"
+            },
+            "text_cfg": {
+              "context_length": 64,
+              "vocab_size": 32000,
+              "hf_tokenizer_name": "timm/ViT-B-16-SigLIP",
+              "tokenizer_kwargs": {
+                "clean": "canonicalize"
+              },
+              "width": 1152,
+              "heads": 16,
+              "layers": 27,
+              "mlp_ratio": 3.7362,
+              "no_causal_mask": true,
+              "proj_bias": true,
+              "pool_type": "last",
+              "norm_kwargs": {
+                "eps": 1e-06
+              }
+            }
+          },
+          "quick_gelu": false,
+          "activation": "native",
+          "mean": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "std": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "metadata_source": "registered_pretrained_tag",
+          "registered_preprocess": {
+            "interpolation": "bicubic",
+            "resize_mode": "squash"
+          },
+          "strict_state_dict": true,
+          "actual_activation_modules": {
+            "QuickGELU": 0,
+            "GELU": 55
+          },
+          "loader_version": 3,
+          "loader_sha256": "562966bba1620c5b352d9f092bee56ce10fce48afa68cb91575094bd7ad47731"
+        },
+        "tokenizer_audit": {
+          "type": "HFTokenizer",
+          "special_tokens": {
+            "sot_token_id": null,
+            "eot_token_id": null,
+            "pad_token_id": null,
+            "context_length": 64
+          },
+          "content_sha256": "e71db1ac6bdfbb30baf3dbc203876d7a650afc0f864a4125c14b2929625025ca"
+        },
+        "fusion": "equal_unit_image_plus_unit_full_text",
+        "weighted_fusion": {
+          "algorithm": "unit_alpha_image_plus_one_minus_alpha_full_text_v1",
+          "default_image_weight": 0.5,
+          "equal_weight_path": "exact_legacy_image_plus_text",
+          "empty_text": "image_only_except_text_only_weight_rejected"
+        },
+        "text_policy": {
+          "algorithm": "contiguous_nonoverlapping_raw_token_chunks_v1",
+          "context_length": 64,
+          "payload_tokens_per_chunk": 63,
+          "special_tokens_per_chunk": 1,
+          "coverage": "all_token_ids_no_truncation",
+          "aggregation": "unit_token_count_weighted_mean_then_unit",
+          "tokenizer": "HFTokenizer"
+        },
+        "evaluation_protocol": {
+          "setting": "held_out_public_encoder",
+          "matches_training_surrogate": false,
+          "matching_training_surrogate_indices": [],
+          "black_box_transfer_claimed": true,
+          "tf32_enabled": false,
+          "precision": "float32",
+          "training_identity_scope": "actual_frozen_surrogates",
+          "training_surrogates_sha256": "17b7fc56d67ec8054603435c18d4b1d2e9632bb167f37953a014b6a3d118feae"
+        }
+      },
+      "key_mode": "image",
+      "query_mode": "text",
+      "index_text": "product_feature",
+      "index_text_policy": {
+        "version": 2,
+        "fields": [
+          "PrimaryImage.Title",
+          "Brand",
+          "Attributes",
+          "FeatureText"
+        ],
+        "coverage": "purchased_product_title_brand_and_features_only",
+        "purchase_binding": "primary_asin_must_match_final_asin",
+        "excluded": [
+          "Instruction",
+          "OriginalInstruction",
+          "Actions",
+          "FinalASIN",
+          "FinalOptions",
+          "FinalPrice",
+          "PolicyTrace",
+          "Reward",
+          "attack_metadata"
+        ]
+      },
+      "key_image_weight": 1.0,
+      "query_image_weight": 0.0,
+      "image_decoder": {
+        "schema_version": 1,
+        "scope": "local_encoder_process",
+        "library": "Pillow",
+        "verified": true,
+        "pillow_version": "12.3.0",
+        "jpeg_version": "6.2",
+        "libjpeg_turbo_enabled": true,
+        "libjpeg_turbo_version": "3.1.4.1"
+      },
+      "encoding_runtime": {
+        "torch": "2.14.1+cu126",
+        "numpy": "2.4.6",
+        "machine": "x86_64"
+      },
+      "cache_schema": 4,
+      "bank_sha256": "d0301dc3c0250d1dc9bdb53a44b07c56bb0c126afee20fbcf555776839086e94",
+      "model_sha256": "92756acee79ec5ca52323d4d89e8564197094f4d6cf683f4ae3962b8f71c4d26",
+      "entries_sha256": "c903a9a2b5fb05fd04186cafe4bf179bb539e496a004c4ae87060bc0b9a9aa3f",
+      "query_encoding_audit": {
+        "text_sha256": "ee6ce6f85f97866470f6afb9598913b7eaf3a284b4bdf8a7bd327d162379a79b",
+        "input_tokens": 5,
+        "encoded_tokens": 5,
+        "chunks": 1,
+        "payload_tokens_per_chunk": 63,
+        "chunk_token_counts": [
+          5
+        ],
+        "truncated": false
+      },
+      "memory_vector_reuse": {
+        "hits": 180,
+        "misses": 9,
+        "writes": 9,
+        "rejected": 0
+      }
+    }
+  }
+]

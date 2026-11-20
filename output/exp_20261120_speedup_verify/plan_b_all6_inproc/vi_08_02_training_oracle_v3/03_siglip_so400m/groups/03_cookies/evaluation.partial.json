@@ -1,0 +1,616 @@
+[
+  {
+    "condition": {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    },
+    "bank": "clean",
+    "bank_path": "/content/AmbiLAGE/output/exp_20261120_speedup_verify/plan_b_all6_inproc/vi_08_02_training_oracle_v3/03_siglip_so400m/shared_banks/banks/none/clean.json",
+    "bank_sha256": "bd76fcd4057fd63fa38e7ac2c2cad26b515baf5beee5f2a43d0f300825953145",
+    "queries": [
+      {
+        "task_id": "feature_01",
+        "rank": 1,
+        "score": 0.18439990282058716
+      },
+      {
+        "task_id": "feature_02",
+        "rank": 1,
+        "score": 0.1277378350496292
+      },
+      {
+        "task_id": "feature_03",
+        "rank": 2,
+        "score": 0.07783764600753784
+      },
+      {
+        "task_id": "feature_04",
+        "rank": 1,
+        "score": 0.14510734379291534
+      },
+      {
+        "task_id": "feature_05",
+        "rank": 1,
+        "score": 0.11235842108726501
+      },
+      {
+        "task_id": "feature_06",
+        "rank": 1,
+        "score": 0.12132631242275238
+      },
+      {
+        "task_id": "feature_07",
+        "rank": 3,
+        "score": 0.051257889717817307
+      },
+      {
+        "task_id": "feature_08",
+        "rank": 3,
+        "score": 0.11763645708560944
+      },
+      {
+        "task_id": "feature_09",
+        "rank": 2,
+        "score": 0.0992174819111824
+      },
+      {
+        "task_id": "feature_10",
+        "rank": 1,
+        "score": 0.13613682985305786
+      },
+      {
+        "task_id": "feature_11",
+        "rank": 1,
+        "score": 0.13210321962833405
+      },
+      {
+        "task_id": "feature_12",
+        "rank": 2,
+        "score": 0.11298917979001999
+      },
+      {
+        "task_id": "feature_13",
+        "rank": 1,
+        "score": 0.13832159340381622
+      },
+      {
+        "task_id": "feature_14",
+        "rank": 1,
+        "score": 0.1854831427335739
+      },
+      {
+        "task_id": "feature_15",
+        "rank": 1,
+        "score": 0.09105601906776428
+      },
+      {
+        "task_id": "feature_16",
+        "rank": 1,
+        "score": 0.13485342264175415
+      },
+      {
+        "task_id": "feature_17",
+        "rank": 1,
+        "score": 0.12310713529586792
+      },
+      {
+        "task_id": "feature_18",
+        "rank": 1,
+        "score": 0.14027249813079834
+      },
+      {
+        "task_id": "feature_19",
+        "rank": 1,
+        "score": 0.12359260022640228
+      },
+      {
+        "task_id": "feature_20",
+        "rank": 1,
+        "score": 0.16550181806087494
+      }
+    ],
+    "top3": 20,
+    "top5": 20,
+    "query_count": 20,
+    "score_archive_index": 0,
+    "retrieval_protocol": {
+      "encoder": {
+        "provider": "clip",
+        "loader": "standalone_eval_clip",
+        "role": "evaluation_only_encoder",
+        "decoupled_from_training_surrogate": true,
+        "uses_forward_intermediates": false,
+        "batch_size": 16,
+        "name": "ViT-SO400M-14-SigLIP-384",
+        "pretrained": "webli",
+        "hf_repo": "timm/ViT-SO400M-14-SigLIP-384",
+        "tokenizer_path": "/content/AmbiLAGE/models/siglip_so400m",
+        "weight_path": "/content/AmbiLAGE/models/siglip_so400m/open_clip_model.safetensors",
+        "weight_sha256": "97faeafa0576c1ba4c92bae739ca06ef5f5d0c2db92f86a6086653d82a262043",
+        "weight_revision": null,
+        "device": "cuda",
+        "precision": "float32",
+        "image_size": 384,
+        "preprocess": {
+          "resize": "bicubic_direct_square",
+          "align_corners": false,
+          "antialias": true,
+          "mean": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "std": [
+            0.5,
+            0.5,
+            0.5
+          ]
+        },
+        "open_clip_torch_version": "3.3.0",
+        "loading": {
+          "architecture": {
+            "embed_dim": 1152,
+            "init_logit_bias": -10,
+            "custom_text": true,
+            "vision_cfg": {
+              "image_size": 384,
+              "timm_model_name": "vit_so400m_patch14_siglip_384",
+              "timm_model_pretrained": false,
+              "timm_pool": "map",
+              "timm_proj": "none"
+            },
+            "text_cfg": {
+              "context_length": 64,
+              "vocab_size": 32000,
+              "hf_tokenizer_name": "timm/ViT-B-16-SigLIP",
+              "tokenizer_kwargs": {
+                "clean": "canonicalize"
+              },
+              "width": 1152,
+              "heads": 16,
+              "layers": 27,
+              "mlp_ratio": 3.7362,
+              "no_causal_mask": true,
+              "proj_bias": true,
+              "pool_type": "last",
+              "norm_kwargs": {
+                "eps": 1e-06
+              }
+            }
+          },
+          "quick_gelu": false,
+          "activation": "native",
+          "mean": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "std": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "metadata_source": "registered_pretrained_tag",
+          "registered_preprocess": {
+            "interpolation": "bicubic",
+            "resize_mode": "squash"
+          },
+          "strict_state_dict": true,
+          "actual_activation_modules": {
+            "QuickGELU": 0,
+            "GELU": 55
+          },
+          "loader_version": 3,
+          "loader_sha256": "562966bba1620c5b352d9f092bee56ce10fce48afa68cb91575094bd7ad47731"
+        },
+        "tokenizer_audit": {
+          "type": "HFTokenizer",
+          "special_tokens": {
+            "sot_token_id": null,
+            "eot_token_id": null,
+            "pad_token_id": null,
+            "context_length": 64
+          },
+          "content_sha256": "e71db1ac6bdfbb30baf3dbc203876d7a650afc0f864a4125c14b2929625025ca"
+        },
+        "fusion": "equal_unit_image_plus_unit_full_text",
+        "weighted_fusion": {
+          "algorithm": "unit_alpha_image_plus_one_minus_alpha_full_text_v1",
+          "default_image_weight": 0.5,
+          "equal_weight_path": "exact_legacy_image_plus_text",
+          "empty_text": "image_only_except_text_only_weight_rejected"
+        },
+        "text_policy": {
+          "algorithm": "contiguous_nonoverlapping_raw_token_chunks_v1",
+          "context_length": 64,
+          "payload_tokens_per_chunk": 63,
+          "special_tokens_per_chunk": 1,
+          "coverage": "all_token_ids_no_truncation",
+          "aggregation": "unit_token_count_weighted_mean_then_unit",
+          "tokenizer": "HFTokenizer"
+        },
+        "evaluation_protocol": {
+          "setting": "held_out_public_encoder",
+          "matches_training_surrogate": false,
+          "matching_training_surrogate_indices": [],
+          "black_box_transfer_claimed": true,
+          "tf32_enabled": false,
+          "precision": "float32",
+          "training_identity_scope": "actual_frozen_surrogates",
+          "training_surrogates_sha256": "17b7fc56d67ec8054603435c18d4b1d2e9632bb167f37953a014b6a3d118feae"
+        }
+      },
+      "key_mode": "image",
+      "query_mode": "text",
+      "index_text": "product_feature",
+      "index_text_policy": {
+        "version": 2,
+        "fields": [
+          "PrimaryImage.Title",
+          "Brand",
+          "Attributes",
+          "FeatureText"
+        ],
+        "coverage": "purchased_product_title_brand_and_features_only",
+        "purchase_binding": "primary_asin_must_match_final_asin",
+        "excluded": [
+          "Instruction",
+          "OriginalInstruction",
+          "Actions",
+          "FinalASIN",
+          "FinalOptions",
+          "FinalPrice",
+          "PolicyTrace",
+          "Reward",
+          "attack_metadata"
+        ]
+      },
+      "key_image_weight": 1.0,
+      "query_image_weight": 0.0,
+      "image_decoder": {
+        "schema_version": 1,
+        "scope": "local_encoder_process",
+        "library": "Pillow",
+        "verified": true,
+        "pillow_version": "12.3.0",
+        "jpeg_version": "6.2",
+        "libjpeg_turbo_enabled": true,
+        "libjpeg_turbo_version": "3.1.4.1"
+      },
+      "encoding_runtime": {
+        "torch": "2.14.1+cu126",
+        "numpy": "2.4.6",
+        "machine": "x86_64"
+      },
+      "cache_schema": 4,
+      "bank_sha256": "bd76fcd4057fd63fa38e7ac2c2cad26b515baf5beee5f2a43d0f300825953145",
+      "model_sha256": "92756acee79ec5ca52323d4d89e8564197094f4d6cf683f4ae3962b8f71c4d26",
+      "entries_sha256": "0c62e7e9f6e228c1d6d1380934a34c272602790e0626ffc5e71440fe10d542f5",
+      "query_encoding_audit": {
+        "text_sha256": "1e1fb1d49015ea1c4ab9fc728ec47a46fd2a3e3bb6104e36cf409359051aa5ee",
+        "input_tokens": 4,
+        "encoded_tokens": 4,
+        "chunks": 1,
+        "payload_tokens_per_chunk": 63,
+        "chunk_token_counts": [
+          4
+        ],
+        "truncated": false
+      },
+      "memory_vector_reuse": {
+        "hits": 189,
+        "misses": 0,
+        "writes": 0,
+        "rejected": 0
+      }
+    }
+  },
+  {
+    "condition": {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    },
+    "bank": "modified",
+    "bank_path": "/content/AmbiLAGE/output/exp_20261120_speedup_verify/plan_b_all6_inproc/vi_08_02_training_oracle_v3/03_siglip_so400m/shared_banks/banks/none/modified.json",
+    "bank_sha256": "8e521be46d71cbe2c54cdcd15f73ae899bd89313cfea9ddb3012199d1d0eaf1e",
+    "queries": [
+      {
+        "task_id": "feature_01",
+        "rank": 1,
+        "score": 0.17793935537338257
+      },
+      {
+        "task_id": "feature_02",
+        "rank": 1,
+        "score": 0.12601642310619354
+      },
+      {
+        "task_id": "feature_03",
+        "rank": 1,
+        "score": 0.08545613288879395
+      },
+      {
+        "task_id": "feature_04",
+        "rank": 1,
+        "score": 0.14760875701904297
+      },
+      {
+        "task_id": "feature_05",
+        "rank": 1,
+        "score": 0.1148030161857605
+      },
+      {
+        "task_id": "feature_06",
+        "rank": 1,
+        "score": 0.12478367239236832
+      },
+      {
+        "task_id": "feature_07",
+        "rank": 2,
+        "score": 0.05295640975236893
+      },
+      {
+        "task_id": "feature_08",
+        "rank": 3,
+        "score": 0.11831697076559067
+      },
+      {
+        "task_id": "feature_09",
+        "rank": 1,
+        "score": 0.10172228515148163
+      },
+      {
+        "task_id": "feature_10",
+        "rank": 1,
+        "score": 0.1352657675743103
+      },
+      {
+        "task_id": "feature_11",
+        "rank": 1,
+        "score": 0.1329927146434784
+      },
+      {
+        "task_id": "feature_12",
+        "rank": 1,
+        "score": 0.11650699377059937
+      },
+      {
+        "task_id": "feature_13",
+        "rank": 1,
+        "score": 0.1461205929517746
+      },
+      {
+        "task_id": "feature_14",
+        "rank": 1,
+        "score": 0.18389219045639038
+      },
+      {
+        "task_id": "feature_15",
+        "rank": 1,
+        "score": 0.09924092143774033
+      },
+      {
+        "task_id": "feature_16",
+        "rank": 1,
+        "score": 0.14177536964416504
+      },
+      {
+        "task_id": "feature_17",
+        "rank": 1,
+        "score": 0.1247602105140686
+      },
+      {
+        "task_id": "feature_18",
+        "rank": 1,
+        "score": 0.14116278290748596
+      },
+      {
+        "task_id": "feature_19",
+        "rank": 1,
+        "score": 0.11958888918161392
+      },
+      {
+        "task_id": "feature_20",
+        "rank": 1,
+        "score": 0.15857726335525513
+      }
+    ],
+    "top3": 20,
+    "top5": 20,
+    "query_count": 20,
+    "score_archive_index": 1,
+    "retrieval_protocol": {
+      "encoder": {
+        "provider": "clip",
+        "loader": "standalone_eval_clip",
+        "role": "evaluation_only_encoder",
+        "decoupled_from_training_surrogate": true,
+        "uses_forward_intermediates": false,
+        "batch_size": 16,
+        "name": "ViT-SO400M-14-SigLIP-384",
+        "pretrained": "webli",
+        "hf_repo": "timm/ViT-SO400M-14-SigLIP-384",
+        "tokenizer_path": "/content/AmbiLAGE/models/siglip_so400m",
+        "weight_path": "/content/AmbiLAGE/models/siglip_so400m/open_clip_model.safetensors",
+        "weight_sha256": "97faeafa0576c1ba4c92bae739ca06ef5f5d0c2db92f86a6086653d82a262043",
+        "weight_revision": null,
+        "device": "cuda",
+        "precision": "float32",
+        "image_size": 384,
+        "preprocess": {
+          "resize": "bicubic_direct_square",
+          "align_corners": false,
+          "antialias": true,
+          "mean": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "std": [
+            0.5,
+            0.5,
+            0.5
+          ]
+        },
+        "open_clip_torch_version": "3.3.0",
+        "loading": {
+          "architecture": {
+            "embed_dim": 1152,
+            "init_logit_bias": -10,
+            "custom_text": true,
+            "vision_cfg": {
+              "image_size": 384,
+              "timm_model_name": "vit_so400m_patch14_siglip_384",
+              "timm_model_pretrained": false,
+              "timm_pool": "map",
+              "timm_proj": "none"
+            },
+            "text_cfg": {
+              "context_length": 64,
+              "vocab_size": 32000,
+              "hf_tokenizer_name": "timm/ViT-B-16-SigLIP",
+              "tokenizer_kwargs": {
+                "clean": "canonicalize"
+              },
+              "width": 1152,
+              "heads": 16,
+              "layers": 27,
+              "mlp_ratio": 3.7362,
+              "no_causal_mask": true,
+              "proj_bias": true,
+              "pool_type": "last",
+              "norm_kwargs": {
+                "eps": 1e-06
+              }
+            }
+          },
+          "quick_gelu": false,
+          "activation": "native",
+          "mean": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "std": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "metadata_source": "registered_pretrained_tag",
+          "registered_preprocess": {
+            "interpolation": "bicubic",
+            "resize_mode": "squash"
+          },
+          "strict_state_dict": true,
+          "actual_activation_modules": {
+            "QuickGELU": 0,
+            "GELU": 55
+          },
+          "loader_version": 3,
+          "loader_sha256": "562966bba1620c5b352d9f092bee56ce10fce48afa68cb91575094bd7ad47731"
+        },
+        "tokenizer_audit": {
+          "type": "HFTokenizer",
+          "special_tokens": {
+            "sot_token_id": null,
+            "eot_token_id": null,
+            "pad_token_id": null,
+            "context_length": 64
+          },
+          "content_sha256": "e71db1ac6bdfbb30baf3dbc203876d7a650afc0f864a4125c14b2929625025ca"
+        },
+        "fusion": "equal_unit_image_plus_unit_full_text",
+        "weighted_fusion": {
+          "algorithm": "unit_alpha_image_plus_one_minus_alpha_full_text_v1",
+          "default_image_weight": 0.5,
+          "equal_weight_path": "exact_legacy_image_plus_text",
+          "empty_text": "image_only_except_text_only_weight_rejected"
+        },
+        "text_policy": {
+          "algorithm": "contiguous_nonoverlapping_raw_token_chunks_v1",
+          "context_length": 64,
+          "payload_tokens_per_chunk": 63,
+          "special_tokens_per_chunk": 1,
+          "coverage": "all_token_ids_no_truncation",
+          "aggregation": "unit_token_count_weighted_mean_then_unit",
+          "tokenizer": "HFTokenizer"
+        },
+        "evaluation_protocol": {
+          "setting": "held_out_public_encoder",
+          "matches_training_surrogate": false,
+          "matching_training_surrogate_indices": [],
+          "black_box_transfer_claimed": true,
+          "tf32_enabled": false,
+          "precision": "float32",
+          "training_identity_scope": "actual_frozen_surrogates",
+          "training_surrogates_sha256": "17b7fc56d67ec8054603435c18d4b1d2e9632bb167f37953a014b6a3d118feae"
+        }
+      },
+      "key_mode": "image",
+      "query_mode": "text",
+      "index_text": "product_feature",
+      "index_text_policy": {
+        "version": 2,
+        "fields": [
+          "PrimaryImage.Title",
+          "Brand",
+          "Attributes",
+          "FeatureText"
+        ],
+        "coverage": "purchased_product_title_brand_and_features_only",
+        "purchase_binding": "primary_asin_must_match_final_asin",
+        "excluded": [
+          "Instruction",
+          "OriginalInstruction",
+          "Actions",
+          "FinalASIN",
+          "FinalOptions",
+          "FinalPrice",
+          "PolicyTrace",
+          "Reward",
+          "attack_metadata"
+        ]
+      },
+      "key_image_weight": 1.0,
+      "query_image_weight": 0.0,
+      "image_decoder": {
+        "schema_version": 1,
+        "scope": "local_encoder_process",
+        "library": "Pillow",
+        "verified": true,
+        "pillow_version": "12.3.0",
+        "jpeg_version": "6.2",
+        "libjpeg_turbo_enabled": true,
+        "libjpeg_turbo_version": "3.1.4.1"
+      },
+      "encoding_runtime": {
+        "torch": "2.14.1+cu126",
+        "numpy": "2.4.6",
+        "machine": "x86_64"
+      },
+      "cache_schema": 4,
+      "bank_sha256": "8e521be46d71cbe2c54cdcd15f73ae899bd89313cfea9ddb3012199d1d0eaf1e",
+      "model_sha256": "92756acee79ec5ca52323d4d89e8564197094f4d6cf683f4ae3962b8f71c4d26",
+      "entries_sha256": "d77683f1160b24c15b33b34ad6088cc812b13e97c595424448c29cc72cf962a1",
+      "query_encoding_audit": {
+        "text_sha256": "1e1fb1d49015ea1c4ab9fc728ec47a46fd2a3e3bb6104e36cf409359051aa5ee",
+        "input_tokens": 4,
+        "encoded_tokens": 4,
+        "chunks": 1,
+        "payload_tokens_per_chunk": 63,
+        "chunk_token_counts": [
+          4
+        ],
+        "truncated": false
+      },
+      "memory_vector_reuse": {
+        "hits": 189,
+        "misses": 0,
+        "writes": 0,
+        "rejected": 0
+      }
+    }
+  }
+]

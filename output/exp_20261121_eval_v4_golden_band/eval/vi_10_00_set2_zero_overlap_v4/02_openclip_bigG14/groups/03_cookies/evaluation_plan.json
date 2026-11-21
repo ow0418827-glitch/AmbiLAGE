@@ -1,0 +1,349 @@
+{
+  "schema_version": 1,
+  "scope": "shared",
+  "pool_path": "/content/AmbiLAGE/resources/evaluation_base_golden_band/shared_memory/shared_memory.json",
+  "pool_sha256": "8c39c7b688006b49e572634980176beaee8824101dc15296ccb7b023edc56145",
+  "pool_count": 189,
+  "source_memory_id": "groups9_reference_03_cookies_B00HHP71JY",
+  "frozen_image_sha256": "9e0935fa38731f3536f789f6be3e123daee17caba90c8a39385953755bcb6595",
+  "source_public_id": "B00HHP71JY",
+  "method": "visual_inception",
+  "queries": [
+    {
+      "task_id": "feature_01",
+      "instruction": "This cookie dough is full of semi sweet morsels, for a cookie that delivers the rich, creamy semi-sweet chocolate taste you love from Nestle Toll House.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_02",
+      "instruction": "Davids Cookies Chocolate Chip Cookie Dough, 1.33 Ounce -- 252 per case.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_03",
+      "instruction": "Delicious Flavors - Whether you want classic chocolate chip cookies, a creamy oreos cookie dough, or a pop of cherry, we got you covered! Enjoy all of our delicious unbaked cookie dough flavors: Rocket Chip, Galactic Fusion, and Super Cluster.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_04",
+      "instruction": "Chocolate chip cookie dough chunks are made with non gmo sourced ingredients, fairtrade certified cocoa, sugar, and vanilla, and cage free eggs. feel good about every doughy bite.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_05",
+      "instruction": "Ready To Bake Sugar Cookies are super simple — just place and bake for cookies in minutes.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_06",
+      "instruction": "NO MIXING, NO MESS: Refrigerated cookie dough is easy to use — just place and bake",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_07",
+      "instruction": "Cookies are pre-formed for easy freezer to oven baking (no scooping or thawing required)",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_08",
+      "instruction": "HOMEMADE TASTE: Classic chocolate chip cookie dough in a 30 oz value size",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_09",
+      "instruction": "GET YOUR HOMEMADE COOKIE WITHOUT ALL THE MESS.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_10",
+      "instruction": "Snickerdoodle Cookie Dough Cups are that ready-to-eat treat that you just eat (no baking required).",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_11",
+      "instruction": "refrigerated cookie dough",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_12",
+      "instruction": "tollhouse cookie dough",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_13",
+      "instruction": "nestle toll house cookie dough",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_14",
+      "instruction": "pillsbury sugar cookie dough",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_15",
+      "instruction": "I need cookie dough featuring cookie dough Bites are low calorie, keto-friendly, gluten-free.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_16",
+      "instruction": "Searching for chocolate chip cookie dough featuring with Ready To Bake Chocolate Chip Cookie Dough, letting you make any.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_17",
+      "instruction": "I want cookie dough featuring make Pillsbury cookies for dessert bars or parties.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_18",
+      "instruction": "Find refrigerated homemade cookie dough featuring refrigerated cookie dough makes it easy to scoop, bake.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_19",
+      "instruction": "Where can I buy chocolate chip cookie dough featuring ben & Jerry's snackable, frozen chocolate chip cookie dough chunks?",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    },
+    {
+      "task_id": "feature_20",
+      "instruction": "I need cookie dough featuring a great way to create your own cookies without the mess of making the dough.",
+      "query_mode": "text",
+      "query_image": null,
+      "query_image_sha256": null
+    }
+  ],
+  "conditions": [
+    {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    }
+  ],
+  "training_surrogate_context": {
+    "schema_version": 1,
+    "scope": "all_frozen_images_in_modified_bank",
+    "images": [
+      {
+        "method": "visual_inception",
+        "source_id": "B00HHP71JY",
+        "image_sha256": "9e0935fa38731f3536f789f6be3e123daee17caba90c8a39385953755bcb6595",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B01LML1VXU",
+        "image_sha256": "2c5757acc0d558b7e8d45825fed19978c9e26add3bb06162022593a8f4de79a1",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B07GDZQ68V",
+        "image_sha256": "de02a6bcf05424e4fb0342093d5db382b0d6ad335ab8c5230fdefaef93c6cb57",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B09KRPJJC4",
+        "image_sha256": "712d3ba6e030f1664759ff23a0fd1c9f8990a36b9c91e240f179889003dab0cb",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B07BC7JMPL",
+        "image_sha256": "a01e6b04ec35679ac63cc6a844919d3f328ca5bc47dfb93a943bb2177f06fe86",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B09J89KXRJ",
+        "image_sha256": "a8378add75a72c9651d4b63ae87cee08cf48183d067e2ef7931a1f62ecfcd8f2",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B08WJB1XDD",
+        "image_sha256": "cd3f43e5a9012b6267d6b70f895dd935aa17952b249473dd4f8309ed86ab1436",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B09P3RR62H",
+        "image_sha256": "574c4c11fad72e069c8b5450e52b3cd1b0add0ca08f9eaa40321efb6a02533d4",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      },
+      {
+        "method": "visual_inception",
+        "source_id": "B09MD5SZCX",
+        "image_sha256": "5bfde8fd6ba655094915b04629691f919669518e9b5dff966363b8fcca6464ca",
+        "surrogates": [
+          {
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e"
+          }
+        ]
+      }
+    ],
+    "context_sha256": "286f85981492bd09b0c98c21ef465bd89f0d8ba92dc843f1e7237706e838abc5"
+  },
+  "training_identity_policy": "actual_frozen_surrogates_v1",
+  "simultaneous_replacements": [
+    {
+      "source_id": "B01LML1VXU",
+      "image_sha256": "2c5757acc0d558b7e8d45825fed19978c9e26add3bb06162022593a8f4de79a1",
+      "source_memory_id": "groups9_reference_01_camera_B01LML1VXU"
+    },
+    {
+      "source_id": "B07GDZQ68V",
+      "image_sha256": "de02a6bcf05424e4fb0342093d5db382b0d6ad335ab8c5230fdefaef93c6cb57",
+      "source_memory_id": "groups9_reference_02_chair_B07GDZQ68V"
+    },
+    {
+      "source_id": "B00HHP71JY",
+      "image_sha256": "9e0935fa38731f3536f789f6be3e123daee17caba90c8a39385953755bcb6595",
+      "source_memory_id": "groups9_reference_03_cookies_B00HHP71JY"
+    },
+    {
+      "source_id": "B09KRPJJC4",
+      "image_sha256": "712d3ba6e030f1664759ff23a0fd1c9f8990a36b9c91e240f179889003dab0cb",
+      "source_memory_id": "groups9_reference_04_curtain_B09KRPJJC4"
+    },
+    {
+      "source_id": "B07BC7JMPL",
+      "image_sha256": "a01e6b04ec35679ac63cc6a844919d3f328ca5bc47dfb93a943bb2177f06fe86",
+      "source_memory_id": "groups9_reference_05_hair_extension_B07BC7JMPL"
+    },
+    {
+      "source_id": "B09J89KXRJ",
+      "image_sha256": "a8378add75a72c9651d4b63ae87cee08cf48183d067e2ef7931a1f62ecfcd8f2",
+      "source_memory_id": "groups9_reference_06_jeans_B09J89KXRJ"
+    },
+    {
+      "source_id": "B08WJB1XDD",
+      "image_sha256": "cd3f43e5a9012b6267d6b70f895dd935aa17952b249473dd4f8309ed86ab1436",
+      "source_memory_id": "groups9_reference_07_shampoo_B08WJB1XDD"
+    },
+    {
+      "source_id": "B09P3RR62H",
+      "image_sha256": "574c4c11fad72e069c8b5450e52b3cd1b0add0ca08f9eaa40321efb6a02533d4",
+      "source_memory_id": "groups9_reference_08_speaker_B09P3RR62H"
+    },
+    {
+      "source_id": "B09MD5SZCX",
+      "image_sha256": "5bfde8fd6ba655094915b04629691f919669518e9b5dff966363b8fcca6464ca",
+      "source_memory_id": "groups9_reference_09_toothbrush_B09MD5SZCX"
+    }
+  ],
+  "memory_vector_cache_policy": "content_model_decoder_text_fusion_bound_v1",
+  "encoder_config": "/content/AmbiLAGE/src/visual/config/evaluator.clip_bigG14.heldout.json",
+  "encoder_config_sha256": "a7a7da0b205e7f814af790bf6227a055e35795a6e3a3248c1b0f1c07b1eae1ac",
+  "key_mode": "image",
+  "key_image_weight": 1.0,
+  "query_image_weight": 0.0,
+  "query_mode": "text",
+  "query_manifest": "/content/AmbiLAGE/resources/visual_inception_evaluation/exact_overlap_v4/zero_overlap_v4/03_cookies/queries.json",
+  "query_manifest_sha256": "b9bad318db5b51f09cca8c6005b779f2f6facbfe124d7fd71a2bf2ca2b15c844",
+  "index_text": "product_feature",
+  "query_image_defended": false,
+  "all_memory_images_equally_defended": true,
+  "shopping_allowed": false,
+  "record_kinds": {
+    "purchase_memory": 51,
+    "simulated_gallery": 138
+  }
+}

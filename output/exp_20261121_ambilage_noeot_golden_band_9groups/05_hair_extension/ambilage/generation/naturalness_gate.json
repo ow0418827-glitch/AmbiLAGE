@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "natural": true,
+  "text_preserved": true,
+  "artifact_free": true,
+  "reasons": [
+    "strict_mathematical_naturalness_gate_passed"
+  ],
+  "category": "hair extensions, wigs & accessories",
+  "metrics": {
+    "source_ssim": 0.969348020687253,
+    "rgb_source_ssim": 0.969348020687253,
+    "luma_source_ssim": 0.9756255515384935,
+    "source_mae_levels": 4.711797714233398,
+    "rgb_source_mae_levels": 4.711797714233398,
+    "luma_source_mae_levels": 4.193239688873291,
+    "fg_rgb_source_mae_levels": 4.6077880859375,
+    "fg_chroma_tv_levels": 2.210292339324951,
+    "halo_error": 1.767763614654541,
+    "roi_max_abs_diff": 0.0
+  },
+  "thresholds": {
+    "source_ssim_floor": 0.85,
+    "source_mae_ceiling": 22.0,
+    "fg_source_mae_ceiling": 10.0,
+    "fg_chroma_tv_ceiling": 2.5,
+    "halo_ceiling": 10.0,
+    "roi_max_abs_diff": 0.0
+  },
+  "model": "mathematical_rgb_oklab_dual_gate_v2",
+  "precision": "float32",
+  "candidate_sha256": "5361002349054253c491346ab24c72e1f68c7b0d6c66b424755f48e31201759c"
+}

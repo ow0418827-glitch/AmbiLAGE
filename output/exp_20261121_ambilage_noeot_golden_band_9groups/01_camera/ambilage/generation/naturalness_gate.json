@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "natural": true,
+  "text_preserved": true,
+  "artifact_free": true,
+  "reasons": [
+    "strict_mathematical_naturalness_gate_passed"
+  ],
+  "category": "video surveillance",
+  "metrics": {
+    "source_ssim": 0.965547613676017,
+    "rgb_source_ssim": 0.965547613676017,
+    "luma_source_ssim": 0.9760652711875172,
+    "source_mae_levels": 7.66691780090332,
+    "rgb_source_mae_levels": 7.66691780090332,
+    "luma_source_mae_levels": 5.431143760681152,
+    "fg_rgb_source_mae_levels": 8.132411003112793,
+    "fg_chroma_tv_levels": 0.986142098903656,
+    "halo_error": 2.6353468894958496,
+    "roi_max_abs_diff": 0.0
+  },
+  "thresholds": {
+    "source_ssim_floor": 0.85,
+    "source_mae_ceiling": 22.0,
+    "fg_source_mae_ceiling": 10.0,
+    "fg_chroma_tv_ceiling": 2.5,
+    "halo_ceiling": 10.0,
+    "roi_max_abs_diff": 0.0
+  },
+  "model": "mathematical_rgb_oklab_dual_gate_v2",
+  "precision": "float32",
+  "candidate_sha256": "386ac31f68d42359e893a9205df74c26b57865c03c3482480826d39437c5c3b9"
+}

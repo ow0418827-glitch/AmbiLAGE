@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "natural": true,
+  "text_preserved": true,
+  "artifact_free": true,
+  "reasons": [
+    "strict_mathematical_naturalness_gate_passed"
+  ],
+  "category": "grocery cookies",
+  "metrics": {
+    "source_ssim": 0.9501795021157194,
+    "rgb_source_ssim": 0.9501795021157194,
+    "luma_source_ssim": 0.9741488342042532,
+    "source_mae_levels": 9.52387523651123,
+    "rgb_source_mae_levels": 9.52387523651123,
+    "luma_source_mae_levels": 5.579020977020264,
+    "fg_rgb_source_mae_levels": 6.991548538208008,
+    "fg_chroma_tv_levels": 1.0463571548461914,
+    "halo_error": 4.040046691894531,
+    "roi_max_abs_diff": 0.0
+  },
+  "thresholds": {
+    "source_ssim_floor": 0.85,
+    "source_mae_ceiling": 22.0,
+    "fg_source_mae_ceiling": 10.0,
+    "fg_chroma_tv_ceiling": 2.5,
+    "halo_ceiling": 10.0,
+    "roi_max_abs_diff": 0.0
+  },
+  "model": "mathematical_rgb_oklab_dual_gate_v2",
+  "precision": "float32",
+  "candidate_sha256": "c8954709f7e9a71164aa02f0c2f54ba07cc635535acdd4e5b7fd7ecf2cd50445"
+}

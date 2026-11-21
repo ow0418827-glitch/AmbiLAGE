@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "protocol": "visual_inception_training_oracle_v4_exact",
+  "query_suite": "training_oracle_v4",
+  "status": "passed",
+  "groups_verified": 4,
+  "rankings_recomputed": 160,
+  "candidate_scores_recomputed": 30240,
+  "max_score_error": 0.0,
+  "all_candidate_scores_checked": true,
+  "summary_sha256": "80e5dbb0e383ae10fad70571acd7434c63c5af3a2656755d79f0f3935824e827",
+  "groups": {
+    "01_camera": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "c3e69640445f754d181b0d6df8e216de04f01fb4f673a88c32881070dfb56d10",
+      "scores_sha256": "174be3ec1f9fd7c57cd8b4e90d76fb732a876a53b68bbb1809956659eb965d5f"
+    },
+    "02_chair": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "9c070d58b249290f5a96c6df2aa9341697ce99a4a3d955485f675f2a419bf5df",
+      "scores_sha256": "0c605a6369a92c54c215561e69a2dbe1ed749798c709bb51dc4dbfb7c7148dd6"
+    },
+    "06_jeans": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "6240cb179d583f5ee6c6ae295d0c289521e9d2add943c3428e6b5d907de06eaa",
+      "scores_sha256": "458e2bf526c594c9289df0b4f2a9586b88a3f7a171af786f148a262fa9b5342c"
+    },
+    "07_shampoo": {
+      "rankings_recomputed": 40,
+      "candidate_scores_recomputed": 7560,
+      "max_score_error": 0.0,
+      "evaluated_file_sha256": "d63c8ba86f6a27df079e00a8758fe6e6d59a2bf5623b9530413e05d6d99678a0",
+      "scores_sha256": "755b42ef86a58b69bc6da6e4453101e760b717b724820b93d83911b15bd53167"
+    }
+  }
+}

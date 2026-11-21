@@ -1,0 +1,7 @@
+[SKIP SUB-OUT] vi_paper_standard_set2_training_oracle_v4/01_clip_l14 already verified
+[SKIP SUB-OUT] vi_paper_standard_set2_overlap_30_v4/01_clip_l14 already verified
+[SKIP SUB-OUT] vi_paper_standard_set2_zero_overlap_v4/01_clip_l14 already verified
+
+=== [ENCODER 02_openclip_bigG14] panels=['vi_paper_standard_set2_training_oracle_v4', 'vi_paper_standard_set2_overlap_30_v4', 'vi_paper_standard_set2_zero_overlap_v4'] unique_images=198 unique_texts=360 batch_size=16 text_batch_size=64 verify=in_process ===
+[PRECOMPUTED UPDATE 02_openclip_bigG14] Encoding only delta assets: missing_images=9, missing_texts=0
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.

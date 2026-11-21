@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "protocol": "visual_inception_overlap_30_v4_exact",
+  "query_suite": "overlap_30_v4",
+  "method": "ambilage",
+  "query_mode": "text",
+  "key_mode": "image",
+  "key_image_weight": 1.0,
+  "defense_mode": "none",
+  "selected_conditions": [
+    {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    }
+  ],
+  "base_path": "/content/AmbiLAGE/resources/evaluation_base_golden_band",
+  "base_manifest_sha256": "00bc13faa0ce4a9b92a2177576b68fb2b212cab9f9b5ad6969cd7171a59fde8a",
+  "query_root": "/content/AmbiLAGE/resources/visual_inception_evaluation/exact_overlap_v4/overlap_30_v4",
+  "query_root_manifest_sha256": "6b21a8e99f9e8505b13fd4d06059c506f35ad171519f68bf93d2c8d4570580f7",
+  "query_validation_sha256": "2b89e5b4ee2314844ecb709a40b92484b2d71c730f12370ce471875f94b49fa0",
+  "pool_path": "/content/AmbiLAGE/resources/evaluation_base_golden_band/shared_memory/shared_memory.json",
+  "pool_sha256": "8c39c7b688006b49e572634980176beaee8824101dc15296ccb7b023edc56145",
+  "pool_count": 189,
+  "encoder_config": "/content/AmbiLAGE/src/visual/config/evaluator.clip_bigG14.heldout.json",
+  "encoder_config_sha256": "a7a7da0b205e7f814af790bf6227a055e35795a6e3a3248c1b0f1c07b1eae1ac",
+  "groups": [
+    "01_camera",
+    "02_chair",
+    "03_cookies",
+    "04_curtain",
+    "05_hair_extension",
+    "06_jeans",
+    "07_shampoo",
+    "08_speaker",
+    "09_toothbrush"
+  ],
+  "simultaneous_replacement_count": 9,
+  "shared_pool_scope": "all_entries_simultaneous_nine_group_replacement",
+  "shopping_allowed": false,
+  "recommendation_executed": false,
+  "frozen_images": {
+    "01_camera": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_ambilage_noeot_golden_band_9groups/01_camera/ambilage/frozen.png",
+      "image_sha256": "386ac31f68d42359e893a9205df74c26b57865c03c3482480826d39437c5c3b9",
+      "source_memory_id": "groups9_reference_01_camera_B01LML1VXU",
+      "source_id": "B01LML1VXU",
+      "target_id": "B08V134QWR",
+      "requested_steps": 250,
+      "objective_kind": "sequential_public_joint_text_fg_ot_psi_v4"
+    },
+    "02_chair": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_ambilage_noeot_golden_band_9groups/02_chair/ambilage/frozen.png",
+      "image_sha256": "08a0243b9a29ef1ac181331e652573de46800bd7cea86e95a11973b6621db8c8",
+      "source_memory_id": "groups9_reference_02_chair_B07GDZQ68V",
+      "source_id": "B07GDZQ68V",
+      "target_id": "B09CYFD5BX",
+      "requested_steps": 250,
+      "objective_kind": "sequential_public_joint_text_fg_ot_psi_v4"
+    },
+    "03_cookies": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_ambilage_noeot_golden_band_9groups/03_cookies/ambilage/frozen.png",
+      "image_sha256": "c8954709f7e9a71164aa02f0c2f54ba07cc635535acdd4e5b7fd7ecf2cd50445",
+      "source_memory_id": "groups9_reference_03_cookies_B00HHP71JY",
+      "source_id": "B00HHP71JY",
+      "target_id": "B08Z8MHWVS",
+      "requested_steps": 250,
+      "objective_kind": "sequential_public_joint_text_fg_ot_psi_v4"
+    },
+    "04_curtain": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_ambilage_noeot_golden_band_9groups/04_curtain/ambilage/frozen.png",
+      "image_sha256": "e26f2a3142864ec6f3c55c52b8cea555f0f23238398b72d33ed81f1196dea2fc",
+      "source_memory_id": "groups9_reference_04_curtain_B09KRPJJC4",
+      "source_id": "B09KRPJJC4",
+      "target_id": "B086PW7TWX",
+      "requested_steps": 250,
+      "objective_kind": "sequential_public_joint_text_fg_ot_psi_v4"
+    },
+    "05_hair_extension": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_ambilage_noeot_golden_band_9groups/05_hair_extension/ambilage/frozen.png",
+      "image_sha256": "5361002349054253c491346ab24c72e1f68c7b0d6c66b424755f48e31201759c",
+      "source_memory_id": "groups9_reference_05_hair_extension_B07BC7JMPL",
+      "source_id": "B07BC7JMPL",
+      "target_id": "B01460C2I2",
+      "requested_steps": 250,
+      "objective_kind": "sequential_public_joint_text_fg_ot_psi_v4"
+    },
+    "06_jeans": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_ambilage_noeot_golden_band_9groups/06_jeans/ambilage/frozen.png",
+      "image_sha256": "8ab7536b01e2ff6122b50fa9852f17d9936f4215ed11d1309cd4379a0fc930c2",
+      "source_memory_id": "groups9_reference_06_jeans_B09J89KXRJ",
+      "source_id": "B09J89KXRJ",
+      "target_id": "B09HH96NJY",
+      "requested_steps": 250,
+      "objective_kind": "sequential_public_joint_text_fg_ot_psi_v4"
+    },
+    "07_shampoo": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_ambilage_noeot_golden_band_9groups/07_shampoo/ambilage/frozen.png",
+      "image_sha256": "b94bdf867df64e922aa648cdb9247b070f001dfadd4627151b5eda5c40f2ead2",
+      "source_memory_id": "groups9_reference_07_shampoo_B08WJB1XDD",
+      "source_id": "B08WJB1XDD",
+      "target_id": "B00BDJODWI",
+      "requested_steps": 250,
+      "objective_kind": "sequential_public_joint_text_fg_ot_psi_v4"
+    },
+    "08_speaker": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_ambilage_noeot_golden_band_9groups/08_speaker/ambilage/frozen.png",
+      "image_sha256": "60a6ed6edf4137f08975f9d8d801a96311dfa281607b66f8b5aa230adc8dcbe2",
+      "source_memory_id": "groups9_reference_08_speaker_B09P3RR62H",
+      "source_id": "B09P3RR62H",
+      "target_id": "B01N47U1VI",
+      "requested_steps": 250,
+      "objective_kind": "sequential_public_joint_text_fg_ot_psi_v4"
+    },
+    "09_toothbrush": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_ambilage_noeot_golden_band_9groups/09_toothbrush/ambilage/frozen.png",
+      "image_sha256": "92620e01ea35ba313e45bce2e619fba1bec52636bfec957c73010b8f1b8d4e1b",
+      "source_memory_id": "groups9_reference_09_toothbrush_B09MD5SZCX",
+      "source_id": "B09MD5SZCX",
+      "target_id": "B09J81RMLD",
+      "requested_steps": 250,
+      "objective_kind": "sequential_public_joint_text_fg_ot_psi_v4"
+    }
+  }
+}

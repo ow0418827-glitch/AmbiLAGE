@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "natural": true,
+  "text_preserved": true,
+  "artifact_free": true,
+  "reasons": [
+    "strict_mathematical_naturalness_gate_passed"
+  ],
+  "category": "dental floss & picks",
+  "metrics": {
+    "source_ssim": 0.9733643994529548,
+    "rgb_source_ssim": 0.9733643994529548,
+    "luma_source_ssim": 0.9831223509834458,
+    "source_mae_levels": 11.362090110778809,
+    "rgb_source_mae_levels": 11.362090110778809,
+    "luma_source_mae_levels": 8.321901321411133,
+    "fg_rgb_source_mae_levels": 3.898653268814087,
+    "fg_chroma_tv_levels": 0.6993110179901123,
+    "halo_error": 2.1177563667297363,
+    "roi_max_abs_diff": 0.0
+  },
+  "thresholds": {
+    "source_ssim_floor": 0.85,
+    "source_mae_ceiling": 22.0,
+    "fg_source_mae_ceiling": 10.0,
+    "fg_chroma_tv_ceiling": 2.5,
+    "halo_ceiling": 10.0,
+    "roi_max_abs_diff": 0.0
+  },
+  "model": "mathematical_rgb_oklab_dual_gate_v2",
+  "precision": "float32",
+  "candidate_sha256": "92620e01ea35ba313e45bce2e619fba1bec52636bfec957c73010b8f1b8d4e1b"
+}

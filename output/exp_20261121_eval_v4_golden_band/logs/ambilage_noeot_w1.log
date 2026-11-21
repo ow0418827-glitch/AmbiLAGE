@@ -1,0 +1,162 @@
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  46%|████▋     | 344/741 [00:00<00:00, 3437.99it/s]Loading weights:  95%|█████████▌| 707/741 [00:00<00:00, 3548.84it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 3653.23it/s]
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  57%|█████▋    | 425/741 [00:00<00:00, 4247.24it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 4160.67it/s]
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+AmbiLAGE 细化 [10/250] Utility=0.5008 SSIM=0.9756 MAE=10.94 LR=1.000 (Accepted=10, Rejected=0)
+AmbiLAGE 细化 [20/250] Utility=0.5643 SSIM=0.9711 MAE=10.98 LR=0.996 (Accepted=20, Rejected=0)
+AmbiLAGE 细化 [30/250] Utility=0.5932 SSIM=0.9692 MAE=10.86 LR=0.984 (Accepted=30, Rejected=0)
+AmbiLAGE 细化 [40/250] Utility=0.6260 SSIM=0.9684 MAE=10.49 LR=0.965 (Accepted=40, Rejected=0)
+AmbiLAGE 细化 [50/250] Utility=0.6545 SSIM=0.9677 MAE=10.36 LR=0.938 (Accepted=50, Rejected=0)
+AmbiLAGE 细化 [60/250] Utility=0.6773 SSIM=0.9680 MAE=9.08 LR=0.905 (Accepted=60, Rejected=0)
+AmbiLAGE 细化 [70/250] Utility=0.6942 SSIM=0.9679 MAE=8.45 LR=0.865 (Accepted=70, Rejected=0)
+AmbiLAGE 细化 [80/250] Utility=0.7017 SSIM=0.9671 MAE=9.29 LR=0.820 (Accepted=80, Rejected=0)
+AmbiLAGE 细化 [90/250] Utility=0.7182 SSIM=0.9666 MAE=9.47 LR=0.770 (Accepted=90, Rejected=0)
+AmbiLAGE 细化 [100/250] Utility=0.7257 SSIM=0.9667 MAE=8.52 LR=0.716 (Accepted=100, Rejected=0)
+AmbiLAGE 细化 [110/250] Utility=0.7312 SSIM=0.9666 MAE=8.26 LR=0.659 (Accepted=110, Rejected=0)
+AmbiLAGE 细化 [120/250] Utility=0.7407 SSIM=0.9663 MAE=8.09 LR=0.600 (Accepted=120, Rejected=0)
+AmbiLAGE 细化 [130/250] Utility=0.7480 SSIM=0.9662 MAE=8.13 LR=0.540 (Accepted=130, Rejected=0)
+AmbiLAGE 细化 [140/250] Utility=0.7451 SSIM=0.9662 MAE=7.28 LR=0.480 (Accepted=140, Rejected=0)
+AmbiLAGE 细化 [150/250] Utility=0.7557 SSIM=0.9657 MAE=8.07 LR=0.421 (Accepted=150, Rejected=0)
+AmbiLAGE 细化 [160/250] Utility=0.7642 SSIM=0.9659 MAE=7.65 LR=0.364 (Accepted=160, Rejected=0)
+AmbiLAGE 细化 [170/250] Utility=0.7689 SSIM=0.9658 MAE=7.60 LR=0.310 (Accepted=170, Rejected=0)
+AmbiLAGE 细化 [180/250] Utility=0.7747 SSIM=0.9657 MAE=7.68 LR=0.260 (Accepted=180, Rejected=0)
+AmbiLAGE 细化 [190/250] Utility=0.7790 SSIM=0.9657 MAE=7.53 LR=0.215 (Accepted=190, Rejected=0)
+AmbiLAGE 细化 [200/250] Utility=0.7790 SSIM=0.9655 MAE=7.67 LR=0.175 (Accepted=200, Rejected=0)
+AmbiLAGE 细化 [210/250] Utility=0.7793 SSIM=0.9655 MAE=7.89 LR=0.142 (Accepted=210, Rejected=0)
+AmbiLAGE 细化 [220/250] Utility=0.7775 SSIM=0.9655 MAE=7.65 LR=0.086 (Accepted=220, Rejected=0)
+AmbiLAGE 自适应退火收敛早停 [220/250] (min_steps=180, lr_scale=0.0863, best_step=200, best_sel_utility=0.7671)
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  56%|█████▋    | 417/741 [00:00<00:00, 4156.84it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 3957.12it/s]
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  62%|██████▏   | 460/741 [00:00<00:00, 4596.64it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 4717.29it/s]
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+AmbiLAGE 细化 [10/250] Utility=0.5797 SSIM=0.9831 MAE=8.66 LR=1.000 (Accepted=10, Rejected=0)
+AmbiLAGE 细化 [20/250] Utility=0.6627 SSIM=0.9773 MAE=9.06 LR=0.996 (Accepted=20, Rejected=0)
+AmbiLAGE 细化 [30/250] Utility=0.6977 SSIM=0.9750 MAE=9.42 LR=0.984 (Accepted=30, Rejected=0)
+AmbiLAGE 细化 [40/250] Utility=0.7273 SSIM=0.9739 MAE=8.67 LR=0.965 (Accepted=40, Rejected=0)
+AmbiLAGE 细化 [50/250] Utility=0.7490 SSIM=0.9724 MAE=10.29 LR=0.938 (Accepted=50, Rejected=0)
+AmbiLAGE 细化 [60/250] Utility=0.7714 SSIM=0.9722 MAE=9.28 LR=0.905 (Accepted=60, Rejected=0)
+AmbiLAGE 细化 [70/250] Utility=0.7879 SSIM=0.9716 MAE=10.03 LR=0.865 (Accepted=70, Rejected=0)
+AmbiLAGE 细化 [80/250] Utility=0.7930 SSIM=0.9709 MAE=11.39 LR=0.820 (Accepted=80, Rejected=0)
+AmbiLAGE 细化 [90/250] Utility=0.8115 SSIM=0.9706 MAE=10.84 LR=0.770 (Accepted=90, Rejected=0)
+AmbiLAGE 细化 [100/250] Utility=0.8271 SSIM=0.9706 MAE=10.07 LR=0.716 (Accepted=100, Rejected=0)
+AmbiLAGE 细化 [110/250] Utility=0.8366 SSIM=0.9705 MAE=10.52 LR=0.659 (Accepted=110, Rejected=0)
+AmbiLAGE 细化 [120/250] Utility=0.8463 SSIM=0.9704 MAE=10.38 LR=0.600 (Accepted=120, Rejected=0)
+AmbiLAGE 细化 [130/250] Utility=0.8448 SSIM=0.9707 MAE=9.54 LR=0.540 (Accepted=130, Rejected=0)
+AmbiLAGE 细化 [140/250] Utility=0.8571 SSIM=0.9706 MAE=9.47 LR=0.480 (Accepted=140, Rejected=0)
+AmbiLAGE 细化 [150/250] Utility=0.8662 SSIM=0.9708 MAE=9.28 LR=0.421 (Accepted=150, Rejected=0)
+AmbiLAGE 细化 [160/250] Utility=0.8700 SSIM=0.9706 MAE=9.41 LR=0.364 (Accepted=160, Rejected=0)
+AmbiLAGE 细化 [170/250] Utility=0.8687 SSIM=0.9704 MAE=9.72 LR=0.310 (Accepted=170, Rejected=0)
+AmbiLAGE 细化 [180/250] Utility=0.8761 SSIM=0.9702 MAE=9.97 LR=0.260 (Accepted=180, Rejected=0)
+AmbiLAGE 细化 [190/250] Utility=0.8850 SSIM=0.9701 MAE=9.97 LR=0.215 (Accepted=190, Rejected=0)
+AmbiLAGE 细化 [200/250] Utility=0.8910 SSIM=0.9700 MAE=9.99 LR=0.175 (Accepted=200, Rejected=0)
+AmbiLAGE 细化 [210/250] Utility=0.8885 SSIM=0.9701 MAE=9.93 LR=0.142 (Accepted=210, Rejected=0)
+AmbiLAGE 细化 [220/250] Utility=0.8913 SSIM=0.9701 MAE=9.92 LR=0.115 (Accepted=220, Rejected=0)
+AmbiLAGE 细化 [230/250] Utility=0.8904 SSIM=0.9700 MAE=9.98 LR=0.080 (Accepted=230, Rejected=0)
+AmbiLAGE 自适应退火收敛早停 [230/250] (min_steps=180, lr_scale=0.0800, best_step=220, best_sel_utility=0.8818)
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  51%|█████     | 376/741 [00:00<00:00, 3736.03it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 3782.26it/s]
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  65%|██████▍   | 479/741 [00:00<00:00, 4789.66it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 4644.03it/s]
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+AmbiLAGE 细化 [10/250] Utility=0.2368 SSIM=0.9692 MAE=8.96 LR=1.000 (Accepted=10, Rejected=0)
+AmbiLAGE 细化 [20/250] Utility=0.3687 SSIM=0.9608 MAE=9.60 LR=0.996 (Accepted=20, Rejected=0)
+AmbiLAGE 细化 [30/250] Utility=0.4182 SSIM=0.9568 MAE=10.78 LR=0.984 (Accepted=30, Rejected=0)
+AmbiLAGE 细化 [40/250] Utility=0.4682 SSIM=0.9538 MAE=11.71 LR=0.965 (Accepted=40, Rejected=0)
+AmbiLAGE 细化 [50/250] Utility=0.4885 SSIM=0.9526 MAE=12.00 LR=0.938 (Accepted=50, Rejected=0)
+AmbiLAGE 细化 [60/250] Utility=0.5259 SSIM=0.9514 MAE=12.14 LR=0.905 (Accepted=60, Rejected=0)
+AmbiLAGE 细化 [70/250] Utility=0.5499 SSIM=0.9509 MAE=11.96 LR=0.865 (Accepted=70, Rejected=0)
+AmbiLAGE 细化 [80/250] Utility=0.5568 SSIM=0.9506 MAE=11.62 LR=0.820 (Accepted=80, Rejected=0)
+AmbiLAGE 细化 [90/250] Utility=0.5691 SSIM=0.9502 MAE=11.56 LR=0.770 (Accepted=90, Rejected=0)
+AmbiLAGE 细化 [100/250] Utility=0.5868 SSIM=0.9500 MAE=11.27 LR=0.716 (Accepted=100, Rejected=0)
+AmbiLAGE 细化 [110/250] Utility=0.6022 SSIM=0.9497 MAE=11.28 LR=0.659 (Accepted=110, Rejected=0)
+AmbiLAGE 细化 [120/250] Utility=0.6069 SSIM=0.9496 MAE=11.08 LR=0.600 (Accepted=120, Rejected=0)
+AmbiLAGE 细化 [130/250] Utility=0.6299 SSIM=0.9496 MAE=10.98 LR=0.540 (Accepted=130, Rejected=0)
+AmbiLAGE 细化 [140/250] Utility=0.6402 SSIM=0.9497 MAE=10.75 LR=0.480 (Accepted=140, Rejected=0)
+AmbiLAGE 细化 [150/250] Utility=0.6482 SSIM=0.9497 MAE=10.53 LR=0.421 (Accepted=150, Rejected=0)
+AmbiLAGE 细化 [160/250] Utility=0.6558 SSIM=0.9498 MAE=10.37 LR=0.364 (Accepted=160, Rejected=0)
+AmbiLAGE 细化 [170/250] Utility=0.6628 SSIM=0.9498 MAE=10.21 LR=0.310 (Accepted=170, Rejected=0)
+AmbiLAGE 细化 [180/250] Utility=0.6704 SSIM=0.9498 MAE=10.06 LR=0.260 (Accepted=180, Rejected=0)
+AmbiLAGE 细化 [190/250] Utility=0.6756 SSIM=0.9500 MAE=9.89 LR=0.215 (Accepted=190, Rejected=0)
+AmbiLAGE 细化 [200/250] Utility=0.6788 SSIM=0.9500 MAE=9.75 LR=0.175 (Accepted=200, Rejected=0)
+AmbiLAGE 细化 [210/250] Utility=0.6824 SSIM=0.9501 MAE=9.59 LR=0.142 (Accepted=210, Rejected=0)
+AmbiLAGE 细化 [220/250] Utility=0.6857 SSIM=0.9502 MAE=9.49 LR=0.115 (Accepted=220, Rejected=0)
+AmbiLAGE 细化 [230/250] Utility=0.6890 SSIM=0.9502 MAE=9.44 LR=0.096 (Accepted=230, Rejected=0)
+AmbiLAGE 细化 [240/250] Utility=0.6913 SSIM=0.9502 MAE=9.47 LR=0.084 (Accepted=240, Rejected=0)
+AmbiLAGE 细化 [250/250] Utility=0.6922 SSIM=0.9502 MAE=9.52 LR=0.080 (Accepted=250, Rejected=0)
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  56%|█████▋    | 418/741 [00:00<00:00, 4177.95it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 4012.47it/s]
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  55%|█████▌    | 410/741 [00:00<00:00, 4097.83it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 4018.53it/s]
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+AmbiLAGE 细化 [10/250] Utility=0.5522 SSIM=0.9712 MAE=9.98 LR=1.000 (Accepted=10, Rejected=0)
+AmbiLAGE 细化 [20/250] Utility=0.6148 SSIM=0.9662 MAE=11.34 LR=0.996 (Accepted=20, Rejected=0)
+AmbiLAGE 细化 [30/250] Utility=0.6585 SSIM=0.9663 MAE=10.37 LR=0.984 (Accepted=30, Rejected=0)
+AmbiLAGE 细化 [40/250] Utility=0.6823 SSIM=0.9663 MAE=10.06 LR=0.965 (Accepted=40, Rejected=0)
+AmbiLAGE 细化 [50/250] Utility=0.6830 SSIM=0.9659 MAE=9.76 LR=0.938 (Accepted=50, Rejected=0)
+AmbiLAGE 细化 [60/250] Utility=0.7077 SSIM=0.9647 MAE=10.41 LR=0.905 (Accepted=60, Rejected=0)
+AmbiLAGE 细化 [70/250] Utility=0.7211 SSIM=0.9643 MAE=10.52 LR=0.865 (Accepted=70, Rejected=0)
+AmbiLAGE 细化 [80/250] Utility=0.7337 SSIM=0.9647 MAE=10.17 LR=0.820 (Accepted=80, Rejected=0)
+AmbiLAGE 细化 [90/250] Utility=0.7475 SSIM=0.9648 MAE=10.02 LR=0.770 (Accepted=90, Rejected=0)
+AmbiLAGE 细化 [100/250] Utility=0.7517 SSIM=0.9648 MAE=9.88 LR=0.716 (Accepted=100, Rejected=0)
+AmbiLAGE 细化 [110/250] Utility=0.7577 SSIM=0.9642 MAE=10.29 LR=0.659 (Accepted=110, Rejected=0)
+AmbiLAGE 细化 [120/250] Utility=0.7599 SSIM=0.9644 MAE=10.04 LR=0.600 (Accepted=120, Rejected=0)
+AmbiLAGE 细化 [130/250] Utility=0.7729 SSIM=0.9645 MAE=9.71 LR=0.540 (Accepted=130, Rejected=0)
+AmbiLAGE 细化 [140/250] Utility=0.7594 SSIM=0.9648 MAE=9.68 LR=0.480 (Accepted=140, Rejected=0)
+AmbiLAGE 细化 [150/250] Utility=0.7715 SSIM=0.9651 MAE=9.17 LR=0.421 (Accepted=150, Rejected=0)
+AmbiLAGE 细化 [160/250] Utility=0.7817 SSIM=0.9654 MAE=8.81 LR=0.273 (Accepted=160, Rejected=0)
+AmbiLAGE 细化 [170/250] Utility=0.7894 SSIM=0.9650 MAE=9.19 LR=0.233 (Accepted=170, Rejected=0)
+AmbiLAGE 细化 [180/250] Utility=0.7945 SSIM=0.9649 MAE=9.34 LR=0.195 (Accepted=180, Rejected=0)
+AmbiLAGE 细化 [190/250] Utility=0.8032 SSIM=0.9650 MAE=9.29 LR=0.161 (Accepted=190, Rejected=0)
+AmbiLAGE 细化 [200/250] Utility=0.8033 SSIM=0.9650 MAE=9.29 LR=0.131 (Accepted=200, Rejected=0)
+AmbiLAGE 细化 [210/250] Utility=0.8111 SSIM=0.9650 MAE=9.24 LR=0.106 (Accepted=210, Rejected=0)
+AmbiLAGE 细化 [220/250] Utility=0.8162 SSIM=0.9651 MAE=9.21 LR=0.086 (Accepted=220, Rejected=0)
+AmbiLAGE 细化 [230/250] Utility=0.8160 SSIM=0.9651 MAE=9.18 LR=0.080 (Accepted=230, Rejected=0)
+AmbiLAGE 细化 [240/250] Utility=0.8101 SSIM=0.9651 MAE=9.17 LR=0.080 (Accepted=240, Rejected=0)
+AmbiLAGE 自适应退火收敛早停 [240/250] (min_steps=180, lr_scale=0.0800, best_step=220, best_sel_utility=0.8040)
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  62%|██████▏   | 460/741 [00:00<00:00, 4551.70it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 4296.18it/s]
+[transformers] You are using a model of type `sam2_video` to instantiate a model of type `sam2`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Loading weights:   0%|          | 0/741 [00:00<?, ?it/s]Loading weights:  60%|█████▉    | 444/741 [00:00<00:00, 4436.23it/s]Loading weights: 100%|██████████| 741/741 [00:00<00:00, 4675.54it/s]
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+AmbiLAGE 细化 [10/250] Utility=0.5050 SSIM=0.9123 MAE=8.28 LR=1.000 (Accepted=10, Rejected=0)
+AmbiLAGE 细化 [20/250] Utility=0.5497 SSIM=0.9088 MAE=8.93 LR=0.996 (Accepted=20, Rejected=0)
+AmbiLAGE 细化 [30/250] Utility=0.5758 SSIM=0.9040 MAE=10.42 LR=0.984 (Accepted=30, Rejected=0)
+AmbiLAGE 细化 [40/250] Utility=0.6003 SSIM=0.9001 MAE=10.23 LR=0.965 (Accepted=40, Rejected=0)
+AmbiLAGE 细化 [50/250] Utility=0.6160 SSIM=0.8997 MAE=10.31 LR=0.938 (Accepted=50, Rejected=0)
+AmbiLAGE 细化 [60/250] Utility=0.6216 SSIM=0.8739 MAE=12.46 LR=0.905 (Accepted=60, Rejected=0)
+AmbiLAGE 细化 [70/250] Utility=0.6323 SSIM=0.8720 MAE=12.75 LR=0.865 (Accepted=70, Rejected=0)
+AmbiLAGE 细化 [80/250] Utility=0.6565 SSIM=0.8746 MAE=12.69 LR=0.820 (Accepted=80, Rejected=0)
+AmbiLAGE 细化 [90/250] Utility=0.6653 SSIM=0.8750 MAE=12.76 LR=0.770 (Accepted=90, Rejected=0)
+AmbiLAGE 细化 [100/250] Utility=0.6702 SSIM=0.8783 MAE=12.58 LR=0.716 (Accepted=100, Rejected=0)
+AmbiLAGE 细化 [110/250] Utility=0.6792 SSIM=0.8820 MAE=12.16 LR=0.659 (Accepted=110, Rejected=0)
+AmbiLAGE 细化 [120/250] Utility=0.6913 SSIM=0.8842 MAE=11.96 LR=0.600 (Accepted=120, Rejected=0)
+AmbiLAGE 细化 [130/250] Utility=0.6783 SSIM=0.8722 MAE=13.76 LR=0.540 (Accepted=130, Rejected=0)
+AmbiLAGE 细化 [140/250] Utility=0.6908 SSIM=0.8500 MAE=15.68 LR=0.432 (Accepted=140, Rejected=0)
+AmbiLAGE 细化 [150/250] Utility=0.6908 SSIM=0.8500 MAE=15.68 LR=0.080 (Accepted=142, Rejected=8)
+AmbiLAGE 细化 [160/250] Utility=0.6908 SSIM=0.8500 MAE=15.68 LR=0.080 (Accepted=142, Rejected=18)
+AmbiLAGE 细化 [170/250] Utility=0.6908 SSIM=0.8500 MAE=15.68 LR=0.080 (Accepted=142, Rejected=28)
+AmbiLAGE 细化 [180/250] Utility=0.6908 SSIM=0.8500 MAE=15.68 LR=0.080 (Accepted=142, Rejected=38)
+AmbiLAGE 自适应退火收敛早停 [180/250] (min_steps=180, lr_scale=0.0800, best_step=120, best_sel_utility=0.6671)
+Traceback (most recent call last):
+  File "/content/AmbiLAGE/tools/run_experiment.py", line 8, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/content/AmbiLAGE/src/experiments/base_workflow.py", line 331, in main
+    generate_group(base, group, args.method, output / group / args.method, device=args.device,
+  File "/content/AmbiLAGE/src/experiments/base_workflow.py", line 228, in generate_group
+    image, metadata = generate_attack(inputs['source']['image'], inputs['target']['image'],
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/content/AmbiLAGE/src/visual/optimization.py", line 116, in generate_attack
+    image, metadata = run_ambilage_attack(
+                      ^^^^^^^^^^^^^^^^^^^^
+  File "/content/AmbiLAGE/src/visual/_ambilage/pipeline.py", line 447, in run_attack
+    return generate_ambilage(source,target,output_dir,definition=definition,config=ambilage_config,device=device,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/content/AmbiLAGE/src/visual/_ambilage/pipeline.py", line 432, in generate_ambilage
+    return AmbiLAGEPipeline(cfg,device).execute(source,target,output_dir,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/content/AmbiLAGE/src/visual/_ambilage/pipeline.py", line 365, in execute
+    raise RuntimeError('最终自然度门禁未通过，证据已保存，禁止标记为完整成图')
+RuntimeError: 最终自然度门禁未通过，证据已保存，禁止标记为完整成图

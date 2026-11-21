@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "protocol": "visual_inception_overlap_30_v4_exact",
+  "query_suite": "overlap_30_v4",
+  "method": "ambilage",
+  "query_mode": "text",
+  "key_mode": "image",
+  "key_image_weight": 1.0,
+  "defense_mode": "none",
+  "selected_conditions": [
+    {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    }
+  ],
+  "base_path": "/content/AmbiLAGE/resources/evaluation_base_golden_band",
+  "base_manifest_sha256": "00bc13faa0ce4a9b92a2177576b68fb2b212cab9f9b5ad6969cd7171a59fde8a",
+  "query_root": "/content/AmbiLAGE/resources/visual_inception_evaluation/exact_overlap_v4/overlap_30_v4",
+  "query_root_manifest_sha256": "6b21a8e99f9e8505b13fd4d06059c506f35ad171519f68bf93d2c8d4570580f7",
+  "query_validation_sha256": "2b89e5b4ee2314844ecb709a40b92484b2d71c730f12370ce471875f94b49fa0",
+  "pool_path": "/content/AmbiLAGE/resources/evaluation_base_golden_band/shared_memory/shared_memory.json",
+  "pool_sha256": "8c39c7b688006b49e572634980176beaee8824101dc15296ccb7b023edc56145",
+  "pool_count": 189,
+  "encoder_config": "/content/AmbiLAGE/src/visual/config/evaluator.clip_bigG14.heldout.json",
+  "encoder_config_sha256": "a7a7da0b205e7f814af790bf6227a055e35795a6e3a3248c1b0f1c07b1eae1ac",
+  "groups": [
+    "01_camera",
+    "02_chair",
+    "06_jeans",
+    "07_shampoo"
+  ],
+  "simultaneous_replacement_count": 4,
+  "shared_pool_scope": "simultaneous_4_group_replacement",
+  "shopping_allowed": false,
+  "recommendation_executed": false,
+  "frozen_images": {
+    "01_camera": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_ambilage_golden_band_9groups/01_camera/ambilage/frozen.png",
+      "image_sha256": "6e985a293db3bdcd88d123dd4ccf148266d8bc53c92fc974546c8553165b450a",
+      "source_memory_id": "groups9_reference_01_camera_B01LML1VXU",
+      "source_id": "B01LML1VXU",
+      "target_id": "B08V134QWR",
+      "requested_steps": 250,
+      "objective_kind": "sequential_public_joint_text_fg_ot_psi_v4"
+    },
+    "02_chair": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_ambilage_golden_band_9groups/02_chair/ambilage/frozen.png",
+      "image_sha256": "98cdf2294b761a254e95a89b14a7c89662bddfe0b2975d25599020129dc2f0f9",
+      "source_memory_id": "groups9_reference_02_chair_B07GDZQ68V",
+      "source_id": "B07GDZQ68V",
+      "target_id": "B09CYFD5BX",
+      "requested_steps": 250,
+      "objective_kind": "sequential_public_joint_text_fg_ot_psi_v4"
+    },
+    "06_jeans": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_ambilage_golden_band_9groups/06_jeans/ambilage/frozen.png",
+      "image_sha256": "6dcde655584d0085f4a1e87996d1f052ed05dbf32fcb200ff6480d2f2054f8e0",
+      "source_memory_id": "groups9_reference_06_jeans_B09J89KXRJ",
+      "source_id": "B09J89KXRJ",
+      "target_id": "B09HH96NJY",
+      "requested_steps": 250,
+      "objective_kind": "sequential_public_joint_text_fg_ot_psi_v4"
+    },
+    "07_shampoo": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_ambilage_golden_band_9groups/07_shampoo/ambilage/frozen.png",
+      "image_sha256": "f5442bb03c2d7400dc1ae586dec17f1da238e68b926c1f140d0495aecc1c2c42",
+      "source_memory_id": "groups9_reference_07_shampoo_B08WJB1XDD",
+      "source_id": "B08WJB1XDD",
+      "target_id": "B00BDJODWI",
+      "requested_steps": 250,
+      "objective_kind": "sequential_public_joint_text_fg_ot_psi_v4"
+    }
+  }
+}

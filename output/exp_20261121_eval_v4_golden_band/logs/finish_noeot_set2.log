@@ -1,0 +1,637 @@
+[STAGE A VERIFY] 2026-11-21T08:40:22+00:00 Validating all 9 Set 2 EoT=OFF groups via load_frozen_suite & manifest checks...
+[NOEOT FROZEN VERIFIED] 01_camera: source=B01LML1VXU tv=0.9861 ssim=0.9655 sha256=386ac31f68d4...
+[NOEOT FROZEN VERIFIED] 02_chair: source=B07GDZQ68V tv=1.1312 ssim=0.9701 sha256=08a0243b9a29...
+[NOEOT FROZEN VERIFIED] 03_cookies: source=B00HHP71JY tv=1.0464 ssim=0.9502 sha256=c8954709f7e9...
+[NOEOT FROZEN VERIFIED] 04_curtain: source=B09KRPJJC4 tv=1.4415 ssim=0.9651 sha256=e26f2a314286...
+[NOEOT FROZEN VERIFIED] 05_hair_extension: source=B07BC7JMPL tv=2.2103 ssim=0.9693 sha256=536100234905...
+[NOEOT FROZEN VERIFIED] 06_jeans: source=B09J89KXRJ tv=1.4553 ssim=0.9752 sha256=8ab7536b01e2...
+[NOEOT FROZEN VERIFIED] 07_shampoo: source=B08WJB1XDD tv=0.8371 ssim=0.9396 sha256=b94bdf867df6...
+[NOEOT FROZEN VERIFIED] 08_speaker: source=B09P3RR62H tv=0.7549 ssim=0.9721 sha256=60a6ed6edf41...
+[NOEOT FROZEN VERIFIED] 09_toothbrush: source=B09MD5SZCX tv=0.6993 ssim=0.9734 sha256=92620e01ea35...
+[DRIVE_SYNC:after_noeot_gen] 2026-11-21T08:40:25+00:00 starting rsync to /content/drive/MyDrive/AmbiLAGE_backup ...
+[DRIVE_SYNC:after_noeot_gen] 2026-11-21T08:40:26+00:00 completed.
+[STAGE B START] 2026-11-21T08:40:26+00:00 Evaluating AmbiLAGE (EoT=OFF) on Set 2 across 3 exact_overlap_v4 suites x 3 encoders...
+
+=== [ENCODER 01_clip_l14] panels=['ambilage_noeot_set2_training_oracle_v4', 'ambilage_noeot_set2_overlap_30_v4', 'ambilage_noeot_set2_zero_overlap_v4'] unique_images=198 unique_texts=360 batch_size=16 text_batch_size=64 verify=in_process ===
+[PRECOMPUTED UPDATE 01_clip_l14] Encoding only delta assets: missing_images=9, missing_texts=0
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+none clean: 前三 1/20；前五 7/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 14/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 5/20；前五 7/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 4/20；前五 10/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 4/20；前五 7/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 11/20；前五 17/20
+none clean: 前三 1/20；前五 6/20
+none modified: 前三 20/20；前五 20/20
+[EVAL DONE] ambilage_noeot_set2_training_oracle_v4/01_clip_l14
+none clean: 前三 2/20；前五 3/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 3/20；前五 15/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 6/20；前五 8/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 6/20；前五 13/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 7/20；前五 9/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 4/20
+none modified: 前三 9/20；前五 13/20
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 20/20；前五 20/20
+[EVAL DONE] ambilage_noeot_set2_overlap_30_v4/01_clip_l14
+none clean: 前三 1/20；前五 2/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 3/20；前五 14/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 5/20；前五 10/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 7/20；前五 13/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 7/20；前五 9/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 6/20；前五 11/20
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 20/20；前五 20/20
+[EVAL DONE] ambilage_noeot_set2_zero_overlap_v4/01_clip_l14
+[VERIFY 01_clip_l14] prewarmed 198 unique images (batch=16), 360 unique texts (text_batch=64)
+[VERIFIED] ambilage_noeot_set2_training_oracle_v4/01_clip_l14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] ambilage_noeot_set2_overlap_30_v4/01_clip_l14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] ambilage_noeot_set2_zero_overlap_v4/01_clip_l14: rankings=360 scores=68040 max_error=0.00e+00
+
+=== [ENCODER 02_openclip_bigG14] panels=['ambilage_noeot_set2_training_oracle_v4', 'ambilage_noeot_set2_overlap_30_v4', 'ambilage_noeot_set2_zero_overlap_v4'] unique_images=198 unique_texts=360 batch_size=16 text_batch_size=64 verify=in_process ===
+[PRECOMPUTED UPDATE 02_openclip_bigG14] Encoding only delta assets: missing_images=9, missing_texts=0
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+none clean: 前三 2/20；前五 7/20
+none modified: 前三 6/20；前五 10/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 0/20；前五 7/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 0/20
+none clean: 前三 1/20；前五 4/20
+none modified: 前三 7/20；前五 11/20
+none clean: 前三 5/20；前五 6/20
+none modified: 前三 5/20；前五 9/20
+none clean: 前三 8/20；前五 12/20
+none modified: 前三 11/20；前五 14/20
+none clean: 前三 3/20；前五 6/20
+none modified: 前三 7/20；前五 9/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 1/20；前五 1/20
+none clean: 前三 5/20；前五 5/20
+none modified: 前三 6/20；前五 10/20
+[EVAL DONE] ambilage_noeot_set2_training_oracle_v4/02_openclip_bigG14
+none clean: 前三 3/20；前五 5/20
+none modified: 前三 7/20；前五 10/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 7/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 1/20；前五 1/20
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 4/20；前五 8/20
+none clean: 前三 7/20；前五 10/20
+none modified: 前三 7/20；前五 10/20
+none clean: 前三 9/20；前五 15/20
+none modified: 前三 9/20；前五 15/20
+none clean: 前三 7/20；前五 9/20
+none modified: 前三 7/20；前五 9/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 1/20；前五 2/20
+none clean: 前三 3/20；前五 5/20
+none modified: 前三 5/20；前五 9/20
+[EVAL DONE] ambilage_noeot_set2_overlap_30_v4/02_openclip_bigG14
+none clean: 前三 3/20；前五 5/20
+none modified: 前三 8/20；前五 11/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 8/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 1/20；前五 1/20
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 4/20；前五 7/20
+none clean: 前三 7/20；前五 12/20
+none modified: 前三 6/20；前五 12/20
+none clean: 前三 10/20；前五 16/20
+none modified: 前三 8/20；前五 15/20
+none clean: 前三 7/20；前五 10/20
+none modified: 前三 8/20；前五 10/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 1/20
+none clean: 前三 1/20；前五 5/20
+none modified: 前三 4/20；前五 7/20
+[EVAL DONE] ambilage_noeot_set2_zero_overlap_v4/02_openclip_bigG14
+[VERIFY 02_openclip_bigG14] prewarmed 198 unique images (batch=16), 360 unique texts (text_batch=64)
+[VERIFIED] ambilage_noeot_set2_training_oracle_v4/02_openclip_bigG14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] ambilage_noeot_set2_overlap_30_v4/02_openclip_bigG14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] ambilage_noeot_set2_zero_overlap_v4/02_openclip_bigG14: rankings=360 scores=68040 max_error=0.00e+00
+
+=== [ENCODER 03_siglip_so400m] panels=['ambilage_noeot_set2_training_oracle_v4', 'ambilage_noeot_set2_overlap_30_v4', 'ambilage_noeot_set2_zero_overlap_v4'] unique_images=198 unique_texts=360 batch_size=16 text_batch_size=64 verify=in_process ===
+[PRECOMPUTED UPDATE 03_siglip_so400m] Encoding only delta assets: missing_images=9, missing_texts=0
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+none clean: 前三 7/20；前五 8/20
+none modified: 前三 8/20；前五 9/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 1/20；前五 5/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 1/20；前五 5/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 0/20
+none clean: 前三 2/20；前五 6/20
+none modified: 前三 4/20；前五 8/20
+none clean: 前三 13/20；前五 16/20
+none modified: 前三 12/20；前五 17/20
+none clean: 前三 1/20；前五 3/20
+none modified: 前三 4/20；前五 8/20
+none clean: 前三 0/20；前五 2/20
+none modified: 前三 1/20；前五 3/20
+none clean: 前三 3/20；前五 7/20
+none modified: 前三 5/20；前五 9/20
+[EVAL DONE] ambilage_noeot_set2_training_oracle_v4/03_siglip_so400m
+none clean: 前三 8/20；前五 9/20
+none modified: 前三 9/20；前五 12/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 9/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 2/20；前五 2/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 0/20
+none clean: 前三 3/20；前五 4/20
+none modified: 前三 3/20；前五 5/20
+none clean: 前三 13/20；前五 15/20
+none modified: 前三 12/20；前五 15/20
+none clean: 前三 2/20；前五 2/20
+none modified: 前三 6/20；前五 8/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 0/20；前五 2/20
+none clean: 前三 0/20；前五 5/20
+none modified: 前三 3/20；前五 8/20
+[EVAL DONE] ambilage_noeot_set2_overlap_30_v4/03_siglip_so400m
+none clean: 前三 7/20；前五 10/20
+none modified: 前三 8/20；前五 12/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 1/20；前五 12/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 1/20；前五 2/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 1/20
+none clean: 前三 4/20；前五 6/20
+none modified: 前三 5/20；前五 6/20
+none clean: 前三 13/20；前五 16/20
+none modified: 前三 13/20；前五 16/20
+none clean: 前三 2/20；前五 2/20
+none modified: 前三 8/20；前五 10/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 1/20；前五 1/20
+none clean: 前三 1/20；前五 4/20
+none modified: 前三 3/20；前五 6/20
+[EVAL DONE] ambilage_noeot_set2_zero_overlap_v4/03_siglip_so400m
+[VERIFY 03_siglip_so400m] prewarmed 198 unique images (batch=16), 360 unique texts (text_batch=64)
+[VERIFIED] ambilage_noeot_set2_training_oracle_v4/03_siglip_so400m: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] ambilage_noeot_set2_overlap_30_v4/03_siglip_so400m: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] ambilage_noeot_set2_zero_overlap_v4/03_siglip_so400m: rankings=360 scores=68040 max_error=0.00e+00
+{
+  "ambilage_noeot_set2_training_oracle_v4": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 11.922222222222222,
+      "mean_rank_modified": 1.3611111111111112,
+      "mean_rank_gain": 10.561111111111112,
+      "top1": {
+        "clean_hits": 3,
+        "modified_hits": 160,
+        "clean_rate": 0.016666666666666666,
+        "modified_rate": 0.8888888888888888,
+        "gain": 0.8722222222222222,
+        "new_hits": 157,
+        "lost_hits": 0,
+        "clean_miss_count": 177,
+        "clean_miss_conversion_rate": 0.8870056497175142,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.8870056497175142
+      },
+      "top3": {
+        "clean_hits": 16,
+        "modified_hits": 171,
+        "clean_rate": 0.08888888888888889,
+        "modified_rate": 0.95,
+        "gain": 0.8611111111111112,
+        "new_hits": 155,
+        "lost_hits": 0,
+        "clean_miss_count": 164,
+        "clean_miss_conversion_rate": 0.9451219512195121,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9451219512195121
+      },
+      "top5": {
+        "clean_hits": 56,
+        "modified_hits": 177,
+        "clean_rate": 0.3111111111111111,
+        "modified_rate": 0.9833333333333333,
+        "gain": 0.6722222222222223,
+        "new_hits": 121,
+        "lost_hits": 0,
+        "clean_miss_count": 124,
+        "clean_miss_conversion_rate": 0.9758064516129032,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9758064516129032
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 10.588888888888889,
+      "mean_rank_modified": 8.922222222222222,
+      "mean_rank_gain": 1.6666666666666667,
+      "top1": {
+        "clean_hits": 5,
+        "modified_hits": 11,
+        "clean_rate": 0.027777777777777776,
+        "modified_rate": 0.06111111111111111,
+        "gain": 0.03333333333333333,
+        "new_hits": 7,
+        "lost_hits": 1,
+        "clean_miss_count": 175,
+        "clean_miss_conversion_rate": 0.04,
+        "clean_hit_retention_rate": 0.8,
+        "net_headroom_capture": 0.03428571428571429
+      },
+      "top3": {
+        "clean_hits": 25,
+        "modified_hits": 43,
+        "clean_rate": 0.1388888888888889,
+        "modified_rate": 0.2388888888888889,
+        "gain": 0.1,
+        "new_hits": 19,
+        "lost_hits": 1,
+        "clean_miss_count": 155,
+        "clean_miss_conversion_rate": 0.12258064516129032,
+        "clean_hit_retention_rate": 0.96,
+        "net_headroom_capture": 0.11612903225806452
+      },
+      "top5": {
+        "clean_hits": 42,
+        "modified_hits": 71,
+        "clean_rate": 0.23333333333333334,
+        "modified_rate": 0.39444444444444443,
+        "gain": 0.16111111111111112,
+        "new_hits": 30,
+        "lost_hits": 1,
+        "clean_miss_count": 138,
+        "clean_miss_conversion_rate": 0.21739130434782608,
+        "clean_hit_retention_rate": 0.9761904761904762,
+        "net_headroom_capture": 0.21014492753623187
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 10.877777777777778,
+      "mean_rank_modified": 8.938888888888888,
+      "mean_rank_gain": 1.9388888888888889,
+      "top1": {
+        "clean_hits": 7,
+        "modified_hits": 12,
+        "clean_rate": 0.03888888888888889,
+        "modified_rate": 0.06666666666666667,
+        "gain": 0.027777777777777776,
+        "new_hits": 6,
+        "lost_hits": 1,
+        "clean_miss_count": 173,
+        "clean_miss_conversion_rate": 0.03468208092485549,
+        "clean_hit_retention_rate": 0.8571428571428571,
+        "net_headroom_capture": 0.028901734104046242
+      },
+      "top3": {
+        "clean_hits": 26,
+        "modified_hits": 36,
+        "clean_rate": 0.14444444444444443,
+        "modified_rate": 0.2,
+        "gain": 0.05555555555555555,
+        "new_hits": 12,
+        "lost_hits": 2,
+        "clean_miss_count": 154,
+        "clean_miss_conversion_rate": 0.07792207792207792,
+        "clean_hit_retention_rate": 0.9230769230769231,
+        "net_headroom_capture": 0.06493506493506493
+      },
+      "top5": {
+        "clean_hits": 43,
+        "modified_hits": 64,
+        "clean_rate": 0.2388888888888889,
+        "modified_rate": 0.35555555555555557,
+        "gain": 0.11666666666666667,
+        "new_hits": 22,
+        "lost_hits": 1,
+        "clean_miss_count": 137,
+        "clean_miss_conversion_rate": 0.16058394160583941,
+        "clean_hit_retention_rate": 0.9767441860465116,
+        "net_headroom_capture": 0.15328467153284672
+      }
+    }
+  },
+  "ambilage_noeot_set2_overlap_30_v4": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 11.322222222222223,
+      "mean_rank_modified": 1.45,
+      "mean_rank_gain": 9.872222222222222,
+      "top1": {
+        "clean_hits": 4,
+        "modified_hits": 162,
+        "clean_rate": 0.022222222222222223,
+        "modified_rate": 0.9,
+        "gain": 0.8777777777777778,
+        "new_hits": 158,
+        "lost_hits": 0,
+        "clean_miss_count": 176,
+        "clean_miss_conversion_rate": 0.8977272727272727,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.8977272727272727
+      },
+      "top3": {
+        "clean_hits": 25,
+        "modified_hits": 169,
+        "clean_rate": 0.1388888888888889,
+        "modified_rate": 0.9388888888888889,
+        "gain": 0.8,
+        "new_hits": 144,
+        "lost_hits": 0,
+        "clean_miss_count": 155,
+        "clean_miss_conversion_rate": 0.9290322580645162,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9290322580645162
+      },
+      "top5": {
+        "clean_hits": 56,
+        "modified_hits": 173,
+        "clean_rate": 0.3111111111111111,
+        "modified_rate": 0.9611111111111111,
+        "gain": 0.65,
+        "new_hits": 117,
+        "lost_hits": 0,
+        "clean_miss_count": 124,
+        "clean_miss_conversion_rate": 0.9435483870967742,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9435483870967742
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 10.905555555555555,
+      "mean_rank_modified": 8.894444444444444,
+      "mean_rank_gain": 2.011111111111111,
+      "top1": {
+        "clean_hits": 7,
+        "modified_hits": 13,
+        "clean_rate": 0.03888888888888889,
+        "modified_rate": 0.07222222222222222,
+        "gain": 0.03333333333333333,
+        "new_hits": 6,
+        "lost_hits": 0,
+        "clean_miss_count": 173,
+        "clean_miss_conversion_rate": 0.03468208092485549,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.03468208092485549
+      },
+      "top3": {
+        "clean_hits": 31,
+        "modified_hits": 41,
+        "clean_rate": 0.17222222222222222,
+        "modified_rate": 0.22777777777777777,
+        "gain": 0.05555555555555555,
+        "new_hits": 14,
+        "lost_hits": 4,
+        "clean_miss_count": 149,
+        "clean_miss_conversion_rate": 0.09395973154362416,
+        "clean_hit_retention_rate": 0.8709677419354839,
+        "net_headroom_capture": 0.06711409395973154
+      },
+      "top5": {
+        "clean_hits": 49,
+        "modified_hits": 71,
+        "clean_rate": 0.2722222222222222,
+        "modified_rate": 0.39444444444444443,
+        "gain": 0.12222222222222222,
+        "new_hits": 26,
+        "lost_hits": 4,
+        "clean_miss_count": 131,
+        "clean_miss_conversion_rate": 0.1984732824427481,
+        "clean_hit_retention_rate": 0.9183673469387755,
+        "net_headroom_capture": 0.16793893129770993
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 10.705555555555556,
+      "mean_rank_modified": 9.055555555555555,
+      "mean_rank_gain": 1.65,
+      "top1": {
+        "clean_hits": 6,
+        "modified_hits": 6,
+        "clean_rate": 0.03333333333333333,
+        "modified_rate": 0.03333333333333333,
+        "gain": 0.0,
+        "new_hits": 1,
+        "lost_hits": 1,
+        "clean_miss_count": 174,
+        "clean_miss_conversion_rate": 0.005747126436781609,
+        "clean_hit_retention_rate": 0.8333333333333334,
+        "net_headroom_capture": 0.0
+      },
+      "top3": {
+        "clean_hits": 27,
+        "modified_hits": 35,
+        "clean_rate": 0.15,
+        "modified_rate": 0.19444444444444445,
+        "gain": 0.044444444444444446,
+        "new_hits": 10,
+        "lost_hits": 2,
+        "clean_miss_count": 153,
+        "clean_miss_conversion_rate": 0.06535947712418301,
+        "clean_hit_retention_rate": 0.9259259259259259,
+        "net_headroom_capture": 0.05228758169934641
+      },
+      "top5": {
+        "clean_hits": 37,
+        "modified_hits": 61,
+        "clean_rate": 0.20555555555555555,
+        "modified_rate": 0.3388888888888889,
+        "gain": 0.13333333333333333,
+        "new_hits": 26,
+        "lost_hits": 2,
+        "clean_miss_count": 143,
+        "clean_miss_conversion_rate": 0.18181818181818182,
+        "clean_hit_retention_rate": 0.9459459459459459,
+        "net_headroom_capture": 0.16783216783216784
+      }
+    }
+  },
+  "ambilage_noeot_set2_zero_overlap_v4": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 11.377777777777778,
+      "mean_rank_modified": 1.5,
+      "mean_rank_gain": 9.877777777777778,
+      "top1": {
+        "clean_hits": 5,
+        "modified_hits": 162,
+        "clean_rate": 0.027777777777777776,
+        "modified_rate": 0.9,
+        "gain": 0.8722222222222222,
+        "new_hits": 157,
+        "lost_hits": 0,
+        "clean_miss_count": 175,
+        "clean_miss_conversion_rate": 0.8971428571428571,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.8971428571428571
+      },
+      "top3": {
+        "clean_hits": 24,
+        "modified_hits": 166,
+        "clean_rate": 0.13333333333333333,
+        "modified_rate": 0.9222222222222223,
+        "gain": 0.7888888888888889,
+        "new_hits": 142,
+        "lost_hits": 0,
+        "clean_miss_count": 156,
+        "clean_miss_conversion_rate": 0.9102564102564102,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9102564102564102
+      },
+      "top5": {
+        "clean_hits": 52,
+        "modified_hits": 171,
+        "clean_rate": 0.28888888888888886,
+        "modified_rate": 0.95,
+        "gain": 0.6611111111111111,
+        "new_hits": 119,
+        "lost_hits": 0,
+        "clean_miss_count": 128,
+        "clean_miss_conversion_rate": 0.9296875,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9296875
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 11.1,
+      "mean_rank_modified": 9.083333333333334,
+      "mean_rank_gain": 2.0166666666666666,
+      "top1": {
+        "clean_hits": 8,
+        "modified_hits": 14,
+        "clean_rate": 0.044444444444444446,
+        "modified_rate": 0.07777777777777778,
+        "gain": 0.03333333333333333,
+        "new_hits": 6,
+        "lost_hits": 0,
+        "clean_miss_count": 172,
+        "clean_miss_conversion_rate": 0.03488372093023256,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.03488372093023256
+      },
+      "top3": {
+        "clean_hits": 29,
+        "modified_hits": 39,
+        "clean_rate": 0.16111111111111112,
+        "modified_rate": 0.21666666666666667,
+        "gain": 0.05555555555555555,
+        "new_hits": 16,
+        "lost_hits": 6,
+        "clean_miss_count": 151,
+        "clean_miss_conversion_rate": 0.10596026490066225,
+        "clean_hit_retention_rate": 0.7931034482758621,
+        "net_headroom_capture": 0.06622516556291391
+      },
+      "top5": {
+        "clean_hits": 52,
+        "modified_hits": 72,
+        "clean_rate": 0.28888888888888886,
+        "modified_rate": 0.4,
+        "gain": 0.1111111111111111,
+        "new_hits": 24,
+        "lost_hits": 4,
+        "clean_miss_count": 128,
+        "clean_miss_conversion_rate": 0.1875,
+        "clean_hit_retention_rate": 0.9230769230769231,
+        "net_headroom_capture": 0.15625
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 10.483333333333333,
+      "mean_rank_modified": 8.627777777777778,
+      "mean_rank_gain": 1.8555555555555556,
+      "top1": {
+        "clean_hits": 6,
+        "modified_hits": 5,
+        "clean_rate": 0.03333333333333333,
+        "modified_rate": 0.027777777777777776,
+        "gain": -0.005555555555555556,
+        "new_hits": 1,
+        "lost_hits": 2,
+        "clean_miss_count": 174,
+        "clean_miss_conversion_rate": 0.005747126436781609,
+        "clean_hit_retention_rate": 0.6666666666666666,
+        "net_headroom_capture": -0.005747126436781609
+      },
+      "top3": {
+        "clean_hits": 28,
+        "modified_hits": 40,
+        "clean_rate": 0.15555555555555556,
+        "modified_rate": 0.2222222222222222,
+        "gain": 0.06666666666666667,
+        "new_hits": 13,
+        "lost_hits": 1,
+        "clean_miss_count": 152,
+        "clean_miss_conversion_rate": 0.08552631578947369,
+        "clean_hit_retention_rate": 0.9642857142857143,
+        "net_headroom_capture": 0.07894736842105263
+      },
+      "top5": {
+        "clean_hits": 40,
+        "modified_hits": 66,
+        "clean_rate": 0.2222222222222222,
+        "modified_rate": 0.36666666666666664,
+        "gain": 0.14444444444444443,
+        "new_hits": 28,
+        "lost_hits": 2,
+        "clean_miss_count": 140,
+        "clean_miss_conversion_rate": 0.2,
+        "clean_hit_retention_rate": 0.95,
+        "net_headroom_capture": 0.18571428571428572
+      }
+    }
+  }
+}
+[STAGE B DONE] 2026-11-21T08:43:43+00:00
+Updated timings: {'vi_10_00_set2_generate_9groups_seconds': 190.0, 'eval_v4_set2_3suites_3encoders_seconds': 339.93, 'total_pipeline_seconds': 531.9, 'ambilage_noeot_set2_05_hair_extension_regen_seconds': 260.36, 'ambilage_noeot_set2_eval_v4_3suites_3encoders_seconds': 197.14}
+[STAGE C START] 2026-11-21T08:43:43+00:00 Summarizing & verifying <=1e-7 independent verification...
+[SUMMARY WRITTEN] /content/AmbiLAGE/output/exp_20261121_eval_v4_golden_band/EVAL_V4_GOLDEN_BAND_SUMMARY.md
+[VERIFIED <=1e-7] ambilage_noeot_set2_training_oracle_v4 / 01_clip_l14: max_score_error=0.0
+[VERIFIED <=1e-7] ambilage_noeot_set2_training_oracle_v4 / 02_openclip_bigG14: max_score_error=0.0
+[VERIFIED <=1e-7] ambilage_noeot_set2_training_oracle_v4 / 03_siglip_so400m: max_score_error=0.0
+[VERIFIED <=1e-7] ambilage_noeot_set2_overlap_30_v4 / 01_clip_l14: max_score_error=0.0
+[VERIFIED <=1e-7] ambilage_noeot_set2_overlap_30_v4 / 02_openclip_bigG14: max_score_error=0.0
+[VERIFIED <=1e-7] ambilage_noeot_set2_overlap_30_v4 / 03_siglip_so400m: max_score_error=0.0
+[VERIFIED <=1e-7] ambilage_noeot_set2_zero_overlap_v4 / 01_clip_l14: max_score_error=0.0
+[VERIFIED <=1e-7] ambilage_noeot_set2_zero_overlap_v4 / 02_openclip_bigG14: max_score_error=0.0
+[VERIFIED <=1e-7] ambilage_noeot_set2_zero_overlap_v4 / 03_siglip_so400m: max_score_error=0.0
+[ALL AMBILAGE NOEOT SET2 STAGES COMPLETED SUCCESSFULLY] 2026-11-21T08:43:46+00:00
+[DRIVE_SYNC:final_on_exit] 2026-11-21T08:43:46+00:00 starting rsync to /content/drive/MyDrive/AmbiLAGE_backup ...
+[DRIVE_SYNC:final_on_exit] 2026-11-21T08:43:57+00:00 completed.

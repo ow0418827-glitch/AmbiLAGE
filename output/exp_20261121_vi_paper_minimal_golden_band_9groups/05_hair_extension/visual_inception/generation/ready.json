@@ -1,0 +1,32 @@
+{
+  "schema_version": 4,
+  "method": "visual_inception",
+  "status": "completed",
+  "test_fixture": false,
+  "production_backend": true,
+  "output_image": "/content/AmbiLAGE/output/exp_20261121_vi_paper_minimal_golden_band_9groups/05_hair_extension/visual_inception/generation/adversarial.png",
+  "output_image_sha256": "b1b3b0c461f69e13219aa751a78675d809f693f30d24f188df987f1ad4158de4",
+  "source_image": "/content/AmbiLAGE/resources/evaluation_base_golden_band/groups/05_hair_extension/source.jpg",
+  "source_image_sha256": "55ee7ea2a6a6b5c65ccab1b94811e98fed3b2d01ca1f314188f056b9d0bd43ce",
+  "target_image": "/content/AmbiLAGE/resources/evaluation_base_golden_band/groups/05_hair_extension/target.jpg",
+  "target_image_sha256": "c5af2ad55c9b05fdba76c36316aa3088a43c286fe6ccab7858ccd2d14cd9c9a6",
+  "metadata_sha256": "1edab1a3fdf07eca7ef54e2c1d2c3a19821c2bd3796460d0d82a66dd3f9e6ead",
+  "attack_metrics_sha256": "1edab1a3fdf07eca7ef54e2c1d2c3a19821c2bd3796460d0d82a66dd3f9e6ead",
+  "config_sha256": "6979903c767b7ee477195939bb739ed5641cc0e8350757802e286b7aa2c1015b",
+  "steps_requested": 100,
+  "steps_completed": 100,
+  "epsilon": 0.03137254901960784,
+  "epsilon_levels": 8,
+  "training_objective_kind": "visual_inception_retrieval_semantic_perceptual_paper_minimal_v4",
+  "retrieval_loss_omitted": false,
+  "candidates": {
+    "final": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_vi_paper_minimal_golden_band_9groups/05_hair_extension/visual_inception/generation/adversarial.png",
+      "sha256": "b1b3b0c461f69e13219aa751a78675d809f693f30d24f188df987f1ad4158de4"
+    }
+  },
+  "training_bundle_sha256": "821e426c9c2f7344fa6406beed2b904205dbd52d9eef2579ad2b568a58e913f2",
+  "training_manifest_sha256": "cdd84b8e06e708283b99ea1b3f831843f172b5b18ba8105c9913d3dbf5efd373",
+  "mechanism_profile": "paper_minimal",
+  "paper_minimal_mechanisms_sha256": "064dc1f9f22d5aca6188e1f7cd5975102cd02f7cfdd04e9eb8f029f8c9a9d3ba"
+}

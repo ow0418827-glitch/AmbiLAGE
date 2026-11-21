@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "natural": true,
+  "text_preserved": true,
+  "artifact_free": true,
+  "reasons": [
+    "strict_mathematical_naturalness_gate_passed"
+  ],
+  "category": "window coverings",
+  "metrics": {
+    "source_ssim": 0.9641697484333245,
+    "rgb_source_ssim": 0.9641697484333245,
+    "luma_source_ssim": 0.985498880703498,
+    "source_mae_levels": 10.409823417663574,
+    "rgb_source_mae_levels": 10.409823417663574,
+    "luma_source_mae_levels": 5.079129695892334,
+    "fg_rgb_source_mae_levels": 6.892910003662109,
+    "fg_chroma_tv_levels": 1.3717982769012451,
+    "halo_error": 4.09499979019165,
+    "roi_max_abs_diff": 0.0
+  },
+  "thresholds": {
+    "source_ssim_floor": 0.85,
+    "source_mae_ceiling": 22.0,
+    "fg_source_mae_ceiling": 10.0,
+    "fg_chroma_tv_ceiling": 2.5,
+    "halo_ceiling": 10.0,
+    "roi_max_abs_diff": 0.0
+  },
+  "model": "mathematical_rgb_oklab_dual_gate_v2",
+  "precision": "float32",
+  "candidate_sha256": "48c29d08a987457149aebbdfadc598738cb188926ea8960de55a80c1c9621573"
+}

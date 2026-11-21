@@ -1,0 +1,32 @@
+{
+  "schema_version": 4,
+  "method": "visual_inception",
+  "status": "completed",
+  "test_fixture": false,
+  "production_backend": true,
+  "output_image": "/content/AmbiLAGE/output/exp_20261121_vi_paper_minimal_margin_golden_band_9groups/07_shampoo/visual_inception/generation/adversarial.png",
+  "output_image_sha256": "a96232d39f4dc572dfc56b2168abaefeab48b1261bd5f33782d85042975f9027",
+  "source_image": "/content/AmbiLAGE/resources/evaluation_base_golden_band/groups/07_shampoo/source.jpg",
+  "source_image_sha256": "db3943d881d90ad1c02d8f68a9d84e10ec5dad9a1121bff7b689c995823840d7",
+  "target_image": "/content/AmbiLAGE/resources/evaluation_base_golden_band/groups/07_shampoo/target.jpg",
+  "target_image_sha256": "dd0abf8d2d52aa289346aa2e7219187cec901c901d4f3cce1ef3379691467256",
+  "metadata_sha256": "32774bcd464ca129361b2a585f8af01719cbaef80c995c3396c83af34c29c2bc",
+  "attack_metrics_sha256": "32774bcd464ca129361b2a585f8af01719cbaef80c995c3396c83af34c29c2bc",
+  "config_sha256": "b7c7342277d7e328e4e90ad0ddee526752fcea13392d59d845449fa639975a84",
+  "steps_requested": 100,
+  "steps_completed": 100,
+  "epsilon": 0.03137254901960784,
+  "epsilon_levels": 8,
+  "training_objective_kind": "visual_inception_retrieval_semantic_perceptual_paper_minimal_margin_v4",
+  "retrieval_loss_omitted": false,
+  "candidates": {
+    "final": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_vi_paper_minimal_margin_golden_band_9groups/07_shampoo/visual_inception/generation/adversarial.png",
+      "sha256": "a96232d39f4dc572dfc56b2168abaefeab48b1261bd5f33782d85042975f9027"
+    }
+  },
+  "training_bundle_sha256": "47f8c37429ddf591faee2f8b3f3ebf8c813715785ff68096d6e45d868dba4763",
+  "training_manifest_sha256": "3ba7a9d73e4af24c110a44bc0e4c2da6e02676056e4af7accfc56f74a381313a",
+  "mechanism_profile": "paper_minimal_margin",
+  "paper_minimal_mechanisms_sha256": "3cd182acf43ab26ef4b753112d393264452d654349d41a1dbbcad495e31761ad"
+}

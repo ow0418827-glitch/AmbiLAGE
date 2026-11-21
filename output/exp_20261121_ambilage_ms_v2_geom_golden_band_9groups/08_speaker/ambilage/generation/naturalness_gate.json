@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "natural": true,
+  "text_preserved": true,
+  "artifact_free": true,
+  "reasons": [
+    "strict_mathematical_naturalness_gate_passed"
+  ],
+  "category": "soundbars",
+  "metrics": {
+    "source_ssim": 0.9727701510612498,
+    "rgb_source_ssim": 0.9727701510612498,
+    "luma_source_ssim": 0.9905138289137858,
+    "source_mae_levels": 4.002546787261963,
+    "rgb_source_mae_levels": 4.002546787261963,
+    "luma_source_mae_levels": 3.6145830154418945,
+    "fg_rgb_source_mae_levels": 9.999985694885254,
+    "fg_chroma_tv_levels": 0.6745113134384155,
+    "halo_error": 2.2573413848876953,
+    "roi_max_abs_diff": 0.0
+  },
+  "thresholds": {
+    "source_ssim_floor": 0.85,
+    "source_mae_ceiling": 22.0,
+    "fg_source_mae_ceiling": 10.0,
+    "fg_chroma_tv_ceiling": 2.5,
+    "halo_ceiling": 10.0,
+    "roi_max_abs_diff": 0.0
+  },
+  "model": "mathematical_rgb_oklab_dual_gate_v2",
+  "precision": "float32",
+  "candidate_sha256": "8646ad8bf7f8e51af9181341265a702a8531d8e862f46f22ff2e2d1e410d6c6d"
+}

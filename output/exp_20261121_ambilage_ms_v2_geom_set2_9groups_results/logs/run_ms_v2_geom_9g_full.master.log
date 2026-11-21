@@ -1,0 +1,699 @@
+[STAGE A START] 2026-11-21T13:15:58+00:00 Generating remaining 5 Set 2 groups using default ms_v2_geom (/content/AmbiLAGE/src/visual/config/ambilage.clip_l14.example.json)...
+[STAGE A SHARDS DONE] 2026-11-21T13:54:34+00:00 w1=0 w2=0
+[STAGE B VERIFY] 2026-11-21T13:54:34+00:00 Verifying all 9 ms_v2_geom FROZEN_IMAGE.json...
+[VERIFIED 9G FROZEN] 01_camera: ssim=0.9662 mae=8.97 tv=0.8199
+[VERIFIED 9G FROZEN] 02_chair: ssim=0.9756 mae=3.10 tv=0.9138
+[VERIFIED 9G FROZEN] 03_cookies: ssim=0.9545 mae=8.68 tv=0.8819
+[VERIFIED 9G FROZEN] 04_curtain: ssim=0.9642 mae=10.41 tv=1.3718
+[VERIFIED 9G FROZEN] 05_hair_extension: ssim=0.9590 mae=5.46 tv=2.0345
+[VERIFIED 9G FROZEN] 06_jeans: ssim=0.9761 mae=4.56 tv=1.2863
+[VERIFIED 9G FROZEN] 07_shampoo: ssim=0.9437 mae=7.85 tv=0.6811
+[VERIFIED 9G FROZEN] 08_speaker: ssim=0.9728 mae=4.00 tv=0.6745
+[VERIFIED 9G FROZEN] 09_toothbrush: ssim=0.9755 mae=4.95 tv=0.5399
+[SYNC_START] 2026-11-21T13:54:37+00:00 rsync -> /content/drive/MyDrive/AmbiLAGE_backup
+[SYNC_DONE] 2026-11-21T13:54:40+00:00 completed.
+[STAGE C.1 PRECOMPUTE] 2026-11-21T13:54:40+00:00 Encoding all 9 Set 2 ms_v2_geom images across 3 encoders...
+[PRECOMPUTE 01_clip_l14] unique_images=342 unique_texts=937 batch_size=16 text_batch_size=64
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+[PRECOMPUTE 02_openclip_bigG14] unique_images=342 unique_texts=937 batch_size=16 text_batch_size=64
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+[PRECOMPUTE 03_siglip_so400m] unique_images=342 unique_texts=937 batch_size=16 text_batch_size=64
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 5015.60it/s]
+
+[PRECOMPUTE COMPLETED in 103.15s] Store saved to: /content/AmbiLAGE/output/cache/precomputed_eval_vectors
+{
+  "01_clip_l14": {
+    "encoder_slug": "01_clip_l14",
+    "encoder_label": "CLIP-ViT-L/14",
+    "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e",
+    "vector_dim": 768,
+    "image_count": 342,
+    "text_count": 937,
+    "image_vectors_sha256": "7ce199e61807b1ef8e81113dd53d27b0a998b091559027ab2e44c5b8fa78a77d",
+    "text_vectors_sha256": "045dfb3b7d1a6135d6833f78b4b36e31d82ad8e5be9bf53d4749b141916a1b6b"
+  },
+  "02_openclip_bigG14": {
+    "encoder_slug": "02_openclip_bigG14",
+    "encoder_label": "OpenCLIP-bigG-14",
+    "weight_sha256": "db71bd27925917762c506c1b8a08e191d236e5586b5cd99f77d11aced578ec34",
+    "vector_dim": 1280,
+    "image_count": 342,
+    "text_count": 937,
+    "image_vectors_sha256": "3f46e979b99610e5cf984bb98a326fa20b10e5ac85491e15c99e7d5e8d74cc95",
+    "text_vectors_sha256": "539e232101dcda7440d8951918473b5291fef69cc2e28c50d7b410805121bafb"
+  },
+  "03_siglip_so400m": {
+    "encoder_slug": "03_siglip_so400m",
+    "encoder_label": "SigLIP-SO400M",
+    "weight_sha256": "97faeafa0576c1ba4c92bae739ca06ef5f5d0c2db92f86a6086653d82a262043",
+    "vector_dim": 1152,
+    "image_count": 342,
+    "text_count": 937,
+    "image_vectors_sha256": "d702bf36fc3540eb53453c38474f322db709e50db2b4a1640319ea3c8a9670cd",
+    "text_vectors_sha256": "463bd7d2a9d3ed65fc41e108fb121a25da439936ac3be5a742a0c6ae10aa2e7d"
+  }
+}
+[STAGE C.2 COPY STORE] 2026-11-21T13:56:26+00:00 Mirroring precomputed vector store into standalone /content/AmbiLAGE/output/exp_20261121_ambilage_ms_v2_geom_set2_9groups_results/precomputed_eval_vectors...
+[STAGE C.3 EVAL 9G] 2026-11-21T13:56:26+00:00 Evaluating all 9 groups (--group all --replacement-groups all) into /content/AmbiLAGE/output/exp_20261121_ambilage_ms_v2_geom_set2_9groups_results/eval...
+
+=== [ENCODER 01_clip_l14] panels=['ambilage_ms_v2_geom_set2_training_oracle_v4', 'ambilage_ms_v2_geom_set2_overlap_30_v4', 'ambilage_ms_v2_geom_set2_zero_overlap_v4'] unique_images=198 unique_texts=360 batch_size=16 text_batch_size=64 verify=in_process ===
+[OFFLINE PRECOMPUTED 01_clip_l14] 100% vector hit (images=198/342, texts=360/937) -> ZERO model load, ZERO GPU!
+none clean: 前三 1/20；前五 7/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 14/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 17/20；前五 18/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 5/20；前五 7/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 4/20；前五 10/20
+none modified: 前三 18/20；前五 20/20
+none clean: 前三 4/20；前五 7/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 5/20；前五 6/20
+none clean: 前三 1/20；前五 6/20
+none modified: 前三 19/20；前五 20/20
+[EVAL DONE] ambilage_ms_v2_geom_set2_training_oracle_v4/01_clip_l14
+none clean: 前三 2/20；前五 3/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 3/20；前五 15/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 6/20；前五 8/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 6/20；前五 13/20
+none modified: 前三 18/20；前五 19/20
+none clean: 前三 7/20；前五 9/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 4/20
+none modified: 前三 5/20；前五 6/20
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 19/20；前五 19/20
+[EVAL DONE] ambilage_ms_v2_geom_set2_overlap_30_v4/01_clip_l14
+none clean: 前三 1/20；前五 2/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 3/20；前五 14/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 5/20；前五 10/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 7/20；前五 13/20
+none modified: 前三 19/20；前五 19/20
+none clean: 前三 7/20；前五 9/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 3/20；前五 4/20
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 19/20；前五 19/20
+[EVAL DONE] ambilage_ms_v2_geom_set2_zero_overlap_v4/01_clip_l14
+[VERIFY 01_clip_l14] prewarmed 198 unique images (batch=16), 360 unique texts (text_batch=64)
+[VERIFIED] ambilage_ms_v2_geom_set2_training_oracle_v4/01_clip_l14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] ambilage_ms_v2_geom_set2_overlap_30_v4/01_clip_l14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] ambilage_ms_v2_geom_set2_zero_overlap_v4/01_clip_l14: rankings=360 scores=68040 max_error=0.00e+00
+
+=== [ENCODER 02_openclip_bigG14] panels=['ambilage_ms_v2_geom_set2_training_oracle_v4', 'ambilage_ms_v2_geom_set2_overlap_30_v4', 'ambilage_ms_v2_geom_set2_zero_overlap_v4'] unique_images=198 unique_texts=360 batch_size=16 text_batch_size=64 verify=in_process ===
+[OFFLINE PRECOMPUTED 02_openclip_bigG14] 100% vector hit (images=198/342, texts=360/937) -> ZERO model load, ZERO GPU!
+none clean: 前三 2/20；前五 7/20
+none modified: 前三 5/20；前五 14/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 0/20；前五 14/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 2/20；前五 5/20
+none clean: 前三 1/20；前五 4/20
+none modified: 前三 9/20；前五 15/20
+none clean: 前三 5/20；前五 6/20
+none modified: 前三 5/20；前五 11/20
+none clean: 前三 8/20；前五 12/20
+none modified: 前三 12/20；前五 15/20
+none clean: 前三 3/20；前五 6/20
+none modified: 前三 6/20；前五 10/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 1/20；前五 2/20
+none clean: 前三 5/20；前五 5/20
+none modified: 前三 10/20；前五 13/20
+[EVAL DONE] ambilage_ms_v2_geom_set2_training_oracle_v4/02_openclip_bigG14
+none clean: 前三 3/20；前五 5/20
+none modified: 前三 7/20；前五 13/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 13/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 1/20；前五 7/20
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 5/20；前五 9/20
+none clean: 前三 7/20；前五 10/20
+none modified: 前三 6/20；前五 10/20
+none clean: 前三 9/20；前五 15/20
+none modified: 前三 12/20；前五 17/20
+none clean: 前三 7/20；前五 9/20
+none modified: 前三 7/20；前五 11/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 1/20；前五 1/20
+none clean: 前三 3/20；前五 5/20
+none modified: 前三 11/20；前五 12/20
+[EVAL DONE] ambilage_ms_v2_geom_set2_overlap_30_v4/02_openclip_bigG14
+none clean: 前三 3/20；前五 5/20
+none modified: 前三 8/20；前五 12/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 12/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 2/20；前五 6/20
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 4/20；前五 7/20
+none clean: 前三 7/20；前五 12/20
+none modified: 前三 6/20；前五 12/20
+none clean: 前三 10/20；前五 16/20
+none modified: 前三 12/20；前五 17/20
+none clean: 前三 7/20；前五 10/20
+none modified: 前三 8/20；前五 12/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 0/20
+none clean: 前三 1/20；前五 5/20
+none modified: 前三 8/20；前五 9/20
+[EVAL DONE] ambilage_ms_v2_geom_set2_zero_overlap_v4/02_openclip_bigG14
+[VERIFY 02_openclip_bigG14] prewarmed 198 unique images (batch=16), 360 unique texts (text_batch=64)
+[VERIFIED] ambilage_ms_v2_geom_set2_training_oracle_v4/02_openclip_bigG14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] ambilage_ms_v2_geom_set2_overlap_30_v4/02_openclip_bigG14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] ambilage_ms_v2_geom_set2_zero_overlap_v4/02_openclip_bigG14: rankings=360 scores=68040 max_error=0.00e+00
+
+=== [ENCODER 03_siglip_so400m] panels=['ambilage_ms_v2_geom_set2_training_oracle_v4', 'ambilage_ms_v2_geom_set2_overlap_30_v4', 'ambilage_ms_v2_geom_set2_zero_overlap_v4'] unique_images=198 unique_texts=360 batch_size=16 text_batch_size=64 verify=in_process ===
+[OFFLINE PRECOMPUTED 03_siglip_so400m] 100% vector hit (images=198/342, texts=360/937) -> ZERO model load, ZERO GPU!
+none clean: 前三 7/20；前五 8/20
+none modified: 前三 8/20；前五 9/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 2/20；前五 19/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 2/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 0/20
+none clean: 前三 2/20；前五 6/20
+none modified: 前三 5/20；前五 8/20
+none clean: 前三 13/20；前五 16/20
+none modified: 前三 14/20；前五 15/20
+none clean: 前三 1/20；前五 3/20
+none modified: 前三 4/20；前五 8/20
+none clean: 前三 0/20；前五 2/20
+none modified: 前三 1/20；前五 4/20
+none clean: 前三 3/20；前五 7/20
+none modified: 前三 5/20；前五 10/20
+[EVAL DONE] ambilage_ms_v2_geom_set2_training_oracle_v4/03_siglip_so400m
+none clean: 前三 8/20；前五 9/20
+none modified: 前三 9/20；前五 13/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 1/20；前五 20/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 1/20；前五 2/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 0/20
+none clean: 前三 3/20；前五 4/20
+none modified: 前三 4/20；前五 6/20
+none clean: 前三 13/20；前五 15/20
+none modified: 前三 11/20；前五 14/20
+none clean: 前三 2/20；前五 2/20
+none modified: 前三 4/20；前五 7/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 0/20；前五 3/20
+none clean: 前三 0/20；前五 5/20
+none modified: 前三 3/20；前五 6/20
+[EVAL DONE] ambilage_ms_v2_geom_set2_overlap_30_v4/03_siglip_so400m
+none clean: 前三 7/20；前五 10/20
+none modified: 前三 9/20；前五 13/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 1/20；前五 20/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 1/20；前五 2/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 1/20
+none clean: 前三 4/20；前五 6/20
+none modified: 前三 5/20；前五 7/20
+none clean: 前三 13/20；前五 16/20
+none modified: 前三 12/20；前五 16/20
+none clean: 前三 2/20；前五 2/20
+none modified: 前三 6/20；前五 9/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 1/20；前五 1/20
+none clean: 前三 1/20；前五 4/20
+none modified: 前三 2/20；前五 4/20
+[EVAL DONE] ambilage_ms_v2_geom_set2_zero_overlap_v4/03_siglip_so400m
+[VERIFY 03_siglip_so400m] prewarmed 198 unique images (batch=16), 360 unique texts (text_batch=64)
+[VERIFIED] ambilage_ms_v2_geom_set2_training_oracle_v4/03_siglip_so400m: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] ambilage_ms_v2_geom_set2_overlap_30_v4/03_siglip_so400m: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] ambilage_ms_v2_geom_set2_zero_overlap_v4/03_siglip_so400m: rankings=360 scores=68040 max_error=0.00e+00
+{
+  "ambilage_ms_v2_geom_set2_training_oracle_v4": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 11.922222222222222,
+      "mean_rank_modified": 2.0055555555555555,
+      "mean_rank_gain": 9.916666666666666,
+      "top1": {
+        "clean_hits": 3,
+        "modified_hits": 142,
+        "clean_rate": 0.016666666666666666,
+        "modified_rate": 0.7888888888888889,
+        "gain": 0.7722222222222223,
+        "new_hits": 139,
+        "lost_hits": 0,
+        "clean_miss_count": 177,
+        "clean_miss_conversion_rate": 0.7853107344632768,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.7853107344632768
+      },
+      "top3": {
+        "clean_hits": 16,
+        "modified_hits": 159,
+        "clean_rate": 0.08888888888888889,
+        "modified_rate": 0.8833333333333333,
+        "gain": 0.7944444444444444,
+        "new_hits": 143,
+        "lost_hits": 0,
+        "clean_miss_count": 164,
+        "clean_miss_conversion_rate": 0.8719512195121951,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.8719512195121951
+      },
+      "top5": {
+        "clean_hits": 56,
+        "modified_hits": 164,
+        "clean_rate": 0.3111111111111111,
+        "modified_rate": 0.9111111111111111,
+        "gain": 0.6,
+        "new_hits": 108,
+        "lost_hits": 0,
+        "clean_miss_count": 124,
+        "clean_miss_conversion_rate": 0.8709677419354839,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.8709677419354839
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 10.588888888888889,
+      "mean_rank_modified": 7.183333333333334,
+      "mean_rank_gain": 3.4055555555555554,
+      "top1": {
+        "clean_hits": 5,
+        "modified_hits": 16,
+        "clean_rate": 0.027777777777777776,
+        "modified_rate": 0.08888888888888889,
+        "gain": 0.06111111111111111,
+        "new_hits": 11,
+        "lost_hits": 0,
+        "clean_miss_count": 175,
+        "clean_miss_conversion_rate": 0.06285714285714286,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.06285714285714286
+      },
+      "top3": {
+        "clean_hits": 25,
+        "modified_hits": 50,
+        "clean_rate": 0.1388888888888889,
+        "modified_rate": 0.2777777777777778,
+        "gain": 0.1388888888888889,
+        "new_hits": 25,
+        "lost_hits": 0,
+        "clean_miss_count": 155,
+        "clean_miss_conversion_rate": 0.16129032258064516,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.16129032258064516
+      },
+      "top5": {
+        "clean_hits": 42,
+        "modified_hits": 99,
+        "clean_rate": 0.23333333333333334,
+        "modified_rate": 0.55,
+        "gain": 0.31666666666666665,
+        "new_hits": 57,
+        "lost_hits": 0,
+        "clean_miss_count": 138,
+        "clean_miss_conversion_rate": 0.41304347826086957,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.41304347826086957
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 10.877777777777778,
+      "mean_rank_modified": 8.55,
+      "mean_rank_gain": 2.327777777777778,
+      "top1": {
+        "clean_hits": 7,
+        "modified_hits": 11,
+        "clean_rate": 0.03888888888888889,
+        "modified_rate": 0.06111111111111111,
+        "gain": 0.022222222222222223,
+        "new_hits": 5,
+        "lost_hits": 1,
+        "clean_miss_count": 173,
+        "clean_miss_conversion_rate": 0.028901734104046242,
+        "clean_hit_retention_rate": 0.8571428571428571,
+        "net_headroom_capture": 0.023121387283236993
+      },
+      "top3": {
+        "clean_hits": 26,
+        "modified_hits": 39,
+        "clean_rate": 0.14444444444444443,
+        "modified_rate": 0.21666666666666667,
+        "gain": 0.07222222222222222,
+        "new_hits": 15,
+        "lost_hits": 2,
+        "clean_miss_count": 154,
+        "clean_miss_conversion_rate": 0.09740259740259741,
+        "clean_hit_retention_rate": 0.9230769230769231,
+        "net_headroom_capture": 0.08441558441558442
+      },
+      "top5": {
+        "clean_hits": 43,
+        "modified_hits": 75,
+        "clean_rate": 0.2388888888888889,
+        "modified_rate": 0.4166666666666667,
+        "gain": 0.17777777777777778,
+        "new_hits": 35,
+        "lost_hits": 3,
+        "clean_miss_count": 137,
+        "clean_miss_conversion_rate": 0.25547445255474455,
+        "clean_hit_retention_rate": 0.9302325581395349,
+        "net_headroom_capture": 0.23357664233576642
+      }
+    }
+  },
+  "ambilage_ms_v2_geom_set2_overlap_30_v4": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 11.322222222222223,
+      "mean_rank_modified": 1.9111111111111112,
+      "mean_rank_gain": 9.411111111111111,
+      "top1": {
+        "clean_hits": 4,
+        "modified_hits": 147,
+        "clean_rate": 0.022222222222222223,
+        "modified_rate": 0.8166666666666667,
+        "gain": 0.7944444444444444,
+        "new_hits": 143,
+        "lost_hits": 0,
+        "clean_miss_count": 176,
+        "clean_miss_conversion_rate": 0.8125,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.8125
+      },
+      "top3": {
+        "clean_hits": 25,
+        "modified_hits": 161,
+        "clean_rate": 0.1388888888888889,
+        "modified_rate": 0.8944444444444445,
+        "gain": 0.7555555555555555,
+        "new_hits": 136,
+        "lost_hits": 0,
+        "clean_miss_count": 155,
+        "clean_miss_conversion_rate": 0.8774193548387097,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.8774193548387097
+      },
+      "top5": {
+        "clean_hits": 56,
+        "modified_hits": 164,
+        "clean_rate": 0.3111111111111111,
+        "modified_rate": 0.9111111111111111,
+        "gain": 0.6,
+        "new_hits": 108,
+        "lost_hits": 0,
+        "clean_miss_count": 124,
+        "clean_miss_conversion_rate": 0.8709677419354839,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.8709677419354839
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 10.905555555555555,
+      "mean_rank_modified": 7.427777777777778,
+      "mean_rank_gain": 3.477777777777778,
+      "top1": {
+        "clean_hits": 7,
+        "modified_hits": 18,
+        "clean_rate": 0.03888888888888889,
+        "modified_rate": 0.1,
+        "gain": 0.06111111111111111,
+        "new_hits": 11,
+        "lost_hits": 0,
+        "clean_miss_count": 173,
+        "clean_miss_conversion_rate": 0.06358381502890173,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.06358381502890173
+      },
+      "top3": {
+        "clean_hits": 31,
+        "modified_hits": 50,
+        "clean_rate": 0.17222222222222222,
+        "modified_rate": 0.2777777777777778,
+        "gain": 0.10555555555555556,
+        "new_hits": 21,
+        "lost_hits": 2,
+        "clean_miss_count": 149,
+        "clean_miss_conversion_rate": 0.14093959731543623,
+        "clean_hit_retention_rate": 0.9354838709677419,
+        "net_headroom_capture": 0.12751677852348994
+      },
+      "top5": {
+        "clean_hits": 49,
+        "modified_hits": 93,
+        "clean_rate": 0.2722222222222222,
+        "modified_rate": 0.5166666666666667,
+        "gain": 0.24444444444444444,
+        "new_hits": 46,
+        "lost_hits": 2,
+        "clean_miss_count": 131,
+        "clean_miss_conversion_rate": 0.3511450381679389,
+        "clean_hit_retention_rate": 0.9591836734693877,
+        "net_headroom_capture": 0.33587786259541985
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 10.705555555555556,
+      "mean_rank_modified": 8.772222222222222,
+      "mean_rank_gain": 1.9333333333333333,
+      "top1": {
+        "clean_hits": 6,
+        "modified_hits": 7,
+        "clean_rate": 0.03333333333333333,
+        "modified_rate": 0.03888888888888889,
+        "gain": 0.005555555555555556,
+        "new_hits": 3,
+        "lost_hits": 2,
+        "clean_miss_count": 174,
+        "clean_miss_conversion_rate": 0.017241379310344827,
+        "clean_hit_retention_rate": 0.6666666666666666,
+        "net_headroom_capture": 0.005747126436781609
+      },
+      "top3": {
+        "clean_hits": 27,
+        "modified_hits": 33,
+        "clean_rate": 0.15,
+        "modified_rate": 0.18333333333333332,
+        "gain": 0.03333333333333333,
+        "new_hits": 9,
+        "lost_hits": 3,
+        "clean_miss_count": 153,
+        "clean_miss_conversion_rate": 0.058823529411764705,
+        "clean_hit_retention_rate": 0.8888888888888888,
+        "net_headroom_capture": 0.0392156862745098
+      },
+      "top5": {
+        "clean_hits": 37,
+        "modified_hits": 71,
+        "clean_rate": 0.20555555555555555,
+        "modified_rate": 0.39444444444444443,
+        "gain": 0.18888888888888888,
+        "new_hits": 36,
+        "lost_hits": 2,
+        "clean_miss_count": 143,
+        "clean_miss_conversion_rate": 0.2517482517482518,
+        "clean_hit_retention_rate": 0.9459459459459459,
+        "net_headroom_capture": 0.23776223776223776
+      }
+    }
+  },
+  "ambilage_ms_v2_geom_set2_zero_overlap_v4": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 11.377777777777778,
+      "mean_rank_modified": 1.9555555555555555,
+      "mean_rank_gain": 9.422222222222222,
+      "top1": {
+        "clean_hits": 5,
+        "modified_hits": 150,
+        "clean_rate": 0.027777777777777776,
+        "modified_rate": 0.8333333333333334,
+        "gain": 0.8055555555555556,
+        "new_hits": 145,
+        "lost_hits": 0,
+        "clean_miss_count": 175,
+        "clean_miss_conversion_rate": 0.8285714285714286,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.8285714285714286
+      },
+      "top3": {
+        "clean_hits": 24,
+        "modified_hits": 160,
+        "clean_rate": 0.13333333333333333,
+        "modified_rate": 0.8888888888888888,
+        "gain": 0.7555555555555555,
+        "new_hits": 136,
+        "lost_hits": 0,
+        "clean_miss_count": 156,
+        "clean_miss_conversion_rate": 0.8717948717948718,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.8717948717948718
+      },
+      "top5": {
+        "clean_hits": 52,
+        "modified_hits": 162,
+        "clean_rate": 0.28888888888888886,
+        "modified_rate": 0.9,
+        "gain": 0.6111111111111112,
+        "new_hits": 110,
+        "lost_hits": 0,
+        "clean_miss_count": 128,
+        "clean_miss_conversion_rate": 0.859375,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.859375
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 11.1,
+      "mean_rank_modified": 7.7,
+      "mean_rank_gain": 3.4,
+      "top1": {
+        "clean_hits": 8,
+        "modified_hits": 15,
+        "clean_rate": 0.044444444444444446,
+        "modified_rate": 0.08333333333333333,
+        "gain": 0.03888888888888889,
+        "new_hits": 7,
+        "lost_hits": 0,
+        "clean_miss_count": 172,
+        "clean_miss_conversion_rate": 0.040697674418604654,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.040697674418604654
+      },
+      "top3": {
+        "clean_hits": 29,
+        "modified_hits": 48,
+        "clean_rate": 0.16111111111111112,
+        "modified_rate": 0.26666666666666666,
+        "gain": 0.10555555555555556,
+        "new_hits": 22,
+        "lost_hits": 3,
+        "clean_miss_count": 151,
+        "clean_miss_conversion_rate": 0.1456953642384106,
+        "clean_hit_retention_rate": 0.896551724137931,
+        "net_headroom_capture": 0.12582781456953643
+      },
+      "top5": {
+        "clean_hits": 52,
+        "modified_hits": 87,
+        "clean_rate": 0.28888888888888886,
+        "modified_rate": 0.48333333333333334,
+        "gain": 0.19444444444444445,
+        "new_hits": 37,
+        "lost_hits": 2,
+        "clean_miss_count": 128,
+        "clean_miss_conversion_rate": 0.2890625,
+        "clean_hit_retention_rate": 0.9615384615384616,
+        "net_headroom_capture": 0.2734375
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 10.483333333333333,
+      "mean_rank_modified": 8.472222222222221,
+      "mean_rank_gain": 2.011111111111111,
+      "top1": {
+        "clean_hits": 6,
+        "modified_hits": 5,
+        "clean_rate": 0.03333333333333333,
+        "modified_rate": 0.027777777777777776,
+        "gain": -0.005555555555555556,
+        "new_hits": 1,
+        "lost_hits": 2,
+        "clean_miss_count": 174,
+        "clean_miss_conversion_rate": 0.005747126436781609,
+        "clean_hit_retention_rate": 0.6666666666666666,
+        "net_headroom_capture": -0.005747126436781609
+      },
+      "top3": {
+        "clean_hits": 28,
+        "modified_hits": 37,
+        "clean_rate": 0.15555555555555556,
+        "modified_rate": 0.20555555555555555,
+        "gain": 0.05,
+        "new_hits": 11,
+        "lost_hits": 2,
+        "clean_miss_count": 152,
+        "clean_miss_conversion_rate": 0.07236842105263158,
+        "clean_hit_retention_rate": 0.9285714285714286,
+        "net_headroom_capture": 0.05921052631578947
+      },
+      "top5": {
+        "clean_hits": 40,
+        "modified_hits": 73,
+        "clean_rate": 0.2222222222222222,
+        "modified_rate": 0.40555555555555556,
+        "gain": 0.18333333333333332,
+        "new_hits": 34,
+        "lost_hits": 1,
+        "clean_miss_count": 140,
+        "clean_miss_conversion_rate": 0.24285714285714285,
+        "clean_hit_retention_rate": 0.975,
+        "net_headroom_capture": 0.2357142857142857
+      }
+    }
+  }
+}
+[STAGE C.4 VERIFY 9/9] Checking all 9 independent verification files <= 1e-7 & Zero-GPU precomputed check...
+[VERIFIED 1/9] training_oracle_v4/01_clip_l14: max_score_error=0.0
+[VERIFIED 2/9] training_oracle_v4/02_openclip_bigG14: max_score_error=0.0
+[VERIFIED 3/9] training_oracle_v4/03_siglip_so400m: max_score_error=0.0
+[VERIFIED 4/9] overlap_30_v4/01_clip_l14: max_score_error=0.0
+[VERIFIED 5/9] overlap_30_v4/02_openclip_bigG14: max_score_error=0.0
+[VERIFIED 6/9] overlap_30_v4/03_siglip_so400m: max_score_error=0.0
+[VERIFIED 7/9] zero_overlap_v4/01_clip_l14: max_score_error=0.0
+[VERIFIED 8/9] zero_overlap_v4/02_openclip_bigG14: max_score_error=0.0
+[VERIFIED 9/9] zero_overlap_v4/03_siglip_so400m: max_score_error=0.0
+{
+  "status": "passed",
+  "eval_root": "/content/AmbiLAGE/output/exp_20261121_ambilage_ms_v2_geom_set2_9groups_results/eval",
+  "store_root": "/content/AmbiLAGE/output/exp_20261121_ambilage_ms_v2_geom_set2_9groups_results/precomputed_eval_vectors",
+  "checked_group_archives": 81,
+  "checked_queries": 3240,
+  "checked_candidate_scores": 612360,
+  "max_score_error": 1.1920928955078125e-07,
+  "rank_mismatches": 0,
+  "top5_mismatches": 0,
+  "gpu_used": false,
+  "models_loaded": false,
+  "elapsed_seconds": 20.5498
+}
+[STAGE C.5 EXPORT 9G VECTORS & IMAGES INDEX] Extracting per-encoder 9-group vectors into /content/AmbiLAGE/output/exp_20261121_ambilage_ms_v2_geom_set2_9groups_results/encoder_vectors_9groups...
+[EXPORTED VECTORS] 01_clip_l14: modified=(9, 768), clean=(9, 768), norm_range=[1.000000, 1.000000]
+[EXPORTED VECTORS] 02_openclip_bigG14: modified=(9, 1280), clean=(9, 1280), norm_range=[1.000000, 1.000000]
+[EXPORTED VECTORS] 03_siglip_so400m: modified=(9, 1152), clean=(9, 1152), norm_range=[1.000000, 1.000000]
+[STAGE D SUMMARY] 2026-11-21T13:58:56+00:00 Building 9-group comparison summary & MiniMax-ready README...
+[WRITTEN] /content/AmbiLAGE/output/exp_20261121_ambilage_ms_v2_geom_set2_9groups_results/SUMMARY_9G_MS_V2_GEOM.md
+[WRITTEN] /content/AmbiLAGE/output/exp_20261121_ambilage_ms_v2_geom_set2_9groups_results/SUMMARY_9G_MS_V2_GEOM.json
+[SYNC_START] 2026-11-21T13:58:59+00:00 rsync -> /content/drive/MyDrive/AmbiLAGE_backup
+[SYNC_DONE] 2026-11-21T13:59:12+00:00 completed.
+[MS_V2_GEOM 9G FULL SUITE COMPLETED SUCCESSFULLY] 2026-11-21T13:59:12+00:00
+[SYNC_START] 2026-11-21T13:59:12+00:00 rsync -> /content/drive/MyDrive/AmbiLAGE_backup
+[SYNC_DONE] 2026-11-21T13:59:16+00:00 completed.

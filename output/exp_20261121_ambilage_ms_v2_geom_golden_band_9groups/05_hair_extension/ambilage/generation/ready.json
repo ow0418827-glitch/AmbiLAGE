@@ -1,0 +1,2936 @@
+{
+  "schema_version": 3,
+  "status": "completed",
+  "method": "ambilage",
+  "definition": "ambilage_native_4stage_ambient_coop_psi_v4",
+  "test_fixture": false,
+  "production_backend": true,
+  "source_image": "/content/AmbiLAGE/resources/evaluation_base_golden_band/groups/05_hair_extension/source.jpg",
+  "source_sha256": "55ee7ea2a6a6b5c65ccab1b94811e98fed3b2d01ca1f314188f056b9d0bd43ce",
+  "target_image": "/content/AmbiLAGE/resources/evaluation_base_golden_band/groups/05_hair_extension/target.jpg",
+  "target_sha256": "c5af2ad55c9b05fdba76c36316aa3088a43c286fe6ccab7858ccd2d14cd9c9a6",
+  "output_image": "/content/AmbiLAGE/output/exp_20261121_ambilage_ms_v2_geom_golden_band_9groups/05_hair_extension/ambilage/generation/adversarial.png",
+  "output_image_sha256": "9a9ca69a2f38bf94bf3b3c03ca10c9dd18b0278b5837629ca205bded7e5f2f3a",
+  "candidates": {
+    "final": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_ambilage_ms_v2_geom_golden_band_9groups/05_hair_extension/ambilage/generation/adversarial.png",
+      "sha256": "9a9ca69a2f38bf94bf3b3c03ca10c9dd18b0278b5837629ca205bded7e5f2f3a"
+    }
+  },
+  "pipeline": "ambilage_native_4stage_single_pass",
+  "stages": {
+    "foreground_segmentation": {
+      "status": "completed"
+    },
+    "foreground_statistics": {
+      "status": "completed"
+    },
+    "color_harmonization": {
+      "status": "completed"
+    },
+    "latent_generation_refinement": {
+      "status": "completed",
+      "steps_requested": 250,
+      "steps_completed": 230,
+      "stop_reason": "adaptive_annealing_converged"
+    }
+  },
+  "artifacts": {
+    "adversarial.png": "9a9ca69a2f38bf94bf3b3c03ca10c9dd18b0278b5837629ca205bded7e5f2f3a",
+    "generative_anchor.png": "ee9f821765a9e7dc9eb5fe638440a77beb53d7b0fa02c6d95ee0749075697c97",
+    "print_core.png": "baad59b161c808a50b568620bc079a60f3ce8f5b816529d562cd97f4f5b15064",
+    "source_foreground.png": "08f3dfae29575307b26737f505365af0b40438321e44a8d9cce4d697cd2515b7",
+    "target_foreground.png": "c2c88b7ae27e8e51ff5fde0e7179a47c028dddfd2b675045498c9e332e298dd4",
+    "latent_edit_mask.png": "02d77b152a65735698b11eb955c02904560d3a15e7c83c0be385d1f149a7c823",
+    "naturalness_gate.json": "d9513cfb8e82e2c68f7c686d4862a32a946a9de96ca2797650fe89492c1c1e06",
+    "naturalness_candidate.png": "9a9ca69a2f38bf94bf3b3c03ca10c9dd18b0278b5837629ca205bded7e5f2f3a",
+    "training_surrogates.json": "9f2ebb3e0bccb636b756f1b128ddc28fa3fc37768743922a707925c36d1b4590"
+  },
+  "pixel_optimization": false,
+  "auxiliary_max_levels": 0,
+  "optimization_mode": "ambient_coop_latent_only",
+  "steps": 250,
+  "steps_requested": 250,
+  "steps_completed": 230,
+  "stop_reason": "adaptive_annealing_converged",
+  "quality": {
+    "source_ssim": 0.9590017226042192,
+    "rgb_source_ssim": 0.9590017226042192,
+    "luma_source_ssim": 0.9769860636350721,
+    "source_mae_levels": 5.460040092468262,
+    "luma_source_mae_levels": 4.242551326751709,
+    "fg_source_mae_levels": 4.405210494995117,
+    "bg_source_mae_levels": 4.116786479949951,
+    "rgb_source_mae_levels": 5.460040092468262,
+    "fg_rgb_source_mae_levels": 4.451986312866211,
+    "bg_rgb_source_mae_levels": 6.239442825317383,
+    "fg_chroma_tv_levels": 2.03452467918396,
+    "anchor_mae_levels": 5.688361167907715,
+    "quality_ok": true,
+    "step": 220,
+    "training_utility": 0.5141860842704773,
+    "selection_utility": 0.4988679578527808,
+    "regularization": 0.015318126417696476,
+    "joint_scores": [
+      [
+        0.8146265149116516
+      ]
+    ],
+    "accepted": 220,
+    "rejected": 0,
+    "lr_scale": 0.08626156128360608,
+    "adaptive_scale": 0.75,
+    "stagnation_checks": 1
+  },
+  "refinement": {
+    "status": "completed",
+    "stage": "latent_generation_refinement",
+    "steps_requested": 250,
+    "steps_completed": 230,
+    "stop_reason": "adaptive_annealing_converged",
+    "best_step": 220,
+    "accepted_updates": 230,
+    "rejected_updates": 0,
+    "final_quality": {
+      "source_ssim": 0.9590017226042192,
+      "rgb_source_ssim": 0.9590017226042192,
+      "luma_source_ssim": 0.9769860636350721,
+      "source_mae_levels": 5.460040092468262,
+      "luma_source_mae_levels": 4.242551326751709,
+      "fg_source_mae_levels": 4.405210494995117,
+      "bg_source_mae_levels": 4.116786479949951,
+      "rgb_source_mae_levels": 5.460040092468262,
+      "fg_rgb_source_mae_levels": 4.451986312866211,
+      "bg_rgb_source_mae_levels": 6.239442825317383,
+      "fg_chroma_tv_levels": 2.03452467918396,
+      "anchor_mae_levels": 5.688361167907715,
+      "quality_ok": true,
+      "step": 220,
+      "training_utility": 0.5141860842704773,
+      "selection_utility": 0.4988679578527808,
+      "regularization": 0.015318126417696476,
+      "joint_scores": [
+        [
+          0.8146265149116516
+        ]
+      ],
+      "accepted": 220,
+      "rejected": 0,
+      "lr_scale": 0.08626156128360608,
+      "adaptive_scale": 0.75,
+      "stagnation_checks": 1
+    },
+    "fg_latent_max_levels": 6,
+    "fg_chroma_max_levels": 15.356727600097656,
+    "fg_rgb_max_levels": 6,
+    "bg_latent_max_levels": 21,
+    "roi_max_levels": 0,
+    "elapsed_seconds": 557.2916926799953,
+    "zero_pixel_optimization": true,
+    "vae": {
+      "kind": "flux_16_channel_vae",
+      "precision": "float32",
+      "posterior": "mode",
+      "latent_channels": 16,
+      "gradient_checkpointing": true
+    },
+    "spectral_manifold_projection": true,
+    "conditional_tangent_projection": true,
+    "tangent_projection_calls": 0,
+    "adaptive_annealing": {
+      "enabled": true,
+      "schedule": "cosine_with_backtrack_and_plateau_cooling",
+      "min_steps": 180,
+      "max_steps": 250,
+      "steps_executed": 230,
+      "stop_reason": "adaptive_annealing_converged",
+      "early_stopped": true,
+      "final_lr_scale": 0.08,
+      "final_adaptive_scale": 0.5625,
+      "stagnation_checks": 2,
+      "cool_events": 2,
+      "backtrack_events": 0,
+      "reject_events": 0,
+      "best_step": 220
+    },
+    "checkpoint_resume": {
+      "checkpoint_every": 5,
+      "checkpoints_saved": 46,
+      "resumed": false,
+      "resumed_from_step": null,
+      "resume_count": 0,
+      "stage3_resumed": false
+    },
+    "history": [
+      {
+        "source_ssim": 0.9893885176439277,
+        "rgb_source_ssim": 0.9893885176439277,
+        "luma_source_ssim": 0.991644894402721,
+        "source_mae_levels": 1.969265103340149,
+        "luma_source_mae_levels": 1.969265103340149,
+        "fg_source_mae_levels": 3.5903549194335938,
+        "bg_source_mae_levels": 0.715878427028656,
+        "rgb_source_mae_levels": 1.4886072874069214,
+        "fg_rgb_source_mae_levels": 2.2411890029907227,
+        "bg_rgb_source_mae_levels": 0.906729519367218,
+        "fg_chroma_tv_levels": 1.3277854919433594,
+        "anchor_mae_levels": 0.0,
+        "quality_ok": true,
+        "step": 0,
+        "training_utility": 0.3481586277484894,
+        "selection_utility": 0.34814644451216736,
+        "joint_scores": [
+          [
+            0.8073260188102722
+          ]
+        ],
+        "lr_scale": 0.415,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9844352336111045,
+        "rgb_source_ssim": 0.9844352336111045,
+        "luma_source_ssim": 0.9859059648702397,
+        "source_mae_levels": 3.2851147651672363,
+        "luma_source_mae_levels": 2.531639337539673,
+        "fg_source_mae_levels": 3.6942784786224365,
+        "bg_source_mae_levels": 1.632714867591858,
+        "rgb_source_mae_levels": 3.2851147651672363,
+        "fg_rgb_source_mae_levels": 3.439054489135742,
+        "bg_rgb_source_mae_levels": 3.1660916805267334,
+        "fg_chroma_tv_levels": 1.46558678150177,
+        "anchor_mae_levels": 3.45932936668396,
+        "quality_ok": true,
+        "step": 10,
+        "training_utility": 0.44842401146888733,
+        "selection_utility": 0.43879473581910133,
+        "regularization": 0.009629275649785995,
+        "joint_scores": [
+          [
+            0.8379312753677368
+          ]
+        ],
+        "accepted": 10,
+        "rejected": 0,
+        "lr_scale": 1.0,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9825137402840505,
+        "rgb_source_ssim": 0.9830204322130462,
+        "luma_source_ssim": 0.9825137402840505,
+        "source_mae_levels": 3.3924813270568848,
+        "luma_source_mae_levels": 3.1216208934783936,
+        "fg_source_mae_levels": 4.027705669403076,
+        "bg_source_mae_levels": 2.421058177947998,
+        "rgb_source_mae_levels": 3.3924813270568848,
+        "fg_rgb_source_mae_levels": 3.8348255157470703,
+        "bg_rgb_source_mae_levels": 3.050471305847168,
+        "fg_chroma_tv_levels": 1.5964665412902832,
+        "anchor_mae_levels": 3.6683812141418457,
+        "quality_ok": true,
+        "step": 20,
+        "training_utility": 0.4614250063896179,
+        "selection_utility": 0.44970767945051193,
+        "regularization": 0.011717326939105988,
+        "joint_scores": [
+          [
+            0.8310270309448242
+          ]
+        ],
+        "accepted": 20,
+        "rejected": 0,
+        "lr_scale": 0.9960646362319528,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9826019462336385,
+        "rgb_source_ssim": 0.9828743215734325,
+        "luma_source_ssim": 0.9826019462336385,
+        "source_mae_levels": 3.5036113262176514,
+        "luma_source_mae_levels": 3.3502607345581055,
+        "fg_source_mae_levels": 4.1306891441345215,
+        "bg_source_mae_levels": 2.7468526363372803,
+        "rgb_source_mae_levels": 3.5036113262176514,
+        "fg_rgb_source_mae_levels": 3.991138458251953,
+        "bg_rgb_source_mae_levels": 3.1266674995422363,
+        "fg_chroma_tv_levels": 1.6802153587341309,
+        "anchor_mae_levels": 3.5256247520446777,
+        "quality_ok": true,
+        "step": 30,
+        "training_utility": 0.46323490142822266,
+        "selection_utility": 0.4520793380215764,
+        "regularization": 0.011155563406646252,
+        "joint_scores": [
+          [
+            0.8337513208389282
+          ]
+        ],
+        "accepted": 30,
+        "rejected": 0,
+        "lr_scale": 0.9843258800929714,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9685028423464516,
+        "rgb_source_ssim": 0.9685028423464516,
+        "luma_source_ssim": 0.9795685476595244,
+        "source_mae_levels": 4.699065208435059,
+        "luma_source_mae_levels": 4.297499179840088,
+        "fg_source_mae_levels": 4.271272659301758,
+        "bg_source_mae_levels": 4.317776679992676,
+        "rgb_source_mae_levels": 4.699065208435059,
+        "fg_rgb_source_mae_levels": 4.142167568206787,
+        "bg_rgb_source_mae_levels": 5.129645347595215,
+        "fg_chroma_tv_levels": 1.776275873184204,
+        "anchor_mae_levels": 4.845037460327148,
+        "quality_ok": true,
+        "step": 40,
+        "training_utility": 0.47093939781188965,
+        "selection_utility": 0.45757066272199154,
+        "regularization": 0.01336873508989811,
+        "joint_scores": [
+          [
+            0.8304378390312195
+          ]
+        ],
+        "accepted": 40,
+        "rejected": 0,
+        "lr_scale": 0.9649845849551919,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9639343523120444,
+        "rgb_source_ssim": 0.9639343523120444,
+        "luma_source_ssim": 0.978942883391899,
+        "source_mae_levels": 5.162759780883789,
+        "luma_source_mae_levels": 3.8557066917419434,
+        "fg_source_mae_levels": 4.268795967102051,
+        "bg_source_mae_levels": 3.536316394805908,
+        "rgb_source_mae_levels": 5.162759780883789,
+        "fg_rgb_source_mae_levels": 4.171577453613281,
+        "bg_rgb_source_mae_levels": 5.9291181564331055,
+        "fg_chroma_tv_levels": 1.7967994213104248,
+        "anchor_mae_levels": 5.54677677154541,
+        "quality_ok": true,
+        "step": 50,
+        "training_utility": 0.479717493057251,
+        "selection_utility": 0.46515909023582935,
+        "regularization": 0.014558402821421623,
+        "joint_scores": [
+          [
+            0.8277711868286133
+          ]
+        ],
+        "accepted": 50,
+        "rejected": 0,
+        "lr_scale": 0.9383716857408418,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9628479579066948,
+        "rgb_source_ssim": 0.9628479579066948,
+        "luma_source_ssim": 0.9786703182072679,
+        "source_mae_levels": 5.38375997543335,
+        "luma_source_mae_levels": 3.8653106689453125,
+        "fg_source_mae_levels": 4.32062292098999,
+        "bg_source_mae_levels": 3.5132739543914795,
+        "rgb_source_mae_levels": 5.38375997543335,
+        "fg_rgb_source_mae_levels": 4.235541343688965,
+        "bg_rgb_source_mae_levels": 6.2715349197387695,
+        "fg_chroma_tv_levels": 1.8380870819091797,
+        "anchor_mae_levels": 5.7602972984313965,
+        "quality_ok": true,
+        "step": 60,
+        "training_utility": 0.48405617475509644,
+        "selection_utility": 0.469303160905838,
+        "regularization": 0.014753013849258423,
+        "joint_scores": [
+          [
+            0.828373372554779
+          ]
+        ],
+        "accepted": 60,
+        "rejected": 0,
+        "lr_scale": 0.9049425365339682,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9646640268352091,
+        "rgb_source_ssim": 0.9646640268352091,
+        "luma_source_ssim": 0.9787277053850922,
+        "source_mae_levels": 5.04231071472168,
+        "luma_source_mae_levels": 3.6717746257781982,
+        "fg_source_mae_levels": 4.3429083824157715,
+        "bg_source_mae_levels": 3.1528708934783936,
+        "rgb_source_mae_levels": 5.04231071472168,
+        "fg_rgb_source_mae_levels": 4.271238327026367,
+        "bg_rgb_source_mae_levels": 5.638485431671143,
+        "fg_chroma_tv_levels": 1.8717799186706543,
+        "anchor_mae_levels": 5.420903205871582,
+        "quality_ok": true,
+        "step": 70,
+        "training_utility": 0.48918935656547546,
+        "selection_utility": 0.4749735798686743,
+        "regularization": 0.014215776696801186,
+        "joint_scores": [
+          [
+            0.8236753344535828
+          ]
+        ],
+        "accepted": 70,
+        "rejected": 0,
+        "lr_scale": 0.8652691193458119,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9646349249883763,
+        "rgb_source_ssim": 0.9646349249883763,
+        "luma_source_ssim": 0.9784960212203297,
+        "source_mae_levels": 5.03877067565918,
+        "luma_source_mae_levels": 3.969851493835449,
+        "fg_source_mae_levels": 4.344629764556885,
+        "bg_source_mae_levels": 3.680081605911255,
+        "rgb_source_mae_levels": 5.03877067565918,
+        "fg_rgb_source_mae_levels": 4.289474964141846,
+        "bg_rgb_source_mae_levels": 5.618107795715332,
+        "fg_chroma_tv_levels": 1.8846771717071533,
+        "anchor_mae_levels": 5.305728435516357,
+        "quality_ok": true,
+        "step": 80,
+        "training_utility": 0.4926537871360779,
+        "selection_utility": 0.4786674566566944,
+        "regularization": 0.013986330479383469,
+        "joint_scores": [
+          [
+            0.825198769569397
+          ]
+        ],
+        "accepted": 80,
+        "rejected": 0,
+        "lr_scale": 0.8200302573440115,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9624743578350944,
+        "rgb_source_ssim": 0.9624743578350944,
+        "luma_source_ssim": 0.9778755342283199,
+        "source_mae_levels": 5.168686866760254,
+        "luma_source_mae_levels": 4.072701930999756,
+        "fg_source_mae_levels": 4.3955302238464355,
+        "bg_source_mae_levels": 3.8230984210968018,
+        "rgb_source_mae_levels": 5.168686866760254,
+        "fg_rgb_source_mae_levels": 4.351093292236328,
+        "bg_rgb_source_mae_levels": 5.800829887390137,
+        "fg_chroma_tv_levels": 1.9306310415267944,
+        "anchor_mae_levels": 5.494295120239258,
+        "quality_ok": true,
+        "step": 90,
+        "training_utility": 0.4952458441257477,
+        "selection_utility": 0.48089150339365005,
+        "regularization": 0.014354340732097626,
+        "joint_scores": [
+          [
+            0.825230062007904
+          ]
+        ],
+        "accepted": 90,
+        "rejected": 0,
+        "lr_scale": 0.77,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.962919120018472,
+        "rgb_source_ssim": 0.962919120018472,
+        "luma_source_ssim": 0.9778279146277441,
+        "source_mae_levels": 5.187070846557617,
+        "luma_source_mae_levels": 4.070468425750732,
+        "fg_source_mae_levels": 4.374600887298584,
+        "bg_source_mae_levels": 3.8353207111358643,
+        "rgb_source_mae_levels": 5.187070846557617,
+        "fg_rgb_source_mae_levels": 4.350714206695557,
+        "bg_rgb_source_mae_levels": 5.833721160888672,
+        "fg_chroma_tv_levels": 1.930221438407898,
+        "anchor_mae_levels": 5.468261241912842,
+        "quality_ok": true,
+        "step": 100,
+        "training_utility": 0.49673721194267273,
+        "selection_utility": 0.48254893254488707,
+        "regularization": 0.014188279397785664,
+        "joint_scores": [
+          [
+            0.8240389227867126
+          ]
+        ],
+        "accepted": 100,
+        "rejected": 0,
+        "lr_scale": 0.7160343788879413,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.964304979497827,
+        "rgb_source_ssim": 0.964304979497827,
+        "luma_source_ssim": 0.9778771576926127,
+        "source_mae_levels": 5.135845184326172,
+        "luma_source_mae_levels": 4.107940196990967,
+        "fg_source_mae_levels": 4.3574323654174805,
+        "bg_source_mae_levels": 3.9150383472442627,
+        "rgb_source_mae_levels": 5.135845184326172,
+        "fg_rgb_source_mae_levels": 4.34869909286499,
+        "bg_rgb_source_mae_levels": 5.744447708129883,
+        "fg_chroma_tv_levels": 1.925666332244873,
+        "anchor_mae_levels": 5.362171173095703,
+        "quality_ok": true,
+        "step": 110,
+        "training_utility": 0.49673402309417725,
+        "selection_utility": 0.4825882017612457,
+        "regularization": 0.014145821332931519,
+        "joint_scores": [
+          [
+            0.8267116546630859
+          ]
+        ],
+        "accepted": 110,
+        "rejected": 0,
+        "lr_scale": 0.6590567607471596,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 1
+      },
+      {
+        "source_ssim": 0.9610873015442849,
+        "rgb_source_ssim": 0.9610873015442849,
+        "luma_source_ssim": 0.9773060706289807,
+        "source_mae_levels": 5.453573226928711,
+        "luma_source_mae_levels": 4.5828537940979,
+        "fg_source_mae_levels": 4.353703498840332,
+        "bg_source_mae_levels": 4.7600274085998535,
+        "rgb_source_mae_levels": 5.453573226928711,
+        "fg_rgb_source_mae_levels": 4.362407207489014,
+        "bg_rgb_source_mae_levels": 6.297236442565918,
+        "fg_chroma_tv_levels": 1.9404914379119873,
+        "anchor_mae_levels": 5.758148193359375,
+        "quality_ok": true,
+        "step": 120,
+        "training_utility": 0.4977685809135437,
+        "selection_utility": 0.4832070432603359,
+        "regularization": 0.014561537653207779,
+        "joint_scores": [
+          [
+            0.8239450454711914
+          ]
+        ],
+        "accepted": 120,
+        "rejected": 0,
+        "lr_scale": 0.6000420484212238,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9610229018745995,
+        "rgb_source_ssim": 0.9610229018745995,
+        "luma_source_ssim": 0.9772079290520453,
+        "source_mae_levels": 5.322666645050049,
+        "luma_source_mae_levels": 4.1259002685546875,
+        "fg_source_mae_levels": 4.422383785247803,
+        "bg_source_mae_levels": 3.8966665267944336,
+        "rgb_source_mae_levels": 5.322666645050049,
+        "fg_rgb_source_mae_levels": 4.423600196838379,
+        "bg_rgb_source_mae_levels": 6.017803192138672,
+        "fg_chroma_tv_levels": 1.9835160970687866,
+        "anchor_mae_levels": 5.583652019500732,
+        "quality_ok": true,
+        "step": 130,
+        "training_utility": 0.5044990181922913,
+        "selection_utility": 0.48969842959195375,
+        "regularization": 0.014800588600337505,
+        "joint_scores": [
+          [
+            0.8198136687278748
+          ]
+        ],
+        "accepted": 130,
+        "rejected": 0,
+        "lr_scale": 0.54,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9599679907689126,
+        "rgb_source_ssim": 0.9599679907689126,
+        "luma_source_ssim": 0.97748515269189,
+        "source_mae_levels": 5.44049596786499,
+        "luma_source_mae_levels": 3.9423632621765137,
+        "fg_source_mae_levels": 4.3652262687683105,
+        "bg_source_mae_levels": 3.6154160499572754,
+        "rgb_source_mae_levels": 5.44049596786499,
+        "fg_rgb_source_mae_levels": 4.400764465332031,
+        "bg_rgb_source_mae_levels": 6.244390964508057,
+        "fg_chroma_tv_levels": 1.9823566675186157,
+        "anchor_mae_levels": 5.780563831329346,
+        "quality_ok": true,
+        "step": 140,
+        "training_utility": 0.5047850012779236,
+        "selection_utility": 0.48963438533246517,
+        "regularization": 0.015150615945458412,
+        "joint_scores": [
+          [
+            0.8192705512046814
+          ]
+        ],
+        "accepted": 140,
+        "rejected": 0,
+        "lr_scale": 0.4799579515787764,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 1
+      },
+      {
+        "source_ssim": 0.9595591367090265,
+        "rgb_source_ssim": 0.9595591367090265,
+        "luma_source_ssim": 0.9774022422147662,
+        "source_mae_levels": 5.498086452484131,
+        "luma_source_mae_levels": 3.995182991027832,
+        "fg_source_mae_levels": 4.346624374389648,
+        "bg_source_mae_levels": 3.7234573364257812,
+        "rgb_source_mae_levels": 5.498086452484131,
+        "fg_rgb_source_mae_levels": 4.392067909240723,
+        "bg_rgb_source_mae_levels": 6.353233337402344,
+        "fg_chroma_tv_levels": 1.9819579124450684,
+        "anchor_mae_levels": 5.777376174926758,
+        "quality_ok": true,
+        "step": 150,
+        "training_utility": 0.5063933730125427,
+        "selection_utility": 0.49123164266347885,
+        "regularization": 0.015161730349063873,
+        "joint_scores": [
+          [
+            0.8197824358940125
+          ]
+        ],
+        "accepted": 150,
+        "rejected": 0,
+        "lr_scale": 0.42094323925284044,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9584262594066466,
+        "rgb_source_ssim": 0.9584262594066466,
+        "luma_source_ssim": 0.9770937676915272,
+        "source_mae_levels": 5.559629440307617,
+        "luma_source_mae_levels": 3.9872794151306152,
+        "fg_source_mae_levels": 4.402148723602295,
+        "bg_source_mae_levels": 3.6665127277374268,
+        "rgb_source_mae_levels": 5.559629440307617,
+        "fg_rgb_source_mae_levels": 4.437021255493164,
+        "bg_rgb_source_mae_levels": 6.427602767944336,
+        "fg_chroma_tv_levels": 2.014165163040161,
+        "anchor_mae_levels": 5.843209266662598,
+        "quality_ok": true,
+        "step": 160,
+        "training_utility": 0.5089196562767029,
+        "selection_utility": 0.4933997392654419,
+        "regularization": 0.015519917011260986,
+        "joint_scores": [
+          [
+            0.8170156478881836
+          ]
+        ],
+        "accepted": 160,
+        "rejected": 0,
+        "lr_scale": 0.36396562111205877,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9583491636452052,
+        "rgb_source_ssim": 0.9583491636452052,
+        "luma_source_ssim": 0.9769844805232463,
+        "source_mae_levels": 5.558898448944092,
+        "luma_source_mae_levels": 4.105696678161621,
+        "fg_source_mae_levels": 4.394796371459961,
+        "bg_source_mae_levels": 3.882172107696533,
+        "rgb_source_mae_levels": 5.558898448944092,
+        "fg_rgb_source_mae_levels": 4.438705921173096,
+        "bg_rgb_source_mae_levels": 6.425004482269287,
+        "fg_chroma_tv_levels": 2.019214153289795,
+        "anchor_mae_levels": 5.787667751312256,
+        "quality_ok": true,
+        "step": 170,
+        "training_utility": 0.508045494556427,
+        "selection_utility": 0.49255487509071827,
+        "regularization": 0.015490619465708733,
+        "joint_scores": [
+          [
+            0.8146288990974426
+          ]
+        ],
+        "accepted": 170,
+        "rejected": 0,
+        "lr_scale": 0.3100000000000001,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 1
+      },
+      {
+        "source_ssim": 0.9574052011961988,
+        "rgb_source_ssim": 0.9574052011961988,
+        "luma_source_ssim": 0.9769937462412377,
+        "source_mae_levels": 5.698129177093506,
+        "luma_source_mae_levels": 4.1781768798828125,
+        "fg_source_mae_levels": 4.387331962585449,
+        "bg_source_mae_levels": 4.016464710235596,
+        "rgb_source_mae_levels": 5.698129177093506,
+        "fg_rgb_source_mae_levels": 4.439262390136719,
+        "bg_rgb_source_mae_levels": 6.671454429626465,
+        "fg_chroma_tv_levels": 2.024207830429077,
+        "anchor_mae_levels": 6.002533435821533,
+        "quality_ok": true,
+        "step": 180,
+        "training_utility": 0.5070329904556274,
+        "selection_utility": 0.49119757302105427,
+        "regularization": 0.015835417434573174,
+        "joint_scores": [
+          [
+            0.8179218173027039
+          ]
+        ],
+        "accepted": 180,
+        "rejected": 0,
+        "lr_scale": 0.2599697426559885,
+        "adaptive_scale": 0.75,
+        "stagnation_checks": 2
+      },
+      {
+        "source_ssim": 0.9579303329546054,
+        "rgb_source_ssim": 0.9579303329546054,
+        "luma_source_ssim": 0.9768967223393626,
+        "source_mae_levels": 5.538824081420898,
+        "luma_source_mae_levels": 4.10471248626709,
+        "fg_source_mae_levels": 4.398730278015137,
+        "bg_source_mae_levels": 3.877384901046753,
+        "rgb_source_mae_levels": 5.538824081420898,
+        "fg_rgb_source_mae_levels": 4.4455156326293945,
+        "bg_rgb_source_mae_levels": 6.384143352508545,
+        "fg_chroma_tv_levels": 2.0293431282043457,
+        "anchor_mae_levels": 5.797041416168213,
+        "quality_ok": true,
+        "step": 190,
+        "training_utility": 0.5108811855316162,
+        "selection_utility": 0.495339747518301,
+        "regularization": 0.0155414380133152,
+        "joint_scores": [
+          [
+            0.8139057159423828
+          ]
+        ],
+        "accepted": 190,
+        "rejected": 0,
+        "lr_scale": 0.16104816049064113,
+        "adaptive_scale": 0.75,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9587329380861694,
+        "rgb_source_ssim": 0.9587329380861694,
+        "luma_source_ssim": 0.9771470142050596,
+        "source_mae_levels": 5.500730514526367,
+        "luma_source_mae_levels": 4.033123016357422,
+        "fg_source_mae_levels": 4.392990589141846,
+        "bg_source_mae_levels": 3.7548820972442627,
+        "rgb_source_mae_levels": 5.500730514526367,
+        "fg_rgb_source_mae_levels": 4.4387946128845215,
+        "bg_rgb_source_mae_levels": 6.321794033050537,
+        "fg_chroma_tv_levels": 2.0256757736206055,
+        "anchor_mae_levels": 5.788198471069336,
+        "quality_ok": true,
+        "step": 200,
+        "training_utility": 0.5129364728927612,
+        "selection_utility": 0.4975046683102846,
+        "regularization": 0.015431804582476616,
+        "joint_scores": [
+          [
+            0.8173555731773376
+          ]
+        ],
+        "accepted": 200,
+        "rejected": 0,
+        "lr_scale": 0.1312930975995239,
+        "adaptive_scale": 0.75,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9590400005172756,
+        "rgb_source_ssim": 0.9590400005172756,
+        "luma_source_ssim": 0.9770589433948274,
+        "source_mae_levels": 5.447598457336426,
+        "luma_source_mae_levels": 4.149399757385254,
+        "fg_source_mae_levels": 4.4001569747924805,
+        "bg_source_mae_levels": 3.9555203914642334,
+        "rgb_source_mae_levels": 5.447598457336426,
+        "fg_rgb_source_mae_levels": 4.447705268859863,
+        "bg_rgb_source_mae_levels": 6.220692157745361,
+        "fg_chroma_tv_levels": 2.0325827598571777,
+        "anchor_mae_levels": 5.688591957092285,
+        "quality_ok": true,
+        "step": 210,
+        "training_utility": 0.5137766003608704,
+        "selection_utility": 0.4984167842194438,
+        "regularization": 0.015359816141426563,
+        "joint_scores": [
+          [
+            0.8150340914726257
+          ]
+        ],
+        "accepted": 210,
+        "rejected": 0,
+        "lr_scale": 0.10622123569436864,
+        "adaptive_scale": 0.75,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9590017226042192,
+        "rgb_source_ssim": 0.9590017226042192,
+        "luma_source_ssim": 0.9769860636350721,
+        "source_mae_levels": 5.460040092468262,
+        "luma_source_mae_levels": 4.242551326751709,
+        "fg_source_mae_levels": 4.405210494995117,
+        "bg_source_mae_levels": 4.116786479949951,
+        "rgb_source_mae_levels": 5.460040092468262,
+        "fg_rgb_source_mae_levels": 4.451986312866211,
+        "bg_rgb_source_mae_levels": 6.239442825317383,
+        "fg_chroma_tv_levels": 2.03452467918396,
+        "anchor_mae_levels": 5.688361167907715,
+        "quality_ok": true,
+        "step": 220,
+        "training_utility": 0.5141860842704773,
+        "selection_utility": 0.4988679578527808,
+        "regularization": 0.015318126417696476,
+        "joint_scores": [
+          [
+            0.8146265149116516
+          ]
+        ],
+        "accepted": 220,
+        "rejected": 0,
+        "lr_scale": 0.08626156128360608,
+        "adaptive_scale": 0.75,
+        "stagnation_checks": 1
+      },
+      {
+        "source_ssim": 0.9580315927549067,
+        "rgb_source_ssim": 0.9580315927549067,
+        "luma_source_ssim": 0.9767096329143433,
+        "source_mae_levels": 5.5739827156066895,
+        "luma_source_mae_levels": 4.4115166664123535,
+        "fg_source_mae_levels": 4.424022674560547,
+        "bg_source_mae_levels": 4.4018473625183105,
+        "rgb_source_mae_levels": 5.5739827156066895,
+        "fg_rgb_source_mae_levels": 4.461954593658447,
+        "bg_rgb_source_mae_levels": 6.433775901794434,
+        "fg_chroma_tv_levels": 2.042910575866699,
+        "anchor_mae_levels": 5.81879997253418,
+        "quality_ok": true,
+        "step": 230,
+        "training_utility": 0.5138998031616211,
+        "selection_utility": 0.4983597118407488,
+        "regularization": 0.015540091320872307,
+        "joint_scores": [
+          [
+            0.8151180148124695
+          ]
+        ],
+        "accepted": 230,
+        "rejected": 0,
+        "lr_scale": 0.08,
+        "adaptive_scale": 0.5625,
+        "stagnation_checks": 2
+      }
+    ],
+    "auxiliary_levels": 0
+  },
+  "config": {
+    "steps": 250,
+    "check_every": 10,
+    "log_every": 10,
+    "adaptive_annealing": true,
+    "anneal_min_steps": 180,
+    "anneal_min_lr_ratio": 0.08,
+    "anneal_warmup_steps": 10,
+    "anneal_plateau_factor": 0.75,
+    "anneal_plateau_patience": 2,
+    "anneal_backtrack_factor": 0.9,
+    "anneal_improve_tol": 0.0005,
+    "anneal_early_stop_patience": 4,
+    "checkpoint_every": 5,
+    "resume_from_checkpoint": true,
+    "latent_levels": 6,
+    "background_levels": 34,
+    "auxiliary_levels": 0,
+    "pixel_optimization": false,
+    "fg_edge_feather_pixels": 8.0,
+    "edge_feather_pixels": 12.0,
+    "ambient_feather_pixels": 3.0,
+    "roi_feather_pixels": 6.0,
+    "edge_feather_mode": "cosine",
+    "fg_luma_smooth_sigma": 1.5,
+    "fg_chroma_smooth_sigma": 2.5,
+    "fg_chroma_keep": 0.55,
+    "bg_luma_smooth_sigma": 12.0,
+    "bg_chroma_smooth_sigma": 16.0,
+    "bg_chroma_keep": 0.1,
+    "ambient_smooth_sigma": 14.0,
+    "ambient_grid_size": 8,
+    "ambient_init_bias": 0.0,
+    "tau_scale": 0.75,
+    "tau_fg": 0.05,
+    "tau_bg": 0.12,
+    "latent_working_size": 512,
+    "latent_limit": 6.0,
+    "latent_learning_rate": 0.12,
+    "ambient_learning_rate": 0.012,
+    "ambient_limit": 0.15,
+    "latent_smoothing_mix": 0.0,
+    "temperature": 0.04,
+    "joint_weight": 0.15,
+    "compensation_weight": 0.35,
+    "text_weight": 1.5,
+    "text_key_mix": 0.6,
+    "local_ot_weight": 0.15,
+    "local_ot_clusters": 4,
+    "local_ot_iterations": 50,
+    "local_ot_sinkhorn_regularization": 0.1,
+    "local_ot_fg_threshold": 0.5,
+    "ensemble_temperature": 0.2,
+    "ensemble_uniform_mix": 0.45,
+    "surrogate_set": "clip_l14",
+    "surrogate_config": null,
+    "compensated_weight": 0.5,
+    "fg_l2_weight": 2e-05,
+    "fg_tv_weight": 0.0001,
+    "fg_chroma_tv_weight": 0.03,
+    "bg_l2_weight": 0.005,
+    "bg_tv_weight": 0.02,
+    "bg_chroma_tv_weight": 0.08,
+    "overflow_weight": 0.05,
+    "halo_weight": 0.003,
+    "halo_soft_weight": 0.0001,
+    "halo_floor": 12.0,
+    "halo_ceiling": 10.0,
+    "fg_chroma_tv_ceiling": 2.5,
+    "halo_parent_multiplier": 1.0,
+    "guard_backtracks": 8,
+    "fg_chroma_levels": 0,
+    "fg_chroma_limit": 0.04,
+    "fg_luma_scale": 0.75,
+    "fg_neutral_recolor_base": 0.05,
+    "fg_highlight_luma_knee": 0.88,
+    "fg_shadow_luma_knee": 0.25,
+    "bg_radial_vignette_scale": 0.1,
+    "source_ssim_floor": 0.85,
+    "source_mae_ceiling": 22.0,
+    "fg_source_mae_ceiling": 10.0,
+    "anchor_ssim_floor": 0.85,
+    "anchor_mae_ceiling": 22.0,
+    "harmonization_smoothing_sigma": 12.0,
+    "harmonization_print_ring_sigma": 7.0,
+    "harmonization_selected_color_mix": 0.12,
+    "harmonization_chroma_transfer_strength": 0.0,
+    "harmonization_strength": 1.0,
+    "harmonization_blend_mode": "matte",
+    "harmonization_fg_feather_pixels": 4.0,
+    "harmonization_bg_strength": 0.85,
+    "harmonization_bg_luma_target": 238.0,
+    "harmonization_bg_warmth": 3.0,
+    "harmonization_bg_tint_mix": 0.2,
+    "harmonization_bg_feather_pixels": 6.0,
+    "ink_margin_pixels": 2,
+    "ink_closing_pixels": 9,
+    "ink_local_contrast": 3.0,
+    "ink_dark_luminance": 180.0,
+    "ink_colored_chroma": 12.0,
+    "allow_tf32": true,
+    "enable_gradient_checkpointing": null,
+    "save_intermediate_pngs": false,
+    "device": "cuda",
+    "seed": 42,
+    "smoke_test": false,
+    "sam_model_dir": null,
+    "planner_model_dir": null,
+    "editor_model_dir": null,
+    "vae_model_dir": null,
+    "vae_model_path": null,
+    "purifier_model_path": null,
+    "purifier_working_size": 256,
+    "purifier_gradient_checkpointing": true,
+    "editor_kind": "flux",
+    "anchor_steps": 32,
+    "anchor_guidance_scale": 2.5,
+    "planner_max_new_tokens": 768,
+    "eot_enabled": false,
+    "diffusion_eot_enabled": false,
+    "multiscale_eot_enabled": true,
+    "multiscale_eot_profile": "geom_v2",
+    "multiscale_identity_weight_end": 0.35,
+    "diffusion_weight": 0.05,
+    "purifier_steps": 10,
+    "psi_progressive_schedule": true,
+    "psi_phase1_ratio": 0.24,
+    "psi_phase2_ratio": 0.72,
+    "psi_joint_end_scale": 0.5,
+    "psi_text_peak_multiplier": 1.6,
+    "psi_ot_peak_multiplier": 1.6,
+    "text_pure_image_mix": 0.25,
+    "text_phrase_decomposition": true,
+    "max_text_phrases": 6,
+    "text_spherical_augmentation": true,
+    "text_spherical_radius": 0.05,
+    "text_spherical_mix": 0.5,
+    "source_repulsion_weight": 0.15,
+    "source_repulsion_margin": 0.08,
+    "local_ot_text_weighted": true,
+    "local_ot_text_temperature": 0.1,
+    "pcgrad_enabled": true,
+    "spectral_manifold_projection": true,
+    "spectral_budget_start": 0.65,
+    "spectral_budget_end": 1.35,
+    "conditional_tangent_projection": true,
+    "tangent_ssim_slack_margin": 0.03,
+    "tangent_mae_slack_ratio": 0.2,
+    "training_manifest": "/content/AmbiLAGE/data/public/visual_inception_golden_band/05_hair_extension/training_bundle.json",
+    "candidate_cache_dir": null,
+    "public_retrieval_weight": 3.0,
+    "public_retrieval_temperature": 0.07,
+    "public_query_batch_size": 16,
+    "public_contrastive_margin": 0.45,
+    "low_vram_offload_threshold_gb": 28.0,
+    "bg_studio_basis_enabled": true,
+    "bg_studio_basis_scale": 0.2,
+    "text_aware_proxy_weighting": true,
+    "selection_text_parity_mix": 2.0,
+    "proxy_text_bottleneck_mix": 0.55,
+    "memory_key_mode": "image",
+    "category_data_mode": "category_commonalities_abstraction",
+    "category_subspace_rank": 8,
+    "category_medoid_count": 16,
+    "category_residual_shrinkage": 0.3,
+    "category_visual_prototype_mix": 0.75,
+    "single_model_task_pcgrad": true,
+    "single_model_vis_grad_cap": 0.5,
+    "single_model_multiscale_eot": true,
+    "public_query_adv_radius": 0.18,
+    "public_query_adv_steps": 3,
+    "public_query_adv_mix": 0.5,
+    "joint_key_aux_mix": 0.0,
+    "joint_grad_protect": false,
+    "joint_grad_cap": 0.35
+  },
+  "planning": {
+    "source_boxes": [
+      [
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ]
+    ],
+    "print_regions": [],
+    "edit_prompt": "Explicit studio lighting recipe for public category 'hair extensions, wigs & accessories': apply smooth matte studio ambient harmonization across editable product body while preserving exact geometry, framing, and morphological printed ink core pixels unchanged.",
+    "lighting_note": "studio_softbox_relighting_for_hair_extensions,_wigs_&_accessories",
+    "model": "explicit_public_category_recipe_v1",
+    "planner_model": "explicit_public_category_recipe_v1",
+    "precision": "deterministic_geometry",
+    "inputs": [
+      "source_public_image",
+      "source_public_category"
+    ]
+  },
+  "ocr": {
+    "backend": "rapidocr-onnxruntime",
+    "regions": [],
+    "confidence": [],
+    "passes": [
+      "native",
+      "upscale_2x",
+      "upscale_2x_inverted",
+      "tile_3x",
+      "tile_3x_inverted"
+    ]
+  },
+  "segmentation": {
+    "source": {
+      "image_path": "/content/AmbiLAGE/resources/evaluation_base_golden_band/groups/05_hair_extension/source.jpg",
+      "image_sha256": "55ee7ea2a6a6b5c65ccab1b94811e98fed3b2d01ca1f314188f056b9d0bd43ce",
+      "boxes": [
+        [
+          0.0,
+          0.034,
+          0.512,
+          0.994
+        ]
+      ],
+      "pixel_boxes": [
+        [
+          0.0,
+          17.0,
+          256.0,
+          497.0
+        ]
+      ],
+      "segmenter": "sam2.1-hiera-large",
+      "model": "/content/AmbiLAGE/models/sam2",
+      "scores": [
+        [
+          0.8627044558525085,
+          0.9714342951774597,
+          0.9700188040733337
+        ]
+      ],
+      "selected_indices": [
+        1
+      ],
+      "selected_scores": [
+        0.9714342951774597
+      ],
+      "foreground_ratio": 0.43604,
+      "label_region_pixels": 0,
+      "ink_core_pixels": 0,
+      "substrate_pixels": 0
+    },
+    "target": {
+      "image_path": "/content/AmbiLAGE/resources/evaluation_base_golden_band/groups/05_hair_extension/target.jpg",
+      "image_sha256": "c5af2ad55c9b05fdba76c36316aa3088a43c286fe6ccab7858ccd2d14cd9c9a6",
+      "boxes": [
+        [
+          0.02,
+          0.026,
+          0.964,
+          0.998
+        ]
+      ],
+      "pixel_boxes": [
+        [
+          10.0,
+          13.0,
+          482.0,
+          499.0
+        ]
+      ],
+      "segmenter": "sam2.1-hiera-large",
+      "model": "/content/AmbiLAGE/models/sam2",
+      "scores": [
+        [
+          0.06655008345842361,
+          0.918441653251648,
+          0.9294975996017456
+        ]
+      ],
+      "selected_indices": [
+        2
+      ],
+      "selected_scores": [
+        0.9294975996017456
+      ],
+      "foreground_ratio": 0.461392,
+      "label_region_pixels": 0,
+      "ink_core_pixels": 0,
+      "substrate_pixels": 0
+    }
+  },
+  "color_statistics": {
+    "color_scheme": "statistics",
+    "rgb": [
+      43,
+      40,
+      39
+    ],
+    "lab_mean": [
+      16.32646942138672,
+      1.1770987510681152,
+      0.8838680982589722
+    ],
+    "lab_covariance": [
+      [
+        44.9813398508796,
+        7.647527144791532,
+        6.080942329567978
+      ],
+      [
+        7.647527144791532,
+        15.718064798390888,
+        12.729398945524819
+      ],
+      [
+        6.080942329567978,
+        12.729398945524819,
+        17.356565395404868
+      ]
+    ],
+    "luminance_quantiles": [
+      8.757011413574219,
+      47.829154968261776
+    ],
+    "target_foreground_pixels": 101468,
+    "body_pixels": 71344,
+    "photo_border_background_rgb": [
+      255.0,
+      255.0,
+      255.0
+    ],
+    "border_connected_background_pixels": 91791,
+    "covariance_diagnostic_only": true
+  },
+  "harmonization": {
+    "status": "completed",
+    "stage": "illumination_harmonization",
+    "blend_mode": "matte",
+    "selected_rgb": [
+      43,
+      40,
+      39
+    ],
+    "bg_studio_target_rgb": [
+      241,
+      239,
+      235
+    ],
+    "bg_strength": 0.85,
+    "strength": 1.0,
+    "selected_color_mix": 0.12,
+    "smoothing_sigma": 12.0,
+    "chosen_fraction": 0.125,
+    "line_search_steps": 32,
+    "source_ssim": 0.9893885176104734,
+    "source_mae_levels": 1.9692689180374146,
+    "fg_rgb_source_mae_levels": 2.2411887645721436,
+    "fg_chroma_tv_levels": 1.3277852535247803,
+    "halo_error": 0.7960866093635559,
+    "ink_core_pixels": 0,
+    "substrate_pixels": 0,
+    "max_body_change_levels": 8,
+    "mean_body_change_levels": 2.2411888817539674,
+    "max_bg_change_levels": 2,
+    "mean_bg_change_levels": 0.9067333380618011,
+    "roi_change_levels": 0,
+    "zero_pixel_residual": true,
+    "generator": {
+      "model": "perceptual_illumination_line_search_v1",
+      "chosen_fraction": 0.125,
+      "line_search_steps": 32
+    },
+    "trials_evaluated": 29,
+    "anchor_path": "/content/AmbiLAGE/output/exp_20261121_ambilage_ms_v2_geom_golden_band_9groups/05_hair_extension/ambilage/generation/color_harmonization/generative_anchor.png",
+    "anchor_sha256": "ee9f821765a9e7dc9eb5fe638440a77beb53d7b0fa02c6d95ee0749075697c97"
+  },
+  "anchor_generation": {
+    "backend": "perceptual_illumination_line_search_v1",
+    "model": "perceptual_illumination_line_search_v1",
+    "precision": "float32",
+    "steps": 32,
+    "prompt": "Explicit studio lighting recipe for public category 'hair extensions, wigs & accessories': apply smooth matte studio ambient harmonization across editable product body while preserving exact geometry, framing, and morphological printed ink core pixels unchanged.",
+    "seed": 42,
+    "alignment_mode": "perceptual_line_search"
+  },
+  "training_objective": {
+    "kind": "sequential_public_joint_text_fg_ot_psi_v4",
+    "surrogates": [
+      {
+        "role": "attack_surrogate",
+        "name": "ViT-L-14",
+        "pretrained": "openai",
+        "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+        "tokenizer_path": null,
+        "weight_path": "/content/AmbiLAGE/models/clip_l14/open_clip_model.safetensors",
+        "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e",
+        "weight_revision": null,
+        "device": "cuda",
+        "precision": "fp32",
+        "image_size": 224,
+        "preprocess": {
+          "resize": "bicubic_direct_square",
+          "align_corners": false,
+          "antialias": true,
+          "mean": [
+            0.48145466,
+            0.4578275,
+            0.40821073
+          ],
+          "std": [
+            0.26862954,
+            0.26130258,
+            0.27577711
+          ]
+        },
+        "open_clip_torch_version": "3.3.0",
+        "cache_identity": "2ae7d7ba721f793f3f6bc7e20c9509f7a6ff7380bd2769d0682e1e0b468d1d5d",
+        "requires_true_local_tokens": false,
+        "loading": {
+          "architecture": {
+            "embed_dim": 768,
+            "vision_cfg": {
+              "image_size": 224,
+              "layers": 24,
+              "width": 1024,
+              "patch_size": 14
+            },
+            "text_cfg": {
+              "context_length": 77,
+              "vocab_size": 49408,
+              "width": 768,
+              "heads": 12,
+              "layers": 12
+            }
+          },
+          "quick_gelu": true,
+          "activation": "QuickGELU",
+          "mean": [
+            0.48145466,
+            0.4578275,
+            0.40821073
+          ],
+          "std": [
+            0.26862954,
+            0.26130258,
+            0.27577711
+          ],
+          "metadata_source": "registered_pretrained_tag",
+          "registered_preprocess": {
+            "interpolation": "bicubic",
+            "resize_mode": "shortest"
+          },
+          "strict_state_dict": true,
+          "actual_activation_modules": {
+            "QuickGELU": 36,
+            "GELU": 0
+          },
+          "loader_version": 3,
+          "loader_sha256": "562966bba1620c5b352d9f092bee56ce10fce48afa68cb91575094bd7ad47731"
+        },
+        "tokenizer": {
+          "type": "SimpleTokenizer",
+          "special_tokens": {
+            "sot_token_id": 49406,
+            "eot_token_id": 49407,
+            "pad_token_id": null,
+            "context_length": 77
+          },
+          "content_sha256": "4710f312ff5993f9721ddf2ff9d4d3c1b49ac86b646e95e32b0e3d1ac1abf7b8"
+        }
+      }
+    ],
+    "surrogate_selection": {
+      "schema_version": 1,
+      "profile": "clip_l14",
+      "config_source": "src/visual/config/surrogates.clip_l14.json",
+      "config_sha256": "00a21694e0bc85be51c80b0a3b476fd878f32bbc6f51dc8aa62f25ee49deed2c",
+      "specs": [
+        {
+          "name": "ViT-L-14",
+          "pretrained": "openai",
+          "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+          "weight_path": "clip_l14/open_clip_model.safetensors",
+          "tokenizer_path": null
+        }
+      ],
+      "specs_sha256": "58cf5034c6eb1153bd6c14d7614aa9000f0d7639f9fe9cec51f767c36716f803",
+      "comparison_reference": "visual_inception_single_clip_l14_explicit_checkpoint",
+      "activation_policy": "pretrained_native",
+      "model_count": 1,
+      "held_out_models": [
+        "ViT-g-14",
+        "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+      ],
+      "downloads_during_training": false,
+      "paper_single_encoder_architecture": "CLIP-ViT-L/14",
+      "paper_exact_checkpoints_specified": false,
+      "checkpoint_policy": "explicit_public_pretrained_identity_not_claimed_author_checkpoint"
+    },
+    "public_objectives": [
+      {
+        "source_public_key_sha256": "baef7de50beca1903355bda34322d4d27408356f5d3a5b7a9de466deaec7a469",
+        "training_text_sha256": "e7f582ecfaaa172e5296d45cfd1fb24840065f423cf9383f7ed22e74c9d5793e",
+        "source_text_encoding": {
+          "text_sha256": "baef7de50beca1903355bda34322d4d27408356f5d3a5b7a9de466deaec7a469",
+          "input_tokens": 66,
+          "encoded_tokens": 66,
+          "chunks": 1,
+          "payload_tokens_per_chunk": 75,
+          "chunk_token_counts": [
+            66
+          ],
+          "truncated": false
+        },
+        "target_text_encoding": {
+          "text_sha256": "e7f582ecfaaa172e5296d45cfd1fb24840065f423cf9383f7ed22e74c9d5793e",
+          "input_tokens": 15,
+          "encoded_tokens": 15,
+          "chunks": 1,
+          "payload_tokens_per_chunk": 75,
+          "chunk_token_counts": [
+            15
+          ],
+          "truncated": false
+        },
+        "query_modes": [
+          "multimodal_equal_weight",
+          "independent_target_text",
+          "image_only_memory_key_alignment",
+          "category_level_category_commonalities_abstraction"
+        ],
+        "query_image_weight": 0.5,
+        "query_text_weight": 0.5,
+        "memory_key_image_weight": 1.0,
+        "memory_key_mode": "image",
+        "category_data_mode": "category_commonalities_abstraction",
+        "compensated_target_enabled": true,
+        "compensated_valid": true,
+        "compensation_weight": 0.35,
+        "text_weight": 1.5,
+        "text_key_mix": 0.6,
+        "text_pure_image_mix": 0.25,
+        "text_compensated_valid": true,
+        "phrase_decomposition_enabled": true,
+        "phrase_count": 6,
+        "spherical_query_augmentation": true,
+        "local_ot_weight": 0.15,
+        "joint_key_aux_mix": 0.0,
+        "joint_grad_protect": false,
+        "joint_grad_cap": 0.35,
+        "local_ot_clusters": 4,
+        "local_ot_fg_threshold": 0.5,
+        "local_ot_text_weighted": true,
+        "local_ot_active": true,
+        "public_bundle_retrieval_active": true,
+        "victim_memory_used": false,
+        "formal_queries_used": false,
+        "formal_ranking_used": false,
+        "category_abstraction": {
+          "schema_version": 1,
+          "kind": "contrastive_submodular_spherical_karcher_cpca_v1",
+          "category": "hair extensions",
+          "query_count": 100,
+          "out_of_category_titles_used": 40,
+          "same_category_visual_peers_used": 10,
+          "top_salient_terms": [
+            "human hair",
+            "hair extensions",
+            "full head",
+            "extensions",
+            "hair extension",
+            "clip hair",
+            "length",
+            "synthetic hair",
+            "clip",
+            "crochet hair",
+            "hair length",
+            "heat resistant"
+          ],
+          "canonical_prompts": [
+            "hair extensions: real human hair; double wefts; a clip-in design; rubber-lined clips",
+            "A hair extensions with human hair, full head, hair extension, clip hair, length.",
+            "I want to buy hair extensions featuring human hair, full head, hair extension, clip hair, length, synthetic hair."
+          ],
+          "abstracted_texts": [
+            "hair extensions: real human hair; double wefts; a clip-in design; rubber-lined clips",
+            "A hair extensions with human hair, full head, hair extension, clip hair, length.",
+            "I want to buy hair extensions featuring human hair, full head, hair extension, clip hair, length, synthetic hair.",
+            "hair extensions real human hair",
+            "Item Material: 100% real hairThe hair extensions can be washed, heated, curled, straightened, dried and styled normally, and can last for up to 6 months with proper care",
+            "I’m looking for 120g clip-in human hair extensions in a seven-piece set designed for full-head coverage, with securely sewn scalp-friendly clips for easy application and removal",
+            "I need 12-inch ombre box braid crochet hair made from soft, lightweight fiber with 24 pre-looped roots per piece, four pieces per pack, and protective packaging",
+            "6 inches long, heat resistant synthetic hair extensions in multiple colorsFeatures:Multipurpose: Applied for daily dress up, parties, festivals or many other occasions",
+            "clip in hair extensions",
+            "I need a 14-inch natural-color Brazilian human hair bundle weighing about 100g, with dyeable hair and air or express shipping",
+            "I need 22-inch passion twist crochet hair made from soft, lightweight, flame-retardant synthetic fibers, with 80g and 22 strands per pack and seven packs per lot",
+            "I need one piece of deep wave human hair extensions in natural black, available from 14 to 24 inches",
+            "I’m looking for Indi Remi weaving hair made from healthy, shiny, bouncy strands with high elasticity and minimal processing for long-lasting wear",
+            "I’m looking for 30 colorful 21.6-inch clip-in synthetic hair extensions made from heat-resistant fiber for parties, festivals, costumes, or everyday creative styling",
+            "I’m looking for a lace-front human hair wig for women, available in light brown, with a natural hairline and styling options for long, straight, braided, or curly looks",
+            "Hair Quality：Soft, Smooth, Gloosy, Full Cuticle, Double weft, Natural Hair, No Smell, Shedding, No TangleNotice: This package include 1 pack Human Hair Extensions only,NO hair extension tool"
+          ],
+          "submodular_coverage_score": 0.84839265,
+          "subspace_rank": 8,
+          "ambient_dim": 768,
+          "principal_anchor_count": 16,
+          "residual_shrinkage": 0.3,
+          "visual_prototype_mix": 0.75,
+          "contrastive_beta": 0.35,
+          "abstraction_sha256": "6159fbfeb1d61a8c2229a08e2b48f1e34e43b7bad47331131b222ba06bf7da1c"
+        }
+      }
+    ],
+    "held_out_models": [
+      "ViT-g-14",
+      "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+    ],
+    "held_out_purifiers": [
+      "eval_purifier_sd21",
+      "sd2-community/stable-diffusion-2-1-base",
+      "stabilityai/stable-diffusion-2-1-base"
+    ],
+    "single_surrogate_mode": true,
+    "single_model_task_pcgrad": true,
+    "single_model_multiscale_eot": true,
+    "multiscale_eot_enabled": true,
+    "multiscale_eot_profile": "geom_v2",
+    "multiscale_identity_weight_end": 0.35,
+    "defense_eot_enabled": false,
+    "effective_key_mode": "image",
+    "effective_category_mode": "category_commonalities_abstraction",
+    "gradient_execution": "single_surrogate_task_pcgrad_single_backward",
+    "pcgrad_enabled": true,
+    "psi_progressive_schedule": true,
+    "text_aware_proxy_weighting": true,
+    "weak_proxy_weighting": "text_bottleneck_relative_gain_softmin_with_uniform_floor",
+    "ensemble_temperature": 0.2,
+    "ensemble_uniform_mix": 0.45,
+    "eot_enabled": false,
+    "diffusion_eot_enabled": false,
+    "eot_paths": [
+      "identity",
+      "multiscale_grid_breaking_geom_v2_resize_pad_flip_shift"
+    ],
+    "diffusion_weight": 0.0,
+    "diffusion_gradient": "disabled",
+    "purifier": {
+      "kind": "disabled",
+      "enabled": false
+    },
+    "vram_governance": {
+      "low_vram_mode": true,
+      "offloaded_text_bytes": 494624936,
+      "visual_grad_checkpointing_models": 1,
+      "sequential_gpu_streaming": false
+    },
+    "victim_memory_used": false,
+    "formal_queries_used": false,
+    "training_manifest_sha256": "cdd84b8e06e708283b99ea1b3f831843f172b5b18ba8105c9913d3dbf5efd373",
+    "training_bundle_sha256": "821e426c9c2f7344fa6406beed2b904205dbd52d9eef2579ad2b568a58e913f2",
+    "public_retrieval_weight": 3.0,
+    "negative_candidate_caches": [
+      {
+        "kind": "visual_inception_fixed_public_image_vectors_v2",
+        "cache_key": "55573069a6947db307f544361750e44dfdae3fae1a1989b2f5b097ca412a0f19",
+        "identity": {
+          "kind": "visual_inception_fixed_public_image_vectors_v2",
+          "model": {
+            "role": "attack_surrogate",
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "tokenizer_path": null,
+            "weight_path": "/content/AmbiLAGE/models/clip_l14/open_clip_model.safetensors",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e",
+            "weight_revision": null,
+            "device": "cuda",
+            "precision": "fp32",
+            "image_size": 224,
+            "preprocess": {
+              "resize": "bicubic_direct_square",
+              "align_corners": false,
+              "antialias": true,
+              "mean": [
+                0.48145466,
+                0.4578275,
+                0.40821073
+              ],
+              "std": [
+                0.26862954,
+                0.26130258,
+                0.27577711
+              ]
+            },
+            "open_clip_torch_version": "3.3.0",
+            "cache_identity": "2ae7d7ba721f793f3f6bc7e20c9509f7a6ff7380bd2769d0682e1e0b468d1d5d",
+            "requires_true_local_tokens": false,
+            "loading": {
+              "architecture": {
+                "embed_dim": 768,
+                "vision_cfg": {
+                  "image_size": 224,
+                  "layers": 24,
+                  "width": 1024,
+                  "patch_size": 14
+                },
+                "text_cfg": {
+                  "context_length": 77,
+                  "vocab_size": 49408,
+                  "width": 768,
+                  "heads": 12,
+                  "layers": 12
+                }
+              },
+              "quick_gelu": true,
+              "activation": "QuickGELU",
+              "mean": [
+                0.48145466,
+                0.4578275,
+                0.40821073
+              ],
+              "std": [
+                0.26862954,
+                0.26130258,
+                0.27577711
+              ],
+              "metadata_source": "registered_pretrained_tag",
+              "registered_preprocess": {
+                "interpolation": "bicubic",
+                "resize_mode": "shortest"
+              },
+              "strict_state_dict": true,
+              "actual_activation_modules": {
+                "QuickGELU": 36,
+                "GELU": 0
+              },
+              "loader_version": 3,
+              "loader_sha256": "562966bba1620c5b352d9f092bee56ce10fce48afa68cb91575094bd7ad47731"
+            },
+            "tokenizer": {
+              "type": "SimpleTokenizer",
+              "special_tokens": {
+                "sot_token_id": 49406,
+                "eot_token_id": 49407,
+                "pad_token_id": null,
+                "context_length": 77
+              },
+              "content_sha256": "4710f312ff5993f9721ddf2ff9d4d3c1b49ac86b646e95e32b0e3d1ac1abf7b8"
+            }
+          },
+          "device": "cuda",
+          "test_fixture": false,
+          "candidates": [
+            {
+              "id": "B09BDT7S6G",
+              "image_sha256": "9f6324da1aadaf98064e9ad8dd1e125f8535c27b72bff0c9c3030a4c4bdb2f24"
+            },
+            {
+              "id": "B09S9T261D",
+              "image_sha256": "a3edfd0eca05c73735e3ae525f9b0840ba2ffeb9dacdfa561088a34d28739754"
+            },
+            {
+              "id": "B089KCH58Y",
+              "image_sha256": "4288b9ec2eb3b7b820f5df821c0e48551b74f80eadbc4649d9edd58dac84446d"
+            },
+            {
+              "id": "B00OQV1ZEE",
+              "image_sha256": "9d0813f3e234a905679be211919d178137752b321e104e340b05262ca7436737"
+            },
+            {
+              "id": "B09GF7M3MJ",
+              "image_sha256": "a734ddaa081df79c8a839c0103bf546bba28bba8793c51fc8e76b86055e25f57"
+            },
+            {
+              "id": "B09JC4TCCJ",
+              "image_sha256": "9038bb28815acbf6fefc707475a9e972b6761e15f251ed4c2cbb98885f5b7bc0"
+            },
+            {
+              "id": "B08RD1MXD4",
+              "image_sha256": "1ffe3dc14904ead7a9f0c58364ed9eeb916296f7314b420aa73d69482337e15c"
+            },
+            {
+              "id": "B0819SVCZ3",
+              "image_sha256": "59238eb265476e796ca29c0315874b95e2c7127b660ab303ec5d1324e4854991"
+            },
+            {
+              "id": "B07XYDQCPR",
+              "image_sha256": "2f4bdab17de01af0c801e031ce66bd77a896e597e258c5d72d5b69faa8a4d912"
+            },
+            {
+              "id": "B08K3B1RMR",
+              "image_sha256": "05cdae733e55ac18a99eef2c2441ad42ab8190ac0e7027d76228324f25072e8b"
+            },
+            {
+              "id": "B09SPQH3J5",
+              "image_sha256": "375293ac2d5a1d6844a5abea60204534516ba461bc3299752a3c1480c62b9f3c"
+            },
+            {
+              "id": "B09J85L91G",
+              "image_sha256": "cfdab399daa1e4d4573f8a707696590f14dc08fb44a2ee4472eec97cdc50a6a1"
+            },
+            {
+              "id": "B08BZ8KM9G",
+              "image_sha256": "c8eb5e18364cd7a2ac99a0a11b2e1ca75d90fe7a51c77f0bd17e945fced3aee0"
+            },
+            {
+              "id": "B0823QW259",
+              "image_sha256": "b1f0dceec631a04437d58b2041481ea2751ac4d0f1fa8bd37ed0715698917a6b"
+            },
+            {
+              "id": "B09C3XYMBP",
+              "image_sha256": "20ddbbfd5cb35fa70886380b7069f41af29e5fb30cc27b4ffc571412c3692b42"
+            },
+            {
+              "id": "B09LQNSL7H",
+              "image_sha256": "5359e7cde4c28eee8673a968c227baedf352cf1e30d727c3282c58cc23b1b51c"
+            },
+            {
+              "id": "B07W5Y7P7C",
+              "image_sha256": "bdaba1605a828715ebc63a8ac0092274d14968bdbbdb0522a9813dc7f2b05a0e"
+            },
+            {
+              "id": "B09NZXMWPR",
+              "image_sha256": "db5898754be151bbf11af844a737f0d53473920ea92a3e37a2ac1fb4b9b1de18"
+            },
+            {
+              "id": "B09HWTCSNS",
+              "image_sha256": "24d2aa5b085985e8a5ca117c81331a6b6ea430f7c7944a18d6b2be4a73a26c5f"
+            },
+            {
+              "id": "B09LQC12Q6",
+              "image_sha256": "6864b6feaab4f8b491a7ce2ab706af21aaf2e1202013935536fbca1ba84c0b12"
+            },
+            {
+              "id": "B0042P4LP4",
+              "image_sha256": "afec1264796bb3b880219cf48dc317b8cf1718bbf3bda18d4823145805faad9c"
+            },
+            {
+              "id": "B00CHU0TD4",
+              "image_sha256": "ac9bd07ce690c47676fca07afe4eb874c0493511426a314806488677ae2aa7f6"
+            },
+            {
+              "id": "B01N05V944",
+              "image_sha256": "8187b580947e954b4033cbf73eb9063d550346f09fe52e4886423569c2330da4"
+            },
+            {
+              "id": "B085GLF7ZJ",
+              "image_sha256": "d946d07899462b241a4d740153d39b14496e2842a65cdf32e211dcc4fb0edf2c"
+            },
+            {
+              "id": "B00CHU03DA",
+              "image_sha256": "be9cb717ac0619c238fc8c829d638d8492df2728c0337902e5b9d7bdb5503575"
+            },
+            {
+              "id": "B00B049CB8",
+              "image_sha256": "342c9d97d4de9a4dcf122f9dcbb8da6248cebdac10640394661146f96b316e54"
+            },
+            {
+              "id": "B00CHU1RPI",
+              "image_sha256": "1694a9024898af7bf5a52075ec19f3b1a7654502a3fa0a2ecc4cbd901db6eeb1"
+            },
+            {
+              "id": "B0042PARUC",
+              "image_sha256": "cbe674ad59d1e5217e579e2ce203bf29e298597d74c780784a4f6e8abea13006"
+            },
+            {
+              "id": "B089TRM2ZC",
+              "image_sha256": "d47fc436b6aa069190a53048374ed71fe037e28678cecf28621b8e518d0b8892"
+            },
+            {
+              "id": "B097NKTLRM",
+              "image_sha256": "bba8f998a1e06696446d075c91ad885c4c03b2d40f7455e9553c712c8cce0f82"
+            },
+            {
+              "id": "B08H8BR2TL",
+              "image_sha256": "3e682ac7e66372687754b6deeaa8cff18adfc16825b4c9dc1a1d48725f758799"
+            },
+            {
+              "id": "B074FSM89X",
+              "image_sha256": "dc7822ede9179fc0b07ed924d34f03f5deb67cabba691e24a623ce54ff15c08c"
+            },
+            {
+              "id": "B08Y98PH1D",
+              "image_sha256": "667871217d2b0af70373e6b3c6a4fe2f7688d695c4afb006e62e9f4d19ca0e99"
+            },
+            {
+              "id": "B09FYZPTLB",
+              "image_sha256": "50a99106c785c3a6f27cf93ef41b970260870c74493e3bbb584cb0201503e9bc"
+            },
+            {
+              "id": "B071QYD6TV",
+              "image_sha256": "dcf9af90ad51ce5d82745860aa8adf3650b84ab3096ff02726cb0dc2c47d641f"
+            },
+            {
+              "id": "B086PX13GL",
+              "image_sha256": "1138f1755888b48233919dd747c0ee131efd3b0419f6d84cf6a9fc61664712d9"
+            },
+            {
+              "id": "B0819SK9M3",
+              "image_sha256": "7b7e3dc34b9e407444b2296041dbd1f9ae43cab36044f83811a40ecef4a2b15e"
+            },
+            {
+              "id": "B00PIOW0W4",
+              "image_sha256": "e6d586e18f09d49d8abc0d156506d1ae9dc8b762d8fb206557003ce501bfb816"
+            },
+            {
+              "id": "B08KTQGV2H",
+              "image_sha256": "a6995feaf5765d571d6abd55490953a7018cb2edc7bd5e8e53cd82a6fcb76ba3"
+            },
+            {
+              "id": "B078PSFM42",
+              "image_sha256": "6bbd6557181198552c49f77a568a8d021514d6addbb0ae3cfa205f2b80e18308"
+            },
+            {
+              "id": "B08R61WZKD",
+              "image_sha256": "59a262bff6d7a5dbc9eb63b2f3fa1ce010b1eddec39f78247e50f41423cf3843"
+            },
+            {
+              "id": "B08MF57W76",
+              "image_sha256": "737b9c8745e626b548c1c8d8282567fd13b231521f428d3d797a9d169b5ab0e5"
+            },
+            {
+              "id": "B08N6MLS7N",
+              "image_sha256": "ce2ae8b1508ec1050a9c1ddb16281d3b084e1330493ae3a52dd69928fee36c7b"
+            },
+            {
+              "id": "B09B3FZ8TK",
+              "image_sha256": "4ab1ede1e5d7c32c1ce1d09c05e9cec253793fb113600ce1fb9235ef3818f58c"
+            },
+            {
+              "id": "B0957HJFYT",
+              "image_sha256": "d427d3397bdaabcefff6957fb233664bec2b0e2dd734a57d1a7b9df4d3f28ea8"
+            },
+            {
+              "id": "B087BQ73P7",
+              "image_sha256": "13fbd557e274de313ab5b7313da6e4f540c265821125ebdbb712cf9c74198a6e"
+            },
+            {
+              "id": "B091YSR7KY",
+              "image_sha256": "9dee01d7c5a57b1499849ec0cfecf1ea03b5b6fe656b793d80b68ed4997db6b9"
+            },
+            {
+              "id": "B08D3FXQDD",
+              "image_sha256": "b306c6b8f4a641e1326ea8990bf715a6dc43e58b44cb3f8089af18335d641bbd"
+            },
+            {
+              "id": "B08R5NDZ3Z",
+              "image_sha256": "9203e94317263201c750132ab8a81fa400f72e14e611691b1d7aa5d02e76fd4a"
+            },
+            {
+              "id": "B08XM497N3",
+              "image_sha256": "a09ac5a633c933de0de6fe9b3a5c069cb4d9d203a90fa9ed1211b04674b4c3a6"
+            },
+            {
+              "id": "B08NTV5DQZ",
+              "image_sha256": "8b128d6caac9e95f2ee089340e94c8bb9f7e5e74b0465d114204fb008ed137b4"
+            },
+            {
+              "id": "B09B9ZVYV4",
+              "image_sha256": "0a9bf49864b9ceebb91d5f23aac0d3107741c0158ce4c3913632b688ed1c775e"
+            },
+            {
+              "id": "B08RZ58HLZ",
+              "image_sha256": "9811d9bd9cb27ee990f05c43fc062ee9827a1dd4bb0c796b1ec29ea234ae65b0"
+            },
+            {
+              "id": "B09H41KT2J",
+              "image_sha256": "fb3a59630a561a8cb013812ebd8997430db2ac8b81020cf8f672119be6068739"
+            },
+            {
+              "id": "B09HXMVF7M",
+              "image_sha256": "7f01d97fa964b3a3efeabceaee5dd8660ca79656fb5f254f18ff61d868713467"
+            },
+            {
+              "id": "B09PL4WMY4",
+              "image_sha256": "855852497310c8e864c56bdc99f9ecd698b56da36147af4bb97967ef3132df60"
+            },
+            {
+              "id": "B08S78F56Z",
+              "image_sha256": "295be26e4f7510e49b6a4b9cab7fa43d97ac46fe75856378beff6926ae4b7703"
+            },
+            {
+              "id": "B09PJ74FN6",
+              "image_sha256": "09cbe6a510454a12e61e422f7ac5f65cd30c4740108cbaf1fdf018a7a2bc9526"
+            },
+            {
+              "id": "B09Q2QW66Q",
+              "image_sha256": "be4049b0993e08a083ea7b29f6e220209914cde509686bb1a17aae487d866cba"
+            },
+            {
+              "id": "B098K2BWPH",
+              "image_sha256": "39cf2664897c2a883d13690b109590895eff5adcc3d71c91f5380681d6c3928d"
+            },
+            {
+              "id": "B0857LK1YT",
+              "image_sha256": "b9a79a54df6f0b25dc85d5008350e248ed8c719786deb2fb73c6a077b5d64a75"
+            },
+            {
+              "id": "B08VYGMW9L",
+              "image_sha256": "c8a03cfcf1ce518eece25ec649307385777367347632c6fcd5aac1a67f161b24"
+            },
+            {
+              "id": "B097QXY9DJ",
+              "image_sha256": "72562425c5324bb7fed86c55f5f548c9a1c9a4a59cf09f2859bb2e58b4bf7406"
+            },
+            {
+              "id": "B08LLDB6WG",
+              "image_sha256": "ecf61fa7a03fa6a96d3d8da8f684cc3f2b05ed9e2e20578fb7e351d88dc41c11"
+            },
+            {
+              "id": "B013TPC4J2",
+              "image_sha256": "21f3833a2c03798309dad43f639fe9127c48dfbfc6ed86a08c03815e8c31b525"
+            },
+            {
+              "id": "B0791Y9749",
+              "image_sha256": "4f1153cf238d75c6af2855b5c9096a1eba98b7b55d325c53a372a19a940c9a6a"
+            },
+            {
+              "id": "B07LG4WYCP",
+              "image_sha256": "e436450d59589ecaacd91238839b6acbc9e29984fce53ed1b9edc82210141237"
+            },
+            {
+              "id": "B08Q77XBC7",
+              "image_sha256": "8acd41e2fc61ab45f3ec77b0cc39035fd92205d9e8afb0978e9d90c46875cdc0"
+            },
+            {
+              "id": "B00YMZAJDW",
+              "image_sha256": "caf7f06913120c97f82f5ccee747bb89137f1ffb65d6f14462a1f3afa7579f01"
+            },
+            {
+              "id": "B004D9DKVA",
+              "image_sha256": "ce0de8ab697a277423e90d8db93709ccabeecb6f18fcfeb86d79e7dbe15d62e8"
+            },
+            {
+              "id": "B09FRB9PN2",
+              "image_sha256": "51b691f7c35bbdff74aa642d809f885e064898638e0957da2e6cb401a4e98bee"
+            },
+            {
+              "id": "B09FGVZ5CS",
+              "image_sha256": "970f617f28a492e4d64807a71023b14860d98a6ae6b3ad053d2362c528f0e2e4"
+            },
+            {
+              "id": "B07VBPNBQ3",
+              "image_sha256": "e0ff5c8ab6843b34487a80e4e94478a4b8813f8aed7c5c3ed17acb5323409208"
+            },
+            {
+              "id": "B08XM6CRYG",
+              "image_sha256": "11b60c07c59a6e8d2ad5158ba8e67b5f7c79e78bfc077030a0380b5671a5909d"
+            },
+            {
+              "id": "B0756P6DL9",
+              "image_sha256": "e02a32c5870a662925fb12c86942b80bde07040b9c1c2a33f5d609d03d0d1c4e"
+            },
+            {
+              "id": "B086JD8V3Q",
+              "image_sha256": "8b671760d90edabca876ee3bbeff4f29a0cd52913230c3a4174e9a044d9cb939"
+            },
+            {
+              "id": "B097WMPMGV",
+              "image_sha256": "0ebeb7295b68b63680b178920516b21b71fac589c89ed25b8095c76de5e9592d"
+            },
+            {
+              "id": "B00CRMF6JY",
+              "image_sha256": "15f338f9979ac3e46af701b2788cd59586d6ada8cc8edf9a740fc1972cdc89a6"
+            },
+            {
+              "id": "B07CV42C9J",
+              "image_sha256": "435bea9473437a8480f5c2d27eb305533344985253b4c82d676e3ee0bf6c0084"
+            },
+            {
+              "id": "B074TJZV41",
+              "image_sha256": "009c41bf83e40e2606fa17ae51086d15ed621ab164b5002105fd0e2b8a1b1edb"
+            },
+            {
+              "id": "B09KGXWBRR",
+              "image_sha256": "7466372b522afe0fb881efc0dfc2377c87d51ca62ec9dcfbd63ab3455961c9a6"
+            },
+            {
+              "id": "B09R9T6WYC",
+              "image_sha256": "6ab9ab7249535b74f34a860abf0813c2497ae3713ab71726534a5151687eacee"
+            },
+            {
+              "id": "B09NMBRQS1",
+              "image_sha256": "a64d28ec810e2f7a380825160cbb0e9889b2824f4d4f25d1c7a0f84e776e373f"
+            },
+            {
+              "id": "B07DLZ34W9",
+              "image_sha256": "11951a13fcf57d7c0c576eb96132a70c54eb2ce95c43a20ac70c1b17edd5f049"
+            },
+            {
+              "id": "B09QL7FC9V",
+              "image_sha256": "ae1a605c192f3367b3def2e6dc894422fcb0f574527730718f4e14adc327e907"
+            },
+            {
+              "id": "B09QCS3V2Q",
+              "image_sha256": "c410e76da83721d1244e40f34abc6c5e2aa40d4fb4ba6d881b9493fe56897f21"
+            },
+            {
+              "id": "B083V7GJDY",
+              "image_sha256": "841560ef854734d48279489447439d8feaaf9d00542c86b7a0b8b27627721163"
+            },
+            {
+              "id": "B09R1HJWSY",
+              "image_sha256": "bf30f7489fc6b3a4301187e27b00e3f80a9c6d773223001b33af72692abb6771"
+            },
+            {
+              "id": "B09T6LZ3CL",
+              "image_sha256": "f7d669174000988f2d4401b120b38bf9ca81327dc76b2b2f9bca12f00810a893"
+            },
+            {
+              "id": "B09QCT8FS6",
+              "image_sha256": "64d9dfad57d6551a5781ddea10d46ecc785752bb6dcfe6ca0acbac2f037321e5"
+            }
+          ],
+          "encoder_implementation_sha256": "562966bba1620c5b352d9f092bee56ce10fce48afa68cb91575094bd7ad47731",
+          "pixel_conversion_implementation_sha256": "77fac74d031341a3636900f7f3ff60738ea406e6bbdf61a1db46168835a3e43d",
+          "cache_implementation_sha256": "97a12ce99b6a2388ddda2614cb4a1eb1cccbc841093c8023e760c789cad182a3",
+          "runtime": {
+            "torch_version": "2.14.1+cu126",
+            "numpy_version": "2.4.6",
+            "python_version": "3.11.17",
+            "cuda_version": "12.6",
+            "float32_matmul_precision": "high",
+            "cuda_matmul_allow_tf32": true,
+            "cudnn_allow_tf32": true,
+            "vector_dtype": "float32"
+          }
+        },
+        "shape": [
+          90,
+          768
+        ],
+        "training_bundle_sha256": "821e426c9c2f7344fa6406beed2b904205dbd52d9eef2579ad2b568a58e913f2",
+        "metadata_path": "/content/AmbiLAGE/output/exp_20261121_ambilage_ms_v2_geom_golden_band_9groups/05_hair_extension/ambilage/generation/candidate_cache/55573069a6947db307f544361750e44dfdae3fae1a1989b2f5b097ca412a0f19/cache.json",
+        "metadata_sha256": "51667b9797fde4c3248727244aa577d5fd98e81cd663d3f35f4ef2158613cbce",
+        "vector_path": "/content/AmbiLAGE/output/exp_20261121_ambilage_ms_v2_geom_golden_band_9groups/05_hair_extension/ambilage/generation/candidate_cache/55573069a6947db307f544361750e44dfdae3fae1a1989b2f5b097ca412a0f19/vectors.npy",
+        "vector_sha256": "612615cc6bb40539b9067a1171725a0a8edc0cc3e0a7805e53fadc0f2c485cff",
+        "cache_hit": false
+      }
+    ],
+    "category_abstraction": {
+      "schema_version": 1,
+      "kind": "contrastive_submodular_spherical_karcher_cpca_v1",
+      "category": "hair extensions",
+      "query_count": 100,
+      "out_of_category_titles_used": 40,
+      "same_category_visual_peers_used": 10,
+      "top_salient_terms": [
+        "human hair",
+        "hair extensions",
+        "full head",
+        "extensions",
+        "hair extension",
+        "clip hair",
+        "length",
+        "synthetic hair",
+        "clip",
+        "crochet hair",
+        "hair length",
+        "heat resistant"
+      ],
+      "canonical_prompts": [
+        "hair extensions: real human hair; double wefts; a clip-in design; rubber-lined clips",
+        "A hair extensions with human hair, full head, hair extension, clip hair, length.",
+        "I want to buy hair extensions featuring human hair, full head, hair extension, clip hair, length, synthetic hair."
+      ],
+      "abstracted_texts": [
+        "hair extensions: real human hair; double wefts; a clip-in design; rubber-lined clips",
+        "A hair extensions with human hair, full head, hair extension, clip hair, length.",
+        "I want to buy hair extensions featuring human hair, full head, hair extension, clip hair, length, synthetic hair.",
+        "hair extensions real human hair",
+        "Item Material: 100% real hairThe hair extensions can be washed, heated, curled, straightened, dried and styled normally, and can last for up to 6 months with proper care",
+        "I’m looking for 120g clip-in human hair extensions in a seven-piece set designed for full-head coverage, with securely sewn scalp-friendly clips for easy application and removal",
+        "I need 12-inch ombre box braid crochet hair made from soft, lightweight fiber with 24 pre-looped roots per piece, four pieces per pack, and protective packaging",
+        "6 inches long, heat resistant synthetic hair extensions in multiple colorsFeatures:Multipurpose: Applied for daily dress up, parties, festivals or many other occasions",
+        "clip in hair extensions",
+        "I need a 14-inch natural-color Brazilian human hair bundle weighing about 100g, with dyeable hair and air or express shipping",
+        "I need 22-inch passion twist crochet hair made from soft, lightweight, flame-retardant synthetic fibers, with 80g and 22 strands per pack and seven packs per lot",
+        "I need one piece of deep wave human hair extensions in natural black, available from 14 to 24 inches",
+        "I’m looking for Indi Remi weaving hair made from healthy, shiny, bouncy strands with high elasticity and minimal processing for long-lasting wear",
+        "I’m looking for 30 colorful 21.6-inch clip-in synthetic hair extensions made from heat-resistant fiber for parties, festivals, costumes, or everyday creative styling",
+        "I’m looking for a lace-front human hair wig for women, available in light brown, with a natural hairline and styling options for long, straight, braided, or curly looks",
+        "Hair Quality：Soft, Smooth, Gloosy, Full Cuticle, Double weft, Natural Hair, No Smell, Shedding, No TangleNotice: This package include 1 pack Human Hair Extensions only,NO hair extension tool"
+      ],
+      "submodular_coverage_score": 0.84839265,
+      "subspace_rank": 8,
+      "ambient_dim": 768,
+      "principal_anchor_count": 16,
+      "residual_shrinkage": 0.3,
+      "visual_prototype_mix": 0.75,
+      "contrastive_beta": 0.35,
+      "abstraction_sha256": "6159fbfeb1d61a8c2229a08e2b48f1e34e43b7bad47331131b222ba06bf7da1c"
+    }
+  },
+  "final_naturalness": {
+    "passed": true,
+    "natural": true,
+    "text_preserved": true,
+    "artifact_free": true,
+    "reasons": [
+      "strict_mathematical_naturalness_gate_passed"
+    ],
+    "category": "hair extensions, wigs & accessories",
+    "metrics": {
+      "source_ssim": 0.9590017165360497,
+      "rgb_source_ssim": 0.9590017165360497,
+      "luma_source_ssim": 0.9769860612877361,
+      "source_mae_levels": 5.460041046142578,
+      "rgb_source_mae_levels": 5.460041046142578,
+      "luma_source_mae_levels": 4.242554187774658,
+      "fg_rgb_source_mae_levels": 4.451985836029053,
+      "fg_chroma_tv_levels": 2.034524917602539,
+      "halo_error": 1.8040281534194946,
+      "roi_max_abs_diff": 0.0
+    },
+    "thresholds": {
+      "source_ssim_floor": 0.85,
+      "source_mae_ceiling": 22.0,
+      "fg_source_mae_ceiling": 10.0,
+      "fg_chroma_tv_ceiling": 2.5,
+      "halo_ceiling": 10.0,
+      "roi_max_abs_diff": 0.0
+    },
+    "model": "mathematical_rgb_oklab_dual_gate_v2",
+    "precision": "float32",
+    "candidate_sha256": "9a9ca69a2f38bf94bf3b3c03ca10c9dd18b0278b5837629ca205bded7e5f2f3a"
+  },
+  "hardware_profile": {
+    "tf32_enabled": true,
+    "device": "cuda",
+    "vram_gb": 22.03,
+    "gradient_checkpointing_recommended": true,
+    "seed": 42
+  },
+  "victim_memory_used": false,
+  "formal_queries_used": false,
+  "shadow_pool_used": false,
+  "true_rank_used": false,
+  "elapsed_seconds": 587.4470255409979,
+  "training_bundle_manifest": "/content/AmbiLAGE/data/public/visual_inception_golden_band/05_hair_extension/training_bundle.json",
+  "training_manifest_sha256": "cdd84b8e06e708283b99ea1b3f831843f172b5b18ba8105c9913d3dbf5efd373",
+  "training_bundle_sha256": "821e426c9c2f7344fa6406beed2b904205dbd52d9eef2579ad2b568a58e913f2",
+  "training_bundle_audit": {
+    "schema_version": 1,
+    "kind": "visual_inception_independent_public_training_bundle_v1",
+    "manifest_path": "/content/AmbiLAGE/data/public/visual_inception_golden_band/05_hair_extension/training_bundle.json",
+    "manifest_sha256": "cdd84b8e06e708283b99ea1b3f831843f172b5b18ba8105c9913d3dbf5efd373",
+    "bundle_sha256": "821e426c9c2f7344fa6406beed2b904205dbd52d9eef2579ad2b568a58e913f2",
+    "target_binding": {
+      "source_image_sha256": "55ee7ea2a6a6b5c65ccab1b94811e98fed3b2d01ca1f314188f056b9d0bd43ce",
+      "target_image_sha256": "c5af2ad55c9b05fdba76c36316aa3088a43c286fe6ccab7858ccd2d14cd9c9a6",
+      "canonical_text_sha256": "e7f582ecfaaa172e5296d45cfd1fb24840065f423cf9383f7ed22e74c9d5793e"
+    },
+    "target_concept_text_sha256": "c6c4a383312b10747f24eaf11f07433c09ba48e00b04e6f35848ba25906d724c",
+    "target_concept_format": "category_colon_public_core_attributes_v1",
+    "category": "hair extensions",
+    "source_counts": {
+      "category_description": 50,
+      "model_paraphrase": 30,
+      "heldout_search_query": 20
+    },
+    "query_source_counts": {
+      "category_description": 50,
+      "model_paraphrase": 30,
+      "heldout_search_query": 20
+    },
+    "query_count": 100,
+    "query_batch_size": 16,
+    "query_texts_sha256": "557dda2cda587b4550b1370ffe16f3932f2549aa93721198f73bc68776b5c48d",
+    "query_provenance": [
+      {
+        "id": "category_description_001",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08R61WZKD",
+        "text_sha256": "c739eb3d8bbb27d816bd56d4531dd4183539b85c85251089ce7a3b241c590819"
+      },
+      {
+        "id": "category_description_002",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08MF57W76",
+        "text_sha256": "64a6d0c78ed69330abb0185cdf7159678d1a7f6e60f52a009ba78e5008d95f77"
+      },
+      {
+        "id": "category_description_003",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08N6MLS7N",
+        "text_sha256": "10459f6c64f7e2bc1320a25158bb59bcef784f397e39dec009e8549699742b5d"
+      },
+      {
+        "id": "category_description_004",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09B3FZ8TK",
+        "text_sha256": "75b3e6be7d358791741e8a222d487924162f8693fe0281bed2911ee1cb9e9d9e"
+      },
+      {
+        "id": "category_description_005",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B0957HJFYT",
+        "text_sha256": "62b7ff8e18adfe104a466d3294738ac6bf1b4ab3e4cec6d0e56afc835a81e11c"
+      },
+      {
+        "id": "category_description_006",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B087BQ73P7",
+        "text_sha256": "1de420fc9c5a5afa94c5a872e81b6da7b0386e8c0807fa098c8a32c8dd8abccd"
+      },
+      {
+        "id": "category_description_007",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B091YSR7KY",
+        "text_sha256": "2fb9dede3b13248cffd0f9adf90546e2fb90b24db9a051ab7325bc1176b9ab28"
+      },
+      {
+        "id": "category_description_008",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08D3FXQDD",
+        "text_sha256": "0564603f59b6b355f68cdea4f5028e34be34f84e7f64276292539c0b108ec25d"
+      },
+      {
+        "id": "category_description_009",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08R5NDZ3Z",
+        "text_sha256": "8d11e160b41ce1d25058f8fefdd9b60b7d6720549ce2a6a173391f3de1ebea25"
+      },
+      {
+        "id": "category_description_010",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08XM497N3",
+        "text_sha256": "7dcc323301cc43e1ca9910fdbb08866fe80e4d83538e8793383dd83dc2ace86b"
+      },
+      {
+        "id": "category_description_011",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B071Z96S99",
+        "text_sha256": "673c5403f84ccc9cdf9eee0e04e595c218e79774bd16f6c32e84366bc5411cf6"
+      },
+      {
+        "id": "category_description_012",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B096WRX72X",
+        "text_sha256": "508e39074edb9605aaa730ffc0510d9cd9bc5274b7abea6b79705df799a94bcd"
+      },
+      {
+        "id": "category_description_013",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B07KVTSYRK",
+        "text_sha256": "1a47b8f06133d1ab9492b7ac210ee58afb409c77534844f75353df9232e00f63"
+      },
+      {
+        "id": "category_description_014",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B081W1D8H7",
+        "text_sha256": "2de48c7d3c5c5a6b42298478256e44f77fb0f5905c30442664651e5e1b5de9fa"
+      },
+      {
+        "id": "category_description_015",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B092ZPDDVV",
+        "text_sha256": "c46e931d7d9a41b71511f156efa44db0416505b50eb54e1fb569fa8db0ed986c"
+      },
+      {
+        "id": "category_description_016",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B07F8SQTGK",
+        "text_sha256": "f72deab0493b6cf47029853e0e4ac2c1dccf2f322fbd764114f43221630091e9"
+      },
+      {
+        "id": "category_description_017",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B098K864DJ",
+        "text_sha256": "111a2353a99860e8cb6bbb2b36be4ad64437f06488d7ddde4f174a08ef1fe6b7"
+      },
+      {
+        "id": "category_description_018",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B07HCST9J1",
+        "text_sha256": "7c74e5de3e8771cf1e662706d7ee430cd777945e9113f695b2305f73740b392c"
+      },
+      {
+        "id": "category_description_019",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B093BKS9SH",
+        "text_sha256": "72a336119be450996e50978e5652777822997dda49d4bbd434fb975db10fb9bb"
+      },
+      {
+        "id": "category_description_020",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09MZ8MYPQ",
+        "text_sha256": "94c4b643dfa0f7d2430e9d8385ee7ccf9cc103a64c90c1a71897f7b15a17c0e4"
+      },
+      {
+        "id": "category_description_021",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B07FXL6YH9",
+        "text_sha256": "60a50913bda5c5e8b2da5036dd25188fdaf8388a75d4fb92305a5c823616aa88"
+      },
+      {
+        "id": "category_description_022",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B00XJKCMXG",
+        "text_sha256": "0519dc9dfc97ebe7caa06be42f6eae0764a4a40df445e5a62cc15767ad090031"
+      },
+      {
+        "id": "category_description_023",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B005JU5B8M",
+        "text_sha256": "44b8821b2d41e8d3c2df2f15ad625076b5fe43bb3bde8f5ab7c7cb991570abd3"
+      },
+      {
+        "id": "category_description_024",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08R7JNNBY",
+        "text_sha256": "83a5344b547b0597461647126033e6f301d73cbaff1c71fde5a8fc5beb9c06f8"
+      },
+      {
+        "id": "category_description_025",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B0931VZ36G",
+        "text_sha256": "818edab76747e2c343c3b85220a8f33d0d0deef4292411678174798e1bcef085"
+      },
+      {
+        "id": "category_description_026",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B078JR1WKN",
+        "text_sha256": "d786ba5fe0587304ec59f6bd78b2f3ce2bdc7c2383b7f360bd38b513c0b131a6"
+      },
+      {
+        "id": "category_description_027",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B083YTGQCT",
+        "text_sha256": "5ace0dfcb774aece401fb6447d13a4a7b3c3acadd6dc6a1b19ed727b65f0d314"
+      },
+      {
+        "id": "category_description_028",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08YDR3M55",
+        "text_sha256": "69f70aac4e705995fd630fd1029cf7eb319405f90f69054032a6fb0f45874fe3"
+      },
+      {
+        "id": "category_description_029",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09HC5Y2J6",
+        "text_sha256": "9ff5891ba33a3a7d591067b6e97d5614aacdd50b165d88c613b3e90ef4f7ae7d"
+      },
+      {
+        "id": "category_description_030",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B00OV0XD40",
+        "text_sha256": "9d0ee125f156bdd003c7e38c9259a4a3dd68428a003de268e7e50a8ca9968c5c"
+      },
+      {
+        "id": "category_description_031",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09BMRDX27",
+        "text_sha256": "b307ac317c49c97e56e1ec94f9fa079e822642c9c2407ba8d79616b6e037927e"
+      },
+      {
+        "id": "category_description_032",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B085NY3FHL",
+        "text_sha256": "94f869a7bd1871b357b4e27d7497e46061a8942bab2ba455b269d49d19ba0ea7"
+      },
+      {
+        "id": "category_description_033",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08R5M9565",
+        "text_sha256": "f56e0805104b246cb955d2b81a3efc3452f9f943044b7ae94fe90187f0f21aad"
+      },
+      {
+        "id": "category_description_034",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B017B8LPPM",
+        "text_sha256": "2455803e1ab4aa605796d23c7cc283b17ab6b78504a6568746ec98326ac12fdc"
+      },
+      {
+        "id": "category_description_035",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B092ZV26CC",
+        "text_sha256": "d2e84893e7c4e679f0793ceff7ea75108f09a371086e898d0cf324a42f2164f4"
+      },
+      {
+        "id": "category_description_036",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08T9CLKNY",
+        "text_sha256": "680146af6421e2fc00b02aa029eca1e7b03da767e188b04952bde6dccee60486"
+      },
+      {
+        "id": "category_description_037",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B0932GP23N",
+        "text_sha256": "cf94875a624fc37e1bf0fc5bc55411165deec09492a8864b3aab5dd957e6ac10"
+      },
+      {
+        "id": "category_description_038",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B07ZJBNQMS",
+        "text_sha256": "9dac62bd728d100ed42129093c9d20a814456bba894a737f1c132f47c52519f2"
+      },
+      {
+        "id": "category_description_039",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B081VF1M6F",
+        "text_sha256": "87c0e7198ea9fb8d8f3db89346df3ae03c582729f2c62c25f48433769f414877"
+      },
+      {
+        "id": "category_description_040",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09P9ZGLWW",
+        "text_sha256": "388b99dd205364d4752030c2d1c782ef19a009f7656b5c3beb8e0e54b3ea8d13"
+      },
+      {
+        "id": "category_description_041",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09HZ442T4",
+        "text_sha256": "53e4704aeffb30686b7d8a55599dbf5dbfae337c808f9783700fb54f51b6a07f"
+      },
+      {
+        "id": "category_description_042",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B07VWFZQYZ",
+        "text_sha256": "885930f98c85986f73b427d03f26007c558c2a4c80969fe8da3d473672b993a3"
+      },
+      {
+        "id": "category_description_043",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09C1C1DCC",
+        "text_sha256": "32a76268eacfdd2e717a4057bdf371f8643b3b5627ee29e6ab77f0d98c3531b4"
+      },
+      {
+        "id": "category_description_044",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08PF2DJ4T",
+        "text_sha256": "cdb57a5edaa51fbdd2e292cea9e21c7648882c605b6e5bf78c972c23240670cb"
+      },
+      {
+        "id": "category_description_045",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09MT96NBM",
+        "text_sha256": "893dd3b07b637c59d7d2a03328d263b778dfeee27d353a0ceebf8357b51c5339"
+      },
+      {
+        "id": "category_description_046",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09P8KHXYY",
+        "text_sha256": "b6f1738d984a018aa428763bca15384daae6a230f4c55e2d6c23e21b3ebc601c"
+      },
+      {
+        "id": "category_description_047",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08D3HML3C",
+        "text_sha256": "0cfa08f718dbd4476de608b749c97a78aa7e12008aad4c86cce4df99a7863236"
+      },
+      {
+        "id": "category_description_048",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08CV5R216",
+        "text_sha256": "07c4d25ca2b00f00ef2a1f179e12d5f749f3feabce0bec9b2bda32af7fd4f5b2"
+      },
+      {
+        "id": "category_description_049",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B07MPBHRSD",
+        "text_sha256": "1980aca7299c4f202b37c813bdd49c6f69234069bac9f64705a8c2aaa098dab4"
+      },
+      {
+        "id": "category_description_050",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08PSTY9WB",
+        "text_sha256": "e237514931cee6699f8f65dc9aba9f44f575c2dad3a3a26f5f01a72a493b6c89"
+      },
+      {
+        "id": "model_paraphrase_001",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_001",
+        "text_sha256": "69f19b7be33020566fac328338a8fac863e0b64294f4d5e8b8d6be0c368842e7"
+      },
+      {
+        "id": "model_paraphrase_002",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_002",
+        "text_sha256": "5c0ac8a43809ab4272c2a927c75e59a748f5759a2f8dd881b69b3f326af94a21"
+      },
+      {
+        "id": "model_paraphrase_003",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_003",
+        "text_sha256": "71df54aa70b7f53e9454fd05fb6c226910e7f1e86ba1b497cc998422d6046f52"
+      },
+      {
+        "id": "model_paraphrase_004",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_004",
+        "text_sha256": "2a24b6d9b6786342e67a37c731920fe71b1a23f6fdb9ebb5f198cd718cece04a"
+      },
+      {
+        "id": "model_paraphrase_005",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_005",
+        "text_sha256": "038b3473b3f218a4f26a517576ff7aa9cb209f79c88d07d773b66470bc5e3c9b"
+      },
+      {
+        "id": "model_paraphrase_006",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_006",
+        "text_sha256": "e30b3c1a3f3c681a5299e4acbcf2f2761c816371d222aaf51ca8edae49fea85b"
+      },
+      {
+        "id": "model_paraphrase_007",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_007",
+        "text_sha256": "73a7639074b56f09c63546f7c4408d92b3bcbd1d0870a2dc2be6189d54481f0c"
+      },
+      {
+        "id": "model_paraphrase_008",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_008",
+        "text_sha256": "ebf8431f3635f75db508e515df801bba1a79165c8cc8e028445b80e5b6fa6c07"
+      },
+      {
+        "id": "model_paraphrase_009",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_009",
+        "text_sha256": "2cbb4917de12bdac528355ba8dc32b49b7f48505134a2dfb7f0dc4f1d58c7bdc"
+      },
+      {
+        "id": "model_paraphrase_010",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_010",
+        "text_sha256": "f5ad43499e96de172bfae0411a3dfcdc5a72fe7258756d92807eb40a6bd6fb32"
+      },
+      {
+        "id": "model_paraphrase_011",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_011",
+        "text_sha256": "dd5f035ae60f4d57e119c03d78f3dd374d54cfdeddfcc23ca722caaf96ed624e"
+      },
+      {
+        "id": "model_paraphrase_012",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_012",
+        "text_sha256": "217d5839e190a21414e85963dc3b080d2d63116f0047b7066d19f55c5958f350"
+      },
+      {
+        "id": "model_paraphrase_013",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_013",
+        "text_sha256": "6a192d280b265b45d1bbe78f10117364db21ce9df2797de395955178cc470a9d"
+      },
+      {
+        "id": "model_paraphrase_014",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_014",
+        "text_sha256": "2cb7bf9a5fe01347f2e00b5bd3ef087c33fd8a7a95463ce69bab4f35e71d028a"
+      },
+      {
+        "id": "model_paraphrase_015",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_015",
+        "text_sha256": "7acb1aceeda91b9815e0c3bcf6678e5933f7d7dfbe2da8d5b93e9c1f5fbcd821"
+      },
+      {
+        "id": "model_paraphrase_016",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_016",
+        "text_sha256": "691cd7aec46d376dc93143b91f82cdef332c600e1481da817ad6ef9166102928"
+      },
+      {
+        "id": "model_paraphrase_017",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_017",
+        "text_sha256": "10a4d96696c31f5689d6dd9007ee1b93f3befe9bfbfc86718458ac93099edbf2"
+      },
+      {
+        "id": "model_paraphrase_018",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_018",
+        "text_sha256": "9a09635ee5e8d2c265c7178a93e4c797b702be122e0ede015f2b098316bbde3a"
+      },
+      {
+        "id": "model_paraphrase_019",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_019",
+        "text_sha256": "37072d0f712abd851bf9bd04f3a72174a5817f41e36aa30997354fa78d3f7582"
+      },
+      {
+        "id": "model_paraphrase_020",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_020",
+        "text_sha256": "7ec49e29ffaed25c250608e79dd37e113be91dc04a54e7c6d880eae34d6ac8c7"
+      },
+      {
+        "id": "model_paraphrase_021",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_021",
+        "text_sha256": "92b0c81394df39d13846983f39bfb5679a6d2aec684616ee324029e3412ca809"
+      },
+      {
+        "id": "model_paraphrase_022",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_022",
+        "text_sha256": "20bea7c6ee5bc43fca71d42519e5cb16546f4d88c5d35b5e70164b4607806ccc"
+      },
+      {
+        "id": "model_paraphrase_023",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_023",
+        "text_sha256": "c3eb70e99ee70b983b42886fd0c8aecad4fce206ca2f38df9f7825c509c7ec63"
+      },
+      {
+        "id": "model_paraphrase_024",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_024",
+        "text_sha256": "13222599ffbc910efa8088e719bb651dd7f1ef899acd1b39951fdc53363daf3b"
+      },
+      {
+        "id": "model_paraphrase_025",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_025",
+        "text_sha256": "792d0235bc173d671a8a834a23711dcc15cef7fd7d2a16643a1f3106c44d5fe6"
+      },
+      {
+        "id": "model_paraphrase_026",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_026",
+        "text_sha256": "c3e0f3d752fdb33496ad6493cf7f2126bae2a0895dd4444fd8913e1677380c86"
+      },
+      {
+        "id": "model_paraphrase_027",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_027",
+        "text_sha256": "cdd044daff78ee099f28a38c7b71d84727d77b03e67d9e85b8af22c3d80bf505"
+      },
+      {
+        "id": "model_paraphrase_028",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_028",
+        "text_sha256": "80603d0bd6223901723107e82f886c39c8a0808f3112ee2e64af52a3331ce01f"
+      },
+      {
+        "id": "model_paraphrase_029",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_029",
+        "text_sha256": "ddaedb567617bad48bbeb1c87d08fb5ea75805de528a7753ddf11c62ac8101ab"
+      },
+      {
+        "id": "model_paraphrase_030",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_030",
+        "text_sha256": "689272eb3dfe9626c10c8878733d853e42f7ff93b5e13cd6761d26875ed91fa4"
+      },
+      {
+        "id": "heldout_search_query_001",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "orcas_orcas-doctrain_7304189",
+        "text_sha256": "eccd0c2c38385887aae91543e5c7731daabf740b3890ffe64d14d8d63df4e5e2"
+      },
+      {
+        "id": "heldout_search_query_002",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "orcas_orcas-doctrain_8006362",
+        "text_sha256": "d7321fb095c9f28642a569cfe2ad66721835743f878548a31ca1aa6afd44b7a3"
+      },
+      {
+        "id": "heldout_search_query_003",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "orcas_orcas-doctrain_4200166",
+        "text_sha256": "764706a9af089b240cf0d927fb3c74f3ac8514719fac00b0e6eff514cafdb534"
+      },
+      {
+        "id": "heldout_search_query_004",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "orcas_orcas-doctrain_11728311",
+        "text_sha256": "38129c6d0ce85de91b4f6eb03ba3e24d45433b17683fd347322185656dfd4b2b"
+      },
+      {
+        "id": "heldout_search_query_005",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "orcas_orcas-doctrain_11774898",
+        "text_sha256": "04c7871f87980dd05598da30fe190b94db2c522fcd96b12d334195810aa81e68"
+      },
+      {
+        "id": "heldout_search_query_006",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "orcas_orcas-doctrain_12178697",
+        "text_sha256": "ee8b615e5c510d8e7e28547c330e8c68532c08d0380f225ee6506d5c309f7bc2"
+      },
+      {
+        "id": "heldout_search_query_007",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "orcas_orcas-doctrain_10831191",
+        "text_sha256": "7a0f740f3d8e14314444255304ee61c62f59b3a118b3b7b18061093ea5ddd235"
+      },
+      {
+        "id": "heldout_search_query_008",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "orcas_orcas-doctrain_9897499",
+        "text_sha256": "c874a7d2ad9ba631f8a7a7e5c6229c706407e244d0043b99b149dc2f4dae327a"
+      },
+      {
+        "id": "heldout_search_query_009",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "orcas_orcas-doctrain_11397824",
+        "text_sha256": "2151862498a196657b3a3cb3982eb4dbbc8a42a47f38c1d283a06bc7d7f5932e"
+      },
+      {
+        "id": "heldout_search_query_010",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "orcas_orcas-doctrain_4077126",
+        "text_sha256": "f81334bd0409ae252eeacab8d6c0fa2e0808c09664759f147d1d318b16914143"
+      },
+      {
+        "id": "heldout_search_query_011",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "orcas_orcas-doctrain_9653307",
+        "text_sha256": "d6c1371bb1696fd335dff574f14c668dcfb027a0098b940136a89df768642b06"
+      },
+      {
+        "id": "heldout_search_query_012",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "orcas_orcas-doctrain_9740362",
+        "text_sha256": "f6560bdf9dd5e1c348d7f97c3f93f6d742fd78ae61e143304335569ca6a50f04"
+      },
+      {
+        "id": "heldout_search_query_013",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "orcas_orcas-doctrain_8455127",
+        "text_sha256": "c67d0f9956607f8b63a65cef98e1360613818209f1bf1660363c1e5487e2d029"
+      },
+      {
+        "id": "heldout_search_query_014",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "orcas_orcas-doctrain_11378781",
+        "text_sha256": "c450a9fa881673e6f8e483a3e995ba4998f1243642cfff5034738cc9b3b05bc2"
+      },
+      {
+        "id": "heldout_search_query_015",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "orcas_orcas-doctrain_10235571",
+        "text_sha256": "55e68542047908faa2a9842ce6679cb1a0eda4261825d06f5ed2fde600e96b0d"
+      },
+      {
+        "id": "heldout_search_query_016",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "orcas_orcas-doctrain_6289022",
+        "text_sha256": "e539555350f3e5a3d7090140e4fde46331d733c85e07a7d43ea5b3cff647b752"
+      },
+      {
+        "id": "heldout_search_query_017",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "orcas_orcas-doctrain_4242758",
+        "text_sha256": "8c858ba8ae2275c79b21083fd6107dd931dfd5311c9cffcbb2ee7cef92649612"
+      },
+      {
+        "id": "heldout_search_query_018",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "orcas_orcas-doctrain_5917457",
+        "text_sha256": "9a8f38447df0012e17b8500c259fbb309163c4e3f360d426ee1ea3c5351e635e"
+      },
+      {
+        "id": "heldout_search_query_019",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "orcas_orcas-doctrain_3254476",
+        "text_sha256": "638efb44520ad7165884e216e53bb137285aeff8ad68565ea29932e3c0032561"
+      },
+      {
+        "id": "heldout_search_query_020",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "orcas_orcas-doctrain_4051716",
+        "text_sha256": "4b92379b2324e316b6592e91c5c89d279ed991493a89e98451ed16ca313b327e"
+      }
+    ],
+    "source_files": [
+      {
+        "source_id": "category_description",
+        "path": "/content/AmbiLAGE/data/public/visual_inception_golden_band/05_hair_extension/sources/category_description.jsonl",
+        "sha256": "a7e988527c325d77e40d3ea723a38162661140e20f3bcb296ef52832ef71430b",
+        "kind": "category_description",
+        "split": "public_training",
+        "upstream": {
+          "dataset": "WebShop public Amazon product catalog",
+          "revision": "cbfe10eb111814c7a45e82383173df4f601d08cc9f7d2fd3069429ee71ce42a2",
+          "url": "https://github.com/princeton-nlp/WebShop"
+        },
+        "test_fixture": false,
+        "is_synthetic": false
+      },
+      {
+        "source_id": "model_paraphrase",
+        "path": "/content/AmbiLAGE/data/public/visual_inception_golden_band/05_hair_extension/sources/model_paraphrase.jsonl",
+        "sha256": "73c9031c3e2bdf192546b242db2122cf8aeee5cae3e26dde43dd34e10367b748",
+        "kind": "model_paraphrase",
+        "split": "public_training",
+        "upstream": {
+          "dataset": "MiniMax public-description query paraphrases",
+          "revision": "public_description_query_paraphrases_v2_one_per_selected_input",
+          "url": "https://platform.minimax.cn"
+        },
+        "test_fixture": false,
+        "is_synthetic": true
+      },
+      {
+        "source_id": "heldout_search_query",
+        "path": "/content/AmbiLAGE/data/public/visual_inception_golden_band/05_hair_extension/sources/heldout_search_query.jsonl",
+        "sha256": "19534455996abb9cbbc440ea970e68387d927198645a1fa084f15ce298b0ebc9",
+        "kind": "heldout_search_query",
+        "split": "query_reserve",
+        "upstream": {
+          "dataset": "Microsoft ORCAS query-only",
+          "revision": "21b4ece9f4fc10fa4cec2028bb74287629945df6",
+          "url": "https://github.com/microsoft/msmarco"
+        },
+        "test_fixture": false,
+        "is_synthetic": false
+      },
+      {
+        "source_id": "candidate_catalog",
+        "path": "/content/AmbiLAGE/data/public/visual_inception_golden_band/05_hair_extension/sources/candidate_catalog.jsonl",
+        "sha256": "e514ec927312a4a24ff83815d9bb42ac5edb94cb69f031045bd4796ad017e758",
+        "kind": "candidate_catalog",
+        "split": "public_training",
+        "upstream": {
+          "dataset": "WebShop public Amazon product catalog",
+          "revision": "cbfe10eb111814c7a45e82383173df4f601d08cc9f7d2fd3069429ee71ce42a2",
+          "url": "https://github.com/princeton-nlp/WebShop"
+        },
+        "test_fixture": false,
+        "is_synthetic": false
+      }
+    ],
+    "candidate_count": 90,
+    "candidate_entries_sha256": "eefeff9c31199712ddf6686cb8570bea3be7f9792f816e4c815f862a330c4f41",
+    "split_manifest": {
+      "policy": "independent_public_training_query_reserve_v1",
+      "evaluation_partition_excluded": true,
+      "formal_query_sources_used": false,
+      "heldout_query_ids": [
+        "heldout_search_query_001",
+        "heldout_search_query_002",
+        "heldout_search_query_003",
+        "heldout_search_query_004",
+        "heldout_search_query_005",
+        "heldout_search_query_006",
+        "heldout_search_query_007",
+        "heldout_search_query_008",
+        "heldout_search_query_009",
+        "heldout_search_query_010",
+        "heldout_search_query_011",
+        "heldout_search_query_012",
+        "heldout_search_query_013",
+        "heldout_search_query_014",
+        "heldout_search_query_015",
+        "heldout_search_query_016",
+        "heldout_search_query_017",
+        "heldout_search_query_018",
+        "heldout_search_query_019",
+        "heldout_search_query_020"
+      ]
+    },
+    "paraphrase_policy": "declared_model",
+    "paraphrase_generators": [
+      {
+        "provider": "minimax",
+        "model": "MiniMax-M3",
+        "effective_temperature": 1.0,
+        "temperature_supported": false,
+        "temperature_parameter_sent": false
+      }
+    ],
+    "paper_query_generator_reproduced": false,
+    "paper_query_distribution_reproduced": false,
+    "test_fixture": false,
+    "formal_queries_used": false,
+    "victim_memory_used": false,
+    "candidate_representation": "image_only_independent_public_candidates",
+    "target_image_used_for_optimization": false,
+    "log_origin_evidence": "frozen_upstream_declaration_and_source_rows_not_independent_authenticity_verification",
+    "audit_sha256": "8afe0a12ad4a7e50b72a4a144e09b7383cf03b240bf305381ebfba1242c01409"
+  }
+}

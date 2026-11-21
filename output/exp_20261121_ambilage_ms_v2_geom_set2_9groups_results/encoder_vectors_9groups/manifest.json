@@ -1,0 +1,43 @@
+{
+  "groups": [
+    "01_camera",
+    "02_chair",
+    "03_cookies",
+    "04_curtain",
+    "05_hair_extension",
+    "06_jeans",
+    "07_shampoo",
+    "08_speaker",
+    "09_toothbrush"
+  ],
+  "images_root": "/content/AmbiLAGE/output/exp_20261121_ambilage_ms_v2_geom_golden_band_9groups",
+  "encoders": {
+    "01_clip_l14": {
+      "label": "CLIP-ViT-L/14",
+      "shape": [
+        9,
+        768
+      ],
+      "dtype": "float32",
+      "npz_file": "/content/AmbiLAGE/output/exp_20261121_ambilage_ms_v2_geom_set2_9groups_results/encoder_vectors_9groups/01_clip_l14.npz"
+    },
+    "02_openclip_bigG14": {
+      "label": "OpenCLIP-bigG-14",
+      "shape": [
+        9,
+        1280
+      ],
+      "dtype": "float32",
+      "npz_file": "/content/AmbiLAGE/output/exp_20261121_ambilage_ms_v2_geom_set2_9groups_results/encoder_vectors_9groups/02_openclip_bigG14.npz"
+    },
+    "03_siglip_so400m": {
+      "label": "SigLIP-SO400M",
+      "shape": [
+        9,
+        1152
+      ],
+      "dtype": "float32",
+      "npz_file": "/content/AmbiLAGE/output/exp_20261121_ambilage_ms_v2_geom_set2_9groups_results/encoder_vectors_9groups/03_siglip_so400m.npz"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "natural": true,
+  "text_preserved": true,
+  "artifact_free": true,
+  "reasons": [
+    "strict_mathematical_naturalness_gate_passed"
+  ],
+  "category": "home office chairs",
+  "metrics": {
+    "source_ssim": 0.972667408679652,
+    "rgb_source_ssim": 0.972667408679652,
+    "luma_source_ssim": 0.9840482264368371,
+    "source_mae_levels": 11.262258529663086,
+    "rgb_source_mae_levels": 11.262258529663086,
+    "luma_source_mae_levels": 4.68336820602417,
+    "fg_rgb_source_mae_levels": 4.98492431640625,
+    "fg_chroma_tv_levels": 0.9632937908172607,
+    "halo_error": 4.295427322387695,
+    "roi_max_abs_diff": 0.0
+  },
+  "thresholds": {
+    "source_ssim_floor": 0.85,
+    "source_mae_ceiling": 22.0,
+    "fg_source_mae_ceiling": 10.0,
+    "fg_chroma_tv_ceiling": 2.5,
+    "halo_ceiling": 10.0,
+    "roi_max_abs_diff": 0.0
+  },
+  "model": "mathematical_rgb_oklab_dual_gate_v2",
+  "precision": "float32",
+  "candidate_sha256": "d90427f49c82a2d9c6ebb28abef4a63f7f097ce37717bca906093c8c80214682"
+}

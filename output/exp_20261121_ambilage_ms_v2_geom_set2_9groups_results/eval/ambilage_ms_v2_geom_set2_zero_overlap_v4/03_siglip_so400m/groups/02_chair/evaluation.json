@@ -1,0 +1,616 @@
+[
+  {
+    "condition": {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    },
+    "bank": "clean",
+    "bank_path": "/content/AmbiLAGE/output/exp_20261121_ambilage_ms_v2_geom_set2_9groups_results/eval/ambilage_ms_v2_geom_set2_zero_overlap_v4/03_siglip_so400m/shared_banks/banks/none/clean.json",
+    "bank_sha256": "71baf1f406b1349e8bcd2607bbef5d89cd000a1bdd24921f497c7fdd25de8718",
+    "queries": [
+      {
+        "task_id": "feature_01",
+        "rank": 13,
+        "score": 0.04044507443904877
+      },
+      {
+        "task_id": "feature_02",
+        "rank": 13,
+        "score": 0.03558916971087456
+      },
+      {
+        "task_id": "feature_03",
+        "rank": 12,
+        "score": 0.0375601202249527
+      },
+      {
+        "task_id": "feature_04",
+        "rank": 19,
+        "score": -0.012154990807175636
+      },
+      {
+        "task_id": "feature_05",
+        "rank": 15,
+        "score": 0.03362910822033882
+      },
+      {
+        "task_id": "feature_06",
+        "rank": 10,
+        "score": 0.03757956996560097
+      },
+      {
+        "task_id": "feature_07",
+        "rank": 13,
+        "score": 0.040453385561704636
+      },
+      {
+        "task_id": "feature_08",
+        "rank": 11,
+        "score": 0.07251793146133423
+      },
+      {
+        "task_id": "feature_09",
+        "rank": 12,
+        "score": 0.04923919960856438
+      },
+      {
+        "task_id": "feature_10",
+        "rank": 15,
+        "score": 0.036640480160713196
+      },
+      {
+        "task_id": "feature_11",
+        "rank": 12,
+        "score": 0.03437575697898865
+      },
+      {
+        "task_id": "feature_12",
+        "rank": 10,
+        "score": 0.04670418053865433
+      },
+      {
+        "task_id": "feature_13",
+        "rank": 11,
+        "score": 0.03554483503103256
+      },
+      {
+        "task_id": "feature_14",
+        "rank": 7,
+        "score": 0.0617465078830719
+      },
+      {
+        "task_id": "feature_15",
+        "rank": 30,
+        "score": 0.0109238401055336
+      },
+      {
+        "task_id": "feature_16",
+        "rank": 10,
+        "score": 0.03748750314116478
+      },
+      {
+        "task_id": "feature_17",
+        "rank": 12,
+        "score": 0.05029738321900368
+      },
+      {
+        "task_id": "feature_18",
+        "rank": 8,
+        "score": 0.00959443673491478
+      },
+      {
+        "task_id": "feature_19",
+        "rank": 8,
+        "score": 0.0253334641456604
+      },
+      {
+        "task_id": "feature_20",
+        "rank": 8,
+        "score": 0.05464567244052887
+      }
+    ],
+    "top3": 0,
+    "top5": 0,
+    "query_count": 20,
+    "score_archive_index": 0,
+    "retrieval_protocol": {
+      "encoder": {
+        "provider": "clip",
+        "loader": "standalone_eval_clip",
+        "role": "evaluation_only_encoder",
+        "decoupled_from_training_surrogate": true,
+        "uses_forward_intermediates": false,
+        "batch_size": 16,
+        "name": "ViT-SO400M-14-SigLIP-384",
+        "pretrained": "webli",
+        "hf_repo": "timm/ViT-SO400M-14-SigLIP-384",
+        "tokenizer_path": "/content/AmbiLAGE/models/siglip_so400m",
+        "weight_path": "/content/AmbiLAGE/models/siglip_so400m/open_clip_model.safetensors",
+        "weight_sha256": "97faeafa0576c1ba4c92bae739ca06ef5f5d0c2db92f86a6086653d82a262043",
+        "weight_revision": null,
+        "device": "cuda",
+        "precision": "float32",
+        "image_size": 384,
+        "preprocess": {
+          "resize": "bicubic_direct_square",
+          "align_corners": false,
+          "antialias": true,
+          "mean": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "std": [
+            0.5,
+            0.5,
+            0.5
+          ]
+        },
+        "open_clip_torch_version": "3.3.0",
+        "loading": {
+          "architecture": {
+            "embed_dim": 1152,
+            "init_logit_bias": -10,
+            "custom_text": true,
+            "vision_cfg": {
+              "image_size": 384,
+              "timm_model_name": "vit_so400m_patch14_siglip_384",
+              "timm_model_pretrained": false,
+              "timm_pool": "map",
+              "timm_proj": "none"
+            },
+            "text_cfg": {
+              "context_length": 64,
+              "vocab_size": 32000,
+              "hf_tokenizer_name": "timm/ViT-B-16-SigLIP",
+              "tokenizer_kwargs": {
+                "clean": "canonicalize"
+              },
+              "width": 1152,
+              "heads": 16,
+              "layers": 27,
+              "mlp_ratio": 3.7362,
+              "no_causal_mask": true,
+              "proj_bias": true,
+              "pool_type": "last",
+              "norm_kwargs": {
+                "eps": 1e-06
+              }
+            }
+          },
+          "quick_gelu": false,
+          "activation": "native",
+          "mean": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "std": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "metadata_source": "registered_pretrained_tag",
+          "registered_preprocess": {
+            "interpolation": "bicubic",
+            "resize_mode": "squash"
+          },
+          "strict_state_dict": true,
+          "actual_activation_modules": {
+            "QuickGELU": 0,
+            "GELU": 55
+          },
+          "loader_version": 3,
+          "loader_sha256": "562966bba1620c5b352d9f092bee56ce10fce48afa68cb91575094bd7ad47731"
+        },
+        "tokenizer_audit": {
+          "type": "HFTokenizer",
+          "special_tokens": {
+            "sot_token_id": null,
+            "eot_token_id": null,
+            "pad_token_id": null,
+            "context_length": 64
+          },
+          "content_sha256": "e71db1ac6bdfbb30baf3dbc203876d7a650afc0f864a4125c14b2929625025ca"
+        },
+        "fusion": "equal_unit_image_plus_unit_full_text",
+        "weighted_fusion": {
+          "algorithm": "unit_alpha_image_plus_one_minus_alpha_full_text_v1",
+          "default_image_weight": 0.5,
+          "equal_weight_path": "exact_legacy_image_plus_text",
+          "empty_text": "image_only_except_text_only_weight_rejected"
+        },
+        "text_policy": {
+          "algorithm": "contiguous_nonoverlapping_raw_token_chunks_v1",
+          "context_length": 64,
+          "payload_tokens_per_chunk": 63,
+          "special_tokens_per_chunk": 1,
+          "coverage": "all_token_ids_no_truncation",
+          "aggregation": "unit_token_count_weighted_mean_then_unit",
+          "tokenizer": "HFTokenizer"
+        },
+        "evaluation_protocol": {
+          "setting": "held_out_public_encoder",
+          "matches_training_surrogate": false,
+          "matching_training_surrogate_indices": [],
+          "black_box_transfer_claimed": true,
+          "tf32_enabled": false,
+          "precision": "float32",
+          "training_identity_scope": "actual_frozen_surrogates",
+          "training_surrogates_sha256": "17b7fc56d67ec8054603435c18d4b1d2e9632bb167f37953a014b6a3d118feae"
+        }
+      },
+      "key_mode": "image",
+      "query_mode": "text",
+      "index_text": "product_feature",
+      "index_text_policy": {
+        "version": 2,
+        "fields": [
+          "PrimaryImage.Title",
+          "Brand",
+          "Attributes",
+          "FeatureText"
+        ],
+        "coverage": "purchased_product_title_brand_and_features_only",
+        "purchase_binding": "primary_asin_must_match_final_asin",
+        "excluded": [
+          "Instruction",
+          "OriginalInstruction",
+          "Actions",
+          "FinalASIN",
+          "FinalOptions",
+          "FinalPrice",
+          "PolicyTrace",
+          "Reward",
+          "attack_metadata"
+        ]
+      },
+      "key_image_weight": 1.0,
+      "query_image_weight": 0.0,
+      "image_decoder": {
+        "schema_version": 1,
+        "scope": "local_encoder_process",
+        "library": "Pillow",
+        "verified": true,
+        "pillow_version": "12.3.0",
+        "jpeg_version": "6.2",
+        "libjpeg_turbo_enabled": true,
+        "libjpeg_turbo_version": "3.1.4.1"
+      },
+      "encoding_runtime": {
+        "torch": "2.14.1+cu126",
+        "numpy": "2.4.6",
+        "machine": "x86_64"
+      },
+      "cache_schema": 4,
+      "bank_sha256": "71baf1f406b1349e8bcd2607bbef5d89cd000a1bdd24921f497c7fdd25de8718",
+      "model_sha256": "92756acee79ec5ca52323d4d89e8564197094f4d6cf683f4ae3962b8f71c4d26",
+      "entries_sha256": "7b9da54ccfaca497474d9dbd9319ec95c3808dd00897bd93e3bc56c3aecf70a9",
+      "query_encoding_audit": {
+        "text_sha256": "d1b5888edfc8d0890f857b8b05a7c8daec4adee15a98108b0db2201cef5ee66c",
+        "input_tokens": 21,
+        "encoded_tokens": 21,
+        "chunks": 1,
+        "payload_tokens_per_chunk": 63,
+        "chunk_token_counts": [
+          21
+        ],
+        "truncated": false
+      },
+      "memory_vector_reuse": {
+        "hits": 189,
+        "misses": 0,
+        "writes": 0,
+        "rejected": 0
+      }
+    }
+  },
+  {
+    "condition": {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    },
+    "bank": "modified",
+    "bank_path": "/content/AmbiLAGE/output/exp_20261121_ambilage_ms_v2_geom_set2_9groups_results/eval/ambilage_ms_v2_geom_set2_zero_overlap_v4/03_siglip_so400m/shared_banks/banks/none/modified.json",
+    "bank_sha256": "8ecfbd7aa6835d6ef0f1f12728a63cd25088edefc3e4e9b51984a30eaddf3f30",
+    "queries": [
+      {
+        "task_id": "feature_01",
+        "rank": 3,
+        "score": 0.08308614790439606
+      },
+      {
+        "task_id": "feature_02",
+        "rank": 4,
+        "score": 0.07831653952598572
+      },
+      {
+        "task_id": "feature_03",
+        "rank": 4,
+        "score": 0.0874553769826889
+      },
+      {
+        "task_id": "feature_04",
+        "rank": 4,
+        "score": 0.05022042989730835
+      },
+      {
+        "task_id": "feature_05",
+        "rank": 4,
+        "score": 0.08561474084854126
+      },
+      {
+        "task_id": "feature_06",
+        "rank": 4,
+        "score": 0.08921155333518982
+      },
+      {
+        "task_id": "feature_07",
+        "rank": 5,
+        "score": 0.0854502022266388
+      },
+      {
+        "task_id": "feature_08",
+        "rank": 4,
+        "score": 0.10297702997922897
+      },
+      {
+        "task_id": "feature_09",
+        "rank": 4,
+        "score": 0.08931919932365417
+      },
+      {
+        "task_id": "feature_10",
+        "rank": 5,
+        "score": 0.08410582691431046
+      },
+      {
+        "task_id": "feature_11",
+        "rank": 5,
+        "score": 0.07314679026603699
+      },
+      {
+        "task_id": "feature_12",
+        "rank": 4,
+        "score": 0.08483096957206726
+      },
+      {
+        "task_id": "feature_13",
+        "rank": 5,
+        "score": 0.07742675393819809
+      },
+      {
+        "task_id": "feature_14",
+        "rank": 5,
+        "score": 0.10230298340320587
+      },
+      {
+        "task_id": "feature_15",
+        "rank": 4,
+        "score": 0.06511307507753372
+      },
+      {
+        "task_id": "feature_16",
+        "rank": 4,
+        "score": 0.07659322023391724
+      },
+      {
+        "task_id": "feature_17",
+        "rank": 4,
+        "score": 0.08370719850063324
+      },
+      {
+        "task_id": "feature_18",
+        "rank": 4,
+        "score": 0.052403658628463745
+      },
+      {
+        "task_id": "feature_19",
+        "rank": 4,
+        "score": 0.0730694979429245
+      },
+      {
+        "task_id": "feature_20",
+        "rank": 4,
+        "score": 0.09022008627653122
+      }
+    ],
+    "top3": 1,
+    "top5": 20,
+    "query_count": 20,
+    "score_archive_index": 1,
+    "retrieval_protocol": {
+      "encoder": {
+        "provider": "clip",
+        "loader": "standalone_eval_clip",
+        "role": "evaluation_only_encoder",
+        "decoupled_from_training_surrogate": true,
+        "uses_forward_intermediates": false,
+        "batch_size": 16,
+        "name": "ViT-SO400M-14-SigLIP-384",
+        "pretrained": "webli",
+        "hf_repo": "timm/ViT-SO400M-14-SigLIP-384",
+        "tokenizer_path": "/content/AmbiLAGE/models/siglip_so400m",
+        "weight_path": "/content/AmbiLAGE/models/siglip_so400m/open_clip_model.safetensors",
+        "weight_sha256": "97faeafa0576c1ba4c92bae739ca06ef5f5d0c2db92f86a6086653d82a262043",
+        "weight_revision": null,
+        "device": "cuda",
+        "precision": "float32",
+        "image_size": 384,
+        "preprocess": {
+          "resize": "bicubic_direct_square",
+          "align_corners": false,
+          "antialias": true,
+          "mean": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "std": [
+            0.5,
+            0.5,
+            0.5
+          ]
+        },
+        "open_clip_torch_version": "3.3.0",
+        "loading": {
+          "architecture": {
+            "embed_dim": 1152,
+            "init_logit_bias": -10,
+            "custom_text": true,
+            "vision_cfg": {
+              "image_size": 384,
+              "timm_model_name": "vit_so400m_patch14_siglip_384",
+              "timm_model_pretrained": false,
+              "timm_pool": "map",
+              "timm_proj": "none"
+            },
+            "text_cfg": {
+              "context_length": 64,
+              "vocab_size": 32000,
+              "hf_tokenizer_name": "timm/ViT-B-16-SigLIP",
+              "tokenizer_kwargs": {
+                "clean": "canonicalize"
+              },
+              "width": 1152,
+              "heads": 16,
+              "layers": 27,
+              "mlp_ratio": 3.7362,
+              "no_causal_mask": true,
+              "proj_bias": true,
+              "pool_type": "last",
+              "norm_kwargs": {
+                "eps": 1e-06
+              }
+            }
+          },
+          "quick_gelu": false,
+          "activation": "native",
+          "mean": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "std": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "metadata_source": "registered_pretrained_tag",
+          "registered_preprocess": {
+            "interpolation": "bicubic",
+            "resize_mode": "squash"
+          },
+          "strict_state_dict": true,
+          "actual_activation_modules": {
+            "QuickGELU": 0,
+            "GELU": 55
+          },
+          "loader_version": 3,
+          "loader_sha256": "562966bba1620c5b352d9f092bee56ce10fce48afa68cb91575094bd7ad47731"
+        },
+        "tokenizer_audit": {
+          "type": "HFTokenizer",
+          "special_tokens": {
+            "sot_token_id": null,
+            "eot_token_id": null,
+            "pad_token_id": null,
+            "context_length": 64
+          },
+          "content_sha256": "e71db1ac6bdfbb30baf3dbc203876d7a650afc0f864a4125c14b2929625025ca"
+        },
+        "fusion": "equal_unit_image_plus_unit_full_text",
+        "weighted_fusion": {
+          "algorithm": "unit_alpha_image_plus_one_minus_alpha_full_text_v1",
+          "default_image_weight": 0.5,
+          "equal_weight_path": "exact_legacy_image_plus_text",
+          "empty_text": "image_only_except_text_only_weight_rejected"
+        },
+        "text_policy": {
+          "algorithm": "contiguous_nonoverlapping_raw_token_chunks_v1",
+          "context_length": 64,
+          "payload_tokens_per_chunk": 63,
+          "special_tokens_per_chunk": 1,
+          "coverage": "all_token_ids_no_truncation",
+          "aggregation": "unit_token_count_weighted_mean_then_unit",
+          "tokenizer": "HFTokenizer"
+        },
+        "evaluation_protocol": {
+          "setting": "held_out_public_encoder",
+          "matches_training_surrogate": false,
+          "matching_training_surrogate_indices": [],
+          "black_box_transfer_claimed": true,
+          "tf32_enabled": false,
+          "precision": "float32",
+          "training_identity_scope": "actual_frozen_surrogates",
+          "training_surrogates_sha256": "17b7fc56d67ec8054603435c18d4b1d2e9632bb167f37953a014b6a3d118feae"
+        }
+      },
+      "key_mode": "image",
+      "query_mode": "text",
+      "index_text": "product_feature",
+      "index_text_policy": {
+        "version": 2,
+        "fields": [
+          "PrimaryImage.Title",
+          "Brand",
+          "Attributes",
+          "FeatureText"
+        ],
+        "coverage": "purchased_product_title_brand_and_features_only",
+        "purchase_binding": "primary_asin_must_match_final_asin",
+        "excluded": [
+          "Instruction",
+          "OriginalInstruction",
+          "Actions",
+          "FinalASIN",
+          "FinalOptions",
+          "FinalPrice",
+          "PolicyTrace",
+          "Reward",
+          "attack_metadata"
+        ]
+      },
+      "key_image_weight": 1.0,
+      "query_image_weight": 0.0,
+      "image_decoder": {
+        "schema_version": 1,
+        "scope": "local_encoder_process",
+        "library": "Pillow",
+        "verified": true,
+        "pillow_version": "12.3.0",
+        "jpeg_version": "6.2",
+        "libjpeg_turbo_enabled": true,
+        "libjpeg_turbo_version": "3.1.4.1"
+      },
+      "encoding_runtime": {
+        "torch": "2.14.1+cu126",
+        "numpy": "2.4.6",
+        "machine": "x86_64"
+      },
+      "cache_schema": 4,
+      "bank_sha256": "8ecfbd7aa6835d6ef0f1f12728a63cd25088edefc3e4e9b51984a30eaddf3f30",
+      "model_sha256": "92756acee79ec5ca52323d4d89e8564197094f4d6cf683f4ae3962b8f71c4d26",
+      "entries_sha256": "f38515d26867f4ea7cb9d9e377558dbfb872599c14182ac99775dd4a3af57090",
+      "query_encoding_audit": {
+        "text_sha256": "d1b5888edfc8d0890f857b8b05a7c8daec4adee15a98108b0db2201cef5ee66c",
+        "input_tokens": 21,
+        "encoded_tokens": 21,
+        "chunks": 1,
+        "payload_tokens_per_chunk": 63,
+        "chunk_token_counts": [
+          21
+        ],
+        "truncated": false
+      },
+      "memory_vector_reuse": {
+        "hits": 189,
+        "misses": 0,
+        "writes": 0,
+        "rejected": 0
+      }
+    }
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "status": "completed",
+  "stage": "illumination_harmonization",
+  "blend_mode": "matte",
+  "selected_rgb": [
+    159,
+    146,
+    140
+  ],
+  "bg_studio_target_rgb": [
+    243,
+    239,
+    233
+  ],
+  "bg_strength": 0.85,
+  "strength": 1.0,
+  "selected_color_mix": 0.12,
+  "smoothing_sigma": 12.0,
+  "chosen_fraction": 1.0,
+  "line_search_steps": 32,
+  "source_ssim": 0.9941786241242665,
+  "source_mae_levels": 10.837361335754395,
+  "fg_rgb_source_mae_levels": 2.0584170818328857,
+  "fg_chroma_tv_levels": 0.4355892837047577,
+  "halo_error": 2.2908167839050293,
+  "ink_core_pixels": 529,
+  "substrate_pixels": 131,
+  "max_body_change_levels": 26,
+  "mean_body_change_levels": 2.0584170102122856,
+  "max_bg_change_levels": 18,
+  "mean_bg_change_levels": 13.516728359289482,
+  "roi_change_levels": 0,
+  "zero_pixel_residual": true,
+  "generator": {
+    "model": "perceptual_illumination_line_search_v1",
+    "chosen_fraction": 1.0,
+    "line_search_steps": 32
+  },
+  "trials_evaluated": 1,
+  "anchor_path": "/content/AmbiLAGE/output/exp_20261121_ambilage_ms_v3_geom_photo_golden_band_9groups/02_chair/ambilage/generation/color_harmonization/generative_anchor.png",
+  "anchor_sha256": "2860a903bc01c97e4ffde3cdbaa30acc2a95bf6ad6c37105c439e5eb318715b3"
+}

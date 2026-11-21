@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "natural": true,
+  "text_preserved": true,
+  "artifact_free": true,
+  "reasons": [
+    "strict_mathematical_naturalness_gate_passed"
+  ],
+  "category": "shampoo & conditioner",
+  "metrics": {
+    "source_ssim": 0.9304985942087615,
+    "rgb_source_ssim": 0.9304985942087615,
+    "luma_source_ssim": 0.9532656189133267,
+    "source_mae_levels": 14.74202823638916,
+    "rgb_source_mae_levels": 14.74202823638916,
+    "luma_source_mae_levels": 10.170551300048828,
+    "fg_rgb_source_mae_levels": 5.130045413970947,
+    "fg_chroma_tv_levels": 0.6628800630569458,
+    "halo_error": 8.113669395446777,
+    "roi_max_abs_diff": 0.0
+  },
+  "thresholds": {
+    "source_ssim_floor": 0.85,
+    "source_mae_ceiling": 22.0,
+    "fg_source_mae_ceiling": 10.0,
+    "fg_chroma_tv_ceiling": 2.5,
+    "halo_ceiling": 10.0,
+    "roi_max_abs_diff": 0.0
+  },
+  "model": "mathematical_rgb_oklab_dual_gate_v2",
+  "precision": "float32",
+  "candidate_sha256": "8309eca9f5c5fbf6e582b0b5c984b4b7e4795354523c51d4aac850acf30782c9"
+}

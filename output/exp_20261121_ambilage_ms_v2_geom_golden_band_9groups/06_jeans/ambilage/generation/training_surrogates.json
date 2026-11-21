@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "profile": "clip_l14",
+  "config_source": "src/visual/config/surrogates.clip_l14.json",
+  "config_sha256": "00a21694e0bc85be51c80b0a3b476fd878f32bbc6f51dc8aa62f25ee49deed2c",
+  "specs": [
+    {
+      "name": "ViT-L-14",
+      "pretrained": "openai",
+      "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+      "weight_path": "clip_l14/open_clip_model.safetensors",
+      "tokenizer_path": null
+    }
+  ],
+  "specs_sha256": "58cf5034c6eb1153bd6c14d7614aa9000f0d7639f9fe9cec51f767c36716f803",
+  "comparison_reference": "visual_inception_single_clip_l14_explicit_checkpoint",
+  "activation_policy": "pretrained_native",
+  "model_count": 1,
+  "held_out_models": [
+    "ViT-g-14",
+    "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+  ],
+  "downloads_during_training": false,
+  "paper_single_encoder_architecture": "CLIP-ViT-L/14",
+  "paper_exact_checkpoints_specified": false,
+  "checkpoint_policy": "explicit_public_pretrained_identity_not_claimed_author_checkpoint"
+}

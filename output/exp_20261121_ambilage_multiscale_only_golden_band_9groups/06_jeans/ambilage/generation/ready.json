@@ -1,0 +1,2961 @@
+{
+  "schema_version": 3,
+  "status": "completed",
+  "method": "ambilage",
+  "definition": "ambilage_native_4stage_ambient_coop_psi_v4",
+  "test_fixture": false,
+  "production_backend": true,
+  "source_image": "/content/AmbiLAGE/resources/evaluation_base_golden_band/groups/06_jeans/source.jpg",
+  "source_sha256": "646f603de154a3644550f9d642e49d37bfc781f75c4ab088c9938f71e6573883",
+  "target_image": "/content/AmbiLAGE/resources/evaluation_base_golden_band/groups/06_jeans/target.jpg",
+  "target_sha256": "acf3f5d8944c118d04e2ba456926f4750e87198bbd3201302a34e52e44bd6039",
+  "output_image": "/content/AmbiLAGE/output/exp_20261121_ambilage_multiscale_only_golden_band_9groups/06_jeans/ambilage/generation/adversarial.png",
+  "output_image_sha256": "acb56313e3866e5663e4daf8f57fa6827549e48432ec3b5639594ee7bcc8b71b",
+  "candidates": {
+    "final": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_ambilage_multiscale_only_golden_band_9groups/06_jeans/ambilage/generation/adversarial.png",
+      "sha256": "acb56313e3866e5663e4daf8f57fa6827549e48432ec3b5639594ee7bcc8b71b"
+    }
+  },
+  "pipeline": "ambilage_native_4stage_single_pass",
+  "stages": {
+    "foreground_segmentation": {
+      "status": "completed"
+    },
+    "foreground_statistics": {
+      "status": "completed"
+    },
+    "color_harmonization": {
+      "status": "completed"
+    },
+    "latent_generation_refinement": {
+      "status": "completed",
+      "steps_requested": 250,
+      "steps_completed": 240,
+      "stop_reason": "adaptive_annealing_converged"
+    }
+  },
+  "artifacts": {
+    "adversarial.png": "acb56313e3866e5663e4daf8f57fa6827549e48432ec3b5639594ee7bcc8b71b",
+    "generative_anchor.png": "91e9a43481fce344ca20c573c53e69e8f9b491a12ee5ba9bf8edb15cd10118cd",
+    "print_core.png": "baad59b161c808a50b568620bc079a60f3ce8f5b816529d562cd97f4f5b15064",
+    "source_foreground.png": "9633fe5379ee8c976e7016c74b2b40e6b1781451a67910fdab1856d1810ea682",
+    "target_foreground.png": "542f2fc8c028198796eff12b1824e5538f5ced36dce55e87a53df780346fb266",
+    "latent_edit_mask.png": "0424b60bd196a7cd8570524cc6de4b4b4b7c896661c6e0b8b98177dfe4a50974",
+    "naturalness_gate.json": "0959a98eddfd5d744dd1babe2f4634285c94f476a5026e1660a8d015f722cdf4",
+    "naturalness_candidate.png": "acb56313e3866e5663e4daf8f57fa6827549e48432ec3b5639594ee7bcc8b71b",
+    "training_surrogates.json": "9f2ebb3e0bccb636b756f1b128ddc28fa3fc37768743922a707925c36d1b4590"
+  },
+  "pixel_optimization": false,
+  "auxiliary_max_levels": 0,
+  "optimization_mode": "ambient_coop_latent_only",
+  "steps": 250,
+  "steps_requested": 250,
+  "steps_completed": 240,
+  "stop_reason": "adaptive_annealing_converged",
+  "quality": {
+    "source_ssim": 0.9742947520946954,
+    "rgb_source_ssim": 0.9742947520946954,
+    "luma_source_ssim": 0.9823804662752544,
+    "source_mae_levels": 6.266007900238037,
+    "luma_source_mae_levels": 3.7982707023620605,
+    "fg_source_mae_levels": 7.425523281097412,
+    "bg_source_mae_levels": 2.7665271759033203,
+    "rgb_source_mae_levels": 6.266007900238037,
+    "fg_rgb_source_mae_levels": 8.065109252929688,
+    "bg_rgb_source_mae_levels": 5.754266738891602,
+    "fg_chroma_tv_levels": 1.3481690883636475,
+    "anchor_mae_levels": 8.256738662719727,
+    "quality_ok": true,
+    "step": 220,
+    "training_utility": 0.5874818563461304,
+    "selection_utility": 0.5740705830976367,
+    "regularization": 0.013411273248493671,
+    "joint_scores": [
+      [
+        0.8453542590141296
+      ]
+    ],
+    "accepted": 220,
+    "rejected": 0,
+    "lr_scale": 0.11501541504480811,
+    "adaptive_scale": 1.0,
+    "stagnation_checks": 0
+  },
+  "refinement": {
+    "status": "completed",
+    "stage": "latent_generation_refinement",
+    "steps_requested": 250,
+    "steps_completed": 240,
+    "stop_reason": "adaptive_annealing_converged",
+    "best_step": 220,
+    "accepted_updates": 240,
+    "rejected_updates": 0,
+    "final_quality": {
+      "source_ssim": 0.9742947520946954,
+      "rgb_source_ssim": 0.9742947520946954,
+      "luma_source_ssim": 0.9823804662752544,
+      "source_mae_levels": 6.266007900238037,
+      "luma_source_mae_levels": 3.7982707023620605,
+      "fg_source_mae_levels": 7.425523281097412,
+      "bg_source_mae_levels": 2.7665271759033203,
+      "rgb_source_mae_levels": 6.266007900238037,
+      "fg_rgb_source_mae_levels": 8.065109252929688,
+      "bg_rgb_source_mae_levels": 5.754266738891602,
+      "fg_chroma_tv_levels": 1.3481690883636475,
+      "anchor_mae_levels": 8.256738662719727,
+      "quality_ok": true,
+      "step": 220,
+      "training_utility": 0.5874818563461304,
+      "selection_utility": 0.5740705830976367,
+      "regularization": 0.013411273248493671,
+      "joint_scores": [
+        [
+          0.8453542590141296
+        ]
+      ],
+      "accepted": 220,
+      "rejected": 0,
+      "lr_scale": 0.11501541504480811,
+      "adaptive_scale": 1.0,
+      "stagnation_checks": 0
+    },
+    "fg_latent_max_levels": 6,
+    "fg_chroma_max_levels": 14.658201217651367,
+    "fg_rgb_max_levels": 6,
+    "bg_latent_max_levels": 17,
+    "roi_max_levels": 0,
+    "elapsed_seconds": 793.6570762779957,
+    "zero_pixel_optimization": true,
+    "vae": {
+      "kind": "flux_16_channel_vae",
+      "precision": "float32",
+      "posterior": "mode",
+      "latent_channels": 16,
+      "gradient_checkpointing": true
+    },
+    "spectral_manifold_projection": true,
+    "conditional_tangent_projection": true,
+    "tangent_projection_calls": 210,
+    "adaptive_annealing": {
+      "enabled": true,
+      "schedule": "cosine_with_backtrack_and_plateau_cooling",
+      "min_steps": 180,
+      "max_steps": 250,
+      "steps_executed": 240,
+      "stop_reason": "adaptive_annealing_converged",
+      "early_stopped": true,
+      "final_lr_scale": 0.08393536376804722,
+      "final_adaptive_scale": 0.75,
+      "stagnation_checks": 2,
+      "cool_events": 1,
+      "backtrack_events": 0,
+      "reject_events": 0,
+      "best_step": 220
+    },
+    "checkpoint_resume": {
+      "checkpoint_every": 5,
+      "checkpoints_saved": 48,
+      "resumed": false,
+      "resumed_from_step": null,
+      "resume_count": 0,
+      "stage3_resumed": false
+    },
+    "history": [
+      {
+        "source_ssim": 0.9837443222671121,
+        "rgb_source_ssim": 0.9837443222671121,
+        "luma_source_ssim": 0.9900851999494071,
+        "source_mae_levels": 12.391712188720703,
+        "luma_source_mae_levels": 9.561250686645508,
+        "fg_source_mae_levels": 7.8776631355285645,
+        "bg_source_mae_levels": 10.040132522583008,
+        "rgb_source_mae_levels": 12.391712188720703,
+        "fg_rgb_source_mae_levels": 7.9431023597717285,
+        "bg_rgb_source_mae_levels": 13.657084465026855,
+        "fg_chroma_tv_levels": 0.8053690195083618,
+        "anchor_mae_levels": 0.0,
+        "quality_ok": true,
+        "step": 0,
+        "training_utility": 0.38411375880241394,
+        "selection_utility": 0.3841052669540659,
+        "joint_scores": [
+          [
+            0.8022506237030029
+          ]
+        ],
+        "lr_scale": 0.415,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9797009491567303,
+        "rgb_source_ssim": 0.9797009491567303,
+        "luma_source_ssim": 0.9872825548883841,
+        "source_mae_levels": 10.859567642211914,
+        "luma_source_mae_levels": 8.290142059326172,
+        "fg_source_mae_levels": 7.028886318206787,
+        "bg_source_mae_levels": 8.648897171020508,
+        "rgb_source_mae_levels": 10.859567642211914,
+        "fg_rgb_source_mae_levels": 7.600430965423584,
+        "bg_rgb_source_mae_levels": 11.786602973937988,
+        "fg_chroma_tv_levels": 0.9923697710037231,
+        "anchor_mae_levels": 3.718790054321289,
+        "quality_ok": true,
+        "step": 10,
+        "training_utility": 0.4988242983818054,
+        "selection_utility": 0.4924486903473735,
+        "regularization": 0.006375608034431934,
+        "joint_scores": [
+          [
+            0.8312320709228516
+          ]
+        ],
+        "accepted": 10,
+        "rejected": 0,
+        "lr_scale": 1.0,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9778613837154974,
+        "rgb_source_ssim": 0.9778613837154974,
+        "luma_source_ssim": 0.9852151511659676,
+        "source_mae_levels": 8.383188247680664,
+        "luma_source_mae_levels": 6.006937503814697,
+        "fg_source_mae_levels": 7.240993499755859,
+        "bg_source_mae_levels": 5.655919551849365,
+        "rgb_source_mae_levels": 8.383188247680664,
+        "fg_rgb_source_mae_levels": 7.8757829666137695,
+        "bg_rgb_source_mae_levels": 8.527515411376953,
+        "fg_chroma_tv_levels": 1.054137945175171,
+        "anchor_mae_levels": 5.577643871307373,
+        "quality_ok": true,
+        "step": 20,
+        "training_utility": 0.521310031414032,
+        "selection_utility": 0.5101892203092575,
+        "regularization": 0.011120811104774475,
+        "joint_scores": [
+          [
+            0.8380911350250244
+          ]
+        ],
+        "accepted": 20,
+        "rejected": 0,
+        "lr_scale": 0.9960646362319528,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9769389191186517,
+        "rgb_source_ssim": 0.9769389191186517,
+        "luma_source_ssim": 0.9843371968158943,
+        "source_mae_levels": 7.824677467346191,
+        "luma_source_mae_levels": 5.6175456047058105,
+        "fg_source_mae_levels": 7.3365960121154785,
+        "bg_source_mae_levels": 5.128574371337891,
+        "rgb_source_mae_levels": 7.824677467346191,
+        "fg_rgb_source_mae_levels": 8.001673698425293,
+        "bg_rgb_source_mae_levels": 7.774332046508789,
+        "fg_chroma_tv_levels": 1.1004385948181152,
+        "anchor_mae_levels": 6.196263790130615,
+        "quality_ok": true,
+        "step": 30,
+        "training_utility": 0.5336670279502869,
+        "selection_utility": 0.5215629898011684,
+        "regularization": 0.012104038149118423,
+        "joint_scores": [
+          [
+            0.8388197422027588
+          ]
+        ],
+        "accepted": 30,
+        "rejected": 0,
+        "lr_scale": 0.9843258800929714,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9763757867624107,
+        "rgb_source_ssim": 0.9763757867624107,
+        "luma_source_ssim": 0.9838302685752619,
+        "source_mae_levels": 8.224512100219727,
+        "luma_source_mae_levels": 6.048930644989014,
+        "fg_source_mae_levels": 7.338268280029297,
+        "bg_source_mae_levels": 5.682188510894775,
+        "rgb_source_mae_levels": 8.224512100219727,
+        "fg_rgb_source_mae_levels": 8.01269817352295,
+        "bg_rgb_source_mae_levels": 8.284760475158691,
+        "fg_chroma_tv_levels": 1.1405775547027588,
+        "anchor_mae_levels": 5.8680267333984375,
+        "quality_ok": true,
+        "step": 40,
+        "training_utility": 0.5401565432548523,
+        "selection_utility": 0.5288402903825045,
+        "regularization": 0.011316252872347832,
+        "joint_scores": [
+          [
+            0.8402458429336548
+          ]
+        ],
+        "accepted": 40,
+        "rejected": 0,
+        "lr_scale": 0.9649845849551919,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9759303474060256,
+        "rgb_source_ssim": 0.9759303474060256,
+        "luma_source_ssim": 0.9834201317770268,
+        "source_mae_levels": 8.067298889160156,
+        "luma_source_mae_levels": 6.034257411956787,
+        "fg_source_mae_levels": 7.380284309387207,
+        "bg_source_mae_levels": 5.651390075683594,
+        "rgb_source_mae_levels": 8.067298889160156,
+        "fg_rgb_source_mae_levels": 8.050460815429688,
+        "bg_rgb_source_mae_levels": 8.072088241577148,
+        "fg_chroma_tv_levels": 1.173405647277832,
+        "anchor_mae_levels": 5.870314598083496,
+        "quality_ok": true,
+        "step": 50,
+        "training_utility": 0.5478289127349854,
+        "selection_utility": 0.5374464029446244,
+        "regularization": 0.010382509790360928,
+        "joint_scores": [
+          [
+            0.8426634669303894
+          ]
+        ],
+        "accepted": 50,
+        "rejected": 0,
+        "lr_scale": 0.9383716857408418,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9754100901495137,
+        "rgb_source_ssim": 0.9754100901495137,
+        "luma_source_ssim": 0.9832445211968194,
+        "source_mae_levels": 8.667314529418945,
+        "luma_source_mae_levels": 5.870511054992676,
+        "fg_source_mae_levels": 7.387070178985596,
+        "bg_source_mae_levels": 5.439137935638428,
+        "rgb_source_mae_levels": 8.667314529418945,
+        "fg_rgb_source_mae_levels": 8.070666313171387,
+        "bg_rgb_source_mae_levels": 8.837026596069336,
+        "fg_chroma_tv_levels": 1.1884856224060059,
+        "anchor_mae_levels": 5.808887958526611,
+        "quality_ok": true,
+        "step": 60,
+        "training_utility": 0.5494845509529114,
+        "selection_utility": 0.5389486504718661,
+        "regularization": 0.010535900481045246,
+        "joint_scores": [
+          [
+            0.8399844169616699
+          ]
+        ],
+        "accepted": 60,
+        "rejected": 0,
+        "lr_scale": 0.9049425365339682,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.974685805389859,
+        "rgb_source_ssim": 0.974685805389859,
+        "luma_source_ssim": 0.9824500061821485,
+        "source_mae_levels": 9.425497055053711,
+        "luma_source_mae_levels": 7.204041957855225,
+        "fg_source_mae_levels": 7.361382007598877,
+        "bg_source_mae_levels": 7.159287452697754,
+        "rgb_source_mae_levels": 9.425497055053711,
+        "fg_rgb_source_mae_levels": 8.037931442260742,
+        "bg_rgb_source_mae_levels": 9.82017993927002,
+        "fg_chroma_tv_levels": 1.215442419052124,
+        "anchor_mae_levels": 4.483774185180664,
+        "quality_ok": true,
+        "step": 70,
+        "training_utility": 0.5498428344726562,
+        "selection_utility": 0.5425666244700551,
+        "regularization": 0.007276210002601147,
+        "joint_scores": [
+          [
+            0.8438155055046082
+          ]
+        ],
+        "accepted": 70,
+        "rejected": 0,
+        "lr_scale": 0.8652691193458119,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9749501680432513,
+        "rgb_source_ssim": 0.9749501680432513,
+        "luma_source_ssim": 0.9828751482480103,
+        "source_mae_levels": 8.010848999023438,
+        "luma_source_mae_levels": 5.409399509429932,
+        "fg_source_mae_levels": 7.4194464683532715,
+        "bg_source_mae_levels": 4.837657451629639,
+        "rgb_source_mae_levels": 8.010848999023438,
+        "fg_rgb_source_mae_levels": 8.088728904724121,
+        "bg_rgb_source_mae_levels": 7.988697052001953,
+        "fg_chroma_tv_levels": 1.2314534187316895,
+        "anchor_mae_levels": 6.156438827514648,
+        "quality_ok": true,
+        "step": 80,
+        "training_utility": 0.5552717447280884,
+        "selection_utility": 0.5431524869054556,
+        "regularization": 0.01211925782263279,
+        "joint_scores": [
+          [
+            0.8442764282226562
+          ]
+        ],
+        "accepted": 80,
+        "rejected": 0,
+        "lr_scale": 0.8200302573440115,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9753755247769684,
+        "rgb_source_ssim": 0.9753755247769684,
+        "luma_source_ssim": 0.9829681373401039,
+        "source_mae_levels": 6.421619892120361,
+        "luma_source_mae_levels": 4.604964733123779,
+        "fg_source_mae_levels": 7.371277809143066,
+        "bg_source_mae_levels": 3.818108081817627,
+        "rgb_source_mae_levels": 6.421619892120361,
+        "fg_rgb_source_mae_levels": 8.048727035522461,
+        "bg_rgb_source_mae_levels": 5.958802223205566,
+        "fg_chroma_tv_levels": 1.2408394813537598,
+        "anchor_mae_levels": 7.133763790130615,
+        "quality_ok": true,
+        "step": 90,
+        "training_utility": 0.5588791370391846,
+        "selection_utility": 0.5469573270529509,
+        "regularization": 0.011921809986233711,
+        "joint_scores": [
+          [
+            0.8413564562797546
+          ]
+        ],
+        "accepted": 90,
+        "rejected": 0,
+        "lr_scale": 0.77,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9746563757147202,
+        "rgb_source_ssim": 0.9746563757147202,
+        "luma_source_ssim": 0.9824508434040716,
+        "source_mae_levels": 7.335101127624512,
+        "luma_source_mae_levels": 5.074713706970215,
+        "fg_source_mae_levels": 7.42573881149292,
+        "bg_source_mae_levels": 4.405982494354248,
+        "rgb_source_mae_levels": 7.335101127624512,
+        "fg_rgb_source_mae_levels": 8.089620590209961,
+        "bg_rgb_source_mae_levels": 7.120484352111816,
+        "fg_chroma_tv_levels": 1.2613279819488525,
+        "anchor_mae_levels": 6.297613143920898,
+        "quality_ok": true,
+        "step": 100,
+        "training_utility": 0.5663862824440002,
+        "selection_utility": 0.556260084733367,
+        "regularization": 0.010126197710633278,
+        "joint_scores": [
+          [
+            0.8460308313369751
+          ]
+        ],
+        "accepted": 100,
+        "rejected": 0,
+        "lr_scale": 0.7160343788879413,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9746234400824124,
+        "rgb_source_ssim": 0.9746234400824124,
+        "luma_source_ssim": 0.9823849692867622,
+        "source_mae_levels": 6.641629219055176,
+        "luma_source_mae_levels": 4.671613693237305,
+        "fg_source_mae_levels": 7.465338706970215,
+        "bg_source_mae_levels": 3.8769607543945312,
+        "rgb_source_mae_levels": 6.641629219055176,
+        "fg_rgb_source_mae_levels": 8.124650001525879,
+        "bg_rgb_source_mae_levels": 6.2197957038879395,
+        "fg_chroma_tv_levels": 1.280540943145752,
+        "anchor_mae_levels": 6.984935283660889,
+        "quality_ok": true,
+        "step": 110,
+        "training_utility": 0.5698761343955994,
+        "selection_utility": 0.5570386908948421,
+        "regularization": 0.012837443500757217,
+        "joint_scores": [
+          [
+            0.8453966975212097
+          ]
+        ],
+        "accepted": 110,
+        "rejected": 0,
+        "lr_scale": 0.6590567607471596,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.974510411546051,
+        "rgb_source_ssim": 0.974510411546051,
+        "luma_source_ssim": 0.982321025099055,
+        "source_mae_levels": 6.853001117706299,
+        "luma_source_mae_levels": 4.41980504989624,
+        "fg_source_mae_levels": 7.456132411956787,
+        "bg_source_mae_levels": 3.556144952774048,
+        "rgb_source_mae_levels": 6.853001117706299,
+        "fg_rgb_source_mae_levels": 8.116883277893066,
+        "bg_rgb_source_mae_levels": 6.493499755859375,
+        "fg_chroma_tv_levels": 1.2830004692077637,
+        "anchor_mae_levels": 6.989188194274902,
+        "quality_ok": true,
+        "step": 120,
+        "training_utility": 0.5704908967018127,
+        "selection_utility": 0.5586042134091258,
+        "regularization": 0.01188668329268694,
+        "joint_scores": [
+          [
+            0.8455491065979004
+          ]
+        ],
+        "accepted": 120,
+        "rejected": 0,
+        "lr_scale": 0.6000420484212238,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9744622694682009,
+        "rgb_source_ssim": 0.9744622694682009,
+        "luma_source_ssim": 0.9822006549207668,
+        "source_mae_levels": 7.109558582305908,
+        "luma_source_mae_levels": 4.959751605987549,
+        "fg_source_mae_levels": 7.413778305053711,
+        "bg_source_mae_levels": 4.261722564697266,
+        "rgb_source_mae_levels": 7.109558582305908,
+        "fg_rgb_source_mae_levels": 8.076157569885254,
+        "bg_rgb_source_mae_levels": 6.8346171379089355,
+        "fg_chroma_tv_levels": 1.2829015254974365,
+        "anchor_mae_levels": 6.748337268829346,
+        "quality_ok": true,
+        "step": 130,
+        "training_utility": 0.5703603625297546,
+        "selection_utility": 0.5590136386454105,
+        "regularization": 0.011346723884344101,
+        "joint_scores": [
+          [
+            0.8449361324310303
+          ]
+        ],
+        "accepted": 130,
+        "rejected": 0,
+        "lr_scale": 0.54,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 1
+      },
+      {
+        "source_ssim": 0.9745981536799645,
+        "rgb_source_ssim": 0.9745981536799645,
+        "luma_source_ssim": 0.9825635862766775,
+        "source_mae_levels": 6.831069469451904,
+        "luma_source_mae_levels": 4.2727203369140625,
+        "fg_source_mae_levels": 7.396335124969482,
+        "bg_source_mae_levels": 3.3842318058013916,
+        "rgb_source_mae_levels": 6.831069469451904,
+        "fg_rgb_source_mae_levels": 8.058456420898438,
+        "bg_rgb_source_mae_levels": 6.481949329376221,
+        "fg_chroma_tv_levels": 1.2968919277191162,
+        "anchor_mae_levels": 7.182412147521973,
+        "quality_ok": true,
+        "step": 140,
+        "training_utility": 0.5744474530220032,
+        "selection_utility": 0.562384121119976,
+        "regularization": 0.01206333190202713,
+        "joint_scores": [
+          [
+            0.846889853477478
+          ]
+        ],
+        "accepted": 140,
+        "rejected": 0,
+        "lr_scale": 0.4799579515787764,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9744139856486541,
+        "rgb_source_ssim": 0.9744139856486541,
+        "luma_source_ssim": 0.9824037618539501,
+        "source_mae_levels": 6.4530839920043945,
+        "luma_source_mae_levels": 3.832191228866577,
+        "fg_source_mae_levels": 7.42247200012207,
+        "bg_source_mae_levels": 2.8109633922576904,
+        "rgb_source_mae_levels": 6.4530839920043945,
+        "fg_rgb_source_mae_levels": 8.078072547912598,
+        "bg_rgb_source_mae_levels": 5.990868091583252,
+        "fg_chroma_tv_levels": 1.318049669265747,
+        "anchor_mae_levels": 7.73497200012207,
+        "quality_ok": true,
+        "step": 150,
+        "training_utility": 0.573136031627655,
+        "selection_utility": 0.5618527308106422,
+        "regularization": 0.011283300817012787,
+        "joint_scores": [
+          [
+            0.8465654850006104
+          ]
+        ],
+        "accepted": 150,
+        "rejected": 0,
+        "lr_scale": 0.42094323925284044,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 1
+      },
+      {
+        "source_ssim": 0.9748805953527165,
+        "rgb_source_ssim": 0.9748805953527165,
+        "luma_source_ssim": 0.9826014821701573,
+        "source_mae_levels": 5.325375556945801,
+        "luma_source_mae_levels": 3.402270793914795,
+        "fg_source_mae_levels": 7.430750370025635,
+        "bg_source_mae_levels": 2.2564005851745605,
+        "rgb_source_mae_levels": 5.325375556945801,
+        "fg_rgb_source_mae_levels": 8.086808204650879,
+        "bg_rgb_source_mae_levels": 4.539906978607178,
+        "fg_chroma_tv_levels": 1.3243143558502197,
+        "anchor_mae_levels": 8.602068901062012,
+        "quality_ok": true,
+        "step": 160,
+        "training_utility": 0.5758615732192993,
+        "selection_utility": 0.5630063191056252,
+        "regularization": 0.012855254113674164,
+        "joint_scores": [
+          [
+            0.8466551303863525
+          ]
+        ],
+        "accepted": 160,
+        "rejected": 0,
+        "lr_scale": 0.36396562111205877,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9743725787385789,
+        "rgb_source_ssim": 0.9743725787385789,
+        "luma_source_ssim": 0.9823798415905748,
+        "source_mae_levels": 6.497521877288818,
+        "luma_source_mae_levels": 4.211097240447998,
+        "fg_source_mae_levels": 7.420138359069824,
+        "bg_source_mae_levels": 3.2983100414276123,
+        "rgb_source_mae_levels": 6.497521877288818,
+        "fg_rgb_source_mae_levels": 8.068836212158203,
+        "bg_rgb_source_mae_levels": 6.050573825836182,
+        "fg_chroma_tv_levels": 1.3264459371566772,
+        "anchor_mae_levels": 7.924453258514404,
+        "quality_ok": true,
+        "step": 170,
+        "training_utility": 0.5756545662879944,
+        "selection_utility": 0.5617594867944717,
+        "regularization": 0.013895079493522644,
+        "joint_scores": [
+          [
+            0.8441858291625977
+          ]
+        ],
+        "accepted": 170,
+        "rejected": 0,
+        "lr_scale": 0.3100000000000001,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 1
+      },
+      {
+        "source_ssim": 0.9743679718836185,
+        "rgb_source_ssim": 0.9743679718836185,
+        "luma_source_ssim": 0.982322185112872,
+        "source_mae_levels": 6.3582258224487305,
+        "luma_source_mae_levels": 4.20583963394165,
+        "fg_source_mae_levels": 7.400310039520264,
+        "bg_source_mae_levels": 3.29719614982605,
+        "rgb_source_mae_levels": 6.3582258224487305,
+        "fg_rgb_source_mae_levels": 8.046192169189453,
+        "bg_rgb_source_mae_levels": 5.878097057342529,
+        "fg_chroma_tv_levels": 1.3281159400939941,
+        "anchor_mae_levels": 8.00992488861084,
+        "quality_ok": true,
+        "step": 180,
+        "training_utility": 0.5774758458137512,
+        "selection_utility": 0.5642113285139203,
+        "regularization": 0.013264517299830914,
+        "joint_scores": [
+          [
+            0.8444781303405762
+          ]
+        ],
+        "accepted": 180,
+        "rejected": 0,
+        "lr_scale": 0.2599697426559885,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9742752216698656,
+        "rgb_source_ssim": 0.9742752216698656,
+        "luma_source_ssim": 0.9823040764186541,
+        "source_mae_levels": 6.3196120262146,
+        "luma_source_mae_levels": 3.8985793590545654,
+        "fg_source_mae_levels": 7.417055130004883,
+        "bg_source_mae_levels": 2.8977763652801514,
+        "rgb_source_mae_levels": 6.3196120262146,
+        "fg_rgb_source_mae_levels": 8.057011604309082,
+        "bg_rgb_source_mae_levels": 5.825422763824463,
+        "fg_chroma_tv_levels": 1.3340778350830078,
+        "anchor_mae_levels": 8.126419067382812,
+        "quality_ok": true,
+        "step": 190,
+        "training_utility": 0.5838904976844788,
+        "selection_utility": 0.5713912891224027,
+        "regularization": 0.012499208562076092,
+        "joint_scores": [
+          [
+            0.8451172709465027
+          ]
+        ],
+        "accepted": 190,
+        "rejected": 0,
+        "lr_scale": 0.21473088065418816,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9743665211875979,
+        "rgb_source_ssim": 0.9743665211875979,
+        "luma_source_ssim": 0.9823818529514493,
+        "source_mae_levels": 6.0709614753723145,
+        "luma_source_mae_levels": 3.68780255317688,
+        "fg_source_mae_levels": 7.428481578826904,
+        "bg_source_mae_levels": 2.6237952709198,
+        "rgb_source_mae_levels": 6.0709614753723145,
+        "fg_rgb_source_mae_levels": 8.070317268371582,
+        "bg_rgb_source_mae_levels": 5.502258777618408,
+        "fg_chroma_tv_levels": 1.3410050868988037,
+        "anchor_mae_levels": 8.337662696838379,
+        "quality_ok": true,
+        "step": 200,
+        "training_utility": 0.5850054025650024,
+        "selection_utility": 0.5720062516629696,
+        "regularization": 0.012999150902032852,
+        "joint_scores": [
+          [
+            0.8456836938858032
+          ]
+        ],
+        "accepted": 200,
+        "rejected": 0,
+        "lr_scale": 0.17505746346603188,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.974491142048802,
+        "rgb_source_ssim": 0.974491142048802,
+        "luma_source_ssim": 0.9825232791941241,
+        "source_mae_levels": 5.824995994567871,
+        "luma_source_mae_levels": 3.437757730484009,
+        "fg_source_mae_levels": 7.440881729125977,
+        "bg_source_mae_levels": 2.299099922180176,
+        "rgb_source_mae_levels": 5.824995994567871,
+        "fg_rgb_source_mae_levels": 8.079728126525879,
+        "bg_rgb_source_mae_levels": 5.18365478515625,
+        "fg_chroma_tv_levels": 1.3482332229614258,
+        "anchor_mae_levels": 8.562539100646973,
+        "quality_ok": true,
+        "step": 210,
+        "training_utility": 0.5860885381698608,
+        "selection_utility": 0.5722646079957485,
+        "regularization": 0.01382393017411232,
+        "joint_scores": [
+          [
+            0.8459596633911133
+          ]
+        ],
+        "accepted": 210,
+        "rejected": 0,
+        "lr_scale": 0.1416283142591582,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 1
+      },
+      {
+        "source_ssim": 0.9742947520946954,
+        "rgb_source_ssim": 0.9742947520946954,
+        "luma_source_ssim": 0.9823804662752544,
+        "source_mae_levels": 6.266007900238037,
+        "luma_source_mae_levels": 3.7982707023620605,
+        "fg_source_mae_levels": 7.425523281097412,
+        "bg_source_mae_levels": 2.7665271759033203,
+        "rgb_source_mae_levels": 6.266007900238037,
+        "fg_rgb_source_mae_levels": 8.065109252929688,
+        "bg_rgb_source_mae_levels": 5.754266738891602,
+        "fg_chroma_tv_levels": 1.3481690883636475,
+        "anchor_mae_levels": 8.256738662719727,
+        "quality_ok": true,
+        "step": 220,
+        "training_utility": 0.5874818563461304,
+        "selection_utility": 0.5740705830976367,
+        "regularization": 0.013411273248493671,
+        "joint_scores": [
+          [
+            0.8453542590141296
+          ]
+        ],
+        "accepted": 220,
+        "rejected": 0,
+        "lr_scale": 0.11501541504480811,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 0
+      },
+      {
+        "source_ssim": 0.9742957621525073,
+        "rgb_source_ssim": 0.9742957621525073,
+        "luma_source_ssim": 0.9823942983695559,
+        "source_mae_levels": 6.254327774047852,
+        "luma_source_mae_levels": 3.6868882179260254,
+        "fg_source_mae_levels": 7.418795108795166,
+        "bg_source_mae_levels": 2.6253762245178223,
+        "rgb_source_mae_levels": 6.254327774047852,
+        "fg_rgb_source_mae_levels": 8.058420181274414,
+        "bg_rgb_source_mae_levels": 5.741167068481445,
+        "fg_chroma_tv_levels": 1.3471180200576782,
+        "anchor_mae_levels": 8.309074401855469,
+        "quality_ok": true,
+        "step": 230,
+        "training_utility": 0.5862287282943726,
+        "selection_utility": 0.5730569381266832,
+        "regularization": 0.013171790167689323,
+        "joint_scores": [
+          [
+            0.8435847759246826
+          ]
+        ],
+        "accepted": 230,
+        "rejected": 0,
+        "lr_scale": 0.09567411990702863,
+        "adaptive_scale": 1.0,
+        "stagnation_checks": 1
+      },
+      {
+        "source_ssim": 0.9741321370214006,
+        "rgb_source_ssim": 0.9741321370214006,
+        "luma_source_ssim": 0.9822148934411287,
+        "source_mae_levels": 6.458193302154541,
+        "luma_source_mae_levels": 4.007684230804443,
+        "fg_source_mae_levels": 7.429244041442871,
+        "bg_source_mae_levels": 3.0344481468200684,
+        "rgb_source_mae_levels": 6.458193302154541,
+        "fg_rgb_source_mae_levels": 8.066789627075195,
+        "bg_rgb_source_mae_levels": 6.000641345977783,
+        "fg_chroma_tv_levels": 1.3498151302337646,
+        "anchor_mae_levels": 8.086983680725098,
+        "quality_ok": true,
+        "step": 240,
+        "training_utility": 0.5845198631286621,
+        "selection_utility": 0.5716752856969833,
+        "regularization": 0.012844577431678772,
+        "joint_scores": [
+          [
+            0.8441147804260254
+          ]
+        ],
+        "accepted": 240,
+        "rejected": 0,
+        "lr_scale": 0.08393536376804722,
+        "adaptive_scale": 0.75,
+        "stagnation_checks": 2
+      }
+    ],
+    "auxiliary_levels": 0
+  },
+  "config": {
+    "steps": 250,
+    "check_every": 10,
+    "log_every": 10,
+    "adaptive_annealing": true,
+    "anneal_min_steps": 180,
+    "anneal_min_lr_ratio": 0.08,
+    "anneal_warmup_steps": 10,
+    "anneal_plateau_factor": 0.75,
+    "anneal_plateau_patience": 2,
+    "anneal_backtrack_factor": 0.9,
+    "anneal_improve_tol": 0.0005,
+    "anneal_early_stop_patience": 4,
+    "checkpoint_every": 5,
+    "resume_from_checkpoint": true,
+    "latent_levels": 6,
+    "background_levels": 34,
+    "auxiliary_levels": 0,
+    "pixel_optimization": false,
+    "fg_edge_feather_pixels": 8.0,
+    "edge_feather_pixels": 12.0,
+    "ambient_feather_pixels": 3.0,
+    "roi_feather_pixels": 6.0,
+    "edge_feather_mode": "cosine",
+    "fg_luma_smooth_sigma": 1.5,
+    "fg_chroma_smooth_sigma": 2.5,
+    "fg_chroma_keep": 0.55,
+    "bg_luma_smooth_sigma": 12.0,
+    "bg_chroma_smooth_sigma": 16.0,
+    "bg_chroma_keep": 0.1,
+    "ambient_smooth_sigma": 14.0,
+    "ambient_grid_size": 8,
+    "ambient_init_bias": 0.0,
+    "tau_scale": 0.75,
+    "tau_fg": 0.05,
+    "tau_bg": 0.12,
+    "latent_working_size": 512,
+    "latent_limit": 6.0,
+    "latent_learning_rate": 0.12,
+    "ambient_learning_rate": 0.012,
+    "ambient_limit": 0.15,
+    "latent_smoothing_mix": 0.0,
+    "temperature": 0.04,
+    "joint_weight": 0.15,
+    "compensation_weight": 0.35,
+    "text_weight": 1.5,
+    "text_key_mix": 0.6,
+    "local_ot_weight": 0.15,
+    "local_ot_clusters": 4,
+    "local_ot_iterations": 50,
+    "local_ot_sinkhorn_regularization": 0.1,
+    "local_ot_fg_threshold": 0.5,
+    "ensemble_temperature": 0.2,
+    "ensemble_uniform_mix": 0.45,
+    "surrogate_set": "clip_l14",
+    "surrogate_config": null,
+    "compensated_weight": 0.5,
+    "fg_l2_weight": 2e-05,
+    "fg_tv_weight": 0.0001,
+    "fg_chroma_tv_weight": 0.03,
+    "bg_l2_weight": 0.005,
+    "bg_tv_weight": 0.02,
+    "bg_chroma_tv_weight": 0.08,
+    "overflow_weight": 0.05,
+    "halo_weight": 0.003,
+    "halo_soft_weight": 0.0001,
+    "halo_floor": 12.0,
+    "halo_ceiling": 10.0,
+    "fg_chroma_tv_ceiling": 2.5,
+    "halo_parent_multiplier": 1.0,
+    "guard_backtracks": 8,
+    "fg_chroma_levels": 0,
+    "fg_chroma_limit": 0.04,
+    "fg_luma_scale": 0.75,
+    "fg_neutral_recolor_base": 0.05,
+    "fg_highlight_luma_knee": 0.88,
+    "fg_shadow_luma_knee": 0.25,
+    "bg_radial_vignette_scale": 0.1,
+    "source_ssim_floor": 0.85,
+    "source_mae_ceiling": 22.0,
+    "fg_source_mae_ceiling": 10.0,
+    "anchor_ssim_floor": 0.85,
+    "anchor_mae_ceiling": 22.0,
+    "harmonization_smoothing_sigma": 12.0,
+    "harmonization_print_ring_sigma": 7.0,
+    "harmonization_selected_color_mix": 0.12,
+    "harmonization_chroma_transfer_strength": 0.0,
+    "harmonization_strength": 1.0,
+    "harmonization_blend_mode": "matte",
+    "harmonization_fg_feather_pixels": 4.0,
+    "harmonization_bg_strength": 0.85,
+    "harmonization_bg_luma_target": 238.0,
+    "harmonization_bg_warmth": 3.0,
+    "harmonization_bg_tint_mix": 0.2,
+    "harmonization_bg_feather_pixels": 6.0,
+    "ink_margin_pixels": 2,
+    "ink_closing_pixels": 9,
+    "ink_local_contrast": 3.0,
+    "ink_dark_luminance": 180.0,
+    "ink_colored_chroma": 12.0,
+    "allow_tf32": true,
+    "enable_gradient_checkpointing": null,
+    "save_intermediate_pngs": false,
+    "device": "cuda",
+    "seed": 42,
+    "smoke_test": false,
+    "sam_model_dir": null,
+    "planner_model_dir": null,
+    "editor_model_dir": null,
+    "vae_model_dir": null,
+    "vae_model_path": null,
+    "purifier_model_path": null,
+    "purifier_working_size": 256,
+    "purifier_gradient_checkpointing": true,
+    "editor_kind": "flux",
+    "anchor_steps": 32,
+    "anchor_guidance_scale": 2.5,
+    "planner_max_new_tokens": 768,
+    "eot_enabled": false,
+    "diffusion_eot_enabled": false,
+    "multiscale_eot_enabled": true,
+    "diffusion_weight": 0.05,
+    "purifier_steps": 10,
+    "psi_progressive_schedule": true,
+    "psi_phase1_ratio": 0.24,
+    "psi_phase2_ratio": 0.72,
+    "psi_joint_end_scale": 0.5,
+    "psi_text_peak_multiplier": 1.6,
+    "psi_ot_peak_multiplier": 1.6,
+    "text_pure_image_mix": 0.25,
+    "text_phrase_decomposition": true,
+    "max_text_phrases": 6,
+    "text_spherical_augmentation": true,
+    "text_spherical_radius": 0.05,
+    "text_spherical_mix": 0.5,
+    "source_repulsion_weight": 0.15,
+    "source_repulsion_margin": 0.08,
+    "local_ot_text_weighted": true,
+    "local_ot_text_temperature": 0.1,
+    "pcgrad_enabled": true,
+    "spectral_manifold_projection": true,
+    "spectral_budget_start": 0.65,
+    "spectral_budget_end": 1.35,
+    "conditional_tangent_projection": true,
+    "tangent_ssim_slack_margin": 0.03,
+    "tangent_mae_slack_ratio": 0.2,
+    "training_manifest": "/content/AmbiLAGE/data/public/visual_inception_golden_band/06_jeans/training_bundle.json",
+    "candidate_cache_dir": null,
+    "public_retrieval_weight": 3.0,
+    "public_retrieval_temperature": 0.07,
+    "public_query_batch_size": 16,
+    "public_contrastive_margin": 0.45,
+    "low_vram_offload_threshold_gb": 28.0,
+    "bg_studio_basis_enabled": true,
+    "bg_studio_basis_scale": 0.2,
+    "text_aware_proxy_weighting": true,
+    "selection_text_parity_mix": 2.0,
+    "proxy_text_bottleneck_mix": 0.55,
+    "memory_key_mode": "image",
+    "category_data_mode": "category_commonalities_abstraction",
+    "category_subspace_rank": 8,
+    "category_medoid_count": 16,
+    "category_residual_shrinkage": 0.3,
+    "category_visual_prototype_mix": 0.75,
+    "single_model_task_pcgrad": true,
+    "single_model_vis_grad_cap": 0.5,
+    "single_model_multiscale_eot": true,
+    "public_query_adv_radius": 0.18,
+    "public_query_adv_steps": 3,
+    "public_query_adv_mix": 0.5,
+    "joint_key_aux_mix": 0.0,
+    "joint_grad_protect": false,
+    "joint_grad_cap": 0.35
+  },
+  "planning": {
+    "source_boxes": [
+      [
+        0.264,
+        0.032,
+        0.734,
+        0.968
+      ]
+    ],
+    "print_regions": [],
+    "edit_prompt": "Explicit studio lighting recipe for public category 'women's jeans': apply smooth matte studio ambient harmonization across editable product body while preserving exact geometry, framing, and morphological printed ink core pixels unchanged.",
+    "lighting_note": "studio_softbox_relighting_for_women's_jeans",
+    "model": "explicit_public_category_recipe_v1",
+    "planner_model": "explicit_public_category_recipe_v1",
+    "precision": "deterministic_geometry",
+    "inputs": [
+      "source_public_image",
+      "source_public_category"
+    ]
+  },
+  "ocr": {
+    "backend": "rapidocr-onnxruntime",
+    "regions": [],
+    "confidence": [],
+    "passes": [
+      "native",
+      "upscale_2x",
+      "upscale_2x_inverted",
+      "tile_3x",
+      "tile_3x_inverted"
+    ]
+  },
+  "segmentation": {
+    "source": {
+      "image_path": "/content/AmbiLAGE/resources/evaluation_base_golden_band/groups/06_jeans/source.jpg",
+      "image_sha256": "646f603de154a3644550f9d642e49d37bfc781f75c4ab088c9938f71e6573883",
+      "boxes": [
+        [
+          0.288,
+          0.054,
+          0.71,
+          0.944
+        ]
+      ],
+      "pixel_boxes": [
+        [
+          144.0,
+          27.0,
+          355.0,
+          472.0
+        ]
+      ],
+      "segmenter": "sam2.1-hiera-large",
+      "model": "/content/AmbiLAGE/models/sam2",
+      "scores": [
+        [
+          0.44956013560295105,
+          0.9752792716026306,
+          0.9728522300720215
+        ]
+      ],
+      "selected_indices": [
+        1
+      ],
+      "selected_scores": [
+        0.9752792716026306
+      ],
+      "foreground_ratio": 0.221452,
+      "label_region_pixels": 0,
+      "ink_core_pixels": 0,
+      "substrate_pixels": 0
+    },
+    "target": {
+      "image_path": "/content/AmbiLAGE/resources/evaluation_base_golden_band/groups/06_jeans/target.jpg",
+      "image_sha256": "acf3f5d8944c118d04e2ba456926f4750e87198bbd3201302a34e52e44bd6039",
+      "boxes": [
+        [
+          0.314,
+          0.028,
+          0.652,
+          0.978
+        ]
+      ],
+      "pixel_boxes": [
+        [
+          157.0,
+          14.0,
+          326.0,
+          489.0
+        ]
+      ],
+      "segmenter": "sam2.1-hiera-large",
+      "model": "/content/AmbiLAGE/models/sam2",
+      "scores": [
+        [
+          0.4387139081954956,
+          0.9816484451293945,
+          0.9810934662818909
+        ]
+      ],
+      "selected_indices": [
+        1
+      ],
+      "selected_scores": [
+        0.9816484451293945
+      ],
+      "foreground_ratio": 0.18274,
+      "label_region_pixels": 0,
+      "ink_core_pixels": 0,
+      "substrate_pixels": 0
+    }
+  },
+  "color_statistics": {
+    "color_scheme": "statistics",
+    "rgb": [
+      31,
+      27,
+      27
+    ],
+    "lab_mean": [
+      10.12315559387207,
+      2.1103899478912354,
+      0.6268056035041809
+    ],
+    "lab_covariance": [
+      [
+        127.10823686451839,
+        9.96720642111113,
+        13.826314738279656
+      ],
+      [
+        9.96720642111113,
+        5.0434231845746895,
+        4.666597021284687
+      ],
+      [
+        13.826314738279656,
+        4.666597021284687,
+        8.558428248839913
+      ]
+    ],
+    "luminance_quantiles": [
+      3.3209590911865234,
+      66.80443572998047
+    ],
+    "target_foreground_pixels": 42398,
+    "body_pixels": 29864,
+    "photo_border_background_rgb": [
+      255.0,
+      255.0,
+      255.0
+    ],
+    "border_connected_background_pixels": 203541,
+    "covariance_diagnostic_only": true
+  },
+  "harmonization": {
+    "status": "completed",
+    "stage": "illumination_harmonization",
+    "blend_mode": "matte",
+    "selected_rgb": [
+      31,
+      27,
+      27
+    ],
+    "bg_studio_target_rgb": [
+      242,
+      239,
+      235
+    ],
+    "bg_strength": 0.85,
+    "strength": 1.0,
+    "selected_color_mix": 0.12,
+    "smoothing_sigma": 12.0,
+    "chosen_fraction": 1.0,
+    "line_search_steps": 32,
+    "source_ssim": 0.9837443176814061,
+    "source_mae_levels": 12.391721725463867,
+    "fg_rgb_source_mae_levels": 7.943102836608887,
+    "fg_chroma_tv_levels": 0.8053687214851379,
+    "halo_error": 3.376387357711792,
+    "ink_core_pixels": 0,
+    "substrate_pixels": 0,
+    "max_body_change_levels": 40,
+    "mean_body_change_levels": 7.943102794284992,
+    "max_bg_change_levels": 17,
+    "mean_bg_change_levels": 13.657100140261102,
+    "roi_change_levels": 0,
+    "zero_pixel_residual": true,
+    "generator": {
+      "model": "perceptual_illumination_line_search_v1",
+      "chosen_fraction": 1.0,
+      "line_search_steps": 32
+    },
+    "trials_evaluated": 1,
+    "anchor_path": "/content/AmbiLAGE/output/exp_20261121_ambilage_multiscale_only_golden_band_9groups/06_jeans/ambilage/generation/color_harmonization/generative_anchor.png",
+    "anchor_sha256": "91e9a43481fce344ca20c573c53e69e8f9b491a12ee5ba9bf8edb15cd10118cd"
+  },
+  "anchor_generation": {
+    "backend": "perceptual_illumination_line_search_v1",
+    "model": "perceptual_illumination_line_search_v1",
+    "precision": "float32",
+    "steps": 32,
+    "prompt": "Explicit studio lighting recipe for public category 'women's jeans': apply smooth matte studio ambient harmonization across editable product body while preserving exact geometry, framing, and morphological printed ink core pixels unchanged.",
+    "seed": 42,
+    "alignment_mode": "perceptual_line_search"
+  },
+  "training_objective": {
+    "kind": "sequential_public_joint_text_fg_ot_psi_v4",
+    "surrogates": [
+      {
+        "role": "attack_surrogate",
+        "name": "ViT-L-14",
+        "pretrained": "openai",
+        "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+        "tokenizer_path": null,
+        "weight_path": "/content/AmbiLAGE/models/clip_l14/open_clip_model.safetensors",
+        "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e",
+        "weight_revision": null,
+        "device": "cuda",
+        "precision": "fp32",
+        "image_size": 224,
+        "preprocess": {
+          "resize": "bicubic_direct_square",
+          "align_corners": false,
+          "antialias": true,
+          "mean": [
+            0.48145466,
+            0.4578275,
+            0.40821073
+          ],
+          "std": [
+            0.26862954,
+            0.26130258,
+            0.27577711
+          ]
+        },
+        "open_clip_torch_version": "3.3.0",
+        "cache_identity": "2ae7d7ba721f793f3f6bc7e20c9509f7a6ff7380bd2769d0682e1e0b468d1d5d",
+        "requires_true_local_tokens": false,
+        "loading": {
+          "architecture": {
+            "embed_dim": 768,
+            "vision_cfg": {
+              "image_size": 224,
+              "layers": 24,
+              "width": 1024,
+              "patch_size": 14
+            },
+            "text_cfg": {
+              "context_length": 77,
+              "vocab_size": 49408,
+              "width": 768,
+              "heads": 12,
+              "layers": 12
+            }
+          },
+          "quick_gelu": true,
+          "activation": "QuickGELU",
+          "mean": [
+            0.48145466,
+            0.4578275,
+            0.40821073
+          ],
+          "std": [
+            0.26862954,
+            0.26130258,
+            0.27577711
+          ],
+          "metadata_source": "registered_pretrained_tag",
+          "registered_preprocess": {
+            "interpolation": "bicubic",
+            "resize_mode": "shortest"
+          },
+          "strict_state_dict": true,
+          "actual_activation_modules": {
+            "QuickGELU": 36,
+            "GELU": 0
+          },
+          "loader_version": 3,
+          "loader_sha256": "562966bba1620c5b352d9f092bee56ce10fce48afa68cb91575094bd7ad47731"
+        },
+        "tokenizer": {
+          "type": "SimpleTokenizer",
+          "special_tokens": {
+            "sot_token_id": 49406,
+            "eot_token_id": 49407,
+            "pad_token_id": null,
+            "context_length": 77
+          },
+          "content_sha256": "4710f312ff5993f9721ddf2ff9d4d3c1b49ac86b646e95e32b0e3d1ac1abf7b8"
+        }
+      }
+    ],
+    "surrogate_selection": {
+      "schema_version": 1,
+      "profile": "clip_l14",
+      "config_source": "src/visual/config/surrogates.clip_l14.json",
+      "config_sha256": "00a21694e0bc85be51c80b0a3b476fd878f32bbc6f51dc8aa62f25ee49deed2c",
+      "specs": [
+        {
+          "name": "ViT-L-14",
+          "pretrained": "openai",
+          "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+          "weight_path": "clip_l14/open_clip_model.safetensors",
+          "tokenizer_path": null
+        }
+      ],
+      "specs_sha256": "58cf5034c6eb1153bd6c14d7614aa9000f0d7639f9fe9cec51f767c36716f803",
+      "comparison_reference": "visual_inception_single_clip_l14_explicit_checkpoint",
+      "activation_policy": "pretrained_native",
+      "model_count": 1,
+      "held_out_models": [
+        "ViT-g-14",
+        "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+      ],
+      "downloads_during_training": false,
+      "paper_single_encoder_architecture": "CLIP-ViT-L/14",
+      "paper_exact_checkpoints_specified": false,
+      "checkpoint_policy": "explicit_public_pretrained_identity_not_claimed_author_checkpoint"
+    },
+    "public_objectives": [
+      {
+        "source_public_key_sha256": "7a17adb846fd97820e642829254f9cc95cc8fd99f85befaf3c0b9a60f11134a0",
+        "training_text_sha256": "cfc5997d852316dda3fdca6876f266c3bc05a5927caeb8669996c1c68604d78b",
+        "source_text_encoding": {
+          "text_sha256": "7a17adb846fd97820e642829254f9cc95cc8fd99f85befaf3c0b9a60f11134a0",
+          "input_tokens": 70,
+          "encoded_tokens": 70,
+          "chunks": 1,
+          "payload_tokens_per_chunk": 75,
+          "chunk_token_counts": [
+            70
+          ],
+          "truncated": false
+        },
+        "target_text_encoding": {
+          "text_sha256": "cfc5997d852316dda3fdca6876f266c3bc05a5927caeb8669996c1c68604d78b",
+          "input_tokens": 18,
+          "encoded_tokens": 18,
+          "chunks": 1,
+          "payload_tokens_per_chunk": 75,
+          "chunk_token_counts": [
+            18
+          ],
+          "truncated": false
+        },
+        "query_modes": [
+          "multimodal_equal_weight",
+          "independent_target_text",
+          "image_only_memory_key_alignment",
+          "category_level_category_commonalities_abstraction"
+        ],
+        "query_image_weight": 0.5,
+        "query_text_weight": 0.5,
+        "memory_key_image_weight": 1.0,
+        "memory_key_mode": "image",
+        "category_data_mode": "category_commonalities_abstraction",
+        "compensated_target_enabled": true,
+        "compensated_valid": true,
+        "compensation_weight": 0.35,
+        "text_weight": 1.5,
+        "text_key_mix": 0.6,
+        "text_pure_image_mix": 0.25,
+        "text_compensated_valid": true,
+        "phrase_decomposition_enabled": true,
+        "phrase_count": 6,
+        "spherical_query_augmentation": true,
+        "local_ot_weight": 0.15,
+        "joint_key_aux_mix": 0.0,
+        "joint_grad_protect": false,
+        "joint_grad_cap": 0.35,
+        "local_ot_clusters": 4,
+        "local_ot_fg_threshold": 0.5,
+        "local_ot_text_weighted": true,
+        "local_ot_active": true,
+        "public_bundle_retrieval_active": true,
+        "victim_memory_used": false,
+        "formal_queries_used": false,
+        "formal_ranking_used": false,
+        "category_abstraction": {
+          "schema_version": 1,
+          "kind": "contrastive_submodular_spherical_karcher_cpca_v1",
+          "category": "jeans",
+          "query_count": 100,
+          "out_of_category_titles_used": 40,
+          "same_category_visual_peers_used": 10,
+          "top_salient_terms": [
+            "wide leg",
+            "jeans",
+            "high waisted",
+            "button closure",
+            "high waist",
+            "high",
+            "casual",
+            "jeans women",
+            "straight leg",
+            "women high",
+            "leg",
+            "waist"
+          ],
+          "canonical_prompts": [
+            "jeans: a high waist; a baggy straight-leg cut; flap pockets; a zipper fly",
+            "A jeans with wide leg, high waisted, button closure, high waist, casual.",
+            "I want to buy jeans featuring wide leg, high waisted, button closure, high waist, casual, jeans women."
+          ],
+          "abstracted_texts": [
+            "jeans: a high waist; a baggy straight-leg cut; flap pockets; a zipper fly",
+            "A jeans with wide leg, high waisted, button closure, high waist, casual.",
+            "I want to buy jeans featuring wide leg, high waisted, button closure, high waist, casual, jeans women.",
+            "Find women's jeans with a fitted narrow upper section, loose legs, a button closure, and breathable soft 70% cotton construction for casual outfits and gifting",
+            "mens high waisted jeans",
+            "Looking for women's Y2K high-waisted wide-leg vintage baggy jeans with distressed holes, made from polyester and cotton for casual wear, dates, parties, and streetwear?",
+            "Women' s Trousers, High Waist Straight-Leg Pants with Chain DecorsDescription:High-quality material, soft and comfortable, breathable and wear-resistant",
+            "Find imported jeans with a button closure that are machine washable",
+            "curvy jeans for women high waist",
+            "Find full-length stretchy bell-bottom flare jeans for women in light blue, black, or dark denim, with back pockets, frayed hems, and a breathable cotton-blend-spandex construction",
+            "Find women's high-waist zebra-striped wide-leg jeans with zipper and button closures, pockets, and a soft nonstretch fabric for casual outings, parties, and school",
+            "Looking for stretch yoga or casual pants with a high elastic waistband, cargo or plaid styling, and long lengths sized S through XL for women or men?",
+            "Find a light-weight soft breathable regular-fit casual top in a small Asian size for school, work, sports, or daily life, suitable for pairing with high-waisted leggings or jeans",
+            "Find women's high-waisted wide-leg cargo jeans in cotton and polyester with deep front and flap pockets, full-length relaxed boyfriend styling, and a zip-and-button fly",
+            "Find women's Y2K high-waisted baggy patchwork jeans with a printed vintage streetwear design, polyester construction, and a true-to-size fit for daily casual wear",
+            "Find low-waist light polyester pull-on pants with a butterfly embroidery design in Korean hip-hop, Y2K, Harajuku, or streetwear style for S, M, or L"
+          ],
+          "submodular_coverage_score": 0.80139585,
+          "subspace_rank": 8,
+          "ambient_dim": 768,
+          "principal_anchor_count": 16,
+          "residual_shrinkage": 0.3,
+          "visual_prototype_mix": 0.75,
+          "contrastive_beta": 0.35,
+          "abstraction_sha256": "fbe06034192977d0460c15b01ab67cc7e7a3a5d21fd5bbcd3775e0c4423a4965"
+        }
+      }
+    ],
+    "held_out_models": [
+      "ViT-g-14",
+      "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
+    ],
+    "held_out_purifiers": [
+      "eval_purifier_sd21",
+      "sd2-community/stable-diffusion-2-1-base",
+      "stabilityai/stable-diffusion-2-1-base"
+    ],
+    "single_surrogate_mode": true,
+    "single_model_task_pcgrad": true,
+    "single_model_multiscale_eot": true,
+    "multiscale_eot_enabled": true,
+    "defense_eot_enabled": false,
+    "effective_key_mode": "image",
+    "effective_category_mode": "category_commonalities_abstraction",
+    "gradient_execution": "single_surrogate_task_pcgrad_single_backward",
+    "pcgrad_enabled": true,
+    "psi_progressive_schedule": true,
+    "text_aware_proxy_weighting": true,
+    "weak_proxy_weighting": "text_bottleneck_relative_gain_softmin_with_uniform_floor",
+    "ensemble_temperature": 0.2,
+    "ensemble_uniform_mix": 0.45,
+    "eot_enabled": false,
+    "diffusion_eot_enabled": false,
+    "eot_paths": [
+      "identity",
+      "multiscale_grid_breaking_crop_zoom"
+    ],
+    "diffusion_weight": 0.0,
+    "diffusion_gradient": "disabled",
+    "purifier": {
+      "kind": "disabled",
+      "enabled": false
+    },
+    "vram_governance": {
+      "low_vram_mode": true,
+      "offloaded_text_bytes": 494624936,
+      "visual_grad_checkpointing_models": 1,
+      "sequential_gpu_streaming": false
+    },
+    "victim_memory_used": false,
+    "formal_queries_used": false,
+    "training_manifest_sha256": "ec1f61e41e3211be1e086913c57ca3054f2528f1cd2f3847dce3cf42d432cb3b",
+    "training_bundle_sha256": "05aa10083aa5c7a19f5e300afcd03f5829048f5db9b3c36635a02df8babedf6a",
+    "public_retrieval_weight": 3.0,
+    "negative_candidate_caches": [
+      {
+        "kind": "visual_inception_fixed_public_image_vectors_v2",
+        "cache_key": "55573069a6947db307f544361750e44dfdae3fae1a1989b2f5b097ca412a0f19",
+        "identity": {
+          "kind": "visual_inception_fixed_public_image_vectors_v2",
+          "model": {
+            "role": "attack_surrogate",
+            "name": "ViT-L-14",
+            "pretrained": "openai",
+            "hf_repo": "timm/vit_large_patch14_clip_224.openai",
+            "tokenizer_path": null,
+            "weight_path": "/content/AmbiLAGE/models/clip_l14/open_clip_model.safetensors",
+            "weight_sha256": "9ce2e8a8ebfff3793d7d375ad6d3c35cb9aebf3de7ace0fc7308accab7cd207e",
+            "weight_revision": null,
+            "device": "cuda",
+            "precision": "fp32",
+            "image_size": 224,
+            "preprocess": {
+              "resize": "bicubic_direct_square",
+              "align_corners": false,
+              "antialias": true,
+              "mean": [
+                0.48145466,
+                0.4578275,
+                0.40821073
+              ],
+              "std": [
+                0.26862954,
+                0.26130258,
+                0.27577711
+              ]
+            },
+            "open_clip_torch_version": "3.3.0",
+            "cache_identity": "2ae7d7ba721f793f3f6bc7e20c9509f7a6ff7380bd2769d0682e1e0b468d1d5d",
+            "requires_true_local_tokens": false,
+            "loading": {
+              "architecture": {
+                "embed_dim": 768,
+                "vision_cfg": {
+                  "image_size": 224,
+                  "layers": 24,
+                  "width": 1024,
+                  "patch_size": 14
+                },
+                "text_cfg": {
+                  "context_length": 77,
+                  "vocab_size": 49408,
+                  "width": 768,
+                  "heads": 12,
+                  "layers": 12
+                }
+              },
+              "quick_gelu": true,
+              "activation": "QuickGELU",
+              "mean": [
+                0.48145466,
+                0.4578275,
+                0.40821073
+              ],
+              "std": [
+                0.26862954,
+                0.26130258,
+                0.27577711
+              ],
+              "metadata_source": "registered_pretrained_tag",
+              "registered_preprocess": {
+                "interpolation": "bicubic",
+                "resize_mode": "shortest"
+              },
+              "strict_state_dict": true,
+              "actual_activation_modules": {
+                "QuickGELU": 36,
+                "GELU": 0
+              },
+              "loader_version": 3,
+              "loader_sha256": "562966bba1620c5b352d9f092bee56ce10fce48afa68cb91575094bd7ad47731"
+            },
+            "tokenizer": {
+              "type": "SimpleTokenizer",
+              "special_tokens": {
+                "sot_token_id": 49406,
+                "eot_token_id": 49407,
+                "pad_token_id": null,
+                "context_length": 77
+              },
+              "content_sha256": "4710f312ff5993f9721ddf2ff9d4d3c1b49ac86b646e95e32b0e3d1ac1abf7b8"
+            }
+          },
+          "device": "cuda",
+          "test_fixture": false,
+          "candidates": [
+            {
+              "id": "B09BDT7S6G",
+              "image_sha256": "9f6324da1aadaf98064e9ad8dd1e125f8535c27b72bff0c9c3030a4c4bdb2f24"
+            },
+            {
+              "id": "B09S9T261D",
+              "image_sha256": "a3edfd0eca05c73735e3ae525f9b0840ba2ffeb9dacdfa561088a34d28739754"
+            },
+            {
+              "id": "B089KCH58Y",
+              "image_sha256": "4288b9ec2eb3b7b820f5df821c0e48551b74f80eadbc4649d9edd58dac84446d"
+            },
+            {
+              "id": "B00OQV1ZEE",
+              "image_sha256": "9d0813f3e234a905679be211919d178137752b321e104e340b05262ca7436737"
+            },
+            {
+              "id": "B09GF7M3MJ",
+              "image_sha256": "a734ddaa081df79c8a839c0103bf546bba28bba8793c51fc8e76b86055e25f57"
+            },
+            {
+              "id": "B09JC4TCCJ",
+              "image_sha256": "9038bb28815acbf6fefc707475a9e972b6761e15f251ed4c2cbb98885f5b7bc0"
+            },
+            {
+              "id": "B08RD1MXD4",
+              "image_sha256": "1ffe3dc14904ead7a9f0c58364ed9eeb916296f7314b420aa73d69482337e15c"
+            },
+            {
+              "id": "B0819SVCZ3",
+              "image_sha256": "59238eb265476e796ca29c0315874b95e2c7127b660ab303ec5d1324e4854991"
+            },
+            {
+              "id": "B07XYDQCPR",
+              "image_sha256": "2f4bdab17de01af0c801e031ce66bd77a896e597e258c5d72d5b69faa8a4d912"
+            },
+            {
+              "id": "B08K3B1RMR",
+              "image_sha256": "05cdae733e55ac18a99eef2c2441ad42ab8190ac0e7027d76228324f25072e8b"
+            },
+            {
+              "id": "B09SPQH3J5",
+              "image_sha256": "375293ac2d5a1d6844a5abea60204534516ba461bc3299752a3c1480c62b9f3c"
+            },
+            {
+              "id": "B09J85L91G",
+              "image_sha256": "cfdab399daa1e4d4573f8a707696590f14dc08fb44a2ee4472eec97cdc50a6a1"
+            },
+            {
+              "id": "B08BZ8KM9G",
+              "image_sha256": "c8eb5e18364cd7a2ac99a0a11b2e1ca75d90fe7a51c77f0bd17e945fced3aee0"
+            },
+            {
+              "id": "B0823QW259",
+              "image_sha256": "b1f0dceec631a04437d58b2041481ea2751ac4d0f1fa8bd37ed0715698917a6b"
+            },
+            {
+              "id": "B09C3XYMBP",
+              "image_sha256": "20ddbbfd5cb35fa70886380b7069f41af29e5fb30cc27b4ffc571412c3692b42"
+            },
+            {
+              "id": "B09LQNSL7H",
+              "image_sha256": "5359e7cde4c28eee8673a968c227baedf352cf1e30d727c3282c58cc23b1b51c"
+            },
+            {
+              "id": "B07W5Y7P7C",
+              "image_sha256": "bdaba1605a828715ebc63a8ac0092274d14968bdbbdb0522a9813dc7f2b05a0e"
+            },
+            {
+              "id": "B09NZXMWPR",
+              "image_sha256": "db5898754be151bbf11af844a737f0d53473920ea92a3e37a2ac1fb4b9b1de18"
+            },
+            {
+              "id": "B09HWTCSNS",
+              "image_sha256": "24d2aa5b085985e8a5ca117c81331a6b6ea430f7c7944a18d6b2be4a73a26c5f"
+            },
+            {
+              "id": "B09LQC12Q6",
+              "image_sha256": "6864b6feaab4f8b491a7ce2ab706af21aaf2e1202013935536fbca1ba84c0b12"
+            },
+            {
+              "id": "B0042P4LP4",
+              "image_sha256": "afec1264796bb3b880219cf48dc317b8cf1718bbf3bda18d4823145805faad9c"
+            },
+            {
+              "id": "B00CHU0TD4",
+              "image_sha256": "ac9bd07ce690c47676fca07afe4eb874c0493511426a314806488677ae2aa7f6"
+            },
+            {
+              "id": "B01N05V944",
+              "image_sha256": "8187b580947e954b4033cbf73eb9063d550346f09fe52e4886423569c2330da4"
+            },
+            {
+              "id": "B085GLF7ZJ",
+              "image_sha256": "d946d07899462b241a4d740153d39b14496e2842a65cdf32e211dcc4fb0edf2c"
+            },
+            {
+              "id": "B00CHU03DA",
+              "image_sha256": "be9cb717ac0619c238fc8c829d638d8492df2728c0337902e5b9d7bdb5503575"
+            },
+            {
+              "id": "B00B049CB8",
+              "image_sha256": "342c9d97d4de9a4dcf122f9dcbb8da6248cebdac10640394661146f96b316e54"
+            },
+            {
+              "id": "B00CHU1RPI",
+              "image_sha256": "1694a9024898af7bf5a52075ec19f3b1a7654502a3fa0a2ecc4cbd901db6eeb1"
+            },
+            {
+              "id": "B0042PARUC",
+              "image_sha256": "cbe674ad59d1e5217e579e2ce203bf29e298597d74c780784a4f6e8abea13006"
+            },
+            {
+              "id": "B089TRM2ZC",
+              "image_sha256": "d47fc436b6aa069190a53048374ed71fe037e28678cecf28621b8e518d0b8892"
+            },
+            {
+              "id": "B097NKTLRM",
+              "image_sha256": "bba8f998a1e06696446d075c91ad885c4c03b2d40f7455e9553c712c8cce0f82"
+            },
+            {
+              "id": "B08H8BR2TL",
+              "image_sha256": "3e682ac7e66372687754b6deeaa8cff18adfc16825b4c9dc1a1d48725f758799"
+            },
+            {
+              "id": "B074FSM89X",
+              "image_sha256": "dc7822ede9179fc0b07ed924d34f03f5deb67cabba691e24a623ce54ff15c08c"
+            },
+            {
+              "id": "B08Y98PH1D",
+              "image_sha256": "667871217d2b0af70373e6b3c6a4fe2f7688d695c4afb006e62e9f4d19ca0e99"
+            },
+            {
+              "id": "B09FYZPTLB",
+              "image_sha256": "50a99106c785c3a6f27cf93ef41b970260870c74493e3bbb584cb0201503e9bc"
+            },
+            {
+              "id": "B071QYD6TV",
+              "image_sha256": "dcf9af90ad51ce5d82745860aa8adf3650b84ab3096ff02726cb0dc2c47d641f"
+            },
+            {
+              "id": "B086PX13GL",
+              "image_sha256": "1138f1755888b48233919dd747c0ee131efd3b0419f6d84cf6a9fc61664712d9"
+            },
+            {
+              "id": "B0819SK9M3",
+              "image_sha256": "7b7e3dc34b9e407444b2296041dbd1f9ae43cab36044f83811a40ecef4a2b15e"
+            },
+            {
+              "id": "B00PIOW0W4",
+              "image_sha256": "e6d586e18f09d49d8abc0d156506d1ae9dc8b762d8fb206557003ce501bfb816"
+            },
+            {
+              "id": "B08KTQGV2H",
+              "image_sha256": "a6995feaf5765d571d6abd55490953a7018cb2edc7bd5e8e53cd82a6fcb76ba3"
+            },
+            {
+              "id": "B078PSFM42",
+              "image_sha256": "6bbd6557181198552c49f77a568a8d021514d6addbb0ae3cfa205f2b80e18308"
+            },
+            {
+              "id": "B08R61WZKD",
+              "image_sha256": "59a262bff6d7a5dbc9eb63b2f3fa1ce010b1eddec39f78247e50f41423cf3843"
+            },
+            {
+              "id": "B08MF57W76",
+              "image_sha256": "737b9c8745e626b548c1c8d8282567fd13b231521f428d3d797a9d169b5ab0e5"
+            },
+            {
+              "id": "B08N6MLS7N",
+              "image_sha256": "ce2ae8b1508ec1050a9c1ddb16281d3b084e1330493ae3a52dd69928fee36c7b"
+            },
+            {
+              "id": "B09B3FZ8TK",
+              "image_sha256": "4ab1ede1e5d7c32c1ce1d09c05e9cec253793fb113600ce1fb9235ef3818f58c"
+            },
+            {
+              "id": "B0957HJFYT",
+              "image_sha256": "d427d3397bdaabcefff6957fb233664bec2b0e2dd734a57d1a7b9df4d3f28ea8"
+            },
+            {
+              "id": "B087BQ73P7",
+              "image_sha256": "13fbd557e274de313ab5b7313da6e4f540c265821125ebdbb712cf9c74198a6e"
+            },
+            {
+              "id": "B091YSR7KY",
+              "image_sha256": "9dee01d7c5a57b1499849ec0cfecf1ea03b5b6fe656b793d80b68ed4997db6b9"
+            },
+            {
+              "id": "B08D3FXQDD",
+              "image_sha256": "b306c6b8f4a641e1326ea8990bf715a6dc43e58b44cb3f8089af18335d641bbd"
+            },
+            {
+              "id": "B08R5NDZ3Z",
+              "image_sha256": "9203e94317263201c750132ab8a81fa400f72e14e611691b1d7aa5d02e76fd4a"
+            },
+            {
+              "id": "B08XM497N3",
+              "image_sha256": "a09ac5a633c933de0de6fe9b3a5c069cb4d9d203a90fa9ed1211b04674b4c3a6"
+            },
+            {
+              "id": "B08NTV5DQZ",
+              "image_sha256": "8b128d6caac9e95f2ee089340e94c8bb9f7e5e74b0465d114204fb008ed137b4"
+            },
+            {
+              "id": "B09B9ZVYV4",
+              "image_sha256": "0a9bf49864b9ceebb91d5f23aac0d3107741c0158ce4c3913632b688ed1c775e"
+            },
+            {
+              "id": "B08RZ58HLZ",
+              "image_sha256": "9811d9bd9cb27ee990f05c43fc062ee9827a1dd4bb0c796b1ec29ea234ae65b0"
+            },
+            {
+              "id": "B09H41KT2J",
+              "image_sha256": "fb3a59630a561a8cb013812ebd8997430db2ac8b81020cf8f672119be6068739"
+            },
+            {
+              "id": "B09HXMVF7M",
+              "image_sha256": "7f01d97fa964b3a3efeabceaee5dd8660ca79656fb5f254f18ff61d868713467"
+            },
+            {
+              "id": "B09PL4WMY4",
+              "image_sha256": "855852497310c8e864c56bdc99f9ecd698b56da36147af4bb97967ef3132df60"
+            },
+            {
+              "id": "B08S78F56Z",
+              "image_sha256": "295be26e4f7510e49b6a4b9cab7fa43d97ac46fe75856378beff6926ae4b7703"
+            },
+            {
+              "id": "B09PJ74FN6",
+              "image_sha256": "09cbe6a510454a12e61e422f7ac5f65cd30c4740108cbaf1fdf018a7a2bc9526"
+            },
+            {
+              "id": "B09Q2QW66Q",
+              "image_sha256": "be4049b0993e08a083ea7b29f6e220209914cde509686bb1a17aae487d866cba"
+            },
+            {
+              "id": "B098K2BWPH",
+              "image_sha256": "39cf2664897c2a883d13690b109590895eff5adcc3d71c91f5380681d6c3928d"
+            },
+            {
+              "id": "B0857LK1YT",
+              "image_sha256": "b9a79a54df6f0b25dc85d5008350e248ed8c719786deb2fb73c6a077b5d64a75"
+            },
+            {
+              "id": "B08VYGMW9L",
+              "image_sha256": "c8a03cfcf1ce518eece25ec649307385777367347632c6fcd5aac1a67f161b24"
+            },
+            {
+              "id": "B097QXY9DJ",
+              "image_sha256": "72562425c5324bb7fed86c55f5f548c9a1c9a4a59cf09f2859bb2e58b4bf7406"
+            },
+            {
+              "id": "B08LLDB6WG",
+              "image_sha256": "ecf61fa7a03fa6a96d3d8da8f684cc3f2b05ed9e2e20578fb7e351d88dc41c11"
+            },
+            {
+              "id": "B013TPC4J2",
+              "image_sha256": "21f3833a2c03798309dad43f639fe9127c48dfbfc6ed86a08c03815e8c31b525"
+            },
+            {
+              "id": "B0791Y9749",
+              "image_sha256": "4f1153cf238d75c6af2855b5c9096a1eba98b7b55d325c53a372a19a940c9a6a"
+            },
+            {
+              "id": "B07LG4WYCP",
+              "image_sha256": "e436450d59589ecaacd91238839b6acbc9e29984fce53ed1b9edc82210141237"
+            },
+            {
+              "id": "B08Q77XBC7",
+              "image_sha256": "8acd41e2fc61ab45f3ec77b0cc39035fd92205d9e8afb0978e9d90c46875cdc0"
+            },
+            {
+              "id": "B00YMZAJDW",
+              "image_sha256": "caf7f06913120c97f82f5ccee747bb89137f1ffb65d6f14462a1f3afa7579f01"
+            },
+            {
+              "id": "B004D9DKVA",
+              "image_sha256": "ce0de8ab697a277423e90d8db93709ccabeecb6f18fcfeb86d79e7dbe15d62e8"
+            },
+            {
+              "id": "B09FRB9PN2",
+              "image_sha256": "51b691f7c35bbdff74aa642d809f885e064898638e0957da2e6cb401a4e98bee"
+            },
+            {
+              "id": "B09FGVZ5CS",
+              "image_sha256": "970f617f28a492e4d64807a71023b14860d98a6ae6b3ad053d2362c528f0e2e4"
+            },
+            {
+              "id": "B07VBPNBQ3",
+              "image_sha256": "e0ff5c8ab6843b34487a80e4e94478a4b8813f8aed7c5c3ed17acb5323409208"
+            },
+            {
+              "id": "B08XM6CRYG",
+              "image_sha256": "11b60c07c59a6e8d2ad5158ba8e67b5f7c79e78bfc077030a0380b5671a5909d"
+            },
+            {
+              "id": "B0756P6DL9",
+              "image_sha256": "e02a32c5870a662925fb12c86942b80bde07040b9c1c2a33f5d609d03d0d1c4e"
+            },
+            {
+              "id": "B086JD8V3Q",
+              "image_sha256": "8b671760d90edabca876ee3bbeff4f29a0cd52913230c3a4174e9a044d9cb939"
+            },
+            {
+              "id": "B097WMPMGV",
+              "image_sha256": "0ebeb7295b68b63680b178920516b21b71fac589c89ed25b8095c76de5e9592d"
+            },
+            {
+              "id": "B00CRMF6JY",
+              "image_sha256": "15f338f9979ac3e46af701b2788cd59586d6ada8cc8edf9a740fc1972cdc89a6"
+            },
+            {
+              "id": "B07CV42C9J",
+              "image_sha256": "435bea9473437a8480f5c2d27eb305533344985253b4c82d676e3ee0bf6c0084"
+            },
+            {
+              "id": "B074TJZV41",
+              "image_sha256": "009c41bf83e40e2606fa17ae51086d15ed621ab164b5002105fd0e2b8a1b1edb"
+            },
+            {
+              "id": "B09KGXWBRR",
+              "image_sha256": "7466372b522afe0fb881efc0dfc2377c87d51ca62ec9dcfbd63ab3455961c9a6"
+            },
+            {
+              "id": "B09R9T6WYC",
+              "image_sha256": "6ab9ab7249535b74f34a860abf0813c2497ae3713ab71726534a5151687eacee"
+            },
+            {
+              "id": "B09NMBRQS1",
+              "image_sha256": "a64d28ec810e2f7a380825160cbb0e9889b2824f4d4f25d1c7a0f84e776e373f"
+            },
+            {
+              "id": "B07DLZ34W9",
+              "image_sha256": "11951a13fcf57d7c0c576eb96132a70c54eb2ce95c43a20ac70c1b17edd5f049"
+            },
+            {
+              "id": "B09QL7FC9V",
+              "image_sha256": "ae1a605c192f3367b3def2e6dc894422fcb0f574527730718f4e14adc327e907"
+            },
+            {
+              "id": "B09QCS3V2Q",
+              "image_sha256": "c410e76da83721d1244e40f34abc6c5e2aa40d4fb4ba6d881b9493fe56897f21"
+            },
+            {
+              "id": "B083V7GJDY",
+              "image_sha256": "841560ef854734d48279489447439d8feaaf9d00542c86b7a0b8b27627721163"
+            },
+            {
+              "id": "B09R1HJWSY",
+              "image_sha256": "bf30f7489fc6b3a4301187e27b00e3f80a9c6d773223001b33af72692abb6771"
+            },
+            {
+              "id": "B09T6LZ3CL",
+              "image_sha256": "f7d669174000988f2d4401b120b38bf9ca81327dc76b2b2f9bca12f00810a893"
+            },
+            {
+              "id": "B09QCT8FS6",
+              "image_sha256": "64d9dfad57d6551a5781ddea10d46ecc785752bb6dcfe6ca0acbac2f037321e5"
+            }
+          ],
+          "encoder_implementation_sha256": "562966bba1620c5b352d9f092bee56ce10fce48afa68cb91575094bd7ad47731",
+          "pixel_conversion_implementation_sha256": "77fac74d031341a3636900f7f3ff60738ea406e6bbdf61a1db46168835a3e43d",
+          "cache_implementation_sha256": "97a12ce99b6a2388ddda2614cb4a1eb1cccbc841093c8023e760c789cad182a3",
+          "runtime": {
+            "torch_version": "2.14.1+cu126",
+            "numpy_version": "2.4.6",
+            "python_version": "3.11.17",
+            "cuda_version": "12.6",
+            "float32_matmul_precision": "high",
+            "cuda_matmul_allow_tf32": true,
+            "cudnn_allow_tf32": true,
+            "vector_dtype": "float32"
+          }
+        },
+        "shape": [
+          90,
+          768
+        ],
+        "training_bundle_sha256": "05aa10083aa5c7a19f5e300afcd03f5829048f5db9b3c36635a02df8babedf6a",
+        "metadata_path": "/content/AmbiLAGE/output/exp_20261121_ambilage_multiscale_only_golden_band_9groups/06_jeans/ambilage/generation/candidate_cache/55573069a6947db307f544361750e44dfdae3fae1a1989b2f5b097ca412a0f19/cache.json",
+        "metadata_sha256": "51667b9797fde4c3248727244aa577d5fd98e81cd663d3f35f4ef2158613cbce",
+        "vector_path": "/content/AmbiLAGE/output/exp_20261121_ambilage_multiscale_only_golden_band_9groups/06_jeans/ambilage/generation/candidate_cache/55573069a6947db307f544361750e44dfdae3fae1a1989b2f5b097ca412a0f19/vectors.npy",
+        "vector_sha256": "612615cc6bb40539b9067a1171725a0a8edc0cc3e0a7805e53fadc0f2c485cff",
+        "cache_hit": false
+      }
+    ],
+    "category_abstraction": {
+      "schema_version": 1,
+      "kind": "contrastive_submodular_spherical_karcher_cpca_v1",
+      "category": "jeans",
+      "query_count": 100,
+      "out_of_category_titles_used": 40,
+      "same_category_visual_peers_used": 10,
+      "top_salient_terms": [
+        "wide leg",
+        "jeans",
+        "high waisted",
+        "button closure",
+        "high waist",
+        "high",
+        "casual",
+        "jeans women",
+        "straight leg",
+        "women high",
+        "leg",
+        "waist"
+      ],
+      "canonical_prompts": [
+        "jeans: a high waist; a baggy straight-leg cut; flap pockets; a zipper fly",
+        "A jeans with wide leg, high waisted, button closure, high waist, casual.",
+        "I want to buy jeans featuring wide leg, high waisted, button closure, high waist, casual, jeans women."
+      ],
+      "abstracted_texts": [
+        "jeans: a high waist; a baggy straight-leg cut; flap pockets; a zipper fly",
+        "A jeans with wide leg, high waisted, button closure, high waist, casual.",
+        "I want to buy jeans featuring wide leg, high waisted, button closure, high waist, casual, jeans women.",
+        "Find women's jeans with a fitted narrow upper section, loose legs, a button closure, and breathable soft 70% cotton construction for casual outfits and gifting",
+        "mens high waisted jeans",
+        "Looking for women's Y2K high-waisted wide-leg vintage baggy jeans with distressed holes, made from polyester and cotton for casual wear, dates, parties, and streetwear?",
+        "Women' s Trousers, High Waist Straight-Leg Pants with Chain DecorsDescription:High-quality material, soft and comfortable, breathable and wear-resistant",
+        "Find imported jeans with a button closure that are machine washable",
+        "curvy jeans for women high waist",
+        "Find full-length stretchy bell-bottom flare jeans for women in light blue, black, or dark denim, with back pockets, frayed hems, and a breathable cotton-blend-spandex construction",
+        "Find women's high-waist zebra-striped wide-leg jeans with zipper and button closures, pockets, and a soft nonstretch fabric for casual outings, parties, and school",
+        "Looking for stretch yoga or casual pants with a high elastic waistband, cargo or plaid styling, and long lengths sized S through XL for women or men?",
+        "Find a light-weight soft breathable regular-fit casual top in a small Asian size for school, work, sports, or daily life, suitable for pairing with high-waisted leggings or jeans",
+        "Find women's high-waisted wide-leg cargo jeans in cotton and polyester with deep front and flap pockets, full-length relaxed boyfriend styling, and a zip-and-button fly",
+        "Find women's Y2K high-waisted baggy patchwork jeans with a printed vintage streetwear design, polyester construction, and a true-to-size fit for daily casual wear",
+        "Find low-waist light polyester pull-on pants with a butterfly embroidery design in Korean hip-hop, Y2K, Harajuku, or streetwear style for S, M, or L"
+      ],
+      "submodular_coverage_score": 0.80139585,
+      "subspace_rank": 8,
+      "ambient_dim": 768,
+      "principal_anchor_count": 16,
+      "residual_shrinkage": 0.3,
+      "visual_prototype_mix": 0.75,
+      "contrastive_beta": 0.35,
+      "abstraction_sha256": "fbe06034192977d0460c15b01ab67cc7e7a3a5d21fd5bbcd3775e0c4423a4965"
+    }
+  },
+  "final_naturalness": {
+    "passed": true,
+    "natural": true,
+    "text_preserved": true,
+    "artifact_free": true,
+    "reasons": [
+      "strict_mathematical_naturalness_gate_passed"
+    ],
+    "category": "women's jeans",
+    "metrics": {
+      "source_ssim": 0.9742947462964359,
+      "rgb_source_ssim": 0.9742947462964359,
+      "luma_source_ssim": 0.9823804619713253,
+      "source_mae_levels": 6.266014099121094,
+      "rgb_source_mae_levels": 6.266014099121094,
+      "luma_source_mae_levels": 3.7982871532440186,
+      "fg_rgb_source_mae_levels": 8.065109252929688,
+      "fg_chroma_tv_levels": 1.3481687307357788,
+      "halo_error": 4.006074905395508,
+      "roi_max_abs_diff": 0.0
+    },
+    "thresholds": {
+      "source_ssim_floor": 0.85,
+      "source_mae_ceiling": 22.0,
+      "fg_source_mae_ceiling": 10.0,
+      "fg_chroma_tv_ceiling": 2.5,
+      "halo_ceiling": 10.0,
+      "roi_max_abs_diff": 0.0
+    },
+    "model": "mathematical_rgb_oklab_dual_gate_v2",
+    "precision": "float32",
+    "candidate_sha256": "acb56313e3866e5663e4daf8f57fa6827549e48432ec3b5639594ee7bcc8b71b"
+  },
+  "hardware_profile": {
+    "tf32_enabled": true,
+    "device": "cuda",
+    "vram_gb": 22.03,
+    "gradient_checkpointing_recommended": true,
+    "seed": 42
+  },
+  "victim_memory_used": false,
+  "formal_queries_used": false,
+  "shadow_pool_used": false,
+  "true_rank_used": false,
+  "elapsed_seconds": 831.4442078600041,
+  "training_bundle_manifest": "/content/AmbiLAGE/data/public/visual_inception_golden_band/06_jeans/training_bundle.json",
+  "training_manifest_sha256": "ec1f61e41e3211be1e086913c57ca3054f2528f1cd2f3847dce3cf42d432cb3b",
+  "training_bundle_sha256": "05aa10083aa5c7a19f5e300afcd03f5829048f5db9b3c36635a02df8babedf6a",
+  "training_bundle_audit": {
+    "schema_version": 1,
+    "kind": "visual_inception_independent_public_training_bundle_v1",
+    "manifest_path": "/content/AmbiLAGE/data/public/visual_inception_golden_band/06_jeans/training_bundle.json",
+    "manifest_sha256": "ec1f61e41e3211be1e086913c57ca3054f2528f1cd2f3847dce3cf42d432cb3b",
+    "bundle_sha256": "05aa10083aa5c7a19f5e300afcd03f5829048f5db9b3c36635a02df8babedf6a",
+    "target_binding": {
+      "source_image_sha256": "646f603de154a3644550f9d642e49d37bfc781f75c4ab088c9938f71e6573883",
+      "target_image_sha256": "acf3f5d8944c118d04e2ba456926f4750e87198bbd3201302a34e52e44bd6039",
+      "canonical_text_sha256": "cfc5997d852316dda3fdca6876f266c3bc05a5927caeb8669996c1c68604d78b"
+    },
+    "target_concept_text_sha256": "06993c547c1ba9c1d5f79c2075cc4632ad95f397bddaf4ebd4680747f83c897a",
+    "target_concept_format": "category_colon_public_core_attributes_v1",
+    "category": "jeans",
+    "source_counts": {
+      "category_description": 50,
+      "model_paraphrase": 30,
+      "heldout_search_query": 20
+    },
+    "query_source_counts": {
+      "category_description": 50,
+      "model_paraphrase": 30,
+      "heldout_search_query": 20
+    },
+    "query_count": 100,
+    "query_batch_size": 16,
+    "query_texts_sha256": "e83781bd1844ff4994dd719bccafb7cc806829beaa91a7ae0d79a8656035f020",
+    "query_provenance": [
+      {
+        "id": "category_description_001",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08NTV5DQZ",
+        "text_sha256": "787fdbe75cd3c98cd2029b5c0c7aa98d02557339b8c9c6d4c05fee30cd2f43e1"
+      },
+      {
+        "id": "category_description_002",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09B9ZVYV4",
+        "text_sha256": "5b86f25ec427977e5bf6ab3059f763fa65ee0cd7206435d28482779b03a4f533"
+      },
+      {
+        "id": "category_description_003",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08RZ58HLZ",
+        "text_sha256": "5bed88d10e322c53d01b555b44dffdc836581047a5bec7b5ff400ef7992eb22e"
+      },
+      {
+        "id": "category_description_004",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09H41KT2J",
+        "text_sha256": "e5346e0d9a575426f28fb0c253c3c65e46c4bc13324931ce7180647b0086b581"
+      },
+      {
+        "id": "category_description_005",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09HXMVF7M",
+        "text_sha256": "d52f295bf6cb38ee8f00fe30c2d3e0901013505548ef23be557ec6a1bdcda98b"
+      },
+      {
+        "id": "category_description_006",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09PL4WMY4",
+        "text_sha256": "633cdf1ca62a26b433f2827b386c8a3329e95f2598edfed8cb58917e1a7d416d"
+      },
+      {
+        "id": "category_description_007",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08S78F56Z",
+        "text_sha256": "3099f84cf2828870ef304fd6117aa9b9d2811a40b5ef85da5799b694775004ba"
+      },
+      {
+        "id": "category_description_008",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09PJ74FN6",
+        "text_sha256": "07c780fe2f97fb9f0a2e555d0dfe68333c1edd6ca6cf23f916cc41a6a43cd8da"
+      },
+      {
+        "id": "category_description_009",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09Q2QW66Q",
+        "text_sha256": "10fc29bc0f2a789d46222eb733cf190293da65041b28288def89957cfe1cd899"
+      },
+      {
+        "id": "category_description_010",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B098K2BWPH",
+        "text_sha256": "8c89efb93e4f1cc0cc3abd9d124b5901b05790a4695db7fe937fc5a0fcc0c218"
+      },
+      {
+        "id": "category_description_011",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08VDLC82P",
+        "text_sha256": "6212aa01749ec6e72bd6869d361c0f80ae313663e88c29e602e13337c9e49b89"
+      },
+      {
+        "id": "category_description_012",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09PSJTHHK",
+        "text_sha256": "0eb0ab18b13e6d333f0b7ade5d16c16d4347636da64c158dbf82fc6a2722c1fe"
+      },
+      {
+        "id": "category_description_013",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B07RTQG35B",
+        "text_sha256": "60e8d437969dbae9d77955ce5bcc9634f4ce58187227be8da0869c6d63e16633"
+      },
+      {
+        "id": "category_description_014",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09PGYQPG4",
+        "text_sha256": "ce3a6c9dc7b90b2139762c458e3b1b44c37c13eb5446e84f928d2852b2491252"
+      },
+      {
+        "id": "category_description_015",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B01HF1DQ0C",
+        "text_sha256": "ff0501ba5b3b2d3b06da64a4e22d34f352c16a835312d1a560c8247eafd49ccd"
+      },
+      {
+        "id": "category_description_016",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09HS2N1PM",
+        "text_sha256": "bb4d4ab358d8d865d60c7cccb4bbef114882ca721c50f0de19b117a668cc7600"
+      },
+      {
+        "id": "category_description_017",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09D3TMZ9T",
+        "text_sha256": "0821b3296ebfe6d255bb8b0792d92be82e5c1af2b9e546ea7daac492d5d0fa20"
+      },
+      {
+        "id": "category_description_018",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B093QZKT2R",
+        "text_sha256": "159a83a2aeee66ec96d619313a4a0dae05fe219a6b569fe1764448a49bb8233a"
+      },
+      {
+        "id": "category_description_019",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B073V43LQH",
+        "text_sha256": "da8213ccc4b748d0f152da470334586131ca93fb87a99d420f0212dd6dea113d"
+      },
+      {
+        "id": "category_description_020",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B07N95CH33",
+        "text_sha256": "345b48e7294a36a11ca2888e8a62f9f891a77c6094a4699c3c001f983cfe7a46"
+      },
+      {
+        "id": "category_description_021",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09MQTFP11",
+        "text_sha256": "dd5f15f79d070f4dd2268c6965f30baa40c53f7cf0dae1152b4c04b3cc22bd58"
+      },
+      {
+        "id": "category_description_022",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09J8FXZ9X",
+        "text_sha256": "ffd2c93a320973d1fe37deb02b3322d3abac75fe339460990b90d5eb90ef9a68"
+      },
+      {
+        "id": "category_description_023",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09F5KV741",
+        "text_sha256": "c11a374569642f8dee3a37b7757453ba68785fda4ce8f4b3bb427b1bbad0a9de"
+      },
+      {
+        "id": "category_description_024",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09PFZCTG8",
+        "text_sha256": "29b254bf646bc4ba7e3a3a7bdba775dd97e6b5a7de9d71c16a807602964e41d8"
+      },
+      {
+        "id": "category_description_025",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08GYZF5GB",
+        "text_sha256": "2a8101088d3010f4aebcd6a0e91ff39f7918cdff7e7224a0c57fe014f36d56ad"
+      },
+      {
+        "id": "category_description_026",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08TH8SFQW",
+        "text_sha256": "18593bb558e2a60af311e9338fb48e51aa20f9d3ddcda027cee718abbf65d8a5"
+      },
+      {
+        "id": "category_description_027",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09MTC7HYJ",
+        "text_sha256": "035bd86850e331c0e017778dda631a625b6afb8d4e7db3bc3eebfeda898308b2"
+      },
+      {
+        "id": "category_description_028",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B094FVGLXQ",
+        "text_sha256": "98a1cd4c89f4a274eb44a51f33f12539f85e9fea543797357bd220f3936664df"
+      },
+      {
+        "id": "category_description_029",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09PH25QR9",
+        "text_sha256": "eea874821adfc596f08d47efb22f7c3bfb7c97b0aa48ec76765f7a342a39ccf5"
+      },
+      {
+        "id": "category_description_030",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B099RWWG39",
+        "text_sha256": "14fa310ef543d98f47e3e2c86a37d772aa0db5fb6935a68b55a6212f5385045f"
+      },
+      {
+        "id": "category_description_031",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B07GSYH81D",
+        "text_sha256": "b72af482e02536fd423d5739a1ea652a7ca4549788c8e667d5c88eefa3d3be89"
+      },
+      {
+        "id": "category_description_032",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09R81BR7F",
+        "text_sha256": "1818decf2c6d364d8eb1b5f4dd320253a21f8ad187667186116c51831300db8b"
+      },
+      {
+        "id": "category_description_033",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08JHMX4HF",
+        "text_sha256": "cf9225569ed2c0f22b511c24e13edbee2622399841e7c215ba76fa025262134e"
+      },
+      {
+        "id": "category_description_034",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B07ZG1RXF5",
+        "text_sha256": "97a96fdfbded9ff7094ae5cfe640f5a1dad056df7c4a59ba4792c9216fff9170"
+      },
+      {
+        "id": "category_description_035",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B07JMZQT4B",
+        "text_sha256": "95ef2f88a3bb209f08a69e1ee7cb827279d5d259e25aa22d57d896f51bec62d2"
+      },
+      {
+        "id": "category_description_036",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09FQBZRLL",
+        "text_sha256": "af5554e3d6972ae57550c327487022eee12ba8a2bb967a8c488ae2d2135c7ebd"
+      },
+      {
+        "id": "category_description_037",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B07PDW3RYP",
+        "text_sha256": "33f9e213cd45daa8ba302bc214f253faef75406520d478d9fccdc38469b85769"
+      },
+      {
+        "id": "category_description_038",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B091V5WWQT",
+        "text_sha256": "642a560031ec893a57afb8ab30baf52131b4e1b6a8c6fde608a0d17fb626438a"
+      },
+      {
+        "id": "category_description_039",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09PJ63H9K",
+        "text_sha256": "564595a500b89ec65d35e67c953d9ab0870e308b35bc9a4a1e17dfa1009b6c5f"
+      },
+      {
+        "id": "category_description_040",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09M6JBC54",
+        "text_sha256": "8e780bc3b62904ae79a1958db8724b033978604225e09ffd767ab49ae8075e3b"
+      },
+      {
+        "id": "category_description_041",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09QX98BML",
+        "text_sha256": "e85248b2cfe1d4d5141cc430ff839f01c10612ceb9f9e8b2cdbaaa5edd047e5e"
+      },
+      {
+        "id": "category_description_042",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09C87PV8B",
+        "text_sha256": "94fc1f695faebff549cf73207da5895cd69c1051d51e2d8730c0d271d4221008"
+      },
+      {
+        "id": "category_description_043",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B07KN23DB9",
+        "text_sha256": "85ef7ded413cca3c28caef9b57defadccfea4aa44a3cbf3a2df0474ef524d700"
+      },
+      {
+        "id": "category_description_044",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08PS1XYS9",
+        "text_sha256": "6078d76e1a71a38fbf7fda5d2b09714b51d387798b1bc4dd63353cb554c3c852"
+      },
+      {
+        "id": "category_description_045",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B07PQYS7SY",
+        "text_sha256": "2942ff33b524f8647cb452cf84cd501da95c5f3eb8021e849958a36e1c742379"
+      },
+      {
+        "id": "category_description_046",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09MZCG7JD",
+        "text_sha256": "ff73495b0de395d496cb62f5c126a0ed0d7af94344511e1c9cbd2a020c7c474c"
+      },
+      {
+        "id": "category_description_047",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09PC1SLP5",
+        "text_sha256": "46cc7af2964f1400cdafad6fd8cd0496167ff02b3a5d7dedf0f7eb563cb8a062"
+      },
+      {
+        "id": "category_description_048",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B08HZ19SH2",
+        "text_sha256": "d32632585744b9c4ed623f22126913984714cb84308700b5e9d857506cc2e262"
+      },
+      {
+        "id": "category_description_049",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B0163PCIZK",
+        "text_sha256": "1fd97f065bc8ab47daaaea432d399817164971eec09e8c82758aba81e17ec376"
+      },
+      {
+        "id": "category_description_050",
+        "source_type": "category_description",
+        "source_id": "category_description",
+        "row_id": "B09FSLHTT2",
+        "text_sha256": "e2c77706ad9c5327960771dc4419f876953ae2fdfa8817f9082005e926b65f51"
+      },
+      {
+        "id": "model_paraphrase_001",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_001",
+        "text_sha256": "46e9ae60f8421978daaed2377a42d899aa2235a6c4700021caefdad3f3ab8196"
+      },
+      {
+        "id": "model_paraphrase_002",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_002",
+        "text_sha256": "551efaf4ff799654c5f5ecc2990a1d86de0ae3d9221afcd2cb9eddc0e1364d3e"
+      },
+      {
+        "id": "model_paraphrase_003",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_003",
+        "text_sha256": "cf9a06f9f342843d67eedc07891edfae822d33e9b5c288ef5fb513db3f2686a2"
+      },
+      {
+        "id": "model_paraphrase_004",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_004",
+        "text_sha256": "9300acaf9df10c2a0730dcb50caf6fe55be1b7ae9af9fd322f36cc9aa3978c26"
+      },
+      {
+        "id": "model_paraphrase_005",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_005",
+        "text_sha256": "9a83c9e1563bb499500c59960ce0ab6f0dc2e4e15e5a814014f32cadb1387309"
+      },
+      {
+        "id": "model_paraphrase_006",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_006",
+        "text_sha256": "5e82ab049aa9884aa8a4293fd6870d8f3245abda9da46f5a9f7003729096bdd7"
+      },
+      {
+        "id": "model_paraphrase_007",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_007",
+        "text_sha256": "c1c0b41a6ca66471498e1c48d59868b0297dd55460a8d2ff1a4eb6de4678ee0e"
+      },
+      {
+        "id": "model_paraphrase_008",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_008",
+        "text_sha256": "7af4f9125797e49b43fab0abd70311514f5756990874017eb6d9b3858b143841"
+      },
+      {
+        "id": "model_paraphrase_009",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_009",
+        "text_sha256": "78c9a1ba81671312226e8de72c8f14895150ecb8881bd8e5837dbcaa6b7619f5"
+      },
+      {
+        "id": "model_paraphrase_010",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_010",
+        "text_sha256": "32696a768257ae30ec9bc89bbb546a5f4cf65ab3e8861f8e38a0b25e2174ca38"
+      },
+      {
+        "id": "model_paraphrase_011",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_011",
+        "text_sha256": "dc82df597d32a050a0ff006760ba92df4af7a22f44c0c123ea76ba6c19a47549"
+      },
+      {
+        "id": "model_paraphrase_012",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_012",
+        "text_sha256": "3b83147a3cf703e99a1535ea8afb91cba4db025ce310be2051b7192cacd8df4b"
+      },
+      {
+        "id": "model_paraphrase_013",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_013",
+        "text_sha256": "9e6a3abdf2e05c9442f33f029e9ebc3eedb2a962943fbc978914a82ed3ea02dd"
+      },
+      {
+        "id": "model_paraphrase_014",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_014",
+        "text_sha256": "e57ea355d43f525fb480c8d5cd0418d58a9326f6e18d476fecd6709fd0f879f9"
+      },
+      {
+        "id": "model_paraphrase_015",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_015",
+        "text_sha256": "8e10ac6a03871f7c5d965845f58fdb68c7ccd120b7122082c47cf87104a7900b"
+      },
+      {
+        "id": "model_paraphrase_016",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_016",
+        "text_sha256": "b12b424938582f4cb22fac79ba27cdb6870db293fb4cc9d4ba8077c6e2baf801"
+      },
+      {
+        "id": "model_paraphrase_017",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_017",
+        "text_sha256": "529ada8f17580e508711e10d9ac8470cf2c68b40a6657b17f053fa76bc1c222c"
+      },
+      {
+        "id": "model_paraphrase_018",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_018",
+        "text_sha256": "4c807ad3b2499b79592e53cc13653ba58707ccf6848632476f81a252f6e975f8"
+      },
+      {
+        "id": "model_paraphrase_019",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_019",
+        "text_sha256": "a948b050f2ac7676badaa9d228e7bdff5fec1136bfe744bf49dfa24429d6bc19"
+      },
+      {
+        "id": "model_paraphrase_020",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_020",
+        "text_sha256": "7acd1aaccd67bf76c3075fd89f23fcf649991730c3a05da5ab670bf3a01d7de4"
+      },
+      {
+        "id": "model_paraphrase_021",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_021",
+        "text_sha256": "11b4718705a4da56a735d1a7341edfdddb4f05e8676b5721f818e228fcaec872"
+      },
+      {
+        "id": "model_paraphrase_022",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_022",
+        "text_sha256": "db76c91eedda29da6f7642a3ea29daf257c7fc62eb750ca926599c4e80367fda"
+      },
+      {
+        "id": "model_paraphrase_023",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_023",
+        "text_sha256": "48ba8e350e38c342e49f7ebc6c570bf7fa260a3e4c5042b7eae6abe0114913aa"
+      },
+      {
+        "id": "model_paraphrase_024",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_024",
+        "text_sha256": "c4fb7c3e280f5e3d4a222bbc31b9ddb088bd60b9d1910ee5265b0c41b796f164"
+      },
+      {
+        "id": "model_paraphrase_025",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_025",
+        "text_sha256": "32b33369020dc9a5fab59c4a7cfd1bc5ae28bc276c6f0e7b46ac05863722c24d"
+      },
+      {
+        "id": "model_paraphrase_026",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_026",
+        "text_sha256": "5d69a03123ec27cf945a463c26bdb7b57605c570e6c277b5ea5dec49b905a732"
+      },
+      {
+        "id": "model_paraphrase_027",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_027",
+        "text_sha256": "5257e7c6af41fa038298ebc0eedbf6b8414ad0ea80d5e0daf50aad0460bd72c2"
+      },
+      {
+        "id": "model_paraphrase_028",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_028",
+        "text_sha256": "4aee436567f9c152559271ecbca690bf131ca98bb90f697800071646909dd285"
+      },
+      {
+        "id": "model_paraphrase_029",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_029",
+        "text_sha256": "3de0d68c48e54ce657b27da0baa4a5efd57be12d9393c838365e90130dc32e97"
+      },
+      {
+        "id": "model_paraphrase_030",
+        "source_type": "model_paraphrase",
+        "source_id": "model_paraphrase",
+        "row_id": "paraphrase_030",
+        "text_sha256": "ae2865a099585e23ad1ce70b140a3e5d7e3f50894232496c25593a85eb33bf62"
+      },
+      {
+        "id": "heldout_search_query_001",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "esci_train_112922",
+        "text_sha256": "4b4fde60ce6cd2a57f146074ba1a8bfe4c00982755d0afd485f68830f6cfdf2e"
+      },
+      {
+        "id": "heldout_search_query_002",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "esci_train_83314",
+        "text_sha256": "03993f3387befe090be9746534b901f0d3cc67fb09b6022d9b68c74a1457b90f"
+      },
+      {
+        "id": "heldout_search_query_003",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "esci_train_67658",
+        "text_sha256": "e270ffe4260b2ae9d4d3efd85ab05ca6f58d45e6e14776097badf1d8a810ca2b"
+      },
+      {
+        "id": "heldout_search_query_004",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "esci_train_57220",
+        "text_sha256": "e4c585f7a55c948959e5f4118b7fc9288b31c4ee04bcbcfce29b47afa11aafce"
+      },
+      {
+        "id": "heldout_search_query_005",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "esci_train_87820",
+        "text_sha256": "a577c06211ea76c3f98b9acf9f48b84044ac4c5aa9cd0a785e76c1212a1f4fd2"
+      },
+      {
+        "id": "heldout_search_query_006",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "esci_train_74438",
+        "text_sha256": "fc6341de047dd1252b44e9749dbebae64bdc87a283625162e53164c550406a72"
+      },
+      {
+        "id": "heldout_search_query_007",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "esci_train_108474",
+        "text_sha256": "8e0efd775ef08ddc146e55668de45c7042551970532982cd6b4ae0bbc18ea25f"
+      },
+      {
+        "id": "heldout_search_query_008",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "esci_train_112416",
+        "text_sha256": "74729d4e9392da3526dfa0adaa94f555b206b8d92e762a68b0d84e2dedd0f740"
+      },
+      {
+        "id": "heldout_search_query_009",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "esci_train_64106",
+        "text_sha256": "24b4f23babb90a58ce74511da9127453673e1410eee3d6a20f188d85bd24f23a"
+      },
+      {
+        "id": "heldout_search_query_010",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "esci_train_21685",
+        "text_sha256": "0c3c1afb5b7fd961dbd29763ad070280dc726eca533849f694e703cef97555cf"
+      },
+      {
+        "id": "heldout_search_query_011",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "esci_train_30968",
+        "text_sha256": "34d16a870e688d5741c5c530f4fb04032652a844595fd252955f10d5a80e45bb"
+      },
+      {
+        "id": "heldout_search_query_012",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "esci_train_67732",
+        "text_sha256": "f0eff8f9d872c314b3b8b9f0d46fbb9da2e030c09b068eec9c475b9f045791c4"
+      },
+      {
+        "id": "heldout_search_query_013",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "esci_train_108310",
+        "text_sha256": "62c3e42119932318a3f5a4b9cf5601d981b32e6cd5550544beff4bc999db0c8b"
+      },
+      {
+        "id": "heldout_search_query_014",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "esci_train_81516",
+        "text_sha256": "92932e8b45c99aa283e7b3e910905e87f1b5b4d5fd7b3e4ddcf4551df5e75bcd"
+      },
+      {
+        "id": "heldout_search_query_015",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "esci_train_67835",
+        "text_sha256": "769e7b8fc754f07b9761107dcedc8610c01811079e548be0a92ea698a4580fee"
+      },
+      {
+        "id": "heldout_search_query_016",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "esci_train_59568",
+        "text_sha256": "55395942a62c2fb88129b4c87d0462779ff2a6b302619ef9838100f78e1dc6ad"
+      },
+      {
+        "id": "heldout_search_query_017",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "esci_train_87817",
+        "text_sha256": "d638e1780b85480c8bbed5c7b61b528ca1c8e358a3fbe1a021dc4e5026df3fcb"
+      },
+      {
+        "id": "heldout_search_query_018",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "esci_train_30892",
+        "text_sha256": "38b179288cc68b792a27c040307ac90d8d609d4bebe53361dabaf7211c35b42c"
+      },
+      {
+        "id": "heldout_search_query_019",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "esci_train_8583",
+        "text_sha256": "65fd5e35d4b15bed34ec3b6587a1d31e6b7795f31d9095c0e84b24d06efb2b4d"
+      },
+      {
+        "id": "heldout_search_query_020",
+        "source_type": "heldout_search_query",
+        "source_id": "heldout_search_query",
+        "row_id": "esci_train_23182",
+        "text_sha256": "820b47917cfa8b647c1df03925e2ca297ac4976725664c30fed951d9a71f93ad"
+      }
+    ],
+    "source_files": [
+      {
+        "source_id": "category_description",
+        "path": "/content/AmbiLAGE/data/public/visual_inception_golden_band/06_jeans/sources/category_description.jsonl",
+        "sha256": "3599c61dab6c493945818b4fb1b93b57c9affb85c2e3ebce63aeba393091544d",
+        "kind": "category_description",
+        "split": "public_training",
+        "upstream": {
+          "dataset": "WebShop public Amazon product catalog",
+          "revision": "cbfe10eb111814c7a45e82383173df4f601d08cc9f7d2fd3069429ee71ce42a2",
+          "url": "https://github.com/princeton-nlp/WebShop"
+        },
+        "test_fixture": false,
+        "is_synthetic": false
+      },
+      {
+        "source_id": "model_paraphrase",
+        "path": "/content/AmbiLAGE/data/public/visual_inception_golden_band/06_jeans/sources/model_paraphrase.jsonl",
+        "sha256": "819b7bcc6f88b6cacbb244a3c3c560ebcaa3dd63125333ef9dd50e6ae8e69e23",
+        "kind": "model_paraphrase",
+        "split": "public_training",
+        "upstream": {
+          "dataset": "MiniMax public-description query paraphrases",
+          "revision": "public_description_query_paraphrases_v2_one_per_selected_input",
+          "url": "https://platform.minimax.cn"
+        },
+        "test_fixture": false,
+        "is_synthetic": true
+      },
+      {
+        "source_id": "heldout_search_query",
+        "path": "/content/AmbiLAGE/data/public/visual_inception_golden_band/06_jeans/sources/heldout_search_query.jsonl",
+        "sha256": "1aa07813abc2f5b30994727063a5f1e88445b0c1c58b18d7db56ec9c8b038cdf",
+        "kind": "heldout_search_query",
+        "split": "query_reserve",
+        "upstream": {
+          "dataset": "Amazon Science Shopping Queries Dataset / ESCI",
+          "revision": "7916cdf6ab75a462e77f20ab40428a10923998d5",
+          "url": "https://github.com/amazon-science/esci-data"
+        },
+        "test_fixture": false,
+        "is_synthetic": false
+      },
+      {
+        "source_id": "candidate_catalog",
+        "path": "/content/AmbiLAGE/data/public/visual_inception_golden_band/06_jeans/sources/candidate_catalog.jsonl",
+        "sha256": "e514ec927312a4a24ff83815d9bb42ac5edb94cb69f031045bd4796ad017e758",
+        "kind": "candidate_catalog",
+        "split": "public_training",
+        "upstream": {
+          "dataset": "WebShop public Amazon product catalog",
+          "revision": "cbfe10eb111814c7a45e82383173df4f601d08cc9f7d2fd3069429ee71ce42a2",
+          "url": "https://github.com/princeton-nlp/WebShop"
+        },
+        "test_fixture": false,
+        "is_synthetic": false
+      }
+    ],
+    "candidate_count": 90,
+    "candidate_entries_sha256": "82fa8785da60fe1e963d06ffe2a759ad12c2c9ea226238ad5ec113ee2a03ed83",
+    "split_manifest": {
+      "policy": "independent_public_training_query_reserve_v1",
+      "evaluation_partition_excluded": true,
+      "formal_query_sources_used": false,
+      "heldout_query_ids": [
+        "heldout_search_query_001",
+        "heldout_search_query_002",
+        "heldout_search_query_003",
+        "heldout_search_query_004",
+        "heldout_search_query_005",
+        "heldout_search_query_006",
+        "heldout_search_query_007",
+        "heldout_search_query_008",
+        "heldout_search_query_009",
+        "heldout_search_query_010",
+        "heldout_search_query_011",
+        "heldout_search_query_012",
+        "heldout_search_query_013",
+        "heldout_search_query_014",
+        "heldout_search_query_015",
+        "heldout_search_query_016",
+        "heldout_search_query_017",
+        "heldout_search_query_018",
+        "heldout_search_query_019",
+        "heldout_search_query_020"
+      ]
+    },
+    "paraphrase_policy": "declared_model",
+    "paraphrase_generators": [
+      {
+        "provider": "minimax",
+        "model": "MiniMax-M3",
+        "effective_temperature": 1.0,
+        "temperature_supported": false,
+        "temperature_parameter_sent": false
+      }
+    ],
+    "paper_query_generator_reproduced": false,
+    "paper_query_distribution_reproduced": false,
+    "test_fixture": false,
+    "formal_queries_used": false,
+    "victim_memory_used": false,
+    "candidate_representation": "image_only_independent_public_candidates",
+    "target_image_used_for_optimization": false,
+    "log_origin_evidence": "frozen_upstream_declaration_and_source_rows_not_independent_authenticity_verification",
+    "audit_sha256": "e5ae55ea5453cdf37f2956e5108e72ace5c89c4a3f4d7eb95590a6a341819c78"
+  }
+}

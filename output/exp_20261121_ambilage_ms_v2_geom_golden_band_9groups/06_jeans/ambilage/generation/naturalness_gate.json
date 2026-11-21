@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "natural": true,
+  "text_preserved": true,
+  "artifact_free": true,
+  "reasons": [
+    "strict_mathematical_naturalness_gate_passed"
+  ],
+  "category": "women's jeans",
+  "metrics": {
+    "source_ssim": 0.9761342954554322,
+    "rgb_source_ssim": 0.9761342954554322,
+    "luma_source_ssim": 0.9841634748378635,
+    "source_mae_levels": 4.556514263153076,
+    "rgb_source_mae_levels": 4.556514263153076,
+    "luma_source_mae_levels": 2.364072799682617,
+    "fg_rgb_source_mae_levels": 7.944770812988281,
+    "fg_chroma_tv_levels": 1.2863065004348755,
+    "halo_error": 3.8498058319091797,
+    "roi_max_abs_diff": 0.0
+  },
+  "thresholds": {
+    "source_ssim_floor": 0.85,
+    "source_mae_ceiling": 22.0,
+    "fg_source_mae_ceiling": 10.0,
+    "fg_chroma_tv_ceiling": 2.5,
+    "halo_ceiling": 10.0,
+    "roi_max_abs_diff": 0.0
+  },
+  "model": "mathematical_rgb_oklab_dual_gate_v2",
+  "precision": "float32",
+  "candidate_sha256": "51ebde8dd421eaf83d3df2a31ad67965bd297fec87f5bee5adc7734a602826fd"
+}

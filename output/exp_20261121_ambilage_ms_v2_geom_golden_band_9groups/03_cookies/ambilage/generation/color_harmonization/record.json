@@ -1,0 +1,42 @@
+{
+  "status": "completed",
+  "stage": "illumination_harmonization",
+  "blend_mode": "matte",
+  "selected_rgb": [
+    184,
+    119,
+    84
+  ],
+  "bg_studio_target_rgb": [
+    244,
+    237,
+    232
+  ],
+  "bg_strength": 0.85,
+  "strength": 1.0,
+  "selected_color_mix": 0.12,
+  "smoothing_sigma": 12.0,
+  "chosen_fraction": 1.0,
+  "line_search_steps": 32,
+  "source_ssim": 0.9854659662510531,
+  "source_mae_levels": 8.949371337890625,
+  "fg_rgb_source_mae_levels": 4.449936866760254,
+  "fg_chroma_tv_levels": 0.3309715688228607,
+  "halo_error": 1.4979387521743774,
+  "ink_core_pixels": 21875,
+  "substrate_pixels": 29460,
+  "max_body_change_levels": 51,
+  "mean_body_change_levels": 4.449936994718883,
+  "max_bg_change_levels": 19,
+  "mean_bg_change_levels": 12.95323228887125,
+  "roi_change_levels": 0,
+  "zero_pixel_residual": true,
+  "generator": {
+    "model": "perceptual_illumination_line_search_v1",
+    "chosen_fraction": 1.0,
+    "line_search_steps": 32
+  },
+  "trials_evaluated": 1,
+  "anchor_path": "/content/AmbiLAGE/output/exp_20261121_ambilage_ms_v2_geom_golden_band_9groups/03_cookies/ambilage/generation/color_harmonization/generative_anchor.png",
+  "anchor_sha256": "e34073c2948426486e17edf2072df56635440328e2bc073f2b1f30cb676857e9"
+}

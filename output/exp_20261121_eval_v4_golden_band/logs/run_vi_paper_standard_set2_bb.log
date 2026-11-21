@@ -5,3 +5,542 @@
 === [ENCODER 02_openclip_bigG14] panels=['vi_paper_standard_set2_training_oracle_v4', 'vi_paper_standard_set2_overlap_30_v4', 'vi_paper_standard_set2_zero_overlap_v4'] unique_images=198 unique_texts=360 batch_size=16 text_batch_size=64 verify=in_process ===
 [PRECOMPUTED UPDATE 02_openclip_bigG14] Encoding only delta assets: missing_images=9, missing_texts=0
 WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+none clean: 前三 2/20；前五 7/20
+none modified: 前三 5/20；前五 6/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 0/20；前五 14/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 1/20；前五 4/20
+none clean: 前三 1/20；前五 4/20
+none modified: 前三 5/20；前五 7/20
+none clean: 前三 5/20；前五 6/20
+none modified: 前三 5/20；前五 8/20
+none clean: 前三 8/20；前五 12/20
+none modified: 前三 5/20；前五 13/20
+none clean: 前三 3/20；前五 6/20
+none modified: 前三 3/20；前五 7/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 3/20；前五 4/20
+none clean: 前三 5/20；前五 5/20
+none modified: 前三 11/20；前五 12/20
+[EVAL DONE] vi_paper_standard_set2_training_oracle_v4/02_openclip_bigG14
+none clean: 前三 3/20；前五 5/20
+none modified: 前三 5/20；前五 6/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 1/20；前五 13/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 1/20；前五 3/20
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 2/20；前五 4/20
+none clean: 前三 7/20；前五 10/20
+none modified: 前三 5/20；前五 7/20
+none clean: 前三 9/20；前五 15/20
+none modified: 前三 4/20；前五 11/20
+none clean: 前三 7/20；前五 9/20
+none modified: 前三 4/20；前五 11/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 1/20；前五 2/20
+none clean: 前三 3/20；前五 5/20
+none modified: 前三 9/20；前五 11/20
+[EVAL DONE] vi_paper_standard_set2_overlap_30_v4/02_openclip_bigG14
+none clean: 前三 3/20；前五 5/20
+none modified: 前三 6/20；前五 7/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 1/20；前五 13/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 1/20；前五 3/20
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 1/20；前五 3/20
+none clean: 前三 7/20；前五 12/20
+none modified: 前三 5/20；前五 9/20
+none clean: 前三 10/20；前五 16/20
+none modified: 前三 6/20；前五 12/20
+none clean: 前三 7/20；前五 10/20
+none modified: 前三 6/20；前五 11/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 0/20
+none clean: 前三 1/20；前五 5/20
+none modified: 前三 7/20；前五 10/20
+[EVAL DONE] vi_paper_standard_set2_zero_overlap_v4/02_openclip_bigG14
+[VERIFY 02_openclip_bigG14] prewarmed 198 unique images (batch=16), 360 unique texts (text_batch=64)
+[VERIFIED] vi_paper_standard_set2_training_oracle_v4/02_openclip_bigG14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] vi_paper_standard_set2_overlap_30_v4/02_openclip_bigG14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] vi_paper_standard_set2_zero_overlap_v4/02_openclip_bigG14: rankings=360 scores=68040 max_error=0.00e+00
+
+=== [ENCODER 03_siglip_so400m] panels=['vi_paper_standard_set2_training_oracle_v4', 'vi_paper_standard_set2_overlap_30_v4', 'vi_paper_standard_set2_zero_overlap_v4'] unique_images=198 unique_texts=360 batch_size=16 text_batch_size=64 verify=in_process ===
+[PRECOMPUTED UPDATE 03_siglip_so400m] Encoding only delta assets: missing_images=9, missing_texts=0
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+none clean: 前三 7/20；前五 8/20
+none modified: 前三 11/20；前五 11/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 2/20；前五 9/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 2/20；前五 5/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 1/20；前五 4/20
+none clean: 前三 2/20；前五 6/20
+none modified: 前三 8/20；前五 10/20
+none clean: 前三 13/20；前五 16/20
+none modified: 前三 16/20；前五 17/20
+none clean: 前三 1/20；前五 3/20
+none modified: 前三 3/20；前五 6/20
+none clean: 前三 0/20；前五 2/20
+none modified: 前三 1/20；前五 3/20
+none clean: 前三 3/20；前五 7/20
+none modified: 前三 4/20；前五 8/20
+[EVAL DONE] vi_paper_standard_set2_training_oracle_v4/03_siglip_so400m
+none clean: 前三 8/20；前五 9/20
+none modified: 前三 10/20；前五 15/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 1/20；前五 10/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 2/20；前五 2/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 1/20；前五 2/20
+none clean: 前三 3/20；前五 4/20
+none modified: 前三 7/20；前五 11/20
+none clean: 前三 13/20；前五 15/20
+none modified: 前三 13/20；前五 15/20
+none clean: 前三 2/20；前五 2/20
+none modified: 前三 1/20；前五 8/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 1/20；前五 4/20
+none clean: 前三 0/20；前五 5/20
+none modified: 前三 2/20；前五 3/20
+[EVAL DONE] vi_paper_standard_set2_overlap_30_v4/03_siglip_so400m
+none clean: 前三 7/20；前五 10/20
+none modified: 前三 9/20；前五 16/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 1/20；前五 11/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 1/20；前五 2/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 2/20；前五 3/20
+none clean: 前三 4/20；前五 6/20
+none modified: 前三 7/20；前五 11/20
+none clean: 前三 13/20；前五 16/20
+none modified: 前三 13/20；前五 16/20
+none clean: 前三 2/20；前五 2/20
+none modified: 前三 3/20；前五 9/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 1/20；前五 3/20
+none clean: 前三 1/20；前五 4/20
+none modified: 前三 0/20；前五 1/20
+[EVAL DONE] vi_paper_standard_set2_zero_overlap_v4/03_siglip_so400m
+[VERIFY 03_siglip_so400m] prewarmed 198 unique images (batch=16), 360 unique texts (text_batch=64)
+[VERIFIED] vi_paper_standard_set2_training_oracle_v4/03_siglip_so400m: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] vi_paper_standard_set2_overlap_30_v4/03_siglip_so400m: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] vi_paper_standard_set2_zero_overlap_v4/03_siglip_so400m: rankings=360 scores=68040 max_error=0.00e+00
+{
+  "vi_paper_standard_set2_training_oracle_v4": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 11.922222222222222,
+      "mean_rank_modified": 1.211111111111111,
+      "mean_rank_gain": 10.71111111111111,
+      "top1": {
+        "clean_hits": 3,
+        "modified_hits": 164,
+        "clean_rate": 0.016666666666666666,
+        "modified_rate": 0.9111111111111111,
+        "gain": 0.8944444444444445,
+        "new_hits": 161,
+        "lost_hits": 0,
+        "clean_miss_count": 177,
+        "clean_miss_conversion_rate": 0.9096045197740112,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9096045197740112
+      },
+      "top3": {
+        "clean_hits": 16,
+        "modified_hits": 174,
+        "clean_rate": 0.08888888888888889,
+        "modified_rate": 0.9666666666666667,
+        "gain": 0.8777777777777778,
+        "new_hits": 158,
+        "lost_hits": 0,
+        "clean_miss_count": 164,
+        "clean_miss_conversion_rate": 0.9634146341463414,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9634146341463414
+      },
+      "top5": {
+        "clean_hits": 56,
+        "modified_hits": 178,
+        "clean_rate": 0.3111111111111111,
+        "modified_rate": 0.9888888888888889,
+        "gain": 0.6777777777777778,
+        "new_hits": 122,
+        "lost_hits": 0,
+        "clean_miss_count": 124,
+        "clean_miss_conversion_rate": 0.9838709677419355,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9838709677419355
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 10.588888888888889,
+      "mean_rank_modified": 8.188888888888888,
+      "mean_rank_gain": 2.4,
+      "top1": {
+        "clean_hits": 5,
+        "modified_hits": 16,
+        "clean_rate": 0.027777777777777776,
+        "modified_rate": 0.08888888888888889,
+        "gain": 0.06111111111111111,
+        "new_hits": 12,
+        "lost_hits": 1,
+        "clean_miss_count": 175,
+        "clean_miss_conversion_rate": 0.06857142857142857,
+        "clean_hit_retention_rate": 0.8,
+        "net_headroom_capture": 0.06285714285714286
+      },
+      "top3": {
+        "clean_hits": 25,
+        "modified_hits": 38,
+        "clean_rate": 0.1388888888888889,
+        "modified_rate": 0.2111111111111111,
+        "gain": 0.07222222222222222,
+        "new_hits": 19,
+        "lost_hits": 6,
+        "clean_miss_count": 155,
+        "clean_miss_conversion_rate": 0.12258064516129032,
+        "clean_hit_retention_rate": 0.76,
+        "net_headroom_capture": 0.08387096774193549
+      },
+      "top5": {
+        "clean_hits": 42,
+        "modified_hits": 75,
+        "clean_rate": 0.23333333333333334,
+        "modified_rate": 0.4166666666666667,
+        "gain": 0.18333333333333332,
+        "new_hits": 39,
+        "lost_hits": 6,
+        "clean_miss_count": 138,
+        "clean_miss_conversion_rate": 0.2826086956521739,
+        "clean_hit_retention_rate": 0.8571428571428571,
+        "net_headroom_capture": 0.2391304347826087
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 10.877777777777778,
+      "mean_rank_modified": 7.972222222222222,
+      "mean_rank_gain": 2.9055555555555554,
+      "top1": {
+        "clean_hits": 7,
+        "modified_hits": 18,
+        "clean_rate": 0.03888888888888889,
+        "modified_rate": 0.1,
+        "gain": 0.06111111111111111,
+        "new_hits": 12,
+        "lost_hits": 1,
+        "clean_miss_count": 173,
+        "clean_miss_conversion_rate": 0.06936416184971098,
+        "clean_hit_retention_rate": 0.8571428571428571,
+        "net_headroom_capture": 0.06358381502890173
+      },
+      "top3": {
+        "clean_hits": 26,
+        "modified_hits": 48,
+        "clean_rate": 0.14444444444444443,
+        "modified_rate": 0.26666666666666666,
+        "gain": 0.12222222222222222,
+        "new_hits": 23,
+        "lost_hits": 1,
+        "clean_miss_count": 154,
+        "clean_miss_conversion_rate": 0.14935064935064934,
+        "clean_hit_retention_rate": 0.9615384615384616,
+        "net_headroom_capture": 0.14285714285714285
+      },
+      "top5": {
+        "clean_hits": 43,
+        "modified_hits": 73,
+        "clean_rate": 0.2388888888888889,
+        "modified_rate": 0.40555555555555556,
+        "gain": 0.16666666666666666,
+        "new_hits": 34,
+        "lost_hits": 4,
+        "clean_miss_count": 137,
+        "clean_miss_conversion_rate": 0.24817518248175183,
+        "clean_hit_retention_rate": 0.9069767441860465,
+        "net_headroom_capture": 0.21897810218978103
+      }
+    }
+  },
+  "vi_paper_standard_set2_overlap_30_v4": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 11.322222222222223,
+      "mean_rank_modified": 1.2666666666666666,
+      "mean_rank_gain": 10.055555555555555,
+      "top1": {
+        "clean_hits": 4,
+        "modified_hits": 160,
+        "clean_rate": 0.022222222222222223,
+        "modified_rate": 0.8888888888888888,
+        "gain": 0.8666666666666667,
+        "new_hits": 156,
+        "lost_hits": 0,
+        "clean_miss_count": 176,
+        "clean_miss_conversion_rate": 0.8863636363636364,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.8863636363636364
+      },
+      "top3": {
+        "clean_hits": 25,
+        "modified_hits": 174,
+        "clean_rate": 0.1388888888888889,
+        "modified_rate": 0.9666666666666667,
+        "gain": 0.8277777777777777,
+        "new_hits": 149,
+        "lost_hits": 0,
+        "clean_miss_count": 155,
+        "clean_miss_conversion_rate": 0.9612903225806452,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9612903225806452
+      },
+      "top5": {
+        "clean_hits": 56,
+        "modified_hits": 177,
+        "clean_rate": 0.3111111111111111,
+        "modified_rate": 0.9833333333333333,
+        "gain": 0.6722222222222223,
+        "new_hits": 121,
+        "lost_hits": 0,
+        "clean_miss_count": 124,
+        "clean_miss_conversion_rate": 0.9758064516129032,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9758064516129032
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 10.905555555555555,
+      "mean_rank_modified": 8.338888888888889,
+      "mean_rank_gain": 2.566666666666667,
+      "top1": {
+        "clean_hits": 7,
+        "modified_hits": 13,
+        "clean_rate": 0.03888888888888889,
+        "modified_rate": 0.07222222222222222,
+        "gain": 0.03333333333333333,
+        "new_hits": 7,
+        "lost_hits": 1,
+        "clean_miss_count": 173,
+        "clean_miss_conversion_rate": 0.04046242774566474,
+        "clean_hit_retention_rate": 0.8571428571428571,
+        "net_headroom_capture": 0.03468208092485549
+      },
+      "top3": {
+        "clean_hits": 31,
+        "modified_hits": 32,
+        "clean_rate": 0.17222222222222222,
+        "modified_rate": 0.17777777777777778,
+        "gain": 0.005555555555555556,
+        "new_hits": 12,
+        "lost_hits": 11,
+        "clean_miss_count": 149,
+        "clean_miss_conversion_rate": 0.08053691275167785,
+        "clean_hit_retention_rate": 0.6451612903225806,
+        "net_headroom_capture": 0.006711409395973154
+      },
+      "top5": {
+        "clean_hits": 49,
+        "modified_hits": 68,
+        "clean_rate": 0.2722222222222222,
+        "modified_rate": 0.37777777777777777,
+        "gain": 0.10555555555555556,
+        "new_hits": 31,
+        "lost_hits": 12,
+        "clean_miss_count": 131,
+        "clean_miss_conversion_rate": 0.2366412213740458,
+        "clean_hit_retention_rate": 0.7551020408163265,
+        "net_headroom_capture": 0.1450381679389313
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 10.705555555555556,
+      "mean_rank_modified": 8.116666666666667,
+      "mean_rank_gain": 2.588888888888889,
+      "top1": {
+        "clean_hits": 6,
+        "modified_hits": 12,
+        "clean_rate": 0.03333333333333333,
+        "modified_rate": 0.06666666666666667,
+        "gain": 0.03333333333333333,
+        "new_hits": 6,
+        "lost_hits": 0,
+        "clean_miss_count": 174,
+        "clean_miss_conversion_rate": 0.034482758620689655,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.034482758620689655
+      },
+      "top3": {
+        "clean_hits": 27,
+        "modified_hits": 38,
+        "clean_rate": 0.15,
+        "modified_rate": 0.2111111111111111,
+        "gain": 0.06111111111111111,
+        "new_hits": 13,
+        "lost_hits": 2,
+        "clean_miss_count": 153,
+        "clean_miss_conversion_rate": 0.08496732026143791,
+        "clean_hit_retention_rate": 0.9259259259259259,
+        "net_headroom_capture": 0.0718954248366013
+      },
+      "top5": {
+        "clean_hits": 37,
+        "modified_hits": 70,
+        "clean_rate": 0.20555555555555555,
+        "modified_rate": 0.3888888888888889,
+        "gain": 0.18333333333333332,
+        "new_hits": 37,
+        "lost_hits": 4,
+        "clean_miss_count": 143,
+        "clean_miss_conversion_rate": 0.25874125874125875,
+        "clean_hit_retention_rate": 0.8918918918918919,
+        "net_headroom_capture": 0.23076923076923078
+      }
+    }
+  },
+  "vi_paper_standard_set2_zero_overlap_v4": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 11.377777777777778,
+      "mean_rank_modified": 1.3277777777777777,
+      "mean_rank_gain": 10.05,
+      "top1": {
+        "clean_hits": 5,
+        "modified_hits": 158,
+        "clean_rate": 0.027777777777777776,
+        "modified_rate": 0.8777777777777778,
+        "gain": 0.85,
+        "new_hits": 153,
+        "lost_hits": 0,
+        "clean_miss_count": 175,
+        "clean_miss_conversion_rate": 0.8742857142857143,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.8742857142857143
+      },
+      "top3": {
+        "clean_hits": 24,
+        "modified_hits": 171,
+        "clean_rate": 0.13333333333333333,
+        "modified_rate": 0.95,
+        "gain": 0.8166666666666667,
+        "new_hits": 147,
+        "lost_hits": 0,
+        "clean_miss_count": 156,
+        "clean_miss_conversion_rate": 0.9423076923076923,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9423076923076923
+      },
+      "top5": {
+        "clean_hits": 52,
+        "modified_hits": 176,
+        "clean_rate": 0.28888888888888886,
+        "modified_rate": 0.9777777777777777,
+        "gain": 0.6888888888888889,
+        "new_hits": 124,
+        "lost_hits": 0,
+        "clean_miss_count": 128,
+        "clean_miss_conversion_rate": 0.96875,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.96875
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 180,
+      "mean_rank_clean": 11.1,
+      "mean_rank_modified": 8.555555555555555,
+      "mean_rank_gain": 2.5444444444444443,
+      "top1": {
+        "clean_hits": 8,
+        "modified_hits": 11,
+        "clean_rate": 0.044444444444444446,
+        "modified_rate": 0.06111111111111111,
+        "gain": 0.016666666666666666,
+        "new_hits": 4,
+        "lost_hits": 1,
+        "clean_miss_count": 172,
+        "clean_miss_conversion_rate": 0.023255813953488372,
+        "clean_hit_retention_rate": 0.875,
+        "net_headroom_capture": 0.01744186046511628
+      },
+      "top3": {
+        "clean_hits": 29,
+        "modified_hits": 33,
+        "clean_rate": 0.16111111111111112,
+        "modified_rate": 0.18333333333333332,
+        "gain": 0.022222222222222223,
+        "new_hits": 14,
+        "lost_hits": 10,
+        "clean_miss_count": 151,
+        "clean_miss_conversion_rate": 0.09271523178807947,
+        "clean_hit_retention_rate": 0.6551724137931034,
+        "net_headroom_capture": 0.026490066225165563
+      },
+      "top5": {
+        "clean_hits": 52,
+        "modified_hits": 68,
+        "clean_rate": 0.28888888888888886,
+        "modified_rate": 0.37777777777777777,
+        "gain": 0.08888888888888889,
+        "new_hits": 28,
+        "lost_hits": 12,
+        "clean_miss_count": 128,
+        "clean_miss_conversion_rate": 0.21875,
+        "clean_hit_retention_rate": 0.7692307692307693,
+        "net_headroom_capture": 0.125
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 180,
+      "mean_rank_clean": 10.483333333333333,
+      "mean_rank_modified": 7.888888888888889,
+      "mean_rank_gain": 2.5944444444444446,
+      "top1": {
+        "clean_hits": 6,
+        "modified_hits": 11,
+        "clean_rate": 0.03333333333333333,
+        "modified_rate": 0.06111111111111111,
+        "gain": 0.027777777777777776,
+        "new_hits": 6,
+        "lost_hits": 1,
+        "clean_miss_count": 174,
+        "clean_miss_conversion_rate": 0.034482758620689655,
+        "clean_hit_retention_rate": 0.8333333333333334,
+        "net_headroom_capture": 0.028735632183908046
+      },
+      "top3": {
+        "clean_hits": 28,
+        "modified_hits": 37,
+        "clean_rate": 0.15555555555555556,
+        "modified_rate": 0.20555555555555555,
+        "gain": 0.05,
+        "new_hits": 12,
+        "lost_hits": 3,
+        "clean_miss_count": 152,
+        "clean_miss_conversion_rate": 0.07894736842105263,
+        "clean_hit_retention_rate": 0.8928571428571429,
+        "net_headroom_capture": 0.05921052631578947
+      },
+      "top5": {
+        "clean_hits": 40,
+        "modified_hits": 72,
+        "clean_rate": 0.2222222222222222,
+        "modified_rate": 0.4,
+        "gain": 0.17777777777777778,
+        "new_hits": 35,
+        "lost_hits": 3,
+        "clean_miss_count": 140,
+        "clean_miss_conversion_rate": 0.25,
+        "clean_hit_retention_rate": 0.925,
+        "net_headroom_capture": 0.22857142857142856
+      }
+    }
+  }
+}

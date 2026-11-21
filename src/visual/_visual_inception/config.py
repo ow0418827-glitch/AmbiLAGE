@@ -3,27 +3,6 @@ from dataclasses import asdict, dataclass
 import math
 
 
-ENHANCED_V3_ONLY_FIELDS = (
-    'hard_negative_count',
-    'query_adversarial_radius',
-    'bank_loss_blend',
-    'hard_margin_loss_blend',
-)
-PAPER_STANDARD_DEFAULTS = dict(
-    contrastive_margin=0.3,
-    hard_negative_count=30,
-    hard_negative_same_category_count=10,
-    hard_negative_proxy_memory_count=10,
-    hard_negative_popularity_count=10,
-    query_adversarial_radius=0.05,
-    query_adversarial_steps=1,
-    query_adversarial_step_size=0.05,
-    query_adversarial_mix=0.25,
-    bank_loss_blend=1.0,
-    hard_margin_loss_blend=0.0,
-)
-
-
 @dataclass(frozen=True)
 class VisualInceptionConfig:
     steps: int = 100
@@ -44,18 +23,13 @@ class VisualInceptionConfig:
     retrieval_temperature: float = 0.07
     query_batch_size: int = 16
     candidate_cache_dir: str | None = None
-    mechanism_profile: str = 'enhanced_v3'
+    mechanism_profile: str = 'paper_minimal_margin'
     contrastive_margin: float = 0.3
-    hard_negative_count: int = 32
-    hard_negative_same_category_count: int = 10
-    hard_negative_proxy_memory_count: int = 10
-    hard_negative_popularity_count: int = 10
-    query_adversarial_radius: float = 0.20
-    query_adversarial_steps: int = 3
-    query_adversarial_step_size: float = 0.10
-    query_adversarial_mix: float = 0.5
-    bank_loss_blend: float = 1.0
-    hard_margin_loss_blend: float = 0.0
+    negative_same_category_count: int = 10
+    negative_proxy_memory_count: int = 10
+    negative_popularity_count: int = 10
+    query_noise_std: float = 0.03
+    query_noise_fraction: float = 0.25
 
     def validate(self):
         if type(self.steps) is not int or self.steps < 1:
@@ -76,37 +50,22 @@ class VisualInceptionConfig:
             raise ValueError('轻量夹具最多执行三步')
         if self.objective_mode not in ('semantic_perceptual', 'retrieval_semantic_perceptual'):
             raise ValueError('未知视觉记忆植入训练目标模式')
-        if self.mechanism_profile not in ('legacy_v2', 'enhanced_v3', 'paper_standard'):
+        if self.mechanism_profile not in ('legacy_v2', 'paper_minimal_margin'):
             raise ValueError('未知视觉记忆植入机制版本')
-        for name, upper in (('contrastive_margin', 2.0), ('query_adversarial_radius', 1.0),
-                            ('query_adversarial_mix', 1.0), ('bank_loss_blend', 1.0),
-                            ('hard_margin_loss_blend', 1.0)):
+        for name in ('negative_same_category_count', 'negative_proxy_memory_count', 'negative_popularity_count'):
+            if type(getattr(self, name)) is not int or getattr(self, name) < 0:
+                raise ValueError(name + ' 必须为非负整数')
+        minimal_counts = [
+            self.negative_same_category_count,
+            self.negative_proxy_memory_count,
+            self.negative_popularity_count,
+        ]
+        if self.mechanism_profile == 'paper_minimal_margin' and sum(minimal_counts) < 1:
+            raise ValueError('最小单层复现静态三来源负例配额之和至少为一')
+        for name, upper in (('query_noise_std', 1.0), ('query_noise_fraction', 1.0), ('contrastive_margin', 2.0)):
             value = getattr(self, name)
             if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or not 0 <= value <= upper:
                 raise ValueError(name + ' 超出合法范围')
-        if abs((float(self.bank_loss_blend) + float(self.hard_margin_loss_blend)) - 1.0) > 1e-6:
-            raise ValueError('bank_loss_blend 与 hard_margin_loss_blend 之和必须等于 1.0')
-        for name in ('hard_negative_count', 'query_adversarial_steps'):
-            if type(getattr(self, name)) is not int or getattr(self, name) < 1:
-                raise ValueError(name + ' 必须为正整数')
-        for name in ('hard_negative_same_category_count', 'hard_negative_proxy_memory_count',
-                     'hard_negative_popularity_count'):
-            if type(getattr(self, name)) is not int or getattr(self, name) < 0:
-                raise ValueError(name + ' 必须为非负整数')
-        counts = [self.hard_negative_same_category_count, self.hard_negative_proxy_memory_count,
-                  self.hard_negative_popularity_count]
-        if any(type(v) is not int or v < 0 for v in counts):
-            raise ValueError('负例来源配额必须为非负整数')
-        if self.mechanism_profile == 'paper_standard':
-            if self.query_adversarial_steps != 1:
-                raise ValueError('标准复现对抗查询步数必须为 1')
-            if sum(counts) < 1:
-                raise ValueError('标准复现静态三来源负例配额之和至少为一')
-        elif sum(counts) > self.hard_negative_count:
-            raise ValueError('困难负例来源配额必须为非负整数且总数不超过候选数')
-        value = self.query_adversarial_step_size
-        if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or value <= 0:
-            raise ValueError('查询对抗步长必须为有限正数')
         if type(self.query_batch_size) is not int or not 1 <= self.query_batch_size <= 100:
             raise ValueError('训练查询批量必须为一至一百之间的整数')
         if self.surrogate_set not in ('clip_l14', 'lucid', 'heterogeneous4', 'visual_inception_paper', 'custom'):
@@ -132,13 +91,7 @@ class VisualInceptionConfig:
         # must never be reinterpreted as the new mechanism.
         if 'objective_mode' in value and 'mechanism_profile' not in value:
             interpreted['mechanism_profile'] = 'legacy_v2'
-        if interpreted.get('mechanism_profile') == 'paper_standard':
-            for key, default in PAPER_STANDARD_DEFAULTS.items():
-                interpreted.setdefault(key, default)
         return cls(**interpreted).validate()
 
     def to_dict(self):
-        payload = asdict(self)
-        if self.mechanism_profile == 'paper_standard':
-            return {k: v for k, v in payload.items() if k not in ENHANCED_V3_ONLY_FIELDS}
-        return payload
+        return asdict(self)

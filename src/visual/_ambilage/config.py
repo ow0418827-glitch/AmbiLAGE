@@ -160,6 +160,8 @@ class AmbiLAGEConfig:
     eot_enabled: bool = False
     diffusion_eot_enabled: bool | None = None
     multiscale_eot_enabled: bool | None = None
+    multiscale_eot_profile: str = "geom_v2"
+    multiscale_identity_weight_end: float = 0.35
     diffusion_weight: float = 0.08          # 压低扩散净化梯度权重以消除潜空间棋盘格伪影
     purifier_steps: int = 10
 
@@ -227,10 +229,10 @@ class AmbiLAGEConfig:
         return bool(self.eot_enabled)
 
     def effective_multiscale_eot_enabled(self, *, num_surrogates: int = 1) -> bool:
-        """解析多尺度破网格视角变换开关：显式设置时独立于防御 EoT 生效，否则跟随 eot_enabled 与 single_model_multiscale_eot。"""
+        """解析多尺度破网格视角变换开关：显式设置优先，否则单代理默认开启（独立于防御 EoT）。"""
         if self.multiscale_eot_enabled is not None:
             return bool(self.multiscale_eot_enabled)
-        return bool(self.eot_enabled and self.single_model_multiscale_eot and int(num_surrogates) == 1)
+        return bool(self.single_model_multiscale_eot and int(num_surrogates) == 1)
 
     def validate(self) -> None:
         """严格校验配置参数有效性，杜绝越界或无效数值。"""
@@ -397,6 +399,14 @@ class AmbiLAGEConfig:
             raise ValueError("扩散净化期望变换开关 diffusion_eot_enabled 必须为布尔值或 None")
         if self.multiscale_eot_enabled is not None and type(self.multiscale_eot_enabled) is not bool:
             raise ValueError("多尺度破网格视角变换开关 multiscale_eot_enabled 必须为布尔值或 None")
+        if self.multiscale_eot_profile not in ("legacy", "geom_v2", "geom_photo_v3"):
+            raise ValueError("多尺度破网格档位 multiscale_eot_profile 必须为 legacy、geom_v2 或 geom_photo_v3")
+        if (
+            isinstance(self.multiscale_identity_weight_end, bool)
+            or not isinstance(self.multiscale_identity_weight_end, (int, float))
+            or not (0.05 <= float(self.multiscale_identity_weight_end) <= 1.0)
+        ):
+            raise ValueError("多尺度恒等视图终端权重 multiscale_identity_weight_end 必须位于 [0.05, 1.0]")
         if self.effective_diffusion_eot_enabled():
             if self.diffusion_weight <= 0 or self.purifier_steps != 10:
                 raise ValueError("开启扩散净化期望变换时须使用正权重十步扩散净化")

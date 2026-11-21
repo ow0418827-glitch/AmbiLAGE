@@ -717,8 +717,8 @@ def test_full_command_line_passes_training_manifest_into_micro_generation(tiny_p
     metadata = validate_ready(output, require_production=False)
     assert metadata['config']['objective_mode'] == 'retrieval_semantic_perceptual'
     assert Path(metadata['config']['training_manifest']).resolve() == manifest.resolve()
-    assert metadata['config']['mechanism_profile'] == 'enhanced_v3'
-    assert metadata['training_objective']['kind'] == 'visual_inception_retrieval_semantic_perceptual_hardneg_advquery_v3'
+    assert metadata['config']['mechanism_profile'] == 'paper_minimal_margin'
+    assert metadata['training_objective']['kind'] == 'visual_inception_retrieval_semantic_perceptual_paper_minimal_margin_v4'
     assert metadata['training_objective']['retrieval_positive_count'] == 1
     assert metadata['query_sampling']['pool_size'] == 100
 

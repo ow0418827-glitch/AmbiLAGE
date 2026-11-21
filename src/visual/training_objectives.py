@@ -227,38 +227,189 @@ def multiscale_grid_breaking_views(
     *,
     step: int,
     base_views: torch.Tensor,
+    profile: str = 'legacy',
 ) -> torch.Tensor:
-    """为单代理训练追加确定性多尺度裁剪缩放视图，打破 CLIP-ViT-L/14 固定 14x14 分块边界过拟合。"""
+    """为单代理训练追加确定性多尺度破网格视角变换，支持 legacy / geom_v2 / geom_photo_v3 三档。"""
     from src.visual.image_utils import quantize_ste
     x = quantize_ste(image)
     _, _, h, w = x.shape
-    scales = (0.91, 0.96, 0.93, 1.05)
-    s1 = scales[(int(step) - 1) % 4]
-    s2 = scales[(int(step) + 1) % 4]
+    st = max(1, int(step))
+    if profile == 'legacy':
+        scales = (0.91, 0.96, 0.93, 1.05)
+        s1 = scales[(st - 1) % 4]
+        s2 = scales[(st + 1) % 4]
+        extra = []
+        for idx, scale in enumerate((s1, s2)):
+            if scale < 1.0:
+                ch = max(4, min(h, int(round(h * scale))))
+                cw = max(4, min(w, int(round(w * scale))))
+                max_y = max(0, h - ch)
+                max_x = max(0, w - cw)
+                top = ((st * 7 + idx * 13) % (max_y + 1)) if max_y > 0 else 0
+                left = ((st * 11 + idx * 5) % (max_x + 1)) if max_x > 0 else 0
+                cropped = x[:, :, top : top + ch, left : left + cw]
+                resized = F.interpolate(
+                    cropped, size=(h, w), mode='bicubic', align_corners=False, antialias=True
+                ).clamp(0, 1)
+            else:
+                up_h = max(h + 2, int(round(h * scale)))
+                up_w = max(w + 2, int(round(w * scale)))
+                zoomed = F.interpolate(
+                    x, size=(up_h, up_w), mode='bicubic', align_corners=False, antialias=True
+                )
+                top = (up_h - h) // 2
+                left = (up_w - w) // 2
+                resized = zoomed[:, :, top : top + h, left : left + w].clamp(0, 1)
+            extra.append(quantize_ste(resized))
+        return torch.cat([base_views, *extra], dim=0)
+
+    if profile not in ('geom_v2', 'geom_photo_v3'):
+        raise ValueError(f'未知多尺度破网格档位: {profile}')
+
+    # Studio background fill estimated from detached outer strips avoids edge truncation loss on resize-and-pad.
+    bw = max(1, min(2, h // 8, w // 8))
+    with torch.no_grad():
+        border_samples = torch.cat(
+            [
+                x.detach()[:, :, :bw, :].reshape(x.shape[0], x.shape[1], -1),
+                x.detach()[:, :, :, :bw].reshape(x.shape[0], x.shape[1], -1),
+                x.detach()[:, :, :, -bw:].reshape(x.shape[0], x.shape[1], -1),
+            ],
+            dim=-1,
+        )
+        bg_fill = border_samples.median(dim=-1).values[:, :, None, None]
+
+    scales = (0.78, 0.86, 0.94, 1.08, 1.15)
+    selected_scales = [scales[(st - 1 + k) % 5] for k in range(4)]
+    max_safe = max(1, min(h, w) // 4 - 1)
+    shift_min = min(max_safe, max(1, int(round(min(h, w) * (7.0 / 224.0)))))
+    shift_max = min(max_safe, max(shift_min, int(round(min(h, w) * (14.0 / 224.0)))))
+    span = max(1, shift_max - shift_min + 1)
+
     extra = []
-    for idx, scale in enumerate((s1, s2)):
+    for idx, scale in enumerate(selected_scales):
+        interp_mode = 'bilinear' if ((st + idx) % 2 == 0) else 'bicubic'
         if scale < 1.0:
-            ch = max(4, min(h, int(round(h * scale))))
-            cw = max(4, min(w, int(round(w * scale))))
-            max_y = max(0, h - ch)
-            max_x = max(0, w - cw)
-            top = ((int(step) * 7 + idx * 13) % (max_y + 1)) if max_y > 0 else 0
-            left = ((int(step) * 11 + idx * 5) % (max_x + 1)) if max_x > 0 else 0
-            cropped = x[:, :, top : top + ch, left : left + cw]
-            resized = F.interpolate(
-                cropped, size=(h, w), mode='bicubic', align_corners=False, antialias=True
-            ).clamp(0, 1)
+            sh = max(4, min(h - 1 if h > 4 else h, int(round(h * scale))))
+            sw = max(4, min(w - 1 if w > 4 else w, int(round(w * scale))))
+            shrunk = F.interpolate(
+                x, size=(sh, sw), mode=interp_mode, align_corners=False, antialias=True
+            ).clamp(0.0, 1.0)
+            pad_h = h - sh
+            pad_w = w - sw
+            pad_top = ((st * 7 + idx * 13) % (pad_h + 1)) if pad_h > 0 else 0
+            pad_left = ((st * 11 + idx * 5) % (pad_w + 1)) if pad_w > 0 else 0
+            view = (
+                F.pad(
+                    shrunk - bg_fill,
+                    (pad_left, pad_w - pad_left, pad_top, pad_h - pad_top),
+                    mode='constant',
+                    value=0.0,
+                )
+                + bg_fill
+            ).clamp(0.0, 1.0)
         else:
             up_h = max(h + 2, int(round(h * scale)))
             up_w = max(w + 2, int(round(w * scale)))
             zoomed = F.interpolate(
-                x, size=(up_h, up_w), mode='bicubic', align_corners=False, antialias=True
+                x, size=(up_h, up_w), mode=interp_mode, align_corners=False, antialias=True
             )
-            top = (up_h - h) // 2
-            left = (up_w - w) // 2
-            resized = zoomed[:, :, top : top + h, left : left + w].clamp(0, 1)
-        extra.append(quantize_ste(resized))
+            max_y = max(0, up_h - h)
+            max_x = max(0, up_w - w)
+            top = ((st * 13 + idx * 17) % (max_y + 1)) if max_y > 0 else 0
+            left = ((st * 19 + idx * 23) % (max_x + 1)) if max_x > 0 else 0
+            view = zoomed[:, :, top : top + h, left : left + w].clamp(0.0, 1.0)
+
+        if idx in (1, 3) and min(h, w) >= 16:
+            mag_y = shift_min + ((st * 5 + idx * 11) % span)
+            mag_x = shift_min + ((st * 9 + idx * 7) % span)
+            dy = mag_y if ((st + idx) % 2 == 0) else -mag_y
+            dx = mag_x if ((st * 3 + idx) % 2 == 0) else -mag_x
+            p = max(abs(dy), abs(dx))
+            padded = F.pad(view, (p, p, p, p), mode='reflect')
+            view = padded[:, :, p + dy : p + dy + h, p + dx : p + dx + w]
+
+        if (st + idx) % 2 == 1:
+            view = torch.flip(view, dims=[-1])
+
+        if profile == 'geom_photo_v3':
+            db_table = (-0.05, -0.025, 0.025, 0.05)
+            dc_table = (0.95, 0.975, 1.025, 1.05)
+            gm_table = (0.95, 0.975, 1.025, 1.05)
+            db = db_table[(st + idx) % 4]
+            dc = dc_table[(st * 3 + idx * 2 + 1) % 4]
+            gm = gm_table[(st * 5 + idx * 3 + 2) % 4]
+            # Clamp away from zero before fractional pow to prevent infinite gradients at black pixels.
+            view = view.clamp(1e-4, 1.0).pow(gm)
+            v_mean = view.mean(dim=(-2, -1), keepdim=True)
+            view = (v_mean + dc * (view - v_mean) + db).clamp(0.0, 1.0)
+
+        extra.append(quantize_ste(view))
     return torch.cat([base_views, *extra], dim=0)
+
+
+def _normalize_view_weights(
+    view_weights: torch.Tensor | None,
+    num_views: int,
+    *,
+    device,
+    dtype: torch.dtype,
+) -> torch.Tensor | None:
+    if view_weights is None or num_views <= 0 or view_weights.numel() != num_views:
+        return None
+    w = view_weights.to(device=device, dtype=dtype).reshape(num_views)
+    return w / w.sum().clamp_min(1e-12)
+
+
+def weighted_mean_softmin(
+    values: torch.Tensor,
+    temperature: float,
+    view_weights: torch.Tensor | None = None,
+) -> torch.Tensor:
+    """按视图权重融合均值与平滑最坏值；当 view_weights 为空或均匀时与等权结果严格一致。"""
+    w = None if values.ndim == 0 else _normalize_view_weights(
+        view_weights, values.shape[0], device=values.device, dtype=values.dtype
+    )
+    if w is None:
+        return 0.5 * values.mean() + 0.5 * softmin(values, temperature)
+    b = int(w.numel())
+    flat_rows = values.reshape(b, -1)
+    m = flat_rows.shape[1]
+    w_mean = (w.unsqueeze(1) * flat_rows).sum(dim=0).mean()
+    temp = max(float(temperature), 1e-8)
+    log_p = torch.log(w.clamp_min(1e-12)).unsqueeze(1) - math.log(float(m))
+    w_softmin = -temp * torch.logsumexp((-flat_rows / temp + log_p).reshape(-1), dim=0)
+    return 0.5 * w_mean + 0.5 * w_softmin
+
+
+def multiscale_view_weights(
+    config,
+    num_views: int,
+    *,
+    step: int | None = None,
+    progressive: bool = False,
+    device=None,
+    dtype: torch.dtype = torch.float32,
+) -> torch.Tensor | None:
+    """在中后期训练步退火下调第 0 号 identity 视图权重；非渐进（恒定评估）保持均匀。"""
+    id_end = float(getattr(config, 'multiscale_identity_weight_end', 1.0))
+    if not progressive or step is None or int(step) <= 0 or num_views <= 1 or id_end >= 1.0 - 1e-9:
+        return None
+    total_steps = max(int(getattr(config, 'steps', 250)), 2)
+    p1 = max(1, int(round(float(getattr(config, 'psi_phase1_ratio', 0.24)) * total_steps)))
+    p2 = max(p1 + 1, int(round(float(getattr(config, 'psi_phase2_ratio', 0.72)) * total_steps)))
+    cur = int(step)
+    if cur <= p1:
+        r_id = 1.0
+    elif cur <= p2:
+        prog = (cur - p1) / max(1, p2 - p1)
+        alpha = 0.5 * (1.0 - math.cos(math.pi * min(max(prog, 0.0), 1.0)))
+        r_id = 1.0 + alpha * (id_end - 1.0)
+    else:
+        r_id = id_end
+    w = torch.ones(num_views, device=device, dtype=dtype)
+    w[0] = r_id
+    return w / w.sum()
 
 
 def psi_cross_modal_weights(
@@ -743,7 +894,15 @@ class PublicFullKeyObjective:
             mixed_joint = s_key
         return rem * mixed_joint + alpha_img * s_img
 
-    def _pure_image_text_utility(self, img_norm: torch.Tensor, temperature: float, *, progressive: bool) -> torch.Tensor:
+    def _pure_image_text_utility(
+        self,
+        img_norm: torch.Tensor,
+        temperature: float,
+        *,
+        progressive: bool,
+        view_weights: torch.Tensor | None = None,
+    ) -> torch.Tensor:
+        w = _normalize_view_weights(view_weights, img_norm.shape[0], device=img_norm.device, dtype=img_norm.dtype)
         if (
             self.effective_category_mode in ('category_commonalities_abstraction', 'category_subspace_hybrid')
             and self.category_anchor_bank is not None
@@ -759,30 +918,44 @@ class PublicFullKeyObjective:
 
         clean_mat = img_norm @ phrases.T
         if progressive and self.spherical_augmentation and self.spherical_radius > 0.0 and self.spherical_mix > 0.0:
-            v_dir = img_norm.detach().mean(dim=0, keepdim=True)
+            v_dir = (
+                (w.unsqueeze(1) * img_norm.detach()).sum(dim=0, keepdim=True)
+                if w is not None
+                else img_norm.detach().mean(dim=0, keepdim=True)
+            )
             adv_phrases = worst_case_spherical_queries(phrases, v_dir, self.spherical_radius)
             adv_mat = img_norm @ adv_phrases.T
             score_mat = (1.0 - self.spherical_mix) * clean_mat + self.spherical_mix * adv_mat
         else:
             score_mat = clean_mat
 
-        u_phrases = 0.5 * score_mat.mean() + 0.5 * softmin(score_mat.flatten(), max(temperature, 0.08))
+        u_phrases = weighted_mean_softmin(score_mat, max(temperature, 0.08), w)
         if self.mu_cat is not None:
-            u_mu = (img_norm @ self.mu_cat.to(img_norm.device).T).mean()
+            mu_mat = img_norm @ self.mu_cat.to(img_norm.device).T
+            u_mu = (w.unsqueeze(1) * mu_mat).sum(dim=0).mean() if w is not None else mu_mat.mean()
             u_phrases = 0.65 * u_phrases + 0.35 * u_mu
         if self.source_repulsion_weight > 0.0 and self.source_clean_img is not None:
             s_pos = img_norm @ phrases.T
             s_src = (self.source_clean_img.to(img_norm.device) @ phrases.T).detach()
             tau_nce = 0.07
-            u_repel = (-tau_nce * F.softplus((s_src - (s_pos - self.source_repulsion_margin)) / tau_nce)).mean()
+            repel_mat = -tau_nce * F.softplus((s_src - (s_pos - self.source_repulsion_margin)) / tau_nce)
+            u_repel = (w.unsqueeze(1) * repel_mat).sum(dim=0).mean() if w is not None else repel_mat.mean()
             u_phrases = u_phrases + self.source_repulsion_weight * u_repel
         return u_phrases
 
-    def enhanced_text_utility(self, features: torch.Tensor, temperature: float, *, progressive: bool = False) -> torch.Tensor:
+    def enhanced_text_utility(
+        self,
+        features: torch.Tensor,
+        temperature: float,
+        *,
+        progressive: bool = False,
+        view_weights: torch.Tensor | None = None,
+    ) -> torch.Tensor:
         """多粒度子句簇/共性原型 + 闭式球面最坏查询增强 + 源干净特征对比排斥效用。"""
         img_norm = F.normalize(features.float(), dim=-1)
+        w = _normalize_view_weights(view_weights, img_norm.shape[0], device=img_norm.device, dtype=img_norm.dtype)
         if self.effective_key_mode == 'image':
-            return self._pure_image_text_utility(img_norm, temperature, progressive=progressive)
+            return self._pure_image_text_utility(img_norm, temperature, progressive=progressive, view_weights=w)
 
         has_v4_text = (
             self.phrase_decomposition
@@ -792,7 +965,7 @@ class PublicFullKeyObjective:
         )
         if not has_v4_text:
             t_scores = self.text_scores(features)
-            u_legacy = 0.5 * t_scores.mean() + 0.5 * softmin(t_scores, temperature)
+            u_legacy = weighted_mean_softmin(t_scores, temperature, w)
         else:
             own = self.own.to(img_norm.device)
             key = F.normalize(img_norm + own, dim=-1)
@@ -803,7 +976,9 @@ class PublicFullKeyObjective:
             clean_mat = self._score_query_bank(img_norm, key, phrases, p_comp, p_valid)
             if progressive and self.spherical_augmentation and self.spherical_radius > 0.0 and self.spherical_mix > 0.0:
                 alpha_img = min(max(self.text_pure_image_mix, 0.0), 0.80)
-                v_dir = (1.0 - alpha_img) * key.detach().mean(dim=0, keepdim=True) + alpha_img * img_norm.detach().mean(dim=0, keepdim=True)
+                mean_key = (w.unsqueeze(1) * key.detach()).sum(dim=0, keepdim=True) if w is not None else key.detach().mean(dim=0, keepdim=True)
+                mean_img = (w.unsqueeze(1) * img_norm.detach()).sum(dim=0, keepdim=True) if w is not None else img_norm.detach().mean(dim=0, keepdim=True)
+                v_dir = (1.0 - alpha_img) * mean_key + alpha_img * mean_img
                 adv_phrases = worst_case_spherical_queries(phrases, v_dir, self.spherical_radius)
                 adv_comp, adv_valid = compensated_targets(adv_phrases, own)
                 adv_mat = self._score_query_bank(img_norm, key, adv_phrases, adv_comp.detach(), adv_valid.detach())
@@ -811,7 +986,7 @@ class PublicFullKeyObjective:
             else:
                 score_mat = clean_mat
 
-            u_legacy = 0.5 * score_mat.mean() + 0.5 * softmin(score_mat.flatten(), max(temperature, 0.08))
+            u_legacy = weighted_mean_softmin(score_mat, max(temperature, 0.08), w)
 
             if self.source_repulsion_weight > 0.0 and self.source_clean_key is not None:
                 clean_key = self.source_clean_key.to(img_norm.device)
@@ -819,10 +994,11 @@ class PublicFullKeyObjective:
                 s_src = (clean_key @ phrases.T).detach()
                 tau_nce = 0.07
                 logits_gap = (s_src - (s_pos - self.source_repulsion_margin)) / tau_nce
-                u_repel = (-tau_nce * F.softplus(logits_gap)).mean()
+                repel_mat = -tau_nce * F.softplus(logits_gap)
+                u_repel = (w.unsqueeze(1) * repel_mat).sum(dim=0).mean() if w is not None else repel_mat.mean()
                 u_legacy = u_legacy + self.source_repulsion_weight * u_repel
         if self.effective_key_mode == 'hybrid':
-            u_pure = self._pure_image_text_utility(img_norm, temperature, progressive=progressive)
+            u_pure = self._pure_image_text_utility(img_norm, temperature, progressive=progressive, view_weights=w)
             return 0.5 * u_pure + 0.5 * u_legacy
         return u_legacy
 
@@ -832,6 +1008,7 @@ class PublicFullKeyObjective:
         query_indices: list[int] | None,
         *,
         progressive: bool = False,
+        view_weights: torch.Tensor | None = None,
     ) -> torch.Tensor | None:
         """温度尺度化全库 InfoNCE + Top-5 困难竞品软间隔对决对比检索效用（支持直接/纯共性/子空间混合接口）。"""
         if self.public_retrieval_state is None or self.public_retrieval_weight <= 0.0:
@@ -839,6 +1016,7 @@ class PublicFullKeyObjective:
         from src.visual._visual_inception.negative_sampling import select_hard_negatives
 
         img_norm = F.normalize(features.float(), dim=-1)
+        w = _normalize_view_weights(view_weights, img_norm.shape[0], device=img_norm.device, dtype=img_norm.dtype)
         state = self.public_retrieval_state
         negatives = state['negative_features'].to(img_norm.device)
         policy = state['negative_policy']
@@ -889,7 +1067,11 @@ class PublicFullKeyObjective:
                     bank_l = torch.logsumexp(torch.cat([p_b, neg_logits], dim=1), dim=1) - p_b[:, 0]
                     comp_l = F.softplus(2.0 * (comp_logit - p_b[:, 0] + margin)) / 2.0
                     view_losses.append(0.3 * bank_l + 0.7 * comp_l)
-                key_losses.append(torch.stack(view_losses).mean())
+                stacked_views = torch.stack(view_losses, dim=0)
+                if w is not None:
+                    key_losses.append((w.unsqueeze(1) * stacked_views).sum(dim=0).mean())
+                else:
+                    key_losses.append(stacked_views.mean())
             return torch.stack(key_losses).mean()
 
         loss_total = _loss_for_queries(q_batch, indices)
@@ -898,7 +1080,12 @@ class PublicFullKeyObjective:
         adv_mix = float(getattr(self.config, 'public_query_adv_mix', 0.0))
         if progressive and adv_radius > 0.0 and adv_steps > 0 and adv_mix > 0.0:
             basis = self.category_basis.to(img_norm.device) if self.category_basis is not None else None
-            key_anchor = F.normalize(eval_keys[0].detach().mean(dim=0, keepdim=True), dim=-1)
+            k0_mean = (
+                (w.unsqueeze(1) * eval_keys[0].detach()).sum(dim=0, keepdim=True)
+                if w is not None
+                else eval_keys[0].detach().mean(dim=0, keepdim=True)
+            )
+            key_anchor = F.normalize(k0_mean, dim=-1)
             q_cur = q_batch.clone()
             step_sz = max(adv_radius / max(1, adv_steps), 1e-3)
             for _ in range(adv_steps):
@@ -977,22 +1164,38 @@ class PublicFullKeyObjective:
                 w_text = max(w_text, parity_mix * w_joint)
         w_text = w_text * float(text_multiplier)
         temperature = float(self.config.temperature)
-        u_joint = 0.5 * scores.mean() + 0.5 * softmin(scores, temperature)
+        view_weights = (
+            multiscale_view_weights(
+                self.config,
+                features.shape[0],
+                step=step,
+                progressive=progressive,
+                device=features.device,
+                dtype=features.float().dtype,
+            )
+            if bool(getattr(self, 'multiscale_eot_enabled', True))
+            else None
+        )
+        u_joint = weighted_mean_softmin(scores, temperature, view_weights)
         u_joint_weighted = w_joint * u_joint
         u_ot_weighted = u_joint_weighted.new_zeros(())
         u_cat = u_joint_weighted.new_zeros(())
         if w_text > 0.0:
-            u_text = self.enhanced_text_utility(features, temperature, progressive=progressive)
+            u_text = self.enhanced_text_utility(
+                features, temperature, progressive=progressive, view_weights=view_weights
+            )
             u_cat = u_cat + w_text * u_text
         else:
             u_text = u_joint_weighted.new_zeros(())
         if w_ot > 0.0 and patch_tokens is not None:
             ot_scores = self.local_ot_scores(patch_tokens)
             if ot_scores is not None:
-                u_ot = 0.5 * ot_scores.mean() + 0.5 * softmin(ot_scores, temperature)
+                u_ot = weighted_mean_softmin(ot_scores, temperature, view_weights)
                 u_ot_weighted = u_ot_weighted + w_ot * u_ot
         if self.public_retrieval_weight > 0.0:
-            u_pub = self.public_bundle_retrieval_utility(features, public_query_indices, progressive=progressive)
+            u_pub = self.public_bundle_retrieval_utility(
+                features, public_query_indices, progressive=progressive, view_weights=view_weights
+            )
             if u_pub is not None:
                 u_cat = u_cat + self.public_retrieval_weight * u_pub
         total = u_cat + u_joint_weighted + u_ot_weighted
@@ -1309,12 +1512,22 @@ class SequentialEnsembleObjective:
         else:
             self.multiscale_eot_enabled = bool(
                 len(self.surrogates) == 1
-                and eot_on
                 and bool(getattr(config, 'single_model_multiscale_eot', False))
             )
+        for o in self.objectives:
+            o.multiscale_eot_enabled = self.multiscale_eot_enabled
+        self.multiscale_eot_profile = str(getattr(config, 'multiscale_eot_profile', 'geom_v2'))
+        self.multiscale_identity_weight_end = float(getattr(config, 'multiscale_identity_weight_end', 0.35))
         eot_paths = ['identity', 'pillow_blur_bpda', 'jpeg_exact_forward_ste', 'resize'] if eot_on else ['identity']
         if self.multiscale_eot_enabled:
-            eot_paths.append('multiscale_grid_breaking_crop_zoom')
+            profile_path = {
+                'legacy': 'multiscale_grid_breaking_crop_zoom',
+                'geom_v2': 'multiscale_grid_breaking_geom_v2_resize_pad_flip_shift',
+                'geom_photo_v3': 'multiscale_grid_breaking_geom_photo_v3_light_photometric',
+            }.get(self.multiscale_eot_profile)
+            if profile_path is None:
+                raise ValueError(f'未知多尺度破网格档位: {self.multiscale_eot_profile}')
+            eot_paths.append(profile_path)
         grad_exec_mode = (
             'single_surrogate_task_pcgrad_single_backward'
             if single_task_pcgrad
@@ -1333,6 +1546,8 @@ class SequentialEnsembleObjective:
             'single_model_task_pcgrad': single_task_pcgrad,
             'single_model_multiscale_eot': self.multiscale_eot_enabled,
             'multiscale_eot_enabled': self.multiscale_eot_enabled,
+            'multiscale_eot_profile': self.multiscale_eot_profile,
+            'multiscale_identity_weight_end': self.multiscale_identity_weight_end,
             'defense_eot_enabled': eot_on,
             'effective_key_mode': self.effective_key_mode,
             'effective_category_mode': self.effective_category_mode,
@@ -1387,7 +1602,9 @@ class SequentialEnsembleObjective:
         eot_on = bool(getattr(self.config, 'eot_enabled', False))
         views = transformed_batch(base_img, step=max(1, int(step))) if eot_on else base_img
         if self.multiscale_eot_enabled:
-            views = multiscale_grid_breaking_views(base_img, step=max(1, int(step)), base_views=views)
+            views = multiscale_grid_breaking_views(
+                base_img, step=max(1, int(step)), base_views=views, profile=self.multiscale_eot_profile
+            )
         views_transformed = bool(eot_on or self.multiscale_eot_enabled)
         purified = (
             self.purifier(base_img, seed=self._seed(step), gradient=gradient)
@@ -1493,7 +1710,10 @@ class SequentialEnsembleObjective:
         # 同时计算恒定终端评估标尺值，供 _baseline_values 与退火控制器跨阶段一致比较
         if precomputed_stationary is not None:
             stat_util, stat_joint, stat_text = precomputed_stationary
-        elif progressive and bool(getattr(self.config, 'psi_progressive_schedule', False)):
+        elif progressive and (
+            bool(getattr(self.config, 'psi_progressive_schedule', False))
+            or (self.multiscale_eot_enabled and self.multiscale_identity_weight_end < 1.0 - 1e-9)
+        ):
             with torch.no_grad():
                 stat_eot, sj_eot, st_eot = objective.component_values(
                     feature.detach(),
@@ -1671,7 +1891,10 @@ class SequentialEnsembleObjective:
         v_leaf = views.detach().requires_grad_(True)
         p_leaf = purified.detach().requires_grad_(True) if has_purified else None
         grad_targets = (v_leaf, p_leaf) if has_purified else (v_leaf,)
-        use_prog = bool(getattr(self.config, 'psi_progressive_schedule', False))
+        use_prog = bool(
+            getattr(self.config, 'psi_progressive_schedule', False)
+            or (self.multiscale_eot_enabled and self.multiscale_identity_weight_end < 1.0 - 1e-9)
+        )
         joint_protect = bool(getattr(self.config, 'joint_grad_protect', False))
         vis_cap = float(getattr(self.config, 'single_model_vis_grad_cap', 0.80))
         joint_cap = float(getattr(self.config, 'joint_grad_cap', 0.35))
@@ -1793,7 +2016,10 @@ class SequentialEnsembleObjective:
         p_leaf = purified.detach().requires_grad_(True) if has_purified else None
         grad_targets = (v_leaf, p_leaf) if has_purified else (v_leaf,)
         stat_values, joint_values, text_values, scores, rows, gv_list, gp_list = [], [], [], [], [], [], []
-        use_prog = bool(getattr(self.config, 'psi_progressive_schedule', False))
+        use_prog = bool(
+            getattr(self.config, 'psi_progressive_schedule', False)
+            or (self.multiscale_eot_enabled and self.multiscale_identity_weight_end < 1.0 - 1e-9)
+        )
         for i in range(len(self.surrogates)):
             try:
                 value, score, row = self._evaluate_proxy_from_inputs(

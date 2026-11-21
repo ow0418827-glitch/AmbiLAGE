@@ -1098,6 +1098,93 @@ def check_minimax_connectivity(
     }
 
 
+def _load_query_family_lookup(
+    query_manifest_path: str | Path | None,
+) -> tuple[list[dict[str, Any]], dict[str, dict[str, Any]]]:
+    """Load `query_records` list and normalized-instruction lookup from a suite queries.json."""
+    if query_manifest_path is None:
+        return [], {}
+    p = Path(query_manifest_path)
+    if not p.is_file():
+        return [], {}
+    doc = read_json(p)
+    q_records = [dict(r) for r in (doc.get("query_records") or []) if isinstance(r, Mapping)]
+    by_norm: dict[str, dict[str, Any]] = {}
+    for rec in q_records:
+        instr = rec.get("instruction")
+        if instr:
+            nk = " ".join(str(instr).split()).casefold()
+            by_norm[nk] = rec
+    return q_records, by_norm
+
+
+def _match_query_record(
+    instruction: str,
+    task_id: str,
+    q_idx: int,
+    q_records: Sequence[Mapping[str, Any]],
+    q_by_norm: Mapping[str, Mapping[str, Any]],
+) -> Mapping[str, Any] | None:
+    nk = " ".join(str(instruction or "").split()).casefold()
+    if nk in q_by_norm:
+        return q_by_norm[nk]
+    if 0 <= q_idx < len(q_records):
+        return q_records[q_idx]
+    m = re.search(r"(\d+)$", str(task_id or ""))
+    if m:
+        pos = int(m.group(1)) - 1
+        if 0 <= pos < len(q_records):
+            return q_records[pos]
+    return None
+
+
+def _select_queries_for_group(
+    queries: Sequence[Mapping[str, Any]],
+    *,
+    query_families: Sequence[str] | None = None,
+    max_queries_per_group: int | None = None,
+) -> list[dict[str, Any]]:
+    """Filter by query_families and optionally draw a deterministic family-stratified subset."""
+    selected = [dict(q) for q in queries]
+    if query_families:
+        allowed = {str(f).strip() for f in query_families if str(f).strip()}
+        selected = [q for q in selected if str(q.get("query_family") or "") in allowed]
+    if max_queries_per_group is None:
+        return selected
+    limit = int(max_queries_per_group)
+    if limit < 1:
+        raise ValueError(f"max_queries_per_group must be >= 1, got {max_queries_per_group}")
+    if len(selected) <= limit:
+        return selected
+
+    buckets: dict[str, list[dict[str, Any]]] = {}
+    for q in selected:
+        fam = str(q.get("query_family") or "unknown")
+        buckets.setdefault(fam, []).append(q)
+    ordered_families = [f for f in QUERY_FAMILY_ORDER if f in buckets]
+    ordered_families.extend(sorted(f for f in buckets if f not in ordered_families))
+
+    chosen_ids: set[str] = set()
+    chosen: list[dict[str, Any]] = []
+    idx = 0
+    while len(chosen) < limit:
+        progressed = False
+        for fam in ordered_families:
+            bucket = buckets[fam]
+            if idx < len(bucket):
+                item = bucket[idx]
+                chosen.append(item)
+                chosen_ids.add(str(item["task_id"]))
+                progressed = True
+                if len(chosen) >= limit:
+                    break
+        if not progressed:
+            break
+        idx += 1
+
+    return [q for q in selected if str(q["task_id"]) in chosen_ids]
+
+
 def prepare_group_queries_from_eval_dir(
     group_eval_dir: str | Path,
     *,
@@ -1105,8 +1192,15 @@ def prepare_group_queries_from_eval_dir(
     bank_name: str = "modified",
     top_k: int = 5,
     precomputed_store: PrecomputedEncoderStore | None = None,
+    query_suite: str | None = None,
+    group_name: str | None = None,
+    brand_fallback_map: Mapping[str, str] | None = SET2_ASIN_BRAND_FALLBACK,
+    clean_title_punctuation: bool = True,
 ) -> dict[str, Any]:
-    """Restore deterministic Top-5 memories from a frozen group evaluation directory (`scores.npz` + `modified.json`)."""
+    """Restore deterministic Top-k memories from a frozen group evaluation directory (`scores.npz` + `modified.json`)."""
+    k_val = int(top_k)
+    if k_val < 1:
+        raise ValueError(f"top_k must be >= 1, got {top_k}")
     group_eval_dir = Path(group_eval_dir).resolve()
     plan = read_json(group_eval_dir / "evaluation_plan.json")
     rows = read_json(group_eval_dir / "evaluation.json")
@@ -1128,10 +1222,11 @@ def prepare_group_queries_from_eval_dir(
     if source_memory_id not in by_id:
         raise ValueError(f"source_memory_id {source_memory_id!r} not found in {bank_path}")
     source_entry = by_id[source_memory_id]
-    target_title = " ".join(str(source_entry["PrimaryImage"]["Title"]).split()).strip()
-    target_brand = " ".join(
-        str(source_entry.get("Brand") or source_entry["PrimaryImage"].get("Brand") or "").split()
-    ).strip()
+    target_title = clean_product_title(
+        source_entry["PrimaryImage"]["Title"],
+        strip_trailing_punctuation=clean_title_punctuation,
+    )
+    target_brand = resolve_entry_brand(source_entry, brand_fallback_map=brand_fallback_map)
 
     row_index = int(row["score_archive_index"])
     with np.load(group_eval_dir / "scores.npz", allow_pickle=False) as saved:
@@ -1157,11 +1252,19 @@ def prepare_group_queries_from_eval_dir(
             key_image_weight=key_weight,
             index_text=index_text,
             source_memory_id=source_memory_id,
-            top_k=top_k,
+            top_k=k_val,
         )
         max_err = float(np.max(np.abs(offline_res["scores"] - scores_matrix)))
         if max_err > 1e-5:
             raise ValueError(f"Precomputed store score mismatch vs scores.npz: {max_err:.3e}")
+
+    manifest_path = plan.get("query_manifest")
+    if (not manifest_path or not Path(manifest_path).is_file()) and query_suite and group_name:
+        try:
+            manifest_path = resolve_query_root(None, query_suite) / group_name / "queries.json"
+        except Exception:
+            manifest_path = None
+    q_records, q_by_norm = _load_query_family_lookup(manifest_path)
 
     source_idx = entry_ids.index(source_memory_id)
     obs_by_task = {q["task_id"]: q for q in row["queries"]}
@@ -1170,21 +1273,33 @@ def prepare_group_queries_from_eval_dir(
     for q_idx, q in enumerate(plan["queries"]):
         scores_row = scores_matrix[q_idx]
         order = np.argsort(-scores_row, kind="stable").tolist()
-        top_indices = order[:top_k]
+        top_indices = order[:k_val]
         computed_rank = order.index(source_idx) + 1
         recorded_rank = obs_by_task[q["task_id"]]["rank"]
         if computed_rank != recorded_rank:
             raise ValueError(f"Rank mismatch for {q['task_id']}: archive={computed_rank} vs json={recorded_rank}")
 
+        rec_meta = _match_query_record(q["instruction"], q["task_id"], q_idx, q_records, q_by_norm)
         top_entries = [bank_entries[i] for i in top_indices]
         query_items.append({
             "task_id": q["task_id"],
+            "query_id": rec_meta.get("id") if rec_meta else None,
+            "query_family": rec_meta.get("query_family") if rec_meta else None,
             "instruction": q["instruction"],
+            "top_k": k_val,
             "source_rank": int(computed_rank),
             "source_score": float(scores_row[source_idx]),
+            "source_in_top1": bool(computed_rank == 1),
             "source_in_top5": bool(computed_rank <= 5),
+            "source_in_topk": bool(computed_rank <= k_val),
             "top5_memory_ids": [entry_ids[i] for i in top_indices],
-            "top5_titles": [" ".join(str(bank_entries[i]["PrimaryImage"]["Title"]).split()).strip() for i in top_indices],
+            "top5_titles": [
+                clean_product_title(
+                    bank_entries[i]["PrimaryImage"]["Title"],
+                    strip_trailing_punctuation=clean_title_punctuation,
+                )
+                for i in top_indices
+            ],
             "top5_scores": [float(scores_row[i]) for i in top_indices],
             "top5_entries": top_entries,
         })
@@ -1214,8 +1329,13 @@ def prepare_suite_queries_from_precomputed(
     selected_groups: Sequence[str] | None = None,
     replacement_groups: str = "all",
     verify_training_snapshots: bool = False,
+    brand_fallback_map: Mapping[str, str] | None = SET2_ASIN_BRAND_FALLBACK,
+    clean_title_punctuation: bool = True,
 ) -> dict[str, dict[str, Any]]:
-    """Zero-GPU Top-5 retrieval directly from PrecomputedEncoderStore without requiring scores.npz."""
+    """Zero-GPU Top-k retrieval directly from PrecomputedEncoderStore without requiring scores.npz."""
+    k_val = int(top_k)
+    if k_val < 1:
+        raise ValueError(f"top_k must be >= 1, got {top_k}")
     norm_method = normalize_method(method)
     effective_key_mode = shared_evaluation.default_key_mode_for_method(norm_method) if key_mode is None else key_mode
     key_image_weight = 1.0 if effective_key_mode == "image" else 0.5
@@ -1269,20 +1389,21 @@ def prepare_suite_queries_from_precomputed(
         group = item["group"]
         source_memory_id = item["source_memory_id"]
         source_entry = by_id[source_memory_id]
-        target_title = " ".join(str(source_entry["PrimaryImage"]["Title"]).split()).strip()
-        target_brand = " ".join(
-            str(source_entry.get("Brand") or source_entry["PrimaryImage"].get("Brand") or "").split()
-        ).strip()
+        target_title = clean_product_title(
+            source_entry["PrimaryImage"]["Title"],
+            strip_trailing_punctuation=clean_title_punctuation,
+        )
+        target_brand = resolve_entry_brand(source_entry, brand_fallback_map=brand_fallback_map)
 
         group_query_path = Path(validation["groups"][group]["query_manifest"])
-        q_doc = read_json(group_query_path)
-        q_records = q_doc.get("query_records") or []
+        q_records, q_by_norm = _load_query_family_lookup(group_query_path)
         formal_queries = shared_evaluation.load_formal_queries(
             group_query_path, item["target"], query_mode="text"
         )
-        for fq, rec in zip(formal_queries, q_records):
-            fq["query_id"] = rec.get("id")
-            fq["query_family"] = rec.get("query_family")
+        for q_idx, fq in enumerate(formal_queries):
+            rec_meta = _match_query_record(fq["instruction"], fq["task_id"], q_idx, q_records, q_by_norm)
+            fq["query_id"] = rec_meta.get("id") if rec_meta else None
+            fq["query_family"] = rec_meta.get("query_family") if rec_meta else None
 
         ranked = store.rank_bank_queries(
             chosen_bank,
@@ -1292,23 +1413,30 @@ def prepare_suite_queries_from_precomputed(
             key_image_weight=key_image_weight,
             index_text=index_text,
             source_memory_id=source_memory_id,
-            top_k=top_k,
+            top_k=k_val,
         )
 
         query_items: list[dict[str, Any]] = []
         for q_res in ranked["queries"]:
             top_entries = q_res["top_entries"]
+            s_rank = int(q_res["source_rank"])
             query_items.append({
                 "task_id": q_res["task_id"],
                 "query_id": q_res.get("query_id"),
                 "query_family": q_res.get("query_family"),
                 "instruction": q_res["instruction"],
-                "source_rank": int(q_res["source_rank"]),
+                "top_k": k_val,
+                "source_rank": s_rank,
                 "source_score": float(q_res["source_score"]),
+                "source_in_top1": bool(s_rank == 1),
                 "source_in_top5": bool(q_res["source_in_top5"]),
+                "source_in_topk": bool(s_rank <= k_val),
                 "top5_memory_ids": list(q_res["top_memory_ids"]),
                 "top5_titles": [
-                    " ".join(str(e["PrimaryImage"]["Title"]).split()).strip()
+                    clean_product_title(
+                        e["PrimaryImage"]["Title"],
+                        strip_trailing_punctuation=clean_title_punctuation,
+                    )
                     for e in top_entries
                 ],
                 "top5_scores": list(q_res["top_scores"]),
@@ -1330,13 +1458,58 @@ def prepare_suite_queries_from_precomputed(
     return per_group
 
 
-def _aggregate_records(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+def _is_in_top1(rec: Mapping[str, Any]) -> bool:
+    if "source_in_top1" in rec and rec["source_in_top1"] is not None:
+        return bool(rec["source_in_top1"])
+    rank = rec.get("source_rank")
+    return (int(rank) == 1) if rank is not None else False
+
+
+def _is_in_topk(rec: Mapping[str, Any], top_k: int) -> bool:
+    if "source_in_topk" in rec and rec.get("top_k") == top_k and rec["source_in_topk"] is not None:
+        return bool(rec["source_in_topk"])
+    rank = rec.get("source_rank")
+    if rank is not None:
+        return int(rank) <= int(top_k)
+    return bool(rec.get("source_in_top5"))
+
+
+def _is_null_recommendation(rec: Mapping[str, Any]) -> bool:
+    if "recommended_product_is_null" in rec and rec["recommended_product_is_null"] is not None:
+        return bool(rec["recommended_product_is_null"])
+    if "recommended_product_name" in rec:
+        return rec.get("recommended_product_name") is None
+    parsed = rec.get("parsed_json")
+    if isinstance(parsed, Mapping):
+        return parsed.get("recommended_product_name") is None
+    return False
+
+
+def _record_reasoning_chars(rec: Mapping[str, Any]) -> int:
+    if "reasoning_chars" in rec and rec["reasoning_chars"] is not None:
+        return int(rec["reasoning_chars"])
+    rc = rec.get("reasoning_content")
+    if isinstance(rc, str) and rc:
+        return len(rc)
+    inline = rec.get("inline_thinking")
+    if isinstance(inline, str) and inline:
+        return len(inline)
+    return 0
+
+
+def _aggregate_records(records: Sequence[Mapping[str, Any]], *, top_k: int = 5) -> dict[str, Any]:
     n = len(records)
+    k_val = int(top_k)
     if n == 0:
         return {
             "query_count": 0,
+            "top_k": k_val,
+            "top1_recall_hits": 0,
+            "top1_recall_rate": 0.0,
             "top5_recall_hits": 0,
             "top5_recall_rate": 0.0,
+            "topk_recall_hits": 0,
+            "topk_recall_rate": 0.0,
             "mean_source_rank": None,
             "ghr_mean_cosine": 0.0,
             "ghr_070_hits": 0,
@@ -1345,36 +1518,86 @@ def _aggregate_records(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
             "ghr_075_rate": 0.0,
             "ghr_080_hits": 0,
             "ghr_080_rate": 0.0,
+            "ghr_sent_max_mean_cosine": 0.0,
+            "ghr_sent_max_075_hits": 0,
+            "ghr_sent_max_075_rate": 0.0,
             "rec_exact_hits": 0,
             "rec_exact_rate": 0.0,
             "rec_abbrev_only_hits": 0,
             "rec_abbrev_only_rate": 0.0,
             "rec_any_hits": 0,
             "rec_any_rate": 0.0,
+            "null_recommendation_hits": 0,
+            "null_recommendation_rate": 0.0,
+            "reasoning_present_hits": 0,
+            "reasoning_present_rate": 0.0,
+            "mean_reasoning_chars": 0.0,
+            "mean_reasoning_tokens": None,
             "cond_rec_exact_given_top5": None,
             "cond_rec_any_given_top5": None,
             "cond_ghr_075_given_top5": None,
+            "cond_rec_exact_given_topk": None,
+            "cond_rec_any_given_topk": None,
+            "cond_ghr_075_given_topk": None,
+            "cond_ghr_sent_max_075_given_topk": None,
         }
 
+    top1_records = [r for r in records if _is_in_top1(r)]
     top5_records = [r for r in records if r.get("source_in_top5")]
+    topk_records = [r for r in records if _is_in_topk(r, k_val)]
+    n_top1 = len(top1_records)
     n_top5 = len(top5_records)
+    n_topk = len(topk_records)
+
     ghr_070 = sum(1 for r in records if r.get("ghr_hit_070"))
     ghr_075 = sum(1 for r in records if r.get("ghr_hit_075"))
     ghr_080 = sum(1 for r in records if r.get("ghr_hit_080"))
+    sent_max_075 = sum(
+        1
+        for r in records
+        if (r["ghr_sentence_max_hit_075"] if "ghr_sentence_max_hit_075" in r else r.get("ghr_hit_075"))
+    )
     rec_exact = sum(1 for r in records if r.get("rec_exact_hit"))
     rec_abbrev = sum(1 for r in records if r.get("rec_abbrev_hit"))
     rec_any = sum(1 for r in records if r.get("rec_any_hit"))
+    null_hits = sum(1 for r in records if _is_null_recommendation(r))
+
     mean_cos = sum(float(r.get("ghr_cosine", 0.0)) for r in records) / n
+    mean_sent_max_cos = sum(
+        float(r.get("ghr_sentence_max_cosine", r.get("ghr_cosine", 0.0))) for r in records
+    ) / n
     mean_rank = sum(float(r.get("source_rank", 0)) for r in records) / n
+
+    r_chars = [_record_reasoning_chars(r) for r in records]
+    r_present = sum(1 for c in r_chars if c > 0)
+    r_tokens = [
+        (r.get("usage") or {}).get("ReasoningTokens")
+        for r in records
+        if isinstance((r.get("usage") or {}).get("ReasoningTokens"), (int, float))
+    ]
 
     top5_exact = sum(1 for r in top5_records if r.get("rec_exact_hit"))
     top5_any = sum(1 for r in top5_records if r.get("rec_any_hit"))
     top5_ghr075 = sum(1 for r in top5_records if r.get("ghr_hit_075"))
 
+    topk_exact = sum(1 for r in topk_records if r.get("rec_exact_hit"))
+    topk_any = sum(1 for r in topk_records if r.get("rec_any_hit"))
+    topk_ghr075 = sum(1 for r in topk_records if r.get("ghr_hit_075"))
+    topk_sent_max_ghr075 = sum(
+        1
+        for r in topk_records
+        if (r["ghr_sentence_max_hit_075"] if "ghr_sentence_max_hit_075" in r else r.get("ghr_hit_075"))
+    )
+
     return {
         "query_count": n,
+        "top_k": k_val,
+        "top1_recall_hits": n_top1,
+        "top1_recall_rate": n_top1 / n,
         "top5_recall_hits": n_top5,
         "top5_recall_rate": n_top5 / n,
+        "topk_recall_hits": n_topk,
+        "topk_recall_rate": n_topk / n,
         "mean_source_rank": round(mean_rank, 3),
         "ghr_mean_cosine": round(mean_cos, 4),
         "ghr_070_hits": ghr_070,
@@ -1383,15 +1606,28 @@ def _aggregate_records(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
         "ghr_075_rate": ghr_075 / n,
         "ghr_080_hits": ghr_080,
         "ghr_080_rate": ghr_080 / n,
+        "ghr_sent_max_mean_cosine": round(mean_sent_max_cos, 4),
+        "ghr_sent_max_075_hits": sent_max_075,
+        "ghr_sent_max_075_rate": sent_max_075 / n,
         "rec_exact_hits": rec_exact,
         "rec_exact_rate": rec_exact / n,
         "rec_abbrev_only_hits": rec_abbrev,
         "rec_abbrev_only_rate": rec_abbrev / n,
         "rec_any_hits": rec_any,
         "rec_any_rate": rec_any / n,
+        "null_recommendation_hits": null_hits,
+        "null_recommendation_rate": null_hits / n,
+        "reasoning_present_hits": r_present,
+        "reasoning_present_rate": r_present / n,
+        "mean_reasoning_chars": round(sum(r_chars) / n, 1),
+        "mean_reasoning_tokens": round(sum(r_tokens) / len(r_tokens), 1) if r_tokens else None,
         "cond_rec_exact_given_top5": (top5_exact / n_top5) if n_top5 > 0 else None,
         "cond_rec_any_given_top5": (top5_any / n_top5) if n_top5 > 0 else None,
         "cond_ghr_075_given_top5": (top5_ghr075 / n_top5) if n_top5 > 0 else None,
+        "cond_rec_exact_given_topk": (topk_exact / n_topk) if n_topk > 0 else None,
+        "cond_rec_any_given_topk": (topk_any / n_topk) if n_topk > 0 else None,
+        "cond_ghr_075_given_topk": (topk_ghr075 / n_topk) if n_topk > 0 else None,
+        "cond_ghr_sent_max_075_given_topk": (topk_sent_max_ghr075 / n_topk) if n_topk > 0 else None,
     }
 
 
@@ -1404,10 +1640,23 @@ def build_downstream_summary(
     encoder_slug: str,
     model_name: str,
     temperature: float | None,
+    provider: str = "minimax",
+    prompt_mode: str = DEFAULT_PROMPT_MODE,
+    memory_text_mode: str = DEFAULT_MEMORY_TEXT_MODE,
+    top_k: int = 5,
+    thinking_mode: str = "enabled",
+    reasoning_effort: str | None = None,
+    reasoning_split: str = "auto",
+    effective_temperature: float | None = None,
+    temperature_supported: bool | None = None,
+    run_label: str | None = None,
 ) -> dict[str, Any]:
     """Summarize downstream recommendation evaluation records globally, by group, and by query family."""
+    k_val = int(top_k)
     groups = sorted({str(r["group"]) for r in records})
-    families = sorted({str(r["query_family"]) for r in records if r.get("query_family")})
+    raw_families = {str(r["query_family"]) for r in records if r.get("query_family")}
+    families = [f for f in QUERY_FAMILY_ORDER if f in raw_families]
+    families.extend(sorted(f for f in raw_families if f not in families))
 
     by_group = {}
     for g in groups:
@@ -1419,11 +1668,11 @@ def build_downstream_summary(
             "target_brand": sample.get("target_brand"),
             "target_title": sample.get("target_title"),
             "ghr_target_sentence": sample.get("ghr_target_sentence"),
-            "metrics": _aggregate_records(g_recs),
+            "metrics": _aggregate_records(g_recs, top_k=k_val),
         }
 
     by_family = {
-        fam: _aggregate_records([r for r in records if r.get("query_family") == fam])
+        fam: _aggregate_records([r for r in records if r.get("query_family") == fam], top_k=k_val)
         for fam in families
     }
 
@@ -1432,21 +1681,41 @@ def build_downstream_summary(
         st = str(r.get("parse_status") or "unknown")
         parse_counts[st] = parse_counts.get(st, 0) + 1
 
+    if temperature_supported is None:
+        is_m3 = str(provider).lower() == "minimax" and str(model_name).casefold().startswith("minimax-m3")
+        temperature_supported = not is_m3
+    if effective_temperature is None:
+        effective_temperature = 1.0 if not temperature_supported else (0.0 if temperature is None else float(temperature))
+
     return {
-        "schema_version": 1,
+        "schema_version": 2,
+        "run_label": run_label,
         "method_tag": method_tag,
         "method": method,
         "query_suite": query_suite,
         "encoder_slug": encoder_slug,
+        "provider": provider,
         "mllm_model": model_name,
+        "prompt_mode": prompt_mode,
+        "memory_text_mode": memory_text_mode,
+        "top_k": k_val,
+        "thinking_mode": thinking_mode,
+        "reasoning_effort": reasoning_effort,
+        "reasoning_split": reasoning_split,
         "temperature": temperature,
+        "effective_temperature": effective_temperature,
+        "temperature_supported": bool(temperature_supported),
         "total_queries": len(records),
         "group_count": len(groups),
         "parse_status_counts": parse_counts,
-        "overall": _aggregate_records(records),
+        "overall": _aggregate_records(records, top_k=k_val),
         "by_group": by_group,
         "by_family": by_family,
     }
+
+
+def _fmt_pct(val: float | None) -> str:
+    return f"{val * 100:.1f}%" if val is not None else "—"
 
 
 def write_downstream_report(summary: Mapping[str, Any], report_path: str | Path) -> Path:
@@ -1454,56 +1723,118 @@ def write_downstream_report(summary: Mapping[str, Any], report_path: str | Path)
     report_path = Path(report_path).resolve()
     ov = summary["overall"]
     n = ov["query_count"]
-    cond_exact = (
-        f"{ov['cond_rec_exact_given_top5'] * 100:.1f}%"
-        if ov["cond_rec_exact_given_top5"] is not None
-        else "N/A"
-    )
-    cond_any = (
-        f"{ov['cond_rec_any_given_top5'] * 100:.1f}%"
-        if ov["cond_rec_any_given_top5"] is not None
-        else "N/A"
-    )
-    cond_ghr = (
-        f"{ov['cond_ghr_075_given_top5'] * 100:.1f}%"
-        if ov["cond_ghr_075_given_top5"] is not None
-        else "N/A"
-    )
+    k_val = int(summary.get("top_k", ov.get("top_k", 5)))
+    prompt_mode = summary.get("prompt_mode", DEFAULT_PROMPT_MODE)
+    mem_mode = summary.get("memory_text_mode", DEFAULT_MEMORY_TEXT_MODE)
+    think_mode = summary.get("thinking_mode", "enabled")
+    effort = summary.get("reasoning_effort") or "default"
+    run_label = summary.get("run_label")
+    label_suffix = f" / {run_label}" if run_label else ""
+
+    cond_exact_k = _fmt_pct(ov.get("cond_rec_exact_given_topk", ov.get("cond_rec_exact_given_top5")))
+    cond_any_k = _fmt_pct(ov.get("cond_rec_any_given_topk", ov.get("cond_rec_any_given_top5")))
+    cond_ghr_k = _fmt_pct(ov.get("cond_ghr_075_given_topk", ov.get("cond_ghr_075_given_top5")))
+    cond_smax_k = _fmt_pct(ov.get("cond_ghr_sent_max_075_given_topk"))
+    cond_exact_5 = _fmt_pct(ov.get("cond_rec_exact_given_top5"))
+
+    r_tokens_str = f"{ov['mean_reasoning_tokens']:.1f}" if ov.get("mean_reasoning_tokens") is not None else "N/A"
+    topk_hits = ov.get("topk_recall_hits", ov["top5_recall_hits"])
+    topk_rate = ov.get("topk_recall_rate", ov["top5_recall_rate"])
+    top1_hits = ov.get("top1_recall_hits", 0)
+    top1_rate = ov.get("top1_recall_rate", 0.0)
+    smax_hits = ov.get("ghr_sent_max_075_hits", ov["ghr_075_hits"])
+    smax_rate = ov.get("ghr_sent_max_075_rate", ov["ghr_075_rate"])
+    smax_cos = ov.get("ghr_sent_max_mean_cosine", ov["ghr_mean_cosine"])
+    null_hits = ov.get("null_recommendation_hits", 0)
+    null_rate = ov.get("null_recommendation_rate", 0.0)
 
     lines = [
-        f"# MiniMax M3 下游推荐评测报告（{summary['method_tag']} / {summary['encoder_slug']} / {summary['query_suite']}）",
+        f"# 下游多模态推荐评测报告（{summary['method_tag']} / {summary['encoder_slug']} / {summary['query_suite']}{label_suffix}）",
         "",
         f"- **方法**：`{summary['method_tag']}` (`{summary['method']}`)，**检索编码器**：`{summary['encoder_slug']}`，**测试集**：`{summary['query_suite']}`",
-        f"- **下游被测 MLLM**：`{summary['mllm_model']}` (`temperature={summary['temperature']}`)，**总查询数**：`{n}` 条（{summary['group_count']} 组）",
+        (
+            f"- **下游被测 MLLM**：`{summary['mllm_model']}` (provider=`{summary.get('provider', 'minimax')}`, "
+            f"`effective_temperature={summary.get('effective_temperature', summary['temperature'])}`, "
+            f"`temperature_supported={summary.get('temperature_supported')}`)，"
+            f"**总查询数**：`{n}` 条（{summary['group_count']} 组）"
+        ),
+        (
+            f"- **实验协议配置**：`prompt_mode={prompt_mode}` | `memory_text_mode={mem_mode}` | "
+            f"`top_k={k_val}` | `thinking_mode={think_mode}` | `reasoning_effort={effort}` | "
+            f"`reasoning_split={summary.get('reasoning_split', 'auto')}`"
+        ),
+        (
+            f"- **思考链与拒答审计**：思考链出现 `{ov.get('reasoning_present_hits', 0)}/{n}` "
+            f"(`{ov.get('reasoning_present_rate', 0.0) * 100:.1f}%`)，均字符 `{ov.get('mean_reasoning_chars', 0.0):.1f}`，"
+            f"均 ReasoningTokens `{r_tokens_str}`；`recommended_product_name=null` 拒答 `{null_hits}/{n}` (`{null_rate * 100:.1f}%`)"
+        ),
         f"- **JSON 解析状态统计**：`{json.dumps(summary['parse_status_counts'], ensure_ascii=False)}`",
         "",
         "## 一、全局汇总指标",
         "",
         "| 指标维度 | 命中数 / 总数 | 比例 / 均值 | 说明 |",
         "|---|---:|---:|---|",
-        f"| 上游检索 Top-5 召回率 | {ov['top5_recall_hits']}/{n} | {ov['top5_recall_rate'] * 100:.1f}% | 目标商品进入前 5 名（均名 {ov['mean_source_rank']}） |",
-        f"| **GHR (τ = 0.75，主口径)** | **{ov['ghr_075_hits']}/{n}** | **{ov['ghr_075_rate'] * 100:.1f}%** | SBERT `all-MiniLM-L6-v2` cos > 0.75 |",
-        f"| GHR (τ = 0.70 / 0.80) | {ov['ghr_070_hits']}/{n} / {ov['ghr_080_hits']}/{n} | {ov['ghr_070_rate'] * 100:.1f}% / {ov['ghr_080_rate'] * 100:.1f}% | 阈值灵敏度（平均余弦 {ov['ghr_mean_cosine']:.4f}） |",
+        f"| 上游检索 Top-{k_val} 召回率 | {topk_hits}/{n} | {topk_rate * 100:.1f}% | 目标商品进入输入窗口 Top-{k_val}（均名 {ov['mean_source_rank']}） |",
+        f"| 上游检索 Rank-1 / Top-5 召回 | {top1_hits}/{n} / {ov['top5_recall_hits']}/{n} | {top1_rate * 100:.1f}% / {ov['top5_recall_rate'] * 100:.1f}% | 第一位命中率与全量 Top-5 召回率 |",
+        f"| **GHR (τ = 0.75，整段主口径)** | **{ov['ghr_075_hits']}/{n}** | **{ov['ghr_075_rate'] * 100:.1f}%** | SBERT `all-MiniLM-L6-v2` 整段 cos > 0.75（均 Cos {ov['ghr_mean_cosine']:.4f}） |",
+        f"| GHR (分句最大余弦 τ = 0.75，校准审计) | {smax_hits}/{n} | {smax_rate * 100:.1f}% | `max_s cos(SB(s), SB(target)) > 0.75`（均 Cos {smax_cos:.4f}） |",
+        f"| GHR (整段 τ = 0.70 / 0.80) | {ov['ghr_070_hits']}/{n} / {ov['ghr_080_hits']}/{n} | {ov['ghr_070_rate'] * 100:.1f}% / {ov['ghr_080_rate'] * 100:.1f}% | 阈值灵敏度 |",
         f"| **推荐成功率（严格精确匹配，主指标）** | **{ov['rec_exact_hits']}/{n}** | **{ov['rec_exact_rate'] * 100:.1f}%** | `norm(target_title)` 完整命中 |",
         f"| 推荐成功率（含简写容错，辅助审计） | {ov['rec_any_hits']}/{n} | {ov['rec_any_rate'] * 100:.1f}% | 其中纯简写命中 {ov['rec_abbrev_only_hits']}/{n} ({ov['rec_abbrev_only_rate'] * 100:.1f}%) |",
-        f"| 条件转化率 P(精确推荐 | 进 Top-5) | — | {cond_exact} | 进 Top-5 后被 MLLM 采信点名比例 |",
-        f"| 条件转化率 P(含简写推荐 | 进 Top-5) | — | {cond_any} | 进 Top-5 后被 MLLM 采信（含简写）比例 |",
-        f"| 条件转化率 P(GHR@0.75 | 进 Top-5) | — | {cond_ghr} | 进 Top-5 后语义劫持转化率 |",
+        f"| 空推荐拒答率 (`null`) | {null_hits}/{n} | {null_rate * 100:.1f}% | `recommended_product_name` 为 `null` 占比 |",
+        f"| 条件转化率 P(精确推荐 \\| 进 Top-{k_val}) | — | {cond_exact_k} | 进 Top-{k_val} 后被 MLLM 采信点名（P(精确\\|Top-5) = {cond_exact_5}） |",
+        f"| 条件转化率 P(含简写推荐 \\| 进 Top-{k_val}) | — | {cond_any_k} | 进 Top-{k_val} 后被 MLLM 采信（含简写）比例 |",
+        f"| 条件转化率 P(GHR@0.75 整段 / 分句 \\| 进 Top-{k_val}) | — | {cond_ghr_k} / {cond_smax_k} | 进 Top-{k_val} 后语义劫持转化率 |",
         "",
-        "## 二、逐商品组明细（9 组）",
+        "## 二、按查询家族分层统计 (`query_family`)",
         "",
-        "| 组别 | 目标商品 (`source_memory_id`) | Top-5 召回 | GHR@0.75 (均 Cos) | 推荐成功(严格) | 推荐成功(含简写) | P(严格推荐\\|Top-5) |",
-        "|---|---|---:|---:|---:|---:|---:|",
     ]
+
+    by_family = summary.get("by_family") or {}
+    if by_family:
+        lines.extend([
+            f"| 查询家族 (`query_family`) | 查询数 | Top-{k_val} / Rank-1 召回 | GHR@0.75 (整段 / 分句最大) | 推荐成功(严格) | 推荐成功(含简写) | Null 拒答 | P(精确\\|Top-{k_val}) | P(GHR@0.75\\|Top-{k_val}) |",
+            "|---|---:|---:|---:|---:|---:|---:|---:|---:|",
+        ])
+        for fam, fm in by_family.items():
+            fn = fm["query_count"]
+            ftk = fm.get("topk_recall_hits", fm["top5_recall_hits"])
+            ft1 = fm.get("top1_recall_hits", 0)
+            fsmax = fm.get("ghr_sent_max_075_hits", fm["ghr_075_hits"])
+            fnull = fm.get("null_recommendation_hits", 0)
+            f_cex = _fmt_pct(fm.get("cond_rec_exact_given_topk", fm.get("cond_rec_exact_given_top5")))
+            f_cghr = _fmt_pct(fm.get("cond_ghr_075_given_topk", fm.get("cond_ghr_075_given_top5")))
+            lines.append(
+                f"| `{fam}` | {fn} | "
+                f"{ftk}/{fn} ({fm.get('topk_recall_rate', fm['top5_recall_rate']) * 100:.1f}%) / {ft1}/{fn} | "
+                f"{fm['ghr_075_hits']}/{fn} ({fm['ghr_075_rate'] * 100:.1f}%) / {fsmax}/{fn} ({fm.get('ghr_sent_max_075_rate', fm['ghr_075_rate']) * 100:.1f}%) | "
+                f"{fm['rec_exact_hits']}/{fn} ({fm['rec_exact_rate'] * 100:.1f}%) | "
+                f"{fm['rec_any_hits']}/{fn} ({fm['rec_any_rate'] * 100:.1f}%) | "
+                f"{fnull}/{fn} ({fm.get('null_recommendation_rate', 0.0) * 100:.1f}%) | "
+                f"{f_cex} | {f_cghr} |"
+            )
+    else:
+        lines.append("*（当前记录缺少 `query_family` 元数据；请对旧归档执行 `--score-only` 自动回填后再出表。）*")
+
+    lines.extend([
+        "",
+        "## 三、逐商品组明细（9 组）",
+        "",
+        f"| 组别 | 目标商品 (`source_memory_id`) | 目标品牌 (`target_brand`) | Top-{k_val} / Top-5 召回 | GHR@0.75 (整段 / 分句最大) | 推荐成功(严格) | 推荐成功(含简写) | P(严格推荐\\|Top-{k_val}) |",
+        "|---|---|---|---:|---:|---:|---:|---:|",
+    ])
 
     for g, g_info in summary["by_group"].items():
         m = g_info["metrics"]
         gn = m["query_count"]
-        c_ex = f"{m['cond_rec_exact_given_top5'] * 100:.1f}%" if m["cond_rec_exact_given_top5"] is not None else "—"
+        brand_disp = g_info.get("target_brand") or "*(unbranded)*"
+        c_ex = _fmt_pct(m.get("cond_rec_exact_given_topk", m.get("cond_rec_exact_given_top5")))
+        gtk = m.get("topk_recall_hits", m["top5_recall_hits"])
+        gsmax = m.get("ghr_sent_max_075_hits", m["ghr_075_hits"])
         lines.append(
-            f"| `{g}` | `{g_info['source_memory_id']}` | "
-            f"{m['top5_recall_hits']}/{gn} ({m['top5_recall_rate'] * 100:.0f}%) | "
-            f"{m['ghr_075_hits']}/{gn} ({m['ghr_075_rate'] * 100:.0f}%, {m['ghr_mean_cosine']:.3f}) | "
+            f"| `{g}` | `{g_info['source_memory_id']}` | `{brand_disp}` | "
+            f"{gtk}/{gn} ({m.get('topk_recall_rate', m['top5_recall_rate']) * 100:.0f}%) / {m['top5_recall_hits']}/{gn} | "
+            f"{m['ghr_075_hits']}/{gn} ({m['ghr_075_rate'] * 100:.0f}%, {m['ghr_mean_cosine']:.3f}) / {gsmax}/{gn} | "
             f"{m['rec_exact_hits']}/{gn} ({m['rec_exact_rate'] * 100:.0f}%) | "
             f"{m['rec_any_hits']}/{gn} ({m['rec_any_rate'] * 100:.0f}%) | "
             f"{c_ex} |"
@@ -1541,8 +1872,35 @@ def evaluate_downstream_job(
     sbert_calculator: SBERTGHRCalculator | None = None,
     dry_run: bool = False,
     score_only: bool = False,
+    prompt_mode: str = DEFAULT_PROMPT_MODE,
+    memory_text_mode: str = DEFAULT_MEMORY_TEXT_MODE,
+    top_k: int = 5,
+    thinking_mode: str = "enabled",
+    reasoning_effort: str | None = None,
+    reasoning_split: str | bool = "auto",
+    extra_body: Mapping[str, Any] | None = None,
+    query_families: Sequence[str] | None = None,
+    max_queries_per_group: int | None = None,
+    run_label: str | None = None,
+    brand_fallback_map: Mapping[str, str] | None = SET2_ASIN_BRAND_FALLBACK,
+    clean_title_punctuation: bool = True,
 ) -> dict[str, Any]:
-    """Run (or resume / re-score) downstream MiniMax M3 recommendation evaluation for one (method, suite, encoder)."""
+    """Run (or resume / re-score) downstream MLLM recommendation evaluation for one configuration."""
+    k_val = int(top_k)
+    if k_val < 1:
+        raise ValueError(f"top_k must be >= 1, got {top_k}")
+    if prompt_mode not in SYSTEM_PROMPTS:
+        raise ValueError(f"Unsupported prompt_mode {prompt_mode!r}; expected one of {PROMPT_MODES}")
+    if memory_text_mode not in MEMORY_TEXT_MODES:
+        raise ValueError(f"Unsupported memory_text_mode {memory_text_mode!r}; expected one of {MEMORY_TEXT_MODES}")
+    norm_thinking = str(thinking_mode or "enabled").strip().lower()
+    if norm_thinking not in THINKING_MODES:
+        raise ValueError(f"Unsupported thinking_mode {thinking_mode!r}; expected one of {THINKING_MODES}")
+    norm_effort = _normalize_reasoning_effort(reasoning_effort)
+    if norm_thinking == "disabled" and norm_effort is not None:
+        raise ValueError("Cannot specify reasoning_effort when thinking_mode='disabled'")
+    norm_split = _normalize_reasoning_split(reasoning_split)
+
     output_dir = Path(output_dir).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
     jsonl_path = output_dir / "responses.jsonl"
@@ -1564,38 +1922,116 @@ def evaluate_downstream_job(
     if score_only:
         if not existing_records:
             raise FileNotFoundError(f"--score-only requested but no records found in {jsonl_path}")
+        query_lookup_cache: dict[str, tuple[list[dict[str, Any]], dict[str, dict[str, Any]]]] = {}
+        try:
+            q_root = resolve_query_root(None, query_suite)
+        except Exception:
+            q_root = None
+
         rescored_list: list[dict[str, Any]] = []
         for key in sorted(existing_records):
             rec = copy.deepcopy(existing_records[key])
+            group_name = str(rec["group"])
+            if rec.get("query_family") is None and q_root is not None:
+                if group_name not in query_lookup_cache:
+                    query_lookup_cache[group_name] = _load_query_family_lookup(
+                        q_root / group_name / "queries.json"
+                    )
+                q_recs, q_norm = query_lookup_cache[group_name]
+                matched = _match_query_record(
+                    str(rec.get("instruction") or ""),
+                    str(rec.get("task_id") or ""),
+                    -1,
+                    q_recs,
+                    q_norm,
+                )
+                if matched:
+                    rec["query_family"] = matched.get("query_family")
+                    rec.setdefault("query_id", matched.get("id"))
+
+            rec["target_title"] = clean_product_title(
+                rec["target_title"],
+                strip_trailing_punctuation=clean_title_punctuation,
+            )
+            if not str(rec.get("target_brand") or "").strip() and brand_fallback_map:
+                sm_id = str(rec.get("source_memory_id") or "")
+                for asin, fb_brand in brand_fallback_map.items():
+                    if sm_id.endswith(f"_{asin}"):
+                        rec["target_brand"] = fb_brand
+                        break
+
             parsed = parse_recommendation_response(rec.get("raw_content"))
             rec.update(parsed)
+            rec["recommended_product_is_null"] = parsed["recommended_product_name"] is None
+            if "reasoning_chars" not in rec or rec["reasoning_chars"] is None:
+                rec["reasoning_chars"] = _record_reasoning_chars(rec)
+            if "source_rank" in rec and rec["source_rank"] is not None:
+                rec.setdefault("source_in_top1", bool(int(rec["source_rank"]) == 1))
+                rec.setdefault("source_in_topk", bool(int(rec["source_rank"]) <= int(rec.get("top_k", k_val))))
+
             metrics = compute_recommendation_metrics(
                 parsed["recommend"],
                 parsed["recommended_product_name"],
                 target_title=rec["target_title"],
                 target_brand=rec.get("target_brand"),
-                top5_titles=rec["top5_titles"],
+                top5_titles=[
+                    clean_product_title(t, strip_trailing_punctuation=clean_title_punctuation)
+                    for t in rec["top5_titles"]
+                ],
                 sbert_calculator=sbert,
             )
             rec.update(metrics)
             rescored_list.append(rec)
+
         with jsonl_path.open("w", encoding="utf-8") as f:
             for rec in rescored_list:
                 f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+
+        sample0 = rescored_list[0]
         summary = build_downstream_summary(
             rescored_list,
             method_tag=method_tag,
             method=method,
             query_suite=query_suite,
             encoder_slug=encoder_slug,
-            model_name=model_name,
+            model_name=str(sample0.get("mllm_model") or model_name),
             temperature=temperature,
+            provider=str(sample0.get("provider") or provider),
+            prompt_mode=str(sample0.get("prompt_mode") or prompt_mode),
+            memory_text_mode=str(sample0.get("memory_text_mode") or memory_text_mode),
+            top_k=int(sample0.get("top_k") or k_val),
+            thinking_mode=str(sample0.get("thinking_mode") or norm_thinking),
+            reasoning_effort=sample0.get("reasoning_effort", norm_effort),
+            reasoning_split=str(sample0.get("reasoning_split") or norm_split),
+            effective_temperature=sample0.get("effective_temperature"),
+            temperature_supported=sample0.get("temperature_supported"),
+            run_label=run_label or sample0.get("run_label"),
         )
-        freeze_json(summary_path, summary)
+        save_json(summary_path, summary)
         write_downstream_report(summary, report_path)
         return summary
 
-    # Step 1: Zero-GPU Top-5 memory recall (from precomputed store or frozen eval_panel_dir).
+    # Guard against resuming an incompatible protocol in the same output directory.
+    if not dry_run and existing_records:
+        expected_protocol = {
+            "suite": query_suite,
+            "encoder": encoder_slug,
+            "prompt_mode": prompt_mode,
+            "memory_text_mode": memory_text_mode,
+            "top_k": k_val,
+            "thinking_mode": norm_thinking,
+            "reasoning_effort": norm_effort,
+            "mllm_model": model_name,
+        }
+        for rec in existing_records.values():
+            for field, expected_val in expected_protocol.items():
+                if field in rec and rec[field] != expected_val:
+                    raise ValueError(
+                        f"Cannot resume {jsonl_path}: existing record has {field}={rec[field]!r}, "
+                        f"which conflicts with current {field}={expected_val!r}. Use a new --output-dir or --run-label."
+                    )
+
+    # Step 1: Zero-GPU Top-k memory recall (from precomputed store or frozen eval_panel_dir).
     store = (
         PrecomputedEncoderStore(encoder_slug, store_root)
         if PrecomputedEncoderStore.exists(encoder_slug, store_root)
@@ -1615,8 +2051,12 @@ def evaluate_downstream_job(
                 sub_out / "groups" / g,
                 condition_label=condition_label,
                 bank_name=bank_name,
-                top_k=5,
+                top_k=k_val,
                 precomputed_store=store,
+                query_suite=query_suite,
+                group_name=g,
+                brand_fallback_map=brand_fallback_map,
+                clean_title_punctuation=clean_title_punctuation,
             )
             g_data["group"] = g
             per_group[g] = g_data
@@ -1629,17 +2069,19 @@ def evaluate_downstream_job(
             base=base,
             key_mode=key_mode,
             bank_name=bank_name,
-            top_k=5,
+            top_k=k_val,
             store_root=store_root,
             selected_groups=selected_groups,
             replacement_groups=replacement_groups,
+            brand_fallback_map=brand_fallback_map,
+            clean_title_punctuation=clean_title_punctuation,
         )
     else:
         raise ValueError("Either images_root (precomputed vector mode) or eval_panel_dir (scores.npz mode) is required")
 
     all_records: list[dict[str, Any]] = []
     dry_run_previews: list[dict[str, Any]] = []
-    sanitized_entry_cache: dict[tuple[str, str, str], dict[str, Any]] = {}
+    sanitized_entry_cache: dict[tuple[Any, ...], dict[str, Any]] = {}
     pending_tasks: list[dict[str, Any]] = []
 
     for group, g_data in per_group.items():
@@ -1648,7 +2090,13 @@ def evaluate_downstream_job(
         target_brand = g_data["target_brand"]
         source_memory_id = g_data["source_memory_id"]
 
-        for q in g_data["queries"]:
+        group_queries = _select_queries_for_group(
+            g_data["queries"],
+            query_families=query_families,
+            max_queries_per_group=max_queries_per_group,
+        )
+
+        for q in group_queries:
             task_id = q["task_id"]
             key = (group, task_id)
             if not dry_run and key in existing_records:
@@ -1659,24 +2107,40 @@ def evaluate_downstream_job(
                 q["top5_entries"],
                 q["instruction"],
                 memory_path=image_base_path,
+                prompt_mode=prompt_mode,
+                memory_text_mode=memory_text_mode,
+                top_k=k_val,
+                brand_fallback_map=brand_fallback_map,
+                clean_title_punctuation=clean_title_punctuation,
                 entry_cache=sanitized_entry_cache,
             )
 
             if dry_run:
                 dry_run_previews.append({
+                    "run_label": run_label,
                     "method_tag": method_tag,
                     "method": method,
                     "suite": query_suite,
                     "encoder": encoder_slug,
+                    "prompt_mode": prompt_mode,
+                    "memory_text_mode": memory_text_mode,
+                    "top_k": k_val,
+                    "thinking_mode": norm_thinking,
+                    "reasoning_effort": norm_effort,
+                    "reasoning_split": norm_split,
                     "group": group,
                     "task_id": task_id,
+                    "query_id": q.get("query_id"),
+                    "query_family": q.get("query_family"),
                     "instruction": q["instruction"],
                     "source_memory_id": source_memory_id,
                     "target_brand": target_brand,
                     "target_title": target_title,
                     "ghr_target_sentence": format_ghr_target_sentence(target_brand, target_title),
                     "source_rank": q["source_rank"],
+                    "source_in_top1": q["source_in_top1"],
                     "source_in_top5": q["source_in_top5"],
+                    "source_in_topk": q["source_in_topk"],
                     "top5_memory_ids": q["top5_memory_ids"],
                     "top5_titles": q["top5_titles"],
                     "top5_scores": q["top5_scores"],
@@ -1706,7 +2170,9 @@ def evaluate_downstream_job(
         completed_counter = 0
 
         print(
-            f"[DOWNSTREAM {method_tag}/{encoder_slug}/{query_suite}] "
+            f"[DOWNSTREAM {method_tag}/{encoder_slug}/{query_suite} "
+            f"prompt={prompt_mode} text={memory_text_mode} k={k_val} "
+            f"think={norm_thinking} effort={norm_effort or 'default'}] "
             f"pending={total_pending}, resumed={already_done}, concurrency={max_workers}",
             flush=True,
         )
@@ -1720,6 +2186,10 @@ def evaluate_downstream_job(
                 temperature=temperature,
                 initial_max_tokens=max_tokens,
                 max_retries=max_retries,
+                thinking_mode=norm_thinking,
+                reasoning_effort=norm_effort,
+                reasoning_split=norm_split,
+                extra_body=extra_body,
             )
             return {"task": task, "api_res": api_res}
 
@@ -1744,12 +2214,25 @@ def evaluate_downstream_job(
                             sbert_calculator=sbert,
                         )
                         record = {
+                            "run_label": run_label,
                             "method": method_tag,
                             "method_kind": method,
                             "suite": query_suite,
                             "encoder": encoder_slug,
+                            "provider": provider,
+                            "mllm_model": model_name,
+                            "prompt_mode": prompt_mode,
+                            "memory_text_mode": memory_text_mode,
+                            "top_k": k_val,
+                            "thinking_mode": api_res["thinking_mode"],
+                            "reasoning_effort": api_res["reasoning_effort"],
+                            "reasoning_split": api_res["reasoning_split"],
+                            "temperature_supported": api_res["temperature_supported"],
+                            "temperature_sent": api_res["temperature_sent"],
+                            "effective_temperature": api_res["effective_temperature"],
                             "group": group,
                             "task_id": task_id,
+                            "query_id": q.get("query_id"),
                             "query_family": q.get("query_family"),
                             "instruction": q["instruction"],
                             "source_memory_id": task["source_memory_id"],
@@ -1757,14 +2240,19 @@ def evaluate_downstream_job(
                             "target_title": task["target_title"],
                             "source_rank": q["source_rank"],
                             "source_score": q["source_score"],
+                            "source_in_top1": q["source_in_top1"],
                             "source_in_top5": q["source_in_top5"],
+                            "source_in_topk": q["source_in_topk"],
                             "top5_memory_ids": q["top5_memory_ids"],
                             "top5_titles": q["top5_titles"],
                             "top5_scores": q["top5_scores"],
                             "raw_content": api_res["raw_content"],
                             "reasoning_content": api_res["reasoning_content"],
+                            "inline_thinking": api_res.get("inline_thinking"),
+                            "reasoning_chars": api_res["reasoning_chars"],
                             "parsed_json": api_res["parsed_json"],
                             "parse_status": api_res["parse_status"],
+                            "recommended_product_is_null": api_res["recommended_product_name"] is None,
                             "finish_reason": api_res["finish_reason"],
                             "usage": api_res["usage"],
                             "attempts": api_res["attempts"],
@@ -1785,23 +2273,52 @@ def evaluate_downstream_job(
         all_records.sort(key=lambda r: (str(r["group"]), str(r["task_id"])))
 
     if dry_run:
+        top1_hits = sum(1 for item in dry_run_previews if item["source_in_top1"])
         top5_hits = sum(1 for item in dry_run_previews if item["source_in_top5"])
+        topk_hits = sum(1 for item in dry_run_previews if item["source_in_topk"])
+        fam_counts: dict[str, int] = {}
+        by_group_targets: dict[str, dict[str, Any]] = {}
+        for item in dry_run_previews:
+            fam = str(item.get("query_family") or "unknown")
+            fam_counts[fam] = fam_counts.get(fam, 0) + 1
+            by_group_targets.setdefault(
+                item["group"],
+                {
+                    "source_memory_id": item["source_memory_id"],
+                    "target_brand": item["target_brand"],
+                    "target_title": item["target_title"],
+                    "ghr_target_sentence": item["ghr_target_sentence"],
+                },
+            )
         dry_summary = {
             "mode": "dry_run",
             "gpu_used": False,
             "models_loaded": False,
+            "run_label": run_label,
             "method_tag": method_tag,
             "method": method,
             "query_suite": query_suite,
             "encoder_slug": encoder_slug,
+            "prompt_mode": prompt_mode,
+            "memory_text_mode": memory_text_mode,
+            "top_k": k_val,
+            "thinking_mode": norm_thinking,
+            "reasoning_effort": norm_effort,
+            "reasoning_split": norm_split,
             "prepared_query_count": len(dry_run_previews),
+            "query_family_counts": fam_counts,
+            "top1_recall_hits": top1_hits,
             "top5_recall_hits": top5_hits,
             "top5_recall_rate": (top5_hits / len(dry_run_previews)) if dry_run_previews else 0.0,
+            "topk_recall_hits": topk_hits,
+            "topk_recall_rate": (topk_hits / len(dry_run_previews)) if dry_run_previews else 0.0,
+            "by_group_targets": by_group_targets,
             "sample_preview": dry_run_previews[0] if dry_run_previews else None,
         }
         freeze_json(output_dir / "dry_run_verification.json", dry_summary)
         return dry_summary
 
+    sample_rec = all_records[0] if all_records else {}
     summary = build_downstream_summary(
         all_records,
         method_tag=method_tag,
@@ -1810,6 +2327,16 @@ def evaluate_downstream_job(
         encoder_slug=encoder_slug,
         model_name=model_name,
         temperature=temperature,
+        provider=provider,
+        prompt_mode=prompt_mode,
+        memory_text_mode=memory_text_mode,
+        top_k=k_val,
+        thinking_mode=norm_thinking,
+        reasoning_effort=norm_effort,
+        reasoning_split=norm_split,
+        effective_temperature=sample_rec.get("effective_temperature"),
+        temperature_supported=sample_rec.get("temperature_supported"),
+        run_label=run_label,
     )
     freeze_json(summary_path, summary)
     write_downstream_report(summary, report_path)
@@ -1820,35 +2347,81 @@ def write_comparison_report(
     summaries: Sequence[Mapping[str, Any]],
     output_dir: str | Path,
 ) -> Path:
-    """Write a side-by-side comparison report across methods/encoders/suites."""
+    """Write a side-by-side comparison report across methods/encoders/suites/ablations."""
     output_dir = Path(output_dir).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
     report_path = output_dir / "DOWNSTREAM_COMPARISON_REPORT.md"
 
+    valid_runs = [s for s in summaries if s.get("mode") != "dry_run"]
     lines = [
-        "# MiniMax M3 下游推荐评测对比总表",
+        "# 下游多模态推荐评测对比总表",
         "",
-        "| 方法 (`method_tag`) | 检索编码器 | 测试集 | Top-5 召回率 | GHR@0.75 (均 Cos) | GHR@0.70 / @0.80 | 推荐成功(严格) | 推荐成功(含简写) | P(严格推荐\\|Top-5) | P(GHR@0.75\\|Top-5) |",
-        "|---|---|---|---:|---:|---:|---:|---:|---:|---:|",
+        "## 一、全局指标对比总表",
+        "",
+        "| 运行标签 / 方法 | 检索编码器 | 测试集 | 被测 MLLM | Prompt / 记忆文本 / Top-k | CoT 配置 (均字符) | Top-k 召回率 | GHR@0.75 (整段 / 分句最大) | 推荐成功(严格) | Null 拒答率 | P(严格推荐\\|Top-k) | P(GHR@0.75\\|Top-k) |",
+        "|---|---|---|---|---|---|---:|---:|---:|---:|---:|---:|",
     ]
-    for s in summaries:
-        if s.get("mode") == "dry_run":
-            continue
+    for s in valid_runs:
         ov = s["overall"]
         n = ov["query_count"]
-        c_ex = f"{ov['cond_rec_exact_given_top5'] * 100:.1f}%" if ov["cond_rec_exact_given_top5"] is not None else "—"
-        c_ghr = f"{ov['cond_ghr_075_given_top5'] * 100:.1f}%" if ov["cond_ghr_075_given_top5"] is not None else "—"
-        lines.append(
-            f"| `{s['method_tag']}` | `{s['encoder_slug']}` | `{s['query_suite']}` | "
-            f"{ov['top5_recall_hits']}/{n} ({ov['top5_recall_rate'] * 100:.1f}%) | "
-            f"**{ov['ghr_075_hits']}/{n} ({ov['ghr_075_rate'] * 100:.1f}%)** ({ov['ghr_mean_cosine']:.3f}) | "
-            f"{ov['ghr_070_rate'] * 100:.1f}% / {ov['ghr_080_rate'] * 100:.1f}% | "
-            f"**{ov['rec_exact_hits']}/{n} ({ov['rec_exact_rate'] * 100:.1f}%)** | "
-            f"{ov['rec_any_hits']}/{n} ({ov['rec_any_rate'] * 100:.1f}%) | "
-            f"{c_ex} | {c_ghr} |"
+        k_val = int(s.get("top_k", ov.get("top_k", 5)))
+        tag_disp = f"`{s['method_tag']}` (`{s['run_label']}`)" if s.get("run_label") else f"`{s['method_tag']}`"
+        cfg_disp = (
+            f"`{s.get('prompt_mode', DEFAULT_PROMPT_MODE)}` / "
+            f"`{s.get('memory_text_mode', DEFAULT_MEMORY_TEXT_MODE)}` / `k={k_val}`"
         )
+        cot_disp = (
+            f"`{s.get('thinking_mode', 'enabled')}` / `{s.get('reasoning_effort') or 'default'}` "
+            f"({ov.get('mean_reasoning_chars', 0.0):.0f})"
+        )
+        tk_hits = ov.get("topk_recall_hits", ov["top5_recall_hits"])
+        tk_rate = ov.get("topk_recall_rate", ov["top5_recall_rate"])
+        smax_hits = ov.get("ghr_sent_max_075_hits", ov["ghr_075_hits"])
+        smax_rate = ov.get("ghr_sent_max_075_rate", ov["ghr_075_rate"])
+        null_rate = ov.get("null_recommendation_rate", 0.0)
+        c_ex = _fmt_pct(ov.get("cond_rec_exact_given_topk", ov.get("cond_rec_exact_given_top5")))
+        c_ghr = _fmt_pct(ov.get("cond_ghr_075_given_topk", ov.get("cond_ghr_075_given_top5")))
+        lines.append(
+            f"| {tag_disp} | `{s['encoder_slug']}` | `{s['query_suite']}` | `{s['mllm_model']}` | "
+            f"{cfg_disp} | {cot_disp} | "
+            f"{tk_hits}/{n} ({tk_rate * 100:.1f}%) | "
+            f"**{ov['ghr_075_hits']}/{n} ({ov['ghr_075_rate'] * 100:.1f}%)** / {smax_hits}/{n} ({smax_rate * 100:.1f}%) | "
+            f"**{ov['rec_exact_hits']}/{n} ({ov['rec_exact_rate'] * 100:.1f}%)** | "
+            f"{null_rate * 100:.1f}% | {c_ex} | {c_ghr} |"
+        )
+
+    has_families = any(bool(s.get("by_family")) for s in valid_runs)
+    if has_families:
+        lines.extend([
+            "",
+            "## 二、按 `query_family` 分层对比总表",
+            "",
+            "| 运行标签 / 方法 | 检索编码器 | 测试集 | 查询家族 | 查询数 | Top-k 召回 | GHR@0.75 (整段 / 分句最大) | 推荐成功(严格) | Null 拒答率 | P(严格推荐\\|Top-k) | P(GHR@0.75\\|Top-k) |",
+            "|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|",
+        ])
+        for s in valid_runs:
+            by_fam = s.get("by_family") or {}
+            tag_disp = f"`{s['method_tag']}` (`{s['run_label']}`)" if s.get("run_label") else f"`{s['method_tag']}`"
+            fam_keys = [f for f in QUERY_FAMILY_ORDER if f in by_fam]
+            fam_keys.extend(sorted(f for f in by_fam if f not in fam_keys))
+            for fam in fam_keys:
+                fm = by_fam[fam]
+                fn = fm["query_count"]
+                ftk = fm.get("topk_recall_hits", fm["top5_recall_hits"])
+                ftk_rate = fm.get("topk_recall_rate", fm["top5_recall_rate"])
+                fsmax = fm.get("ghr_sent_max_075_hits", fm["ghr_075_hits"])
+                fsmax_rate = fm.get("ghr_sent_max_075_rate", fm["ghr_075_rate"])
+                c_ex = _fmt_pct(fm.get("cond_rec_exact_given_topk", fm.get("cond_rec_exact_given_top5")))
+                c_ghr = _fmt_pct(fm.get("cond_ghr_075_given_topk", fm.get("cond_ghr_075_given_top5")))
+                lines.append(
+                    f"| {tag_disp} | `{s['encoder_slug']}` | `{s['query_suite']}` | `{fam}` | {fn} | "
+                    f"{ftk}/{fn} ({ftk_rate * 100:.1f}%) | "
+                    f"{fm['ghr_075_hits']}/{fn} ({fm['ghr_075_rate'] * 100:.1f}%) / {fsmax}/{fn} ({fsmax_rate * 100:.1f}%) | "
+                    f"{fm['rec_exact_hits']}/{fn} ({fm['rec_exact_rate'] * 100:.1f}%) | "
+                    f"{fm.get('null_recommendation_rate', 0.0) * 100:.1f}% | {c_ex} | {c_ghr} |"
+                )
 
     lines.append("")
     report_path.write_text("\n".join(lines), encoding="utf-8")
-    freeze_json(output_dir / "downstream_comparison_summary.json", {"runs": list(summaries)})
+    save_json(output_dir / "downstream_comparison_summary.json", {"runs": valid_runs})
     return report_path

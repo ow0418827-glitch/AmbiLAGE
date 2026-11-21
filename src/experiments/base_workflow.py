@@ -268,6 +268,10 @@ def main(argv=None):
                         help='显式开启纯多尺度破网格视角变换（可独立于防御 EoT 开启）')
     parser.add_argument('--disable-multiscale-eot', dest='multiscale_eot_enabled', action='store_false',
                         help='显式关闭多尺度破网格视角变换')
+    parser.add_argument('--multiscale-eot-profile', choices=('legacy', 'geom_v2', 'geom_photo_v3'), default=None,
+                        help='多尺度破网格档位（默认 geom_v2；保留 geom_photo_v3 与 legacy）')
+    parser.add_argument('--multiscale-identity-weight-end', type=float, default=None,
+                        help='多尺度破网格恒等视图后期退火权重 [0.05, 1.0]（默认 0.35）')
     parser.add_argument('--visual-inception-config', type=Path)
     parser.add_argument('--training-manifest', type=Path)
     parser.add_argument('--training-bundles-root', type=Path, help='每组子目录保存独立训练包清单的公开根目录')
@@ -298,8 +302,14 @@ def main(argv=None):
         parser.error('公开训练包根目录仅用于环境光协同或视觉记忆植入，且与单份清单互斥')
     if args.ambilage_config and args.method != 'ambilage':
         parser.error('环境光协同配置只能用于对应方法')
-    if (args.eot_enabled is not None or args.diffusion_eot_enabled is not None or args.multiscale_eot_enabled is not None) and args.method != 'ambilage':
-        parser.error('EoT 接口开关仅用于环境光协同（ambilage）方法')
+    if (
+        args.eot_enabled is not None
+        or args.diffusion_eot_enabled is not None
+        or args.multiscale_eot_enabled is not None
+        or args.multiscale_eot_profile is not None
+        or args.multiscale_identity_weight_end is not None
+    ) and args.method != 'ambilage':
+        parser.error('EoT 接口开关与多尺度档位仅用于环境光协同（ambilage）方法')
     if args.environments != 'single' and args.query_manifest is not None:
         parser.error('standard3 多环境评测不能同时指定单个 query-manifest')
     if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]{0,63}', args.evaluation_name):
@@ -320,7 +330,13 @@ def main(argv=None):
     if args.query_manifest is not None and len(groups) != 1:
         parser.error('多组运行不能共用一份正式询问清单')
     config = read_json(args.ambilage_config) if args.ambilage_config else None
-    if args.eot_enabled is not None or args.diffusion_eot_enabled is not None or args.multiscale_eot_enabled is not None:
+    if (
+        args.eot_enabled is not None
+        or args.diffusion_eot_enabled is not None
+        or args.multiscale_eot_enabled is not None
+        or args.multiscale_eot_profile is not None
+        or args.multiscale_identity_weight_end is not None
+    ):
         config = dict(config or {})
         if args.eot_enabled is not None:
             config['eot_enabled'] = bool(args.eot_enabled)
@@ -328,6 +344,10 @@ def main(argv=None):
             config['diffusion_eot_enabled'] = bool(args.diffusion_eot_enabled)
         if args.multiscale_eot_enabled is not None:
             config['multiscale_eot_enabled'] = bool(args.multiscale_eot_enabled)
+        if args.multiscale_eot_profile is not None:
+            config['multiscale_eot_profile'] = str(args.multiscale_eot_profile)
+        if args.multiscale_identity_weight_end is not None:
+            config['multiscale_identity_weight_end'] = float(args.multiscale_identity_weight_end)
     inception_config = read_json(args.visual_inception_config) if args.visual_inception_config else None
     # 所有生成先完成并冻结，随后才进入任何一组正式评估。
     if args.stage in ('generate', 'all'):

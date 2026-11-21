@@ -20,7 +20,8 @@ from src.tests.test_evaluation_integrity import _DummyEncoder
 from src.visual import training_surrogates as choices
 from src.visual._ambilage.config import AmbiLAGEConfig
 from src.visual._ambilage.evidence import validate_ready as validate_ambilage_ready
-from src.visual._ambilage.pipeline import AmbiLAGEPipeline
+from src.visual._ambilage.latent_refinement import _stage4_signature
+from src.visual._ambilage.pipeline import AmbiLAGEPipeline, _stage3_signature
 from src.visual._ambilage.smoke import SmokeStages, TinyPurifier, TinySurrogate
 from src.visual._visual_inception.config import VisualInceptionConfig
 from src.visual._visual_inception.data_preparation import _write_rows, prepare_training_bundle
@@ -38,10 +39,13 @@ from src.visual.category_abstraction import (
     spherical_karcher_mean,
 )
 from src.visual.io import sha256_file
+from src.visual.robust_objectives import softmin
 from src.visual.training_objectives import (
     SequentialEnsembleObjective,
     multiscale_grid_breaking_views,
+    multiscale_view_weights,
     single_model_dominant_pcgrad,
+    weighted_mean_softmin,
 )
 
 
@@ -449,7 +453,16 @@ def test_ambilage_single_model_pcgrad_multiscale_and_category_modes(tmp_path):
         [TinySurrogate(0)], base_img, 'source key', 'target text', cfg_1, purifier=TinyPurifier()
     )
     views_1, _, _ = obj_1._shared_inputs(base_img, step=1, gradient='none')
-    assert views_1.shape[0] == 6
+    assert views_1.shape[0] == 8
+    cfg_1_legacy = AmbiLAGEConfig(
+        steps=1, surrogate_set='clip_l14', eot_enabled=True, single_model_multiscale_eot=True,
+        multiscale_eot_profile='legacy', multiscale_identity_weight_end=1.0, smoke_test=True,
+    )
+    obj_1_legacy = SequentialEnsembleObjective(
+        [TinySurrogate(0)], base_img, 'source key', 'target text', cfg_1_legacy, purifier=TinyPurifier()
+    )
+    views_1_legacy, _, _ = obj_1_legacy._shared_inputs(base_img, step=1, gradient='none')
+    assert views_1_legacy.shape[0] == 6
 
     cfg_3 = AmbiLAGEConfig(steps=1, surrogate_set='visual_inception_paper', eot_enabled=True, single_model_multiscale_eot=True, smoke_test=True)
     obj_3 = SequentialEnsembleObjective(
@@ -670,8 +683,26 @@ def test_ambilage_eot_ablation_interface_defaults_off_and_supports_all_modes(tmp
     definition = _public_shampoo_definition()
     base_img = torch.full((1, 3, 32, 32), 0.5, dtype=torch.float32)
 
-    # Mode 1: default OFF (eot_enabled=False) — skips transforms and diffusion purifier
-    cfg_off = AmbiLAGEConfig(steps=2, surrogate_set='clip_l14', joint_grad_protect=True, smoke_test=True)
+    # Mode 0: out-of-the-box default uses ms_v2_geom (defense EoT OFF + multiscale geom_v2 ON)
+    cfg_default = AmbiLAGEConfig(steps=2, surrogate_set='clip_l14', smoke_test=True)
+    assert cfg_default.eot_enabled is False
+    assert cfg_default.effective_diffusion_eot_enabled() is False
+    assert cfg_default.effective_multiscale_eot_enabled(num_surrogates=1) is True
+    assert cfg_default.effective_multiscale_eot_enabled(num_surrogates=3) is False
+    assert cfg_default.multiscale_eot_profile == 'geom_v2'
+    assert cfg_default.multiscale_identity_weight_end == pytest.approx(0.35)
+    obj_default = SequentialEnsembleObjective([TinySurrogate(0)], base_img, 'source key', 'target text', cfg_default)
+    views_def, pur_def, eot_flag_def = obj_default._shared_inputs(base_img, step=1, gradient='none')
+    assert eot_flag_def is True
+    assert pur_def is None
+    assert views_def.shape == (5, 3, 32, 32)
+    assert obj_default.audit['eot_paths'] == ['identity', 'multiscale_grid_breaking_geom_v2_resize_pad_flip_shift']
+    assert obj_default.audit['diffusion_gradient'] == 'disabled'
+
+    # Mode 1: explicit OFF (eot_enabled=False, multiscale_eot_enabled=False) — skips all transforms & purifier
+    cfg_off = AmbiLAGEConfig(
+        steps=2, surrogate_set='clip_l14', multiscale_eot_enabled=False, joint_grad_protect=True, smoke_test=True
+    )
     obj_off = SequentialEnsembleObjective([TinySurrogate(0)], base_img, 'source key', 'target text', cfg_off)
     views_off, pur_off, eot_flag_off = obj_off._shared_inputs(base_img, step=1, gradient='none')
     assert eot_flag_off is False
@@ -748,13 +779,15 @@ def test_ambilage_eot_ablation_interface_defaults_off_and_supports_all_modes(tmp
     assert parsed.diffusion_eot_enabled is False
     assert parsed.multiscale_eot_enabled is None
 
-    # Mode 4: defense EoT OFF + diffusion EoT OFF + standalone multiscale grid-breaking ON
+    # Mode 4: defense EoT OFF + diffusion EoT OFF + legacy standalone multiscale grid-breaking ON
     cfg_ms_only = AmbiLAGEConfig(
         steps=2,
         surrogate_set='clip_l14',
         eot_enabled=False,
         diffusion_eot_enabled=False,
         multiscale_eot_enabled=True,
+        multiscale_eot_profile='legacy',
+        multiscale_identity_weight_end=1.0,
         single_model_task_pcgrad=True,
         smoke_test=True,
     )
@@ -784,6 +817,8 @@ def test_ambilage_eot_ablation_interface_defaults_off_and_supports_all_modes(tmp
         eot_enabled=False,
         diffusion_eot_enabled=False,
         multiscale_eot_enabled=True,
+        multiscale_eot_profile='legacy',
+        multiscale_identity_weight_end=1.0,
         single_model_task_pcgrad=False,
         smoke_test=True,
     )
@@ -830,3 +865,142 @@ def test_ambilage_eot_ablation_interface_defaults_off_and_supports_all_modes(tmp
     assert parsed_ms.eot_enabled is False
     assert parsed_ms.diffusion_eot_enabled is False
     assert parsed_ms.multiscale_eot_enabled is True
+
+
+def test_ambilage_multiscale_v2_geom_and_v3_photo_profiles(tmp_path):
+    """Verify geom_v2 / geom_photo_v3 view expansion, safe pow gradients, identity annealing, and audit trails."""
+    src_img, tgt_img = tmp_path / 'src.png', tmp_path / 'tgt.png'
+    Image.new('RGB', (64, 64), (165, 115, 90)).save(src_img)
+    Image.new('RGB', (64, 64), (70, 160, 180)).save(tgt_img)
+
+    # Patterned tensor including exact 0.0 and 1.0 corners to catch unsafe pow gradients.
+    yy, xx = torch.meshgrid(
+        torch.linspace(0.0, 1.0, 64, dtype=torch.float32),
+        torch.linspace(0.0, 1.0, 64, dtype=torch.float32),
+        indexing='ij',
+    )
+    pattern = torch.stack([xx, yy, 0.5 * (xx + yy)], dim=0).unsqueeze(0).clone()
+    pattern[:, :, 0, 0] = 0.0
+    pattern[:, :, -1, -1] = 1.0
+
+    for h_sz in (32, 256):
+        t_in = F.interpolate(pattern, size=(h_sz, h_sz), mode='bilinear', align_corners=False)
+        t_in[:, :, 0, 0] = 0.0
+        t_in[:, :, -1, -1] = 1.0
+        leaf = t_in.clone().requires_grad_(True)
+        v_g2 = multiscale_grid_breaking_views(leaf, step=2, base_views=leaf, profile='geom_v2')
+        assert v_g2.shape == (5, 3, h_sz, h_sz)
+        assert torch.allclose(v_g2[0], t_in[0], atol=1.0 / 255.0 + 1e-6)
+        # Transformed views must be distinct and non-identical.
+        assert any(not torch.allclose(v_g2[i], v_g2[j], atol=1e-4) for i in range(1, 5) for j in range(i + 1, 5))
+        grad_g2 = torch.autograd.grad((v_g2[1:] ** 2).sum(), leaf)[0]
+        assert torch.isfinite(grad_g2).all() and grad_g2.abs().sum() > 0
+
+        leaf3 = t_in.clone().requires_grad_(True)
+        v_g3 = multiscale_grid_breaking_views(leaf3, step=2, base_views=leaf3, profile='geom_photo_v3')
+        assert v_g3.shape == (5, 3, h_sz, h_sz)
+        assert torch.allclose(v_g3[0], t_in[0], atol=1.0 / 255.0 + 1e-6)
+        assert not torch.allclose(v_g3[1:], v_g2[1:], atol=1e-4)
+        grad_g3 = torch.autograd.grad((v_g3[1:] ** 2).sum(), leaf3)[0]
+        assert torch.isfinite(grad_g3).all() and grad_g3.abs().sum() > 0
+
+    # weighted_mean_softmin exact equivalence when weights are uniform
+    vals = torch.tensor([[0.10, 0.35], [0.20, 0.45], [0.30, 0.55], [0.15, 0.25], [0.40, 0.60]], dtype=torch.float32)
+    uniform_w = torch.full((5,), 0.2, dtype=torch.float32)
+    ref_u = 0.5 * vals.mean() + 0.5 * softmin(vals, 0.1)
+    assert torch.allclose(weighted_mean_softmin(vals, 0.1, None), ref_u, atol=1e-6)
+    assert torch.allclose(weighted_mean_softmin(vals, 0.1, uniform_w), ref_u, atol=1e-6)
+    down_id_w = torch.tensor([0.35, 1.0, 1.0, 1.0, 1.0], dtype=torch.float32)
+    down_id_w = down_id_w / down_id_w.sum()
+    assert not torch.allclose(weighted_mean_softmin(vals, 0.1, down_id_w), ref_u, atol=1e-4)
+
+    # multiscale_view_weights Phase 1/2/3 & progressive=False stationary check
+    cfg_w = AmbiLAGEConfig(
+        steps=100,
+        surrogate_set='clip_l14',
+        eot_enabled=False,
+        diffusion_eot_enabled=False,
+        multiscale_eot_enabled=True,
+        multiscale_eot_profile='geom_v2',
+        multiscale_identity_weight_end=0.35,
+        psi_phase1_ratio=0.24,
+        psi_phase2_ratio=0.72,
+        smoke_test=True,
+    )
+    assert multiscale_view_weights(cfg_w, 5, step=80, progressive=False) is None
+    w_p1 = multiscale_view_weights(cfg_w, 5, step=24, progressive=True)
+    assert w_p1 is not None and torch.allclose(w_p1, torch.full((5,), 0.2), atol=1e-6)
+    w_p3 = multiscale_view_weights(cfg_w, 5, step=80, progressive=True)
+    expected_p3 = torch.tensor([0.35, 1.0, 1.0, 1.0, 1.0]) / 4.35
+    assert w_p3 is not None and torch.allclose(w_p3, expected_p3, atol=1e-6)
+    w_p2 = multiscale_view_weights(cfg_w, 5, step=48, progressive=True)
+    assert w_p2 is not None and float(w_p3[0]) < float(w_p2[0]) < float(w_p1[0])
+
+    # Config JSON validation & audit check + end-to-end tiny objective gradient
+    for cfg_name, expected_profile, expected_path in (
+        ('ambilage.clip_l14.example.json', 'geom_v2', 'multiscale_grid_breaking_geom_v2_resize_pad_flip_shift'),
+        ('ambilage.clip_l14.ms_v2_geom.json', 'geom_v2', 'multiscale_grid_breaking_geom_v2_resize_pad_flip_shift'),
+        ('ambilage.clip_l14.ms_v3_geom_photo.json', 'geom_photo_v3', 'multiscale_grid_breaking_geom_photo_v3_light_photometric'),
+    ):
+        raw_cfg = json.loads((Path('/content/AmbiLAGE/src/visual/config') / cfg_name).read_text(encoding='utf-8'))
+        parsed_cfg = AmbiLAGEConfig.from_dict(raw_cfg)
+        assert parsed_cfg.eot_enabled is False
+        assert parsed_cfg.effective_diffusion_eot_enabled() is False
+        assert parsed_cfg.effective_multiscale_eot_enabled(num_surrogates=1) is True
+        assert parsed_cfg.multiscale_eot_profile == expected_profile
+        assert parsed_cfg.multiscale_identity_weight_end == pytest.approx(0.35)
+
+        smoke_cfg = AmbiLAGEConfig.from_dict({**raw_cfg, 'steps': 2, 'smoke_test': True})
+        base_img = torch.clamp(F.interpolate(pattern, size=(32, 32), mode='bilinear', align_corners=False), 0.0, 1.0)
+        obj = SequentialEnsembleObjective([TinySurrogate(0)], base_img, 'source key', 'target text', smoke_cfg)
+        assert obj.audit['eot_paths'] == ['identity', expected_path]
+        assert obj.audit['multiscale_eot_profile'] == expected_profile
+        assert obj.audit['multiscale_identity_weight_end'] == pytest.approx(0.35)
+        for forbidden in ('pillow_blur_bpda', 'jpeg_exact_forward_ste', 'resize'):
+            assert forbidden not in obj.audit['eot_paths']
+        views, pur, transformed = obj._shared_inputs(base_img, step=1, gradient='none')
+        assert transformed is True and pur is None and views.shape == (5, 3, 32, 32)
+        _, _, grad, _ = obj.image_gradient(base_img, step=2)
+        assert torch.isfinite(grad).all() and grad.abs().sum() > 0
+
+    # CLI flags retain access to geom_photo_v3 and custom identity weight end
+    from tools import generate as generate_cli
+    parsed_v3 = generate_cli.parse_args([
+        '--method', 'ambilage', '--source', str(src_img), '--target', str(tgt_img),
+        '--output', str(tmp_path / 'cli_v3'),
+        '--multiscale-eot-profile', 'geom_photo_v3', '--multiscale-identity-weight-end', '0.5',
+    ])
+    assert parsed_v3.multiscale_eot_profile == 'geom_photo_v3'
+    assert parsed_v3.multiscale_identity_weight_end == pytest.approx(0.5)
+
+    # Signature backward compatibility with legacy defaults AND consistency with new ms_v2_geom defaults
+    cfg_explicit_legacy = AmbiLAGEConfig(
+        steps=2, surrogate_set='clip_l14', eot_enabled=False,
+        multiscale_eot_profile='legacy', multiscale_identity_weight_end=1.0, smoke_test=True,
+    )
+    cfg_dict_stripped = cfg_explicit_legacy.to_dict()
+    cfg_dict_stripped.pop('multiscale_eot_profile')
+    cfg_dict_stripped.pop('multiscale_identity_weight_end')
+    cfg_dict_stripped['multiscale_eot_profile'] = 'legacy'
+    cfg_dict_stripped['multiscale_identity_weight_end'] = 1.0
+    assert _stage3_signature(
+        's', 't', 'tt', 'spk', 'sc', cfg_explicit_legacy, [], [], [], 'sp'
+    ) == _stage3_signature(
+        's', 't', 'tt', 'spk', 'sc', AmbiLAGEConfig.from_dict(cfg_dict_stripped), [], [], [], 'sp'
+    )
+    cfg_default_v2 = AmbiLAGEConfig(steps=2, surrogate_set='clip_l14', eot_enabled=False, smoke_test=True)
+    cfg_explicit_v2 = AmbiLAGEConfig(
+        steps=2, surrogate_set='clip_l14', eot_enabled=False,
+        multiscale_eot_profile='geom_v2', multiscale_identity_weight_end=0.35, smoke_test=True,
+    )
+    assert _stage3_signature('s', 't', 'tt', 'spk', 'sc', cfg_default_v2, [], [], [], 'sp') == _stage3_signature(
+        's', 't', 'tt', 'spk', 'sc', cfg_explicit_v2, [], [], [], 'sp'
+    )
+    tiny_t = torch.zeros((1, 4, 4, 4), dtype=torch.float32)
+    assert _stage4_signature(tiny_t, tiny_t, cfg_default_v2, {'id': 'x'}) == _stage4_signature(
+        tiny_t, tiny_t, cfg_explicit_v2, {'id': 'x'}
+    )
+    with pytest.raises(ValueError):
+        AmbiLAGEConfig(multiscale_eot_profile='invalid_profile').validate()
+    with pytest.raises(ValueError):
+        AmbiLAGEConfig(multiscale_identity_weight_end=0.01).validate()

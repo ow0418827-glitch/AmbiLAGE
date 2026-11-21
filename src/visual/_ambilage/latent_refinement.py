@@ -263,6 +263,10 @@ def _stage4_signature(
         cfg_dict.pop("diffusion_eot_enabled", None)
     if cfg_dict.get("multiscale_eot_enabled") is None:
         cfg_dict.pop("multiscale_eot_enabled", None)
+    if cfg_dict.get("multiscale_eot_profile") == "legacy":
+        cfg_dict.pop("multiscale_eot_profile", None)
+    if cfg_dict.get("multiscale_identity_weight_end") == 1.0:
+        cfg_dict.pop("multiscale_identity_weight_end", None)
     for runtime_key in ("log_every", "checkpoint_every", "resume_from_checkpoint", "save_intermediate_pngs", "device"):
         cfg_dict.pop(runtime_key, None)
     payload = {

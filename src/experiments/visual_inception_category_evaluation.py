@@ -39,9 +39,11 @@ ZERO_OVERLAP_PROTOCOLS = (PROTOCOL, 'visual_inception_zero_overlap_v4_exact')
 ORACLE_PROTOCOLS = (ORACLE_PROTOCOL, 'visual_inception_training_oracle_v4_exact')
 OVERLAP_30_PROTOCOLS = (OVERLAP_30_PROTOCOL, 'visual_inception_overlap_30_v4_exact')
 REQUIRED_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_v2'
-ENHANCED_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_hardneg_advquery_v3'
-PAPER_STANDARD_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_paper_standard_v4'
-SUPPORTED_OBJECTIVE_KINDS = (REQUIRED_OBJECTIVE_KIND, ENHANCED_OBJECTIVE_KIND, PAPER_STANDARD_OBJECTIVE_KIND)
+PAPER_MINIMAL_MARGIN_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_paper_minimal_margin_v4'
+SUPPORTED_OBJECTIVE_KINDS = (
+    REQUIRED_OBJECTIVE_KIND,
+    PAPER_MINIMAL_MARGIN_OBJECTIVE_KIND,
+)
 TRANSFER_PANEL_ENCODERS = (
     ('01_clip_l14', 'CLIP-ViT-L/14', ('ViT-L-14', 'openai'),
      'evaluator.clip_l14.matched.json', 'evaluator.clip_l14.heldout.json'),

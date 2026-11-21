@@ -67,7 +67,7 @@ def test_enhanced_suite_accepts_one_version_and_rejects_mixed_versions(tmp_path,
     monkeypatch.setattr(category, 'public_group', lambda _base, group: publics[group])
     monkeypatch.setattr(category, 'validate_attack_completion', lambda *args, **kwargs: None)
     for group in GROUPS[:-1] if mixed else GROUPS:
-        documents[group]['metadata']['training_objective']['kind'] = category.ENHANCED_OBJECTIVE_KIND
+        documents[group]['metadata']['training_objective']['kind'] = category.PAPER_MINIMAL_MARGIN_OBJECTIVE_KIND
         _write(images / group / 'visual_inception/FROZEN_IMAGE.json', documents[group])
     if mixed:
         with pytest.raises(ValueError, match='混用'):
@@ -75,7 +75,7 @@ def test_enhanced_suite_accepts_one_version_and_rejects_mixed_versions(tmp_path,
     else:
         suite = category.load_frozen_suite(images, base=base)
         assert len(suite) == 9
-        assert {item['metadata']['training_objective']['kind'] for item in suite} == {category.ENHANCED_OBJECTIVE_KIND}
+        assert {item['metadata']['training_objective']['kind'] for item in suite} == {category.PAPER_MINIMAL_MARGIN_OBJECTIVE_KIND}
 
 
 @pytest.mark.parametrize('change', ('method', 'fixture', 'early_mode', 'image_bytes', 'source_binding'))

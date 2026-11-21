@@ -1,4 +1,4 @@
-"""Public-only Visual Inception, with explicit legacy and enhanced identities."""
+"""Public-only Visual Inception, with explicit legacy and minimal-margin identities."""
 from .config import VisualInceptionConfig
 
 

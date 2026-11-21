@@ -139,6 +139,18 @@ def parse_args(argv=None) -> argparse.Namespace:
         help="显式关闭多尺度破网格视角变换",
     )
     parser.add_argument(
+        "--multiscale-eot-profile",
+        choices=("legacy", "geom_v2", "geom_photo_v3"),
+        default=None,
+        help="多尺度破网格档位（默认 geom_v2；保留 geom_photo_v3 几何+轻量光度与 legacy 旧版）",
+    )
+    parser.add_argument(
+        "--multiscale-identity-weight-end",
+        type=float,
+        default=None,
+        help="多尺度破网格恒等视图后期退火权重 [0.05, 1.0]（默认 0.35）",
+    )
+    parser.add_argument(
         "--optimization-config",
         default=None,
         help="Lucid 优化配置 JSON 路径",
@@ -158,8 +170,14 @@ def parse_args(argv=None) -> argparse.Namespace:
         parser.error('公开训练清单仅用于环境光协同或视觉记忆植入方法')
     if args.ambilage_config and args.method != 'ambilage':
         parser.error('环境光协同配置只能用于对应方法')
-    if (args.eot_enabled is not None or args.diffusion_eot_enabled is not None or args.multiscale_eot_enabled is not None) and args.method != 'ambilage':
-        parser.error('EoT 接口开关仅用于环境光协同（ambilage）方法')
+    if (
+        args.eot_enabled is not None
+        or args.diffusion_eot_enabled is not None
+        or args.multiscale_eot_enabled is not None
+        or args.multiscale_eot_profile is not None
+        or args.multiscale_identity_weight_end is not None
+    ) and args.method != 'ambilage':
+        parser.error('EoT 接口开关与多尺度档位仅用于环境光协同（ambilage）方法')
     return args
 
 
@@ -173,7 +191,13 @@ def main(argv=None) -> int:
             amb_cfg = json.loads(cfg_p.read_text(encoding="utf-8"))
         else:
             amb_cfg = json.loads(args.ambilage_config)
-    if args.eot_enabled is not None or args.diffusion_eot_enabled is not None or args.multiscale_eot_enabled is not None:
+    if (
+        args.eot_enabled is not None
+        or args.diffusion_eot_enabled is not None
+        or args.multiscale_eot_enabled is not None
+        or args.multiscale_eot_profile is not None
+        or args.multiscale_identity_weight_end is not None
+    ):
         amb_cfg = dict(amb_cfg or {})
         if args.eot_enabled is not None:
             amb_cfg['eot_enabled'] = bool(args.eot_enabled)
@@ -181,6 +205,10 @@ def main(argv=None) -> int:
             amb_cfg['diffusion_eot_enabled'] = bool(args.diffusion_eot_enabled)
         if args.multiscale_eot_enabled is not None:
             amb_cfg['multiscale_eot_enabled'] = bool(args.multiscale_eot_enabled)
+        if args.multiscale_eot_profile is not None:
+            amb_cfg['multiscale_eot_profile'] = str(args.multiscale_eot_profile)
+        if args.multiscale_identity_weight_end is not None:
+            amb_cfg['multiscale_identity_weight_end'] = float(args.multiscale_identity_weight_end)
 
     print("=" * 60)
     print(f"AmbiLAGE 统一图像生成启动")

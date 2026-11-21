@@ -1,33 +1,32 @@
-# 视觉记忆植入增强第三版
+# 视觉记忆植入机制实现说明（`paper_minimal_margin`）
 
-用户于二〇二六年十一月十七日授权，以合理且明确登记的工程方案补充困难负例、零点三对比间隔和对抗查询增强，并于二〇二六年十一月十八日经原论文与实测跨模态几何核查后修订升级。[原论文第3.2节](https://arxiv.org/html/2604.16966v1#S3.SS2)提及上述三项机制，但未公开唯一可确定的公式与超参数；本版本提供数学自洽、符合跨模态编码器几何特性的工程实现，不宣称与作者未公开内部代码逐行一致。
+用户于二〇二六年十一月十七日至十一月二十一日先后授权并收敛 [Visual Inception 原论文（arXiv:2604.16966v1）第 3.2 节](https://arxiv.org/html/2604.16966v1#S3.SS2) 中三处未给出唯一数学公式的工程细节。此前内部试验过的 `enhanced_v3`（动态前 32 困难负例重排 + 文本正交子空间 3 步球面帽查询对抗优化，存在与 AmbiLAGE 自研方法机制混同的问题）及无 `+0.3` 间隔的过渡版 `paper_minimal` 接口已全部移除，仅保留历史 `legacy_v2` 与当前主用单层基线 **`paper_minimal_margin`**。
 
-## 原初版复现缺陷与本版修正原理
+## 当前严格单层基线 `paper_minimal_margin`
 
-1. **困难负例与全库分母保留**：
-   - **原初版缺陷**：从九十个候选选出三十二个困难负例后将剩余五十八个候选直接移出分母，导致分区函数小于历史第二版全库分母；同时将“代理用户记忆”直接设为全库 `range(90)`（与全局补位完全重合、失去独立角色意义），且热门代理仅算全库跨品类图像均值，易被单一白底方盒品类垄断。
-   - **修正方案**：
-     - 全库九十个冻结候选**完整保留在基础检索分母中**，绝不因负例筛选而削弱全局分区函数。
-     - 三类角色真正正交互补：`same_category`（同品类直接竞品，默认配额 `10`，完整覆盖组内十个同类商品）、`popular`（缺少真实公开销量时采用**品类内原型中心性与全局中心性等权融合**的前三分之一候选，默认配额 `10`，避免跨类背景偏置）、`proxy_user_memory`（明确限定为**跨品类公开候选池**以模拟真实用户跨品类历史记忆并防止通用视觉捷径误撞，默认配额 `10`；仅在单品类微型测试夹具中回退全库），余下名额由全局最难未选候选补齐至最多 `32` 个。
+基础公式与超参数严格保持原论文 Eq. (2)–(3) 及 Appendix A.2（`sign-PGD`、`steps=100`、`epsilon_levels=8`、步长 `2/255`、$\lambda_1=1.0$、$\lambda_2=0.1$、检索温度 $\tau=0.07$、100 条训练查询池、`query_batch_size=16`），三项未给公式细节均采用最朴素、无额外技巧的单层实现（不宣称与作者未公开源码逐行一致，`author_exact_implementation_claimed=False`）：
 
-2. **温度对齐的零点三对比间隔与前五强敌平滑决斗损失**：
-   - **原初版缺陷**：在除以温度 $\tau = 0.07$ 之前直接从原始跨模态余弦相似度减去 $0.3$（即 $(s_+ - 0.3)/0.07 = s_+/0.07 - 4.286$）。由于 CLIP 与 SigLIP 存在显著跨模态间隙（实测图文余弦在 CLIP 中仅约 $0.24 \sim 0.37$，在 SigLIP 中仅约 $0.07 \sim 0.12$），硬扣 $4.286$ 对数几率使正例权重缩水 $72.65$ 倍，在全部百步训练中正例概率恒趋近于零，外层梯度权重 $(1 - p_+)$ 恒卡死在 $\approx 0.999$，导致困难负例在外层梯度中几乎完全失效，且简单已赢查询持续抢占有限像素预算。
-   - **修正方案**：将 `0.3` 对比间隔置于**温度缩放后的无量纲对数几率空间**（对应跨模态余弦领先量 $0.3 \times \tau = 0.021$，恰处于 CLIP 与 SigLIP 同类商品前五名间隔的合理区间），并采用**全库偏置检索项（权重 `0.3`）与前五困难对手平滑间隔项（权重 `0.7`）的凸组合**：
-     $$z_+ = \frac{s_+(q)}{\tau}, \qquad z_j(q) = \frac{s_j(q)}{\tau} + m \cdot \mathbf{1}[j \in \mathcal{H}(q)]$$
-     $$\mathcal{L}_{\text{bank}}(q) = \log\!\left(e^{z_+} + \sum_{j=1}^{N} e^{z_j(q)}\right) - z_+, \qquad z_{\text{comp}}(q) = \operatorname{logsumexp}_{j=1..r}\!\left(\frac{s_{(j)}(q)}{\tau}\right) - \ln r$$
-     $$\mathcal{L}_{\text{ret}}(q) = 0.3\,\mathcal{L}_{\text{bank}}(q) + 0.7 \cdot \frac{1}{\beta}\operatorname{softplus}\!\big(\beta\,(z_{\text{comp}}(q) - z_+ + m)\big), \quad r=\min(5, |\mathcal{H}(q)|),\;\beta=2.0$$
-     该形式既保持与原论文三项总损失相同的梯度量纲上界，又能在已大幅领先对手的查询上自动衰减梯度，集中像素扰动攻克仍落后或仅微弱领先的困难查询。
+1. **静态三来源随机负例库 $\mathcal{M}$（不做每步动态挖掘与品类轮询）**：
+   - 优化开始前，根据冻结公开候选元数据与固定向量从三类独立公开候选池中各**不放回均匀随机抽取固定配额**（默认各 `10` 个，合计 `30` 个：`negative_same_category_count=10`、`negative_popularity_count=10`、`negative_proxy_memory_count=10`）：
+     - `same_category`：同品类公开非目标商品；
+     - `popular`：优先采用有公开来源凭证的外部热度字段；缺少真实销量字段时，按全库全局平均余弦中心性排序取前三分之一（无品类 round-robin 轮询中心性）；
+     - `proxy_user_memory`：使用跨品类独立公开候选作为代理记忆（仅在单品类微型测试夹具回退全库），严禁读取正式用户记忆或正式测试查询。
+   - 静态池 $\mathcal{M}$ 直接固定代入 Eq. (3) InfoNCE 分母，每步不再动态重排 Top-32 困难负例。
 
-3. **冻结文本流形子空间约束的球面查询对抗增强**：
-   - **原初版缺陷**：在无约束全维空间 $\mathbb{R}^D$ 中对查询向量做梯度上升（$\nabla_q \mathcal{L}_{\text{ret}} \propto \bar{n} - v_{\text{img}}$），其中 $-v_{\text{img}}$ 分量在单位化图像切空间 $P_{v^\perp}(-v_{\text{img}})=0$ 上完全自抵消，而 $+\bar{n}$ 分量直接跨越模态间隙把文本查询推向**负例图像锥体**（非真实文本问法偏移，反而误导修改图向负例图片靠近）；同时半径 `0.05`（$\cos = 0.99875$）过小，无法覆盖真实同义改写偏移。
-   - **修正方案**：预先从每个编码器冻结的一百条训练查询与目标概念特征中剔除文本锥体均值轴，经奇异值分解提取**真实文本语义变化正交子空间** $U_{\text{text}}$。内层三步球面梯度上升先将查询梯度投影至 $U_{\text{text}}$ 再做球冠投影（默认半径升级为 `0.20`，步长 `0.10`，对应球面余弦下界 $0.98$），保留逐条最坏损失后与干净查询损失按 `0.5 : 0.5` 混合。内层图片与候选完全脱离计算图，外层仅对图片求导，不调用语言模型、不改写冻结文本。
+2. **无梯度各向同性高斯查询扰动（严格维持单层多目标优化）**：
+   - 不构建文本正交子空间、不执行内层 PGD/FGSM 梯度上升循环；
+   - 对每个 `batch` 内随机抽取的 `25%` 查询向量（`query_noise_fraction=0.25`，即 `16` 条中随机 `4` 条，其余保持原样）叠加各向同性高斯噪声并重新单位球面归一化：
+     $$q' = \operatorname{normalize}(q + \varepsilon_q), \qquad \varepsilon_q \sim \mathcal{N}(0, \sigma^2 I), \quad \sigma = 0.03$$
+   - 随机种子由基础 `seed`、阶段标识（`calibration` / `step` / `final`）、步号及代理序号确定性派生，外层仅对图像像素求导。
 
-## 公开代理来源与限制
+3. **Eq. (3) 静态负例统一 `+0.3` 对数几率间隔（不新增第四项损失）**：
+   - 在保持原论文三项损失结构不变的前提下，将 `contrastive_margin=0.3` 统一加在 Eq. (3) 分母中所有静态负例的相似度对数几率上：
+     $$z_+ = \frac{\cos(E(I_{\text{adv}}), E(q'))}{\tau}, \qquad z_j = \frac{\cos(E(n_j), E(q'))}{\tau} + 0.3 \quad (n_j \in \mathcal{M})$$
+     $$\mathcal{L}_{\text{ret}}(q') = \log\!\left(e^{z_+} + \sum_{j \in \mathcal{M}} e^{z_j}\right) - z_+$$
+   - 不新增第四项 Hinge Margin 损失，也不对原始余弦直接减 `0.3` 后再除以 `0.07`（避免 $0.3 / 0.07 \approx 4.29$ 的数值梯度坍塌）。
 
-正式共享记忆和正式测试查询禁止参与训练。热门分支优先使用带公开来源凭证的热度数值；当前九十商品清单无真实销量字段，故使用与查询无关的品类均衡余弦中心性代理并如实登记，绝不冒称真实销量或用户历史记忆。
+## 版本与配置说明
 
-## 版本、缓存与紧凑审计
-
-- `mechanism_profile`（机制版本字段）取 `enhanced_v3`（增强第三版）时启用上述三项机制；取 `legacy_v2`（历史第二版）时保留原无间隔全库检索与无查询增强行为。新版配置示例见 [visual_inception.example.json](../src/visual/config/visual_inception.example.json)。
-- 增强目标身份为 `visual_inception_retrieval_semantic_perceptual_hardneg_advquery_v3`。历史无检索版与第二版记录按原身份校验，禁止跨版本重签或混评。
-- 校准起点与百步优化过程记录紧凑选择摘要（`selection_sha256`）及完整标量预算证据，消除原初版单文件六十二兆字节的重复序列化膨胀；最终全池百条查询检查保留完整逐查询负例角色分配明细，兼顾全链路防篡改核验与代码仓库同步体积限制。
+- `mechanism_profile` 默认及推荐值为 `paper_minimal_margin`（配置示例见 [visual_inception.example.json](../src/visual/config/visual_inception.example.json) 与 [visual_inception.paper_surrogates.example.json](../src/visual/config/visual_inception.paper_surrogates.example.json)）；历史第二版保留为 `legacy_v2`。
+- 训练目标身份标识为 `visual_inception_retrieval_semantic_perceptual_paper_minimal_margin_v4`。已移除的 `enhanced_v3` 与 `paper_minimal` 配置会被配置校验直接拒绝；历史与旧版产物禁止跨版本重签或混评。
+- 公开代理负例模块 [negative_sampling.py](../src/visual/_visual_inception/negative_sampling.py) 继续作为 `AmbiLAGE` 训练目标依赖保留，不受本次 Visual Inception 基线收口影响。

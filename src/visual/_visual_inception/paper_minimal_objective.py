@@ -1,20 +1,23 @@
-"""Standard (non-AmbiLAGE-coupled) realizations of Visual Inception's three underspecified mechanisms.
+"""Strictly single-level minimal reproduction of Visual Inception Eq. (2)-(3) (`paper_minimal_margin`).
 
-1. Static Three-Source Uniform Random Negative Sampling:
+1. Static Three-Source Uniform Random Negative Pool:
    Before optimization, uniformly sample fixed quotas at random (without replacement)
    from three independent public pools: (1) same-category non-target items,
    (2) cross-category proxy user memory items, and (3) top-1/3 popular items
    (using sourced public metrics if declared, otherwise plain global mean cosine
    centrality without category round-robin interleaving).
 
-2. Standard InfoNCE + Cosine-Space Hinge Margin (m=0.3):
-   Applies standard InfoNCE over the dynamic positive plus the static negative subset
-   and adds mean(max(0, cos(E(n), E(Q)) - cos(E(I_adv), E(Q)) + 0.3)).
+2. Strictly Single-Level Eq. (3) InfoNCE with Uniform Contrastive Margin (+0.3):
+   Applies standard Eq. (3) InfoNCE over the dynamic positive plus the static
+   negative pool with a uniform logit offset `+contrastive_margin` on static
+   negatives (`cos(E(m), E(q')) / tau + 0.3`), without adding a fourth Hinge
+   Margin loss term or dynamic Top-K hard negative mining.
 
-3. Single-Step Embedding-Space FGSM Query Perturbation:
-   Computes one L2-normalized gradient ascent step on q in ambient embedding space
-   followed by unit-norm renormalization, without text-manifold SVD subspace projection
-   or per-query greedy best-loss selection.
+3. Single-Level Gradient-Free Isotropic Gaussian Query Perturbation:
+   Randomly perturbs a subset of batch query embeddings by isotropic Gaussian noise
+   and re-normalizes onto the unit hypersphere:
+     q' = normalize(q + eps_q),  eps_q ~ N(0, sigma^2 I)
+   without any inner gradient loop or subspace projection.
 """
 from __future__ import annotations
 
@@ -30,8 +33,13 @@ from .targets import content_sha256
 
 STATIC_POLICY_KIND = 'independent_public_three_role_static_random_v1'
 STATIC_ROLE_ORDER = ('same_category', 'popular', 'proxy_user_memory')
-PAPER_STANDARD_MARGIN_KIND = 'standard_infonce_plus_cosine_hinge_margin_v1'
-PAPER_STANDARD_QUERY_AUGMENTATION_KIND = 'single_step_embedding_l2_fgsm_v1'
+PAPER_MINIMAL_MARGIN_RETRIEVAL_KIND = 'standard_eq3_infonce_static_three_source_negatives_logit_margin_v1'
+PAPER_MINIMAL_QUERY_PERTURBATION_KIND = 'single_level_isotropic_gaussian_query_noise_v1'
+_STAGE_OFFSETS = {
+    'calibration': 10007,
+    'step': 20011,
+    'final': 30013,
+}
 
 
 def _require(condition, message):
@@ -45,31 +53,44 @@ def _vector_digest(value):
     return hashlib.sha256(payload + cpu.numpy().tobytes()).hexdigest()
 
 
+def paper_minimal_noise_seed(base_seed, *, stage, step_index, model_index):
+    """Deterministic seed for single-level Gaussian query noise."""
+    _require(stage in _STAGE_OFFSETS, '未知的查询随机扰动阶段：' + str(stage))
+    _require(
+        type(base_seed) is int and 0 <= base_seed < 2**63
+        and type(step_index) is int and step_index >= 0
+        and type(model_index) is int and model_index >= 0,
+        '查询随机扰动种子参数无效',
+    )
+    return (
+        int(base_seed)
+        + _STAGE_OFFSETS[stage]
+        + 1000003 * int(step_index)
+        + 97 * int(model_index)
+    ) % 2**63
+
+
 def _parameters(config):
     values = dict(
         temperature=config.retrieval_temperature,
-        margin=config.contrastive_margin,
-        steps=config.query_adversarial_steps,
-        step_size=config.query_adversarial_step_size,
-        mix=config.query_adversarial_mix,
+        noise_std=config.query_noise_std,
+        noise_fraction=config.query_noise_fraction,
+        logit_margin=config.contrastive_margin,
     )
-    for key in ('temperature', 'margin', 'step_size', 'mix'):
-        value = values[key]
+    for key, value in values.items():
         _require(
             not isinstance(value, bool) and isinstance(value, (float, int)) and math.isfinite(value),
-            '标准复现目标参数必须为有限实数：' + key,
+            '最小单层复现目标参数必须为有限实数：' + key,
         )
-    _require(values['temperature'] > 0, '标准复现检索温度必须为正数')
-    _require(0 <= values['margin'] <= 2, '标准复现对比间隔必须在零至二之间')
-    _require(0 <= values['mix'] <= 1, '标准复现对抗查询混合权重必须在零至一之间')
-    _require(type(values['steps']) is int and values['steps'] == 1, '标准复现对抗查询步数必须为 1')
-    _require(values['step_size'] >= 0, '标准复现对抗查询步长不能为负数')
+    _require(values['temperature'] > 0, '最小单层复现检索温度必须为正数')
+    _require(0 <= values['noise_std'] <= 1.0, '查询高斯噪声标准差必须在零至一之间')
+    _require(0 <= values['noise_fraction'] <= 1.0, '查询随机扰动比例必须在零至一之间')
+    _require(0 <= values['logit_margin'] <= 2.0, '最小单层复现对比间隔必须在零至二之间')
     return {
         'temperature': float(values['temperature']),
-        'margin': float(values['margin']),
-        'steps': int(values['steps']),
-        'step_size': float(values['step_size']),
-        'mix': float(values['mix']),
+        'noise_std': float(values['noise_std']),
+        'noise_fraction': float(values['noise_fraction']),
+        'logit_margin': float(values['logit_margin']),
     }
 
 
@@ -81,14 +102,14 @@ def _features(image_features, query_features, negative_features):
         and query_features.shape[0] > 0
         and negative_features.shape[0] > 0
         and image_features.shape[1] == query_features.shape[1] == negative_features.shape[1],
-        '标准复现检索的图片、查询与负例向量形状不一致',
+        '最小单层复现检索的图片、查询与负例向量形状不一致',
     )
     dtype = torch.float64 if image_features.dtype == torch.float64 else torch.float32
     device = image_features.device
     for feature in (image_features, query_features, negative_features):
         _require(
             bool(torch.isfinite(feature).all()) and bool((feature.detach().norm(dim=-1) > 0).all()),
-            '标准复现检索向量必须有限且非零',
+            '最小单层复现检索向量必须有限且非零',
         )
     return (
         F.normalize(image_features.to(dtype=dtype), dim=-1),
@@ -98,7 +119,7 @@ def _features(image_features, query_features, negative_features):
 
 
 def build_static_negative_selection(candidate_metadata, negative_features, category, *, config):
-    """Freeze static three-source random negative subset using public metadata only."""
+    """Freeze static three-source random negative pool using public metadata only."""
     _require(
         isinstance(candidate_metadata, list)
         and candidate_metadata
@@ -166,9 +187,9 @@ def build_static_negative_selection(candidate_metadata, negative_features, categ
     role_indices = dict(same_category=same_category, proxy_user_memory=proxy_memory, popular=popular)
 
     quotas = dict(
-        same_category=config.hard_negative_same_category_count,
-        popular=config.hard_negative_popularity_count,
-        proxy_user_memory=config.hard_negative_proxy_memory_count,
+        same_category=config.negative_same_category_count,
+        popular=config.negative_popularity_count,
+        proxy_user_memory=config.negative_proxy_memory_count,
     )
     _require(
         all(type(v) is int and v >= 0 for v in quotas.values()) and sum(quotas.values()) >= 1,
@@ -250,96 +271,84 @@ def _validate_static_selection(static_selection, candidate_count):
     return selected
 
 
-def _paper_standard_per_query_loss(image, queries, static_negatives, *, temperature, margin):
-    pos_cos = (queries @ image.T)[:, 0]
-    neg_cos = queries @ static_negatives.T
-    pos_logit = pos_cos / temperature
-    neg_logits = neg_cos / temperature
-    infonce = torch.logsumexp(torch.cat((pos_logit[:, None], neg_logits), dim=1), dim=1) - pos_logit
-    hinge_margin = F.relu(neg_cos - pos_cos[:, None] + margin).mean(dim=1)
-    total = infonce + hinge_margin
-    _require(bool(torch.isfinite(total).all()), '标准复现检索损失包含非有限值')
-    return total, infonce, hinge_margin
+def perturb_queries_gaussian(query_features, *, std, fraction, seed):
+    """Gradient-free isotropic Gaussian noise on a random subset of unit queries."""
+    _require(
+        torch.is_tensor(query_features)
+        and query_features.ndim == 2
+        and query_features.shape[0] > 0
+        and query_features.shape[1] > 0
+        and bool(torch.isfinite(query_features).all())
+        and bool((query_features.detach().norm(dim=-1) > 0).all()),
+        '查询向量必须为有限非零二维张量',
+    )
+    _require(
+        not isinstance(std, bool) and isinstance(std, (float, int)) and math.isfinite(std) and 0 <= std <= 1.0,
+        '查询高斯噪声标准差无效',
+    )
+    _require(
+        not isinstance(fraction, bool) and isinstance(fraction, (float, int))
+        and math.isfinite(fraction) and 0 <= fraction <= 1.0,
+        '查询随机扰动比例无效',
+    )
+    _require(type(seed) is int and 0 <= seed, '查询随机扰动种子无效')
 
+    std = float(std)
+    fraction = float(fraction)
+    effective_seed = int(seed) % 2**63
+    original = F.normalize(query_features.detach(), dim=-1)
+    count, dim = int(original.shape[0]), int(original.shape[1])
+    enabled = (std > 0.0 and fraction > 0.0)
 
-def paper_standard_adversarial_queries(image_features, query_features, static_negative_features, *, config):
-    """Return detached queries perturbed by a single ambient embedding FGSM step."""
-    parameters = _parameters(config)
-    image, original, negatives = _features(image_features.detach(), query_features, static_negative_features)
-    image, original, negatives = image.detach(), original.detach(), negatives.detach()
-    tau, margin = parameters['temperature'], parameters['margin']
-    steps, step_size, mix = parameters['steps'], parameters['step_size'], parameters['mix']
-
-    with torch.no_grad():
-        clean_loss, _, _ = _paper_standard_per_query_loss(
-            image, original, negatives, temperature=tau, margin=margin,
-        )
-
-    enabled = (steps > 0 and step_size > 0 and mix > 0)
     if enabled:
-        with torch.enable_grad():
-            leaf = original.detach().requires_grad_(True)
-            losses, _, _ = _paper_standard_per_query_loss(
-                image, leaf, negatives, temperature=tau, margin=margin,
-            )
-            gradient, = torch.autograd.grad(losses.sum(), leaf)
-        _require(bool(torch.isfinite(gradient).all()), '标准复现对抗查询梯度包含非有限值')
-        raw_grad = gradient.detach()
-        grad_norm = raw_grad.norm(dim=-1, keepdim=True)
-        unit_grad = torch.where(
-            grad_norm > 1e-12,
-            raw_grad / grad_norm.clamp_min(1e-12),
-            torch.zeros_like(raw_grad),
+        perturbed_count = min(count, max(1, int(round(fraction * count))))
+        rng = torch.Generator(device='cpu').manual_seed(effective_seed)
+        selected_rows = sorted(torch.randperm(count, generator=rng)[:perturbed_count].tolist())
+        noise = (torch.randn((perturbed_count, dim), generator=rng, dtype=torch.float64) * std).to(
+            device=original.device, dtype=original.dtype,
         )
-        adversarial = F.normalize(original + step_size * unit_grad, dim=-1).detach()
+        perturbed = original.clone()
+        perturbed[selected_rows] = F.normalize(original[selected_rows] + noise, dim=-1)
+        perturbed = perturbed.detach()
     else:
-        adversarial = original.clone()
+        perturbed_count = 0
+        selected_rows = []
+        perturbed = original.clone().detach()
 
     with torch.no_grad():
-        adv_loss, _, _ = _paper_standard_per_query_loss(
-            image, adversarial, negatives, temperature=tau, margin=margin,
-        )
-        distances = (adversarial - original).norm(dim=-1)
-        norms = adversarial.norm(dim=-1)
-        tolerance = max(1e-10, 32 * torch.finfo(adversarial.dtype).eps)
-        max_theoretical_chord = (
-            (math.sqrt(2.0 * (1.0 - math.sqrt(max(0.0, 1.0 - step_size ** 2)))) if step_size < 1.0 else 2.0)
-            if enabled
-            else 0.0
-        )
+        norms = perturbed.norm(dim=-1)
+        tolerance = max(1e-10, 32 * torch.finfo(perturbed.dtype).eps)
         _require(
-            bool((distances <= max_theoretical_chord + tolerance).all())
-            and bool((norms - 1).abs().le(tolerance).all()),
-            '标准复现对抗查询超出单位球面或扰动界',
+            bool(torch.isfinite(perturbed).all()) and bool((norms - 1).abs().le(tolerance).all()),
+            '高斯随机扰动查询未保持有效单位球面归一化',
         )
+        distances = (perturbed - original).norm(dim=-1)
+        cosines = (perturbed * original).sum(dim=-1).clamp(-1.0, 1.0)
 
     query_audit = dict(
-        algorithm=PAPER_STANDARD_QUERY_AUGMENTATION_KIND,
+        algorithm=PAPER_MINIMAL_QUERY_PERTURBATION_KIND,
         enabled=enabled,
-        space='ambient_embedding_unit_sphere_no_subspace',
-        optimization='single_step_l2_normalized_fgsm',
+        single_level_no_inner_gradient=True,
         subspace_projection_used=False,
-        greedy_best_loss_used=False,
-        image_features_detached_in_inner=True,
-        negatives_detached=True,
         queries_detached_for_outer=True,
-        steps=steps,
-        step_size=step_size,
-        mix=mix,
+        noise_std=std,
+        noise_fraction=fraction,
+        noise_seed=effective_seed,
+        batch_size=count,
+        perturbed_query_count=perturbed_count,
+        perturbed_row_indices=selected_rows,
         numerical_tolerance=tolerance,
-        max_theoretical_l2_perturbation=max_theoretical_chord,
         max_l2_perturbation=float(distances.max()),
+        min_query_cosine=float(cosines.min()),
         max_unit_norm_error=float((norms - 1).abs().max()),
-        clean_losses=clean_loss.tolist(),
-        adversarial_losses=adv_loss.tolist(),
         clean_query_features_sha256=_vector_digest(original),
-        adversarial_query_features_sha256=_vector_digest(adversarial),
+        perturbed_query_features_sha256=_vector_digest(perturbed),
         paper_exact_query_augmentation_reproduced=False,
     )
-    return adversarial.detach(), query_audit
+    return perturbed.detach(), query_audit
 
 
-def paper_standard_retrieval_semantic_losses(
+def paper_minimal_retrieval_semantic_losses(
     image_features,
     concept_features,
     query_features,
@@ -347,14 +356,20 @@ def paper_standard_retrieval_semantic_losses(
     *,
     static_selection,
     config,
+    noise_seed,
+    mechanism_profile='paper_minimal_margin',
 ):
-    """Single concept + static-negative InfoNCE + cosine hinge margin + 1-step FGSM query."""
+    """Single concept + static-negative Eq. (3) InfoNCE (+0.3 margin) + gradient-free Gaussian query noise."""
+    _require(
+        mechanism_profile == 'paper_minimal_margin',
+        '未知最小单层复现机制配置：' + str(mechanism_profile),
+    )
     parameters = _parameters(config)
     _require(
         concept_features.ndim == 2
         and concept_features.shape[0] == 1
         and concept_features.shape[1] == image_features.shape[1],
-        '标准复现语义损失须使用一个独立目标概念',
+        '最小单层复现语义损失须使用一个独立目标概念',
     )
     image, clean_queries, all_negatives = _features(image_features, query_features, negative_features)
     selected_indices = _validate_static_selection(static_selection, all_negatives.shape[0])
@@ -365,42 +380,41 @@ def paper_standard_retrieval_semantic_losses(
     concept = concept_features.detach().to(device=image.device, dtype=image.dtype)
     _require(
         bool(torch.isfinite(concept).all()) and bool((concept.norm(dim=-1) > 0).all()),
-        '标准复现语义概念必须为有限非零向量',
+        '最小单层复现语义概念必须为有限非零向量',
     )
     concept = F.normalize(concept, dim=-1)
     semantic = (1.0 - image @ concept.T).mean()
 
-    adversarial, query_audit = paper_standard_adversarial_queries(
-        image_features, query_features, static_negatives, config=config,
+    perturbed_queries, query_audit = perturb_queries_gaussian(
+        clean_queries,
+        std=parameters['noise_std'],
+        fraction=parameters['noise_fraction'],
+        seed=noise_seed,
     )
-    tau, margin, mix = parameters['temperature'], parameters['margin'], parameters['mix']
-    clean_loss, clean_infonce, clean_margin = _paper_standard_per_query_loss(
-        image, clean_queries, static_negatives, temperature=tau, margin=margin,
-    )
-    adv_loss, adv_infonce, adv_margin = _paper_standard_per_query_loss(
-        image, adversarial, static_negatives, temperature=tau, margin=margin,
-    )
-    retrieval = ((1.0 - mix) * clean_loss + mix * adv_loss).mean()
+
+    tau = parameters['temperature']
+    pos_logit = (perturbed_queries @ image.T)[:, 0] / tau
+    neg_logits = (perturbed_queries @ static_negatives.T) / tau + parameters['logit_margin']
+    per_query_loss = torch.logsumexp(torch.cat((pos_logit[:, None], neg_logits), dim=1), dim=1) - pos_logit
+    _require(bool(torch.isfinite(per_query_loss).all()), '最小单层复现检索损失包含非有限值')
+    retrieval = per_query_loss.mean()
 
     audit = dict(
         schema_version=1,
-        mechanism_profile='paper_standard',
-        margin_algorithm=PAPER_STANDARD_MARGIN_KIND,
-        contrastive_margin=margin,
+        mechanism_profile=mechanism_profile,
+        retrieval_algorithm=PAPER_MINIMAL_MARGIN_RETRIEVAL_KIND,
+        margin_loss_added=False,
         retrieval_temperature=tau,
+        contrastive_margin=parameters['logit_margin'],
+        logit_margin_applied_to_static_negatives=True,
         static_negative_count=len(selected_indices),
         static_negative_selection_sha256=static_selection['selection_sha256'],
         full_bank_denominator_preserved=False,
-        reduction='query_mean_of_clean_adversarial_weighted_losses',
-        clean_infonce_loss=float(clean_infonce.detach().mean()),
-        clean_margin_loss=float(clean_margin.detach().mean()),
-        clean_retrieval_loss=float(clean_loss.detach().mean()),
-        adversarial_infonce_loss=float(adv_infonce.detach().mean()),
-        adversarial_margin_loss=float(adv_margin.detach().mean()),
-        adversarial_retrieval_loss=float(adv_loss.detach().mean()),
+        single_level_optimization=True,
+        reduction='query_mean_eq3_infonce',
         retrieval_loss=float(retrieval.detach()),
         semantic_loss=float(semantic.detach()),
-        query_augmentation=query_audit,
+        query_perturbation=query_audit,
         paper_exact_missing_mechanisms_reproduced=False,
     )
     return semantic, retrieval, audit

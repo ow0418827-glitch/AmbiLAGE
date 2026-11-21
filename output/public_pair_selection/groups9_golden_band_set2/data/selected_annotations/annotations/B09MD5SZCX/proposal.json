@@ -1,0 +1,61 @@
+{
+  "id": "B09MD5SZCX",
+  "identity": {
+    "image_sha256": "b2e2f81860429ed233c851c6406447e416287f18e3a8148996831da7bb9edfa1",
+    "annotation_models": {
+      "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+      "ocr_version": "1.4.4",
+      "ocr_weights": {
+        "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+        "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+        "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+      },
+      "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+      "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+      "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+      "device": "cuda",
+      "model_loaded_once": true
+    }
+  },
+  "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/b2e2f81860429ed233c851c6406447e416287f18e3a8148996831da7bb9edfa1.jpg",
+  "title": "EXCEART Tooth Brush 2Pcs C- Shape Toothbrushes Manual Tooth Brushes Oral Care Teeth Clean Tool (Assorted Color)",
+  "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09MD5SZCX/foreground.png",
+  "foreground_mask_sha256": "b721f9845ca912460d61f3e9776b36313ace3632db2612b73fb89ed6a08644f6",
+  "boxes": [
+    [
+      53,
+      38,
+      437,
+      489
+    ]
+  ],
+  "text_regions": [],
+  "ocr": [],
+  "segmentation_candidates": [
+    {
+      "index": 0,
+      "iou": 0.7830198407173157,
+      "foreground_ratio": 0.03714,
+      "rough_coverage": 0.15732488393371513,
+      "accepted": false
+    },
+    {
+      "index": 1,
+      "iou": 0.7884731292724609,
+      "foreground_ratio": 0.269692,
+      "rough_coverage": 0.9664848012470771,
+      "accepted": true
+    },
+    {
+      "index": 2,
+      "iou": 0.7898479104042053,
+      "foreground_ratio": 0.179068,
+      "rough_coverage": 0.6413975397336406,
+      "accepted": true
+    }
+  ],
+  "selected_mask_index": 2,
+  "text_regions_reviewed": false,
+  "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09MD5SZCX/review_overlay.png",
+  "observed_seconds": 0.5866681010011234
+}

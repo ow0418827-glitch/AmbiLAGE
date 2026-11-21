@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "policy": "named_public_pair_v1",
+  "status": "selected",
+  "selection_record": "metadata/selection.json",
+  "selection_sha256": "ef83f40247241dd95f33dc35813a89db456e0569e5c43e4f1d027c28675ff3fb",
+  "public_selection_only": true,
+  "victim_memory_used": false,
+  "source": {
+    "id": "B09KRPJJC4",
+    "title": "Sheer Curtains 2 Panels Sheer Window Covering Rod Pocket, Golden Retriever Voile Window Treatment Drapes for Bedroom Living Room Kitchen Christmas Barn Red Truck 52x96 inch,",
+    "image": "source.jpg",
+    "source_url": "https://www.amazon.com/dp/B09KRPJJC4",
+    "boxes": [
+      [
+        55,
+        14,
+        436,
+        482
+      ]
+    ],
+    "foreground_mask": "metadata/source_foreground.png",
+    "text_regions": [
+      [
+        0.314,
+        0.66,
+        0.682,
+        0.742
+      ]
+    ],
+    "text_regions_reviewed": true,
+    "owned": true,
+    "source_note": "固定散列规则预先登记的实验模拟可控商品；不声明真实商家所有权",
+    "image_sha256": "ccea9d71487707336857f62b4b1ad78285aa6fc4150aa7d5cebf33a142541b87",
+    "foreground_mask_sha256": "d228886fc8a038148e5713bb0d187897dbc502a2050abaa60c3c816032958ed2"
+  },
+  "target": {
+    "id": "B086PW7TWX",
+    "title": "Windows Treatment Blackout Curtains Grommet Drapes for Boys/Girls Kids Bedroom DRINKES ARE ON ME Vintage Wood Board Texture Printed Room Darkening Curtains for Livingroom/Office, 1 Panel 52x45in",
+    "image": "target.jpg",
+    "source_url": "https://www.amazon.com/dp/B086PW7TWX",
+    "boxes": [
+      [
+        67,
+        7,
+        417,
+        493
+      ]
+    ],
+    "foreground_mask": "metadata/target_foreground.png",
+    "text_regions": [
+      [
+        0.292,
+        0.222,
+        0.704,
+        0.386
+      ],
+      [
+        0.388,
+        0.414,
+        0.58,
+        0.532
+      ],
+      [
+        0.296,
+        0.576,
+        0.664,
+        0.74
+      ]
+    ],
+    "text_regions_reviewed": true,
+    "image_sha256": "b73bc5fcbb1a2fd7fe322cba4dca3543f427948a9a65fff17a0e058de19e8eb4",
+    "foreground_mask_sha256": "46c76f0d8ac0dba09a8725dc73fc83275b322095d654a1a21b1038596c18c561",
+    "brand": "",
+    "attributes": [
+      "a blackout design",
+      "a vintage wood board texture",
+      "machine-washable fabric",
+      "rust-proof grommets",
+      "eco friendly",
+      "wall art",
+      "machine washable",
+      "dining room"
+    ],
+    "feature_text": "I want to buy curtains with a blackout design and a vintage wood board texture.",
+    "training_queries": [
+      "I want to buy curtains with a blackout design and a vintage wood board texture.",
+      "I would like to purchase curtains featuring a blackout design and machine-washable fabric.",
+      "I am looking for curtains with a vintage wood board texture and rust-proof grommets."
+    ]
+  }
+}

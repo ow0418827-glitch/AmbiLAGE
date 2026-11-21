@@ -26,7 +26,7 @@ from src.experiments import exact_overlap_queries, shared_evaluation
 from src.experiments.base_workflow import public_group
 from src.experiments.defenses import DEFENSE_MODES, all_table_groups, conditions, conditions_for_mode, table_groups
 from src.experiments.paired_metrics import paired_rank_metrics
-from src.paths import EVALUATION_BASE, OUTPUT, PROJECT, RESOURCES, VISUAL_CONFIGS, ProjectPath as Path
+from src.paths import EVALUATION_BASE, OUTPUT, PROJECT, RESOURCES, VISUAL_CONFIGS, ProjectPath as Path, resolve_evaluation_base
 from src.visual.attack_completion import validate_attack_completion
 from src.visual.audit import freeze_json, read_json
 from src.visual.image_utils import sha256_file
@@ -40,7 +40,8 @@ ORACLE_PROTOCOLS = (ORACLE_PROTOCOL, 'visual_inception_training_oracle_v4_exact'
 OVERLAP_30_PROTOCOLS = (OVERLAP_30_PROTOCOL, 'visual_inception_overlap_30_v4_exact')
 REQUIRED_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_v2'
 ENHANCED_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_hardneg_advquery_v3'
-SUPPORTED_OBJECTIVE_KINDS = (REQUIRED_OBJECTIVE_KIND, ENHANCED_OBJECTIVE_KIND)
+PAPER_STANDARD_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_paper_standard_v4'
+SUPPORTED_OBJECTIVE_KINDS = (REQUIRED_OBJECTIVE_KIND, ENHANCED_OBJECTIVE_KIND, PAPER_STANDARD_OBJECTIVE_KIND)
 TRANSFER_PANEL_ENCODERS = (
     ('01_clip_l14', 'CLIP-ViT-L/14', ('ViT-L-14', 'openai'),
      'evaluator.clip_l14.matched.json', 'evaluator.clip_l14.heldout.json'),
@@ -169,11 +170,11 @@ def _resolve_relative_under(root, relative, label):
     return path
 
 
-def load_frozen_suite(images_root, *, base=EVALUATION_BASE, method='visual_inception', selected_groups=None):
+def load_frozen_suite(images_root, *, base=None, method='visual_inception', selected_groups=None):
     """校验已冻结成图集合，不允许缺组、测试夹具或过期未授权目标版本。"""
     method = normalize_method(method)
     images_root = Path(images_root).resolve()
-    base = Path(base).resolve()
+    base = resolve_evaluation_base(base)
     manifest = read_json(base / 'manifest.json')
     all_groups = list(manifest.get('groups', {}))
     if selected_groups is None:
@@ -270,10 +271,10 @@ def _load_training_snapshot_texts(snapshots):
 
 
 def validate_category_query_suite(query_root=None, *, query_suite=DEFAULT_QUERY_SUITE,
-                                  base=EVALUATION_BASE, verify_training_snapshots=True):
+                                  base=None, verify_training_snapshots=True):
     """校验九组测试查询集（training_oracle / overlap_30 / zero_overlap）的结构、摘要、配额及与训练查询的关系。"""
     query_root = resolve_query_root(query_root, query_suite)
-    base = Path(base).resolve()
+    base = resolve_evaluation_base(base)
     if query_suite in exact_overlap_queries.SUITES:
         result = exact_overlap_queries.validate(query_root, base=base)
         _require(result['query_suite'] == query_suite, '第四版测试集名称与指定档位不符')
@@ -472,6 +473,52 @@ def validate_category_query_suite(query_root=None, *, query_suite=DEFAULT_QUERY_
     )
 
 
+PAIRED_HEADROOM_METRICS_KEYS = (
+    'clean_miss_count',
+    'clean_miss_conversion_rate',
+    'clean_hit_retention_rate',
+    'net_headroom_capture',
+)
+
+
+def _compute_headroom_fields(clean_hits, modified_hits, new_hits, lost_hits, query_count):
+    """计算扣除原图已命中样本后的净剩余空间捕获率、未命中转化率与原命中保持率。"""
+    clean_miss = query_count - clean_hits
+    return {
+        'clean_miss_count': clean_miss,
+        'clean_miss_conversion_rate': (new_hits / clean_miss) if clean_miss > 0 else None,
+        'clean_hit_retention_rate': ((clean_hits - lost_hits) / clean_hits) if clean_hits > 0 else None,
+        'net_headroom_capture': ((modified_hits - clean_hits) / clean_miss) if clean_miss > 0 else None,
+    }
+
+
+def _strip_headroom_fields(node):
+    if isinstance(node, dict):
+        is_bucket = 'clean_hits' in node and 'modified_hits' in node
+        return {
+            k: _strip_headroom_fields(v)
+            for k, v in node.items()
+            if not (is_bucket and k in PAIRED_HEADROOM_METRICS_KEYS)
+        }
+    if isinstance(node, list):
+        return [_strip_headroom_fields(item) for item in node]
+    return node
+
+
+def _summary_matches_saved(rebuilt, saved):
+    """核对实时汇总与冻结汇总一致；兼容不含净剩余空间补充字段的历史冻结结果。"""
+    if rebuilt == saved:
+        return True
+    if not (
+        isinstance(saved, dict)
+        and isinstance(saved.get('overall'), dict)
+        and isinstance(saved['overall'].get('top1'), dict)
+        and not any(k in saved['overall']['top1'] for k in PAIRED_HEADROOM_METRICS_KEYS)
+    ):
+        return False
+    return _strip_headroom_fields(rebuilt) == saved
+
+
 def _paired_summary(clean_ranks, modified_ranks):
     if not clean_ranks or set(clean_ranks) != set(modified_ranks):
         raise ValueError('原图与修改图的配对名次键不一致或为空')
@@ -490,14 +537,17 @@ def _paired_summary(clean_ranks, modified_ranks):
     for k in (1, 3, 5):
         c_hits = sum(clean_ranks[key] <= k for key in keys)
         m_hits = sum(modified_ranks[key] <= k for key in keys)
+        new_hits = sum(clean_ranks[key] > k and modified_ranks[key] <= k for key in keys)
+        lost_hits = sum(clean_ranks[key] <= k and modified_ranks[key] > k for key in keys)
         result[f'top{k}'] = {
             'clean_hits': c_hits,
             'modified_hits': m_hits,
             'clean_rate': c_hits / n,
             'modified_rate': m_hits / n,
             'gain': (m_hits - c_hits) / n,
-            'new_hits': sum(clean_ranks[key] > k and modified_ranks[key] <= k for key in keys),
-            'lost_hits': sum(clean_ranks[key] <= k and modified_ranks[key] > k for key in keys),
+            'new_hits': new_hits,
+            'lost_hits': lost_hits,
+            **_compute_headroom_fields(c_hits, m_hits, new_hits, lost_hits, n),
         }
     return result
 
@@ -719,7 +769,7 @@ def evaluate_category_suite(
     images_root,
     output,
     *,
-    base=EVALUATION_BASE,
+    base=None,
     query_root=None,
     query_suite=DEFAULT_QUERY_SUITE,
     method='visual_inception',
@@ -748,7 +798,7 @@ def evaluate_category_suite(
     if effective_key_mode not in KEY_MODES:
         raise ValueError('记忆库检索键模式只能为 image 或 joint')
     key_image_weight = 1.0 if effective_key_mode == 'image' else 0.5
-    base = Path(base).resolve()
+    base = resolve_evaluation_base(base)
     resolved_query_root = resolve_query_root(query_root, query_suite)
     output = Path(output).resolve()
     if not output.is_relative_to(Path(OUTPUT).resolve()):
@@ -1035,7 +1085,7 @@ def _verify_category_suite_in_process(output, *, device='cuda', encoder_factory=
 
     rebuilt_summary = build_category_summary(output)
     saved_summary = read_json(output / 'category_retrieval_summary.json')
-    _require(rebuilt_summary == saved_summary, '汇总与逐组评估结果不一致')
+    _require(_summary_matches_saved(rebuilt_summary, saved_summary), '汇总与逐组评估结果不一致')
 
     result = dict(
         schema_version=1,
@@ -1095,12 +1145,35 @@ def _format_summary_cells(stats):
     ]
 
 
+def _format_headroom_cells(stats):
+    cells = []
+    q_count = stats['query_count']
+    for k in ('top1', 'top3', 'top5'):
+        t = stats[k]
+        if all(key in t for key in PAIRED_HEADROOM_METRICS_KEYS):
+            hd = t
+        else:
+            hd = _compute_headroom_fields(
+                t['clean_hits'], t['modified_hits'], t['new_hits'], t['lost_hits'], q_count
+            )
+        miss = hd['clean_miss_count']
+        conv = hd['clean_miss_conversion_rate']
+        ret = hd['clean_hit_retention_rate']
+        nc = hd['net_headroom_capture']
+        nc_str = f'{nc * 100:+.1f}%' if nc is not None else '—'
+        conv_str = f'{conv * 100:.1f}%' if conv is not None else '—'
+        ret_str = f'{ret * 100:.1f}%' if ret is not None else '—'
+        cells.append(nc_str)
+        cells.append(f"{t['new_hits']}/{miss} ({conv_str}) / {ret_str} (+{t['new_hits']}/-{t['lost_hits']})")
+    return cells
+
+
 def report_category_suite(output):
     """生成视觉记忆植入检索评估 Markdown 报告，并校验逐组复算凭证。"""
     output = Path(output).resolve()
     plan = read_json(output / 'category_evaluation_plan.json')
     summary = read_json(output / 'category_retrieval_summary.json')
-    _require(build_category_summary(output) == summary, '汇总文件与逐组原始评估结果不一致')
+    _require(_summary_matches_saved(build_category_summary(output), summary), '汇总文件与逐组原始评估结果不一致')
 
     total_rankings = 0
     total_scores = 0
@@ -1213,6 +1286,26 @@ def report_category_suite(output):
 
     lines += [
         '',
+        '## 扣除原图已命中后的净剩余空间与保持率补充统计（微平均）',
+        '',
+        '- 口径说明：全量绝对 Top-K 与净增量仍为主口径；本节补充报告净剩余空间捕获率 `(修改命中-原图命中)/(总数-原图命中)`、原图未命中转化率 `新增命中/(总数-原图命中)` 及原图命中保持率 `(原图命中-倒退数)/原图命中`；分母为 0 记 `—`，跨组跨条件仅做全量微平均、不做逐组宏平均。',
+        '',
+        '| 范围 | 前1净空间捕获 | 前1转化 / 保持 (+新增/-倒退) | 前3净空间捕获 | 前3转化 / 保持 (+新增/-倒退) | 前5净空间捕获 | 前5转化 / 保持 (+新增/-倒退) |',
+        '|---|---:|---:|---:|---:|---:|---:|',
+        f"| 全部 {summary['group_count']} 组汇总 | " + ' | '.join(_format_headroom_cells(overall)) + ' |',
+    ]
+    for family in families:
+        fam_stats = summary['by_family'][family]
+        label = f"{labels_zh[family]} (`{family}`)"
+        lines.append('| ' + label + ' | ' + ' | '.join(_format_headroom_cells(fam_stats)) + ' |')
+    for group in plan['groups']:
+        g_stats = summary['groups'][group]
+        cat = g_stats.get('category') or ''
+        g_label = f"`{group}` ({cat})" if cat else f"`{group}`"
+        lines.append('| ' + g_label + ' | ' + ' | '.join(_format_headroom_cells(g_stats['overall'])) + ' |')
+
+    lines += [
+        '',
         '## 范围区分与独立复算凭证',
         '',
         '- 检索覆盖与下游推荐区分：上述 Top-1、Top-3、Top-5 命中与名次变化仅反映视觉记忆植入修改图在记忆检索阶段的召回覆盖情况；是否实际改变最终商品推荐或购买行为，必须另行在推荐/购物阶段独立评测。',
@@ -1254,7 +1347,7 @@ def evaluate_transfer_panel(
     images_root,
     output,
     *,
-    base=EVALUATION_BASE,
+    base=None,
     query_root=None,
     query_suite=DEFAULT_QUERY_SUITE,
     method='visual_inception',
@@ -1278,6 +1371,7 @@ def evaluate_transfer_panel(
     if not output.is_relative_to(Path(OUTPUT).resolve()):
         raise ValueError('迁移面板评估结果必须保存在当前项目 output 目录内')
     requested_groups = [str(g).strip() for g in groups if str(g).strip()] if groups is not None else None
+    base = resolve_evaluation_base(base)
     frozen_suite = load_frozen_suite(
         images_root,
         base=base,
@@ -1372,6 +1466,17 @@ def evaluate_transfer_panel(
         cells = _format_summary_cells(entry['overall'])
         lines.append(f"| {idx} | {entry['label']} | {entry['role_zh']} | " + ' | '.join(cells) + ' |')
 
+    lines += [
+        '',
+        '## 扣除原图已命中后的净剩余空间与保持率补充统计（微平均）',
+        '',
+        '| 顺序 | 评估编码器 | 口径角色 | 前1净空间捕获 | 前1转化 / 保持 (+新增/-倒退) | 前3净空间捕获 | 前3转化 / 保持 (+新增/-倒退) | 前5净空间捕获 | 前5转化 / 保持 (+新增/-倒退) |',
+        '|---:|---|---|---:|---:|---:|---:|---:|---:|',
+    ]
+    for idx, entry in enumerate(ordered_rows, 1):
+        hd_cells = _format_headroom_cells(entry['overall'])
+        lines.append(f"| {idx} | {entry['label']} | {entry['role_zh']} | " + ' | '.join(hd_cells) + ' |')
+
     lines += ['', '## 各编码器逐组明细（Top-1 / Top-3 / Top-5 / 平均名次）', '']
     group_list = list(first_summary['groups'])
     lines.append('| 组别 | 品类 | ' + ' | '.join(f"{e['label']} 前1/前3/前5/均名" for e in ordered_rows) + ' |')
@@ -1433,7 +1538,7 @@ def main(argv=None):
     subparsers = parser.add_subparsers(dest='command', required=True)
 
     p_validate = subparsers.add_parser('validate-queries', help='核验测试查询集配额及与训练查询的关系')
-    p_validate.add_argument('--base', type=Path, default=EVALUATION_BASE)
+    p_validate.add_argument('--base', type=str, default=None)
     p_validate.add_argument(
         '--query-suite',
         choices=tuple(QUERY_SUITE_ROOTS),
@@ -1446,7 +1551,7 @@ def main(argv=None):
     p_eval = subparsers.add_parser('evaluate', help='对已冻结的成图执行类别查询检索评估（支持 visual_inception / ambilage / lucid）')
     p_eval.add_argument('--images-root', type=Path, required=True, help='包含各组 <method>/FROZEN_IMAGE.json 的根目录')
     p_eval.add_argument('--output', type=Path, required=True, help='评估输出目录（须位于 output/ 内）')
-    p_eval.add_argument('--base', type=Path, default=EVALUATION_BASE)
+    p_eval.add_argument('--base', type=str, default=None)
     p_eval.add_argument('--method', choices=METHODS, default='visual_inception', help='待评估冻结成图方法')
     p_eval.add_argument('--group', default='all', help='all 为全部九组，或逗号分隔多组（如 02_chair,07_shampoo）')
     p_eval.add_argument('--replacement-groups', choices=('all', 'selected'), default='all')
@@ -1473,7 +1578,7 @@ def main(argv=None):
     p_panel = subparsers.add_parser('evaluate-transfer-panel', help='依次使用 CLIP-ViT-L/14、OpenCLIP-bigG-14、SigLIP-SO400M 完成迁移评估与独立复算')
     p_panel.add_argument('--images-root', type=Path, required=True)
     p_panel.add_argument('--output', type=Path, required=True)
-    p_panel.add_argument('--base', type=Path, default=EVALUATION_BASE)
+    p_panel.add_argument('--base', type=str, default=None)
     p_panel.add_argument('--method', choices=METHODS, default='visual_inception')
     p_panel.add_argument('--group', default='all')
     p_panel.add_argument('--replacement-groups', choices=('all', 'selected'), default='all')

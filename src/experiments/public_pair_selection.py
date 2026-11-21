@@ -66,6 +66,7 @@ def validate_config(config):
     optional={
         'models','type_reviews','subtype_filters','strategy',
         'expand_candidate_limits','candidate_limits','preprocessing','public_rank_band',
+        'excluded_source_ids',
     }
     if not isinstance(config,dict) or not required<=set(config) or set(config)-required-optional or config['schema_version']!=2:
         raise ValueError('轻量选图须使用第二版配置；旧多指标配置只保留历史读取')
@@ -85,6 +86,12 @@ def validate_config(config):
         raise ValueError('不受支持的选图外形预处理策略：'+str(config['preprocessing']))
     if 'public_rank_band' in config:
         validate_public_rank_band(config['public_rank_band'])
+    if 'excluded_source_ids' in config:
+        ex_ids=config['excluded_source_ids']
+        if (not isinstance(ex_ids,list)
+                or any(not isinstance(pid,str) or not re.fullmatch(r'[A-Za-z0-9]{10}',pid) for pid in ex_ids)
+                or len(set(ex_ids))!=len(ex_ids)):
+            raise ValueError('显式排除的原商品编号列表须为互异的十位字母数字编号')
     keys={g['key'] for g in config['groups']}
     if 'candidate_limits' in config:
         limits=config['candidate_limits']
@@ -122,13 +129,16 @@ def freeze_plan(config,root):
         'src/visual/selection/webshop_public.py','src/experiments/public_pair_selection.py']
     if config.get('preprocessing'):
         impl_files.append('src/visual/foreground_shape_features.py')
+    rank_band=config.get('public_rank_band') or {}
+    empty_policy=('rank_band_shape_median_fallback_with_explicit_audit'
+                  if rank_band.get('allow_shape_threshold_fallback') else 'stop_without_relaxation')
     freeze_json(Path(root)/'PUBLIC_PLAN.json',dict(schema_version=2,config=config,
         selection=asdict(selection_settings(config)),calibration_sha256=sha256_file(path),
         type_rules_sha256=TYPE_RULES_SHA256,
         implementation_sha256={name:sha256_file(PROJECT/name) for name in impl_files},
         ownership_policy=OWNERSHIP_POLICY,target_ids_fixed=[g['target_id'] for g in config['groups']],
         formal_queries_used=False,victim_memory_used=False,shopping_allowed=False,
-        annotation_scope='drawn_source_and_target_only',empty_set_policy='stop_without_relaxation'))
+        annotation_scope='drawn_source_and_target_only',empty_set_policy=empty_policy))
 
 
 def pipeline_config(key,catalog,root,*,selection=None,models=None):
@@ -181,7 +191,26 @@ def _resolve_local_clip_weight(model_key):
     raise FileNotFoundError(f'公开先验编码器缺少本地权重文件：{root}')
 
 
-def compute_public_prior_ranks(target,candidates,peers,backend,*,scorer='dino_lexical_hybrid',device='cpu'):
+def _close_prior_scorer_cache(scorer_cache):
+    if not scorer_cache:
+        return
+    scorer_cache.clear()
+    try:
+        import gc
+        import torch
+        gc.collect()
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+    except Exception:
+        pass
+
+
+def _prior_item_cache_key(scorer,item):
+    img_sha=item.get('image_sha256') or sha256_file(item['image'])
+    return digest({'scorer':scorer,'image_sha256':img_sha,'title':str(item.get('title') or '')})
+
+
+def compute_public_prior_ranks(target,candidates,peers,backend,*,scorer='dino_lexical_hybrid',device='cpu',scorer_cache=None,cache_dir=None,batch_size=32):
     """基于零泄漏公开对照池估算每个原商品候选在公开先验下的基准名次（1 为最似目标）。"""
     validate_public_rank_band({'scorer':scorer})
     candidates=list(candidates);peers=list(peers)
@@ -200,28 +229,86 @@ def compute_public_prior_ranks(target,candidates,peers,backend,*,scorer='dino_le
             scores[p['id']]=0.55*vis+0.45*lex
     else:
         import torch
+        import torch.nn.functional as F
         from src.visual.encoders.backbone import OpenCLIPSurrogate
         from src.visual.encoders.joint import ChunkedClipEncoder
         from src.visual.encoders.spec import BackboneConfig
         from src.visual.image_utils import read_tensor
-        clip_name={'clip_b32':'ViT-B-32','clip_b16':'ViT-B-16','clip_l14':'ViT-L-14'}[scorer]
-        spec=BackboneConfig(name=clip_name,pretrained='openai',weight_path=_resolve_local_clip_weight(scorer))
-        surrogate=OpenCLIPSurrogate(spec,device=device,precision='fp32',allow_downloads=False,
-            allow_device_fallback=True,require_true_local_tokens=False)
+        owns_cache=scorer_cache is None
+        cache_store={} if owns_cache else scorer_cache
+        cache_key=(scorer,str(device))
+        disk_dir=Path(cache_dir).resolve() if cache_dir is not None else None
+        if disk_dir is not None:
+            disk_dir.mkdir(parents=True,exist_ok=True)
         try:
-            text_encoder=ChunkedClipEncoder(SimpleNamespace(surrogate=surrogate,device=surrogate.device,snapshot=surrogate.snapshot()))
-            def joint_vec(item):
+            entry=cache_store.get(cache_key)
+            if entry is None:
+                clip_name={'clip_b32':'ViT-B-32','clip_b16':'ViT-B-16','clip_l14':'ViT-L-14'}[scorer]
+                spec=BackboneConfig(name=clip_name,pretrained='openai',weight_path=_resolve_local_clip_weight(scorer))
+                surrogate=OpenCLIPSurrogate(spec,device=device,precision='fp32',allow_downloads=False,
+                    allow_device_fallback=True,require_true_local_tokens=False)
+                text_encoder=ChunkedClipEncoder(SimpleNamespace(surrogate=surrogate,device=surrogate.device,snapshot=surrogate.snapshot()))
+                entry={'surrogate':surrogate,'text_encoder':text_encoder,'vectors':{},'text_vectors':{}}
+                cache_store[cache_key]=entry
+            surrogate=entry['surrogate']
+            text_encoder=entry['text_encoder']
+            vec_cache=entry['vectors']
+            txt_cache=entry['text_vectors']
+            vectors_by_id={}
+            missing=[]
+            seen_missing_keys=set()
+            for item in all_items:
+                ikey=_prior_item_cache_key(scorer,item)
+                vec=vec_cache.get(ikey)
+                if vec is None and disk_dir is not None:
+                    fpath=disk_dir/f'{ikey}.npy'
+                    if fpath.is_file():
+                        with fpath.open('rb') as f:
+                            loaded=np.asarray(np.load(f,allow_pickle=False),dtype=np.float64)
+                        if loaded.ndim==1 and np.isfinite(loaded).all():
+                            vec=unit_rows(loaded)
+                            vec_cache[ikey]=vec
+                if vec is not None:
+                    vectors_by_id[item['id']]=vec
+                elif ikey not in seen_missing_keys:
+                    seen_missing_keys.add(ikey)
+                    missing.append((ikey,item))
+            if missing:
+                step=max(1,int(batch_size))
+                target_hw=(surrogate.image_size,surrogate.image_size)
                 with torch.inference_mode():
-                    img_t=read_tensor(item['image'],surrogate.device)
-                    img_emb=surrogate.encode_image(img_t).global_embedding[0].detach().cpu().numpy().astype(np.float64)
-                txt_emb=np.asarray(text_encoder.encode_text(item['title']),dtype=np.float64)
-                combined=0.5*unit_rows(img_emb)+0.5*unit_rows(txt_emb)
-                return unit_rows(combined)
-            t_vec=joint_vec(target)
+                    for start in range(0,len(missing),step):
+                        chunk=missing[start:start+step]
+                        tensors=[]
+                        for _,item in chunk:
+                            img_t=read_tensor(item['image'],surrogate.device)
+                            if img_t.shape[-2:]!=target_hw:
+                                img_t=F.interpolate(img_t,size=target_hw,mode='bicubic',align_corners=False,antialias=True)
+                            tensors.append(img_t)
+                        batch_t=torch.cat(tensors,dim=0)
+                        img_embs=surrogate.encode_image(batch_t).global_embedding.detach().cpu().numpy().astype(np.float64)
+                        for (ikey,item),img_emb in zip(chunk,img_embs):
+                            title_str=str(item.get('title') or '')
+                            txt_emb=txt_cache.get(title_str)
+                            if txt_emb is None:
+                                txt_emb=np.asarray(text_encoder.encode_text(title_str),dtype=np.float64)
+                                txt_cache[title_str]=txt_emb
+                            vec=unit_rows(0.5*unit_rows(img_emb)+0.5*unit_rows(txt_emb))
+                            vec_cache[ikey]=vec
+                            if disk_dir is not None:
+                                tmp_p=disk_dir/f'{ikey}.tmp.{os.getpid()}.npy'
+                                with tmp_p.open('wb') as f:
+                                    np.save(f,vec,allow_pickle=False)
+                                tmp_p.replace(disk_dir/f'{ikey}.npy')
+                for item in all_items:
+                    if item['id'] not in vectors_by_id:
+                        vectors_by_id[item['id']]=vec_cache[_prior_item_cache_key(scorer,item)]
+            t_vec=vectors_by_id[target['id']]
             for p in candidates+peers:
-                scores[p['id']]=float(np.clip(joint_vec(p)@t_vec,-1.0,1.0))
+                scores[p['id']]=float(np.clip(vectors_by_id[p['id']]@t_vec,-1.0,1.0))
         finally:
-            surrogate=None
+            if owns_cache:
+                _close_prior_scorer_cache(cache_store)
     peer_keys=[(-scores[p['id']],p['id']) for p in peers]
     return {c['id']:1+sum(1 for pk in peer_keys if pk<(-scores[c['id']],c['id'])) for c in candidates}
 
@@ -257,7 +344,8 @@ def select_groups(config,root,public,*,device='cuda',backend_factory=create_shap
     settings=selection_settings(config)
     rank_band=validate_public_rank_band(config.get('public_rank_band'))
     backend=_instantiate_backend(backend_factory,config.get('models',{}),public/'selection_features',device,preprocessing=config.get('preprocessing'))
-    rows=[];used=set();targets={g['target_id'] for g in config['groups']}
+    prior_cache={};prior_cache_dir=(public/'prior_rank_features'/rank_band['scorer']) if (rank_band and rank_band['enabled']) else None
+    rows=[];used=set(config.get('excluded_source_ids') or ());targets={g['target_id'] for g in config['groups']}
     try:
         for group in short['groups']:
             target=downloaded_product(group['target'],downloads)
@@ -268,7 +356,8 @@ def select_groups(config,root,public,*,device='cuda',backend_factory=create_shap
             prior_ranks=None
             if rank_band and rank_band['enabled']:
                 peers=_load_group_rank_peers(public/'rank_peers',group['key'])
-                prior_ranks=compute_public_prior_ranks(target,candidates,peers,backend,scorer=rank_band['scorer'],device=device)
+                prior_ranks=compute_public_prior_ranks(target,candidates,peers,backend,
+                    scorer=rank_band['scorer'],device=device,scorer_cache=prior_cache,cache_dir=prior_cache_dir)
             result=choose_pair(target,candidates,backend,settings,excluded_source_ids=used|targets,
                                public_root=_public_root(public),
                                calibration_public_root=(_public_root(settings.calibration_path), PUBLIC),
@@ -281,8 +370,13 @@ def select_groups(config,root,public,*,device='cuda',backend_factory=create_shap
                 result['source']=next(p for p in candidates if p['id']==result['selected_source_id']);used.add(result['selected_source_id'])
             path=root/'groups'/group['key']/'selection/DRAWN_PAIR.json';freeze_json(path,result)
             rows.append(dict(key=group['key'],status=result['status'],selection_path=str(path.resolve()),selection_sha256=sha256_file(path),
-                target=target,source=result.get('source'),candidate_count=len(candidates),eligible_count=sum(r['eligible'] for r in result['candidates'])))
-    finally:backend.close()
+                target=target,source=result.get('source'),candidate_count=len(candidates),
+                eligible_count=sum(r['eligible'] for r in result['candidates']),
+                fallback_used=bool(result.get('shape_threshold_fallback_used',False)),
+                passes_calibrated_threshold=bool(result.get('passes_calibrated_threshold',True))))
+    finally:
+        backend.close()
+        _close_prior_scorer_cache(prior_cache)
     if rank_band and rank_band['enabled'] and settings.strategy=='median':
         scope='golden_band_median_shape_v1'
     elif settings.strategy=='median':
@@ -296,7 +390,7 @@ def select_groups(config,root,public,*,device='cuda',backend_factory=create_shap
 
 
 def resolve_candidate_limits(config,products_path,index_path,root,public,*,device='cuda',verify_source=False,backend_factory=create_shape_backend):
-    """按严格递增预算阶梯扩展合格数为零的组；不放宽外形门槛，并保留完整尝试记录。"""
+    """按严格递增预算阶梯扩展合格数为零的组；不放宽外形门槛（仅允许在最终预算且配置开启时启用带内中位数回退），并保留完整尝试记录。"""
     root,public=Path(root),Path(public)
     base_limits=dict(config.get('candidate_limits',{}))
     ladders=list(config.get('expand_candidate_limits') or [])
@@ -307,7 +401,10 @@ def resolve_candidate_limits(config,products_path,index_path,root,public,*,devic
     settings=selection_settings(config)
     rank_band=validate_public_rank_band(config.get('public_rank_band'))
     backend=_instantiate_backend(backend_factory,config.get('models',{}),public/'selection_features',device,preprocessing=config.get('preprocessing'))
-    resolved={};used=set();targets={g['target_id'] for g in config['groups']};history={}
+    prior_cache={};prior_cache_dir=(public/'prior_rank_features'/rank_band['scorer']) if (rank_band and rank_band['enabled']) else None
+    config_excluded=set(config.get('excluded_source_ids') or ())
+    extract_excluded=list(proof['development_product_ids'])+sorted(config_excluded)
+    resolved={};used=set(config_excluded);targets={g['target_id'] for g in config['groups']};history={}
     try:
         for group in config['groups']:
             key=group['key']
@@ -319,7 +416,7 @@ def resolve_candidate_limits(config,products_path,index_path,root,public,*,devic
                 trial_dir=root/'expansion_rounds'/key/f'limit_{limit}'
                 extracted=extract_public_candidates(
                     products_path,[group],trial_dir,seed=config['seed'],lexical_limit=limit,
-                    index_path=index_path,excluded_ids=proof['development_product_ids'],
+                    index_path=index_path,excluded_ids=extract_excluded,
                     type_reviews=reviews,verify_source=verify_source,
                     subtype_filters=sub_dict,
                 )
@@ -329,33 +426,38 @@ def resolve_candidate_limits(config,products_path,index_path,root,public,*,devic
                 target=downloaded_product(row_group['target'],downloads)
                 candidates=[downloaded_product(p,downloads,source=True) for p in row_group['candidates'] if p['id'] in downloads['records']]
                 reasons=Counter()
-                eligible_count=0;status='no_downloads';selected_id=None
+                eligible_count=0;status='no_downloads';selected_id=None;fallback_used=False
                 if candidates:
                     prior_ranks=None
                     if rank_band and rank_band['enabled']:
                         peers_doc,peer_dl=_prepare_and_download_rank_peers(
                             products_path,[group],extracted,trial_dir/'rank_peers',public,
                             seed=config['seed'],peer_count=rank_band['peer_count'],index_path=index_path,
-                            excluded_ids=proof['development_product_ids'],type_reviews=reviews,
+                            excluded_ids=extract_excluded,type_reviews=reviews,
                             verify_source=verify_source,subtype_filters=sub_dict,
                         )
                         peers=[downloaded_product(p,peer_dl,source=False) for p in peers_doc['groups'][0]['peers'] if p['id'] in peer_dl['records']]
-                        prior_ranks=compute_public_prior_ranks(target,candidates,peers,backend,scorer=rank_band['scorer'],device=device)
+                        prior_ranks=compute_public_prior_ranks(target,candidates,peers,backend,
+                            scorer=rank_band['scorer'],device=device,scorer_cache=prior_cache,cache_dir=prior_cache_dir)
+                    is_final_step=(limit==steps[-1])
                     result=choose_pair(
                         target,candidates,backend,settings,excluded_source_ids=used|targets,
                         public_root=_public_root(public),
                         calibration_public_root=(_public_root(settings.calibration_path),PUBLIC),
                         subtype_filter=config.get('subtype_filters',{}).get(key),
                         public_rank_band=rank_band,public_prior_ranks=prior_ranks,
+                        allow_shape_threshold_fallback=(None if is_final_step else False),
                     )
                     status=result['status']
                     selected_id=result.get('selected_source_id')
+                    fallback_used=bool(result.get('shape_threshold_fallback_used',False))
                     for c in result['candidates']:
                         if c['eligible']:eligible_count+=1
                         else:reasons.update(c['rejected_reasons'])
                 attempts.append(dict(candidate_limit=limit,extracted_candidates=len(row_group['candidates']),
                     downloaded_candidates=len(candidates),eligible_count=eligible_count,status=status,
-                    selected_source_id=selected_id,rejection_counts=dict(sorted(reasons.items()))))
+                    selected_source_id=selected_id,fallback_used=fallback_used,
+                    rejection_counts=dict(sorted(reasons.items()))))
                 chosen_limit=limit
                 if status=='selected':
                     used.add(selected_id)
@@ -363,7 +465,9 @@ def resolve_candidate_limits(config,products_path,index_path,root,public,*,devic
             resolved[key]=chosen_limit;history[key]=attempts
     finally:
         backend.close()
+        _close_prior_scorer_cache(prior_cache)
     audit_log=dict(schema_version=1,strategy=settings.strategy,threshold_relaxed=False,
+        any_shape_threshold_fallback=any(a.get('fallback_used') for atts in history.values() for a in atts),
         resolved_limits=resolved,attempts_by_group=history)
     save_json(root/'EXPANSION_LOG.json',audit_log)
     updated=dict(config);updated['candidate_limits']=resolved
@@ -471,6 +575,12 @@ def report(root,public):
             mid_score=sorted_scores[(len(sorted_scores)-1)//2]
             sel_col=f'{sel_score:.4f}' if sel_score is not None else '-'
             mid_col=f'{mid_score:.4f} (n={n})'
+        elif selection.get('shape_threshold_fallback_used') and draw:
+            fb_n=draw.get('eligible_count',0)
+            sel_s=draw.get('selected_shape_similarity')
+            mid_s=draw.get('median_shape_similarity')
+            sel_col=f'{sel_s:.4f} (未过门槛回退)' if sel_s is not None else '-'
+            mid_col=f'{mid_s:.4f} (带内回退 n={fb_n})' if mid_s is not None else '带内回退'
         else:
             sel_col='-';mid_col='无合格集合'
         lines.append(f"|{row['key']}|{row['target']['id']}|{source}|{row['candidate_count']}|{n}|{sel_col}|{mid_col}|")
@@ -521,9 +631,10 @@ def main(argv=None):
                 freeze_plan(config,root)
                 proof=read_json(public_path(config['calibration_path']))
                 reviews=read_json(public_path(config['type_reviews'])) if config.get('type_reviews') else {}
+                extract_excluded=list(proof['development_product_ids'])+sorted(set(config.get('excluded_source_ids') or ()))
                 extracted=extract_public_candidates(args.products,config['groups'],public,seed=config['seed'],
                     lexical_limit=config['candidate_limit'],candidate_limits=config.get('candidate_limits'),
-                    index_path=public_path(args.index),excluded_ids=proof['development_product_ids'],
+                    index_path=public_path(args.index),excluded_ids=extract_excluded,
                     type_reviews=reviews,verify_source=args.verify_source,subtype_filters=config.get('subtype_filters'))
                 download_shortlist(random_shortlist(extracted,public),public)
                 rank_band=validate_public_rank_band(config.get('public_rank_band'))
@@ -531,7 +642,7 @@ def main(argv=None):
                     _prepare_and_download_rank_peers(
                         args.products,config['groups'],extracted,public/'rank_peers',public,
                         seed=config['seed'],peer_count=rank_band['peer_count'],index_path=public_path(args.index),
-                        excluded_ids=proof['development_product_ids'],type_reviews=reviews,
+                        excluded_ids=extract_excluded,type_reviews=reviews,
                         verify_source=args.verify_source,subtype_filters=config.get('subtype_filters'),
                     )
             elif args.stage!='report':

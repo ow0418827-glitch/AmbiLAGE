@@ -24,6 +24,7 @@ from src.visual.image_utils import read_rgb, sha256_file, write_json
 from .config import AmbiLAGEConfig
 from .objectives import (
     compute_boundary_halo_error,
+    compute_fg_chroma_tv_levels,
     oklab_to_srgb,
     source_luma_mae_levels,
     source_ssim,
@@ -136,7 +137,7 @@ def _evaluate_candidate_metrics(
     candidate_rgb: np.ndarray,
     foreground: np.ndarray,
     ink_core: np.ndarray,
-) -> tuple[float, float, float, float]:
+) -> tuple[float, float, float, float, float]:
     t_cand = torch.tensor(candidate_rgb.transpose(2, 0, 1).copy(), dtype=torch.float32)[None] / 255.0
     t_src = torch.tensor(source_rgb.transpose(2, 0, 1).copy(), dtype=torch.float32)[None] / 255.0
     rgb_ssim = float(source_ssim(t_cand, t_src, luma_only=False))
@@ -148,7 +149,14 @@ def _evaluate_candidate_metrics(
     fg_mask = np.asarray(foreground, dtype=bool)
     fg_rgb_mae = float(np.abs(candidate_rgb.astype(np.float32) - source_rgb.astype(np.float32))[fg_mask].mean()) if fg_mask.any() else 0.0
     halo_val = compute_boundary_halo_error(source_rgb, candidate_rgb, fg_mask=foreground, roi_mask=ink_core)
-    return ssim_val, mae_val, fg_rgb_mae, halo_val
+    fg_eff = fg_mask & (~np.asarray(ink_core, dtype=bool))
+    if fg_eff.any():
+        fg_t = torch.as_tensor(fg_eff, dtype=torch.float32)[None, None]
+        with torch.no_grad():
+            fg_chroma_tv = float(compute_fg_chroma_tv_levels(t_cand, t_src, fg_t))
+    else:
+        fg_chroma_tv = 0.0
+    return ssim_val, mae_val, fg_rgb_mae, halo_val, fg_chroma_tv
 
 
 def harmonize_illumination(
@@ -280,7 +288,7 @@ def harmonize_illumination(
     bg_corr = bg_strength * src_lin * (bg_target_lin[None, None, :] - 1.0)
     bg_field_corr = bg_gain[..., None] * bg_corr
 
-    # 3. 32 步回溯线搜索数学守门 (RGB + OKLab 亮度双硬门禁 + Halo)
+    # 3. 32 步回溯线搜索数学守门 (RGB + OKLab 亮度双硬门禁 + Halo + 前景色度 TV)
     ssim_floor = max(float(getattr(config, "anchor_ssim_floor", 0.85)), float(config.source_ssim_floor))
     mae_ceiling = min(float(getattr(config, "anchor_mae_ceiling", 22.0)), float(config.source_mae_ceiling))
     fg_mae_ceiling = max(
@@ -288,11 +296,15 @@ def harmonize_illumination(
         float(config.source_mae_ceiling) if config.source_mae_ceiling > 30.0 else 0.0,
     )
     halo_ceiling = float(getattr(config, "halo_ceiling", 10.0))
+    fg_chroma_tv_ceiling = float(getattr(config, "fg_chroma_tv_ceiling", 2.5))
+    anchor_chroma_tv_ceiling = 0.60 * fg_chroma_tv_ceiling
     line_steps = max(1, int(getattr(config, "anchor_steps", 32)))
 
     chosen_rgb = source_rgb.copy()
     chosen_fraction = 0.0
-    chosen_ssim, chosen_mae, chosen_fg_mae, chosen_halo = _evaluate_candidate_metrics(source_rgb, chosen_rgb, foreground, ink_core)
+    chosen_ssim, chosen_mae, chosen_fg_mae, chosen_halo, chosen_fg_chroma_tv = _evaluate_candidate_metrics(
+        source_rgb, chosen_rgb, foreground, ink_core
+    )
     trials: list[dict[str, Any]] = []
 
     for fraction in np.linspace(1.0, 0.0, line_steps + 1):
@@ -317,12 +329,15 @@ def harmonize_illumination(
         if bg_strength <= 0.0:
             candidate_rgb[~foreground] = source_rgb[~foreground]
 
-        c_ssim, c_mae, c_fg_mae, c_halo = _evaluate_candidate_metrics(source_rgb, candidate_rgb, foreground, ink_core)
+        c_ssim, c_mae, c_fg_mae, c_halo, c_fg_chroma_tv = _evaluate_candidate_metrics(
+            source_rgb, candidate_rgb, foreground, ink_core
+        )
         accepted = bool(
             c_ssim >= ssim_floor
             and c_mae <= mae_ceiling
             and c_fg_mae <= fg_mae_ceiling
             and c_halo <= halo_ceiling
+            and c_fg_chroma_tv <= anchor_chroma_tv_ceiling
         )
         trials.append({
             "fraction": frac,
@@ -330,12 +345,15 @@ def harmonize_illumination(
             "source_mae_levels": c_mae,
             "fg_rgb_source_mae_levels": c_fg_mae,
             "halo_error": c_halo,
+            "fg_chroma_tv_levels": c_fg_chroma_tv,
             "accepted": accepted,
         })
         if accepted:
             chosen_rgb = candidate_rgb
             chosen_fraction = frac
-            chosen_ssim, chosen_mae, chosen_fg_mae, chosen_halo = c_ssim, c_mae, c_fg_mae, c_halo
+            chosen_ssim, chosen_mae, chosen_fg_mae, chosen_halo, chosen_fg_chroma_tv = (
+                c_ssim, c_mae, c_fg_mae, c_halo, c_fg_chroma_tv
+            )
             break
 
     anchor_rgb = chosen_rgb
@@ -361,6 +379,7 @@ def harmonize_illumination(
         "source_ssim": chosen_ssim,
         "source_mae_levels": chosen_mae,
         "fg_rgb_source_mae_levels": chosen_fg_mae,
+        "fg_chroma_tv_levels": chosen_fg_chroma_tv,
         "halo_error": chosen_halo,
         "ink_core_pixels": int(ink_core.sum()),
         "substrate_pixels": int(substrate.sum()),

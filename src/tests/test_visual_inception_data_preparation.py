@@ -191,3 +191,67 @@ def test_evaluation_paraphrases_bind_six_inputs_and_leave_unsupported_temperatur
     assert len(result['rows']) == 6
     assert 'temperature' not in requests[0]
     assert [row['input_row_id'] for row in result['rows']] == [row['id'] for row in descriptions()[:6]]
+
+
+def test_rule_evaluation_paraphrases_are_deterministic_length_aligned_and_deduped():
+    from tools.build_visual_inception_eval_v4_suites import acceptable
+
+    sample_inputs = [
+        {
+            'id': 'desc_0',
+            'category': 'jeans',
+            'text': 'These high-waisted stretch denim jeans feature a classic five-pocket layout, reinforced zip fly closure, breathable cotton blend fabric, and relaxed straight leg cut for daily wear.',
+        },
+        {
+            'id': 'desc_1',
+            'category': 'jeans',
+            'text': 'Women mid-rise bootcut jeans crafted with whiskered indigo wash, belt loops, contoured waistband, and spandex elasticity for office commuting and weekend travel.',
+        },
+        {
+            'id': 'desc_2',
+            'category': 'jeans',
+            'text': 'Boyfriend wide-leg denim jeans designed with distressed knee accents, deep front utility pockets, button closure, and vintage faded finish for street outfits.',
+        },
+        {
+            'id': 'desc_3',
+            'category': 'jeans',
+            'text': 'High-rise skinny ankle jeans built with soft dark-wash twill, tummy-control front panel, cropped hem, and triple-stitched seams for all-day comfort.',
+        },
+        {
+            'id': 'desc_4',
+            'category': 'jeans',
+            'text': 'Relaxed baggy cargo denim jeans offering oversized side flap pockets, adjustable drawstring cuffs, heavyweight non-stretch cotton, and casual retro silhouette.',
+        },
+        {
+            'id': 'desc_5',
+            'category': 'jeans',
+            'text': 'Low-waist flared bell-bottom jeans made with raw hem detailing, metal rivet hardware, slim thigh tailoring, and stretchy cotton-polyester fabric for evening outings.',
+        },
+        {
+            'id': 'desc_6',
+            'category': 'jeans',
+            'text': 'Classic straight-leg carpenter denim jeans featuring hammer loop strap, double-layered knees, brass zipper, and mid-weight washed denim for workwear.',
+        },
+        {
+            'id': 'desc_7',
+            'category': 'jeans',
+            'text': 'Petite curvy-fit tapered denim jeans with gap-free contoured waist, reinforced back pockets, ankle slits, and breathable organic cotton fabric for spring.',
+        },
+    ]
+    targets = [120, 135, 145, 155, 165, 175]
+    result = preparation.generate_rule_evaluation_paraphrases(
+        sample_inputs,
+        group='06_jeans',
+        category='jeans',
+        target_lengths=targets,
+        forbidden_texts=[sample_inputs[0]['text']],
+        seed=20261120,
+        acceptable_fn=acceptable,
+    )
+    assert result['network_request_performed'] is False
+    assert result['generation']['mode'] == 'rule_based_length_aligned'
+    assert len(result['rows']) == 6
+    assert len({r['input_row_id'] for r in result['rows']}) == 6
+    for r in result['rows']:
+        assert acceptable('06_jeans', r['text'])
+        assert 85 <= len(r['text']) <= 220

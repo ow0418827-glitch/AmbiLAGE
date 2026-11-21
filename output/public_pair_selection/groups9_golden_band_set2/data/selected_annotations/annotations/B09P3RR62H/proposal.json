@@ -1,0 +1,61 @@
+{
+  "id": "B09P3RR62H",
+  "identity": {
+    "image_sha256": "fd025d523f288b91eff6e3c5af7dbe74db99aef26a4da917c1647f2d817463f5",
+    "annotation_models": {
+      "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+      "ocr_version": "1.4.4",
+      "ocr_weights": {
+        "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+        "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+        "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+      },
+      "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+      "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+      "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+      "device": "cuda",
+      "model_loaded_once": true
+    }
+  },
+  "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/fd025d523f288b91eff6e3c5af7dbe74db99aef26a4da917c1647f2d817463f5.jpg",
+  "title": "Portable Wireless Bluetooth Speakers 7 LED Lights Patterns Wireless Speaker V5.0 Hi-Fi Bass Powerful Sound Built-in Microphone,with 2400mAh high Battery, HandsFree, Audio-Auxiliary (White, One Size)",
+  "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09P3RR62H/foreground.png",
+  "foreground_mask_sha256": "100e565ab6828381cf6f57b40ed0f27a2cb0fe17e09dd3f31137349294287a46",
+  "boxes": [
+    [
+      10,
+      161,
+      488,
+      359
+    ]
+  ],
+  "text_regions": [],
+  "ocr": [],
+  "segmentation_candidates": [
+    {
+      "index": 0,
+      "iou": 0.5166440606117249,
+      "foreground_ratio": 0.027404,
+      "rough_coverage": 0.12407031069954537,
+      "accepted": false
+    },
+    {
+      "index": 1,
+      "iou": 0.939053475856781,
+      "foreground_ratio": 0.212816,
+      "rough_coverage": 0.9835746160776015,
+      "accepted": true
+    },
+    {
+      "index": 2,
+      "iou": 0.9586843848228455,
+      "foreground_ratio": 0.189768,
+      "rough_coverage": 0.9215813622174268,
+      "accepted": true
+    }
+  ],
+  "selected_mask_index": 2,
+  "text_regions_reviewed": false,
+  "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09P3RR62H/review_overlay.png",
+  "observed_seconds": 0.5465265269958763
+}

@@ -539,3 +539,237 @@ def test_paper_surrogates_example_config_validates_and_selects_14x14_triad():
     names = tuple(spec.name for spec in selection.specs)
     assert names == ("ViT-L-14", "ViT-SO400M-14-SigLIP-384", "ViT-bigG-14")
     assert set(names).isdisjoint(HELD_OUT_MODELS)
+
+
+def test_excluded_source_ids_and_resolve_evaluation_base(tmp_path: Path, monkeypatch):
+    from src.paths import EVALUATION_BASE, resolve_evaluation_base
+
+    # 1) resolve_evaluation_base: profile name, env var, and explicit path
+    monkeypatch.delenv("AMBILAGE_EVALUATION_BASE", raising=False)
+    assert resolve_evaluation_base("original_9groups") == EVALUATION_BASE.resolve()
+    expected_gb = (PROJECT / "resources/evaluation_base_golden_band").resolve()
+    assert resolve_evaluation_base("golden_band_9groups") == expected_gb
+    monkeypatch.setenv("AMBILAGE_EVALUATION_BASE", "golden_band_9groups")
+    assert resolve_evaluation_base() == expected_gb
+    assert resolve_evaluation_base(tmp_path / "custom") == (tmp_path / "custom").resolve()
+
+    # 2) excluded_source_ids validation & set2 config check
+    set2_cfg = validate_config(
+        json.loads((PROJECT / "src/experiments/config/selection_groups9_golden_band_set2.json").read_text(encoding="utf-8"))
+    )
+    assert len(set2_cfg["excluded_source_ids"]) == 9
+    with pytest.raises(ValueError, match="互异的十位字母数字编号"):
+        validate_config(dict(set2_cfg, excluded_source_ids=["BAD", "B071ZFHTZN"]))
+    with pytest.raises(ValueError, match="互异的十位字母数字编号"):
+        validate_config(dict(set2_cfg, excluded_source_ids=["B071ZFHTZN", "B071ZFHTZN"]))
+
+    # 3) select_groups excludes excluded_source_ids from candidates
+    from src.tests.test_median_pair_selection import _make_solid_image, _setup_calibration
+    from src.experiments import public_pair_selection
+
+    pub = tmp_path / "output/sel_excl/data"
+    root = tmp_path / "output/sel_excl"
+    img_root = pub / "images"
+    dev_vecs = {
+        "DEVPOS0001": [1.0, 0.0, 0.0],
+        "DEVPOS0002": [0.98, 0.19, 0.0],
+        "DEVNEG0001": [1.0, 0.0, 0.0],
+        "DEVNEG0002": [0.0, 1.0, 0.0],
+    }
+    cal_path, _cert, backend = _setup_calibration(pub, dev_vecs)
+    tgt_img = _make_solid_image(img_root / "TGT0000001.png", (10, 20, 30))
+    cand_a = _make_solid_image(img_root / "SRCEXCL001.png", (40, 50, 60))
+    cand_b = _make_solid_image(img_root / "SRCKEEP002.png", (70, 80, 90))
+    backend.map.update({
+        "TGT0000001": np.asarray([1.0, 0.0, 0.0], dtype=np.float64),
+        "SRCEXCL001": np.asarray([0.99, 0.10, 0.0], dtype=np.float64),
+        "SRCKEEP002": np.asarray([0.97, 0.22, 0.0], dtype=np.float64),
+    })
+    shortlist = {
+        "schema_version": 2,
+        "groups": [{
+            "key": "01_camera",
+            "target": {
+                "id": "TGT0000001",
+                "title": "Security Camera Optical Zoom",
+                "source_url": "https://www.amazon.com/dp/TGT0000001",
+            },
+            "candidates": [
+                {
+                    "id": "SRCEXCL001",
+                    "title": "HD Indoor Security Camera A",
+                    "source_url": "https://www.amazon.com/dp/SRCEXCL001",
+                },
+                {
+                    "id": "SRCKEEP002",
+                    "title": "HD Indoor Security Camera B",
+                    "source_url": "https://www.amazon.com/dp/SRCKEEP002",
+                },
+            ],
+        }],
+    }
+    downloads = {
+        "shortlist_sha256": digest(shortlist),
+        "failures": {},
+        "records": {
+            "TGT0000001": {"image": str(tgt_img["path"]), "image_sha256": tgt_img["sha256"]},
+            "SRCEXCL001": {"image": str(cand_a["path"]), "image_sha256": cand_a["sha256"]},
+            "SRCKEEP002": {"image": str(cand_b["path"]), "image_sha256": cand_b["sha256"]},
+        },
+    }
+    freeze_json(pub / "candidate_shortlist.json", shortlist)
+    freeze_json(pub / "download_manifest.json", downloads)
+    cfg = {
+        "schema_version": 2,
+        "strategy": "median",
+        "seed": 42,
+        "candidate_limit": 8,
+        "calibration_path": str(cal_path),
+        "excluded_source_ids": ["SRCEXCL001"],
+        "groups": [{"key": "01_camera", "target_id": "TGT0000001"}],
+        "subtype_filters": {
+            "01_camera": {"policy": "cam", "include": "\\bcamera\\b", "exclude": "\\bcase\\b"},
+        },
+    }
+    monkeypatch.setattr(public_pair_selection, "OUTPUT", tmp_path / "output")
+    monkeypatch.setattr(public_pair_selection, "PUBLIC", pub)
+    public_pair_selection.freeze_plan(cfg, root)
+    bundle = select_groups(
+        cfg, root, pub, device="cpu", backend_factory=lambda *args, **kwargs: backend
+    )
+    assert bundle["status"] == "selected"
+    assert bundle["groups"][0]["source"]["id"] == "SRCKEEP002"
+    sel_doc = json.loads(Path(bundle["groups"][0]["selection_path"]).read_text(encoding="utf-8"))
+    excl_row = next(r for r in sel_doc["candidates"] if r["source_id"] == "SRCEXCL001")
+    assert "reserved_in_public_batch" in excl_row["rejected_reasons"]
+
+
+def test_golden_band_shape_threshold_fallback_and_set2_target_filters(tmp_path: Path):
+    """验证 Set 2 配置合规与所有 9 个真实目标通过规则，以及带内未过门槛本体中位数回退与严格篡改拦截。"""
+    import copy
+
+    # 1) 验证 Set 2 配置采用 clip_b32、允许带内回退，且 9 个真实目标标题均通过 subtype_filter(role='target')
+    set2_cfg = validate_config(
+        json.loads((PROJECT / "src/experiments/config/selection_groups9_golden_band_set2.json").read_text(encoding="utf-8"))
+    )
+    assert set2_cfg["public_rank_band"]["scorer"] == "clip_b32"
+    assert set2_cfg["public_rank_band"]["allow_shape_threshold_fallback"] is True
+    with pytest.raises(ValueError, match="布尔值"):
+        validate_public_rank_band({"allow_shape_threshold_fallback": "yes"})
+
+    base_manifest = json.loads((PROJECT / "resources/evaluation_base/manifest.json").read_text(encoding="utf-8"))
+    for group_item in set2_cfg["groups"]:
+        gkey = group_item["key"]
+        def_path = PROJECT / "resources/evaluation_base" / base_manifest["groups"][gkey]["definition"]
+        target_title = json.loads(def_path.read_text(encoding="utf-8"))["target"]["title"]
+        assert matches_subtype_filter(target_title, set2_cfg["subtype_filters"][gkey], role="target") is True
+
+    # 2) 验证当 shape >= threshold ∩ [rank_min, rank_max] 为空时的回退行为与完整性校验证书
+    from src.tests.test_median_pair_selection import _make_solid_image, _setup_calibration
+
+    pub = tmp_path / "pub"
+    img_dir = pub / "images"
+    dev_vecs = {
+        "DEVPOS0001": [1.0, 0.0, 0.0],
+        "DEVPOS0002": [0.98, 0.19, 0.0],
+        "DEVNEG0001": [1.0, 0.0, 0.0],
+        "DEVNEG0002": [0.0, 1.0, 0.0],
+    }
+    cal_path, cert, backend = _setup_calibration(pub, dev_vecs)
+    threshold = float(cert["fit"]["threshold"])
+    assert 0.4 < threshold < 0.7
+
+    tgt_img = _make_solid_image(img_dir / "TGT0000001.png", (20, 20, 200))
+    # 构造 7 个候选：
+    # - CANDCEIL01: shape=0.99 高于门槛但先验排名=2 (<5)，不能被选或触发回退
+    # - CANDBLOW01 / CANDBMID01 / CANDBHIG01: 均在 [5, 12] 内且 < threshold -> 构成回退中位数池（应选中 CANDBMID01）
+    # - CANDBZUP01: 与 CANDBMID01 同图字节且字母序在后 -> 应被 duplicate_candidate_image 去重剔除
+    # - CANDBATT01: 在 [5, 12] 内但命中 source_exclude -> 不能进入回退池
+    # - CANDDEAD01: 先验排名=15 (>12) -> 不能进入回退池
+    spec_items = [
+        ("CANDCEIL01", "Classic Office Swivel Chair High", (30, 30, 190), [0.99, 0.10, 0.0], 2, 1),
+        ("CANDBLOW01", "Modern Accent Chair Low", (60, 60, 150), [0.15, 0.988, 0.0], 6, 2),
+        ("CANDBMID01", "Wooden Dining Chair Mid", (80, 80, 140), [0.25, 0.968, 0.0], 8, 3),
+        ("CANDBHIG01", "Ergonomic Desk Chair High", (95, 95, 120), [0.35, 0.936, 0.0], 11, 4),
+        ("CANDBZUP01", "Duplicate Mid Chair Copy", (80, 80, 140), [0.25, 0.968, 0.0], 9, 3),
+        ("CANDBATT01", "Salon Barber Chair Excluded", (70, 70, 145), [0.30, 0.953, 0.0], 7, 5),
+        ("CANDDEAD01", "Patio Stool Out Of Band", (160, 60, 60), [0.20, 0.979, 0.0], 15, 6),
+    ]
+    cands = []
+    prior_ranks = {}
+    backend.map["TGT0000001"] = np.asarray([1.0, 0.0, 0.0], dtype=np.float64)
+    img_cache = {}
+    for pid, title, color, vec, prank, img_slot in spec_items:
+        if img_slot not in img_cache:
+            img_cache[img_slot] = _make_solid_image(img_dir / f"slot_{img_slot}.png", color)
+        im = img_cache[img_slot]
+        backend.map[pid] = np.asarray(vec, dtype=np.float64)
+        cands.append({
+            "id": pid,
+            "title": title,
+            "image": str(im["path"]),
+            "image_sha256": im["sha256"],
+            "owned": True,
+            "source_url": f"https://www.amazon.com/dp/{pid}",
+            "source_note": "合成回退单元测试",
+        })
+        prior_ranks[pid] = prank
+
+    target = {
+        "id": "TGT0000001",
+        "title": "Black Barber Chair Target",
+        "image": str(tgt_img["path"]),
+        "image_sha256": tgt_img["sha256"],
+        "source_url": "https://www.amazon.com/dp/TGT0000001",
+        "owned": False,
+    }
+    chair_filter = {
+        "policy": "chair_fb_test",
+        "include": r"\b(?:chairs?|stools?)\b",
+        "exclude": r"\bcushion\b",
+        "source_exclude": r"\bbarber\b",
+    }
+    sel_cfg = SelectionConfig(seed=42, calibration_path=str(cal_path), strategy="median")
+    rank_band_on = {"enabled": True, "peer_count": 20, "rank_min": 5, "rank_max": 12, "scorer": "clip_b32", "allow_shape_threshold_fallback": True}
+
+    res_strict = choose_pair(
+        target, cands, backend, sel_cfg,
+        public_root=pub, subtype_filter=chair_filter,
+        public_rank_band=rank_band_on, public_prior_ranks=prior_ranks,
+        allow_shape_threshold_fallback=False,
+    )
+    assert res_strict["status"] == "no_eligible_pair"
+    assert res_strict["selected_source_id"] is None
+
+    res_fb = choose_pair(
+        target, cands, backend, sel_cfg,
+        public_root=pub, subtype_filter=chair_filter,
+        public_rank_band=rank_band_on, public_prior_ranks=prior_ranks,
+    )
+    assert res_fb["status"] == "selected"
+    assert res_fb["protocol"] == GOLDEN_BAND_MEDIAN_POLICY
+    assert res_fb["shape_threshold_fallback_used"] is True
+    assert res_fb["passes_calibrated_threshold"] is False
+    # CANDBZUP01 / CANDBATT01 / CANDCEIL01 / CANDDEAD01 均不得进入中位数池；仅 LOW(0.15), MID(0.25), HIGH(0.35) 三者排序取中位 CANDBMID01
+    assert res_fb["draw"]["eligible_count"] == 3
+    assert set(res_fb["draw"]["eligible_ids"]) == {"CANDBLOW01", "CANDBMID01", "CANDBHIG01"}
+    assert res_fb["selected_source_id"] == "CANDBMID01"
+
+    res_fb["source"] = next(c for c in cands if c["id"] == res_fb["selected_source_id"])
+    res_fb["target"] = target
+    verify_selection(res_fb)
+
+    # 篡改校验：把 passes_calibrated_threshold 改成 True 必须被 verify_selection 拒绝
+    tampered_flag = copy.deepcopy(res_fb)
+    tampered_flag["passes_calibrated_threshold"] = True
+    with pytest.raises(ValueError, match="未通过校准门槛"):
+        verify_selection(tampered_flag)
+
+    # 当存在合格候选时强行标记 fallback_used=True 必须被 verify_selection 拒绝
+    tampered_elig = copy.deepcopy(res_fb)
+    for row in tampered_elig["candidates"]:
+        if row["source_id"] == "CANDCEIL01":
+            row["eligible"] = True
+            row["rejected_reasons"] = []
+    with pytest.raises(ValueError, match="存在合格高分候选时禁止触发外形门槛回退"):
+        verify_selection(tampered_elig)

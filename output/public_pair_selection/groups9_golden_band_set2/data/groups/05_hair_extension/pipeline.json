@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "method": "ambilage",
+  "run_dir": "/content/AmbiLAGE/output/runs/groups9_golden_band_set2/05_hair_extension",
+  "selection": {
+    "seed": 42,
+    "calibration_path": "/content/AmbiLAGE/output/datasets/public/calibration/shape_fg_crop_v1/threshold.json",
+    "min_image_side": 64,
+    "strategy": "median"
+  },
+  "selection_models": {
+    "batch_size": 16
+  },
+  "generation": {
+    "lucid": {
+      "steps": 1000,
+      "epsilon_levels": 8,
+      "target_text": "I want to buy hair extensions with real human hair and double wefts.",
+      "text_weight": 1.0
+    },
+    "ambilage": {}
+  },
+  "evaluation": {
+    "shared_pool": "/content/AmbiLAGE/resources/evaluation_base/shared_memory/shared_memory.json",
+    "query_manifest": "/content/AmbiLAGE/output/datasets/private/query_images/groups9_golden_band_set2/05_hair_extension.json"
+  },
+  "public_pair": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/groups/05_hair_extension/pair.json"
+}

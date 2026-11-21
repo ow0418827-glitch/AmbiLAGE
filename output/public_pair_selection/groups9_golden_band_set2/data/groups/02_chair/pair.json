@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "policy": "named_public_pair_v1",
+  "status": "selected",
+  "selection_record": "metadata/selection.json",
+  "selection_sha256": "1f013ed8314b0bec7132e54f0b0252680b3087c454e746a9f32f3b2352cce994",
+  "public_selection_only": true,
+  "victim_memory_used": false,
+  "source": {
+    "id": "B07GDZQ68V",
+    "title": "Christopher Knight Home Maye Traditional Home Office Chair, Wheat and Chrome",
+    "image": "source.jpg",
+    "source_url": "https://www.amazon.com/dp/B07GDZQ68V",
+    "boxes": [
+      [
+        103,
+        60,
+        419,
+        457
+      ]
+    ],
+    "foreground_mask": "metadata/source_foreground.png",
+    "text_regions": [],
+    "text_regions_reviewed": true,
+    "owned": true,
+    "source_note": "固定散列规则预先登记的实验模拟可控商品；不声明真实商家所有权",
+    "image_sha256": "7d92c26259daa206212651d01b6af57fdcf00266a024fdf0e6d509bb3c8fdf5a",
+    "foreground_mask_sha256": "febdf483f5aae698996cac7f1a86337d77c57525cd61483c18ff37c9ada3f158"
+  },
+  "target": {
+    "id": "B09CYFD5BX",
+    "title": "LTHDD Bar Stool Swivel Barber Chair Hydraulic Barber Chairs Heavy Duty 360 Degrees Rolling Salon Chair for Hair Stylist Tattoo Chair Salon Equipment,Blue,1 (Color : Black, Size : 1)",
+    "image": "target.jpg",
+    "source_url": "https://www.amazon.com/dp/B09CYFD5BX",
+    "boxes": [
+      [
+        5,
+        5,
+        399,
+        496
+      ]
+    ],
+    "foreground_mask": "metadata/target_foreground.png",
+    "text_regions": [],
+    "text_regions_reviewed": true,
+    "image_sha256": "8fc2834a77b8ecf235f5bec9c1f335830d1de142843cda13284cdfe36579000d",
+    "foreground_mask_sha256": "850de84170dca01a372dd2fc7e12d2247493f0e8e66bfa9990716b13c22317f2",
+    "brand": "LTHDD",
+    "attributes": [
+      "a heavy-duty hydraulic pump",
+      "360-degree rotation",
+      "an adjustable seat height",
+      "a high-density foam cushion",
+      "barber chair",
+      "beauty salon",
+      "heavy duty"
+    ],
+    "feature_text": "I want to buy a barber chair with a heavy-duty hydraulic pump and 360-degree rotation.",
+    "training_queries": [
+      "I want to buy a barber chair with a heavy-duty hydraulic pump and 360-degree rotation.",
+      "I would like to purchase a barber chair featuring a heavy-duty hydraulic pump and an adjustable seat height.",
+      "I am looking for a barber chair with 360-degree rotation and a high-density foam cushion."
+    ]
+  }
+}

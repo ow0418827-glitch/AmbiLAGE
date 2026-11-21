@@ -108,7 +108,23 @@ class PublicImageAnnotator:
         image=Image.open(record['image']).convert('RGB')
         result,_=self.ocr(record['image'],use_cls=False)
         regions,texts=regions_from_ocr(result,image.width,image.height)
-        rough,box,seed=object_prior(image)
+        try:
+            rough,box,seed=object_prior(image)
+            uniform_bg=True
+        except ValueError:
+            from src.visual.foreground_shape_features import _estimate_foreground_mask
+            fg=_estimate_foreground_mask(np.asarray(image,dtype=np.uint8))
+            if not fg.any():
+                raise ValueError('公开图片没有足够的主体颜色线索')
+            rough=fg
+            ys,xs=np.where(rough)
+            pad_x,pad_y=max(2,int(image.width*.015)),max(2,int(image.height*.015))
+            box=[max(0,int(xs.min())-pad_x),max(0,int(ys.min())-pad_y),
+                 min(image.width-1,int(xs.max())+pad_x),min(image.height-1,int(ys.max())+pad_y)]
+            distance=ndi.distance_transform_edt(rough)
+            sy,sx=np.unravel_index(np.argmax(distance),distance.shape)
+            seed=(int(sx),int(sy))
+            uniform_bg=False
         inputs=self.processor(images=image,input_boxes=[[box]],input_points=[[[list(seed)]]],
                               input_labels=[[[1]]],return_tensors='pt').to(self.device)
         with self.torch.no_grad():prediction=self.model(**inputs,multimask_output=True)
@@ -116,7 +132,8 @@ class PublicImageAnnotator:
             inputs['original_sizes'].detach().cpu())[0].cpu().numpy()[0]
         scores=prediction.iou_scores[0,0].cpu().numpy()
         candidates=[]
-        masks=np.stack([remove_connected_background(image,m) for m in masks])
+        if uniform_bg:
+            masks=np.stack([remove_connected_background(image,m) for m in masks])
         for i,mask in enumerate(masks):
             ratio=float(mask.mean());coverage=float((mask&rough).sum()/rough.sum())
             accepted=bool(mask[seed[1],seed[0]] and .01<=ratio<=.97 and coverage>=.30)

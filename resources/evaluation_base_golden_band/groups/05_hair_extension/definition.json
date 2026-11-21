@@ -1,0 +1,113 @@
+{
+  "schema_version": 2,
+  "group": "05_hair_extension",
+  "name": "第五组接发（黄金先验区间中位数重选）",
+  "category": "hair_extensions",
+  "shape_similarity": 0.6051981476249388,
+  "calibrated_threshold": 0.5960951412738369,
+  "passes_calibrated_threshold": true,
+  "public_prior_rank": 11,
+  "shape_threshold_fallback_used": false,
+  "selection_status": "public_shape_golden_band_median_v1",
+  "selection_notes": "依公开 public_shape_golden_band_median_v1 规则从 4 个合格候选中按灰度外形分数取中位数选出 B07BC7JMPL（shape=0.6052 >= 0.5961、公开先验名次=11）。",
+  "methods_supported": [
+    "lucid",
+    "ambilage",
+    "visual_inception"
+  ],
+  "target_feature_text": "I want to buy hair extensions with real human hair and double wefts.",
+  "training_queries": [
+    "I want to buy hair extensions with real human hair and double wefts.",
+    "I would like to purchase hair extensions featuring real human hair and a clip-in design.",
+    "I am looking for hair extensions with double wefts and rubber-lined clips."
+  ],
+  "data": {
+    "source": "source.jpg",
+    "target": "target.jpg",
+    "source_title": "Perstar Loose Wave Human Hair Bundles Curly Wave Bundles Unprocessed Brazilian Virgin Hair Extensions 100% Real Human Hair Loose Wave 5 Bundles Remy Virgin Hair Bundles Natural Wavy20 22 24 26 26",
+    "training_queries": [
+      "I want to buy hair extensions with real human hair and double wefts."
+    ]
+  },
+  "source_boxes": [
+    [
+      0,
+      17,
+      256,
+      497
+    ]
+  ],
+  "target_boxes": [
+    [
+      10,
+      13,
+      482,
+      499
+    ]
+  ],
+  "print_regions": [],
+  "target": {
+    "id": "B01460C2I2",
+    "title": "S-noilite Clip in Hair Extension Human Hair Double Weft 8pcs 150g 20 Inch Jet Black Clip in Real Human Hair Extension for Women Adding Natural Volume Thick Clip in Extension #1",
+    "brand": "S-noilite",
+    "attributes": [
+      "real human hair",
+      "double wefts",
+      "a clip-in design",
+      "rubber-lined clips",
+      "hair extensions",
+      "hair styling",
+      "hair cutting"
+    ],
+    "feature_text": "I want to buy hair extensions with real human hair and double wefts.",
+    "training_queries": [
+      "I want to buy hair extensions with real human hair and double wefts.",
+      "I would like to purchase hair extensions featuring real human hair and a clip-in design.",
+      "I am looking for hair extensions with double wefts and rubber-lined clips."
+    ],
+    "image": "target.jpg",
+    "foreground_mask": "target_foreground.png",
+    "boxes": [
+      [
+        10,
+        13,
+        482,
+        499
+      ]
+    ],
+    "text_regions": []
+  },
+  "source": {
+    "id": "B07BC7JMPL",
+    "title": "Perstar Loose Wave Human Hair Bundles Curly Wave Bundles Unprocessed Brazilian Virgin Hair Extensions 100% Real Human Hair Loose Wave 5 Bundles Remy Virgin Hair Bundles Natural Wavy20 22 24 26 26",
+    "brand": "",
+    "attributes": [
+      "hair extensions"
+    ],
+    "image": "source.jpg",
+    "foreground_mask": "source_foreground.png",
+    "boxes": [
+      [
+        0,
+        17,
+        256,
+        497
+      ]
+    ],
+    "text_regions": []
+  },
+  "color_scheme": "statistics",
+  "training_data_policy": "catalog_image_and_public_title_only_v1",
+  "lucid_alignment_config": {
+    "enabled": true,
+    "target_text": "I want to buy hair extensions with real human hair and double wefts.",
+    "text_weight": 1.0,
+    "steps": 1000
+  },
+  "subtype_policy": {
+    "policy": "hair_extensions_golden_band_v4",
+    "include": "\\b(?:hair(?:\\s+\\w+){0,2}\\s+extensions?|wefts?|hair\\s+bundles?|clip[ -]?in\\s+hair)\\b|接发",
+    "exclude": "\\b(?:wigs?|shampoo|conditioner|lotion|body\\s+wash|wig\\s+(?:cap|stand|glue|brush|head)|adhesive|remover|comb|pliers?|beads?|rings?|loop\\s+needle|storage\\s+bag|hanger)\\b",
+    "source_exclude": "\\b(?:8\\s*pcs|double\\s+weft|150\\s*g)\\b"
+  }
+}

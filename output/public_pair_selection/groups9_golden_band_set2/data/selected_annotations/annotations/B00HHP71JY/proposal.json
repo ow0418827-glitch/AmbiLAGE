@@ -1,0 +1,147 @@
+{
+  "id": "B00HHP71JY",
+  "identity": {
+    "image_sha256": "bafdeacc0deef6990db751cc9809cd48a67ea47e9265012457b43137582347ea",
+    "annotation_models": {
+      "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+      "ocr_version": "1.4.4",
+      "ocr_weights": {
+        "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+        "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+        "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+      },
+      "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+      "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+      "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+      "device": "cuda",
+      "model_loaded_once": true
+    }
+  },
+  "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/bafdeacc0deef6990db751cc9809cd48a67ea47e9265012457b43137582347ea.jpg",
+  "title": "Lotte Cancho Korean Favourite Chocolate Snack Cookies Kids Snack (Pack of 3)",
+  "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B00HHP71JY/foreground.png",
+  "foreground_mask_sha256": "50e6b4f595dc6187c914aff1bff11b26ae38271dbd57fc1f29458510fa0811f8",
+  "boxes": [
+    [
+      82,
+      18,
+      419,
+      481
+    ]
+  ],
+  "text_regions": [
+    [
+      0.236,
+      0.218,
+      0.384,
+      0.29
+    ],
+    [
+      0.232,
+      0.336,
+      0.788,
+      0.634
+    ],
+    [
+      0.356,
+      0.59,
+      0.488,
+      0.654
+    ]
+  ],
+  "ocr": [
+    {
+      "text": "LOTTE",
+      "confidence": 0.9942505717277527,
+      "polygon": [
+        [
+          122.0,
+          112.0
+        ],
+        [
+          189.0,
+          116.0
+        ],
+        [
+          188.0,
+          142.0
+        ],
+        [
+          121.0,
+          138.0
+        ]
+      ]
+    },
+    {
+      "text": "Kancho",
+      "confidence": 0.942110002040863,
+      "polygon": [
+        [
+          128.0,
+          171.0
+        ],
+        [
+          391.0,
+          189.0
+        ],
+        [
+          382.0,
+          314.0
+        ],
+        [
+          119.0,
+          296.0
+        ]
+      ]
+    },
+    {
+      "text": "CHOCO",
+      "confidence": 0.9915220737457275,
+      "polygon": [
+        [
+          183.0,
+          298.0
+        ],
+        [
+          241.0,
+          303.0
+        ],
+        [
+          239.0,
+          324.0
+        ],
+        [
+          181.0,
+          319.0
+        ]
+      ]
+    }
+  ],
+  "segmentation_candidates": [
+    {
+      "index": 0,
+      "iou": 0.710913896560669,
+      "foreground_ratio": 0.149548,
+      "rough_coverage": 0.3166104910147186,
+      "accepted": true
+    },
+    {
+      "index": 1,
+      "iou": 0.992026150226593,
+      "foreground_ratio": 0.470996,
+      "rough_coverage": 0.9889822326857607,
+      "accepted": true
+    },
+    {
+      "index": 2,
+      "iou": 0.990282416343689,
+      "foreground_ratio": 0.46938,
+      "rough_coverage": 0.9855693501126336,
+      "accepted": true
+    }
+  ],
+  "selected_mask_index": 1,
+  "text_regions_reviewed": false,
+  "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B00HHP71JY/review_overlay.png",
+  "observed_seconds": 0.6439315710013034
+}

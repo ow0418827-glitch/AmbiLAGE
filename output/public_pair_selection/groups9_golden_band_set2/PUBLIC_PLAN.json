@@ -1,0 +1,176 @@
+{
+  "schema_version": 2,
+  "config": {
+    "schema_version": 2,
+    "strategy": "median",
+    "seed": 42,
+    "preprocessing": "foreground_crop_gray_letterbox224_global_cls_v1",
+    "candidate_limit": 64,
+    "expand_candidate_limits": [
+      128,
+      256,
+      512,
+      1024
+    ],
+    "calibration_path": "output/datasets/public/calibration/shape_fg_crop_v1/threshold.json",
+    "models": {
+      "batch_size": 16
+    },
+    "public_rank_band": {
+      "enabled": true,
+      "peer_count": 20,
+      "rank_min": 5,
+      "rank_max": 12,
+      "scorer": "clip_b32",
+      "allow_shape_threshold_fallback": true
+    },
+    "excluded_source_ids": [
+      "B071ZFHTZN",
+      "B08GCSRXKS",
+      "B07BBLWTLM",
+      "B09PHLS2QD",
+      "B07Z7MQSM1",
+      "B07FRKQNFV",
+      "B09B63YYCW",
+      "B01590FHS0",
+      "B09PNNXYJ4"
+    ],
+    "groups": [
+      {
+        "key": "01_camera",
+        "target_id": "B08V134QWR"
+      },
+      {
+        "key": "02_chair",
+        "target_id": "B09CYFD5BX"
+      },
+      {
+        "key": "03_cookies",
+        "target_id": "B08Z8MHWVS"
+      },
+      {
+        "key": "04_curtain",
+        "target_id": "B086PW7TWX"
+      },
+      {
+        "key": "05_hair_extension",
+        "target_id": "B01460C2I2"
+      },
+      {
+        "key": "06_jeans",
+        "target_id": "B09HH96NJY"
+      },
+      {
+        "key": "07_shampoo",
+        "target_id": "B00BDJODWI"
+      },
+      {
+        "key": "08_speaker",
+        "target_id": "B01N47U1VI"
+      },
+      {
+        "key": "09_toothbrush",
+        "target_id": "B09J81RMLD"
+      }
+    ],
+    "subtype_filters": {
+      "01_camera": {
+        "policy": "camera_device_golden_band_v3",
+        "include": "\\bcameras?\\b|相机|摄像",
+        "exclude": "\\b(?:case|bag|strap|tripod|charger|battery|protector|mount|bracket|housing\\s+only|replacement\\s+(?:lens|cable|adapter)|gimbal|stabilizer|usb\\s*cable|charging\\s*cable|power\\s*(?:cable|cord|adapter)|hdmi\\s*cable|sd\\s*card|memory\\s*card|remote\\s*(?:control|shutter)|lens\\s*(?:cap|filter|hood|kit|cover)|camera\\s*(?:flash|microphone|cage|cover|skin|dummy)|ring\\s*light|webcam\\s*cover|(?:dummy|fake|decoy)\\s+camera)\\b",
+        "source_exclude": "\\b(?:ptz|pan[ -]?tilt|30x\\s+optical|optical\\s+zoom|auto\\s+tracking|strobe|dual[ -]?(?:screen|lcd)|front[ -]?screen)\\b"
+      },
+      "02_chair": {
+        "policy": "chair_seating_golden_band_v3",
+        "include": "\\b(?:chairs?|stools?|armchairs?|recliners?)\\b|椅|凳",
+        "exclude": "\\b(?:seat\\s+cushion|chair\\s+(?:cover|mat|pad|protector|slipcover|wheels?|casters?|armrest|base|cylinder|replacement|parts?)s?|caster\\s+wheels?)\\b",
+        "source_exclude": "\\b(?:barber|salon|tattoo|hydraulic\\s+(?:barber|salon))\\b"
+      },
+      "03_cookies": {
+        "policy": "edible_cookies_golden_band_v5",
+        "include": "\\b(?:cookies?|cookie\\s+dough|biscuits?|wafers?)\\b|饼干|曲奇",
+        "exclude": "\\b(?:cookie\\s+(?:cutter|jar|press|sheet|pan|stamp|mold|tin)s?|apron|ice\\s*cream|gelato|sorbet|sundae|frozen\\s+(?:dairy\\s+)?dessert|frozen\\s+treat|milkshake|cookies\\s*(?:&|and|n)\\s*cream|toy|plush|ornament|candle|soap|lip\\s+balm|scented)\\b",
+        "source_exclude": "\\b(?:cookie\\s+dough|edible\\s+dough|raw\\s+dough)\\b"
+      },
+      "04_curtain": {
+        "policy": "window_curtain_drapes_golden_band_v4",
+        "include": "\\b(?:curtains?|drapes?)\\b|窗帘",
+        "exclude": "\\b(?:curtain\\s+(?:rod|ring|hook|clip|tieback|holdback|track|bracket|finial)s?|shower\\s+curtains?|shower\\s+curtain\\s+(?:liner|hooks|rings)|valances?|swag|blinds?|roller\\s+shades?|roman\\s+shades?|zebra\\s+shades?|window\\s+shades?|shutters?|cornice|tapestry|tablecloth|backdrop|bed\\s*skirt|mosquito\\s+net|tie[- ]?up\\s+shades?|projector\\s+(?:special\\s+)?screen)\\b",
+        "source_exclude": "\\b(?:wood\\s+board|drink(?:es|s)\\s+are\\s+on\\s+me|bar\\s+sign\\s+print)\\b"
+      },
+      "05_hair_extension": {
+        "policy": "hair_extensions_golden_band_v4",
+        "include": "\\b(?:hair(?:\\s+\\w+){0,2}\\s+extensions?|wefts?|hair\\s+bundles?|clip[ -]?in\\s+hair)\\b|接发",
+        "exclude": "\\b(?:wigs?|shampoo|conditioner|lotion|body\\s+wash|wig\\s+(?:cap|stand|glue|brush|head)|adhesive|remover|comb|pliers?|beads?|rings?|loop\\s+needle|storage\\s+bag|hanger)\\b",
+        "source_exclude": "\\b(?:8\\s*pcs|double\\s+weft|150\\s*g)\\b"
+      },
+      "06_jeans": {
+        "policy": "jeans_denim_pants_golden_band_v2",
+        "include": "\\bjeans?\\b|\\bdenim\\s+(?:pants|trousers)\\b|牛仔裤",
+        "exclude": "\\b(?:jacket|shirt|skirt|dress|vest|purse|hat|doll|pet|dog|coat|hoodie|sweater)\\b|\\b(?:jeans?|denim)\\s+(?:shorts|jackets?|skirts?|belts?|bags?|caps?)\\b",
+        "source_exclude": "\\b(?:patchwork|y2k|e[- ]?girl|distressed|ripped|baggy\\s+boyfriend)\\b"
+      },
+      "07_shampoo": {
+        "policy": "shampoo_human_hair_golden_band_v2",
+        "include": "\\bshampoos?\\b|洗发",
+        "exclude": "\\b(?:carpet|rug|upholstery|auto|car|pet|dog|cat|puppy|horse|equine|floor|machine|extracter|extractor|empty|wig|doll|cape|basin|station)\\b|\\bshampoo\\s+(?:brush|bowl|sink|mat|tray|cap|dispenser|bottles?\\s+set)s?\\b|\\brefillable\\b.*\\bbottles?\\b",
+        "source_exclude": "\\b(?:scalp\\s+benefits?|balancing\\s+shampoo|aveda|purple|blonde|silver|toning|violet)\\b"
+      },
+      "08_speaker": {
+        "policy": "portable_bluetooth_speaker_golden_band_v4",
+        "include": "\\b(?:speakers?|soundbars?|loudspeakers?|subwoofers?)\\b|音箱|音响",
+        "exclude": "\\b(?:headphones?|earphones?|earbuds?|headsets?|car\\s+(?:audio|door\\s+)?speakers?|coaxial\\s+speakers?|marine\\s+speakers?|ceiling\\s+speakers?|in[- ]wall\\s+speakers?|passive\\s+speakers?|speaker\\s+(?:wire|cable|stand|mount|grill|bracket|cover|case|bag)s?|remote\\s+control|replacement\\s+remote|microphone\\s+(?:only|stand|kit)|amplifier\\s+board|stereo\\s+(?:receiver|kit|system)|marine\\s+(?:stereo|receiver|radio)|head\\s*unit|car\\s+(?:stereo|radio)|turntable|power\\s*(?:cord|cable|adapter)|charging\\s*(?:cable|dock)|wall\\s*plate|atv|utv|motorcycle|boat\\s+speaker|zipper\\s+case|travel\\s+case|carrying\\s+case|storage\\s+case|protective\\s+case|hard\\s+(?:eva\\s+)?(?:travel\\s+|carrying\\s+|storage\\s+)?(?:black\\s+)?case|silicone\\s+(?:travel\\s+|protective\\s+)?case|box\\s+(?:zipper\\s+)?case|case\\s+(?:replacement|fits?|for|cover)|carrying\\s+bag|storage\\s+bag|travel\\s+bag|lanyard\\s+bag|diy\\s+.*kit|phone\\s+holder|alarm\\s+clock|clock\\s+radio)\\b",
+        "source_exclude": "\\b(?:solar|mp3\\s+player|microsd)\\b"
+      },
+      "09_toothbrush": {
+        "policy": "toothbrush_golden_band_v4",
+        "include": "\\btoothbrush(?:es)?\\b|牙刷",
+        "exclude": "\\b(?:toothpaste|floss|teether|holder|organizer|sterilizer|travel\\s+case|wall\\s+mount|replacement\\s+heads?|replacement\\s+toothbrush\\s+heads?|denture|false\\s+teeth|container|dust[- ]?proof\\s+protector|protective\\s+(?:cap|case)|case\\s+covers?)\\b",
+        "source_exclude": "\\b(?:u[- ]?shaped?|360\\s*[°度]?|silicone|mouth\\s*type|oral\\s+cleaner|infant|baby|toddler|age\\s*2[- ]?12|aged\\s*2[- ]?12|finger\\s+toothbrush|all[- ]?round|whole[- ]?mouth)\\b"
+      }
+    },
+    "candidate_limits": {
+      "01_camera": 256,
+      "02_chair": 256,
+      "03_cookies": 1024,
+      "04_curtain": 1024,
+      "05_hair_extension": 64,
+      "06_jeans": 64,
+      "07_shampoo": 64,
+      "08_speaker": 1024,
+      "09_toothbrush": 1024
+    }
+  },
+  "selection": {
+    "seed": 42,
+    "calibration_path": "/content/AmbiLAGE/output/datasets/public/calibration/shape_fg_crop_v1/threshold.json",
+    "min_image_side": 64,
+    "strategy": "median"
+  },
+  "calibration_sha256": "532d45c336b41343556a2a45a0d3f4feeca3d9f604cd63f0cd856ed71b4717e8",
+  "type_rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd",
+  "implementation_sha256": {
+    "src/visual/pair_selection.py": "6db82df7c9174e2b0e875ef05da424ffea0e471574578627169165e9e5c22ed7",
+    "src/visual/shape_calibration.py": "cba63f5963335bfb7b9e3127bdbb9f6a9ed40083cf1737df2bda7cfd3b292bb2",
+    "src/visual/selection/webshop_public.py": "b964a5afb73980f392783b892ed5e7edcbdbd0da2b949693c63147eeeee67d01",
+    "src/experiments/public_pair_selection.py": "f430944c47611348db359899a6768b53b872d0aba66bce1693f3d10dfe881a7e",
+    "src/visual/foreground_shape_features.py": "61702eee34bba3ed6b272ad181d9ab30f3bec9f6d5daf56d5741f76d4a2286ba"
+  },
+  "ownership_policy": "simulated_controlled_public_subset_sha256_even_v1",
+  "target_ids_fixed": [
+    "B08V134QWR",
+    "B09CYFD5BX",
+    "B08Z8MHWVS",
+    "B086PW7TWX",
+    "B01460C2I2",
+    "B09HH96NJY",
+    "B00BDJODWI",
+    "B01N47U1VI",
+    "B09J81RMLD"
+  ],
+  "formal_queries_used": false,
+  "victim_memory_used": false,
+  "shopping_allowed": false,
+  "annotation_scope": "drawn_source_and_target_only",
+  "empty_set_policy": "rank_band_shape_median_fallback_with_explicit_audit"
+}

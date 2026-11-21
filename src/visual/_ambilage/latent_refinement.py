@@ -261,6 +261,8 @@ def _stage4_signature(
     cfg_dict = config.to_dict()
     if cfg_dict.get("diffusion_eot_enabled") is None:
         cfg_dict.pop("diffusion_eot_enabled", None)
+    if cfg_dict.get("multiscale_eot_enabled") is None:
+        cfg_dict.pop("multiscale_eot_enabled", None)
     for runtime_key in ("log_every", "checkpoint_every", "resume_from_checkpoint", "save_intermediate_pngs", "device"):
         cfg_dict.pop(runtime_key, None)
     payload = {
@@ -454,7 +456,7 @@ def refine_ambient_coop_latent(
         luma_diff = (extract_oklab_luma(image) - extract_oklab_luma(original_tensor)).abs() * 255.0
         fg_luma_mae = float(luma_diff[:, :, fg_bool].mean()) if fg_bool.any() else 0.0
         bg_luma_mae = float(luma_diff[:, :, bg_bool].mean()) if bg_bool.any() else 0.0
-        fg_chroma_tv = float(compute_fg_chroma_tv_levels(image, anchor_tensor, fg_mask_t))
+        fg_chroma_tv = float(compute_fg_chroma_tv_levels(image, original_tensor, fg_mask_t))
         diff_orig = (image - original_tensor).abs() * 255.0
         diff_anchor = (image - anchor_tensor).abs() * 255.0
         rgb_mae = float(diff_orig.mean())

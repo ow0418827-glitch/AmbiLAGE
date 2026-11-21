@@ -1,0 +1,114 @@
+{
+  "schema_version": 2,
+  "group": "09_toothbrush",
+  "name": "第九组牙刷（黄金先验区间中位数重选）",
+  "category": "oral_care",
+  "shape_similarity": 0.6830963832215458,
+  "calibrated_threshold": 0.5960951412738369,
+  "passes_calibrated_threshold": true,
+  "public_prior_rank": 5,
+  "shape_threshold_fallback_used": false,
+  "selection_status": "public_shape_golden_band_median_v1",
+  "selection_notes": "依公开 public_shape_golden_band_median_v1 规则从 5 个合格候选中按灰度外形分数取中位数选出 B09MD5SZCX（shape=0.6831 >= 0.5961、公开先验名次=5）。",
+  "methods_supported": [
+    "lucid",
+    "ambilage",
+    "visual_inception"
+  ],
+  "target_feature_text": "I want to buy a toothbrush with a U-shaped design and soft silicone brush heads.",
+  "training_queries": [
+    "I want to buy a toothbrush with a U-shaped design and soft silicone brush heads.",
+    "I would like to purchase a toothbrush featuring a U-shaped design and 360-degree cleaning.",
+    "I am looking for a toothbrush with soft silicone brush heads and a handle designed for small hands."
+  ],
+  "data": {
+    "source": "source.jpg",
+    "target": "target.jpg",
+    "source_title": "EXCEART Tooth Brush 2Pcs C- Shape Toothbrushes Manual Tooth Brushes Oral Care Teeth Clean Tool (Assorted Color)",
+    "training_queries": [
+      "I want to buy a toothbrush with a U-shaped design and soft silicone brush heads."
+    ]
+  },
+  "source_boxes": [
+    [
+      53,
+      38,
+      437,
+      489
+    ]
+  ],
+  "target_boxes": [
+    [
+      135,
+      51,
+      349,
+      446
+    ]
+  ],
+  "print_regions": [],
+  "target": {
+    "id": "B09J81RMLD",
+    "title": "Baby U Shaped Toothbrush for Aged 2-12 with 360° Soft Silicone Brush Heads Handle Kids Cute Teeth Whitening Massage Tool",
+    "brand": "",
+    "attributes": [
+      "a U-shaped design",
+      "soft silicone brush heads",
+      "360-degree cleaning",
+      "a handle designed for small hands",
+      "brush head",
+      "teeth whitening",
+      "easy use"
+    ],
+    "feature_text": "I want to buy a toothbrush with a U-shaped design and soft silicone brush heads.",
+    "training_queries": [
+      "I want to buy a toothbrush with a U-shaped design and soft silicone brush heads.",
+      "I would like to purchase a toothbrush featuring a U-shaped design and 360-degree cleaning.",
+      "I am looking for a toothbrush with soft silicone brush heads and a handle designed for small hands."
+    ],
+    "image": "target.jpg",
+    "foreground_mask": "target_foreground.png",
+    "boxes": [
+      [
+        135,
+        51,
+        349,
+        446
+      ]
+    ],
+    "text_regions": []
+  },
+  "source": {
+    "id": "B09MD5SZCX",
+    "title": "EXCEART Tooth Brush 2Pcs C- Shape Toothbrushes Manual Tooth Brushes Oral Care Teeth Clean Tool (Assorted Color)",
+    "brand": "",
+    "attributes": [
+      "oral care",
+      "brush head"
+    ],
+    "image": "source.jpg",
+    "foreground_mask": "source_foreground.png",
+    "boxes": [
+      [
+        53,
+        38,
+        437,
+        489
+      ]
+    ],
+    "text_regions": []
+  },
+  "color_scheme": "statistics",
+  "training_data_policy": "catalog_image_and_public_title_only_v1",
+  "lucid_alignment_config": {
+    "enabled": true,
+    "target_text": "I want to buy a toothbrush with a U-shaped design and soft silicone brush heads.",
+    "text_weight": 1.0,
+    "steps": 1000
+  },
+  "subtype_policy": {
+    "policy": "toothbrush_golden_band_v4",
+    "include": "\\btoothbrush(?:es)?\\b|牙刷",
+    "exclude": "\\b(?:toothpaste|floss|teether|holder|organizer|sterilizer|travel\\s+case|wall\\s+mount|replacement\\s+heads?|replacement\\s+toothbrush\\s+heads?|denture|false\\s+teeth|container|dust[- ]?proof\\s+protector|protective\\s+(?:cap|case)|case\\s+covers?)\\b",
+    "source_exclude": "\\b(?:u[- ]?shaped?|360\\s*[°度]?|silicone|mouth\\s*type|oral\\s+cleaner|infant|baby|toddler|age\\s*2[- ]?12|aged\\s*2[- ]?12|finger\\s+toothbrush|all[- ]?round|whole[- ]?mouth)\\b"
+  }
+}

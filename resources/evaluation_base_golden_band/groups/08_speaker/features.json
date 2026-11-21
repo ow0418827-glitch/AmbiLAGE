@@ -1,0 +1,133 @@
+{
+  "group": "08_speaker",
+  "category": "audio",
+  "target": {
+    "asin": "B01N47U1VI",
+    "title": "BuyTVProducts4Less Touch of ECO Solar/Battery Powered 2x3W Bluetooth Speaker Splashproof Portable Wireless MP3 Player with Built-in Micphone, FM Radio/MicroSD Card (Red)",
+    "brand": "",
+    "brand_evidence": {
+      "verified": false,
+      "visual_verified": true,
+      "reason": "Title mentions BuyTVProducts4Less and Touch of ECO while Description calls it Nunet. The actual image logo has an ambiguous stylized prefix and BOOM; existing public OCR reads UJBOOM. No single brand attribution can be established confidently.",
+      "image": "groups/08_speaker/target.jpg",
+      "image_relative_to_package": "groups/08_speaker/target.jpg",
+      "image_sha256": "808882d53dd322b2a319a83f9ec29ec406cae6b93558ea98f60a5444b4eed928",
+      "inspection_crop": "audit/speaker_brand_inspection.png"
+    },
+    "category": "Bluetooth speaker",
+    "attributes": [
+      "water resistance",
+      "stereo sound",
+      "solar charging",
+      "a rechargeable battery",
+      "fm radio",
+      "water resistant",
+      "bluetooth speaker"
+    ],
+    "canonical_sentence": "I want to buy a Bluetooth speaker with water resistance and stereo sound.",
+    "training_queries": [
+      "I want to buy a Bluetooth speaker with water resistance and stereo sound.",
+      "I would like to purchase a Bluetooth speaker featuring water resistance and solar charging.",
+      "I am looking for a Bluetooth speaker with stereo sound and a rechargeable battery."
+    ],
+    "feature_evidence": [
+      {
+        "feature": "water resistance",
+        "field": "BulletPoints",
+        "index": 4,
+        "quote": "Water Resistant"
+      },
+      {
+        "feature": "stereo sound",
+        "field": "BulletPoints",
+        "index": 1,
+        "quote": "stereo sound"
+      },
+      {
+        "feature": "solar charging",
+        "field": "BulletPoints",
+        "index": 4,
+        "quote": "Can charge by sun"
+      },
+      {
+        "feature": "a rechargeable battery",
+        "field": "BulletPoints",
+        "index": 3,
+        "quote": "RECHARGEABLE 800MAH lithium battery"
+      },
+      {
+        "feature": "fm radio",
+        "field": "Attributes",
+        "index": 0,
+        "quote": "fm radio"
+      },
+      {
+        "feature": "water resistant",
+        "field": "Attributes",
+        "index": 1,
+        "quote": "water resistant"
+      },
+      {
+        "feature": "bluetooth speaker",
+        "field": "Attributes",
+        "index": 3,
+        "quote": "bluetooth speaker"
+      }
+    ],
+    "source": "public_catalog_verified_review",
+    "core_attributes": [
+      "water resistance",
+      "stereo sound",
+      "solar charging",
+      "a rechargeable battery"
+    ]
+  },
+  "source": {
+    "asin": "B09P3RR62H",
+    "title": "Portable Wireless Bluetooth Speakers 7 LED Lights Patterns Wireless Speaker V5.0 Hi-Fi Bass Powerful Sound Built-in Microphone,with 2400mAh high Battery, HandsFree, Audio-Auxiliary (White, One Size)",
+    "brand": "",
+    "category": "soundbars",
+    "attributes": [
+      "charging cable",
+      "stereo sound",
+      "wireless bluetooth"
+    ],
+    "canonical_sentence": "I want to buy soundbars with charging cable and stereo sound.",
+    "training_queries": [
+      "I want to buy soundbars with charging cable and stereo sound.",
+      "I would like to purchase soundbars featuring charging cable and wireless bluetooth.",
+      "Looking to buy soundbars with stereo sound and wireless bluetooth."
+    ],
+    "brand_evidence": {
+      "verified": false,
+      "reason": "unknown_public_brand"
+    },
+    "feature_evidence": [
+      {
+        "feature": "charging cable",
+        "field": "Attributes",
+        "index": 0,
+        "quote": "charging cable"
+      },
+      {
+        "feature": "stereo sound",
+        "field": "Attributes",
+        "index": 1,
+        "quote": "stereo sound"
+      },
+      {
+        "feature": "wireless bluetooth",
+        "field": "Attributes",
+        "index": 2,
+        "quote": "wireless bluetooth"
+      }
+    ],
+    "source": "local_public_catalog_fields"
+  },
+  "alignment_canonical_text": "I want to buy a Bluetooth speaker with water resistance and stereo sound.",
+  "alignment_training_queries": [
+    "I want to buy a Bluetooth speaker with water resistance and stereo sound.",
+    "I would like to purchase a Bluetooth speaker featuring water resistance and solar charging.",
+    "I am looking for a Bluetooth speaker with stereo sound and a rechargeable battery."
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "policy": "named_public_pair_v1",
+  "status": "selected",
+  "selection_record": "metadata/selection.json",
+  "selection_sha256": "ced6b18a2d89624c9d05865f3a035ce9cc708b4ee92aff655b04d4aed303d28e",
+  "public_selection_only": true,
+  "victim_memory_used": false,
+  "source": {
+    "id": "B09P3RR62H",
+    "title": "Portable Wireless Bluetooth Speakers 7 LED Lights Patterns Wireless Speaker V5.0 Hi-Fi Bass Powerful Sound Built-in Microphone,with 2400mAh high Battery, HandsFree, Audio-Auxiliary (White, One Size)",
+    "image": "source.jpg",
+    "source_url": "https://www.amazon.com/dp/B09P3RR62H",
+    "boxes": [
+      [
+        10,
+        161,
+        488,
+        359
+      ]
+    ],
+    "foreground_mask": "metadata/source_foreground.png",
+    "text_regions": [],
+    "text_regions_reviewed": true,
+    "owned": true,
+    "source_note": "固定散列规则预先登记的实验模拟可控商品；不声明真实商家所有权",
+    "image_sha256": "fd025d523f288b91eff6e3c5af7dbe74db99aef26a4da917c1647f2d817463f5",
+    "foreground_mask_sha256": "100e565ab6828381cf6f57b40ed0f27a2cb0fe17e09dd3f31137349294287a46"
+  },
+  "target": {
+    "id": "B01N47U1VI",
+    "title": "BuyTVProducts4Less Touch of ECO Solar/Battery Powered 2x3W Bluetooth Speaker Splashproof Portable Wireless MP3 Player with Built-in Micphone, FM Radio/MicroSD Card (Red)",
+    "image": "target.jpg",
+    "source_url": "https://www.amazon.com/dp/B01N47U1VI",
+    "boxes": [
+      [
+        0,
+        0,
+        499,
+        348
+      ]
+    ],
+    "foreground_mask": "metadata/target_foreground.png",
+    "text_regions": [
+      [
+        0.382,
+        0.6475644699140402,
+        0.482,
+        0.8137535816618912
+      ]
+    ],
+    "text_regions_reviewed": true,
+    "image_sha256": "abb62690253646b100a1f9386c4898532613e79dc0b86d8c593f10bfe4be61da",
+    "foreground_mask_sha256": "e86ff26eef9a7d96cd6a9dc18a4d874d1ea29098b09ecea953267bbeb0231670",
+    "brand": "",
+    "attributes": [
+      "water resistance",
+      "stereo sound",
+      "solar charging",
+      "a rechargeable battery",
+      "fm radio",
+      "water resistant",
+      "bluetooth speaker"
+    ],
+    "feature_text": "I want to buy a Bluetooth speaker with water resistance and stereo sound.",
+    "training_queries": [
+      "I want to buy a Bluetooth speaker with water resistance and stereo sound.",
+      "I would like to purchase a Bluetooth speaker featuring water resistance and solar charging.",
+      "I am looking for a Bluetooth speaker with stereo sound and a rechargeable battery."
+    ]
+  }
+}

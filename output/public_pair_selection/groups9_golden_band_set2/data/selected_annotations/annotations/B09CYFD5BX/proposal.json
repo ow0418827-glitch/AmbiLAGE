@@ -1,0 +1,61 @@
+{
+  "id": "B09CYFD5BX",
+  "identity": {
+    "image_sha256": "8fc2834a77b8ecf235f5bec9c1f335830d1de142843cda13284cdfe36579000d",
+    "annotation_models": {
+      "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+      "ocr_version": "1.4.4",
+      "ocr_weights": {
+        "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+        "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+        "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+      },
+      "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+      "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+      "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+      "device": "cuda",
+      "model_loaded_once": true
+    }
+  },
+  "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/8fc2834a77b8ecf235f5bec9c1f335830d1de142843cda13284cdfe36579000d.jpg",
+  "title": "LTHDD Bar Stool Swivel Barber Chair Hydraulic Barber Chairs Heavy Duty 360 Degrees Rolling Salon Chair for Hair Stylist Tattoo Chair Salon Equipment,Blue,1 (Color : Black, Size : 1)",
+  "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09CYFD5BX/foreground.png",
+  "foreground_mask_sha256": "850de84170dca01a372dd2fc7e12d2247493f0e8e66bfa9990716b13c22317f2",
+  "boxes": [
+    [
+      5,
+      5,
+      399,
+      496
+    ]
+  ],
+  "text_regions": [],
+  "ocr": [],
+  "segmentation_candidates": [
+    {
+      "index": 0,
+      "iou": 0.7870935201644897,
+      "foreground_ratio": 0.3438222222222222,
+      "rough_coverage": 0.6923681822764391,
+      "accepted": true
+    },
+    {
+      "index": 1,
+      "iou": 0.9651498794555664,
+      "foreground_ratio": 0.45457283950617283,
+      "rough_coverage": 0.9101320697650973,
+      "accepted": true
+    },
+    {
+      "index": 2,
+      "iou": 0.9572311639785767,
+      "foreground_ratio": 0.43610864197530863,
+      "rough_coverage": 0.878969654199012,
+      "accepted": true
+    }
+  ],
+  "selected_mask_index": 1,
+  "text_regions_reviewed": false,
+  "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09CYFD5BX/review_overlay.png",
+  "observed_seconds": 0.611676365006133
+}

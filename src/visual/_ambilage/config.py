@@ -159,6 +159,7 @@ class AmbiLAGEConfig:
     planner_max_new_tokens: int = 768
     eot_enabled: bool = False
     diffusion_eot_enabled: bool | None = None
+    multiscale_eot_enabled: bool | None = None
     diffusion_weight: float = 0.08          # 压低扩散净化梯度权重以消除潜空间棋盘格伪影
     purifier_steps: int = 10
 
@@ -224,6 +225,12 @@ class AmbiLAGEConfig:
         if self.diffusion_eot_enabled is not None:
             return bool(self.diffusion_eot_enabled)
         return bool(self.eot_enabled)
+
+    def effective_multiscale_eot_enabled(self, *, num_surrogates: int = 1) -> bool:
+        """解析多尺度破网格视角变换开关：显式设置时独立于防御 EoT 生效，否则跟随 eot_enabled 与 single_model_multiscale_eot。"""
+        if self.multiscale_eot_enabled is not None:
+            return bool(self.multiscale_eot_enabled)
+        return bool(self.eot_enabled and self.single_model_multiscale_eot and int(num_surrogates) == 1)
 
     def validate(self) -> None:
         """严格校验配置参数有效性，杜绝越界或无效数值。"""
@@ -388,6 +395,8 @@ class AmbiLAGEConfig:
             raise ValueError("期望变换开关 eot_enabled 必须为布尔值")
         if self.diffusion_eot_enabled is not None and type(self.diffusion_eot_enabled) is not bool:
             raise ValueError("扩散净化期望变换开关 diffusion_eot_enabled 必须为布尔值或 None")
+        if self.multiscale_eot_enabled is not None and type(self.multiscale_eot_enabled) is not bool:
+            raise ValueError("多尺度破网格视角变换开关 multiscale_eot_enabled 必须为布尔值或 None")
         if self.effective_diffusion_eot_enabled():
             if self.diffusion_weight <= 0 or self.purifier_steps != 10:
                 raise ValueError("开启扩散净化期望变换时须使用正权重十步扩散净化")

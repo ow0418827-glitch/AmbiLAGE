@@ -1,0 +1,147 @@
+{
+  "id": "B086PW7TWX",
+  "identity": {
+    "image_sha256": "b73bc5fcbb1a2fd7fe322cba4dca3543f427948a9a65fff17a0e058de19e8eb4",
+    "annotation_models": {
+      "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+      "ocr_version": "1.4.4",
+      "ocr_weights": {
+        "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+        "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+        "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+      },
+      "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+      "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+      "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+      "device": "cuda",
+      "model_loaded_once": true
+    }
+  },
+  "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/b73bc5fcbb1a2fd7fe322cba4dca3543f427948a9a65fff17a0e058de19e8eb4.jpg",
+  "title": "Windows Treatment Blackout Curtains Grommet Drapes for Boys/Girls Kids Bedroom DRINKES ARE ON ME Vintage Wood Board Texture Printed Room Darkening Curtains for Livingroom/Office, 1 Panel 52x45in",
+  "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B086PW7TWX/foreground.png",
+  "foreground_mask_sha256": "46c76f0d8ac0dba09a8725dc73fc83275b322095d654a1a21b1038596c18c561",
+  "boxes": [
+    [
+      67,
+      7,
+      417,
+      493
+    ]
+  ],
+  "text_regions": [
+    [
+      0.292,
+      0.222,
+      0.704,
+      0.386
+    ],
+    [
+      0.388,
+      0.414,
+      0.58,
+      0.532
+    ],
+    [
+      0.296,
+      0.576,
+      0.664,
+      0.74
+    ]
+  ],
+  "ocr": [
+    {
+      "text": "DRINKS",
+      "confidence": 0.9843482871850332,
+      "polygon": [
+        [
+          149.0,
+          116.0
+        ],
+        [
+          348.0,
+          114.0
+        ],
+        [
+          349.0,
+          188.0
+        ],
+        [
+          149.0,
+          190.0
+        ]
+      ]
+    },
+    {
+      "text": "ARE",
+      "confidence": 0.989595909913381,
+      "polygon": [
+        [
+          197.0,
+          210.0
+        ],
+        [
+          287.0,
+          210.0
+        ],
+        [
+          287.0,
+          263.0
+        ],
+        [
+          197.0,
+          263.0
+        ]
+      ]
+    },
+    {
+      "text": "ON ME",
+      "confidence": 0.9103390097618103,
+      "polygon": [
+        [
+          151.0,
+          291.0
+        ],
+        [
+          329.0,
+          291.0
+        ],
+        [
+          329.0,
+          367.0
+        ],
+        [
+          151.0,
+          367.0
+        ]
+      ]
+    }
+  ],
+  "segmentation_candidates": [
+    {
+      "index": 0,
+      "iou": 0.19971348345279694,
+      "foreground_ratio": 0.180932,
+      "rough_coverage": 0.3150964559660575,
+      "accepted": true
+    },
+    {
+      "index": 1,
+      "iou": 0.9871031641960144,
+      "foreground_ratio": 0.563752,
+      "rough_coverage": 0.9807366741676362,
+      "accepted": true
+    },
+    {
+      "index": 2,
+      "iou": 0.982342541217804,
+      "foreground_ratio": 0.561592,
+      "rough_coverage": 0.9772602186195893,
+      "accepted": true
+    }
+  ],
+  "selected_mask_index": 1,
+  "text_regions_reviewed": false,
+  "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B086PW7TWX/review_overlay.png",
+  "observed_seconds": 0.6030510310010868
+}

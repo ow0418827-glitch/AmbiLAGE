@@ -1,0 +1,91 @@
+{
+  "id": "B08V134QWR",
+  "identity": {
+    "image_sha256": "5351fe5727bf6d9d8313c8262c28589948c84856f535b31f6f58d4d44d68166b",
+    "annotation_models": {
+      "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+      "ocr_version": "1.4.4",
+      "ocr_weights": {
+        "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+        "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+        "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+      },
+      "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+      "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+      "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+      "device": "cuda",
+      "model_loaded_once": true
+    }
+  },
+  "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/5351fe5727bf6d9d8313c8262c28589948c84856f535b31f6f58d4d44d68166b.jpg",
+  "title": "PTZ Security Camera Outdoor 30X Optical Zoom Camera WiFi Wireless 5MP RTSP IP Camera 1000FT Night Vision Auto Tracking Emergency Strobe Light Alarm Human Detection 2-Way Audio IP66 Waterproof",
+  "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B08V134QWR/foreground.png",
+  "foreground_mask_sha256": "4a081c92d407c33150c4cafdb8a9a3fae247d502d53dc6c7daa640efda87b248",
+  "boxes": [
+    [
+      15,
+      65,
+      490,
+      465
+    ]
+  ],
+  "text_regions": [
+    [
+      0.466,
+      0.53,
+      0.634,
+      0.584
+    ]
+  ],
+  "ocr": [
+    {
+      "text": "HXVIEW",
+      "confidence": 0.9936245878537496,
+      "polygon": [
+        [
+          236.0,
+          268.0
+        ],
+        [
+          314.0,
+          268.0
+        ],
+        [
+          314.0,
+          289.0
+        ],
+        [
+          236.0,
+          289.0
+        ]
+      ]
+    }
+  ],
+  "segmentation_candidates": [
+    {
+      "index": 0,
+      "iou": 0.8373737931251526,
+      "foreground_ratio": 0.216072,
+      "rough_coverage": 0.492658468359107,
+      "accepted": true
+    },
+    {
+      "index": 1,
+      "iou": 0.9566906690597534,
+      "foreground_ratio": 0.395244,
+      "rough_coverage": 0.9553702433102866,
+      "accepted": true
+    },
+    {
+      "index": 2,
+      "iou": 0.9567664861679077,
+      "foreground_ratio": 0.351516,
+      "rough_coverage": 0.8445664221248746,
+      "accepted": true
+    }
+  ],
+  "selected_mask_index": 2,
+  "text_regions_reviewed": false,
+  "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B08V134QWR/review_overlay.png",
+  "observed_seconds": 0.5758259950016509
+}

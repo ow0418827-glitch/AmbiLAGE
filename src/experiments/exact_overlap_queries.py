@@ -7,7 +7,7 @@ from pathlib import Path
 import re
 import unicodedata
 
-from src.paths import DATA, EVALUATION_BASE, RESOURCES
+from src.paths import DATA, EVALUATION_BASE, RESOURCES, resolve_evaluation_base
 from src.visual.audit import freeze_json, read_json
 
 ROOT = RESOURCES / 'visual_inception_evaluation/exact_overlap_v4'
@@ -241,7 +241,8 @@ def _validate_population(frozen, base, training_root, *, status):
     return specs, old, training
 
 
-def validate_preparation(root=ROOT, *, base=EVALUATION_BASE, training_root=TRAINING_ROOT):
+def validate_preparation(root=ROOT, *, base=None, training_root=TRAINING_ROOT):
+    base = resolve_evaluation_base(base)
     prepared = read_json(Path(root) / 'prepared_pairs.json')
     _validate_population(prepared, base, training_root, status='pending')
     for group, shortage in prepared['missing_groups'].items():
@@ -253,8 +254,9 @@ def validate_preparation(root=ROOT, *, base=EVALUATION_BASE, training_root=TRAIN
     return prepared
 
 
-def validate(query_root, *, base=EVALUATION_BASE, training_root=TRAINING_ROOT):
+def validate(query_root, *, base=None, training_root=TRAINING_ROOT):
     root = Path(query_root).resolve()
+    base = resolve_evaluation_base(base)
     manifest_path = root / 'manifest.json'
     if not manifest_path.is_file() and (root.parent / 'prepared_pairs.json').is_file():
         prepared = validate_preparation(root.parent, base=base, training_root=training_root)
@@ -264,8 +266,13 @@ def validate(query_root, *, base=EVALUATION_BASE, training_root=TRAINING_ROOT):
     require(suite in SUITES and root.name == suite and manifest['schema_version'] == 1,
             '评测集目录、名称或版本不符')
     pair_path = root.parent / 'pairs.json'
-    require(file_sha(pair_path) == manifest['pairs_sha256']
-            and file_sha(Path(base) / 'manifest.json') == manifest['base_sha256'], '配对或基础清单摘要不符')
+    base_manifest_path = Path(base) / 'manifest.json'
+    base_manifest = read_json(base_manifest_path)
+    base_matches = (
+        file_sha(base_manifest_path) == manifest['base_sha256']
+        or base_manifest.get('derived_from_base_manifest_sha256') == manifest['base_sha256']
+    )
+    require(file_sha(pair_path) == manifest['pairs_sha256'] and base_matches, '配对或基础清单摘要不符')
     frozen = read_json(pair_path)
     specs, old, training = _validate_population(frozen, base, training_root, status='ready')
     require(list(manifest['groups']) == list(frozen['groups']) and manifest['groups'],

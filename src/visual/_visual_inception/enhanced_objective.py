@@ -33,8 +33,8 @@ QUERY_AUGMENTATION_KIND = 'text_subspace_spherical_l2_pgd_best_per_query_v2'
 MARGIN_KIND = 'temperature_scaled_full_bank_and_top_hard_softplus_margin_v2'
 TOP_HARD_COMPETITOR_LIMIT = 5
 HARD_MARGIN_SHARPNESS = 2.0
-BANK_LOSS_BLEND = 0.8
-HARD_MARGIN_LOSS_BLEND = 0.2
+BANK_LOSS_BLEND = 1.0
+HARD_MARGIN_LOSS_BLEND = 0.0
 
 
 def _require(condition, message):

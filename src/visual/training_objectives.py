@@ -1303,13 +1303,17 @@ class SequentialEnsembleObjective:
             len(self.surrogates) == 1 and bool(getattr(config, 'single_model_task_pcgrad', False))
         )
         eot_on = bool(getattr(config, 'eot_enabled', False))
-        single_multiscale_eot = bool(
-            len(self.surrogates) == 1
-            and eot_on
-            and bool(getattr(config, 'single_model_multiscale_eot', False))
-        )
+        raw_ms_eot = getattr(config, 'multiscale_eot_enabled', None)
+        if raw_ms_eot is not None:
+            self.multiscale_eot_enabled = bool(raw_ms_eot)
+        else:
+            self.multiscale_eot_enabled = bool(
+                len(self.surrogates) == 1
+                and eot_on
+                and bool(getattr(config, 'single_model_multiscale_eot', False))
+            )
         eot_paths = ['identity', 'pillow_blur_bpda', 'jpeg_exact_forward_ste', 'resize'] if eot_on else ['identity']
-        if single_multiscale_eot:
+        if self.multiscale_eot_enabled:
             eot_paths.append('multiscale_grid_breaking_crop_zoom')
         grad_exec_mode = (
             'single_surrogate_task_pcgrad_single_backward'
@@ -1327,7 +1331,9 @@ class SequentialEnsembleObjective:
             'held_out_purifiers': list(HELD_OUT_PURIFIERS),
             'single_surrogate_mode': bool(len(self.surrogates) == 1),
             'single_model_task_pcgrad': single_task_pcgrad,
-            'single_model_multiscale_eot': single_multiscale_eot,
+            'single_model_multiscale_eot': self.multiscale_eot_enabled,
+            'multiscale_eot_enabled': self.multiscale_eot_enabled,
+            'defense_eot_enabled': eot_on,
             'effective_key_mode': self.effective_key_mode,
             'effective_category_mode': self.effective_category_mode,
             'gradient_execution': grad_exec_mode,
@@ -1379,18 +1385,16 @@ class SequentialEnsembleObjective:
         base_device = getattr(self.purifier, 'device', self.surrogates[0].device) if self.purifier is not None else self.surrogates[0].device
         base_img = image.to(base_device)
         eot_on = bool(getattr(self.config, 'eot_enabled', False))
-        if eot_on:
-            views = transformed_batch(base_img, step=max(1, int(step)))
-            if len(self.surrogates) == 1 and bool(getattr(self.config, 'single_model_multiscale_eot', False)):
-                views = multiscale_grid_breaking_views(base_img, step=max(1, int(step)), base_views=views)
-        else:
-            views = base_img
+        views = transformed_batch(base_img, step=max(1, int(step))) if eot_on else base_img
+        if self.multiscale_eot_enabled:
+            views = multiscale_grid_breaking_views(base_img, step=max(1, int(step)), base_views=views)
+        views_transformed = bool(eot_on or self.multiscale_eot_enabled)
         purified = (
             self.purifier(base_img, seed=self._seed(step), gradient=gradient)
             if (self.diffusion_eot_enabled and self.purifier is not None)
             else None
         )
-        return views, purified, eot_on
+        return views, purified, views_transformed
 
     def _evaluate_proxy_split_core(
         self,
@@ -1662,7 +1666,7 @@ class SequentialEnsembleObjective:
         """单代理主导任务 PCGrad 与双分支（EoT vs 扩散净化）正交合并梯度。"""
         base_device = getattr(self.purifier, 'device', self.surrogates[0].device) if self.purifier is not None else self.surrogates[0].device
         leaf_img = image.detach().to(base_device).clone().requires_grad_(True)
-        views, purified, eot_on = self._shared_inputs(leaf_img, step, gradient='full')
+        views, purified, views_transformed = self._shared_inputs(leaf_img, step, gradient='full')
         has_purified = bool(self.diffusion_eot_enabled and purified is not None and self.diffusion_weight > 0.0)
         v_leaf = views.detach().requires_grad_(True)
         p_leaf = purified.detach().requires_grad_(True) if has_purified else None
@@ -1731,7 +1735,7 @@ class SequentialEnsembleObjective:
         finally:
             self._maybe_offload_streamed_proxy(0)
 
-        if eot_on:
+        if views_transformed:
             g_img_views = torch.autograd.grad(views, leaf_img, grad_outputs=grad_views, retain_graph=False)[0]
         else:
             g_img_views = grad_views
@@ -1750,12 +1754,15 @@ class SequentialEnsembleObjective:
         scores = score.detach().to(image.device).unsqueeze(0)
         weights, gains = self._weights_from_values(values, joint_values=j_tensor, text_values=t_tensor)
         utility = (weights * values).sum().detach()
+        eot_on = bool(getattr(self.config, 'eot_enabled', False))
         info: dict[str, Any] = {
             'model_weights': weights.cpu().tolist(),
             'model_utilities': values.cpu().tolist(),
             'model_relative_gains': gains.cpu().tolist(),
             'paths': [row],
             'eot_enabled': eot_on,
+            'defense_eot_enabled': eot_on,
+            'multiscale_eot_enabled': self.multiscale_eot_enabled,
             'diffusion_eot_enabled': self.diffusion_eot_enabled,
             'purifier_gradient': 'full' if has_purified else 'disabled',
             'pcgrad_applied': bool(conflict_v or conflict_p or conflict_jv or conflict_jp or conflict_branch),
@@ -1780,7 +1787,7 @@ class SequentialEnsembleObjective:
 
         base_device = getattr(self.purifier, 'device', self.surrogates[0].device) if self.purifier is not None else self.surrogates[0].device
         leaf_img = image.detach().to(base_device).clone().requires_grad_(True)
-        views, purified, eot_on = self._shared_inputs(leaf_img, step, gradient='full')
+        views, purified, views_transformed = self._shared_inputs(leaf_img, step, gradient='full')
         has_purified = bool(self.diffusion_eot_enabled and purified is not None and self.diffusion_weight > 0.0)
         v_leaf = views.detach().requires_grad_(True)
         p_leaf = purified.detach().requires_grad_(True) if has_purified else None
@@ -1822,12 +1829,12 @@ class SequentialEnsembleObjective:
                 if has_purified:
                     grad_purified.add_(gp_list[i], alpha=w_i)
         if has_purified:
-            if eot_on:
+            if views_transformed:
                 gradient = torch.autograd.grad((views, purified), leaf_img, grad_outputs=(grad_views, grad_purified))[0]
             else:
                 gradient = grad_views + torch.autograd.grad(purified, leaf_img, grad_outputs=grad_purified)[0]
         else:
-            if eot_on:
+            if views_transformed:
                 gradient = torch.autograd.grad(views, leaf_img, grad_outputs=grad_views)[0]
             else:
                 gradient = grad_views
@@ -1835,12 +1842,15 @@ class SequentialEnsembleObjective:
         if not torch.isfinite(gradient).all():
             raise FloatingPointError('代理目标梯度含非有限值')
         utility = (weights * values).sum().detach()
+        eot_on = bool(getattr(self.config, 'eot_enabled', False))
         info: dict[str, Any] = {
             'model_weights': weights.cpu().tolist(),
             'model_utilities': values.cpu().tolist(),
             'model_relative_gains': gains.cpu().tolist(),
             'paths': rows,
             'eot_enabled': eot_on,
+            'defense_eot_enabled': eot_on,
+            'multiscale_eot_enabled': self.multiscale_eot_enabled,
             'diffusion_eot_enabled': self.diffusion_eot_enabled,
             'purifier_gradient': 'full' if has_purified else 'disabled',
             'pcgrad_applied': bool(self.pcgrad_enabled and len(self.surrogates) > 1),

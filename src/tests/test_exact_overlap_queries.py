@@ -60,3 +60,14 @@ def test_duplicate_checks_catch_reordering_and_training_field_fragments():
     assert 'Cotton denim, deep blue!' in index
     assert index.contains_fragment('contains unconsumed-looking text')
     assert 'Deep blue stretch denim' not in index
+
+
+def test_acceptable_rejects_noise_heads_and_off_category_queries():
+    from tools.build_visual_inception_eval_v4_suites import acceptable
+
+    assert not acceptable('06_jeans', 'Find a light-weight soft breathable regular-fit casual top in a small Asian size.')
+    assert not acceptable('06_jeans', '✤✤【SIZE CHART】✤✤Size:S/US:4Waist:58cm/22.83 Hip:84cm/33.07 Length:105cm')
+    assert not acceptable('06_jeans', '100% Cotton Machine Wash. Comfortable breathable everyday wear for all seasons.')
+    assert not acceptable('05_hair_extension', 'Suitable for daily use, work, school, dating, party, engagement, marriage, travel.')
+    assert acceptable('06_jeans', 'High-waisted stretch denim jeans with a slim flared leg and classic five-pocket styling.')
+    assert acceptable('05_hair_extension', 'Silky straight tape-in human hair extensions in 18 inch length for natural volume.')

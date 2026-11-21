@@ -1,0 +1,119 @@
+{
+  "id": "B01LML1VXU",
+  "identity": {
+    "image_sha256": "4ab746e0c4f3ff84abd731926a23872c3f6bb17a4b49c4fe00c2ac77a432f515",
+    "annotation_models": {
+      "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+      "ocr_version": "1.4.4",
+      "ocr_weights": {
+        "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+        "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+        "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+      },
+      "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+      "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+      "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+      "device": "cuda",
+      "model_loaded_once": true
+    }
+  },
+  "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/4ab746e0c4f3ff84abd731926a23872c3f6bb17a4b49c4fe00c2ac77a432f515.jpg",
+  "title": "LOREX LBV-2521 1080p HD Bullet Security Camera",
+  "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B01LML1VXU/foreground.png",
+  "foreground_mask_sha256": "1bfb608c529452027e0ccc576798725411dff3fd2c6376e12fb74beb3f413d24",
+  "boxes": [
+    [
+      81,
+      9,
+      397,
+      311
+    ]
+  ],
+  "text_regions": [
+    [
+      0.516,
+      0.46546546546546547,
+      0.624,
+      0.6126126126126126
+    ],
+    [
+      0.528,
+      0.5195195195195195,
+      0.616,
+      0.6396396396396397
+    ]
+  ],
+  "ocr": [
+    {
+      "text": "ELOREX",
+      "confidence": 0.8888100037972132,
+      "polygon": [
+        [
+          261.0,
+          188.0
+        ],
+        [
+          299.0,
+          158.0
+        ],
+        [
+          309.0,
+          170.0
+        ],
+        [
+          271.0,
+          201.0
+        ]
+      ]
+    },
+    {
+      "text": "1000HD",
+      "confidence": 0.8086330741643906,
+      "polygon": [
+        [
+          267.0,
+          198.0
+        ],
+        [
+          297.0,
+          176.0
+        ],
+        [
+          305.0,
+          188.0
+        ],
+        [
+          275.0,
+          210.0
+        ]
+      ]
+    }
+  ],
+  "segmentation_candidates": [
+    {
+      "index": 0,
+      "iou": 0.8306884765625,
+      "foreground_ratio": 0.1565825825825826,
+      "rough_coverage": 0.539250876229889,
+      "accepted": true
+    },
+    {
+      "index": 1,
+      "iou": 0.98574298620224,
+      "foreground_ratio": 0.28939339339339337,
+      "rough_coverage": 0.9896752670917613,
+      "accepted": true
+    },
+    {
+      "index": 2,
+      "iou": 0.987011194229126,
+      "foreground_ratio": 0.2877897897897898,
+      "rough_coverage": 0.9846079135171657,
+      "accepted": true
+    }
+  ],
+  "selected_mask_index": 2,
+  "text_regions_reviewed": false,
+  "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B01LML1VXU/review_overlay.png",
+  "observed_seconds": 0.6199026980029885
+}

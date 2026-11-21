@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "policy": "named_public_pair_v1",
+  "status": "selected",
+  "selection_record": "metadata/selection.json",
+  "selection_sha256": "6cf76851a5f7e2179eddfa28815ccb47b949191e6c22d69c15bd368617b64618",
+  "public_selection_only": true,
+  "victim_memory_used": false,
+  "source": {
+    "id": "B09MD5SZCX",
+    "title": "EXCEART Tooth Brush 2Pcs C- Shape Toothbrushes Manual Tooth Brushes Oral Care Teeth Clean Tool (Assorted Color)",
+    "image": "source.jpg",
+    "source_url": "https://www.amazon.com/dp/B09MD5SZCX",
+    "boxes": [
+      [
+        53,
+        38,
+        437,
+        489
+      ]
+    ],
+    "foreground_mask": "metadata/source_foreground.png",
+    "text_regions": [],
+    "text_regions_reviewed": true,
+    "owned": true,
+    "source_note": "固定散列规则预先登记的实验模拟可控商品；不声明真实商家所有权",
+    "image_sha256": "b2e2f81860429ed233c851c6406447e416287f18e3a8148996831da7bb9edfa1",
+    "foreground_mask_sha256": "b721f9845ca912460d61f3e9776b36313ace3632db2612b73fb89ed6a08644f6"
+  },
+  "target": {
+    "id": "B09J81RMLD",
+    "title": "Baby U Shaped Toothbrush for Aged 2-12 with 360° Soft Silicone Brush Heads Handle Kids Cute Teeth Whitening Massage Tool",
+    "image": "target.jpg",
+    "source_url": "https://www.amazon.com/dp/B09J81RMLD",
+    "boxes": [
+      [
+        135,
+        51,
+        349,
+        446
+      ]
+    ],
+    "foreground_mask": "metadata/target_foreground.png",
+    "text_regions": [],
+    "text_regions_reviewed": true,
+    "image_sha256": "893e98a639703a3ebad6a4cb6a31595156b896a3cb519fcfe31511a132866f14",
+    "foreground_mask_sha256": "3f42cd53612146ebdc66522f17b88bfd0f0159ae8e4fd1fa9a366cb6a695ad87",
+    "brand": "",
+    "attributes": [
+      "a U-shaped design",
+      "soft silicone brush heads",
+      "360-degree cleaning",
+      "a handle designed for small hands",
+      "brush head",
+      "teeth whitening",
+      "easy use"
+    ],
+    "feature_text": "I want to buy a toothbrush with a U-shaped design and soft silicone brush heads.",
+    "training_queries": [
+      "I want to buy a toothbrush with a U-shaped design and soft silicone brush heads.",
+      "I would like to purchase a toothbrush featuring a U-shaped design and 360-degree cleaning.",
+      "I am looking for a toothbrush with soft silicone brush heads and a handle designed for small hands."
+    ]
+  }
+}

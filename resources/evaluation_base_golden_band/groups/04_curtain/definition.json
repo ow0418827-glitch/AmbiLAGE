@@ -1,0 +1,149 @@
+{
+  "schema_version": 2,
+  "group": "04_curtain",
+  "name": "第四组窗帘（黄金先验区间中位数重选）",
+  "category": "curtains",
+  "shape_similarity": 0.14804527747715837,
+  "calibrated_threshold": 0.5960951412738369,
+  "passes_calibrated_threshold": false,
+  "public_prior_rank": 10,
+  "shape_threshold_fallback_used": true,
+  "selection_status": "public_shape_golden_band_median_v1",
+  "selection_notes": "依公开 public_shape_golden_band_median_v1 规则发现带内过门槛交集为空，启用带内本体中位数回退，从 590 个带内本体候选中选出 B09KRPJJC4（shape=0.1480 < 0.5961、公开先验名次=10；未通过校准门槛）。",
+  "methods_supported": [
+    "lucid",
+    "ambilage",
+    "visual_inception"
+  ],
+  "target_feature_text": "I want to buy curtains with a blackout design and a vintage wood board texture.",
+  "training_queries": [
+    "I want to buy curtains with a blackout design and a vintage wood board texture.",
+    "I would like to purchase curtains featuring a blackout design and machine-washable fabric.",
+    "I am looking for curtains with a vintage wood board texture and rust-proof grommets."
+  ],
+  "data": {
+    "source": "source.jpg",
+    "target": "target.jpg",
+    "source_title": "Sheer Curtains 2 Panels Sheer Window Covering Rod Pocket, Golden Retriever Voile Window Treatment Drapes for Bedroom Living Room Kitchen Christmas Barn Red Truck 52x96 inch,",
+    "training_queries": [
+      "I want to buy curtains with a blackout design and a vintage wood board texture."
+    ]
+  },
+  "source_boxes": [
+    [
+      55,
+      14,
+      436,
+      482
+    ]
+  ],
+  "target_boxes": [
+    [
+      67,
+      7,
+      417,
+      493
+    ]
+  ],
+  "print_regions": [
+    [
+      0.314,
+      0.66,
+      0.682,
+      0.742
+    ]
+  ],
+  "target": {
+    "id": "B086PW7TWX",
+    "title": "Windows Treatment Blackout Curtains Grommet Drapes for Boys/Girls Kids Bedroom DRINKES ARE ON ME Vintage Wood Board Texture Printed Room Darkening Curtains for Livingroom/Office, 1 Panel 52x45in",
+    "brand": "",
+    "attributes": [
+      "a blackout design",
+      "a vintage wood board texture",
+      "machine-washable fabric",
+      "rust-proof grommets",
+      "eco friendly",
+      "wall art",
+      "machine washable",
+      "dining room"
+    ],
+    "feature_text": "I want to buy curtains with a blackout design and a vintage wood board texture.",
+    "training_queries": [
+      "I want to buy curtains with a blackout design and a vintage wood board texture.",
+      "I would like to purchase curtains featuring a blackout design and machine-washable fabric.",
+      "I am looking for curtains with a vintage wood board texture and rust-proof grommets."
+    ],
+    "image": "target.jpg",
+    "foreground_mask": "target_foreground.png",
+    "boxes": [
+      [
+        67,
+        7,
+        417,
+        493
+      ]
+    ],
+    "text_regions": [
+      [
+        0.292,
+        0.222,
+        0.704,
+        0.386
+      ],
+      [
+        0.388,
+        0.414,
+        0.58,
+        0.532
+      ],
+      [
+        0.296,
+        0.576,
+        0.664,
+        0.74
+      ]
+    ]
+  },
+  "source": {
+    "id": "B09KRPJJC4",
+    "title": "Sheer Curtains 2 Panels Sheer Window Covering Rod Pocket, Golden Retriever Voile Window Treatment Drapes for Bedroom Living Room Kitchen Christmas Barn Red Truck 52x96 inch,",
+    "brand": "",
+    "attributes": [
+      "window curtain",
+      "super soft",
+      "living room"
+    ],
+    "image": "source.jpg",
+    "foreground_mask": "source_foreground.png",
+    "boxes": [
+      [
+        55,
+        14,
+        436,
+        482
+      ]
+    ],
+    "text_regions": [
+      [
+        0.314,
+        0.66,
+        0.682,
+        0.742
+      ]
+    ]
+  },
+  "color_scheme": "statistics",
+  "training_data_policy": "catalog_image_and_public_title_only_v1",
+  "lucid_alignment_config": {
+    "enabled": true,
+    "target_text": "I want to buy curtains with a blackout design and a vintage wood board texture.",
+    "text_weight": 1.0,
+    "steps": 1000
+  },
+  "subtype_policy": {
+    "policy": "window_curtain_drapes_golden_band_v4",
+    "include": "\\b(?:curtains?|drapes?)\\b|窗帘",
+    "exclude": "\\b(?:curtain\\s+(?:rod|ring|hook|clip|tieback|holdback|track|bracket|finial)s?|shower\\s+curtains?|shower\\s+curtain\\s+(?:liner|hooks|rings)|valances?|swag|blinds?|roller\\s+shades?|roman\\s+shades?|zebra\\s+shades?|window\\s+shades?|shutters?|cornice|tapestry|tablecloth|backdrop|bed\\s*skirt|mosquito\\s+net|tie[- ]?up\\s+shades?|projector\\s+(?:special\\s+)?screen)\\b",
+    "source_exclude": "\\b(?:wood\\s+board|drink(?:es|s)\\s+are\\s+on\\s+me|bar\\s+sign\\s+print)\\b"
+  }
+}

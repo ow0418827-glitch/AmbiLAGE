@@ -1,0 +1,2536 @@
+{
+  "downloads_sha256": "95e8aee0c63b184d9f1abf507b8b6c0bbabaadd3fdf7ba8c33f67c255ba836c2",
+  "proposals": {
+    "B00BDJODWI": {
+      "id": "B00BDJODWI",
+      "identity": {
+        "image_sha256": "dd0abf8d2d52aa289346aa2e7219187cec901c901d4f3cce1ef3379691467256",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+          "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/dd0abf8d2d52aa289346aa2e7219187cec901c901d4f3cce1ef3379691467256.jpg",
+      "title": "Aveda Scalp Benefits Balancing Shampoo 33.8 OZ",
+      "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B00BDJODWI/foreground.png",
+      "foreground_mask_sha256": "72082ddea1dffd49982550183087cc16359849de9d953c49ac011f32e20cea69",
+      "boxes": [
+        [
+          2,
+          6,
+          157,
+          493
+        ]
+      ],
+      "text_regions": [
+        [
+          0.275,
+          0.314,
+          0.68125,
+          0.356
+        ],
+        [
+          0.20625,
+          0.352,
+          0.675,
+          0.38
+        ],
+        [
+          0.21875,
+          0.344,
+          0.70625,
+          0.37
+        ],
+        [
+          0.1375,
+          0.454,
+          0.8375,
+          0.502
+        ],
+        [
+          0.2,
+          0.528,
+          0.78125,
+          0.562
+        ],
+        [
+          0.1375,
+          0.554,
+          0.84375,
+          0.588
+        ],
+        [
+          0.20625,
+          0.818,
+          0.75,
+          0.852
+        ],
+        [
+          0.24375,
+          0.856,
+          0.7,
+          0.882
+        ],
+        [
+          0.25,
+          0.842,
+          0.7,
+          0.87
+        ],
+        [
+          0.2,
+          0.9,
+          0.75625,
+          0.94
+        ]
+      ],
+      "ocr": [
+        {
+          "text": "AVEDA",
+          "confidence": 0.9924862265586853,
+          "polygon": [
+            [
+              48.0,
+              160.0
+            ],
+            [
+              106.0,
+              161.0
+            ],
+            [
+              106.0,
+              175.0
+            ],
+            [
+              47.0,
+              174.0
+            ]
+          ]
+        },
+        {
+          "text": "FIOR AG FEASTESSA",
+          "confidence": 0.623597543905763,
+          "polygon": [
+            [
+              36.0,
+              179.0
+            ],
+            [
+              105.0,
+              181.0
+            ],
+            [
+              105.0,
+              187.0
+            ],
+            [
+              36.0,
+              186.0
+            ]
+          ]
+        },
+        {
+          "text": "NHTANOSCESCLOE",
+          "confidence": 0.5575974413326809,
+          "polygon": [
+            [
+              38.0,
+              175.0
+            ],
+            [
+              110.0,
+              175.0
+            ],
+            [
+              110.0,
+              182.0
+            ],
+            [
+              38.0,
+              181.0
+            ]
+          ]
+        },
+        {
+          "text": "scalp benefits",
+          "confidence": 0.9585088193416595,
+          "polygon": [
+            [
+              25.0,
+              231.0
+            ],
+            [
+              131.0,
+              230.0
+            ],
+            [
+              131.0,
+              247.0
+            ],
+            [
+              25.0,
+              248.0
+            ]
+          ]
+        },
+        {
+          "text": "BALANCING SHAMPOO",
+          "confidence": 0.9776410811087665,
+          "polygon": [
+            [
+              35.0,
+              267.0
+            ],
+            [
+              122.0,
+              268.0
+            ],
+            [
+              122.0,
+              278.0
+            ],
+            [
+              35.0,
+              277.0
+            ]
+          ]
+        },
+        {
+          "text": "SHAMPOOINGEQUILIBRANT",
+          "confidence": 0.9846578410693577,
+          "polygon": [
+            [
+              25.0,
+              280.0
+            ],
+            [
+              132.0,
+              280.0
+            ],
+            [
+              132.0,
+              291.0
+            ],
+            [
+              25.0,
+              291.0
+            ]
+          ]
+        },
+        {
+          "text": "e-cines hor  ",
+          "confidence": 0.6666145760279435,
+          "polygon": [
+            [
+              36.0,
+              413.0
+            ],
+            [
+              117.0,
+              412.0
+            ],
+            [
+              117.0,
+              422.0
+            ],
+            [
+              36.0,
+              423.0
+            ]
+          ]
+        },
+        {
+          "text": "hwetecce",
+          "confidence": 0.5766645930707455,
+          "polygon": [
+            [
+              42.0,
+              431.0
+            ],
+            [
+              109.0,
+              431.0
+            ],
+            [
+              109.0,
+              438.0
+            ],
+            [
+              42.0,
+              438.0
+            ]
+          ]
+        },
+        {
+          "text": "eltesescuee",
+          "confidence": 0.5601739910515872,
+          "polygon": [
+            [
+              43.0,
+              424.0
+            ],
+            [
+              109.0,
+              424.0
+            ],
+            [
+              109.0,
+              432.0
+            ],
+            [
+              43.0,
+              432.0
+            ]
+          ]
+        },
+        {
+          "text": "33.8oz/ozlig/1L",
+          "confidence": 0.7969607214132944,
+          "polygon": [
+            [
+              35.0,
+              453.0
+            ],
+            [
+              118.0,
+              454.0
+            ],
+            [
+              118.0,
+              467.0
+            ],
+            [
+              35.0,
+              466.0
+            ]
+          ]
+        }
+      ],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.44440409541130066,
+          "foreground_ratio": 0.3105875,
+          "rough_coverage": 0.3813697200392927,
+          "accepted": true
+        },
+        {
+          "index": 1,
+          "iou": 0.9841012358665466,
+          "foreground_ratio": 0.80175,
+          "rough_coverage": 0.984436394891945,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.9815705418586731,
+          "foreground_ratio": 0.7987875,
+          "rough_coverage": 0.9808294449901768,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 1,
+      "text_regions_reviewed": false,
+      "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B00BDJODWI/review_overlay.png",
+      "observed_seconds": 1.5823387150012422
+    },
+    "B00HHP71JY": {
+      "id": "B00HHP71JY",
+      "identity": {
+        "image_sha256": "bafdeacc0deef6990db751cc9809cd48a67ea47e9265012457b43137582347ea",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+          "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/bafdeacc0deef6990db751cc9809cd48a67ea47e9265012457b43137582347ea.jpg",
+      "title": "Lotte Cancho Korean Favourite Chocolate Snack Cookies Kids Snack (Pack of 3)",
+      "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B00HHP71JY/foreground.png",
+      "foreground_mask_sha256": "50e6b4f595dc6187c914aff1bff11b26ae38271dbd57fc1f29458510fa0811f8",
+      "boxes": [
+        [
+          82,
+          18,
+          419,
+          481
+        ]
+      ],
+      "text_regions": [
+        [
+          0.236,
+          0.218,
+          0.384,
+          0.29
+        ],
+        [
+          0.232,
+          0.336,
+          0.788,
+          0.634
+        ],
+        [
+          0.356,
+          0.59,
+          0.488,
+          0.654
+        ]
+      ],
+      "ocr": [
+        {
+          "text": "LOTTE",
+          "confidence": 0.9942505717277527,
+          "polygon": [
+            [
+              122.0,
+              112.0
+            ],
+            [
+              189.0,
+              116.0
+            ],
+            [
+              188.0,
+              142.0
+            ],
+            [
+              121.0,
+              138.0
+            ]
+          ]
+        },
+        {
+          "text": "Kancho",
+          "confidence": 0.942110002040863,
+          "polygon": [
+            [
+              128.0,
+              171.0
+            ],
+            [
+              391.0,
+              189.0
+            ],
+            [
+              382.0,
+              314.0
+            ],
+            [
+              119.0,
+              296.0
+            ]
+          ]
+        },
+        {
+          "text": "CHOCO",
+          "confidence": 0.9915220737457275,
+          "polygon": [
+            [
+              183.0,
+              298.0
+            ],
+            [
+              241.0,
+              303.0
+            ],
+            [
+              239.0,
+              324.0
+            ],
+            [
+              181.0,
+              319.0
+            ]
+          ]
+        }
+      ],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.710913896560669,
+          "foreground_ratio": 0.149548,
+          "rough_coverage": 0.3166104910147186,
+          "accepted": true
+        },
+        {
+          "index": 1,
+          "iou": 0.992026150226593,
+          "foreground_ratio": 0.470996,
+          "rough_coverage": 0.9889822326857607,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.990282416343689,
+          "foreground_ratio": 0.46938,
+          "rough_coverage": 0.9855693501126336,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 1,
+      "text_regions_reviewed": false,
+      "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B00HHP71JY/review_overlay.png",
+      "observed_seconds": 0.6439315710013034
+    },
+    "B01460C2I2": {
+      "id": "B01460C2I2",
+      "identity": {
+        "image_sha256": "c5af2ad55c9b05fdba76c36316aa3088a43c286fe6ccab7858ccd2d14cd9c9a6",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+          "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/c5af2ad55c9b05fdba76c36316aa3088a43c286fe6ccab7858ccd2d14cd9c9a6.jpg",
+      "title": "S-noilite Clip in Hair Extension Human Hair Double Weft 8pcs 150g 20 Inch Jet Black Clip in Real Human Hair Extension for Women Adding Natural Volume Thick Clip in Extension #1",
+      "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B01460C2I2/foreground.png",
+      "foreground_mask_sha256": "fa418b2438b499089bd2e573a6550e9278bb1dfe0936ceba8e33aecf79792e2c",
+      "boxes": [
+        [
+          10,
+          13,
+          482,
+          499
+        ]
+      ],
+      "text_regions": [],
+      "ocr": [],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.4475463926792145,
+          "foreground_ratio": 0.088996,
+          "rough_coverage": 0.14206795248435306,
+          "accepted": false
+        },
+        {
+          "index": 1,
+          "iou": 0.8746543526649475,
+          "foreground_ratio": 0.611764,
+          "rough_coverage": 0.9754821816323924,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.7915917038917542,
+          "foreground_ratio": 0.586312,
+          "rough_coverage": 0.9358347170775323,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 1,
+      "text_regions_reviewed": false,
+      "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B01460C2I2/review_overlay.png",
+      "observed_seconds": 0.5792941469990183
+    },
+    "B01LML1VXU": {
+      "id": "B01LML1VXU",
+      "identity": {
+        "image_sha256": "4ab746e0c4f3ff84abd731926a23872c3f6bb17a4b49c4fe00c2ac77a432f515",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+          "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/4ab746e0c4f3ff84abd731926a23872c3f6bb17a4b49c4fe00c2ac77a432f515.jpg",
+      "title": "LOREX LBV-2521 1080p HD Bullet Security Camera",
+      "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B01LML1VXU/foreground.png",
+      "foreground_mask_sha256": "1bfb608c529452027e0ccc576798725411dff3fd2c6376e12fb74beb3f413d24",
+      "boxes": [
+        [
+          81,
+          9,
+          397,
+          311
+        ]
+      ],
+      "text_regions": [
+        [
+          0.516,
+          0.46546546546546547,
+          0.624,
+          0.6126126126126126
+        ],
+        [
+          0.528,
+          0.5195195195195195,
+          0.616,
+          0.6396396396396397
+        ]
+      ],
+      "ocr": [
+        {
+          "text": "ELOREX",
+          "confidence": 0.8888100037972132,
+          "polygon": [
+            [
+              261.0,
+              188.0
+            ],
+            [
+              299.0,
+              158.0
+            ],
+            [
+              309.0,
+              170.0
+            ],
+            [
+              271.0,
+              201.0
+            ]
+          ]
+        },
+        {
+          "text": "1000HD",
+          "confidence": 0.8086330741643906,
+          "polygon": [
+            [
+              267.0,
+              198.0
+            ],
+            [
+              297.0,
+              176.0
+            ],
+            [
+              305.0,
+              188.0
+            ],
+            [
+              275.0,
+              210.0
+            ]
+          ]
+        }
+      ],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.8306884765625,
+          "foreground_ratio": 0.1565825825825826,
+          "rough_coverage": 0.539250876229889,
+          "accepted": true
+        },
+        {
+          "index": 1,
+          "iou": 0.98574298620224,
+          "foreground_ratio": 0.28939339339339337,
+          "rough_coverage": 0.9896752670917613,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.987011194229126,
+          "foreground_ratio": 0.2877897897897898,
+          "rough_coverage": 0.9846079135171657,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 2,
+      "text_regions_reviewed": false,
+      "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B01LML1VXU/review_overlay.png",
+      "observed_seconds": 0.6199026980029885
+    },
+    "B01N47U1VI": {
+      "id": "B01N47U1VI",
+      "identity": {
+        "image_sha256": "abb62690253646b100a1f9386c4898532613e79dc0b86d8c593f10bfe4be61da",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+          "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/abb62690253646b100a1f9386c4898532613e79dc0b86d8c593f10bfe4be61da.jpg",
+      "title": "BuyTVProducts4Less Touch of ECO Solar/Battery Powered 2x3W Bluetooth Speaker Splashproof Portable Wireless MP3 Player with Built-in Micphone, FM Radio/MicroSD Card (Red)",
+      "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B01N47U1VI/foreground.png",
+      "foreground_mask_sha256": "e86ff26eef9a7d96cd6a9dc18a4d874d1ea29098b09ecea953267bbeb0231670",
+      "boxes": [
+        [
+          0,
+          0,
+          499,
+          348
+        ]
+      ],
+      "text_regions": [
+        [
+          0.382,
+          0.6475644699140402,
+          0.482,
+          0.8137535816618912
+        ]
+      ],
+      "ocr": [
+        {
+          "text": "UJBOOM",
+          "confidence": 0.8340583642323812,
+          "polygon": [
+            [
+              194.0,
+              270.0
+            ],
+            [
+              223.0,
+              229.0
+            ],
+            [
+              238.0,
+              239.0
+            ],
+            [
+              210.0,
+              281.0
+            ]
+          ]
+        }
+      ],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.1936189979314804,
+          "foreground_ratio": 0.016068767908309457,
+          "rough_coverage": 0.004965287321670819,
+          "accepted": false
+        },
+        {
+          "index": 1,
+          "iou": 0.9603632688522339,
+          "foreground_ratio": 0.46584527220630373,
+          "rough_coverage": 0.3333658441431776,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.990564227104187,
+          "foreground_ratio": 0.464378223495702,
+          "rough_coverage": 0.33275404981247175,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 2,
+      "text_regions_reviewed": false,
+      "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B01N47U1VI/review_overlay.png",
+      "observed_seconds": 0.6468203929980518
+    },
+    "B07BC7JMPL": {
+      "id": "B07BC7JMPL",
+      "identity": {
+        "image_sha256": "55ee7ea2a6a6b5c65ccab1b94811e98fed3b2d01ca1f314188f056b9d0bd43ce",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+          "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/55ee7ea2a6a6b5c65ccab1b94811e98fed3b2d01ca1f314188f056b9d0bd43ce.jpg",
+      "title": "Perstar Loose Wave Human Hair Bundles Curly Wave Bundles Unprocessed Brazilian Virgin Hair Extensions 100% Real Human Hair Loose Wave 5 Bundles Remy Virgin Hair Bundles Natural Wavy20 22 24 26 26",
+      "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B07BC7JMPL/foreground.png",
+      "foreground_mask_sha256": "1a2f12df9ba8208c8070371a89e9c906e10e27cf5b872f3f5efad7cd73446b8c",
+      "boxes": [
+        [
+          0,
+          17,
+          256,
+          497
+        ]
+      ],
+      "text_regions": [],
+      "ocr": [],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.2690683901309967,
+          "foreground_ratio": 0.137684,
+          "rough_coverage": 0.2204339047270854,
+          "accepted": false
+        },
+        {
+          "index": 1,
+          "iou": 0.832831859588623,
+          "foreground_ratio": 0.495368,
+          "rough_coverage": 0.6871016792827527,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.935181200504303,
+          "foreground_ratio": 0.428552,
+          "rough_coverage": 0.6063116436364241,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 2,
+      "text_regions_reviewed": false,
+      "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B07BC7JMPL/review_overlay.png",
+      "observed_seconds": 0.524467219998769
+    },
+    "B07GDZQ68V": {
+      "id": "B07GDZQ68V",
+      "identity": {
+        "image_sha256": "7d92c26259daa206212651d01b6af57fdcf00266a024fdf0e6d509bb3c8fdf5a",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+          "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/7d92c26259daa206212651d01b6af57fdcf00266a024fdf0e6d509bb3c8fdf5a.jpg",
+      "title": "Christopher Knight Home Maye Traditional Home Office Chair, Wheat and Chrome",
+      "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B07GDZQ68V/foreground.png",
+      "foreground_mask_sha256": "febdf483f5aae698996cac7f1a86337d77c57525cd61483c18ff37c9ada3f158",
+      "boxes": [
+        [
+          103,
+          60,
+          419,
+          457
+        ]
+      ],
+      "text_regions": [],
+      "ocr": [],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.9349449872970581,
+          "foreground_ratio": 0.204832,
+          "rough_coverage": 0.8208641519726603,
+          "accepted": true
+        },
+        {
+          "index": 1,
+          "iou": 0.9762440919876099,
+          "foreground_ratio": 0.234844,
+          "rough_coverage": 0.9378920852920885,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.9756255745887756,
+          "foreground_ratio": 0.23374,
+          "rough_coverage": 0.9343623148876089,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 1,
+      "text_regions_reviewed": false,
+      "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B07GDZQ68V/review_overlay.png",
+      "observed_seconds": 0.5535677730003954
+    },
+    "B086PW7TWX": {
+      "id": "B086PW7TWX",
+      "identity": {
+        "image_sha256": "b73bc5fcbb1a2fd7fe322cba4dca3543f427948a9a65fff17a0e058de19e8eb4",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+          "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/b73bc5fcbb1a2fd7fe322cba4dca3543f427948a9a65fff17a0e058de19e8eb4.jpg",
+      "title": "Windows Treatment Blackout Curtains Grommet Drapes for Boys/Girls Kids Bedroom DRINKES ARE ON ME Vintage Wood Board Texture Printed Room Darkening Curtains for Livingroom/Office, 1 Panel 52x45in",
+      "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B086PW7TWX/foreground.png",
+      "foreground_mask_sha256": "46c76f0d8ac0dba09a8725dc73fc83275b322095d654a1a21b1038596c18c561",
+      "boxes": [
+        [
+          67,
+          7,
+          417,
+          493
+        ]
+      ],
+      "text_regions": [
+        [
+          0.292,
+          0.222,
+          0.704,
+          0.386
+        ],
+        [
+          0.388,
+          0.414,
+          0.58,
+          0.532
+        ],
+        [
+          0.296,
+          0.576,
+          0.664,
+          0.74
+        ]
+      ],
+      "ocr": [
+        {
+          "text": "DRINKS",
+          "confidence": 0.9843482871850332,
+          "polygon": [
+            [
+              149.0,
+              116.0
+            ],
+            [
+              348.0,
+              114.0
+            ],
+            [
+              349.0,
+              188.0
+            ],
+            [
+              149.0,
+              190.0
+            ]
+          ]
+        },
+        {
+          "text": "ARE",
+          "confidence": 0.989595909913381,
+          "polygon": [
+            [
+              197.0,
+              210.0
+            ],
+            [
+              287.0,
+              210.0
+            ],
+            [
+              287.0,
+              263.0
+            ],
+            [
+              197.0,
+              263.0
+            ]
+          ]
+        },
+        {
+          "text": "ON ME",
+          "confidence": 0.9103390097618103,
+          "polygon": [
+            [
+              151.0,
+              291.0
+            ],
+            [
+              329.0,
+              291.0
+            ],
+            [
+              329.0,
+              367.0
+            ],
+            [
+              151.0,
+              367.0
+            ]
+          ]
+        }
+      ],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.19971348345279694,
+          "foreground_ratio": 0.180932,
+          "rough_coverage": 0.3150964559660575,
+          "accepted": true
+        },
+        {
+          "index": 1,
+          "iou": 0.9871031641960144,
+          "foreground_ratio": 0.563752,
+          "rough_coverage": 0.9807366741676362,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.982342541217804,
+          "foreground_ratio": 0.561592,
+          "rough_coverage": 0.9772602186195893,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 1,
+      "text_regions_reviewed": false,
+      "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B086PW7TWX/review_overlay.png",
+      "observed_seconds": 0.6030510310010868
+    },
+    "B08V134QWR": {
+      "id": "B08V134QWR",
+      "identity": {
+        "image_sha256": "5351fe5727bf6d9d8313c8262c28589948c84856f535b31f6f58d4d44d68166b",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+          "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/5351fe5727bf6d9d8313c8262c28589948c84856f535b31f6f58d4d44d68166b.jpg",
+      "title": "PTZ Security Camera Outdoor 30X Optical Zoom Camera WiFi Wireless 5MP RTSP IP Camera 1000FT Night Vision Auto Tracking Emergency Strobe Light Alarm Human Detection 2-Way Audio IP66 Waterproof",
+      "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B08V134QWR/foreground.png",
+      "foreground_mask_sha256": "4a081c92d407c33150c4cafdb8a9a3fae247d502d53dc6c7daa640efda87b248",
+      "boxes": [
+        [
+          15,
+          65,
+          490,
+          465
+        ]
+      ],
+      "text_regions": [
+        [
+          0.466,
+          0.53,
+          0.634,
+          0.584
+        ]
+      ],
+      "ocr": [
+        {
+          "text": "HXVIEW",
+          "confidence": 0.9936245878537496,
+          "polygon": [
+            [
+              236.0,
+              268.0
+            ],
+            [
+              314.0,
+              268.0
+            ],
+            [
+              314.0,
+              289.0
+            ],
+            [
+              236.0,
+              289.0
+            ]
+          ]
+        }
+      ],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.8373737931251526,
+          "foreground_ratio": 0.216072,
+          "rough_coverage": 0.492658468359107,
+          "accepted": true
+        },
+        {
+          "index": 1,
+          "iou": 0.9566906690597534,
+          "foreground_ratio": 0.395244,
+          "rough_coverage": 0.9553702433102866,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.9567664861679077,
+          "foreground_ratio": 0.351516,
+          "rough_coverage": 0.8445664221248746,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 2,
+      "text_regions_reviewed": false,
+      "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B08V134QWR/review_overlay.png",
+      "observed_seconds": 0.5758259950016509
+    },
+    "B08WJB1XDD": {
+      "id": "B08WJB1XDD",
+      "identity": {
+        "image_sha256": "db3943d881d90ad1c02d8f68a9d84e10ec5dad9a1121bff7b689c995823840d7",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+          "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/db3943d881d90ad1c02d8f68a9d84e10ec5dad9a1121bff7b689c995823840d7.jpg",
+      "title": "Pantene Gold Series Shampoo & Conditioner Moisture Boost with Argan Oil, for Natural, Coily, and Curly Hair, 29.2 Oz Each",
+      "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B08WJB1XDD/foreground.png",
+      "foreground_mask_sha256": "66d5b0927b7256971be11c535af8ec4d947a5f67e371dc2fbc713c1db9240f15",
+      "boxes": [
+        [
+          38,
+          13,
+          462,
+          485
+        ]
+      ],
+      "text_regions": [
+        [
+          0.178,
+          0.334,
+          0.394,
+          0.378
+        ],
+        [
+          0.61,
+          0.334,
+          0.83,
+          0.378
+        ],
+        [
+          0.236,
+          0.37,
+          0.33,
+          0.408
+        ],
+        [
+          0.672,
+          0.37,
+          0.766,
+          0.408
+        ],
+        [
+          0.198,
+          0.408,
+          0.368,
+          0.45
+        ],
+        [
+          0.634,
+          0.408,
+          0.804,
+          0.45
+        ],
+        [
+          0.224,
+          0.432,
+          0.342,
+          0.466
+        ],
+        [
+          0.642,
+          0.432,
+          0.796,
+          0.466
+        ],
+        [
+          0.194,
+          0.47,
+          0.372,
+          0.504
+        ],
+        [
+          0.204,
+          0.488,
+          0.364,
+          0.518
+        ],
+        [
+          0.63,
+          0.47,
+          0.808,
+          0.504
+        ],
+        [
+          0.204,
+          0.498,
+          0.364,
+          0.532
+        ],
+        [
+          0.646,
+          0.5,
+          0.79,
+          0.53
+        ],
+        [
+          0.22,
+          0.518,
+          0.348,
+          0.55
+        ],
+        [
+          0.216,
+          0.818,
+          0.354,
+          0.858
+        ],
+        [
+          0.654,
+          0.82,
+          0.788,
+          0.856
+        ]
+      ],
+      "ocr": [
+        {
+          "text": "GOLD SERIES",
+          "confidence": 0.9309904466975819,
+          "polygon": [
+            [
+              92.0,
+              170.0
+            ],
+            [
+              194.0,
+              172.0
+            ],
+            [
+              194.0,
+              186.0
+            ],
+            [
+              92.0,
+              185.0
+            ]
+          ]
+        },
+        {
+          "text": "GOLD SERIES",
+          "confidence": 0.9774925925514915,
+          "polygon": [
+            [
+              309.0,
+              170.0
+            ],
+            [
+              412.0,
+              172.0
+            ],
+            [
+              412.0,
+              186.0
+            ],
+            [
+              308.0,
+              185.0
+            ]
+          ]
+        },
+        {
+          "text": "PANTENE",
+          "confidence": 0.9823405742645264,
+          "polygon": [
+            [
+              121.0,
+              188.0
+            ],
+            [
+              162.0,
+              188.0
+            ],
+            [
+              162.0,
+              201.0
+            ],
+            [
+              121.0,
+              201.0
+            ]
+          ]
+        },
+        {
+          "text": "PANTENE",
+          "confidence": 0.9937571883201599,
+          "polygon": [
+            [
+              339.0,
+              188.0
+            ],
+            [
+              380.0,
+              188.0
+            ],
+            [
+              380.0,
+              201.0
+            ],
+            [
+              339.0,
+              201.0
+            ]
+          ]
+        },
+        {
+          "text": "moistureboost",
+          "confidence": 0.9903651888553913,
+          "polygon": [
+            [
+              102.0,
+              207.0
+            ],
+            [
+              181.0,
+              207.0
+            ],
+            [
+              181.0,
+              222.0
+            ],
+            [
+              102.0,
+              222.0
+            ]
+          ]
+        },
+        {
+          "text": "moistureboost",
+          "confidence": 0.9835854264406058,
+          "polygon": [
+            [
+              320.0,
+              207.0
+            ],
+            [
+              399.0,
+              207.0
+            ],
+            [
+              399.0,
+              222.0
+            ],
+            [
+              320.0,
+              222.0
+            ]
+          ]
+        },
+        {
+          "text": "SHAMPOO",
+          "confidence": 0.9917266028267997,
+          "polygon": [
+            [
+              115.0,
+              219.0
+            ],
+            [
+              168.0,
+              219.0
+            ],
+            [
+              168.0,
+              230.0
+            ],
+            [
+              115.0,
+              230.0
+            ]
+          ]
+        },
+        {
+          "text": "CONDITIONER",
+          "confidence": 0.9959686506878246,
+          "polygon": [
+            [
+              324.0,
+              219.0
+            ],
+            [
+              395.0,
+              219.0
+            ],
+            [
+              395.0,
+              230.0
+            ],
+            [
+              324.0,
+              230.0
+            ]
+          ]
+        },
+        {
+          "text": "INFUSED WITHARGANOIL",
+          "confidence": 0.9223551124334335,
+          "polygon": [
+            [
+              100.0,
+              238.0
+            ],
+            [
+              183.0,
+              238.0
+            ],
+            [
+              183.0,
+              249.0
+            ],
+            [
+              100.0,
+              249.0
+            ]
+          ]
+        },
+        {
+          "text": "Cetydnnendmteny em",
+          "confidence": 0.6307200839122137,
+          "polygon": [
+            [
+              105.0,
+              247.0
+            ],
+            [
+              179.0,
+              247.0
+            ],
+            [
+              179.0,
+              256.0
+            ],
+            [
+              105.0,
+              256.0
+            ]
+          ]
+        },
+        {
+          "text": "INFUSEDWITHARGAN OIL",
+          "confidence": 0.9292085781693459,
+          "polygon": [
+            [
+              318.0,
+              238.0
+            ],
+            [
+              401.0,
+              238.0
+            ],
+            [
+              401.0,
+              249.0
+            ],
+            [
+              318.0,
+              249.0
+            ]
+          ]
+        },
+        {
+          "text": "lrogr'gue",
+          "confidence": 0.5039636310603883,
+          "polygon": [
+            [
+              105.0,
+              252.0
+            ],
+            [
+              179.0,
+              252.0
+            ],
+            [
+              179.0,
+              263.0
+            ],
+            [
+              105.0,
+              263.0
+            ]
+          ]
+        },
+        {
+          "text": "teintnt tad dg",
+          "confidence": 0.6196531908852714,
+          "polygon": [
+            [
+              326.0,
+              253.0
+            ],
+            [
+              392.0,
+              253.0
+            ],
+            [
+              392.0,
+              262.0
+            ],
+            [
+              326.0,
+              262.0
+            ]
+          ]
+        },
+        {
+          "text": "frtranhAar",
+          "confidence": 0.6414384514093399,
+          "polygon": [
+            [
+              113.0,
+              262.0
+            ],
+            [
+              171.0,
+              262.0
+            ],
+            [
+              171.0,
+              272.0
+            ],
+            [
+              113.0,
+              272.0
+            ]
+          ]
+        },
+        {
+          "text": "292FL02B65mL）",
+          "confidence": 0.800566737468426,
+          "polygon": [
+            [
+              111.0,
+              412.0
+            ],
+            [
+              174.0,
+              412.0
+            ],
+            [
+              174.0,
+              426.0
+            ],
+            [
+              111.0,
+              426.0
+            ]
+          ]
+        },
+        {
+          "text": "29.2FL0Z（865mL)",
+          "confidence": 0.90218971769015,
+          "polygon": [
+            [
+              330.0,
+              413.0
+            ],
+            [
+              391.0,
+              413.0
+            ],
+            [
+              391.0,
+              425.0
+            ],
+            [
+              330.0,
+              425.0
+            ]
+          ]
+        }
+      ],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.5172437429428101,
+          "foreground_ratio": 0.193388,
+          "rough_coverage": 0.2837686143003297,
+          "accepted": false
+        },
+        {
+          "index": 1,
+          "iou": 0.9724251627922058,
+          "foreground_ratio": 0.669876,
+          "rough_coverage": 0.9723343185176765,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.9665349721908569,
+          "foreground_ratio": 0.431276,
+          "rough_coverage": 0.6977236557917472,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 1,
+      "text_regions_reviewed": false,
+      "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B08WJB1XDD/review_overlay.png",
+      "observed_seconds": 0.836399193998659
+    },
+    "B08Z8MHWVS": {
+      "id": "B08Z8MHWVS",
+      "identity": {
+        "image_sha256": "cead69b311e6005050a6c8b1cdea7abff1a12be0c6500386cbabe4638f254bd3",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+          "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/cead69b311e6005050a6c8b1cdea7abff1a12be0c6500386cbabe4638f254bd3.jpg",
+      "title": "Eggless Raw Edible Cookie Dough, Edible Frozen Cookie Dough - Big Dipper Dough Co: (2 Pints-ChocoChip & CookienCream)",
+      "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B08Z8MHWVS/foreground.png",
+      "foreground_mask_sha256": "0b68e166e11f25f0426f6310947d9624b1910cc7b68d12356af1ec1a91d2ef3e",
+      "boxes": [
+        [
+          58,
+          28,
+          453,
+          463
+        ]
+      ],
+      "text_regions": [
+        [
+          0.432,
+          0.078,
+          0.576,
+          0.264
+        ],
+        [
+          0.412,
+          0.256,
+          0.598,
+          0.33
+        ],
+        [
+          0.146,
+          0.502,
+          0.362,
+          0.58
+        ],
+        [
+          0.398,
+          0.534,
+          0.488,
+          0.608
+        ],
+        [
+          0.674,
+          0.546,
+          0.752,
+          0.594
+        ],
+        [
+          0.742,
+          0.536,
+          0.784,
+          0.578
+        ],
+        [
+          0.146,
+          0.572,
+          0.258,
+          0.642
+        ],
+        [
+          0.544,
+          0.582,
+          0.598,
+          0.618
+        ],
+        [
+          0.756,
+          0.568,
+          0.84,
+          0.69
+        ],
+        [
+          0.538,
+          0.786,
+          0.846,
+          0.852
+        ],
+        [
+          0.22,
+          0.824,
+          0.488,
+          0.886
+        ],
+        [
+          0.606,
+          0.826,
+          0.786,
+          0.868
+        ],
+        [
+          0.228,
+          0.856,
+          0.478,
+          0.91
+        ]
+      ],
+      "ocr": [
+        {
+          "text": "2",
+          "confidence": 0.9997225403785706,
+          "polygon": [
+            [
+              219.0,
+              42.0
+            ],
+            [
+              285.0,
+              42.0
+            ],
+            [
+              285.0,
+              129.0
+            ],
+            [
+              219.0,
+              129.0
+            ]
+          ]
+        },
+        {
+          "text": "PINTS",
+          "confidence": 0.9286361575126648,
+          "polygon": [
+            [
+              209.0,
+              131.0
+            ],
+            [
+              296.0,
+              131.0
+            ],
+            [
+              296.0,
+              162.0
+            ],
+            [
+              209.0,
+              162.0
+            ]
+          ]
+        },
+        {
+          "text": "Binipper",
+          "confidence": 0.8286681436002254,
+          "polygon": [
+            [
+              77.0,
+              254.0
+            ],
+            [
+              178.0,
+              257.0
+            ],
+            [
+              177.0,
+              287.0
+            ],
+            [
+              76.0,
+              284.0
+            ]
+          ]
+        },
+        {
+          "text": "EDIBL",
+          "confidence": 0.9740821838378906,
+          "polygon": [
+            [
+              209.0,
+              270.0
+            ],
+            [
+              241.0,
+              286.0
+            ],
+            [
+              234.0,
+              301.0
+            ],
+            [
+              202.0,
+              285.0
+            ]
+          ]
+        },
+        {
+          "text": "cOO",
+          "confidence": 0.5796535412470499,
+          "polygon": [
+            [
+              341.0,
+              276.0
+            ],
+            [
+              373.0,
+              279.0
+            ],
+            [
+              371.0,
+              294.0
+            ],
+            [
+              340.0,
+              291.0
+            ]
+          ]
+        },
+        {
+          "text": "ED",
+          "confidence": 0.9760150909423828,
+          "polygon": [
+            [
+              374.0,
+              271.0
+            ],
+            [
+              389.0,
+              271.0
+            ],
+            [
+              389.0,
+              286.0
+            ],
+            [
+              374.0,
+              286.0
+            ]
+          ]
+        },
+        {
+          "text": "OONCO",
+          "confidence": 0.6785577774047852,
+          "polygon": [
+            [
+              79.0,
+              289.0
+            ],
+            [
+              126.0,
+              294.0
+            ],
+            [
+              124.0,
+              318.0
+            ],
+            [
+              76.0,
+              312.0
+            ]
+          ]
+        },
+        {
+          "text": "HCO.",
+          "confidence": 0.8850606083869934,
+          "polygon": [
+            [
+              276.0,
+              294.0
+            ],
+            [
+              296.0,
+              296.0
+            ],
+            [
+              296.0,
+              306.0
+            ],
+            [
+              275.0,
+              304.0
+            ]
+          ]
+        },
+        {
+          "text": "DOUGH",
+          "confidence": 0.9768640398979187,
+          "polygon": [
+            [
+              398.0,
+              287.0
+            ],
+            [
+              417.0,
+              336.0
+            ],
+            [
+              400.0,
+              342.0
+            ],
+            [
+              381.0,
+              293.0
+            ]
+          ]
+        },
+        {
+          "text": "GALACTIC FUSION",
+          "confidence": 0.922193956375122,
+          "polygon": [
+            [
+              272.0,
+              397.0
+            ],
+            [
+              420.0,
+              396.0
+            ],
+            [
+              420.0,
+              421.0
+            ],
+            [
+              273.0,
+              423.0
+            ]
+          ]
+        },
+        {
+          "text": "ROCKET CHIP",
+          "confidence": 0.9685123833743009,
+          "polygon": [
+            [
+              113.0,
+              416.0
+            ],
+            [
+              241.0,
+              415.0
+            ],
+            [
+              241.0,
+              439.0
+            ],
+            [
+              114.0,
+              440.0
+            ]
+          ]
+        },
+        {
+          "text": "COOKIESN'CREAN",
+          "confidence": 0.9248635981764112,
+          "polygon": [
+            [
+              306.0,
+              417.0
+            ],
+            [
+              390.0,
+              416.0
+            ],
+            [
+              390.0,
+              430.0
+            ],
+            [
+              306.0,
+              431.0
+            ]
+          ]
+        },
+        {
+          "text": "CHOCOLATECHIPCOOKIE",
+          "confidence": 0.9916262312939292,
+          "polygon": [
+            [
+              117.0,
+              434.0
+            ],
+            [
+              235.0,
+              431.0
+            ],
+            [
+              236.0,
+              450.0
+            ],
+            [
+              118.0,
+              452.0
+            ]
+          ]
+        }
+      ],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.699643611907959,
+          "foreground_ratio": 0.196876,
+          "rough_coverage": 0.39761563269468325,
+          "accepted": true
+        },
+        {
+          "index": 1,
+          "iou": 0.968802809715271,
+          "foreground_ratio": 0.47964,
+          "rough_coverage": 0.9723592468848191,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.9517127275466919,
+          "foreground_ratio": 0.45394,
+          "rough_coverage": 0.9228313947222245,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 1,
+      "text_regions_reviewed": false,
+      "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B08Z8MHWVS/review_overlay.png",
+      "observed_seconds": 0.7479745649980032
+    },
+    "B09CYFD5BX": {
+      "id": "B09CYFD5BX",
+      "identity": {
+        "image_sha256": "8fc2834a77b8ecf235f5bec9c1f335830d1de142843cda13284cdfe36579000d",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+          "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/8fc2834a77b8ecf235f5bec9c1f335830d1de142843cda13284cdfe36579000d.jpg",
+      "title": "LTHDD Bar Stool Swivel Barber Chair Hydraulic Barber Chairs Heavy Duty 360 Degrees Rolling Salon Chair for Hair Stylist Tattoo Chair Salon Equipment,Blue,1 (Color : Black, Size : 1)",
+      "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09CYFD5BX/foreground.png",
+      "foreground_mask_sha256": "850de84170dca01a372dd2fc7e12d2247493f0e8e66bfa9990716b13c22317f2",
+      "boxes": [
+        [
+          5,
+          5,
+          399,
+          496
+        ]
+      ],
+      "text_regions": [],
+      "ocr": [],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.7870935201644897,
+          "foreground_ratio": 0.3438222222222222,
+          "rough_coverage": 0.6923681822764391,
+          "accepted": true
+        },
+        {
+          "index": 1,
+          "iou": 0.9651498794555664,
+          "foreground_ratio": 0.45457283950617283,
+          "rough_coverage": 0.9101320697650973,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.9572311639785767,
+          "foreground_ratio": 0.43610864197530863,
+          "rough_coverage": 0.878969654199012,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 1,
+      "text_regions_reviewed": false,
+      "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09CYFD5BX/review_overlay.png",
+      "observed_seconds": 0.611676365006133
+    },
+    "B09HH96NJY": {
+      "id": "B09HH96NJY",
+      "identity": {
+        "image_sha256": "acf3f5d8944c118d04e2ba456926f4750e87198bbd3201302a34e52e44bd6039",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+          "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/acf3f5d8944c118d04e2ba456926f4750e87198bbd3201302a34e52e44bd6039.jpg",
+      "title": "Womens High Rise Jeans Wide Leg Pants Patchwork Straight Boyfriend Jeans Y2K 90s E-Girl Wild Baggy Trousers Denim Pants",
+      "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09HH96NJY/foreground.png",
+      "foreground_mask_sha256": "40fed037c0b6ad79f495318b190145a4e00566b50891d615bab9bef697772d60",
+      "boxes": [
+        [
+          157,
+          14,
+          326,
+          489
+        ]
+      ],
+      "text_regions": [],
+      "ocr": [],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.8469589352607727,
+          "foreground_ratio": 0.146092,
+          "rough_coverage": 0.7901946334908319,
+          "accepted": true
+        },
+        {
+          "index": 1,
+          "iou": 0.980236828327179,
+          "foreground_ratio": 0.182656,
+          "rough_coverage": 0.9864970306471889,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.9805395603179932,
+          "foreground_ratio": 0.1816,
+          "rough_coverage": 0.9809484589709133,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 2,
+      "text_regions_reviewed": false,
+      "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09HH96NJY/review_overlay.png",
+      "observed_seconds": 0.5562096199937514
+    },
+    "B09J81RMLD": {
+      "id": "B09J81RMLD",
+      "identity": {
+        "image_sha256": "893e98a639703a3ebad6a4cb6a31595156b896a3cb519fcfe31511a132866f14",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+          "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/893e98a639703a3ebad6a4cb6a31595156b896a3cb519fcfe31511a132866f14.jpg",
+      "title": "Baby U Shaped Toothbrush for Aged 2-12 with 360° Soft Silicone Brush Heads Handle Kids Cute Teeth Whitening Massage Tool",
+      "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09J81RMLD/foreground.png",
+      "foreground_mask_sha256": "3f42cd53612146ebdc66522f17b88bfd0f0159ae8e4fd1fa9a366cb6a695ad87",
+      "boxes": [
+        [
+          135,
+          51,
+          349,
+          446
+        ]
+      ],
+      "text_regions": [],
+      "ocr": [],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.7877014875411987,
+          "foreground_ratio": 0.092352,
+          "rough_coverage": 0.6192320103259116,
+          "accepted": true
+        },
+        {
+          "index": 1,
+          "iou": 0.9656690955162048,
+          "foreground_ratio": 0.151852,
+          "rough_coverage": 0.9650424868237065,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.9666442275047302,
+          "foreground_ratio": 0.149832,
+          "rough_coverage": 0.9530224803700118,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 2,
+      "text_regions_reviewed": false,
+      "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09J81RMLD/review_overlay.png",
+      "observed_seconds": 0.5866334649981582
+    },
+    "B09J89KXRJ": {
+      "id": "B09J89KXRJ",
+      "identity": {
+        "image_sha256": "646f603de154a3644550f9d642e49d37bfc781f75c4ab088c9938f71e6573883",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+          "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/646f603de154a3644550f9d642e49d37bfc781f75c4ab088c9938f71e6573883.jpg",
+      "title": "MOKINGTOP Women's Winter Sherpa Fleece Lined Jeans, Thick Cashmere Warm Pants High Waisted Warm Thermal Pants Leggings",
+      "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09J89KXRJ/foreground.png",
+      "foreground_mask_sha256": "babd73e7dc93c3280c315ba45dfcd867ddb7a5ffb5b927efc52d443bd29a35dc",
+      "boxes": [
+        [
+          144,
+          27,
+          355,
+          472
+        ]
+      ],
+      "text_regions": [],
+      "ocr": [],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.8092025518417358,
+          "foreground_ratio": 0.093008,
+          "rough_coverage": 0.411095984865897,
+          "accepted": true
+        },
+        {
+          "index": 1,
+          "iou": 0.976294994354248,
+          "foreground_ratio": 0.221504,
+          "rough_coverage": 0.9781651668110536,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.9769709706306458,
+          "foreground_ratio": 0.219704,
+          "rough_coverage": 0.9704213150403989,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 2,
+      "text_regions_reviewed": false,
+      "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09J89KXRJ/review_overlay.png",
+      "observed_seconds": 0.5497302130024764
+    },
+    "B09KRPJJC4": {
+      "id": "B09KRPJJC4",
+      "identity": {
+        "image_sha256": "ccea9d71487707336857f62b4b1ad78285aa6fc4150aa7d5cebf33a142541b87",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+          "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/ccea9d71487707336857f62b4b1ad78285aa6fc4150aa7d5cebf33a142541b87.jpg",
+      "title": "Sheer Curtains 2 Panels Sheer Window Covering Rod Pocket, Golden Retriever Voile Window Treatment Drapes for Bedroom Living Room Kitchen Christmas Barn Red Truck 52x96 inch,",
+      "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09KRPJJC4/foreground.png",
+      "foreground_mask_sha256": "d228886fc8a038148e5713bb0d187897dbc502a2050abaa60c3c816032958ed2",
+      "boxes": [
+        [
+          55,
+          14,
+          436,
+          482
+        ]
+      ],
+      "text_regions": [
+        [
+          0.314,
+          0.66,
+          0.682,
+          0.742
+        ]
+      ],
+      "ocr": [
+        {
+          "text": "MERRYORISTMAS",
+          "confidence": 0.9618366131415734,
+          "polygon": [
+            [
+              161.0,
+              333.0
+            ],
+            [
+              338.0,
+              334.0
+            ],
+            [
+              337.0,
+              368.0
+            ],
+            [
+              160.0,
+              367.0
+            ]
+          ]
+        }
+      ],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.7520935535430908,
+          "foreground_ratio": 0.09774,
+          "rough_coverage": 0.1593844897206358,
+          "accepted": false
+        },
+        {
+          "index": 1,
+          "iou": 0.8260695934295654,
+          "foreground_ratio": 0.406932,
+          "rough_coverage": 0.6587949331067328,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.7790965437889099,
+          "foreground_ratio": 0.266588,
+          "rough_coverage": 0.43333399205580697,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 1,
+      "text_regions_reviewed": false,
+      "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09KRPJJC4/review_overlay.png",
+      "observed_seconds": 0.5870742879997124
+    },
+    "B09MD5SZCX": {
+      "id": "B09MD5SZCX",
+      "identity": {
+        "image_sha256": "b2e2f81860429ed233c851c6406447e416287f18e3a8148996831da7bb9edfa1",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+          "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/b2e2f81860429ed233c851c6406447e416287f18e3a8148996831da7bb9edfa1.jpg",
+      "title": "EXCEART Tooth Brush 2Pcs C- Shape Toothbrushes Manual Tooth Brushes Oral Care Teeth Clean Tool (Assorted Color)",
+      "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09MD5SZCX/foreground.png",
+      "foreground_mask_sha256": "b721f9845ca912460d61f3e9776b36313ace3632db2612b73fb89ed6a08644f6",
+      "boxes": [
+        [
+          53,
+          38,
+          437,
+          489
+        ]
+      ],
+      "text_regions": [],
+      "ocr": [],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.7830198407173157,
+          "foreground_ratio": 0.03714,
+          "rough_coverage": 0.15732488393371513,
+          "accepted": false
+        },
+        {
+          "index": 1,
+          "iou": 0.7884731292724609,
+          "foreground_ratio": 0.269692,
+          "rough_coverage": 0.9664848012470771,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.7898479104042053,
+          "foreground_ratio": 0.179068,
+          "rough_coverage": 0.6413975397336406,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 2,
+      "text_regions_reviewed": false,
+      "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09MD5SZCX/review_overlay.png",
+      "observed_seconds": 0.5866681010011234
+    },
+    "B09P3RR62H": {
+      "id": "B09P3RR62H",
+      "identity": {
+        "image_sha256": "fd025d523f288b91eff6e3c5af7dbe74db99aef26a4da917c1647f2d817463f5",
+        "annotation_models": {
+          "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+          "ocr_version": "1.4.4",
+          "ocr_weights": {
+            "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+            "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+            "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+          },
+          "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+          "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+          "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+          "device": "cuda",
+          "model_loaded_once": true
+        }
+      },
+      "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/fd025d523f288b91eff6e3c5af7dbe74db99aef26a4da917c1647f2d817463f5.jpg",
+      "title": "Portable Wireless Bluetooth Speakers 7 LED Lights Patterns Wireless Speaker V5.0 Hi-Fi Bass Powerful Sound Built-in Microphone,with 2400mAh high Battery, HandsFree, Audio-Auxiliary (White, One Size)",
+      "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09P3RR62H/foreground.png",
+      "foreground_mask_sha256": "100e565ab6828381cf6f57b40ed0f27a2cb0fe17e09dd3f31137349294287a46",
+      "boxes": [
+        [
+          10,
+          161,
+          488,
+          359
+        ]
+      ],
+      "text_regions": [],
+      "ocr": [],
+      "segmentation_candidates": [
+        {
+          "index": 0,
+          "iou": 0.5166440606117249,
+          "foreground_ratio": 0.027404,
+          "rough_coverage": 0.12407031069954537,
+          "accepted": false
+        },
+        {
+          "index": 1,
+          "iou": 0.939053475856781,
+          "foreground_ratio": 0.212816,
+          "rough_coverage": 0.9835746160776015,
+          "accepted": true
+        },
+        {
+          "index": 2,
+          "iou": 0.9586843848228455,
+          "foreground_ratio": 0.189768,
+          "rough_coverage": 0.9215813622174268,
+          "accepted": true
+        }
+      ],
+      "selected_mask_index": 2,
+      "text_regions_reviewed": false,
+      "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09P3RR62H/review_overlay.png",
+      "observed_seconds": 0.5465265269958763
+    }
+  },
+  "failures": {},
+  "models": {
+    "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+    "ocr_version": "1.4.4",
+    "ocr_weights": {
+      "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+      "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+      "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+    },
+    "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+    "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+    "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+    "device": "cuda",
+    "model_loaded_once": true
+  }
+}

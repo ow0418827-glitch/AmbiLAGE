@@ -8,6 +8,7 @@ is omitted entirely; only the service's fixed effective value is recorded.
 from __future__ import annotations
 
 from datetime import datetime, timezone
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -16,6 +17,7 @@ import shutil
 from urllib import request, error
 from urllib.parse import urlsplit
 
+from src.experiments.exact_overlap_queries import DuplicateIndex, normalize as overlap_normalize
 from src.visual.io import save_json, sha256_file
 from .targets import content_sha256, text_sha256
 from .training_data import (QUERY_COUNTS, SPLIT_POLICY, build_target_concept_text,
@@ -75,16 +77,22 @@ def generate_paraphrases(descriptions, *, provider='minimax', model, base_url=DE
 
 
 def generate_evaluation_paraphrases(descriptions, *, model, provider='minimax', base_url=DEFAULT_BASE_URL,
-        api_key_env='MINIMAX_API_KEY', generate=False, request_fn=None, timeout=120):
+        api_key_env='MINIMAX_API_KEY', generate=False, request_fn=None, timeout=120,
+        target_char_range=None):
     """Use six independently selected evaluation rows with the public paraphrase adapter."""
+    low, high = target_char_range if target_char_range is not None else (110, 190)
+    guidance = (
+        f' Explicit category naming and concrete factual attributes are required; aim for {low}-{high} '
+        'characters matching detailed multi-attribute shopping queries without inventing brands or facts.'
+    )
     return _generate_paraphrases(descriptions, provider=provider, model=model, base_url=base_url,
         api_key_env=api_key_env, generate=generate, count=6, input_count=6,
         prompt_version='public_description_query_paraphrases_eval_v4', temperature=0.8,
-        request_fn=request_fn, timeout=timeout)
+        request_fn=request_fn, timeout=timeout, extra_guidance=guidance)
 
 
 def _generate_paraphrases(descriptions, *, provider, model, base_url, api_key_env, generate,
-        count, input_count, prompt_version, temperature, request_fn, timeout):
+        count, input_count, prompt_version, temperature, request_fn, timeout, extra_guidance=''):
     _require(provider in ('minimax', 'openai'), '仅支持明确登记的模型服务商')
     _require(isinstance(model, str) and bool(model.strip()), '必须显式指定实际改写模型，不自动替换')
     _require(temperature == 0.8 and not isinstance(temperature, bool), '改写请求温度固定为零点八')
@@ -123,7 +131,8 @@ def _generate_paraphrases(descriptions, *, provider, model, base_url, api_key_en
         messages=[dict(role='system', content=(
             f'Rewrite each of the {count} supplied public product descriptions as ONE natural future shopping query. '
             f'Return exactly one query for each input, in the same order: exactly {count} objects total. '
-            'Use only supported product attributes. Do not invent brands, facts, or purchase history. '
+            'Use only supported product attributes. Do not invent brands, facts, or purchase history.'
+            f'{extra_guidance} '
             f'Return ONLY a JSON array of exactly {count} objects with keys input_row_id and text. '
             'Each input_row_id must refer to one supplied description. Do not repeat input text. '
             'No markdown, commentary, or reasoning in the final answer.')),
@@ -284,3 +293,359 @@ def prepare_training_bundle(*, source, target, public_semantic, descriptions, pa
     bundle = load_training_bundle(manifest_path, source=source, target=target,
         public_semantic=public_semantic, require_production=not test_fixture)
     return bundle
+
+
+RULE_PARAPHRASE_PROMPT_VERSION = 'rule_based_length_aligned_eval_v4_1'
+
+_RULE_GROUP_NOUNS = {
+    '01_camera': ('security camera', True),
+    '02_chair': ('barber chair', True),
+    '03_cookies': ('cookie dough', False),
+    '04_curtain': ('curtain panels', False),
+    '05_hair_extension': ('hair extensions', False),
+    '06_jeans': ('denim jeans', False),
+    '07_shampoo': ('shampoo', False),
+    '08_speaker': ('wireless speaker', True),
+    '09_toothbrush': ('toothbrush', True),
+}
+
+_RULE_GROUP_MODIFIERS = {
+    '01_camera': ('outdoor', 'indoor', 'wireless', 'wifi', 'wi-fi', 'hd', '1080p', '2mp', '3mp', '4mp', '2k', 'night-vision', 'night vision', 'dome', 'ptz', 'pan-tilt', 'waterproof', 'bullet'),
+    '02_chair': ('hydraulic', 'reclining', 'swivel', 'heavy-duty', 'heavy duty', 'adjustable', 'vintage', 'classic', 'salon', 'styling'),
+    '03_cookies': ('ready-to-bake', 'edible', 'chocolate chip', 'oatmeal', 'sugar', 'butterscotch', 'refrigerated', 'gourmet', 'homemade'),
+    '04_curtain': ('blackout', 'thermal', 'insulated', 'sheer', 'grommet', 'rod pocket', 'printed', 'noise-reducing', 'room-darkening'),
+    '05_hair_extension': ('human', 'clip-in', 'tape-in', 'silky straight', 'curly', 'wavy', 'water wave', 'braiding', 'remy', 'seamless'),
+    '06_jeans': ('high-waisted', 'high-waist', 'mid-rise', 'low-waist', 'straight-leg', 'wide-leg', 'skinny', 'flare', 'bell-bottom', 'boyfriend', 'stretch', 'ripped', 'distressed', 'baggy'),
+    '07_shampoo': ('sulfate-free', 'moisturizing', 'volumizing', 'clarifying', 'anti-dandruff', 'color-care', 'gentle', 'daily', 'repairing', 'curly'),
+    '08_speaker': ('bluetooth', 'portable', 'waterproof', 'rechargeable', 'mini', 'outdoor', 'compact', 'pocket-sized', 'high-fidelity'),
+    '09_toothbrush': ('electric', 'sonic', 'manual', 'u-shaped', 'soft-bristle', 'soft', 'silicone', 'bamboo', 'waterproof', 'kids', 'toddler', 'rechargeable'),
+}
+
+_RULE_MUTUALLY_EXCLUSIVE_MODS = (
+    {'electric', 'manual'},
+    {'indoor', 'outdoor'},
+    {'high-waisted', 'high-waist', 'mid-rise', 'low-waist'},
+    {'straight-leg', 'wide-leg', 'skinny', 'flare', 'bell-bottom', 'boyfriend'},
+)
+
+_RULE_TRAILING_DANGLING = {
+    'and', 'or', 'of', 'with', 'for', 'to', 'in', 'on', 'the', 'a', 'an', 'so',
+    'that', 'which', 'by', 'from', 'as', 'at', 'into', 'including', 'featuring', 'letting', 'you',
+    'is', 'are', 'was', 'were', 'be', 'has', 'have', 'had', 'when',
+}
+
+_RULE_PRESERVE_UPPER = {
+    'HD', 'FHD', 'UHD', '1080P', '720P', '2K', '4K', '2MP', '3MP', '4MP', '5MP', '8MP',
+    'IP65', 'IP66', 'IP67', 'LED', 'IR', 'UV', 'PU', 'PVC', 'PP', 'TPR', 'ABS', 'USB',
+    'WIFI', 'WI-FI', 'AHD', 'CVI', 'TVI', 'CVBS', 'AC', 'DC', 'LED', 'MP3', 'QI', 'APP',
+    'PTZ', 'NVR', 'DVR', '360°', 'U-SHAPED', '3D', 'PH', 'BPA',
+}
+
+_RULE_FLUFF_RE = re.compile(
+    r'\b(?:'
+    r'leaving nothing to the imagination|welcome to\b|buy with confidence|100% satisfaction|'
+    r'satisfaction guarantee|perfect gift|best gift|great gift|makes a great|ideal gift|'
+    r'if you have any questions|feel free to contact|after.?sales|customer service|'
+    r'business address|for shipping|valid phone|please be sure|shipped via|before delivery|kindly note|'
+    r'exquisite design|durable structure|lazy sofa|related style|'
+    r'made of high quality materials?|high quality material|brand new and high quality|'
+    r'too good to be true|wear-with-everything|you can use for longer|order now|add to cart|'
+    r'definitely be your best partner|excellent value|just start using'
+    r')\b',
+    re.I,
+)
+
+_RULE_OPENERS_SINGULAR = (
+    'Looking for a {noun}',
+    'I need a {noun}',
+    'Find a {noun}',
+    'I want a {noun}',
+    'I am looking for a {noun}',
+    'Searching for a {noun}',
+)
+
+_RULE_OPENERS_PLURAL = (
+    'Looking for {noun}',
+    'I need {noun}',
+    'Find {noun}',
+    'I want {noun}',
+    'I am looking for {noun}',
+    'Searching for {noun}',
+)
+
+
+def _rule_clean_text(text):
+    cleaned = re.sub(r'【[^】]{1,80}】|\[[^\]]{1,80}\]\s*:?', ' ', str(text))
+    cleaned = re.sub(r'â˜…|â€“|â€”|â€™|â€œ|â€[?\u009d]?', ' ', cleaned)
+    cleaned = re.sub(r'[➤❁★☆✿❀❤❥✤✔✓•▪●◆◇▶►]+', ' ', cleaned)
+    cleaned = re.sub(
+        r'(?:^|\n)\s*(?:features?|specifications?|versatile usages?|perfect details?|'
+        r'description|about nursing|occasion|product features?|package included|warm tips?|note)\s*[:\-–—]?\s*',
+        ' ',
+        cleaned,
+        flags=re.I,
+    )
+    cleaned = re.sub(r'(?:^|\n)\s*[A-Za-z][A-Za-z0-9 &\-\/]{2,36}:\s*', ' ', cleaned)
+    cleaned = re.sub(r'^\s*[:\-–—]+\s*', '', cleaned)
+    cleaned = re.sub(r'\s+', ' ', cleaned).strip()
+    return cleaned
+
+
+def _rule_lowercase_clause(clause):
+    words = clause.split()
+    if not words:
+        return ''
+    out = []
+    for idx, tok in enumerate(words):
+        bare = tok.strip('.,;:!?()"\'')
+        if bare.upper() in _RULE_PRESERVE_UPPER or (len(bare) >= 2 and bare.isupper() and any(ch.isalpha() for ch in bare)):
+            out.append(tok)
+        elif idx == 0:
+            if bare.casefold() in ('bluetooth', 'wifi', 'wi-fi', 'iphone', 'android', 'alexa', 'google'):
+                out.append(tok)
+            else:
+                out.append(tok[0].lower() + tok[1:] if len(tok) > 1 else tok.lower())
+        else:
+            out.append(tok)
+    return ' '.join(out)
+
+
+def _rule_normalize_clause(raw_clause):
+    c = raw_clause.strip(' \t\r\n,.;:-–—()*')
+    if c.count('(') != c.count(')'):
+        c = c.replace('(', '').replace(')', '')
+    c = re.sub(r'^[\*\d\.\s]+(?=[A-Za-z])', '', c)
+    c = re.sub(r'^(?:and|or|also|plus|with|featuring|including|that|which|it|this|these|our|the|can)\s+', '', c, flags=re.I)
+    c = re.sub(r'\b(?:our|this)\s+(?:new\s+)?(?:product|item|unit|camera|chair|curtains?|shampoo|speaker|toothbrush|jeans)\b', 'it', c, flags=re.I)
+    c = re.sub(r'\byou\s+can\s+(?:easily\s+)?', 'letting you ', c, flags=re.I)
+    c = re.sub(r'\blets?\s+you\s+', 'allowing you to ', c, flags=re.I)
+    c = re.sub(r'\bprovides?\s+(?:you\s+with\s+)?', '', c, flags=re.I)
+    c = re.sub(r'^(?:is|are|can be|was|were)\s+', '', c, flags=re.I)
+    c = re.sub(r'^(?:it\s+(?:is|has|features?|includes?|offers?|can)\s+)', '', c, flags=re.I)
+    c = re.sub(r'\s+', ' ', c).strip(' \t\r\n,.;:-–—*')
+    return _rule_lowercase_clause(c)
+
+
+def _rule_extract_clauses(text):
+    cleaned = _rule_clean_text(text)
+    raw_parts = re.split(r'(?<=[.!?])(?:\s+|(?=[A-Z]))|\s*[;\n]+\s*|,\s+(?=(?:and |with |for |featuring |including |designed |made |suitable ))', cleaned)
+    clauses, seen = [], set()
+    for part in raw_parts:
+        subparts = re.split(r'\s+---\s+|\s+--\s+|\s+\|\s+', part)
+        for sub in subparts:
+            norm = _rule_normalize_clause(sub)
+            words = re.findall(r"[^\W_]+", norm)
+            if len(words) < 3 or len(norm) < 14 or _RULE_FLUFF_RE.search(norm):
+                continue
+            if norm.casefold() in seen:
+                continue
+            seen.add(norm.casefold())
+            clauses.append(norm)
+    return clauses
+
+
+def _rule_noun_phrase(group, source_text):
+    base_noun, is_singular = _RULE_GROUP_NOUNS.get(group, ('product', True))
+    if group == '08_speaker' and re.search(r'\bbluetooth\b', source_text, re.I):
+        base_noun = 'Bluetooth speaker'
+    lower_src = source_text.casefold()
+    chosen = []
+    for mod in _RULE_GROUP_MODIFIERS.get(group, ()):
+        if len(chosen) >= 2:
+            break
+        if re.search(r'\b' + re.escape(mod) + r'\b', lower_src):
+            if mod in base_noun.casefold():
+                continue
+            if any(mod in prev.casefold() or prev.casefold() in mod for prev in chosen):
+                continue
+            if any(mod in grp and any(p.casefold() in grp for p in chosen) for grp in _RULE_MUTUALLY_EXCLUSIVE_MODS):
+                continue
+            chosen.append('Wi-Fi' if mod in ('wifi', 'wi-fi') else ('Bluetooth' if mod == 'bluetooth' else mod))
+    phrase = (' '.join(chosen) + ' ' + base_noun).strip()
+    return phrase, is_singular
+
+
+def _rule_trim_dangling(clause):
+    words = clause.split()
+    while words and words[-1].strip('.,;:!?').casefold() in _RULE_TRAILING_DANGLING:
+        words.pop()
+    return ' '.join(words).rstrip(',;:-–—')
+
+
+def _rule_assemble_candidate(opener_tpl, noun_phrase, is_singular, clauses, target_len, min_len, max_len, *, order_offset=0):
+    if is_singular and '{noun}' in opener_tpl:
+        lower_np = noun_phrase.casefold()
+        use_an = lower_np[0] in 'aeio' or (lower_np[0] == 'u' and not lower_np.startswith(('u-', 'uv')))
+        prefix = opener_tpl.replace('a {noun}', ('an ' if use_an else 'a ') + '{noun}').format(noun=noun_phrase)
+    else:
+        prefix = opener_tpl.format(noun=noun_phrase)
+
+    ordered = clauses[order_offset:] + clauses[:order_offset] if clauses else []
+    best = None
+    for idx in range(len(ordered)):
+        picked = []
+        for cl in ordered[idx:] + ordered[:idx]:
+            clause_cap = min(105, max(45, max_len - len(prefix) - 13)) if not picked else 105
+            if len(cl) > clause_cap:
+                words = cl.split()
+                trimmed = []
+                limit = min(clause_cap, 88) if clause_cap >= 88 else clause_cap
+                for w in words:
+                    if sum(len(x) + 1 for x in trimmed) + len(w) > limit:
+                        break
+                    trimmed.append(w)
+                cl = _rule_trim_dangling(' '.join(trimmed))
+                if len(cl.split()) < 3:
+                    continue
+            else:
+                cl = _rule_trim_dangling(cl)
+                if len(cl.split()) < 3:
+                    continue
+            extra_join = 11 if not picked else 6
+            projected = len(prefix) + extra_join + len(', '.join(picked + [cl])) + 1
+            if projected > max_len:
+                if not picked:
+                    continue
+                break
+            picked.append(cl)
+            cur_len = len(prefix) + len(' featuring ') + len(', '.join(picked)) + 1
+            if cur_len >= max(min_len, int(round(target_len * 0.90))):
+                break
+        if not picked:
+            continue
+        if len(picked) >= 2:
+            body = ', '.join(picked[:-1]) + ', and ' + picked[-1]
+        else:
+            body = picked[0]
+        first_cl = picked[0].casefold()
+        if first_cl.startswith(('suitable for ', 'ideal for ', 'great for ', 'perfect for ', 'designed for ', 'made of ', 'made from ', 'crafted from ', 'built with ')):
+            joiner = ' '
+        elif first_cl.startswith(('letting you ', 'allowing you to ')):
+            joiner = ', '
+        else:
+            joiner = ' featuring '
+        end_punct = '?' if prefix.startswith('Where can I buy') else '.'
+        cand = f'{prefix}{joiner}{body}{end_punct}'
+        cand = re.sub(r'\s+', ' ', cand).strip()
+        if min_len <= len(cand) <= max_len:
+            if best is None or abs(len(cand) - target_len) < abs(len(best) - target_len):
+                best = cand
+            if abs(len(cand) - target_len) <= 18:
+                return cand
+    return best
+
+
+def generate_rule_evaluation_paraphrases(
+    descriptions,
+    *,
+    group,
+    category,
+    target_lengths=None,
+    forbidden_texts=(),
+    seed=20261120,
+    acceptable_fn=None,
+):
+    """Deterministically generate 6 grounded, length-aligned shopping queries without calling an LLM."""
+    _require(isinstance(descriptions, list) and len(descriptions) >= 6, f'{group} 至少需要 6 条改写候选描述')
+    min_len, max_len = (55, 125) if group == '03_cookies' else (58, 225)
+    if target_lengths:
+        clipped = sorted(max(min_len, min(max_len, int(x))) for x in target_lengths[:6])
+        while len(clipped) < 6:
+            clipped.append(clipped[-1])
+    else:
+        default_len = 85 if group == '03_cookies' else 155
+        clipped = [default_len] * 6
+
+    dupes = DuplicateIndex(list(forbidden_texts) + [row['text'] for row in descriptions])
+    candidates_sorted = sorted(descriptions, key=lambda r: (len(r['text']), str(r['id'])))
+    if len(candidates_sorted) > 6:
+        primary = candidates_sorted[:6]
+        extras = candidates_sorted[6:]
+    else:
+        primary = candidates_sorted
+        extras = []
+
+    ordered_inputs = []
+    for row in primary:
+        ordered_inputs.append(row)
+
+    def _opener_pool(is_singular, grp):
+        pool = list(_RULE_OPENERS_SINGULAR if is_singular else _RULE_OPENERS_PLURAL)
+        if grp == '03_cookies':
+            pool.append('Where can I buy {noun}')
+        return pool
+
+    selected_rows = []
+    seen_norms = {overlap_normalize(t) for t in forbidden_texts} | {overlap_normalize(r['text']) for r in descriptions}
+    pool_queue = list(ordered_inputs) + list(extras)
+    used_input_ids = set()
+
+    for slot_idx, target_len in enumerate(clipped):
+        placed = False
+        for row in pool_queue:
+            rid = str(row['id'])
+            if rid in used_input_ids:
+                continue
+            src_text = row['text']
+            clauses = _rule_extract_clauses(src_text)
+            noun_phrase, is_singular = _rule_noun_phrase(group, src_text)
+            openers = _opener_pool(is_singular, group)
+            start_op = int(hashlib.sha256(f'{seed}|{group}|{rid}'.encode('utf-8')).hexdigest(), 16) % len(openers)
+            ordered_openers = openers[start_op:] + openers[:start_op]
+
+            chosen_text = None
+            for op in ordered_openers:
+                for off in range(max(1, min(len(clauses), 4))):
+                    cand = _rule_assemble_candidate(
+                        op, noun_phrase, is_singular, clauses, target_len, min_len, max_len, order_offset=off
+                    )
+                    if not cand:
+                        continue
+                    norm_cand = overlap_normalize(cand)
+                    if norm_cand in seen_norms or cand in dupes:
+                        continue
+                    if acceptable_fn is not None and not acceptable_fn(group, cand):
+                        continue
+                    chosen_text = cand
+                    break
+                if chosen_text is not None:
+                    break
+
+            if chosen_text is not None:
+                seen_norms.add(overlap_normalize(chosen_text))
+                dupes.add(chosen_text)
+                used_input_ids.add(rid)
+                selected_rows.append(
+                    dict(
+                        id='paraphrase_' + str(slot_idx + 1).zfill(3),
+                        text=chosen_text,
+                        category=category,
+                        input_row_id=rid,
+                        provider='local_rule',
+                        model='rule_paraphrase_v1',
+                        requested_model='rule_paraphrase_v1',
+                    )
+                )
+                placed = True
+                break
+        _require(placed, f'{group} 规则改写未能生成第 {slot_idx + 1} 条合规且去重的查询')
+
+    generation_meta = dict(
+        mode='rule_based_length_aligned',
+        provider='local_rule',
+        model='rule_paraphrase_v1',
+        requested_model='rule_paraphrase_v1',
+        prompt_version=RULE_PARAPHRASE_PROMPT_VERSION,
+        input_descriptions_sha256=content_sha256(descriptions),
+        paraphrase_input_row_ids=[r['input_row_id'] for r in selected_rows],
+        target_lengths=clipped,
+        generated_lengths=[len(r['text']) for r in selected_rows],
+        generated_at=datetime.now(timezone.utc).isoformat(),
+        paper_query_generator_reproduced=False,
+    )
+    return dict(
+        status='generated',
+        network_request_performed=False,
+        rows=selected_rows,
+        generation=generation_meta,
+    )

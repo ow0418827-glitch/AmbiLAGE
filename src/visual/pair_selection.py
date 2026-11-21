@@ -108,7 +108,7 @@ HELD_OUT_RANK_BAND_SCORERS=('eval_g14','eval_gme','vit-g-14','gme-qwen2-vl-2b-in
 def validate_public_rank_band(rank_band):
     if rank_band is None:return None
     if not isinstance(rank_band,dict):raise ValueError('公开先验名次带规则必须为字典对象')
-    if set(rank_band)-{'enabled','peer_count','rank_min','rank_max','scorer'}:
+    if set(rank_band)-{'enabled','peer_count','rank_min','rank_max','scorer','allow_shape_threshold_fallback'}:
         raise ValueError('公开先验名次带字段无效')
     enabled=rank_band.get('enabled',True)
     if type(enabled) is not bool:raise ValueError('公开先验名次带 enabled 必须为布尔值')
@@ -116,6 +116,9 @@ def validate_public_rank_band(rank_band):
     rank_min=rank_band.get('rank_min',5)
     rank_max=rank_band.get('rank_max',12)
     scorer=rank_band.get('scorer','dino_lexical_hybrid')
+    allow_fallback=rank_band.get('allow_shape_threshold_fallback',False)
+    if type(allow_fallback) is not bool:
+        raise ValueError('公开先验名次带 allow_shape_threshold_fallback 必须为布尔值')
     if type(peer_count) is not int or peer_count<2:
         raise ValueError('公开先验对照池商品数量 peer_count 须为不小于二的正整数')
     if type(rank_min) is not int or type(rank_max) is not int or not 1<=rank_min<=rank_max<=peer_count+1:
@@ -127,7 +130,10 @@ def validate_public_rank_band(rank_band):
         raise ValueError('公开先验名次打分器严禁使用严格留出评估模型：'+scorer)
     if scorer not in VALID_RANK_BAND_SCORERS:
         raise ValueError('公开先验名次打分器不受支持：'+scorer)
-    return dict(enabled=enabled,peer_count=peer_count,rank_min=rank_min,rank_max=rank_max,scorer=scorer)
+    out=dict(enabled=enabled,peer_count=peer_count,rank_min=rank_min,rank_max=rank_max,scorer=scorer)
+    if allow_fallback:
+        out['allow_shape_threshold_fallback']=True
+    return out
 
 
 def validate_subtype_filter(subtype_filter,*,allow_empty=False):
@@ -205,11 +211,32 @@ def score_pair(source,target,source_features,target_features,*,threshold,config=
     return row
 
 
-def choose_pair(target,candidates,backend,config=SelectionConfig(),*,excluded_source_ids=(),public_root=None,calibration_public_root=None,subtype_filter=None,public_rank_band=None,public_prior_ranks=None):
+def _in_band_shape_fallback_pool(rows,rank_band):
+    """提取在公开先验名次带内且仅因未达校准外形门槛被拒的非重复本体候选。"""
+    if not (rank_band and rank_band['enabled']):
+        return []
+    rmin,rmax=rank_band['rank_min'],rank_band['rank_max']
+    return [
+        r for r in rows
+        if r.get('rejected_reasons')==['shape_below_calibrated_threshold']
+        and r.get('shape_similarity') is not None
+        and type(r.get('public_prior_rank')) is int
+        and rmin<=r['public_prior_rank']<=rmax
+    ]
+
+
+def choose_pair(target,candidates,backend,config=SelectionConfig(),*,excluded_source_ids=(),public_root=None,calibration_public_root=None,subtype_filter=None,public_rank_band=None,public_prior_ranks=None,allow_shape_threshold_fallback=None):
     from src.visual.shape_calibration import load_calibration
     config.validate()
     subtype_filter=validate_subtype_filter(subtype_filter,allow_empty=False)
     rank_band=validate_public_rank_band(public_rank_band)
+    if allow_shape_threshold_fallback is not None and type(allow_shape_threshold_fallback) is not bool:
+        raise ValueError('allow_shape_threshold_fallback 须为布尔值')
+    use_fallback=bool(
+        rank_band and rank_band['enabled']
+        and (rank_band.get('allow_shape_threshold_fallback',False)
+             if allow_shape_threshold_fallback is None else allow_shape_threshold_fallback)
+    )
     certificate=load_calibration(config.calibration_path,backend.snapshot,public_root=calibration_public_root if calibration_public_root is not None else public_root)
     ids=[p['id'] for p in candidates]
     if not ids or len(ids)!=len(set(ids)):raise ValueError('公开候选标识不能重复或为空')
@@ -227,7 +254,7 @@ def choose_pair(target,candidates,backend,config=SelectionConfig(),*,excluded_so
                 and image_quality(p,config.min_image_side)['accepted']):ready.append(p)
     if hasattr(backend,'features_many'):backend.features_many([target]+ready)
     target_features=backend.features(target)
-    rows=[];seen_images={}
+    rows=[];seen_images={};seen_fallback_images={}
     ready_ids={p['id'] for p in ready}
     for p in sorted(candidates,key=lambda p:p['id']):
         prior_rank=None if public_prior_ranks is None else public_prior_ranks.get(p['id'])
@@ -238,19 +265,42 @@ def choose_pair(target,candidates,backend,config=SelectionConfig(),*,excluded_so
         if not row['rejected_reasons']:
             if p['image_sha256'] in seen_images:row['rejected_reasons'].append('duplicate_candidate_image')
             else:seen_images[p['image_sha256']]=p['id']
+        elif (rank_band and rank_band['enabled']
+                and row['rejected_reasons']==['shape_below_calibrated_threshold']
+                and type(row.get('public_prior_rank')) is int
+                and rank_band['rank_min']<=row['public_prior_rank']<=rank_band['rank_max']):
+            if p['image_sha256'] in seen_fallback_images:
+                row['rejected_reasons'].append('duplicate_candidate_image')
+            else:
+                seen_fallback_images[p['image_sha256']]=p['id']
         row['eligible']=not row['rejected_reasons'];rows.append(row)
     eligible_rows=[r for r in rows if r['eligible']]
+    fallback_used=False
     if config.strategy=='median':
-        draw=median_draw(eligible_rows) if eligible_rows else None
         protocol=GOLDEN_BAND_MEDIAN_POLICY if (rank_band and rank_band['enabled']) else MEDIAN_SELECTION_POLICY
+        if eligible_rows:
+            draw=median_draw(eligible_rows)
+        elif use_fallback:
+            fallback_rows=_in_band_shape_fallback_pool(rows,rank_band)
+            if fallback_rows:
+                draw=median_draw(fallback_rows)
+                fallback_used=True
+            else:
+                draw=None
+        else:
+            draw=None
     else:
         draw=uniform_draw([r['source_id'] for r in eligible_rows],target['id'],config.seed) if eligible_rows else None
         protocol=SELECTION_POLICY
-    result=dict(protocol=protocol,status='selected' if eligible_rows else 'no_eligible_pair',
+    selected=draw is not None
+    result=dict(protocol=protocol,status='selected' if selected else 'no_eligible_pair',
         selected_source_id=draw['selected_source_id'] if draw else None,target_id=target['id'],candidates=rows,
         configuration=asdict(config),draw=draw,calibration=certificate,models=backend.snapshot,
         type_rules_sha256=TYPE_RULES_SHA256,excluded_source_ids=sorted(excluded),
         victim_memory_used=False,victim_queries_used=False,target_system_probed=False)
+    if selected:
+        result['passes_calibrated_threshold']=not fallback_used
+        result['shape_threshold_fallback_used']=bool(fallback_used)
     if subtype_filter:result['subtype_filter']=subtype_filter
     if rank_band and rank_band['enabled']:result['public_rank_band']=rank_band
     return result
@@ -261,24 +311,45 @@ def verify_selection(selection):
     if selection.get('status')!='selected' or not selection.get('source'):raise ValueError('只有已经确定的合格图对才能发布')
     eligible=[r for r in selection['candidates'] if r['eligible']]
     protocol=selection.get('protocol')
+    fallback_used=bool(selection.get('shape_threshold_fallback_used'))
     if protocol in (SELECTION_POLICY,MEDIAN_SELECTION_POLICY,GOLDEN_BAND_MEDIAN_POLICY):
-        if protocol in (MEDIAN_SELECTION_POLICY,GOLDEN_BAND_MEDIAN_POLICY):
-            draw=median_draw(eligible)
-        else:
-            draw=uniform_draw([r['source_id'] for r in eligible],selection['target_id'],selection['configuration']['seed'])
-        if draw!=selection['draw']:raise ValueError('冻结抽样记录与合格集合或选择策略不一致')
-        expected=draw['selected_source_id']
         certificate=selection['calibration'];body={k:v for k,v in certificate.items() if k!='certificate_sha256'}
         if digest(body)!=certificate['certificate_sha256'] or digest(selection['models'])!=certificate['models_sha256']:
             raise ValueError('冻结图对的开发门槛或模型身份改变')
         rank_band=validate_public_rank_band(selection.get('public_rank_band'))
-        for row in eligible:
-            if row['rejected_reasons'] or row['shape_similarity']<certificate['fit']['threshold']:
-                raise ValueError('抽样集合中存在不合格候选')
-            if rank_band and rank_band['enabled']:
+        if fallback_used:
+            if protocol!=GOLDEN_BAND_MEDIAN_POLICY or not (rank_band and rank_band['enabled'] and rank_band.get('allow_shape_threshold_fallback')):
+                raise ValueError('未启用黄金先验区间带内回退，不能跳过外形门槛')
+            if eligible:
+                raise ValueError('存在合格高分候选时禁止触发外形门槛回退')
+            if selection.get('passes_calibrated_threshold') is not False:
+                raise ValueError('启用外形门槛回退时必须明确标注未通过校准门槛')
+            pool=_in_band_shape_fallback_pool(selection['candidates'],rank_band)
+            if not pool:
+                raise ValueError('黄金先验区间带内无任何本体候选，无法回退选取')
+            draw=median_draw(pool)
+            if draw!=selection['draw']:raise ValueError('冻结抽样记录与带内回退集合或选择策略不一致')
+            expected=draw['selected_source_id']
+            for row in pool:
+                if row['shape_similarity']>=certificate['fit']['threshold']:
+                    raise ValueError('带内回退集合不应包含已达门槛候选')
                 pr=row.get('public_prior_rank')
                 if type(pr) is not int or not rank_band['rank_min']<=pr<=rank_band['rank_max']:
                     raise ValueError('抽样集合中存在超出公开先验名次带的候选')
+        else:
+            if protocol in (MEDIAN_SELECTION_POLICY,GOLDEN_BAND_MEDIAN_POLICY):
+                draw=median_draw(eligible)
+            else:
+                draw=uniform_draw([r['source_id'] for r in eligible],selection['target_id'],selection['configuration']['seed'])
+            if draw!=selection['draw']:raise ValueError('冻结抽样记录与合格集合或选择策略不一致')
+            expected=draw['selected_source_id']
+            for row in eligible:
+                if row['rejected_reasons'] or row['shape_similarity']<certificate['fit']['threshold']:
+                    raise ValueError('抽样集合中存在不合格候选')
+                if rank_band and rank_band['enabled']:
+                    pr=row.get('public_prior_rank')
+                    if type(pr) is not int or not rank_band['rank_min']<=pr<=rank_band['rank_max']:
+                        raise ValueError('抽样集合中存在超出公开先验名次带的候选')
     else:
         # 不注册旧选择入口，不重新计算旧分数，不修改已有实验。
         if selection.get('calibration')!='provisional_public_only_heuristics_not_success_probabilities':

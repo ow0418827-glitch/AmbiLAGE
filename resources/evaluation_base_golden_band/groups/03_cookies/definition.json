@@ -1,0 +1,234 @@
+{
+  "schema_version": 2,
+  "group": "03_cookies",
+  "name": "第三组饼干（黄金先验区间中位数重选）",
+  "category": "cookies",
+  "shape_similarity": 0.5981379982000148,
+  "calibrated_threshold": 0.5960951412738369,
+  "passes_calibrated_threshold": true,
+  "public_prior_rank": 10,
+  "shape_threshold_fallback_used": false,
+  "selection_status": "public_shape_golden_band_median_v1",
+  "selection_notes": "依公开 public_shape_golden_band_median_v1 规则从 1 个合格候选中按灰度外形分数取中位数选出 B00HHP71JY（shape=0.5981 >= 0.5961、公开先验名次=10）。",
+  "methods_supported": [
+    "lucid",
+    "ambilage",
+    "visual_inception"
+  ],
+  "target_feature_text": "I want to buy cookie dough with natural ingredients and chocolate chips.",
+  "training_queries": [
+    "I want to buy cookie dough with natural ingredients and chocolate chips.",
+    "I would like to purchase cookie dough featuring natural ingredients and an egg-free recipe.",
+    "I am looking for cookie dough with chocolate chips and a ready-to-eat recipe."
+  ],
+  "data": {
+    "source": "source.jpg",
+    "target": "target.jpg",
+    "source_title": "Lotte Cancho Korean Favourite Chocolate Snack Cookies Kids Snack (Pack of 3)",
+    "training_queries": [
+      "I want to buy cookie dough with natural ingredients and chocolate chips."
+    ]
+  },
+  "source_boxes": [
+    [
+      82,
+      18,
+      419,
+      481
+    ]
+  ],
+  "target_boxes": [
+    [
+      58,
+      28,
+      453,
+      463
+    ]
+  ],
+  "print_regions": [
+    [
+      0.236,
+      0.218,
+      0.384,
+      0.29
+    ],
+    [
+      0.232,
+      0.336,
+      0.788,
+      0.634
+    ],
+    [
+      0.356,
+      0.59,
+      0.488,
+      0.654
+    ]
+  ],
+  "target": {
+    "id": "B08Z8MHWVS",
+    "title": "Eggless Raw Edible Cookie Dough, Edible Frozen Cookie Dough - Big Dipper Dough Co: (2 Pints-ChocoChip & CookienCream)",
+    "brand": "Big Dipper Dough Co",
+    "attributes": [
+      "natural ingredients",
+      "chocolate chips",
+      "an egg-free recipe",
+      "a ready-to-eat recipe",
+      "chocolate chip",
+      "wheat flour",
+      "ready eat",
+      "sea salt",
+      "ice cream"
+    ],
+    "feature_text": "I want to buy cookie dough with natural ingredients and chocolate chips.",
+    "training_queries": [
+      "I want to buy cookie dough with natural ingredients and chocolate chips.",
+      "I would like to purchase cookie dough featuring natural ingredients and an egg-free recipe.",
+      "I am looking for cookie dough with chocolate chips and a ready-to-eat recipe."
+    ],
+    "image": "target.jpg",
+    "foreground_mask": "target_foreground.png",
+    "boxes": [
+      [
+        58,
+        28,
+        453,
+        463
+      ]
+    ],
+    "text_regions": [
+      [
+        0.432,
+        0.078,
+        0.576,
+        0.264
+      ],
+      [
+        0.412,
+        0.256,
+        0.598,
+        0.33
+      ],
+      [
+        0.146,
+        0.502,
+        0.362,
+        0.58
+      ],
+      [
+        0.398,
+        0.534,
+        0.488,
+        0.608
+      ],
+      [
+        0.674,
+        0.546,
+        0.752,
+        0.594
+      ],
+      [
+        0.742,
+        0.536,
+        0.784,
+        0.578
+      ],
+      [
+        0.146,
+        0.572,
+        0.258,
+        0.642
+      ],
+      [
+        0.544,
+        0.582,
+        0.598,
+        0.618
+      ],
+      [
+        0.756,
+        0.568,
+        0.84,
+        0.69
+      ],
+      [
+        0.538,
+        0.786,
+        0.846,
+        0.852
+      ],
+      [
+        0.22,
+        0.824,
+        0.488,
+        0.886
+      ],
+      [
+        0.606,
+        0.826,
+        0.786,
+        0.868
+      ],
+      [
+        0.228,
+        0.856,
+        0.478,
+        0.91
+      ]
+    ]
+  },
+  "source": {
+    "id": "B00HHP71JY",
+    "title": "Lotte Cancho Korean Favourite Chocolate Snack Cookies Kids Snack (Pack of 3)",
+    "brand": "",
+    "attributes": [
+      "korean snack",
+      "chocolate",
+      "snack"
+    ],
+    "image": "source.jpg",
+    "foreground_mask": "source_foreground.png",
+    "boxes": [
+      [
+        82,
+        18,
+        419,
+        481
+      ]
+    ],
+    "text_regions": [
+      [
+        0.236,
+        0.218,
+        0.384,
+        0.29
+      ],
+      [
+        0.232,
+        0.336,
+        0.788,
+        0.634
+      ],
+      [
+        0.356,
+        0.59,
+        0.488,
+        0.654
+      ]
+    ]
+  },
+  "color_scheme": "statistics",
+  "training_data_policy": "catalog_image_and_public_title_only_v1",
+  "lucid_alignment_config": {
+    "enabled": true,
+    "target_text": "I want to buy cookie dough with natural ingredients and chocolate chips.",
+    "text_weight": 1.0,
+    "steps": 1000
+  },
+  "subtype_policy": {
+    "policy": "edible_cookies_golden_band_v5",
+    "include": "\\b(?:cookies?|cookie\\s+dough|biscuits?|wafers?)\\b|饼干|曲奇",
+    "exclude": "\\b(?:cookie\\s+(?:cutter|jar|press|sheet|pan|stamp|mold|tin)s?|apron|ice\\s*cream|gelato|sorbet|sundae|frozen\\s+(?:dairy\\s+)?dessert|frozen\\s+treat|milkshake|cookies\\s*(?:&|and|n)\\s*cream|toy|plush|ornament|candle|soap|lip\\s+balm|scented)\\b",
+    "source_exclude": "\\b(?:cookie\\s+dough|edible\\s+dough|raw\\s+dough)\\b"
+  }
+}

@@ -12,6 +12,7 @@ from .perceptual import OFFICIAL_ALEXNET_SHA256_PREFIX, OFFICIAL_LPIPS_ALEX_V01_
 OBJECTIVE_KIND = 'visual_inception_semantic_perceptual_no_retrieval_v1'
 RETRIEVAL_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_v2'
 ENHANCED_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_hardneg_advquery_v3'
+PAPER_STANDARD_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_paper_standard_v4'
 
 
 def _require(condition, message):
@@ -72,6 +73,8 @@ def _validate_retrieval(root, metadata, ready, config, public_semantic, selectio
              and objective.get('retrieval_denominator') == (
                  'one_dynamic_adversarial_positive_plus_full_public_bank_and_top_hard_negatives'
                  if config.mechanism_profile == 'enhanced_v3' else
+                 'one_dynamic_adversarial_positive_plus_static_three_source_public_negatives'
+                 if config.mechanism_profile == 'paper_standard' else
                  'one_dynamic_adversarial_positive_plus_fixed_public_image_negatives')
              and objective.get('retrieval_positive_count') == 1
              and objective.get('negative_candidate_count') == len(bundle['candidates'])
@@ -288,6 +291,197 @@ def _validate_enhanced_mechanisms(metadata, ready, config, bundle, candidate_vec
                  '增强最终目标值与实际审计不一致')
 
 
+def _validate_paper_standard_mechanisms(metadata, ready, config, bundle, candidate_vectors):
+    from .pipeline import mechanism_parameters
+    from .paper_standard_objective import (
+        PAPER_STANDARD_MARGIN_KIND,
+        PAPER_STANDARD_QUERY_AUGMENTATION_KIND,
+        build_static_negative_selection,
+    )
+
+    expected_params = mechanism_parameters(config)
+    execution = metadata.get('paper_standard_mechanisms', {})
+    body = {k: v for k, v in execution.items() if k != 'execution_sha256'}
+    _require(
+        execution.get('schema_version') == 1
+        and execution.get('kind') == PAPER_STANDARD_OBJECTIVE_KIND
+        and execution.get('parameters') == expected_params
+        and execution.get('execution_sha256') == content_sha256(body) == ready.get('paper_standard_mechanisms_sha256'),
+        '标准复现机制执行审计摘要或配置不一致',
+    )
+    _require(
+        ready.get('mechanism_profile') == 'paper_standard'
+        and execution.get('author_exact_implementation_claimed') is False
+        and metadata.get('paper_missing_mechanisms_implemented') is True
+        and metadata.get('paper_full_attack_reproduced') is False,
+        '标准复现机制不得冒称作者未公开细节的精确复现',
+    )
+
+    expected_selections = [
+        build_static_negative_selection(
+            bundle['candidate_metadata'],
+            vectors,
+            category=bundle['audit']['category'],
+            config=config,
+        )
+        for vectors in candidate_vectors
+    ]
+    selections = execution.get('static_negative_selections')
+    _require(selections == expected_selections, '静态三来源随机负例选择与冻结候选及真实编码向量不一致')
+
+    objective = metadata['training_objective']
+    _require(
+        objective.get('mechanism_profile') == 'paper_standard'
+        and objective.get('mechanism_parameters') == expected_params
+        and objective.get('static_negative_pool_sizes') == [row['selected_count'] for row in expected_selections]
+        and objective.get('contrastive_margin') == config.contrastive_margin
+        and objective.get('contrastive_margin_algorithm') == PAPER_STANDARD_MARGIN_KIND
+        and objective.get('query_adversarial_algorithm') == PAPER_STANDARD_QUERY_AUGMENTATION_KIND
+        and objective.get('query_adversarial_space') == 'ambient_embedding_unit_sphere_no_subspace'
+        and objective.get('proxy_user_memory_is_independent_public_role') is True
+        and objective.get('popularity_is_declared_proxy_not_real_sales') is True
+        and objective.get('paper_missing_mechanisms_implemented') is True
+        and objective.get('author_exact_mechanism_details_reproduced') is False,
+        '标准复现训练目标未绑定实际机制参数及公开代理约定',
+    )
+
+    pool_size = int(bundle['audit']['query_count'])
+
+    def check_audit(audit, model_index, query_count):
+        _require(
+            isinstance(audit, dict)
+            and audit.get('schema_version') == 1
+            and audit.get('mechanism_profile') == 'paper_standard'
+            and audit.get('margin_algorithm') == PAPER_STANDARD_MARGIN_KIND
+            and audit.get('contrastive_margin') == config.contrastive_margin
+            and audit.get('retrieval_temperature') == config.retrieval_temperature
+            and audit.get('static_negative_count') == expected_selections[model_index]['selected_count']
+            and audit.get('static_negative_selection_sha256') == expected_selections[model_index]['selection_sha256']
+            and audit.get('full_bank_denominator_preserved') is False
+            and audit.get('reduction') == 'query_mean_of_clean_adversarial_weighted_losses'
+            and audit.get('paper_exact_missing_mechanisms_reproduced') is False,
+            '逐次标准复现损失审计身份或间隔参数不符',
+        )
+        for key in (
+            'clean_infonce_loss',
+            'clean_margin_loss',
+            'clean_retrieval_loss',
+            'adversarial_infonce_loss',
+            'adversarial_margin_loss',
+            'adversarial_retrieval_loss',
+            'retrieval_loss',
+            'semantic_loss',
+        ):
+            _require(_finite(audit.get(key)), '标准复现损失审计存在非有限值')
+
+        clean_sum = audit['clean_infonce_loss'] + audit['clean_margin_loss']
+        _require(
+            abs(audit['clean_retrieval_loss'] - clean_sum) <= 1e-5 * max(1.0, abs(clean_sum)),
+            '干净检索损失与 InfoNCE 加余弦间隔之和不符',
+        )
+        adv_sum = audit['adversarial_infonce_loss'] + audit['adversarial_margin_loss']
+        _require(
+            abs(audit['adversarial_retrieval_loss'] - adv_sum) <= 1e-5 * max(1.0, abs(adv_sum)),
+            '对抗检索损失与 InfoNCE 加余弦间隔之和不符',
+        )
+        expected = (
+            (1 - config.query_adversarial_mix) * audit['clean_retrieval_loss']
+            + config.query_adversarial_mix * audit['adversarial_retrieval_loss']
+        )
+        _require(
+            abs(audit['retrieval_loss'] - expected) <= 1e-5 * max(1.0, abs(expected)),
+            '标准复现检索损失与干净及对抗查询混合权重不符',
+        )
+
+        q = audit.get('query_augmentation', {})
+        enabled = (
+            config.query_adversarial_steps > 0
+            and config.query_adversarial_step_size > 0
+            and config.query_adversarial_mix > 0
+        )
+        _require(
+            q.get('algorithm') == PAPER_STANDARD_QUERY_AUGMENTATION_KIND
+            and q.get('enabled') is enabled
+            and q.get('steps') == config.query_adversarial_steps
+            and q.get('step_size') == config.query_adversarial_step_size
+            and q.get('mix') == config.query_adversarial_mix
+            and q.get('space') == 'ambient_embedding_unit_sphere_no_subspace'
+            and q.get('optimization') == 'single_step_l2_normalized_fgsm'
+            and q.get('subspace_projection_used') is False
+            and q.get('greedy_best_loss_used') is False
+            and q.get('image_features_detached_in_inner') is True
+            and q.get('negatives_detached') is True
+            and q.get('queries_detached_for_outer') is True
+            and q.get('paper_exact_query_augmentation_reproduced') is False,
+            '标准复现查询增强参数、空间或梯度隔离声明不一致',
+        )
+        for key in ('clean_query_features_sha256', 'adversarial_query_features_sha256'):
+            digest = q.get(key)
+            _require(
+                isinstance(digest, str) and len(digest) == 64 and all(c in '0123456789abcdef' for c in digest),
+                '标准复现查询向量摘要无效',
+            )
+        tolerance = q.get('numerical_tolerance')
+        max_theoretical = q.get('max_theoretical_l2_perturbation')
+        _require(
+            _finite(tolerance)
+            and 0 < tolerance <= 1e-4
+            and _finite(max_theoretical)
+            and _finite(q.get('max_l2_perturbation'))
+            and 0 <= q['max_l2_perturbation'] <= max_theoretical + tolerance
+            and _finite(q.get('max_unit_norm_error'))
+            and 0 <= q['max_unit_norm_error'] <= tolerance,
+            '标准复现对抗查询超出单位球面或扰动预算',
+        )
+        clean, adversarial = q.get('clean_losses'), q.get('adversarial_losses')
+        _require(
+            isinstance(clean, list)
+            and isinstance(adversarial, list)
+            and len(clean) == len(adversarial) == query_count
+            and all(_finite(v) for v in clean + adversarial),
+            '标准复现逐条查询损失列表无效',
+        )
+        _require(
+            abs(sum(clean) / query_count - audit['clean_retrieval_loss']) <= tolerance * 4
+            and abs(sum(adversarial) / query_count - audit['adversarial_retrieval_loss']) <= tolerance * 4,
+            '标准复现逐条查询损失均值与外层检索损失不一致',
+        )
+        return audit
+
+    calibration = execution.get('calibration_audits')
+    if len(selections) == 1 and execution.get('single_surrogate_calibration_skipped') is True:
+        _require(calibration == [], '单代理直接优化不应包含集成方差校准审计')
+    else:
+        _require(isinstance(calibration, list) and len(calibration) == len(selections), '标准复现梯度方差校准模型数不符')
+        for model_index, rows in enumerate(calibration):
+            _require(isinstance(rows, list) and len(rows) == config.gradient_restarts, '标准复现梯度方差随机起点数不符')
+            for row in rows:
+                check_audit(row, model_index, config.query_batch_size)
+    steps = execution.get('step_audits')
+    _require(isinstance(steps, list) and len(steps) == config.steps, '标准复现机制实际优化步数不完整')
+    for step, row in enumerate(steps, 1):
+        _require(
+            row.get('step') == step
+            and row.get('query_indices') == metadata['query_sampling']['step_indices'][step - 1]
+            and isinstance(row.get('model_audits'), list)
+            and len(row['model_audits']) == len(selections),
+            '标准复现机制每步查询或模型审计不符',
+        )
+        for model_index, audit in enumerate(row['model_audits']):
+            check_audit(audit, model_index, config.query_batch_size)
+    for row in metadata.get('history', []):
+        _require('mechanism_audits' not in row, '优化历史日志不应重复拷贝逐步审计大对象')
+    final = execution.get('final_model_audits')
+    _require(isinstance(final, list) and len(final) == len(selections), '标准复现最终模型审计缺失')
+    for model_index, audit in enumerate(final):
+        check_audit(audit, model_index, pool_size)
+        _require(
+            audit['retrieval_loss'] == metadata['final_objective']['retrieval_losses'][model_index]
+            and audit['semantic_loss'] == metadata['final_objective']['semantic_losses'][model_index],
+            '标准复现最终目标值与实际审计不一致',
+        )
+
+
 def validate_ready(root, ready=None, *, require_production=True):
     root = Path(root).resolve()
     on_disk = json.loads((root / 'ready.json').read_text(encoding='utf-8'))
@@ -305,20 +499,31 @@ def validate_ready(root, ready=None, *, require_production=True):
     _require(metadata.get('method') == 'visual_inception' and metadata.get('status') == 'success', '生成方法或状态无效')
     objective = metadata.get('training_objective', {})
     kind = objective.get('kind')
-    _require(kind in (OBJECTIVE_KIND, RETRIEVAL_OBJECTIVE_KIND, ENHANCED_OBJECTIVE_KIND)
+    _require(kind in (OBJECTIVE_KIND, RETRIEVAL_OBJECTIVE_KIND, ENHANCED_OBJECTIVE_KIND, PAPER_STANDARD_OBJECTIVE_KIND)
              and kind == ready.get('training_objective_kind'), '训练目标身份无效')
-    retrieval_enabled = kind in (RETRIEVAL_OBJECTIVE_KIND, ENHANCED_OBJECTIVE_KIND)
+    retrieval_enabled = kind in (RETRIEVAL_OBJECTIVE_KIND, ENHANCED_OBJECTIVE_KIND, PAPER_STANDARD_OBJECTIVE_KIND)
     raw_config = metadata.get('config')
     _require(isinstance(raw_config, dict), '冻结配置必须为对象')
     interpretation = dict(raw_config)
     if 'objective_mode' not in interpretation and not retrieval_enabled:
         interpretation['objective_mode'] = 'semantic_perceptual'
-    if 'bank_loss_blend' not in interpretation and 'hard_margin_loss_blend' not in interpretation:
+    if (
+        kind == ENHANCED_OBJECTIVE_KIND
+        and 'bank_loss_blend' not in interpretation
+        and 'hard_margin_loss_blend' not in interpretation
+    ):
         interpretation['bank_loss_blend'] = 0.3
         interpretation['hard_margin_loss_blend'] = 0.7
     config = VisualInceptionConfig.from_dict(interpretation)
     if retrieval_enabled:
-        _require((kind == ENHANCED_OBJECTIVE_KIND) is (config.mechanism_profile == 'enhanced_v3'),
+        expected_profile = (
+            'enhanced_v3'
+            if kind == ENHANCED_OBJECTIVE_KIND
+            else 'paper_standard'
+            if kind == PAPER_STANDARD_OBJECTIVE_KIND
+            else 'legacy_v2'
+        )
+        _require(config.mechanism_profile == expected_profile,
                  '增强机制版本与冻结训练目标不一致，旧图不能重签')
     _require(config.objective_mode == ('retrieval_semantic_perceptual' if retrieval_enabled else 'semantic_perceptual'),
              '目标版本与冻结配置模式不一致')
@@ -375,6 +580,8 @@ def validate_ready(root, ready=None, *, require_production=True):
         bundle, candidate_vectors = _validate_retrieval(root, metadata, ready, config, audit, selection)
         if kind == ENHANCED_OBJECTIVE_KIND:
             _validate_enhanced_mechanisms(metadata, ready, config, bundle, candidate_vectors)
+        elif kind == PAPER_STANDARD_OBJECTIVE_KIND:
+            _validate_paper_standard_mechanisms(metadata, ready, config, bundle, candidate_vectors)
     perceptual = metadata.get('perceptual', {})
     if fixture:
         _require(perceptual.get('test_fixture') is True and perceptual.get('kind') == 'tiny_test_squared_pixel_distance_not_lpips', '感知测试夹具身份无效')

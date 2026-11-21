@@ -354,8 +354,10 @@ def test_category_evaluation_end_to_end_micro_suite(tmp_path, monkeypatch):
     ]
     assert len(all_details) == 180
     for k in (1, 3, 5):
-        assert summary['overall'][f'top{k}']['clean_hits'] == sum(q['clean_rank'] <= k for q in all_details)
-        assert summary['overall'][f'top{k}']['modified_hits'] == sum(q['modified_rank'] <= k for q in all_details)
+        bucket = summary['overall'][f'top{k}']
+        assert bucket['clean_hits'] == sum(q['clean_rank'] <= k for q in all_details)
+        assert bucket['modified_hits'] == sum(q['modified_rank'] <= k for q in all_details)
+        assert all(key in bucket for key in category.PAIRED_HEADROOM_METRICS_KEYS)
     for family in category.QUERY_FAMILIES:
         fam_details = [q for q in all_details if q['query_family'] == family]
         for k in (1, 3, 5):
@@ -368,6 +370,7 @@ def test_category_evaluation_end_to_end_micro_suite(tmp_path, monkeypatch):
     report_text = (eval_out / 'REPORT.md').read_text(encoding='utf-8')
     assert '按问法类别汇总' in report_text
     assert '类别直接询问' in report_text
+    assert '扣除原图已命中后的净剩余空间与保持率补充统计' in report_text
     assert '检索覆盖与下游推荐区分' in report_text
     assert 'shopping_allowed=false' in report_text
 
@@ -993,6 +996,79 @@ def test_freeze_memory_matches_unfrozen_and_shared_bank_memo_category_suite(tmp_
     assert verified['status'] == 'passed'
     assert verified['all_candidate_scores_checked'] is True
     assert float(verified['max_score_error']) <= shared_evaluation.SCORE_TOLERANCE
+
+
+def test_paired_summary_headroom_and_retention_metrics():
+    from src.experiments import visual_inception_category_evaluation as category
+
+    # Case 1: Mixed new_hits and lost_hits, including net regression (lost_hits > new_hits at Top-5).
+    clean_ranks = {'q1': 2, 'q2': 4, 'q3': 5, 'q4': 6, 'q5': 8}
+    mod_ranks = {'q1': 1, 'q2': 9, 'q3': 10, 'q4': 3, 'q5': 7}
+    summary = category._paired_summary(clean_ranks, mod_ranks)
+    top5 = summary['top5']
+    assert top5['clean_hits'] == 3
+    assert top5['modified_hits'] == 2
+    assert top5['new_hits'] == 1
+    assert top5['lost_hits'] == 2
+    assert top5['clean_miss_count'] == 2
+    assert top5['clean_miss_conversion_rate'] == pytest.approx(0.5)
+    assert top5['clean_hit_retention_rate'] == pytest.approx(1 / 3)
+    assert top5['net_headroom_capture'] == pytest.approx(-0.5)
+
+    top3 = summary['top3']
+    assert top3['clean_hits'] == 1
+    assert top3['modified_hits'] == 2
+    assert top3['new_hits'] == 1
+    assert top3['lost_hits'] == 0
+    assert top3['clean_miss_count'] == 4
+    assert top3['clean_miss_conversion_rate'] == pytest.approx(0.25)
+    assert top3['clean_hit_retention_rate'] == pytest.approx(1.0)
+    assert top3['net_headroom_capture'] == pytest.approx(0.25)
+
+    # Case 2: Zero clean misses (all clean hits at Top-3 / Top-5 -> headroom fields None).
+    all_hit_clean = {'a': 1, 'b': 2, 'c': 3}
+    all_hit_mod = {'a': 1, 'b': 6, 'c': 2}
+    zero_miss = category._paired_summary(all_hit_clean, all_hit_mod)
+    assert zero_miss['top5']['clean_miss_count'] == 0
+    assert zero_miss['top5']['clean_miss_conversion_rate'] is None
+    assert zero_miss['top5']['net_headroom_capture'] is None
+    assert zero_miss['top5']['clean_hit_retention_rate'] == pytest.approx(2 / 3)
+
+    # Case 3: Zero clean hits (retention rate is None; conversion == net_headroom_capture == modified_rate).
+    no_hit_clean = {'a': 10, 'b': 12, 'c': 15}
+    no_hit_mod = {'a': 2, 'b': 4, 'c': 11}
+    zero_clean = category._paired_summary(no_hit_clean, no_hit_mod)
+    assert zero_clean['top5']['clean_miss_count'] == 3
+    assert zero_clean['top5']['clean_hit_retention_rate'] is None
+    assert zero_clean['top5']['clean_miss_conversion_rate'] == pytest.approx(2 / 3)
+    assert zero_clean['top5']['net_headroom_capture'] == pytest.approx(2 / 3)
+
+
+def test_summary_matches_saved_legacy_compat_and_tamper_detection():
+    from src.experiments import visual_inception_category_evaluation as category
+
+    clean_ranks = {'q1': 2, 'q2': 4, 'q3': 8, 'q4': 12}
+    mod_ranks = {'q1': 1, 'q2': 9, 'q3': 3, 'q4': 5}
+    paired = category._paired_summary(clean_ranks, mod_ranks)
+    rebuilt = {
+        'overall': paired,
+        'by_family': {'fam_a': copy.deepcopy(paired)},
+        'groups': {'01_camera': {'overall': copy.deepcopy(paired)}},
+    }
+    legacy_saved = category._strip_headroom_fields(rebuilt)
+    assert not any(k in legacy_saved['overall']['top1'] for k in category.PAIRED_HEADROOM_METRICS_KEYS)
+    assert category._summary_matches_saved(rebuilt, legacy_saved) is True
+
+    # Mutating legacy numeric counts must still fail.
+    tampered_legacy = copy.deepcopy(legacy_saved)
+    tampered_legacy['overall']['top5']['lost_hits'] += 1
+    assert category._summary_matches_saved(rebuilt, tampered_legacy) is False
+
+    # Mutating headroom metrics in a new-schema saved dict must fail.
+    tampered_new = copy.deepcopy(rebuilt)
+    tampered_new['overall']['top5']['net_headroom_capture'] = 0.999
+    assert category._summary_matches_saved(rebuilt, tampered_new) is False
+
 
 
 

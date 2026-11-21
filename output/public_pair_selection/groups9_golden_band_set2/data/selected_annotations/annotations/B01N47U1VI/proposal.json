@@ -1,0 +1,91 @@
+{
+  "id": "B01N47U1VI",
+  "identity": {
+    "image_sha256": "abb62690253646b100a1f9386c4898532613e79dc0b86d8c593f10bfe4be61da",
+    "annotation_models": {
+      "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+      "ocr_version": "1.4.4",
+      "ocr_weights": {
+        "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+        "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+        "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+      },
+      "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+      "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+      "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+      "device": "cuda",
+      "model_loaded_once": true
+    }
+  },
+  "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/abb62690253646b100a1f9386c4898532613e79dc0b86d8c593f10bfe4be61da.jpg",
+  "title": "BuyTVProducts4Less Touch of ECO Solar/Battery Powered 2x3W Bluetooth Speaker Splashproof Portable Wireless MP3 Player with Built-in Micphone, FM Radio/MicroSD Card (Red)",
+  "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B01N47U1VI/foreground.png",
+  "foreground_mask_sha256": "e86ff26eef9a7d96cd6a9dc18a4d874d1ea29098b09ecea953267bbeb0231670",
+  "boxes": [
+    [
+      0,
+      0,
+      499,
+      348
+    ]
+  ],
+  "text_regions": [
+    [
+      0.382,
+      0.6475644699140402,
+      0.482,
+      0.8137535816618912
+    ]
+  ],
+  "ocr": [
+    {
+      "text": "UJBOOM",
+      "confidence": 0.8340583642323812,
+      "polygon": [
+        [
+          194.0,
+          270.0
+        ],
+        [
+          223.0,
+          229.0
+        ],
+        [
+          238.0,
+          239.0
+        ],
+        [
+          210.0,
+          281.0
+        ]
+      ]
+    }
+  ],
+  "segmentation_candidates": [
+    {
+      "index": 0,
+      "iou": 0.1936189979314804,
+      "foreground_ratio": 0.016068767908309457,
+      "rough_coverage": 0.004965287321670819,
+      "accepted": false
+    },
+    {
+      "index": 1,
+      "iou": 0.9603632688522339,
+      "foreground_ratio": 0.46584527220630373,
+      "rough_coverage": 0.3333658441431776,
+      "accepted": true
+    },
+    {
+      "index": 2,
+      "iou": 0.990564227104187,
+      "foreground_ratio": 0.464378223495702,
+      "rough_coverage": 0.33275404981247175,
+      "accepted": true
+    }
+  ],
+  "selected_mask_index": 2,
+  "text_regions_reviewed": false,
+  "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B01N47U1VI/review_overlay.png",
+  "observed_seconds": 0.6468203929980518
+}

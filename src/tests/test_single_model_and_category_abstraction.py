@@ -746,3 +746,87 @@ def test_ambilage_eot_ablation_interface_defaults_off_and_supports_all_modes(tmp
     ])
     assert parsed.eot_enabled is True
     assert parsed.diffusion_eot_enabled is False
+    assert parsed.multiscale_eot_enabled is None
+
+    # Mode 4: defense EoT OFF + diffusion EoT OFF + standalone multiscale grid-breaking ON
+    cfg_ms_only = AmbiLAGEConfig(
+        steps=2,
+        surrogate_set='clip_l14',
+        eot_enabled=False,
+        diffusion_eot_enabled=False,
+        multiscale_eot_enabled=True,
+        single_model_task_pcgrad=True,
+        smoke_test=True,
+    )
+    assert cfg_ms_only.effective_diffusion_eot_enabled() is False
+    assert cfg_ms_only.effective_multiscale_eot_enabled(num_surrogates=1) is True
+
+    obj_ms_pcgrad = SequentialEnsembleObjective(
+        [TinySurrogate(0)], base_img, 'source key', 'target text', cfg_ms_only
+    )
+    views_ms, pur_ms, transformed_ms = obj_ms_pcgrad._shared_inputs(base_img, step=1, gradient='none')
+    assert transformed_ms is True
+    assert pur_ms is None
+    assert views_ms.shape == (3, 3, 32, 32)
+    assert obj_ms_pcgrad.audit['eot_paths'] == ['identity', 'multiscale_grid_breaking_crop_zoom']
+
+    _, _, grad_ms_pc, info_ms_pc = obj_ms_pcgrad.image_gradient(base_img, step=1)
+    assert grad_ms_pc.shape == base_img.shape
+    assert torch.isfinite(grad_ms_pc).all() and grad_ms_pc.abs().sum() > 0
+    assert info_ms_pc['eot_enabled'] is False
+    assert info_ms_pc['defense_eot_enabled'] is False
+    assert info_ms_pc['multiscale_eot_enabled'] is True
+    assert info_ms_pc['purifier_gradient'] == 'disabled'
+
+    cfg_ms_no_pc = AmbiLAGEConfig(
+        steps=2,
+        surrogate_set='clip_l14',
+        eot_enabled=False,
+        diffusion_eot_enabled=False,
+        multiscale_eot_enabled=True,
+        single_model_task_pcgrad=False,
+        smoke_test=True,
+    )
+    obj_ms_std = SequentialEnsembleObjective(
+        [TinySurrogate(0)], base_img, 'source key', 'target text', cfg_ms_no_pc
+    )
+    _, _, grad_ms_std, info_ms_std = obj_ms_std.image_gradient(base_img, step=1)
+    assert grad_ms_std.shape == base_img.shape
+    assert torch.isfinite(grad_ms_std).all() and grad_ms_std.abs().sum() > 0
+    assert info_ms_std['eot_enabled'] is False
+    assert info_ms_std['multiscale_eot_enabled'] is True
+
+    run_ms_only = tmp_path / 'run_ms_only'
+    adv_ms, meta_ms = AmbiLAGEPipeline(cfg_ms_only, device='cpu').execute(
+        src_img, tgt_img, run_ms_only,
+        target_text=definition['target_feature_text'],
+        source_public_key=definition['source_public_key'],
+        source_category=definition['source_category'],
+        definition=definition,
+    )
+    assert adv_ms.is_file()
+    to_ms = meta_ms['training_objective']
+    assert to_ms['eot_enabled'] is False
+    assert to_ms['defense_eot_enabled'] is False
+    assert to_ms['diffusion_eot_enabled'] is False
+    assert to_ms['multiscale_eot_enabled'] is True
+    assert to_ms['diffusion_weight'] == 0.0
+    assert to_ms['diffusion_gradient'] == 'disabled'
+    assert to_ms['eot_paths'] == ['identity', 'multiscale_grid_breaking_crop_zoom']
+    for forbidden_defense_op in ('pillow_blur_bpda', 'jpeg_exact_forward_ste', 'resize'):
+        assert forbidden_defense_op not in to_ms['eot_paths']
+    assert validate_ambilage_ready(run_ms_only, require_production=False)['status'] == 'completed'
+
+    cfg_json = json.loads(Path('/content/AmbiLAGE/src/visual/config/ambilage.clip_l14.multiscale_only.json').read_text(encoding='utf-8'))
+    parsed_cfg = AmbiLAGEConfig.from_dict(cfg_json)
+    assert parsed_cfg.eot_enabled is False
+    assert parsed_cfg.effective_diffusion_eot_enabled() is False
+    assert parsed_cfg.effective_multiscale_eot_enabled(num_surrogates=1) is True
+
+    parsed_ms = generate_cli.parse_args([
+        '--method', 'ambilage', '--source', str(src_img), '--target', str(tgt_img),
+        '--output', str(tmp_path / 'cli_ms'), '--disable-eot', '--disable-diffusion-eot', '--enable-multiscale-eot',
+    ])
+    assert parsed_ms.eot_enabled is False
+    assert parsed_ms.diffusion_eot_enabled is False
+    assert parsed_ms.multiscale_eot_enabled is True

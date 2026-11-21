@@ -1,0 +1,585 @@
+{
+  "reviewer": "真实多模态逐图视觉核对：已逐组查看 01_camera..09_toothbrush 共 9 张 contact_sheet 与 SAM2.1/RapidOCR 标注叠图；2026-11-21",
+  "annotation_manifest_sha256": "a3bf14ef1a9ca5086e43158b7f0f094c2e5bce4c3913a6f6c56f9bb9184b328d",
+  "records": {
+    "B08V134QWR": {
+      "accepted": true,
+      "image_sha256": "5351fe5727bf6d9d8313c8262c28589948c84856f535b31f6f58d4d44d68166b",
+      "proposal_sha256": "4bd6d4e2e63345e96f81220c8c7257342b3ea629799e48df93fb3503d461cfac",
+      "text_regions": [
+        [
+          0.466,
+          0.53,
+          0.634,
+          0.584
+        ]
+      ],
+      "boxes": [
+        [
+          15,
+          65,
+          490,
+          465
+        ]
+      ],
+      "notes": "目标 01_camera：白色球机+左上手机画中画，SAM2 前景掩码完整覆盖球机主体与支架，RapidOCR 红框准确标出机身 HXVIEW 品牌字样。"
+    },
+    "B01LML1VXU": {
+      "accepted": true,
+      "image_sha256": "4ab746e0c4f3ff84abd731926a23872c3f6bb17a4b49c4fe00c2ac77a432f515",
+      "proposal_sha256": "43dc20860662fb8f29b1d3c71aa0ce24a9151fdf6f4ca2af188dc9ca2592766a",
+      "text_regions": [
+        [
+          0.516,
+          0.46546546546546547,
+          0.624,
+          0.6126126126126126
+        ],
+        [
+          0.528,
+          0.5195195195195195,
+          0.616,
+          0.6396396396396397
+        ]
+      ],
+      "boxes": [
+        [
+          81,
+          9,
+          397,
+          311
+        ]
+      ],
+      "notes": "源图 01_camera：纯白底 LOREX 1080p HD 枪式安防摄像头实物，SAM2 绿色轮廓紧贴机身与底座，RapidOCR 准确框出侧面 LOREX 与 1080p HD 标识。"
+    },
+    "B09CYFD5BX": {
+      "accepted": true,
+      "image_sha256": "8fc2834a77b8ecf235f5bec9c1f335830d1de142843cda13284cdfe36579000d",
+      "proposal_sha256": "45f87a7889e64e6c67a769d7d0fe121a5317c89ea7214e37f1dc5723ba46ec4c",
+      "text_regions": [],
+      "boxes": [
+        [
+          5,
+          5,
+          399,
+          496
+        ]
+      ],
+      "notes": "目标 02_chair：纯白底棕色液压理发旋转椅，SAM2 掩码完整覆盖椅背、扶手、气杆与方形底座，无可见印刷文字。"
+    },
+    "B07GDZQ68V": {
+      "accepted": true,
+      "image_sha256": "7d92c26259daa206212651d01b6af57fdcf00266a024fdf0e6d509bb3c8fdf5a",
+      "proposal_sha256": "36fae1f86b3cdc041acdb0a3bbd26c7f7f34b369b2d22fec8c133c1efda558d7",
+      "text_regions": [],
+      "boxes": [
+        [
+          103,
+          60,
+          419,
+          457
+        ]
+      ],
+      "notes": "源图 02_chair：纯白底米色布艺五爪滑轮办公转椅，SAM2 掩码精准贴合椅背、座垫与金属五星脚架，无印刷文字。"
+    },
+    "B08Z8MHWVS": {
+      "accepted": true,
+      "image_sha256": "cead69b311e6005050a6c8b1cdea7abff1a12be0c6500386cbabe4638f254bd3",
+      "proposal_sha256": "321f5210b1ee09045389fa8a06ec379d1d1af67b6fa155d71f41a28e2981a1d8",
+      "text_regions": [
+        [
+          0.432,
+          0.078,
+          0.576,
+          0.264
+        ],
+        [
+          0.412,
+          0.256,
+          0.598,
+          0.33
+        ],
+        [
+          0.146,
+          0.502,
+          0.362,
+          0.58
+        ],
+        [
+          0.398,
+          0.534,
+          0.488,
+          0.608
+        ],
+        [
+          0.674,
+          0.546,
+          0.752,
+          0.594
+        ],
+        [
+          0.742,
+          0.536,
+          0.784,
+          0.578
+        ],
+        [
+          0.146,
+          0.572,
+          0.258,
+          0.642
+        ],
+        [
+          0.544,
+          0.582,
+          0.598,
+          0.618
+        ],
+        [
+          0.756,
+          0.568,
+          0.84,
+          0.69
+        ],
+        [
+          0.538,
+          0.786,
+          0.846,
+          0.852
+        ],
+        [
+          0.22,
+          0.824,
+          0.488,
+          0.886
+        ],
+        [
+          0.606,
+          0.826,
+          0.786,
+          0.868
+        ],
+        [
+          0.228,
+          0.856,
+          0.478,
+          0.91
+        ]
+      ],
+      "boxes": [
+        [
+          58,
+          28,
+          453,
+          463
+        ]
+      ],
+      "notes": "目标 03_cookies：纯白底双桶曲奇生面团及顶部 2 PINTS 圆牌，SAM2 掩码完整覆盖双桶与标牌，RapidOCR 框出 2 PINTS 及桶身品牌文字。"
+    },
+    "B00HHP71JY": {
+      "accepted": true,
+      "image_sha256": "bafdeacc0deef6990db751cc9809cd48a67ea47e9265012457b43137582347ea",
+      "proposal_sha256": "bbcc38f00fd0bbec9945e89d1941748eeaa11c37714621a28e50010e2c9656bb",
+      "text_regions": [
+        [
+          0.236,
+          0.218,
+          0.384,
+          0.29
+        ],
+        [
+          0.232,
+          0.336,
+          0.788,
+          0.634
+        ],
+        [
+          0.356,
+          0.59,
+          0.488,
+          0.654
+        ]
+      ],
+      "boxes": [
+        [
+          82,
+          18,
+          419,
+          481
+        ]
+      ],
+      "notes": "源图 03_cookies：纯白底 Lotte Kancho 粉色杯装巧克力饼干零食，SAM2 掩码完整覆盖杯体，RapidOCR 准确框出 LOTTE、Kancho、CHOCO 字样。"
+    },
+    "B086PW7TWX": {
+      "accepted": true,
+      "image_sha256": "b73bc5fcbb1a2fd7fe322cba4dca3543f427948a9a65fff17a0e058de19e8eb4",
+      "proposal_sha256": "11efc89bbae8b50da8fb7a96cd87561eefa07f8ca799a51afcf7d22a3958bb4f",
+      "text_regions": [
+        [
+          0.292,
+          0.222,
+          0.704,
+          0.386
+        ],
+        [
+          0.388,
+          0.414,
+          0.58,
+          0.532
+        ],
+        [
+          0.296,
+          0.576,
+          0.664,
+          0.74
+        ]
+      ],
+      "boxes": [
+        [
+          67,
+          7,
+          417,
+          493
+        ]
+      ],
+      "notes": "目标 04_curtain：纯白底木纹质感穿孔窗帘，SAM2 掩码完整覆盖窗帘全幅，RapidOCR 准确框出中央 DRINKS / ARE / ON ME 大字。"
+    },
+    "B09KRPJJC4": {
+      "accepted": true,
+      "image_sha256": "ccea9d71487707336857f62b4b1ad78285aa6fc4150aa7d5cebf33a142541b87",
+      "proposal_sha256": "3c4adcfc032bf61d4f4c55724666062e027ea33eb7c68a1a2a7c2b8bb15da337",
+      "text_regions": [
+        [
+          0.314,
+          0.66,
+          0.682,
+          0.742
+        ]
+      ],
+      "boxes": [
+        [
+          55,
+          14,
+          436,
+          482
+        ]
+      ],
+      "notes": "源图 04_curtain：白底双扇金毛犬与红色圣诞卡车图案纱帘，SAM2 掩码覆盖左右两幅窗帘主体，RapidOCR 准确框出车尾 MERRY CHRISTMAS 文字。"
+    },
+    "B01460C2I2": {
+      "accepted": true,
+      "image_sha256": "c5af2ad55c9b05fdba76c36316aa3088a43c286fe6ccab7858ccd2d14cd9c9a6",
+      "proposal_sha256": "dcd136875dadb9d99d6f84cc2671c2236ea2d517fb7cf3c9094ed02a6f64480c",
+      "text_regions": [],
+      "boxes": [
+        [
+          10,
+          13,
+          482,
+          499
+        ]
+      ],
+      "notes": "目标 05_hair_extension：左侧长直发模特+右侧黑色卡扣接发片拼图，SAM2 掩码覆盖模特与接发主体，无印刷文字。"
+    },
+    "B07BC7JMPL": {
+      "accepted": true,
+      "image_sha256": "55ee7ea2a6a6b5c65ccab1b94811e98fed3b2d01ca1f314188f056b9d0bd43ce",
+      "proposal_sha256": "8c8e552f8698e4e94a75b3407c0ff151f6f342a62b1c4236f4600d0abc77863d",
+      "text_regions": [],
+      "boxes": [
+        [
+          0,
+          17,
+          256,
+          497
+        ]
+      ],
+      "notes": "源图 05_hair_extension：左侧卷发模特+右侧 7 束紫色丝带绑扎真人接发发束，SAM2 掩码覆盖左侧人物及发束主体，无印刷文字。"
+    },
+    "B09HH96NJY": {
+      "accepted": true,
+      "image_sha256": "acf3f5d8944c118d04e2ba456926f4750e87198bbd3201302a34e52e44bd6039",
+      "proposal_sha256": "dc6d5aa76e0ba497e4f51f1619dfaf2db5db5b80f0c273d8c08bc94a67a38725",
+      "text_regions": [],
+      "boxes": [
+        [
+          157,
+          14,
+          326,
+          489
+        ]
+      ],
+      "notes": "目标 06_jeans：纯白底黑色高腰明线拼接阔腿牛仔裤，SAM2 掩码完整贴合裤身与裤脚，无印刷文字。"
+    },
+    "B09J89KXRJ": {
+      "accepted": true,
+      "image_sha256": "646f603de154a3644550f9d642e49d37bfc781f75c4ab088c9938f71e6573883",
+      "proposal_sha256": "52f18af2407096f107db9b3cc3c72be92d5ebcd38181f3ff04d148c34fb32921",
+      "text_regions": [],
+      "boxes": [
+        [
+          144,
+          27,
+          355,
+          472
+        ]
+      ],
+      "notes": "源图 06_jeans：纯白底蓝色高腰加绒牛仔长裤，SAM2 掩码精准贴合牛仔裤主体与翻边裤脚，无印刷文字。"
+    },
+    "B00BDJODWI": {
+      "accepted": true,
+      "image_sha256": "dd0abf8d2d52aa289346aa2e7219187cec901c901d4f3cce1ef3379691467256",
+      "proposal_sha256": "2dbb5a202d0dc01501ecf899efdc36de71ec0c0b84a92f4687228457528e84f7",
+      "text_regions": [
+        [
+          0.275,
+          0.314,
+          0.68125,
+          0.356
+        ],
+        [
+          0.20625,
+          0.352,
+          0.675,
+          0.38
+        ],
+        [
+          0.21875,
+          0.344,
+          0.70625,
+          0.37
+        ],
+        [
+          0.1375,
+          0.454,
+          0.8375,
+          0.502
+        ],
+        [
+          0.2,
+          0.528,
+          0.78125,
+          0.562
+        ],
+        [
+          0.1375,
+          0.554,
+          0.84375,
+          0.588
+        ],
+        [
+          0.20625,
+          0.818,
+          0.75,
+          0.852
+        ],
+        [
+          0.24375,
+          0.856,
+          0.7,
+          0.882
+        ],
+        [
+          0.25,
+          0.842,
+          0.7,
+          0.87
+        ],
+        [
+          0.2,
+          0.9,
+          0.75625,
+          0.94
+        ]
+      ],
+      "boxes": [
+        [
+          2,
+          6,
+          157,
+          493
+        ]
+      ],
+      "notes": "目标 07_shampoo：纯白底 Aveda Scalp Benefits 洗发水单瓶，SAM2 掩码精准覆盖瓶身与瓶盖，RapidOCR 完整框出 AVEDA、scalp benefits 等正面标签文字。"
+    },
+    "B08WJB1XDD": {
+      "accepted": true,
+      "image_sha256": "db3943d881d90ad1c02d8f68a9d84e10ec5dad9a1121bff7b689c995823840d7",
+      "proposal_sha256": "95e7e541c7bdfff4a6646fd2fbbf9d808055b6c71d829294e77bfa4d55d56128",
+      "text_regions": [
+        [
+          0.178,
+          0.334,
+          0.394,
+          0.378
+        ],
+        [
+          0.61,
+          0.334,
+          0.83,
+          0.378
+        ],
+        [
+          0.236,
+          0.37,
+          0.33,
+          0.408
+        ],
+        [
+          0.672,
+          0.37,
+          0.766,
+          0.408
+        ],
+        [
+          0.198,
+          0.408,
+          0.368,
+          0.45
+        ],
+        [
+          0.634,
+          0.408,
+          0.804,
+          0.45
+        ],
+        [
+          0.224,
+          0.432,
+          0.342,
+          0.466
+        ],
+        [
+          0.642,
+          0.432,
+          0.796,
+          0.466
+        ],
+        [
+          0.194,
+          0.47,
+          0.372,
+          0.504
+        ],
+        [
+          0.204,
+          0.488,
+          0.364,
+          0.518
+        ],
+        [
+          0.63,
+          0.47,
+          0.808,
+          0.504
+        ],
+        [
+          0.204,
+          0.498,
+          0.364,
+          0.532
+        ],
+        [
+          0.646,
+          0.5,
+          0.79,
+          0.53
+        ],
+        [
+          0.22,
+          0.518,
+          0.348,
+          0.55
+        ],
+        [
+          0.216,
+          0.818,
+          0.354,
+          0.858
+        ],
+        [
+          0.654,
+          0.82,
+          0.788,
+          0.856
+        ]
+      ],
+      "boxes": [
+        [
+          38,
+          13,
+          462,
+          485
+        ]
+      ],
+      "notes": "源图 07_shampoo：纯白底 Pantene Gold Series 洗发水与护发素双压泵瓶，SAM2 掩码完整覆盖双瓶，RapidOCR 准确框出 GOLD SERIES、PANTENE、SHAMPOO 等标签文字。"
+    },
+    "B01N47U1VI": {
+      "accepted": true,
+      "image_sha256": "abb62690253646b100a1f9386c4898532613e79dc0b86d8c593f10bfe4be61da",
+      "proposal_sha256": "ccccd8c31cb9f225b149fb9808c250806930b98eb156346ebed2e7ebde4e74eb",
+      "text_regions": [
+        [
+          0.382,
+          0.6475644699140402,
+          0.482,
+          0.8137535816618912
+        ]
+      ],
+      "boxes": [
+        [
+          0,
+          0,
+          499,
+          348
+        ]
+      ],
+      "notes": "目标 08_speaker：手持红黑机身便携蓝牙音箱，SAM2 掩码覆盖音箱与持握区域，RapidOCR 框出机身正面品牌标识。"
+    },
+    "B09P3RR62H": {
+      "accepted": true,
+      "image_sha256": "fd025d523f288b91eff6e3c5af7dbe74db99aef26a4da917c1647f2d817463f5",
+      "proposal_sha256": "2855b254e2bae7292d38ff6f1d81365ae3d734c542a5a3b89c6f7fc361539d6a",
+      "text_regions": [],
+      "boxes": [
+        [
+          10,
+          161,
+          488,
+          359
+        ]
+      ],
+      "notes": "源图 08_speaker：纯白底白色长条便携无线蓝牙音箱（正面七彩 LED 灯条），SAM2 绿色轮廓精准贴合音箱箱体，无外露品牌印刷文字。"
+    },
+    "B09J81RMLD": {
+      "accepted": true,
+      "image_sha256": "893e98a639703a3ebad6a4cb6a31595156b896a3cb519fcfe31511a132866f14",
+      "proposal_sha256": "e89295ae544399deee14d01e08fa92472c20b7c8848a178a095170ef3997c6b6",
+      "text_regions": [],
+      "boxes": [
+        [
+          135,
+          51,
+          349,
+          446
+        ]
+      ],
+      "notes": "目标 09_toothbrush：纯白底蓝色星形手柄儿童硅胶牙刷，SAM2 掩码完整闭合覆盖刷头与星形握柄，无印刷文字。"
+    },
+    "B09MD5SZCX": {
+      "accepted": true,
+      "image_sha256": "b2e2f81860429ed233c851c6406447e416287f18e3a8148996831da7bb9edfa1",
+      "proposal_sha256": "8e99064b2662990effff708c320af3426d3d29e2ce7839237efc9c9068650238",
+      "text_regions": [],
+      "boxes": [
+        [
+          53,
+          38,
+          437,
+          489
+        ]
+      ],
+      "notes": "源图 09_toothbrush：纯白底蓝粉双色环形握柄手动弧形牙刷（2支装），SAM2 掩码完整覆盖两支牙刷主体，无印刷文字。"
+    }
+  }
+}

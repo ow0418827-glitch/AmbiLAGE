@@ -33,9 +33,10 @@ SAMPLE_INFO = DATA / 'public/visual_inception_inputs/catalog_v5'
 WORK = OUTPUT / 'datasets/public/.cache/exact_overlap_v4'
 SEED = 20261120
 BOILERPLATE = re.compile(
-    r'https?://|www\.|<\s*/?\s*(?:div|a|img|br|ul|li|p)\b|\b(?:customer service|money.back|'
+    r'https?://|www\.|<\s*/?\s*(?:div|a|img|br|ul|li|p)\b|一{3,}|\b(?:customer service|money.back|'
     r'return policy|refund|warranty|contact (?:us|me)|purchase guarantee|amazon\.com|ships from|'
-    r'welcome to (?:our|the)|after.sales guarantee|please send us an email|please allow.{0,28}(?:error|deviation))\b', re.I)
+    r'welcome to (?:our|the)|after.sales guarantee|please send us an email|please allow.{0,28}(?:error|deviation)|'
+    r'worry[\-\s]*free\s+shopping|shipped\s+via\s+freight|call\s+before\s+delivery)\b', re.I)
 CATEGORY_TITLE_EXCLUSIONS = {
     '01_camera': r'\b(?:solar panels?|battery packs?|doorbells?)\b',
     '04_curtain': r'\b(?:curtain|drapery)\s+(?:rods?|rings?|hooks?|hardware)\b',
@@ -43,10 +44,36 @@ CATEGORY_TITLE_EXCLUSIONS = {
     '08_speaker': r'\b(?:fans?|phone holders?|sound bars?)\b',
 }
 CATEGORY_TEXT_EXCLUSIONS = {
+    '01_camera': r'\b(?:replacement\s+charger\s+camera\s+accessory\s+kit|camera\s+accessory\s+kit|solar\s+panel\s+only)\b',
+    '02_chair': r'\blazy\s+sofa\b',
     '05_hair_extension': r'\b(?:purpose of the hair extension tool|purchase it separately)\b',
     '07_shampoo': r'^\s*use this moisturizing conditioner\b',
     '08_speaker': r'\b(?:rechargeable fan|zen music accompanied)\b',
 }
+CATEGORY_ANCHOR_HEAD_CHARS = 250
+CATEGORY_ANCHOR_PATTERNS = {
+    '01_camera': r'\b(?:cameras?|cctv|surveillance|ptz|camcorder)\b',
+    '02_chair': r'\b(?:chairs?|barber|salon\s+seat|styling\s+seat)\b',
+    '03_cookies': r'\b(?:cookies?|dough)\b',
+    '04_curtain': r'\b(?:curtains?|drapes?|draper(?:y|ies)|valances?)\b',
+    '05_hair_extension': r'\b(?:hair|extensions?|wefts?|weaves?|braids?|ponytails?|wigs?|remy|clip[- ]?ins?)\b',
+    '06_jeans': r'\b(?:jeans?|denim|jeggings?)\b',
+    '07_shampoo': r'\b(?:shampoos?|hair\s+wash|cleansing\s+wash|scalp)\b',
+    '08_speaker': r'\b(?:speakers?|boombox|soundbar|subwoofer|bluetooth\s+audio)\b',
+    '09_toothbrush': r'\b(?:tooth\s*brush\w*|bristles?|oral\s+care|dental\s+brush)\b',
+}
+NOISE_HEAD = re.compile(
+    r'^\s*(?:'
+    r'[^\w]{0,8}(?:size\s*chart|size\s*guide|size\s*:|measurements?\s*:|specifications?\s*:|product\s+features?\s*:)'
+    r'|suitable\s+for\s+(?:daily|work|school|party|dating)'
+    r'|(?:\d{1,3}(?:\.\d+)?%\s*(?:cotton|polyester|spandex|nylon|rayon|viscose|elastane)[\s,;/]*){1,4}'
+    r'(?:imported|machine\s+wash|pull\s+on|button\s+closure|zipper\s+closure|hand\s+wash|made\s+of)'
+    r'|welcome\s+to\s+\w+\s+store'
+    r'|[^\w]{0,6}widely\s+used\s*[&]\s*perfect\s+gifts'
+    r'|note\s*:|warm\s+tips?\s*:|attention\s*:'
+    r')',
+    re.I,
+)
 VARIANT_WORDS = set('black white blue green brown silver gray grey pink red yellow beige'
                     ' rose gold navy charcoal ivory small medium large pack inch inches set'.split())
 
@@ -73,7 +100,11 @@ def acceptable(group, text):
     if group == '03_cookies' and not re.search(r'\b(?:cookies?|dough|bake|baking|chocolate)\b', normalized):
         return False
     excluded = CATEGORY_TEXT_EXCLUSIONS.get(group)
+    anchor = CATEGORY_ANCHOR_PATTERNS.get(group)
+    if anchor and not re.search(anchor, normalized[:CATEGORY_ANCHOR_HEAD_CHARS]):
+        return False
     return (len(tokens(text)) >= 6 and len(text) <= 3800 and not BOILERPLATE.search(normalized)
+            and not NOISE_HEAD.search(text)
             and not (excluded and re.search(excluded, normalized)))
 
 
@@ -140,7 +171,7 @@ def catalog_pool(db, group, spec, old_ids, duplicates, snapshot, seed):
             result.extend(product_items)
             seen_titles.add(key)
             seen_images.update(assets)
-        if len(seen_titles) >= 110:
+        if len(seen_titles) >= 160:
             break
     return result
 
@@ -191,6 +222,10 @@ def _select_training_originals(group, training_rows, seed):
             instruction=row['text'],
             training_id=row['id'],
         ))
+    for fam in ('category_description', 'model_paraphrase'):
+        require(len(by_family[fam]) == FAMILIES[fam]
+                and all(acceptable(group, row['instruction']) for row in by_family[fam]),
+                f'{group} 合格训练原题数量不足或含不合格文本：{fam}')
     return dict(by_family)
 
 
@@ -216,16 +251,17 @@ def _choose_descriptions(oracle, pool, reserved, seed, group, existing_rewrite_i
             break
     inputs = list(locked_inputs)
     used_input_products = {row['product_id'] for row in inputs}
-    for old in oracle[:8]:
+    min_tok, max_tok = (10, 60) if group == '03_cookies' else (22, 85)
+    for old in oracle:
         if len(inputs) >= 8:
             break
         options = sorted(pool, key=lambda row: (
             row['origin'] != 'unseen_product', row['product_id'] in used_input_products,
-            row['product_id'] in used_products, not 10 <= len(tokens(row['original_text'])) <= 40,
+            row['product_id'] in used_products, not min_tok <= len(tokens(row['original_text'])) <= max_tok,
             _fit(old['instruction'], row['original_text']), order_key(seed, 'rewrite', group, row['id'])))
         for row in options:
             text = row['original_text']
-            if text in reserved or not 8 <= len(tokens(text)) <= 70:
+            if text in reserved or not 8 <= len(tokens(text)) <= 140:
                 continue
             reserved.add(text)
             used_input_products.add(row['product_id'])
@@ -265,7 +301,27 @@ def _choose_search(group, originals, pools, used_ids, duplicates, selected, seed
     return result
 
 
-def prepare(catalog, output, seed, rewrites_path=WORK / 'rewrites.json'):
+def _reused_searches(reuse_pairs_path, used_searches, duplicates):
+    prev_groups = read_json(reuse_pairs_path)['groups']
+    by_group = {}
+    for group, pairs in prev_groups.items():
+        rows = []
+        for pair in pairs:
+            if pair['family'] != 'heldout_search_query':
+                continue
+            source = dict(pair['heldout']['source'])
+            if source.get('origin') == SYNTHETIC_SEARCH:
+                continue
+            text = source['original_text']
+            key = (source['dataset'], str(source['query_id']))
+            require(text not in duplicates and key not in used_searches,
+                    f'{group} 复用搜索词与训练集重复')
+            rows.append(source)
+        by_group[group] = rows
+    return by_group
+
+
+def prepare(catalog, output, seed, rewrites_path=None, reuse_searches_from=None):
     specs, bundles, training, texts, concepts = training_index(EVALUATION_BASE, TRAINING_ROOT)
     used_searches, products = source_exclusions(bundles, TRAINING_ROOT, specs)
     duplicates = DuplicateIndex(texts | concepts)
@@ -275,7 +331,11 @@ def prepare(catalog, output, seed, rewrites_path=WORK / 'rewrites.json'):
     original_stat = catalog.stat()
     require(original_stat.st_size == entry['bytes'] and file_sha(catalog) == entry['sha256'],
             '公开商品库与冻结摘要不一致')
-    queries = search_pools(CORPUS, specs, products)
+    reused_by_group = (
+        _reused_searches(reuse_searches_from, used_searches, duplicates)
+        if reuse_searches_from is not None else None
+    )
+    queries = None if reused_by_group is not None else search_pools(CORPUS, specs, products)
     groups = {}
     with closing(sqlite3.connect(catalog.resolve().as_uri() + '?mode=ro', uri=True)) as db:
         db.execute('PRAGMA query_only=ON')
@@ -287,10 +347,21 @@ def prepare(catalog, output, seed, rewrites_path=WORK / 'rewrites.json'):
             existing_ids = [row['input_row_id'] for row in existing_rewrites.get(group, [])]
             descriptions, inputs = _choose_descriptions(originals['category_description'],
                 pool, selected, seed, group, existing_rewrite_ids=existing_ids)
-            upstream = bundles[group]['sources']['heldout_search_query']['upstream']['dataset'].casefold()
-            preferred = 'orcas' if 'orcas' in upstream else 'esci'
-            searches = _choose_search(group, originals['heldout_search_query'],
-                queries, used_searches, duplicates, selected, seed, preferred)
+            if reused_by_group is not None:
+                searches = []
+                for row in reused_by_group.get(group, []):
+                    text = row['original_text']
+                    key = (row['dataset'], str(row['query_id']))
+                    require(text not in selected and key not in used_searches,
+                            f'{group} 复用搜索词与本组已选描述冲突')
+                    selected.add(text)
+                    used_searches.add(key)
+                    searches.append(row)
+            else:
+                upstream = bundles[group]['sources']['heldout_search_query']['upstream']['dataset'].casefold()
+                preferred = 'orcas' if 'orcas' in upstream else 'esci'
+                searches = _choose_search(group, originals['heldout_search_query'],
+                    queries, used_searches, duplicates, selected, seed, preferred)
             groups[group] = dict(category=bundles[group]['category'], originals=dict(originals),
                                  descriptions=descriptions, rewrite_inputs=inputs, searches=searches)
             print(f'{group}: 描述 {len(descriptions)}/10，改写输入 {len(inputs)}，真实搜索 {len(searches)}/4',
@@ -364,7 +435,9 @@ def main():
     collect.add_argument('--catalog', type=Path, default=CATALOG)
     collect.add_argument('--output', type=Path, default=WORK / 'prepared.json')
     collect.add_argument('--seed', type=int, default=SEED)
-    collect.add_argument('--rewrites', type=Path, default=WORK / 'rewrites.json')
+    collect.add_argument('--rewrites', type=Path, default=None)
+    collect.add_argument('--reuse-searches-from', type=Path, default=None,
+                         help='可选：从已审计 pairs.json 复用独立真实公开搜索记录（跳过 Parquet 重读）')
     generate = commands.add_parser('generate', help='可选：调用登记的外部模型生成留出改写')
     generate.add_argument('--prepared', type=Path, default=WORK / 'prepared.json')
     generate.add_argument('--group', required=True)
@@ -373,6 +446,10 @@ def main():
     generate.add_argument('--base-url', default='https://api.minimax.cn/v1')
     generate.add_argument('--api-key-env', default='MINIMAX_API_KEY')
     generate.add_argument('--output', type=Path, required=True)
+    rule_gen = commands.add_parser('generate-rule', help='按纯规则生成长度对齐的留出改写（无需调用外部大模型）')
+    rule_gen.add_argument('--prepared', type=Path, default=WORK / 'prepared.json')
+    rule_gen.add_argument('--group', default='all')
+    rule_gen.add_argument('--output', type=Path, required=True)
     build = commands.add_parser('freeze')
     build.add_argument('--prepared', type=Path, default=WORK / 'prepared.json')
     build.add_argument('--rewrites', type=Path, default=WORK / 'rewrites.json')
@@ -387,7 +464,8 @@ def main():
         print(json.dumps(dict(status=prepared['status'], checked_groups=list(prepared['groups']),
                               missing_groups=prepared['missing_groups']), ensure_ascii=False))
     elif args.command == 'prepare':
-        prepare(args.catalog, args.output, args.seed, rewrites_path=args.rewrites)
+        prepare(args.catalog, args.output, args.seed, rewrites_path=args.rewrites,
+                reuse_searches_from=args.reuse_searches_from)
     elif args.command == 'generate':
         from src.visual._visual_inception.data_preparation import generate_evaluation_paraphrases
 
@@ -399,6 +477,40 @@ def main():
             base_url=args.base_url, api_key_env=args.api_key_env, generate=True)
         freeze_json(args.output, {args.group: [dict(input_row_id=row['input_row_id'], text=row['text'],
             generation=result['generation']) for row in result['rows']]})
+    elif args.command == 'generate-rule':
+        from src.visual._visual_inception.data_preparation import generate_rule_evaluation_paraphrases
+
+        prepared_doc = read_json(args.prepared)
+        _, _, _, trained_texts, concepts = training_index(EVALUATION_BASE, TRAINING_ROOT)
+        target_groups = list(prepared_doc['groups']) if args.group == 'all' else [args.group]
+        require(set(target_groups).issubset(prepared_doc['groups']), '改写包含未知组')
+        out_rewrites = {}
+        for gname in target_groups:
+            gdata = prepared_doc['groups'][gname]
+            descriptions = [dict(id=row['id'], text=row['original_text'], title=row.get('title', ''),
+                                 category=gdata['category']) for row in gdata['rewrite_inputs']]
+            target_lengths = [len(r['instruction']) for r in gdata['originals']['model_paraphrase']]
+            forbidden = (
+                set(trained_texts)
+                | set(concepts)
+                | {row['original_text'] for row in gdata['descriptions']}
+                | {row['original_text'] for row in gdata['searches']}
+            )
+            result = generate_rule_evaluation_paraphrases(
+                descriptions,
+                group=gname,
+                category=gdata['category'],
+                target_lengths=target_lengths,
+                forbidden_texts=forbidden,
+                seed=prepared_doc['seed'],
+                acceptable_fn=acceptable,
+            )
+            out_rewrites[gname] = [
+                dict(input_row_id=row['input_row_id'], text=row['text'], generation=result['generation'])
+                for row in result['rows']
+            ]
+            print(f"{gname}: 规则改写 {len(out_rewrites[gname])}/6, 长度={result['generation']['generated_lengths']} (目标={result['generation']['target_lengths']})", flush=True)
+        freeze_json(args.output, out_rewrites, newline='\n')
     else:
         freeze(args.prepared, args.rewrites, args.output, save_preparation=args.save_preparation,
                search_fallbacks_path=args.search_fallbacks)

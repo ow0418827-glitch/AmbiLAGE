@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "default_base": "original_9groups",
+  "bases": {
+    "original_9groups": {
+      "path": "resources/evaluation_base",
+      "description": "原始冻结 9 组实验基础包（Set 1）"
+    },
+    "golden_band_9groups": {
+      "path": "resources/evaluation_base_golden_band",
+      "description": "黄金先验名次带 [5,12] + 前景裁剪中位数新选 9 组基础包（Set 2，与 Set 1 原图严格互斥）"
+    }
+  }
+}

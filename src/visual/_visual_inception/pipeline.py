@@ -25,15 +25,31 @@ from .perceptual import load_perceptual, resolve_lpips_weights
 OBJECTIVE_KIND = 'visual_inception_semantic_perceptual_no_retrieval_v1'
 RETRIEVAL_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_v2'
 ENHANCED_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_hardneg_advquery_v3'
+PAPER_STANDARD_OBJECTIVE_KIND = 'visual_inception_retrieval_semantic_perceptual_paper_standard_v4'
 QUERY_SAMPLING_KIND = 'fixed_pool_per_step_without_replacement_cross_step_reuse_v1'
 LEGACY_MECHANISM_FIELDS = ('mechanism_profile', 'contrastive_margin', 'hard_negative_count',
     'hard_negative_same_category_count', 'hard_negative_proxy_memory_count', 'hard_negative_popularity_count',
     'query_adversarial_radius', 'query_adversarial_steps', 'query_adversarial_step_size', 'query_adversarial_mix')
 MECHANISM_FIELDS = LEGACY_MECHANISM_FIELDS + ('bank_loss_blend', 'hard_margin_loss_blend')
+PAPER_STANDARD_MECHANISM_FIELDS = (
+    'mechanism_profile',
+    'contrastive_margin',
+    'hard_negative_same_category_count',
+    'hard_negative_proxy_memory_count',
+    'hard_negative_popularity_count',
+    'query_adversarial_steps',
+    'query_adversarial_step_size',
+    'query_adversarial_mix',
+)
 
 
 def mechanism_parameters(config):
-    return {name: getattr(config, name) for name in MECHANISM_FIELDS}
+    fields = (
+        PAPER_STANDARD_MECHANISM_FIELDS
+        if config.mechanism_profile == 'paper_standard'
+        else MECHANISM_FIELDS
+    )
+    return {name: getattr(config, name) for name in fields}
 
 
 def _prepare_text_features(models, texts, *, fixture):
@@ -70,6 +86,17 @@ def _proxy_components(model, image, target, *, retrieval_state=None, model_index
         semantic, retrieval, audit = enhanced_retrieval_semantic_losses(feature, target, queries,
             negatives, negative_policy=retrieval_state['negative_policies'][model_index], config=config,
             query_subspace=subspace, include_per_query_audit=include_per_query_audit)
+        return (semantic, retrieval, audit) if return_audit else (semantic, retrieval)
+    if config is not None and config.mechanism_profile == 'paper_standard':
+        from .paper_standard_objective import paper_standard_retrieval_semantic_losses
+        semantic, retrieval, audit = paper_standard_retrieval_semantic_losses(
+            feature,
+            target,
+            queries,
+            negatives,
+            static_selection=retrieval_state['static_negative_selections'][model_index],
+            config=config,
+        )
         return (semantic, retrieval, audit) if return_audit else (semantic, retrieval)
     values = retrieval_semantic_losses(feature, target, queries, negatives, temperature)
     return (*values, None) if return_audit else values
@@ -152,6 +179,8 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
     bundle = _load_bundle(config, source, target, semantic)
     retrieval_enabled = bundle is not None
     enhanced_enabled = retrieval_enabled and config.mechanism_profile == 'enhanced_v3'
+    paper_standard_enabled = retrieval_enabled and config.mechanism_profile == 'paper_standard'
+    mechanism_enabled = enhanced_enabled or paper_standard_enabled
     source_pil, target_pil = load_image(source), load_image(target)
     requested_device = torch.device(device)
     if config.smoke_test:
@@ -184,7 +213,7 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
     if retrieval_enabled:
         from .retrieval_cache import encode_candidate_cache
         query_features, query_encoding = _prepare_text_features(models, bundle['queries'], fixture=config.smoke_test)
-        negatives, negative_policies, query_subspaces = [], [], []
+        negatives, negative_policies, query_subspaces, static_negative_selections = [], [], [], []
         cache_root = _project_path(config.candidate_cache_dir) if config.candidate_cache_dir else root / 'candidate_cache'
         for model_idx, (model, concept) in enumerate(zip(models, text_features)):
             vectors, record = encode_candidate_cache(model, bundle['candidates'], cache_root,
@@ -198,10 +227,22 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
                 negative_policies.append(build_negative_policy(bundle['candidate_metadata'], vectors,
                     category=bundle['audit']['category']))
                 query_subspaces.append(build_query_subspace(query_features[model_idx], concept_features=concept))
+            elif paper_standard_enabled:
+                from .paper_standard_objective import build_static_negative_selection
+                static_negative_selections.append(
+                    build_static_negative_selection(
+                        bundle['candidate_metadata'],
+                        vectors,
+                        category=bundle['audit']['category'],
+                        config=config,
+                    )
+                )
         retrieval_state = dict(concept_features=text_features, query_features=query_features, negative_features=negatives)
         if enhanced_enabled:
             retrieval_state['negative_policies'] = negative_policies
             retrieval_state['query_subspaces'] = query_subspaces
+        elif paper_standard_enabled:
+            retrieval_state['static_negative_selections'] = static_negative_selections
         sampling = dict(algorithm=QUERY_SAMPLING_KIND, pool_size=pool_size, batch_size=config.query_batch_size,
             calibration_indices=sample_query_indices(pool_size, config.query_batch_size, config.seed, 0),
             step_indices=[sample_query_indices(pool_size, config.query_batch_size, config.seed, step)
@@ -229,7 +270,7 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
             retrieval_state=retrieval_state, calibration_indices=sampling['calibration_indices'] if sampling else None,
             retrieval_weight=config.retrieval_weight, semantic_weight=config.semantic_weight,
             temperature=config.retrieval_temperature,
-            loss_function=enhanced_calibration_loss if enhanced_enabled else None)
+            loss_function=enhanced_calibration_loss if mechanism_enabled else None)
         weights = inverse_variance_weights(variances)
     lower, upper = (source_tensor - epsilon).clamp(0, 1), (source_tensor + epsilon).clamp(0, 1)
     # Clean-image initialization is an explicit reproduction assumption; random
@@ -241,7 +282,7 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
         gradient, record = _gradient(image, source_tensor, models, text_features, weights, perceptual, config,
             retrieval_state=retrieval_state, query_indices=indices)
         image = torch.maximum(lower, torch.minimum(upper, image - step_size * gradient.sign())).detach()
-        if enhanced_enabled:
+        if mechanism_enabled:
             mechanism_steps.append(dict(step=step, query_indices=indices,
                                         model_audits=record.pop('mechanism_audits')))
         if step == 1 or step == config.steps or step % 10 == 0:
@@ -263,7 +304,15 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
     decoded = decoded_image_audit(source_pil, output, maximum_levels=config.epsilon_levels)
     if not decoded['within_budget']:
         raise AssertionError('实际解码图片超过冻结像素预算')
-    objective_kind = ENHANCED_OBJECTIVE_KIND if enhanced_enabled else RETRIEVAL_OBJECTIVE_KIND if retrieval_enabled else OBJECTIVE_KIND
+    objective_kind = (
+        PAPER_STANDARD_OBJECTIVE_KIND
+        if paper_standard_enabled
+        else ENHANCED_OBJECTIVE_KIND
+        if enhanced_enabled
+        else RETRIEVAL_OBJECTIVE_KIND
+        if retrieval_enabled
+        else OBJECTIVE_KIND
+    )
     semantic_definition = dict(kind=objective_kind,
         semantic_weight=config.semantic_weight,
         perceptual_weight=config.perceptual_weight,
@@ -306,6 +355,25 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
             proxy_user_memory_is_independent_public_role=True,
             popularity_is_declared_proxy_not_real_sales=True,
             paper_missing_mechanisms_implemented=True, author_exact_mechanism_details_reproduced=False)
+    elif paper_standard_enabled:
+        from .paper_standard_objective import (
+            PAPER_STANDARD_MARGIN_KIND,
+            PAPER_STANDARD_QUERY_AUGMENTATION_KIND,
+        )
+        semantic_definition.update(
+            mechanism_profile='paper_standard',
+            mechanism_parameters=mechanism_parameters(config),
+            retrieval_denominator='one_dynamic_adversarial_positive_plus_static_three_source_public_negatives',
+            static_negative_pool_sizes=[row['selected_count'] for row in static_negative_selections],
+            contrastive_margin=config.contrastive_margin,
+            contrastive_margin_algorithm=PAPER_STANDARD_MARGIN_KIND,
+            query_adversarial_space='ambient_embedding_unit_sphere_no_subspace',
+            query_adversarial_algorithm=PAPER_STANDARD_QUERY_AUGMENTATION_KIND,
+            proxy_user_memory_is_independent_public_role=True,
+            popularity_is_declared_proxy_not_real_sales=True,
+            paper_missing_mechanisms_implemented=True,
+            author_exact_mechanism_details_reproduced=False,
+        )
     if single_surrogate:
         attack = dict(attack_mode='single_surrogate_direct',
             steps_requested=config.steps, steps_completed=config.steps, selected_step=config.steps,
@@ -331,7 +399,9 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
             variance_floor_policy='max(max_model_variance*1e-12,float64_tiny)',
             ensemble_weight_formula='normalize(max(variance,relative_floor)^-2)',
             ensemble_weights=weights, weights_frozen_before_optimization=True)
-    metadata = dict(schema_version=3 if enhanced_enabled else 2 if retrieval_enabled else 1, method='visual_inception', status='success',
+    metadata = dict(
+        schema_version=4 if paper_standard_enabled else 3 if enhanced_enabled else 2 if retrieval_enabled else 1,
+        method='visual_inception', status='success',
         test_fixture=config.smoke_test, production_backend=not config.smoke_test,
         config=config.to_dict(), config_sha256=content_sha256(config.to_dict()), seed=config.seed,
         source_image=str(source), source_image_sha256=semantic['source_image']['sha256'],
@@ -383,6 +453,30 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
         metadata['enhanced_mechanisms'] = execution
         metadata['paper_missing_mechanisms_implemented'] = True
         metadata['assumptions'] += execution['paper_underspecified_choices']
+    elif paper_standard_enabled:
+        execution = dict(
+            schema_version=1,
+            kind=PAPER_STANDARD_OBJECTIVE_KIND,
+            parameters=mechanism_parameters(config),
+            static_negative_selections=static_negative_selections,
+            calibration_audits=calibration_audits,
+            step_audits=mechanism_steps,
+            final_model_audits=final_mechanism_audits,
+            author_exact_implementation_claimed=False,
+            paper_underspecified_choices=[
+                'cross_category_public_proxy_user_memory_role',
+                'global_cosine_centrality_popularity_proxy_without_category_round_robin',
+                'static_uniform_random_three_source_negative_subset_in_infonce_denominator',
+                'standard_cosine_space_hinge_margin_0_3',
+                'single_step_ambient_embedding_l2_fgsm_query_perturbation',
+            ],
+        )
+        if single_surrogate:
+            execution['single_surrogate_calibration_skipped'] = True
+        execution['execution_sha256'] = content_sha256(execution)
+        metadata['paper_standard_mechanisms'] = execution
+        metadata['paper_missing_mechanisms_implemented'] = True
+        metadata['assumptions'] += execution['paper_underspecified_choices']
     for name in ('metadata.json', 'attack_metrics.json'):
         save_json(root / name, metadata)
     ready = dict(schema_version=metadata['schema_version'], method='visual_inception', status='completed',
@@ -401,6 +495,11 @@ def _run(source, target, root, config, *, device, target_text, definition, allow
     if enhanced_enabled:
         ready.update(mechanism_profile='enhanced_v3',
                      enhanced_mechanisms_sha256=metadata['enhanced_mechanisms']['execution_sha256'])
+    elif paper_standard_enabled:
+        ready.update(
+            mechanism_profile='paper_standard',
+            paper_standard_mechanisms_sha256=metadata['paper_standard_mechanisms']['execution_sha256'],
+        )
     save_json(root / 'ready.json', ready)
     del models, perceptual, text_features, image, retrieval_state
     gc.collect()

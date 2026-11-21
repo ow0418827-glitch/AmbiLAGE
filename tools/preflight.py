@@ -12,7 +12,7 @@ import re
 import shutil
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from src.paths import PROJECT, EVALUATION_BASE, MODEL_ROOT, RESOURCES
+from src.paths import PROJECT, EVALUATION_BASE, MODEL_ROOT, RESOURCES, resolve_evaluation_base
 from src.model_registry import model_specs, verify_locked_snapshot_files
 
 
@@ -35,8 +35,8 @@ def bounded_path(root, relative):
     return path
 
 
-def check_resources(base=EVALUATION_BASE):
-    base = Path(base).resolve()
+def check_resources(base=None):
+    base = resolve_evaluation_base(base)
     manifest = json.loads((base / "manifest.json").read_text(encoding="utf-8"))
     checks = 0
     def bound(relative, expected=None):
@@ -201,11 +201,12 @@ def main(argv=None):
     parser.add_argument("--require-models", action="store_true", help="Require production snapshot manifests on the remote server")
     parser.add_argument("--verify-model-hashes", action="store_true", help="Read and hash prepared model files; intended for remote use")
     parser.add_argument("--webshop", action="store_true", help="Check optional project-local shop source and recovery bundle without loading models or starting services")
+    parser.add_argument("--base", type=str, default=None, help="Check a specific evaluation base profile name or path")
     parser.add_argument("--output", type=Path)
     from src.visual.training_surrogates import add_surrogate_arguments,select_training_surrogates,training_model_keys
     add_surrogate_arguments(parser)
     args = parser.parse_args(argv)
-    report = {"schema_version": 1, "checked_at": datetime.now(timezone.utc).isoformat(), "code": check_code(), "resources": ({"status": "skipped_code_only", "private_resources_read": False} if args.code_only else check_resources()), "runtime": inspect_runtime(args.hardware)}
+    report = {"schema_version": 1, "checked_at": datetime.now(timezone.utc).isoformat(), "code": check_code(), "resources": ({"status": "skipped_code_only", "private_resources_read": False} if args.code_only else (check_resources() if args.base is None else check_resources(args.base))), "runtime": inspect_runtime(args.hardware)}
     registry=model_specs()
     selection=select_training_surrogates('custom' if args.surrogate_config else (args.surrogate_set or 'lucid'),args.surrogate_config)
     training_keys=training_model_keys(selection,registry)

@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "policy": "named_public_pair_v1",
+  "status": "selected",
+  "selection_record": "metadata/selection.json",
+  "selection_sha256": "afc8d0c7324944bffba9120a801777a60190b54743f41ea15f3b694256636825",
+  "public_selection_only": true,
+  "victim_memory_used": false,
+  "source": {
+    "id": "B01LML1VXU",
+    "title": "LOREX LBV-2521 1080p HD Bullet Security Camera",
+    "image": "source.jpg",
+    "source_url": "https://www.amazon.com/dp/B01LML1VXU",
+    "boxes": [
+      [
+        81,
+        9,
+        397,
+        311
+      ]
+    ],
+    "foreground_mask": "metadata/source_foreground.png",
+    "text_regions": [
+      [
+        0.516,
+        0.46546546546546547,
+        0.624,
+        0.6126126126126126
+      ],
+      [
+        0.528,
+        0.5195195195195195,
+        0.616,
+        0.6396396396396397
+      ]
+    ],
+    "text_regions_reviewed": true,
+    "owned": true,
+    "source_note": "固定散列规则预先登记的实验模拟可控商品；不声明真实商家所有权",
+    "image_sha256": "4ab746e0c4f3ff84abd731926a23872c3f6bb17a4b49c4fe00c2ac77a432f515",
+    "foreground_mask_sha256": "1bfb608c529452027e0ccc576798725411dff3fd2c6376e12fb74beb3f413d24"
+  },
+  "target": {
+    "id": "B08V134QWR",
+    "title": "PTZ Security Camera Outdoor 30X Optical Zoom Camera WiFi Wireless 5MP RTSP IP Camera 1000FT Night Vision Auto Tracking Emergency Strobe Light Alarm Human Detection 2-Way Audio IP66 Waterproof",
+    "image": "target.jpg",
+    "source_url": "https://www.amazon.com/dp/B08V134QWR",
+    "boxes": [
+      [
+        15,
+        65,
+        490,
+        465
+      ]
+    ],
+    "foreground_mask": "metadata/target_foreground.png",
+    "text_regions": [
+      [
+        0.466,
+        0.53,
+        0.634,
+        0.584
+      ]
+    ],
+    "text_regions_reviewed": true,
+    "image_sha256": "5351fe5727bf6d9d8313c8262c28589948c84856f535b31f6f58d4d44d68166b",
+    "foreground_mask_sha256": "4a081c92d407c33150c4cafdb8a9a3fae247d502d53dc6c7daa640efda87b248",
+    "brand": "HXVIEW",
+    "attributes": [
+      "optical zoom",
+      "motion detection",
+      "night vision",
+      "waterproof construction",
+      "security camera",
+      "sd card",
+      "mobile phone"
+    ],
+    "feature_text": "I want to buy a security camera with optical zoom and motion detection.",
+    "training_queries": [
+      "I want to buy a security camera with optical zoom and motion detection.",
+      "I would like to purchase a security camera featuring optical zoom and night vision.",
+      "I am looking for a security camera with motion detection and waterproof construction."
+    ]
+  }
+}

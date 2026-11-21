@@ -1,0 +1,115 @@
+{
+  "schema_version": 2,
+  "group": "02_chair",
+  "name": "第二组椅子（黄金先验区间中位数重选）",
+  "category": "seating",
+  "shape_similarity": 0.6561514618602594,
+  "calibrated_threshold": 0.5960951412738369,
+  "passes_calibrated_threshold": true,
+  "public_prior_rank": 8,
+  "shape_threshold_fallback_used": false,
+  "selection_status": "public_shape_golden_band_median_v1",
+  "selection_notes": "依公开 public_shape_golden_band_median_v1 规则从 3 个合格候选中按灰度外形分数取中位数选出 B07GDZQ68V（shape=0.6562 >= 0.5961、公开先验名次=8）。",
+  "methods_supported": [
+    "lucid",
+    "ambilage",
+    "visual_inception"
+  ],
+  "target_feature_text": "I want to buy a barber chair with a heavy-duty hydraulic pump and 360-degree rotation.",
+  "training_queries": [
+    "I want to buy a barber chair with a heavy-duty hydraulic pump and 360-degree rotation.",
+    "I would like to purchase a barber chair featuring a heavy-duty hydraulic pump and an adjustable seat height.",
+    "I am looking for a barber chair with 360-degree rotation and a high-density foam cushion."
+  ],
+  "data": {
+    "source": "source.jpg",
+    "target": "target.jpg",
+    "source_title": "Christopher Knight Home Maye Traditional Home Office Chair, Wheat and Chrome",
+    "training_queries": [
+      "I want to buy a barber chair with a heavy-duty hydraulic pump and 360-degree rotation."
+    ]
+  },
+  "source_boxes": [
+    [
+      103,
+      60,
+      419,
+      457
+    ]
+  ],
+  "target_boxes": [
+    [
+      5,
+      5,
+      399,
+      496
+    ]
+  ],
+  "print_regions": [],
+  "target": {
+    "id": "B09CYFD5BX",
+    "title": "LTHDD Bar Stool Swivel Barber Chair Hydraulic Barber Chairs Heavy Duty 360 Degrees Rolling Salon Chair for Hair Stylist Tattoo Chair Salon Equipment,Blue,1 (Color : Black, Size : 1)",
+    "brand": "LTHDD",
+    "attributes": [
+      "a heavy-duty hydraulic pump",
+      "360-degree rotation",
+      "an adjustable seat height",
+      "a high-density foam cushion",
+      "barber chair",
+      "beauty salon",
+      "heavy duty"
+    ],
+    "feature_text": "I want to buy a barber chair with a heavy-duty hydraulic pump and 360-degree rotation.",
+    "training_queries": [
+      "I want to buy a barber chair with a heavy-duty hydraulic pump and 360-degree rotation.",
+      "I would like to purchase a barber chair featuring a heavy-duty hydraulic pump and an adjustable seat height.",
+      "I am looking for a barber chair with 360-degree rotation and a high-density foam cushion."
+    ],
+    "image": "target.jpg",
+    "foreground_mask": "target_foreground.png",
+    "boxes": [
+      [
+        5,
+        5,
+        399,
+        496
+      ]
+    ],
+    "text_regions": []
+  },
+  "source": {
+    "id": "B07GDZQ68V",
+    "title": "Christopher Knight Home Maye Traditional Home Office Chair, Wheat and Chrome",
+    "brand": "",
+    "attributes": [
+      "office chair",
+      "assembly required",
+      "home office"
+    ],
+    "image": "source.jpg",
+    "foreground_mask": "source_foreground.png",
+    "boxes": [
+      [
+        103,
+        60,
+        419,
+        457
+      ]
+    ],
+    "text_regions": []
+  },
+  "color_scheme": "statistics",
+  "training_data_policy": "catalog_image_and_public_title_only_v1",
+  "lucid_alignment_config": {
+    "enabled": true,
+    "target_text": "I want to buy a barber chair with a heavy-duty hydraulic pump and 360-degree rotation.",
+    "text_weight": 1.0,
+    "steps": 1000
+  },
+  "subtype_policy": {
+    "policy": "chair_seating_golden_band_v3",
+    "include": "\\b(?:chairs?|stools?|armchairs?|recliners?)\\b|椅|凳",
+    "exclude": "\\b(?:seat\\s+cushion|chair\\s+(?:cover|mat|pad|protector|slipcover|wheels?|casters?|armrest|base|cylinder|replacement|parts?)s?|caster\\s+wheels?)\\b",
+    "source_exclude": "\\b(?:barber|salon|tattoo|hydraulic\\s+(?:barber|salon))\\b"
+  }
+}

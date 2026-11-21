@@ -19,7 +19,7 @@ from src.experiments.visual_inception_category_evaluation import (
 )
 
 ENCODER_SLUGS = tuple(row[0] for row in TRANSFER_PANEL_ENCODERS)
-from src.paths import EVALUATION_BASE, OUTPUT
+from src.paths import EVALUATION_BASE, OUTPUT, resolve_evaluation_base
 from src.visual.audit import read_json
 from src.visual.optimization import METHODS, normalize_method
 
@@ -55,7 +55,7 @@ def _eval_suites_parser() -> argparse.ArgumentParser:
         help='一个或多个冻结查询套（如 training_oracle_v4 overlap_30_v4 zero_overlap_v4）',
     )
     p.add_argument('--output-dir', type=Path, required=True, help='各面板子目录的输出根目录（须位于 output/ 内）')
-    p.add_argument('--base', type=Path, default=EVALUATION_BASE)
+    p.add_argument('--base', type=str, default=None, help='基础包名称或路径（默认读取 evaluation_bases.json）')
     p.add_argument('--key-mode', choices=KEY_MODES, default=DEFAULT_KEY_MODE)
     p.add_argument('--defense-mode', choices=DEFENSE_MODES, default='none')
     p.add_argument('--defended-cache-dir', type=Path, default=None)
@@ -71,6 +71,8 @@ def _eval_suites_parser() -> argparse.ArgumentParser:
     p.add_argument('--device', choices=('cuda', 'cpu'), default='cuda')
     p.add_argument('--skip-training-snapshots', action='store_true')
     p.add_argument('--query-root', type=Path, default=None, help='仅在单 suite 时显式覆盖 query_root')
+    p.add_argument('--precomputed-dir', type=Path, default=None, help='预计算三编码器向量库目录（默认 output/cache/precomputed_eval_vectors）')
+    p.add_argument('--offline-only', action='store_true', help='严格零 GPU / 免模型加载模式：强制仅从预计算向量库读取')
     return p
 
 
@@ -131,9 +133,12 @@ def main(argv: list[str] | None = None) -> int:
     defended_dir = Path(args.defended_cache_dir).resolve() if args.defended_cache_dir else (out_dir / '_defended_cache')
     vec_dir = Path(args.memory_vectors_dir).resolve() if args.memory_vectors_dir else (out_dir / '_memory_vectors')
 
+    from src.visual.precomputed_eval_store import DEFAULT_PRECOMPUTED_STORE_DIR
+    precomp_dir = Path(args.precomputed_dir).resolve() if args.precomputed_dir else DEFAULT_PRECOMPUTED_STORE_DIR
+
     results = run_encoder_grouped_panels(
         jobs,
-        base=args.base,
+        base=resolve_evaluation_base(args.base),
         key_mode=args.key_mode,
         defense_mode=args.defense_mode,
         defended_cache_dir=defended_dir,
@@ -145,6 +150,8 @@ def main(argv: list[str] | None = None) -> int:
         verify_training_snapshots=not args.skip_training_snapshots,
         verify_mode=args.verify_mode,
         encoder_slugs=args.encoder_slugs,
+        precomputed_store_dir=precomp_dir,
+        require_offline=args.offline_only,
     )
     summary_index = {
         name: {

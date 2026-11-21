@@ -23,21 +23,27 @@ from src.experiments import shared_evaluation
 from src.experiments.defenses import conditions_for_mode
 from src.experiments.visual_inception_category_evaluation import (
     DEFAULT_KEY_MODE,
+    _format_headroom_cells,
     _format_summary_cells,
     _require,
     _resolve_transfer_panel_encoders,
+    _summary_matches_saved,
     build_category_summary,
     load_frozen_suite,
     report_category_suite,
     resolve_query_root,
     validate_category_query_suite,
 )
-from src.paths import EVALUATION_BASE, OUTPUT, PROJECT, VISUAL_CONFIGS
+from src.paths import EVALUATION_BASE, OUTPUT, PROJECT, VISUAL_CONFIGS, resolve_evaluation_base
 from src.visual.audit import digest, freeze_json, read_json
 from src.visual.encoders.eval_clip import BatchedFreshCachedEncoder, make_standalone_eval_encoder
 from src.visual.image_utils import sha256_file
 from src.visual.optimization import normalize_method
-from src.visual.visual_retrieval import resolve_image
+from src.visual.precomputed_eval_store import (
+    DEFAULT_PRECOMPUTED_STORE_DIR,
+    make_offline_or_standalone_eval_encoder,
+)
+from src.visual.visual_retrieval import memory_index_text, resolve_image
 
 
 VERIFY_MODES = ('subprocess', 'in_process')
@@ -292,6 +298,8 @@ def verify_encoder_worker(
     encoder_factory=None,
     shared_base_encoder=None,
     isolated_process: bool = True,
+    precomputed_store_dir: Path | str | None = DEFAULT_PRECOMPUTED_STORE_DIR,
+    require_offline: bool = False,
 ) -> dict[str, dict]:
     """Verify multiple evaluated panel subdirs for ONE encoder with a single fresh encoder load."""
     sub_dirs = [Path(p).resolve() for p in panel_sub_dirs]
@@ -375,6 +383,21 @@ def verify_encoder_worker(
     elif encoder_factory is not None:
         base_encoder = encoder_factory()
         owns_encoder = True
+    elif precomputed_store_dir is not None:
+        base_encoder = make_offline_or_standalone_eval_encoder(
+            encoder_slug,
+            device=device,
+            config_path=enc_config_str,
+            training_surrogates=expected_surrogates,
+            batch_size=batch_size,
+            text_batch_size=text_batch_size,
+            num_workers=num_workers,
+            required_image_assets=union_assets,
+            required_texts=union_texts,
+            store_root=precomputed_store_dir,
+            require_offline=require_offline,
+        )
+        owns_encoder = True
     else:
         base_encoder = make_standalone_eval_encoder(
             device=device,
@@ -436,7 +459,7 @@ def verify_encoder_worker(
 
             rebuilt_summary = build_category_summary(sub_out)
             saved_summary = read_json(sub_out / 'category_retrieval_summary.json')
-            _require(rebuilt_summary == saved_summary, f'{sub_out} 汇总与逐组评估结果不一致')
+            _require(_summary_matches_saved(rebuilt_summary, saved_summary), f'{sub_out} 汇总与逐组评估结果不一致')
             ver_result = dict(
                 schema_version=1,
                 protocol=plan['protocol'],
@@ -466,7 +489,7 @@ def verify_encoder_worker(
 def _write_transfer_panel_outputs(
     job: dict,
     *,
-    base: Path = EVALUATION_BASE,
+    base: Path | str | None = None,
     key_mode: str,
     defense_mode: str,
     encoder_slugs: list[str] | tuple[str, ...] | None = None,
@@ -478,7 +501,7 @@ def _write_transfer_panel_outputs(
 
     method = normalize_method(job['method'])
     effective_key_mode = DEFAULT_KEY_MODE if key_mode is None else key_mode
-    resolved_base = Path(job.get('base') or base).resolve()
+    resolved_base = resolve_evaluation_base(job.get('base') or base)
     requested_groups, replacement_groups = _resolve_job_groups(job)
     frozen_suite = load_frozen_suite(
         job['images_root'],
@@ -552,6 +575,17 @@ def _write_transfer_panel_outputs(
         cells = _format_summary_cells(entry['overall'])
         lines.append(f"| {idx} | {entry['label']} | {entry['role_zh']} | " + ' | '.join(cells) + ' |')
 
+    lines += [
+        '',
+        '## 扣除原图已命中后的净剩余空间与保持率补充统计（微平均）',
+        '',
+        '| 顺序 | 评估编码器 | 口径角色 | 前1净空间捕获 | 前1转化 / 保持 (+新增/-倒退) | 前3净空间捕获 | 前3转化 / 保持 (+新增/-倒退) | 前5净空间捕获 | 前5转化 / 保持 (+新增/-倒退) |',
+        '|---:|---|---|---:|---:|---:|---:|---:|---:|',
+    ]
+    for idx, entry in enumerate(ordered_rows, 1):
+        hd_cells = _format_headroom_cells(entry['overall'])
+        lines.append(f"| {idx} | {entry['label']} | {entry['role_zh']} | " + ' | '.join(hd_cells) + ' |')
+
     lines += ['', '## 各编码器逐组明细（Top-1 / Top-3 / Top-5 / 平均名次）', '']
     group_list = list(first_summary['groups'])
     lines.append('| 组别 | 品类 | ' + ' | '.join(f"{e['label']} 前1/前3/前5/均名" for e in ordered_rows) + ' |')
@@ -613,7 +647,7 @@ def _write_transfer_panel_outputs(
 def run_encoder_grouped_panels(
     jobs: list[dict],
     *,
-    base: Path = EVALUATION_BASE,
+    base: Path | str | None = None,
     key_mode: str = DEFAULT_KEY_MODE,
     defense_mode: str = 'panel_with_sd21',
     defended_cache_dir: Path,
@@ -628,8 +662,10 @@ def run_encoder_grouped_panels(
     isolated_process: bool | None = None,
     verify_mode: str | None = None,
     encoder_slugs: list[str] | tuple[str, ...] | None = None,
+    precomputed_store_dir: Path | str | None = DEFAULT_PRECOMPUTED_STORE_DIR,
+    require_offline: bool = False,
 ) -> dict[str, dict]:
-    base = Path(base).resolve()
+    base = resolve_evaluation_base(base)
     defended_root = Path(defended_cache_dir).resolve()
     vec_dir = Path(memory_vector_cache_dir).resolve()
     _require(defended_root.is_relative_to(Path(OUTPUT).resolve()), '防御缓存目录必须位于当前项目 output 目录内')
@@ -662,7 +698,7 @@ def run_encoder_grouped_panels(
     def _get_job_suite(job_obj: dict) -> list[dict]:
         req_g, rep_g = _resolve_job_groups(job_obj)
         sel = req_g if rep_g == 'selected' else None
-        resolved_base = Path(job_obj.get('base') or base).resolve()
+        resolved_base = resolve_evaluation_base(job_obj.get('base') or base)
         s_key = (
             str(Path(job_obj['images_root']).resolve()),
             str(resolved_base),
@@ -797,17 +833,30 @@ def run_encoder_grouped_panels(
                     flush=True,
                 )
 
-                base_encoder = (
-                    encoder_factory()
-                    if encoder_factory is not None
-                    else make_standalone_eval_encoder(
+                if encoder_factory is not None:
+                    base_encoder = encoder_factory()
+                elif precomputed_store_dir is not None:
+                    base_encoder = make_offline_or_standalone_eval_encoder(
+                        slug,
+                        device=device,
+                        config_path=expected_cfg,
+                        training_surrogates=expected_surrogates,
+                        batch_size=enc_bs,
+                        text_batch_size=text_batch_size,
+                        num_workers=num_workers,
+                        required_image_assets=union_assets,
+                        required_texts=union_texts,
+                        store_root=precomputed_store_dir,
+                        require_offline=require_offline,
+                    )
+                else:
+                    base_encoder = make_standalone_eval_encoder(
                         device=device,
                         config_path=expected_cfg,
                         training_surrogates=expected_surrogates,
                         batch_size=enc_bs,
                         num_workers=num_workers,
                     )
-                )
                 shared_enc = BatchedFreshCachedEncoder(base_encoder)
                 try:
                     shared_enc.prewarm_images([(p, sha) for sha, p in sorted_assets], batch_size=enc_bs)
@@ -937,7 +986,7 @@ def main(argv=None):
     p_run = sub.add_parser('run')
     p_run.add_argument('--stage2-dir', type=Path, default=OUTPUT / 'eval_9groups_20261119' / 'stage2_defenses')
     p_run.add_argument('--jobs-json', type=Path, default=None)
-    p_run.add_argument('--base', type=Path, default=EVALUATION_BASE)
+    p_run.add_argument('--base', type=str, default=None)
     p_run.add_argument('--key-mode', choices=('image', 'joint'), default=DEFAULT_KEY_MODE)
     p_run.add_argument('--defense-mode', default='panel_with_sd21')
     p_run.add_argument('--defended-cache-dir', type=Path, required=True)
@@ -954,7 +1003,7 @@ def main(argv=None):
     p_fin = sub.add_parser('finalize')
     p_fin.add_argument('--stage2-dir', type=Path, default=OUTPUT / 'eval_9groups_20261119' / 'stage2_defenses')
     p_fin.add_argument('--jobs-json', type=Path, default=None)
-    p_fin.add_argument('--base', type=Path, default=EVALUATION_BASE)
+    p_fin.add_argument('--base', type=str, default=None)
     p_fin.add_argument('--key-mode', choices=('image', 'joint'), default=DEFAULT_KEY_MODE)
     p_fin.add_argument('--defense-mode', default='panel_with_sd21')
     p_fin.add_argument('--encoder-slugs', nargs='+', default=None)

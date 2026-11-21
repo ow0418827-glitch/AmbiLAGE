@@ -1,0 +1,221 @@
+{
+  "schema_version": 1,
+  "policy": "named_public_pair_v1",
+  "status": "selected",
+  "selection_record": "metadata/selection.json",
+  "selection_sha256": "e56a206e23fb58e556ec9ddd58ffedebd4fea513c3327750f4168bce5662ced9",
+  "public_selection_only": true,
+  "victim_memory_used": false,
+  "source": {
+    "id": "B08WJB1XDD",
+    "title": "Pantene Gold Series Shampoo & Conditioner Moisture Boost with Argan Oil, for Natural, Coily, and Curly Hair, 29.2 Oz Each",
+    "image": "source.jpg",
+    "source_url": "https://www.amazon.com/dp/B08WJB1XDD",
+    "boxes": [
+      [
+        38,
+        13,
+        462,
+        485
+      ]
+    ],
+    "foreground_mask": "metadata/source_foreground.png",
+    "text_regions": [
+      [
+        0.178,
+        0.334,
+        0.394,
+        0.378
+      ],
+      [
+        0.61,
+        0.334,
+        0.83,
+        0.378
+      ],
+      [
+        0.236,
+        0.37,
+        0.33,
+        0.408
+      ],
+      [
+        0.672,
+        0.37,
+        0.766,
+        0.408
+      ],
+      [
+        0.198,
+        0.408,
+        0.368,
+        0.45
+      ],
+      [
+        0.634,
+        0.408,
+        0.804,
+        0.45
+      ],
+      [
+        0.224,
+        0.432,
+        0.342,
+        0.466
+      ],
+      [
+        0.642,
+        0.432,
+        0.796,
+        0.466
+      ],
+      [
+        0.194,
+        0.47,
+        0.372,
+        0.504
+      ],
+      [
+        0.204,
+        0.488,
+        0.364,
+        0.518
+      ],
+      [
+        0.63,
+        0.47,
+        0.808,
+        0.504
+      ],
+      [
+        0.204,
+        0.498,
+        0.364,
+        0.532
+      ],
+      [
+        0.646,
+        0.5,
+        0.79,
+        0.53
+      ],
+      [
+        0.22,
+        0.518,
+        0.348,
+        0.55
+      ],
+      [
+        0.216,
+        0.818,
+        0.354,
+        0.858
+      ],
+      [
+        0.654,
+        0.82,
+        0.788,
+        0.856
+      ]
+    ],
+    "text_regions_reviewed": true,
+    "owned": true,
+    "source_note": "固定散列规则预先登记的实验模拟可控商品；不声明真实商家所有权",
+    "image_sha256": "db3943d881d90ad1c02d8f68a9d84e10ec5dad9a1121bff7b689c995823840d7",
+    "foreground_mask_sha256": "66d5b0927b7256971be11c535af8ec4d947a5f67e371dc2fbc713c1db9240f15"
+  },
+  "target": {
+    "id": "B00BDJODWI",
+    "title": "Aveda Scalp Benefits Balancing Shampoo 33.8 OZ",
+    "image": "target.jpg",
+    "source_url": "https://www.amazon.com/dp/B00BDJODWI",
+    "boxes": [
+      [
+        2,
+        6,
+        157,
+        493
+      ]
+    ],
+    "foreground_mask": "metadata/target_foreground.png",
+    "text_regions": [
+      [
+        0.275,
+        0.314,
+        0.68125,
+        0.356
+      ],
+      [
+        0.20625,
+        0.352,
+        0.675,
+        0.38
+      ],
+      [
+        0.21875,
+        0.344,
+        0.70625,
+        0.37
+      ],
+      [
+        0.1375,
+        0.454,
+        0.8375,
+        0.502
+      ],
+      [
+        0.2,
+        0.528,
+        0.78125,
+        0.562
+      ],
+      [
+        0.1375,
+        0.554,
+        0.84375,
+        0.588
+      ],
+      [
+        0.20625,
+        0.818,
+        0.75,
+        0.852
+      ],
+      [
+        0.24375,
+        0.856,
+        0.7,
+        0.882
+      ],
+      [
+        0.25,
+        0.842,
+        0.7,
+        0.87
+      ],
+      [
+        0.2,
+        0.9,
+        0.75625,
+        0.94
+      ]
+    ],
+    "text_regions_reviewed": true,
+    "image_sha256": "dd0abf8d2d52aa289346aa2e7219187cec901c901d4f3cce1ef3379691467256",
+    "foreground_mask_sha256": "72082ddea1dffd49982550183087cc16359849de9d953c49ac011f32e20cea69",
+    "brand": "Aveda",
+    "attributes": [
+      "plant-based haircare ingredients",
+      "a balancing formula",
+      "plant and flower essences",
+      "scalp care",
+      "plant based"
+    ],
+    "feature_text": "I want to buy shampoo with plant-based haircare ingredients and a balancing formula.",
+    "training_queries": [
+      "I want to buy shampoo with plant-based haircare ingredients and a balancing formula.",
+      "I would like to purchase shampoo featuring plant-based haircare ingredients and plant and flower essences.",
+      "I am looking for shampoo with a balancing formula and scalp care."
+    ]
+  }
+}

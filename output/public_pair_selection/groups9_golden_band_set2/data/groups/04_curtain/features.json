@@ -1,0 +1,81 @@
+{
+  "asin": "B086PW7TWX",
+  "title": "Windows Treatment Blackout Curtains Grommet Drapes for Boys/Girls Kids Bedroom DRINKES ARE ON ME Vintage Wood Board Texture Printed Room Darkening Curtains for Livingroom/Office, 1 Panel 52x45in",
+  "brand": "",
+  "brand_evidence": {
+    "verified": false,
+    "reason": "Windows Treatment is a generic product phrase; no explicit brand attribution is present."
+  },
+  "category": "curtains",
+  "attributes": [
+    "a blackout design",
+    "a vintage wood board texture",
+    "machine-washable fabric",
+    "rust-proof grommets",
+    "eco friendly",
+    "wall art",
+    "machine washable",
+    "dining room"
+  ],
+  "canonical_sentence": "I want to buy curtains with a blackout design and a vintage wood board texture.",
+  "training_queries": [
+    "I want to buy curtains with a blackout design and a vintage wood board texture.",
+    "I would like to purchase curtains featuring a blackout design and machine-washable fabric.",
+    "I am looking for curtains with a vintage wood board texture and rust-proof grommets."
+  ],
+  "feature_evidence": [
+    {
+      "feature": "a blackout design",
+      "field": "Title",
+      "quote": "Blackout Curtains"
+    },
+    {
+      "feature": "a vintage wood board texture",
+      "field": "Title",
+      "quote": "Vintage Wood Board Texture"
+    },
+    {
+      "feature": "machine-washable fabric",
+      "field": "BulletPoints",
+      "index": 5,
+      "quote": "Machine washable"
+    },
+    {
+      "feature": "rust-proof grommets",
+      "field": "BulletPoints",
+      "index": 1,
+      "quote": "rust-proof grommet"
+    },
+    {
+      "feature": "eco friendly",
+      "field": "Attributes",
+      "index": 0,
+      "quote": "eco friendly"
+    },
+    {
+      "feature": "wall art",
+      "field": "Attributes",
+      "index": 1,
+      "quote": "wall art"
+    },
+    {
+      "feature": "machine washable",
+      "field": "Attributes",
+      "index": 2,
+      "quote": "machine washable"
+    },
+    {
+      "feature": "dining room",
+      "field": "Attributes",
+      "index": 3,
+      "quote": "dining room"
+    }
+  ],
+  "source": "public_catalog_verified_review",
+  "core_attributes": [
+    "a blackout design",
+    "a vintage wood board texture",
+    "machine-washable fabric",
+    "rust-proof grommets"
+  ]
+}

@@ -272,7 +272,12 @@ def build_derived_base(
         selected_row = next((c for c in selection.get('candidates', []) if c.get('source_id') == source_id), None)
         if prior_rank is None and selected_row is not None:
             prior_rank = selected_row.get('public_prior_rank')
+        fallback_used = bool(selection.get('shape_threshold_fallback_used', False))
         rank_note = f"、公开先验名次={prior_rank}" if prior_rank is not None else ""
+        if passes_gate:
+            sel_note = f"依公开 {protocol} 规则从 {draw.get('eligible_count')} 个合格候选中按灰度外形分数取中位数选出 {source_id}（shape={shape_sim:.4f} >= {threshold:.4f}{rank_note}）。"
+        else:
+            sel_note = f"依公开 {protocol} 规则发现带内过门槛交集为空，启用带内本体中位数回退，从 {draw.get('eligible_count')} 个带内本体候选中选出 {source_id}（shape={shape_sim:.4f} < {threshold:.4f}{rank_note}；未通过校准门槛）。"
         out_def = {
             'schema_version': 2,
             'group': group_key,
@@ -281,8 +286,10 @@ def build_derived_base(
             'shape_similarity': shape_sim,
             'calibrated_threshold': threshold,
             'passes_calibrated_threshold': passes_gate,
+            'public_prior_rank': prior_rank,
+            'shape_threshold_fallback_used': fallback_used,
             'selection_status': protocol,
-            'selection_notes': f"依公开 {protocol} 规则从 {draw.get('eligible_count')} 个合格候选中按灰度外形分数取中位数选出 {source_id}（shape={shape_sim:.4f} >= {threshold:.4f}{rank_note}）。",
+            'selection_notes': sel_note,
             'methods_supported': ['lucid', 'ambilage', 'visual_inception'],
             'target_feature_text': target_feat['canonical_sentence'],
             'training_queries': list(target_feat['training_queries']),
@@ -340,6 +347,8 @@ def build_derived_base(
             'shape_similarity': shape_sim,
             'calibrated_threshold': threshold,
             'passes_calibrated_threshold': passes_gate,
+            'public_prior_rank': prior_rank,
+            'shape_threshold_fallback_used': fallback_used,
             'selection_basis': 'median_public_shape_gate_selection_isolated_base',
             'selection_status': selection.get('protocol', MEDIAN_SELECTION_POLICY),
             'source_sha256': src_sha,
@@ -370,9 +379,20 @@ def build_derived_base(
     image_file_count = sum(1 for p in (output_base / 'shared_memory/images').iterdir() if p.is_file())
 
     out_manifest = copy.deepcopy(src_manifest)
-    out_manifest['title'] = '9组中位数公开选图派生实验基础包（不覆盖原始九组）'
-    out_manifest['input_revision'] = 'groups9_median_shape_v3'
+    is_golden_band = bool(new_groups_manifest) and all(
+        g.get('selection_status') == GOLDEN_BAND_MEDIAN_POLICY for g in new_groups_manifest.values()
+    )
+    out_manifest['title'] = (
+        '9组黄金先验区间中位数公开选图派生实验基础包（不覆盖原始九组）'
+        if is_golden_band else
+        '9组中位数公开选图派生实验基础包（不覆盖原始九组）'
+    )
+    out_manifest['input_revision'] = 'groups9_golden_band_median_v1' if is_golden_band else 'groups9_median_shape_v3'
     out_manifest['derived_from_selection'] = str(selection_root)
+    out_manifest['derived_from_base'] = (
+        str(source_base.relative_to(PROJECT)) if source_base.is_relative_to(PROJECT) else str(source_base)
+    )
+    out_manifest['derived_from_base_manifest_sha256'] = sha256_file(source_base / 'manifest.json')
     out_manifest['public_metadata'].update(
         sha256=meta_sha,
         review_sha256=review_sha,

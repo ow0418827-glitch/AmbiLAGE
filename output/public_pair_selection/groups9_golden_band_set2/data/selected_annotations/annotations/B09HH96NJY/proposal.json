@@ -1,0 +1,61 @@
+{
+  "id": "B09HH96NJY",
+  "identity": {
+    "image_sha256": "acf3f5d8944c118d04e2ba456926f4750e87198bbd3201302a34e52e44bd6039",
+    "annotation_models": {
+      "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+      "ocr_version": "1.4.4",
+      "ocr_weights": {
+        "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+        "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+        "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+      },
+      "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+      "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+      "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+      "device": "cuda",
+      "model_loaded_once": true
+    }
+  },
+  "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/acf3f5d8944c118d04e2ba456926f4750e87198bbd3201302a34e52e44bd6039.jpg",
+  "title": "Womens High Rise Jeans Wide Leg Pants Patchwork Straight Boyfriend Jeans Y2K 90s E-Girl Wild Baggy Trousers Denim Pants",
+  "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09HH96NJY/foreground.png",
+  "foreground_mask_sha256": "40fed037c0b6ad79f495318b190145a4e00566b50891d615bab9bef697772d60",
+  "boxes": [
+    [
+      157,
+      14,
+      326,
+      489
+    ]
+  ],
+  "text_regions": [],
+  "ocr": [],
+  "segmentation_candidates": [
+    {
+      "index": 0,
+      "iou": 0.8469589352607727,
+      "foreground_ratio": 0.146092,
+      "rough_coverage": 0.7901946334908319,
+      "accepted": true
+    },
+    {
+      "index": 1,
+      "iou": 0.980236828327179,
+      "foreground_ratio": 0.182656,
+      "rough_coverage": 0.9864970306471889,
+      "accepted": true
+    },
+    {
+      "index": 2,
+      "iou": 0.9805395603179932,
+      "foreground_ratio": 0.1816,
+      "rough_coverage": 0.9809484589709133,
+      "accepted": true
+    }
+  ],
+  "selected_mask_index": 2,
+  "text_regions_reviewed": false,
+  "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09HH96NJY/review_overlay.png",
+  "observed_seconds": 0.5562096199937514
+}

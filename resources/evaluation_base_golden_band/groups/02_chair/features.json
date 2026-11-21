@@ -1,0 +1,127 @@
+{
+  "group": "02_chair",
+  "category": "seating",
+  "target": {
+    "asin": "B09CYFD5BX",
+    "title": "LTHDD Bar Stool Swivel Barber Chair Hydraulic Barber Chairs Heavy Duty 360 Degrees Rolling Salon Chair for Hair Stylist Tattoo Chair Salon Equipment,Blue,1 (Color : Black, Size : 1)",
+    "brand": "LTHDD",
+    "brand_evidence": {
+      "verified": true,
+      "field": "Title",
+      "quote": "LTHDD",
+      "basis": "Unambiguous named maker attribution in the public product title; no inference from generic first words."
+    },
+    "category": "barber chair",
+    "attributes": [
+      "a heavy-duty hydraulic pump",
+      "360-degree rotation",
+      "an adjustable seat height",
+      "a high-density foam cushion",
+      "barber chair",
+      "beauty salon",
+      "heavy duty"
+    ],
+    "canonical_sentence": "I want to buy a barber chair with a heavy-duty hydraulic pump and 360-degree rotation.",
+    "training_queries": [
+      "I want to buy a barber chair with a heavy-duty hydraulic pump and 360-degree rotation.",
+      "I would like to purchase a barber chair featuring a heavy-duty hydraulic pump and an adjustable seat height.",
+      "I am looking for a barber chair with 360-degree rotation and a high-density foam cushion."
+    ],
+    "feature_evidence": [
+      {
+        "feature": "a heavy-duty hydraulic pump",
+        "field": "Description",
+        "quote": "Heavy-duty hydraulic pump"
+      },
+      {
+        "feature": "360-degree rotation",
+        "field": "Description",
+        "quote": "360 degree rotating barber chair"
+      },
+      {
+        "feature": "an adjustable seat height",
+        "field": "BulletPoints",
+        "index": 2,
+        "quote": "seat height can be adjusted between 49-65cm"
+      },
+      {
+        "feature": "a high-density foam cushion",
+        "field": "Description",
+        "quote": "High density foam cushion"
+      },
+      {
+        "feature": "barber chair",
+        "field": "Attributes",
+        "index": 0,
+        "quote": "barber chair"
+      },
+      {
+        "feature": "beauty salon",
+        "field": "Attributes",
+        "index": 1,
+        "quote": "beauty salon"
+      },
+      {
+        "feature": "heavy duty",
+        "field": "Attributes",
+        "index": 2,
+        "quote": "heavy duty"
+      }
+    ],
+    "source": "public_catalog_verified_review",
+    "core_attributes": [
+      "a heavy-duty hydraulic pump",
+      "360-degree rotation",
+      "an adjustable seat height",
+      "a high-density foam cushion"
+    ]
+  },
+  "source": {
+    "asin": "B07GDZQ68V",
+    "title": "Christopher Knight Home Maye Traditional Home Office Chair, Wheat and Chrome",
+    "brand": "",
+    "category": "home office chairs",
+    "attributes": [
+      "office chair",
+      "assembly required",
+      "home office"
+    ],
+    "canonical_sentence": "I want to buy home office chairs with office chair and assembly required.",
+    "training_queries": [
+      "I want to buy home office chairs with office chair and assembly required.",
+      "I would like to purchase home office chairs featuring office chair and home office.",
+      "Looking to buy home office chairs with assembly required and home office."
+    ],
+    "brand_evidence": {
+      "verified": false,
+      "reason": "unknown_public_brand"
+    },
+    "feature_evidence": [
+      {
+        "feature": "office chair",
+        "field": "Attributes",
+        "index": 0,
+        "quote": "office chair"
+      },
+      {
+        "feature": "assembly required",
+        "field": "Attributes",
+        "index": 1,
+        "quote": "assembly required"
+      },
+      {
+        "feature": "home office",
+        "field": "Attributes",
+        "index": 2,
+        "quote": "home office"
+      }
+    ],
+    "source": "local_public_catalog_fields"
+  },
+  "alignment_canonical_text": "I want to buy a barber chair with a heavy-duty hydraulic pump and 360-degree rotation.",
+  "alignment_training_queries": [
+    "I want to buy a barber chair with a heavy-duty hydraulic pump and 360-degree rotation.",
+    "I would like to purchase a barber chair featuring a heavy-duty hydraulic pump and an adjustable seat height.",
+    "I am looking for a barber chair with 360-degree rotation and a high-density foam cushion."
+  ]
+}

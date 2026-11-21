@@ -1,0 +1,124 @@
+{
+  "group": "01_camera",
+  "category": "camera",
+  "target": {
+    "asin": "B08V134QWR",
+    "title": "PTZ Security Camera Outdoor 30X Optical Zoom Camera WiFi Wireless 5MP RTSP IP Camera 1000FT Night Vision Auto Tracking Emergency Strobe Light Alarm Human Detection 2-Way Audio IP66 Waterproof",
+    "brand": "HXVIEW",
+    "brand_evidence": {
+      "verified": true,
+      "visual_verified": true,
+      "field": "PrimaryImage",
+      "quote": "HXVIEW",
+      "image": "groups/01_camera/target.jpg",
+      "image_relative_to_package": "groups/01_camera/target.jpg",
+      "image_sha256": "3e640007088747b83c734fe3a612c241f88b370490d99b3aca717f92f4dd0126",
+      "review_note": "Direct visual inspection of the original selected target image: HXVIEW is printed on the white camera housing. PTZ is the camera mechanism, not its brand."
+    },
+    "category": "security camera",
+    "attributes": [
+      "optical zoom",
+      "motion detection",
+      "night vision",
+      "waterproof construction",
+      "security camera",
+      "sd card",
+      "mobile phone"
+    ],
+    "canonical_sentence": "I want to buy a security camera with optical zoom and motion detection.",
+    "training_queries": [
+      "I want to buy a security camera with optical zoom and motion detection.",
+      "I would like to purchase a security camera featuring optical zoom and night vision.",
+      "I am looking for a security camera with motion detection and waterproof construction."
+    ],
+    "feature_evidence": [
+      {
+        "feature": "optical zoom",
+        "field": "Title",
+        "quote": "30X Optical Zoom"
+      },
+      {
+        "feature": "motion detection",
+        "field": "Attributes",
+        "index": 4,
+        "quote": "motion detection"
+      },
+      {
+        "feature": "night vision",
+        "field": "Title",
+        "quote": "1000FT Night Vision"
+      },
+      {
+        "feature": "waterproof construction",
+        "field": "Title",
+        "quote": "IP66 Waterproof"
+      },
+      {
+        "feature": "security camera",
+        "field": "Attributes",
+        "index": 0,
+        "quote": "security camera"
+      },
+      {
+        "feature": "sd card",
+        "field": "Attributes",
+        "index": 3,
+        "quote": "sd card"
+      },
+      {
+        "feature": "mobile phone",
+        "field": "Attributes",
+        "index": 5,
+        "quote": "mobile phone"
+      }
+    ],
+    "source": "public_catalog_verified_review",
+    "core_attributes": [
+      "optical zoom",
+      "motion detection",
+      "night vision",
+      "waterproof construction"
+    ]
+  },
+  "source": {
+    "asin": "B01LML1VXU",
+    "title": "LOREX LBV-2521 1080p HD Bullet Security Camera",
+    "brand": "",
+    "category": "video surveillance",
+    "attributes": [
+      "1080p hd",
+      "security camera"
+    ],
+    "canonical_sentence": "I want to buy a video surveillance with 1080p hd and security camera.",
+    "training_queries": [
+      "I want to buy a video surveillance with 1080p hd and security camera.",
+      "I would like to purchase a video surveillance featuring 1080p hd and security camera.",
+      "Looking to buy a video surveillance with security camera."
+    ],
+    "brand_evidence": {
+      "verified": false,
+      "reason": "unknown_public_brand"
+    },
+    "feature_evidence": [
+      {
+        "feature": "1080p hd",
+        "field": "Attributes",
+        "index": 0,
+        "quote": "1080p hd"
+      },
+      {
+        "feature": "security camera",
+        "field": "Attributes",
+        "index": 1,
+        "quote": "security camera"
+      }
+    ],
+    "source": "local_public_catalog_fields"
+  },
+  "alignment_canonical_text": "I want to buy a security camera with optical zoom and motion detection.",
+  "alignment_training_queries": [
+    "I want to buy a security camera with optical zoom and motion detection.",
+    "I would like to purchase a security camera featuring optical zoom and night vision.",
+    "I am looking for a security camera with motion detection and waterproof construction."
+  ]
+}

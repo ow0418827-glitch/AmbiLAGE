@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "policy": "named_public_pair_v1",
+  "status": "selected",
+  "selection_record": "metadata/selection.json",
+  "selection_sha256": "6001d5bffb25980f4f95a474cc139a143236c737b41ad312605b4f900f1dda72",
+  "public_selection_only": true,
+  "victim_memory_used": false,
+  "source": {
+    "id": "B00HHP71JY",
+    "title": "Lotte Cancho Korean Favourite Chocolate Snack Cookies Kids Snack (Pack of 3)",
+    "image": "source.jpg",
+    "source_url": "https://www.amazon.com/dp/B00HHP71JY",
+    "boxes": [
+      [
+        82,
+        18,
+        419,
+        481
+      ]
+    ],
+    "foreground_mask": "metadata/source_foreground.png",
+    "text_regions": [
+      [
+        0.236,
+        0.218,
+        0.384,
+        0.29
+      ],
+      [
+        0.232,
+        0.336,
+        0.788,
+        0.634
+      ],
+      [
+        0.356,
+        0.59,
+        0.488,
+        0.654
+      ]
+    ],
+    "text_regions_reviewed": true,
+    "owned": true,
+    "source_note": "固定散列规则预先登记的实验模拟可控商品；不声明真实商家所有权",
+    "image_sha256": "bafdeacc0deef6990db751cc9809cd48a67ea47e9265012457b43137582347ea",
+    "foreground_mask_sha256": "50e6b4f595dc6187c914aff1bff11b26ae38271dbd57fc1f29458510fa0811f8"
+  },
+  "target": {
+    "id": "B08Z8MHWVS",
+    "title": "Eggless Raw Edible Cookie Dough, Edible Frozen Cookie Dough - Big Dipper Dough Co: (2 Pints-ChocoChip & CookienCream)",
+    "image": "target.jpg",
+    "source_url": "https://www.amazon.com/dp/B08Z8MHWVS",
+    "boxes": [
+      [
+        58,
+        28,
+        453,
+        463
+      ]
+    ],
+    "foreground_mask": "metadata/target_foreground.png",
+    "text_regions": [
+      [
+        0.432,
+        0.078,
+        0.576,
+        0.264
+      ],
+      [
+        0.412,
+        0.256,
+        0.598,
+        0.33
+      ],
+      [
+        0.146,
+        0.502,
+        0.362,
+        0.58
+      ],
+      [
+        0.398,
+        0.534,
+        0.488,
+        0.608
+      ],
+      [
+        0.674,
+        0.546,
+        0.752,
+        0.594
+      ],
+      [
+        0.742,
+        0.536,
+        0.784,
+        0.578
+      ],
+      [
+        0.146,
+        0.572,
+        0.258,
+        0.642
+      ],
+      [
+        0.544,
+        0.582,
+        0.598,
+        0.618
+      ],
+      [
+        0.756,
+        0.568,
+        0.84,
+        0.69
+      ],
+      [
+        0.538,
+        0.786,
+        0.846,
+        0.852
+      ],
+      [
+        0.22,
+        0.824,
+        0.488,
+        0.886
+      ],
+      [
+        0.606,
+        0.826,
+        0.786,
+        0.868
+      ],
+      [
+        0.228,
+        0.856,
+        0.478,
+        0.91
+      ]
+    ],
+    "text_regions_reviewed": true,
+    "image_sha256": "cead69b311e6005050a6c8b1cdea7abff1a12be0c6500386cbabe4638f254bd3",
+    "foreground_mask_sha256": "0b68e166e11f25f0426f6310947d9624b1910cc7b68d12356af1ec1a91d2ef3e",
+    "brand": "Big Dipper Dough Co",
+    "attributes": [
+      "natural ingredients",
+      "chocolate chips",
+      "an egg-free recipe",
+      "a ready-to-eat recipe",
+      "chocolate chip",
+      "wheat flour",
+      "ready eat",
+      "sea salt",
+      "ice cream"
+    ],
+    "feature_text": "I want to buy cookie dough with natural ingredients and chocolate chips.",
+    "training_queries": [
+      "I want to buy cookie dough with natural ingredients and chocolate chips.",
+      "I would like to purchase cookie dough featuring natural ingredients and an egg-free recipe.",
+      "I am looking for cookie dough with chocolate chips and a ready-to-eat recipe."
+    ]
+  }
+}

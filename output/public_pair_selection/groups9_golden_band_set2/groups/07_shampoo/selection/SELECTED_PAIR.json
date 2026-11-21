@@ -1,0 +1,4021 @@
+{
+  "protocol": "public_shape_golden_band_median_v1",
+  "status": "selected",
+  "selected_source_id": "B08WJB1XDD",
+  "target_id": "B00BDJODWI",
+  "candidates": [
+    {
+      "source_id": "B000FQQEXQ",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.593774562991425,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 384,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 5
+    },
+    {
+      "source_id": "B000L42CZQ",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_high_ceiling"
+      ],
+      "shape_similarity": 0.5127746833319343,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 137,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 4
+    },
+    {
+      "source_id": "B0019LRD9A",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.39713943663253415,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 362,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 12
+    },
+    {
+      "source_id": "B0040QC9YK",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_low_deadzone"
+      ],
+      "shape_similarity": 0.41598941298495196,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 272,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 15
+    },
+    {
+      "source_id": "B0054Y0IRW",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "public_prior_rank_too_high_ceiling"
+      ],
+      "shape_similarity": 0.6961122903493462,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 1
+    },
+    {
+      "source_id": "B007KSWBP2",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_high_ceiling"
+      ],
+      "shape_similarity": 0.39352065548600107,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 125,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 4
+    },
+    {
+      "source_id": "B00DRDS55O",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "public_prior_rank_too_high_ceiling"
+      ],
+      "shape_similarity": 0.6558770713674537,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 4
+    },
+    {
+      "source_id": "B00FRDPQRW",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_low_deadzone"
+      ],
+      "shape_similarity": 0.1166102201266179,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 192,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 15
+    },
+    {
+      "source_id": "B00FZVXZ3I",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.3548886382094314,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 12
+    },
+    {
+      "source_id": "B00MEPOWM6",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "public_prior_rank_too_high_ceiling"
+      ],
+      "shape_similarity": 0.6582193136575819,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 159,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 1
+    },
+    {
+      "source_id": "B00MQURNGG",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_high_ceiling"
+      ],
+      "shape_similarity": 0.3785390001146299,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 167,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 4
+    },
+    {
+      "source_id": "B00NAALFGK",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "public_prior_rank_too_high_ceiling"
+      ],
+      "shape_similarity": 0.6232271441160757,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 4
+    },
+    {
+      "source_id": "B00S1S2SRQ",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "public_prior_rank_too_high_ceiling"
+      ],
+      "shape_similarity": 0.743235051894679,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Hair Treatment"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 1
+    },
+    {
+      "source_id": "B00WONI1AW",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "public_prior_rank_too_high_ceiling"
+      ],
+      "shape_similarity": 0.6274298683304903,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "SHAMPOO",
+            "shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 4
+    },
+    {
+      "source_id": "B018ZI0A3K",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "public_prior_rank_too_high_ceiling"
+      ],
+      "shape_similarity": 0.6251607347655267,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 4
+    },
+    {
+      "source_id": "B01CYDXMSW",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_low_deadzone"
+      ],
+      "shape_similarity": 0.39261252260404345,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 17
+    },
+    {
+      "source_id": "B01DSGSGIU",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.3959315688557178,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 351,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 9
+    },
+    {
+      "source_id": "B01DXPI1EA",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.43003827521394,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 8
+    },
+    {
+      "source_id": "B01IA96C1S",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_low_deadzone"
+      ],
+      "shape_similarity": 0.3924026277487498,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 14
+    },
+    {
+      "source_id": "B01MCV8G1F",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_high_ceiling"
+      ],
+      "shape_similarity": 0.4820209539430102,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 4
+    },
+    {
+      "source_id": "B01MDULN98",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "public_prior_rank_too_low_deadzone"
+      ],
+      "shape_similarity": 0.6344799622302635,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 15
+    },
+    {
+      "source_id": "B073TN35WR",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.3778187848231318,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 450,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 12
+    },
+    {
+      "source_id": "B074NCD24Y",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.46638226143723394,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 190,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 12
+    },
+    {
+      "source_id": "B075H6RN38",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.5433458323130061,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 9
+    },
+    {
+      "source_id": "B075VDZWNF",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.3407849127380584,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 12
+    },
+    {
+      "source_id": "B0765D87TJ",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "public_prior_rank_too_high_ceiling"
+      ],
+      "shape_similarity": 0.6483067211440154,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 323,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 1
+    },
+    {
+      "source_id": "B076DL1VLG",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_high_ceiling"
+      ],
+      "shape_similarity": 0.5192998050112974,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 4
+    },
+    {
+      "source_id": "B078NHY3P6",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.5764835207833171,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 450,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 12
+    },
+    {
+      "source_id": "B079QZ2FJT",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_high_ceiling"
+      ],
+      "shape_similarity": 0.5796842106238187,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 1
+    },
+    {
+      "source_id": "B079YZR1JC",
+      "target_id": "B00BDJODWI",
+      "eligible": true,
+      "rejected_reasons": [],
+      "shape_similarity": 0.636338264235022,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner",
+            "Shampoo",
+            "Conditioner"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 5
+    },
+    {
+      "source_id": "B07B3R86ND",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.47836710934008564,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 8
+    },
+    {
+      "source_id": "B07FTJDF2S",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.5692105691132319,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Shampoo",
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 8
+    },
+    {
+      "source_id": "B07HPG3QQN",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_low_deadzone"
+      ],
+      "shape_similarity": 0.24031525672775716,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 290,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 14
+    },
+    {
+      "source_id": "B07KQ1M9ZY",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.5366788775160964,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 7
+    },
+    {
+      "source_id": "B07L4V1P2S",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.5291091680379028,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 12
+    },
+    {
+      "source_id": "B07P48FLMK",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_high_ceiling"
+      ],
+      "shape_similarity": 0.49070483066552006,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 133,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 1
+    },
+    {
+      "source_id": "B07PDHTDF2",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_high_ceiling"
+      ],
+      "shape_similarity": 0.4464697324788207,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner",
+            "Hair Oil"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 4
+    },
+    {
+      "source_id": "B07RZT9MGJ",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_high_ceiling"
+      ],
+      "shape_similarity": 0.4813749599742405,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 4
+    },
+    {
+      "source_id": "B07V6RBRF2",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_high_ceiling"
+      ],
+      "shape_similarity": 0.44464860860783123,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 1
+    },
+    {
+      "source_id": "B07ZHW33PQ",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_low_deadzone"
+      ],
+      "shape_similarity": 0.4127106759597466,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 13
+    },
+    {
+      "source_id": "B081FKJ4W6",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.5091918481357793,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 375,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 12
+    },
+    {
+      "source_id": "B082GM798D",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_low_deadzone"
+      ],
+      "shape_similarity": 0.42407308765780405,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner",
+            "Body Wash",
+            "Lotion"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 15
+    },
+    {
+      "source_id": "B0847RZ2SF",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_low_deadzone"
+      ],
+      "shape_similarity": 0.3103081365003171,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 14
+    },
+    {
+      "source_id": "B084LJ5XJ3",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_high_ceiling"
+      ],
+      "shape_similarity": 0.4691527976237991,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 4
+    },
+    {
+      "source_id": "B086PFX6VP",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.478162926099033,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 7
+    },
+    {
+      "source_id": "B087FBL23H",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.5929239265746277,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 5
+    },
+    {
+      "source_id": "B087WL7H2X",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.3633034687141281,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Shampoo",
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 9
+    },
+    {
+      "source_id": "B08865DCLJ",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_low_deadzone"
+      ],
+      "shape_similarity": 0.26860558792977896,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Lotion"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 17
+    },
+    {
+      "source_id": "B0892MQCMR",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.417907587366537,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 408,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 12
+    },
+    {
+      "source_id": "B08NRLS7CH",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.4665855173943662,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 12
+    },
+    {
+      "source_id": "B08QZSDYRT",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_low_deadzone"
+      ],
+      "shape_similarity": 0.5416152927404899,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 17
+    },
+    {
+      "source_id": "B08WJB1XDD",
+      "target_id": "B00BDJODWI",
+      "eligible": true,
+      "rejected_reasons": [],
+      "shape_similarity": 0.6059192129434033,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 5
+    },
+    {
+      "source_id": "B08XD7VWPZ",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.5024460890553066,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 5
+    },
+    {
+      "source_id": "B092MB1XLS",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_low_deadzone"
+      ],
+      "shape_similarity": 0.11089372937792204,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 20
+    },
+    {
+      "source_id": "B096VD56NS",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_low_deadzone"
+      ],
+      "shape_similarity": 0.24457506793228717,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner",
+            "Lotion"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 17
+    },
+    {
+      "source_id": "B0994Q18Q6",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_low_deadzone"
+      ],
+      "shape_similarity": 0.07000790368076182,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 16
+    },
+    {
+      "source_id": "B099C2278T",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "public_prior_rank_too_high_ceiling"
+      ],
+      "shape_similarity": 0.668046823858145,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 4
+    },
+    {
+      "source_id": "B09D66PWBL",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_low_deadzone"
+      ],
+      "shape_similarity": 0.49473268415005384,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "SHAMPOO"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 374,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 15
+    },
+    {
+      "source_id": "B09F525LBT",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.4838301131676685,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner",
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 412,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 12
+    },
+    {
+      "source_id": "B09FMYDY31",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_low_deadzone"
+      ],
+      "shape_similarity": 0.3126128607928318,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 375,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 13
+    },
+    {
+      "source_id": "B09GDVCN82",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold"
+      ],
+      "shape_similarity": 0.43608184762085245,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Conditioner"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 12
+    },
+    {
+      "source_id": "B09L1CXS83",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_low_deadzone"
+      ],
+      "shape_similarity": 0.36688939609701865,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Lotion"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 17
+    },
+    {
+      "source_id": "B09Q26LVHD",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "public_prior_rank_too_low_deadzone"
+      ],
+      "shape_similarity": 0.598392696941757,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 357,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 14
+    },
+    {
+      "source_id": "B09SG5DYNH",
+      "target_id": "B00BDJODWI",
+      "eligible": false,
+      "rejected_reasons": [
+        "shape_below_calibrated_threshold",
+        "public_prior_rank_too_low_deadzone"
+      ],
+      "shape_similarity": 0.022242297075468397,
+      "type_compatibility": {
+        "compatible": true,
+        "resolved": true,
+        "source": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo",
+            "Shampoo",
+            "Shampoo",
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "target": {
+          "category": "personal_care",
+          "method": "public_title_rule",
+          "matches": [
+            "Shampoo"
+          ],
+          "rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd"
+        },
+        "policy": "public_title_coarse_conflicts_v2"
+      },
+      "image_quality": {
+        "accepted": true,
+        "width": 500,
+        "height": 500,
+        "format": "JPEG",
+        "minimum_side": 64
+      },
+      "public_prior_rank": 17
+    }
+  ],
+  "configuration": {
+    "seed": 42,
+    "calibration_path": "/content/AmbiLAGE/output/datasets/public/calibration/shape_fg_crop_v1/threshold.json",
+    "min_image_side": 64,
+    "strategy": "median"
+  },
+  "draw": {
+    "policy": "shape_similarity_median_sorted_v1",
+    "sort_key": [
+      "shape_similarity",
+      "source_id"
+    ],
+    "rule": "lower_middle_index_after_ascending_shape_sort",
+    "eligible_count": 2,
+    "eligible_ids": [
+      "B08WJB1XDD",
+      "B079YZR1JC"
+    ],
+    "ordered_scores": [
+      {
+        "source_id": "B08WJB1XDD",
+        "shape_similarity": 0.6059192129434033
+      },
+      {
+        "source_id": "B079YZR1JC",
+        "shape_similarity": 0.636338264235022
+      }
+    ],
+    "median_shape_similarity": 0.6211287385892127,
+    "index": 0,
+    "selected_source_id": "B08WJB1XDD",
+    "selected_shape_similarity": 0.6059192129434033
+  },
+  "calibration": {
+    "schema_version": 2,
+    "policy": "balanced_public_shape_error_midpoints_v2",
+    "status": "calibrated",
+    "reviewer": "助手实际视觉核对，2026年11月5日；依据逐图及逐对表；不是独立人类双盲标注",
+    "development_manifest": "/content/AmbiLAGE/output/datasets/public/calibration/shape_v2_dev_20261105/development.json",
+    "development_manifest_sha256": "e51b2d84f07c58c03add1b0d95e90749a88b149d6014fbb1931a40c3a50b9534",
+    "development_product_ids": [
+      "B01N4IMDJB",
+      "B07815DPW1",
+      "B07C26NR9T",
+      "B07P9WKGBD",
+      "B07QKNWG41",
+      "B07VLL8QH4",
+      "B082LNGNQY",
+      "B082PVMF5R",
+      "B0842Z8WP5",
+      "B0894WFH5V",
+      "B08BC6DM66",
+      "B08NDPFGDR",
+      "B08PVNZR97",
+      "B08R3PZ7XG",
+      "B08TBHHHJ6",
+      "B08TTXMKCN",
+      "B08XX7F1DZ",
+      "B08XX9CRWY",
+      "B08ZMJGSSR",
+      "B092CJB124",
+      "B093JXX82Z",
+      "B093VHSY5W",
+      "B095X9ZDW9",
+      "B0987HQSKY",
+      "B098DXCK4M",
+      "B098F1FM1Z",
+      "B09CT6ZQF7",
+      "B09CTF1PR3",
+      "B09D7L69T3",
+      "B09FY3X27Y",
+      "B09G318HQR",
+      "B09GXN689Q",
+      "B09J1R6P1Y",
+      "B09JBLQP5Y",
+      "B09JT3Z6JV",
+      "B09L17NKYD",
+      "B09LQCBN17",
+      "B09LVH3W9Q",
+      "B09M9Z8T8V",
+      "B09MC1BYDP",
+      "B09MDZJDZC",
+      "B09MLZJNJX",
+      "B09MMB2YW1",
+      "B09MPH64JN",
+      "B09N1H7F6Z",
+      "B09NBL7NDY",
+      "B09NRTFC3Z",
+      "B09P7SZTLS",
+      "B09PL6X5MZ",
+      "B09PL77NP9",
+      "B09PL7BTKQ",
+      "B09Q8B4BB5",
+      "B09QRKLC7P",
+      "B09S9VSKXW",
+      "B09SHH4RDN",
+      "B09SKWPGK6",
+      "B09SY58YBC"
+    ],
+    "rows": [
+      {
+        "left_id": "B098F1FM1Z",
+        "right_id": "B09G318HQR",
+        "left_sha256": "8a2d457397e840aea0d36b53f37d5bb932230e49cdd19e6eb61bf8c79d52da67",
+        "right_sha256": "37a0008186b0b1bde9793d7436131119f97dd99d7c828912c550aa83b67383c8",
+        "shape": 0.7548696921302139,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第1对（C14/C19）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B07P9WKGBD",
+        "right_id": "B09PL77NP9",
+        "left_sha256": "7c4cc4bcc54f27bab06f569518d2c64357c4234242729f5a142ce54613f5713c",
+        "right_sha256": "e106d77c5d015d2c099cd9f88cd879a06a58badfaefca2ef77e1d27bda17f75b",
+        "shape": 0.6729622028811331,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第2对（C02/C25）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B08TBHHHJ6",
+        "right_id": "B098F1FM1Z",
+        "left_sha256": "cb076a4613ffc709f3e91a94bd6b5b41f25b098ee07eb824447b1eced7e28704",
+        "right_sha256": "8a2d457397e840aea0d36b53f37d5bb932230e49cdd19e6eb61bf8c79d52da67",
+        "shape": 0.8596523493379913,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第3对（C06/C14）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B08TTXMKCN",
+        "right_id": "B093VHSY5W",
+        "left_sha256": "265af875340e0d1b6b60141dac2fb82281fc2799b85c531e70b6af7032c017ab",
+        "right_sha256": "88bbc793ede9aef79861a1d0e9edde43b5a761359c908fc11a3637d2e681c032",
+        "shape": 0.72331582195716,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第4对（C07/C13）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B09D7L69T3",
+        "right_id": "B09SHH4RDN",
+        "left_sha256": "139fe68bfcbd6ec1c41262cf00a2305152f4afe9d879abfffaf01a4d59102b4d",
+        "right_sha256": "0f8aaaa0c385d32b116ec504e0ae6679550f2e10e47c4f2447f4a0ca3d2d77df",
+        "shape": 0.739440292147371,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第5对（C17/C27）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B08TTXMKCN",
+        "right_id": "B098F1FM1Z",
+        "left_sha256": "265af875340e0d1b6b60141dac2fb82281fc2799b85c531e70b6af7032c017ab",
+        "right_sha256": "8a2d457397e840aea0d36b53f37d5bb932230e49cdd19e6eb61bf8c79d52da67",
+        "shape": 0.7667889581819577,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第6对（C07/C14）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B08BC6DM66",
+        "right_id": "B08TTXMKCN",
+        "left_sha256": "1c5a3cf60af01f4d7e66dd07ec25a750c9a9f0678d142e5adb1a357ca9a5bf23",
+        "right_sha256": "265af875340e0d1b6b60141dac2fb82281fc2799b85c531e70b6af7032c017ab",
+        "shape": 0.7487668516041212,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第7对（C05/C07）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B082LNGNQY",
+        "right_id": "B09PL6X5MZ",
+        "left_sha256": "320685bedabe982b0e5b483aa9aeb0426d5234008fdf3d7e37c9d7d1ee63e662",
+        "right_sha256": "2364b025c549faa69d4e405816060835437c42070495414c4289cc3f1b923870",
+        "shape": 0.8369872527335268,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第8对（C03/C24）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B08BC6DM66",
+        "right_id": "B09FY3X27Y",
+        "left_sha256": "1c5a3cf60af01f4d7e66dd07ec25a750c9a9f0678d142e5adb1a357ca9a5bf23",
+        "right_sha256": "b7cb146204fff0b415a672725d426d179cec35ff700686a81fd469014cebe77b",
+        "shape": 0.7994510585842255,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第9对（C05/C18）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B09NBL7NDY",
+        "right_id": "B09SY58YBC",
+        "left_sha256": "71cc27ffec63ff0f3803ace9644940334abeb9de0e07d4e2054b460afd76677d",
+        "right_sha256": "33b8965c224b5a8e805a25ccc75ee149631661f512ed816c81b1100ac07f0c1e",
+        "shape": 0.7253215102275559,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第10对（C23/C28）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B09CT6ZQF7",
+        "right_id": "B09PL77NP9",
+        "left_sha256": "46e6e7d95da743a3c0502a3432608ae7be6d0185891edd31190c2bbfb78cec21",
+        "right_sha256": "e106d77c5d015d2c099cd9f88cd879a06a58badfaefca2ef77e1d27bda17f75b",
+        "shape": 0.6424262135238954,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第11对（C15/C25）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B09NBL7NDY",
+        "right_id": "B09PL7BTKQ",
+        "left_sha256": "71cc27ffec63ff0f3803ace9644940334abeb9de0e07d4e2054b460afd76677d",
+        "right_sha256": "72fcf082942506f9113a11b81444b0b3886534802dcfb9494c0ddeea9cfa0b51",
+        "shape": 0.7989996195992797,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第12对（C23/C26）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B01N4IMDJB",
+        "right_id": "B09NBL7NDY",
+        "left_sha256": "639b91278e0667b5120194c5383a5731d562d83626325fdea1c14d5c0c3e5f63",
+        "right_sha256": "71cc27ffec63ff0f3803ace9644940334abeb9de0e07d4e2054b460afd76677d",
+        "shape": 0.8235895945148852,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第13对（C01/C23）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B09FY3X27Y",
+        "right_id": "B09G318HQR",
+        "left_sha256": "b7cb146204fff0b415a672725d426d179cec35ff700686a81fd469014cebe77b",
+        "right_sha256": "37a0008186b0b1bde9793d7436131119f97dd99d7c828912c550aa83b67383c8",
+        "shape": 0.6731279148376048,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第14对（C18/C19）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B082PVMF5R",
+        "right_id": "B09SHH4RDN",
+        "left_sha256": "3ce5461585cf1207c2b237e86c941dfbf6eda436643861b52267461fcd2cdead",
+        "right_sha256": "0f8aaaa0c385d32b116ec504e0ae6679550f2e10e47c4f2447f4a0ca3d2d77df",
+        "shape": 0.8459083165211553,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第15对（C04/C27）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B08TBHHHJ6",
+        "right_id": "B09MC1BYDP",
+        "left_sha256": "cb076a4613ffc709f3e91a94bd6b5b41f25b098ee07eb824447b1eced7e28704",
+        "right_sha256": "7d71c289424a2240b810fa4a3c7d909bcb5e9affed3347a72740d4606eb63d33",
+        "shape": 0.7340454198080769,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第16对（C06/C22）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B07P9WKGBD",
+        "right_id": "B08ZMJGSSR",
+        "left_sha256": "7c4cc4bcc54f27bab06f569518d2c64357c4234242729f5a142ce54613f5713c",
+        "right_sha256": "cbea74a21f759a64a2354b61de868a12fd262ef8bce0c783a4c84145a2f79d84",
+        "shape": 0.8861026053595613,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第17对（C02/C10）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B08XX7F1DZ",
+        "right_id": "B09PL77NP9",
+        "left_sha256": "37baef6dd63a92f082cb9d0ada1aacb8cf9068f76f2cb3438be5fe4b13d279b0",
+        "right_sha256": "e106d77c5d015d2c099cd9f88cd879a06a58badfaefca2ef77e1d27bda17f75b",
+        "shape": 0.7680044324516339,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第18对（C08/C25）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B08XX9CRWY",
+        "right_id": "B09NBL7NDY",
+        "left_sha256": "e1bbec9d10caf558b5cb847cdc3678aa63314b4292bba52b8009acb93344a61d",
+        "right_sha256": "71cc27ffec63ff0f3803ace9644940334abeb9de0e07d4e2054b460afd76677d",
+        "shape": 0.7640987571856586,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第19对（C09/C23）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B082LNGNQY",
+        "right_id": "B09SY58YBC",
+        "left_sha256": "320685bedabe982b0e5b483aa9aeb0426d5234008fdf3d7e37c9d7d1ee63e662",
+        "right_sha256": "33b8965c224b5a8e805a25ccc75ee149631661f512ed816c81b1100ac07f0c1e",
+        "shape": 0.7745830894477923,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第20对（C03/C28）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B08TBHHHJ6",
+        "right_id": "B093VHSY5W",
+        "left_sha256": "cb076a4613ffc709f3e91a94bd6b5b41f25b098ee07eb824447b1eced7e28704",
+        "right_sha256": "88bbc793ede9aef79861a1d0e9edde43b5a761359c908fc11a3637d2e681c032",
+        "shape": 0.6757415575991401,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第21对（C06/C13）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B092CJB124",
+        "right_id": "B09PL7BTKQ",
+        "left_sha256": "0d1a2a02427d789bb4152c6efa7506dd7789dd14c5c39ebc1618d685eae5631c",
+        "right_sha256": "72fcf082942506f9113a11b81444b0b3886534802dcfb9494c0ddeea9cfa0b51",
+        "shape": 0.7928103275222653,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第22对（C11/C26）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B09CTF1PR3",
+        "right_id": "B09LVH3W9Q",
+        "left_sha256": "121edc7202877d0455573d6ae196a3afda269a8f221eef67be3649be4a5ca8f9",
+        "right_sha256": "f1927c244f07f2d44932d656bac3e6e42562b3721cd39b68d45c496c19b93e8e",
+        "shape": 0.7316984854970516,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第23对（C16/C21）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B082PVMF5R",
+        "right_id": "B09D7L69T3",
+        "left_sha256": "3ce5461585cf1207c2b237e86c941dfbf6eda436643861b52267461fcd2cdead",
+        "right_sha256": "139fe68bfcbd6ec1c41262cf00a2305152f4afe9d879abfffaf01a4d59102b4d",
+        "shape": 0.7168951561262922,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第24对（C04/C17）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B08ZMJGSSR",
+        "right_id": "B09CT6ZQF7",
+        "left_sha256": "cbea74a21f759a64a2354b61de868a12fd262ef8bce0c783a4c84145a2f79d84",
+        "right_sha256": "46e6e7d95da743a3c0502a3432608ae7be6d0185891edd31190c2bbfb78cec21",
+        "shape": 0.8150562732033415,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第25对（C10/C15）：座椅主体的座面、靠背/扶手、支撑布局大体相近，忽略颜色及印字"
+      },
+      {
+        "left_id": "B0987HQSKY",
+        "right_id": "B09MPH64JN",
+        "left_sha256": "45d3316d0f5b8545283ea9289fe09596b8dac6bd281f71b5b288f0ef72a4e9ae",
+        "right_sha256": "5f29da4371cee243ae31c2143e410299e33d32d5840480aaff7aa540be1d223d",
+        "shape": 0.6045034235047387,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第26对（B11/B22）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B09LQCBN17",
+        "right_id": "B09Q8B4BB5",
+        "left_sha256": "0f9cd5cadd228e7052cf0e05ce2deb1bbbbe17be33f2aee496601310a9775bcc",
+        "right_sha256": "5b17e14f1a02a0605b137ebbbf3e22cc696abec74128c09fe1aaf407d9798609",
+        "shape": 0.6644958286825517,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第27对（B17/B26）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B09J1R6P1Y",
+        "right_id": "B09MPH64JN",
+        "left_sha256": "6b702138809bf2004bacdad2a01710c700e0ce84b5a08ac49629bbbcc41a47e6",
+        "right_sha256": "5f29da4371cee243ae31c2143e410299e33d32d5840480aaff7aa540be1d223d",
+        "shape": 0.5089882678026697,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第28对（B13/B22）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B0987HQSKY",
+        "right_id": "B098DXCK4M",
+        "left_sha256": "45d3316d0f5b8545283ea9289fe09596b8dac6bd281f71b5b288f0ef72a4e9ae",
+        "right_sha256": "7666f32e4d919ddce90498b4618dec4c180a9966fffb35cc00c5fa999f4db61b",
+        "shape": 0.5772222843596528,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第29对（B11/B12）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B09JBLQP5Y",
+        "right_id": "B09L17NKYD",
+        "left_sha256": "98a9b9b0facda6ebc789b631ac97e6db7b15fae76bf8fedb54ac56649336900e",
+        "right_sha256": "9901e9e739243fd5a18adcbe5d96f5bcd1653070eb7ca3b06f803de7eed3607f",
+        "shape": 0.8832188066158866,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第30对（B14/B16）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B09LQCBN17",
+        "right_id": "B09QRKLC7P",
+        "left_sha256": "0f9cd5cadd228e7052cf0e05ce2deb1bbbbe17be33f2aee496601310a9775bcc",
+        "right_sha256": "1da2260448048558ca770a98aec6fc69bbde1941062c829b8383a0b4fe038e7a",
+        "shape": 0.6732229735588608,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第31对（B17/B27）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B09JT3Z6JV",
+        "right_id": "B09SKWPGK6",
+        "left_sha256": "5f807ae07c7b470911d878d8442a0055db7ee22fa0d0107b683e39bcadab623f",
+        "right_sha256": "3ba23d1a37ccbfb4b117d460f3223c1215d1b9b2a6e556f869cf1376a0760b58",
+        "shape": 0.8156192792843123,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第32对（B15/B29）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B0987HQSKY",
+        "right_id": "B09S9VSKXW",
+        "left_sha256": "45d3316d0f5b8545283ea9289fe09596b8dac6bd281f71b5b288f0ef72a4e9ae",
+        "right_sha256": "c080018bed7c2c941f5540480239a8d952bcbd513cccc849af86ad4686810b35",
+        "shape": 0.4262677526021432,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第33对（B11/B28）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B098DXCK4M",
+        "right_id": "B09J1R6P1Y",
+        "left_sha256": "7666f32e4d919ddce90498b4618dec4c180a9966fffb35cc00c5fa999f4db61b",
+        "right_sha256": "6b702138809bf2004bacdad2a01710c700e0ce84b5a08ac49629bbbcc41a47e6",
+        "shape": 0.4009295103794834,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第34对（B12/B13）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B09Q8B4BB5",
+        "right_id": "B09QRKLC7P",
+        "left_sha256": "5b17e14f1a02a0605b137ebbbf3e22cc696abec74128c09fe1aaf407d9798609",
+        "right_sha256": "1da2260448048558ca770a98aec6fc69bbde1941062c829b8383a0b4fe038e7a",
+        "shape": 0.6963121581712722,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第35对（B26/B27）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B098DXCK4M",
+        "right_id": "B09S9VSKXW",
+        "left_sha256": "7666f32e4d919ddce90498b4618dec4c180a9966fffb35cc00c5fa999f4db61b",
+        "right_sha256": "c080018bed7c2c941f5540480239a8d952bcbd513cccc849af86ad4686810b35",
+        "shape": 0.3271812211577737,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第36对（B12/B28）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B0842Z8WP5",
+        "right_id": "B09S9VSKXW",
+        "left_sha256": "67cfeadea6fad15f30491b01a0febee6a7b763ff66d6034f479fe242477f3985",
+        "right_sha256": "c080018bed7c2c941f5540480239a8d952bcbd513cccc849af86ad4686810b35",
+        "shape": 0.44863583790829026,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第37对（B05/B28）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B0842Z8WP5",
+        "right_id": "B0987HQSKY",
+        "left_sha256": "67cfeadea6fad15f30491b01a0febee6a7b763ff66d6034f479fe242477f3985",
+        "right_sha256": "45d3316d0f5b8545283ea9289fe09596b8dac6bd281f71b5b288f0ef72a4e9ae",
+        "shape": 0.6043421028684337,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第38对（B05/B11）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B0987HQSKY",
+        "right_id": "B09M9Z8T8V",
+        "left_sha256": "45d3316d0f5b8545283ea9289fe09596b8dac6bd281f71b5b288f0ef72a4e9ae",
+        "right_sha256": "2f0246225864a4757886b3e1f2b4ab59b8933c4db2d25a9a1b70101ea06fe5fc",
+        "shape": 0.44157494960908916,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第39对（B11/B18）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B09J1R6P1Y",
+        "right_id": "B09S9VSKXW",
+        "left_sha256": "6b702138809bf2004bacdad2a01710c700e0ce84b5a08ac49629bbbcc41a47e6",
+        "right_sha256": "c080018bed7c2c941f5540480239a8d952bcbd513cccc849af86ad4686810b35",
+        "shape": 0.44132908471526533,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第40对（B13/B28）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B0842Z8WP5",
+        "right_id": "B09MPH64JN",
+        "left_sha256": "67cfeadea6fad15f30491b01a0febee6a7b763ff66d6034f479fe242477f3985",
+        "right_sha256": "5f29da4371cee243ae31c2143e410299e33d32d5840480aaff7aa540be1d223d",
+        "shape": 0.5508914179453519,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第41对（B05/B22）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B0842Z8WP5",
+        "right_id": "B09J1R6P1Y",
+        "left_sha256": "67cfeadea6fad15f30491b01a0febee6a7b763ff66d6034f479fe242477f3985",
+        "right_sha256": "6b702138809bf2004bacdad2a01710c700e0ce84b5a08ac49629bbbcc41a47e6",
+        "shape": 0.48412805489834443,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第42对（B05/B13）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B098DXCK4M",
+        "right_id": "B09MPH64JN",
+        "left_sha256": "7666f32e4d919ddce90498b4618dec4c180a9966fffb35cc00c5fa999f4db61b",
+        "right_sha256": "5f29da4371cee243ae31c2143e410299e33d32d5840480aaff7aa540be1d223d",
+        "shape": 0.538813808953166,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第43对（B12/B22）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B09M9Z8T8V",
+        "right_id": "B09S9VSKXW",
+        "left_sha256": "2f0246225864a4757886b3e1f2b4ab59b8933c4db2d25a9a1b70101ea06fe5fc",
+        "right_sha256": "c080018bed7c2c941f5540480239a8d952bcbd513cccc849af86ad4686810b35",
+        "shape": 0.3604334937094702,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第44对（B18/B28）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B09MPH64JN",
+        "right_id": "B09S9VSKXW",
+        "left_sha256": "5f29da4371cee243ae31c2143e410299e33d32d5840480aaff7aa540be1d223d",
+        "right_sha256": "c080018bed7c2c941f5540480239a8d952bcbd513cccc849af86ad4686810b35",
+        "shape": 0.5561855929370749,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第45对（B22/B28）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B0842Z8WP5",
+        "right_id": "B09M9Z8T8V",
+        "left_sha256": "67cfeadea6fad15f30491b01a0febee6a7b763ff66d6034f479fe242477f3985",
+        "right_sha256": "2f0246225864a4757886b3e1f2b4ab59b8933c4db2d25a9a1b70101ea06fe5fc",
+        "shape": 0.42083025675980906,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第46对（B05/B18）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B095X9ZDW9",
+        "right_id": "B09L17NKYD",
+        "left_sha256": "c6c2b0a3497bf0a4c26efcc6b86db802e4a8d856cb7654318410adb9c8c13b35",
+        "right_sha256": "9901e9e739243fd5a18adcbe5d96f5bcd1653070eb7ca3b06f803de7eed3607f",
+        "shape": 0.5164973881069747,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第47对（B10/B16）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B09M9Z8T8V",
+        "right_id": "B09MPH64JN",
+        "left_sha256": "2f0246225864a4757886b3e1f2b4ab59b8933c4db2d25a9a1b70101ea06fe5fc",
+        "right_sha256": "5f29da4371cee243ae31c2143e410299e33d32d5840480aaff7aa540be1d223d",
+        "shape": 0.41876068770247593,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第48对（B18/B22）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B09J1R6P1Y",
+        "right_id": "B09M9Z8T8V",
+        "left_sha256": "6b702138809bf2004bacdad2a01710c700e0ce84b5a08ac49629bbbcc41a47e6",
+        "right_sha256": "2f0246225864a4757886b3e1f2b4ab59b8933c4db2d25a9a1b70101ea06fe5fc",
+        "shape": 0.5033830696831177,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第49对（B13/B18）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B0842Z8WP5",
+        "right_id": "B098DXCK4M",
+        "left_sha256": "67cfeadea6fad15f30491b01a0febee6a7b763ff66d6034f479fe242477f3985",
+        "right_sha256": "7666f32e4d919ddce90498b4618dec4c180a9966fffb35cc00c5fa999f4db61b",
+        "shape": 0.379087296190564,
+        "label": 1,
+        "review_note": "已实际查看灰度逐对表第50对（B05/B12）：牙刷主体均为相近的长杆小刷头或相近U形刷头结构，忽略颜色、品牌和包装数量"
+      },
+      {
+        "left_id": "B082PVMF5R",
+        "right_id": "B09CT6ZQF7",
+        "left_sha256": "3ce5461585cf1207c2b237e86c941dfbf6eda436643861b52267461fcd2cdead",
+        "right_sha256": "46e6e7d95da743a3c0502a3432608ae7be6d0185891edd31190c2bbfb78cec21",
+        "shape": 0.6156538511435365,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第51对（C04/C15）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B08XX9CRWY",
+        "right_id": "B098F1FM1Z",
+        "left_sha256": "e1bbec9d10caf558b5cb847cdc3678aa63314b4292bba52b8009acb93344a61d",
+        "right_sha256": "8a2d457397e840aea0d36b53f37d5bb932230e49cdd19e6eb61bf8c79d52da67",
+        "shape": 0.5809077062488326,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第52对（C09/C14）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B08XX7F1DZ",
+        "right_id": "B093JXX82Z",
+        "left_sha256": "37baef6dd63a92f082cb9d0ada1aacb8cf9068f76f2cb3438be5fe4b13d279b0",
+        "right_sha256": "bd450f70f612db9c53a47a834b310c4aba601697d0ec48234a74884dd2c5fe89",
+        "shape": 0.5006413514424042,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第53对（C08/C12）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B08TBHHHJ6",
+        "right_id": "B09NBL7NDY",
+        "left_sha256": "cb076a4613ffc709f3e91a94bd6b5b41f25b098ee07eb824447b1eced7e28704",
+        "right_sha256": "71cc27ffec63ff0f3803ace9644940334abeb9de0e07d4e2054b460afd76677d",
+        "shape": 0.4368706271147025,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第54对（C06/C23）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B09CTF1PR3",
+        "right_id": "B09D7L69T3",
+        "left_sha256": "121edc7202877d0455573d6ae196a3afda269a8f221eef67be3649be4a5ca8f9",
+        "right_sha256": "139fe68bfcbd6ec1c41262cf00a2305152f4afe9d879abfffaf01a4d59102b4d",
+        "shape": 0.5188337437936257,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第55对（C16/C17）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B01N4IMDJB",
+        "right_id": "B08TTXMKCN",
+        "left_sha256": "639b91278e0667b5120194c5383a5731d562d83626325fdea1c14d5c0c3e5f63",
+        "right_sha256": "265af875340e0d1b6b60141dac2fb82281fc2799b85c531e70b6af7032c017ab",
+        "shape": 0.5831005315172482,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第56对（C01/C07）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B082PVMF5R",
+        "right_id": "B09SY58YBC",
+        "left_sha256": "3ce5461585cf1207c2b237e86c941dfbf6eda436643861b52267461fcd2cdead",
+        "right_sha256": "33b8965c224b5a8e805a25ccc75ee149631661f512ed816c81b1100ac07f0c1e",
+        "shape": 0.4984634164228439,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第57对（C04/C28）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B082PVMF5R",
+        "right_id": "B09PL6X5MZ",
+        "left_sha256": "3ce5461585cf1207c2b237e86c941dfbf6eda436643861b52267461fcd2cdead",
+        "right_sha256": "2364b025c549faa69d4e405816060835437c42070495414c4289cc3f1b923870",
+        "shape": 0.5558337596425179,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第58对（C04/C24）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B082LNGNQY",
+        "right_id": "B09SHH4RDN",
+        "left_sha256": "320685bedabe982b0e5b483aa9aeb0426d5234008fdf3d7e37c9d7d1ee63e662",
+        "right_sha256": "0f8aaaa0c385d32b116ec504e0ae6679550f2e10e47c4f2447f4a0ca3d2d77df",
+        "shape": 0.47877723224671415,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第59对（C03/C27）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B093JXX82Z",
+        "right_id": "B09NBL7NDY",
+        "left_sha256": "bd450f70f612db9c53a47a834b310c4aba601697d0ec48234a74884dd2c5fe89",
+        "right_sha256": "71cc27ffec63ff0f3803ace9644940334abeb9de0e07d4e2054b460afd76677d",
+        "shape": 0.4068487234248114,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第60对（C12/C23）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B09PL7BTKQ",
+        "right_id": "B09SHH4RDN",
+        "left_sha256": "72fcf082942506f9113a11b81444b0b3886534802dcfb9494c0ddeea9cfa0b51",
+        "right_sha256": "0f8aaaa0c385d32b116ec504e0ae6679550f2e10e47c4f2447f4a0ca3d2d77df",
+        "shape": 0.5431556777626267,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第61对（C26/C27）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B093JXX82Z",
+        "right_id": "B09PL77NP9",
+        "left_sha256": "bd450f70f612db9c53a47a834b310c4aba601697d0ec48234a74884dd2c5fe89",
+        "right_sha256": "e106d77c5d015d2c099cd9f88cd879a06a58badfaefca2ef77e1d27bda17f75b",
+        "shape": 0.35692171158156827,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第62对（C12/C25）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B082LNGNQY",
+        "right_id": "B098F1FM1Z",
+        "left_sha256": "320685bedabe982b0e5b483aa9aeb0426d5234008fdf3d7e37c9d7d1ee63e662",
+        "right_sha256": "8a2d457397e840aea0d36b53f37d5bb932230e49cdd19e6eb61bf8c79d52da67",
+        "shape": 0.5467685148118449,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第63对（C03/C14）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B08XX9CRWY",
+        "right_id": "B093VHSY5W",
+        "left_sha256": "e1bbec9d10caf558b5cb847cdc3678aa63314b4292bba52b8009acb93344a61d",
+        "right_sha256": "88bbc793ede9aef79861a1d0e9edde43b5a761359c908fc11a3637d2e681c032",
+        "shape": 0.7159213801208322,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第64对（C09/C13）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B07P9WKGBD",
+        "right_id": "B082PVMF5R",
+        "left_sha256": "7c4cc4bcc54f27bab06f569518d2c64357c4234242729f5a142ce54613f5713c",
+        "right_sha256": "3ce5461585cf1207c2b237e86c941dfbf6eda436643861b52267461fcd2cdead",
+        "shape": 0.5878481796792401,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第65对（C02/C04）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B09PL6X5MZ",
+        "right_id": "B09SHH4RDN",
+        "left_sha256": "2364b025c549faa69d4e405816060835437c42070495414c4289cc3f1b923870",
+        "right_sha256": "0f8aaaa0c385d32b116ec504e0ae6679550f2e10e47c4f2447f4a0ca3d2d77df",
+        "shape": 0.49582475612570964,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第66对（C24/C27）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B082PVMF5R",
+        "right_id": "B09PL7BTKQ",
+        "left_sha256": "3ce5461585cf1207c2b237e86c941dfbf6eda436643861b52267461fcd2cdead",
+        "right_sha256": "72fcf082942506f9113a11b81444b0b3886534802dcfb9494c0ddeea9cfa0b51",
+        "shape": 0.5734005378255416,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第67对（C04/C26）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B09G318HQR",
+        "right_id": "B09PL7BTKQ",
+        "left_sha256": "37a0008186b0b1bde9793d7436131119f97dd99d7c828912c550aa83b67383c8",
+        "right_sha256": "72fcf082942506f9113a11b81444b0b3886534802dcfb9494c0ddeea9cfa0b51",
+        "shape": 0.46029059747297385,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第68对（C19/C26）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B09D7L69T3",
+        "right_id": "B09LVH3W9Q",
+        "left_sha256": "139fe68bfcbd6ec1c41262cf00a2305152f4afe9d879abfffaf01a4d59102b4d",
+        "right_sha256": "f1927c244f07f2d44932d656bac3e6e42562b3721cd39b68d45c496c19b93e8e",
+        "shape": 0.6148915737470234,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第69对（C17/C21）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B093JXX82Z",
+        "right_id": "B09CTF1PR3",
+        "left_sha256": "bd450f70f612db9c53a47a834b310c4aba601697d0ec48234a74884dd2c5fe89",
+        "right_sha256": "121edc7202877d0455573d6ae196a3afda269a8f221eef67be3649be4a5ca8f9",
+        "shape": 0.5061835627487972,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第70对（C12/C16）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B01N4IMDJB",
+        "right_id": "B09MC1BYDP",
+        "left_sha256": "639b91278e0667b5120194c5383a5731d562d83626325fdea1c14d5c0c3e5f63",
+        "right_sha256": "7d71c289424a2240b810fa4a3c7d909bcb5e9affed3347a72740d4606eb63d33",
+        "shape": 0.33983762020771013,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第71对（C01/C22）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B08XX7F1DZ",
+        "right_id": "B09SHH4RDN",
+        "left_sha256": "37baef6dd63a92f082cb9d0ada1aacb8cf9068f76f2cb3438be5fe4b13d279b0",
+        "right_sha256": "0f8aaaa0c385d32b116ec504e0ae6679550f2e10e47c4f2447f4a0ca3d2d77df",
+        "shape": 0.6876845697248603,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第72对（C08/C27）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B01N4IMDJB",
+        "right_id": "B098F1FM1Z",
+        "left_sha256": "639b91278e0667b5120194c5383a5731d562d83626325fdea1c14d5c0c3e5f63",
+        "right_sha256": "8a2d457397e840aea0d36b53f37d5bb932230e49cdd19e6eb61bf8c79d52da67",
+        "shape": 0.503929365450212,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第73对（C01/C14）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B08ZMJGSSR",
+        "right_id": "B09D7L69T3",
+        "left_sha256": "cbea74a21f759a64a2354b61de868a12fd262ef8bce0c783a4c84145a2f79d84",
+        "right_sha256": "139fe68bfcbd6ec1c41262cf00a2305152f4afe9d879abfffaf01a4d59102b4d",
+        "shape": 0.5181752032486902,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第74对（C10/C17）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B01N4IMDJB",
+        "right_id": "B09SHH4RDN",
+        "left_sha256": "639b91278e0667b5120194c5383a5731d562d83626325fdea1c14d5c0c3e5f63",
+        "right_sha256": "0f8aaaa0c385d32b116ec504e0ae6679550f2e10e47c4f2447f4a0ca3d2d77df",
+        "shape": 0.42372859026250775,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第75对（C01/C27）：座椅主体的靠背、扶手、头枕或底座布局明显不同；均属于座椅用途"
+      },
+      {
+        "left_id": "B098DXCK4M",
+        "right_id": "B09L17NKYD",
+        "left_sha256": "7666f32e4d919ddce90498b4618dec4c180a9966fffb35cc00c5fa999f4db61b",
+        "right_sha256": "9901e9e739243fd5a18adcbe5d96f5bcd1653070eb7ca3b06f803de7eed3607f",
+        "shape": 0.343493243399958,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第76对（B12/B16）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B098DXCK4M",
+        "right_id": "B09MLZJNJX",
+        "left_sha256": "7666f32e4d919ddce90498b4618dec4c180a9966fffb35cc00c5fa999f4db61b",
+        "right_sha256": "b7bef3401a706099e0fdf1b90ee0e4da804b9d19b515f76539efe7bdb05880ea",
+        "shape": 0.5100569732877654,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第77对（B12/B20）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B0842Z8WP5",
+        "right_id": "B09QRKLC7P",
+        "left_sha256": "67cfeadea6fad15f30491b01a0febee6a7b763ff66d6034f479fe242477f3985",
+        "right_sha256": "1da2260448048558ca770a98aec6fc69bbde1941062c829b8383a0b4fe038e7a",
+        "shape": 0.22499575995635343,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第78对（B05/B27）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B0842Z8WP5",
+        "right_id": "B09Q8B4BB5",
+        "left_sha256": "67cfeadea6fad15f30491b01a0febee6a7b763ff66d6034f479fe242477f3985",
+        "right_sha256": "5b17e14f1a02a0605b137ebbbf3e22cc696abec74128c09fe1aaf407d9798609",
+        "shape": 0.24949209067796674,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第79对（B05/B26）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B09J1R6P1Y",
+        "right_id": "B09MLZJNJX",
+        "left_sha256": "6b702138809bf2004bacdad2a01710c700e0ce84b5a08ac49629bbbcc41a47e6",
+        "right_sha256": "b7bef3401a706099e0fdf1b90ee0e4da804b9d19b515f76539efe7bdb05880ea",
+        "shape": 0.4598471530935583,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第80对（B13/B20）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B09MLZJNJX",
+        "right_id": "B09MPH64JN",
+        "left_sha256": "b7bef3401a706099e0fdf1b90ee0e4da804b9d19b515f76539efe7bdb05880ea",
+        "right_sha256": "5f29da4371cee243ae31c2143e410299e33d32d5840480aaff7aa540be1d223d",
+        "shape": 0.789951797740635,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第81对（B20/B22）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B0842Z8WP5",
+        "right_id": "B09LQCBN17",
+        "left_sha256": "67cfeadea6fad15f30491b01a0febee6a7b763ff66d6034f479fe242477f3985",
+        "right_sha256": "0f9cd5cadd228e7052cf0e05ce2deb1bbbbe17be33f2aee496601310a9775bcc",
+        "shape": 0.2742356466180048,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第82对（B05/B17）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B0842Z8WP5",
+        "right_id": "B09L17NKYD",
+        "left_sha256": "67cfeadea6fad15f30491b01a0febee6a7b763ff66d6034f479fe242477f3985",
+        "right_sha256": "9901e9e739243fd5a18adcbe5d96f5bcd1653070eb7ca3b06f803de7eed3607f",
+        "shape": 0.5089407102078485,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第83对（B05/B16）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B095X9ZDW9",
+        "right_id": "B09MPH64JN",
+        "left_sha256": "c6c2b0a3497bf0a4c26efcc6b86db802e4a8d856cb7654318410adb9c8c13b35",
+        "right_sha256": "5f29da4371cee243ae31c2143e410299e33d32d5840480aaff7aa540be1d223d",
+        "shape": 0.3731613226111821,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第84对（B10/B22）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B09M9Z8T8V",
+        "right_id": "B09Q8B4BB5",
+        "left_sha256": "2f0246225864a4757886b3e1f2b4ab59b8933c4db2d25a9a1b70101ea06fe5fc",
+        "right_sha256": "5b17e14f1a02a0605b137ebbbf3e22cc696abec74128c09fe1aaf407d9798609",
+        "shape": 0.2824463189128045,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第85对（B18/B26）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B09MPH64JN",
+        "right_id": "B09Q8B4BB5",
+        "left_sha256": "5f29da4371cee243ae31c2143e410299e33d32d5840480aaff7aa540be1d223d",
+        "right_sha256": "5b17e14f1a02a0605b137ebbbf3e22cc696abec74128c09fe1aaf407d9798609",
+        "shape": 0.3368583045090424,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第86对（B22/B26）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B0842Z8WP5",
+        "right_id": "B095X9ZDW9",
+        "left_sha256": "67cfeadea6fad15f30491b01a0febee6a7b763ff66d6034f479fe242477f3985",
+        "right_sha256": "c6c2b0a3497bf0a4c26efcc6b86db802e4a8d856cb7654318410adb9c8c13b35",
+        "shape": 0.3945454501496062,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第87对（B05/B10）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B0842Z8WP5",
+        "right_id": "B09JT3Z6JV",
+        "left_sha256": "67cfeadea6fad15f30491b01a0febee6a7b763ff66d6034f479fe242477f3985",
+        "right_sha256": "5f807ae07c7b470911d878d8442a0055db7ee22fa0d0107b683e39bcadab623f",
+        "shape": 0.24128988613885935,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第88对（B05/B15）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B09JBLQP5Y",
+        "right_id": "B09S9VSKXW",
+        "left_sha256": "98a9b9b0facda6ebc789b631ac97e6db7b15fae76bf8fedb54ac56649336900e",
+        "right_sha256": "c080018bed7c2c941f5540480239a8d952bcbd513cccc849af86ad4686810b35",
+        "shape": 0.38923055995871714,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第89对（B14/B28）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B09MPH64JN",
+        "right_id": "B09SKWPGK6",
+        "left_sha256": "5f29da4371cee243ae31c2143e410299e33d32d5840480aaff7aa540be1d223d",
+        "right_sha256": "3ba23d1a37ccbfb4b117d460f3223c1215d1b9b2a6e556f869cf1376a0760b58",
+        "shape": 0.35986166989159446,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第90对（B22/B29）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B095X9ZDW9",
+        "right_id": "B09J1R6P1Y",
+        "left_sha256": "c6c2b0a3497bf0a4c26efcc6b86db802e4a8d856cb7654318410adb9c8c13b35",
+        "right_sha256": "6b702138809bf2004bacdad2a01710c700e0ce84b5a08ac49629bbbcc41a47e6",
+        "shape": 0.2730405372674646,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第91对（B10/B13）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B095X9ZDW9",
+        "right_id": "B0987HQSKY",
+        "left_sha256": "c6c2b0a3497bf0a4c26efcc6b86db802e4a8d856cb7654318410adb9c8c13b35",
+        "right_sha256": "45d3316d0f5b8545283ea9289fe09596b8dac6bd281f71b5b288f0ef72a4e9ae",
+        "shape": 0.3161260495585603,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第92对（B10/B11）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B0987HQSKY",
+        "right_id": "B09L17NKYD",
+        "left_sha256": "45d3316d0f5b8545283ea9289fe09596b8dac6bd281f71b5b288f0ef72a4e9ae",
+        "right_sha256": "9901e9e739243fd5a18adcbe5d96f5bcd1653070eb7ca3b06f803de7eed3607f",
+        "shape": 0.43174603726544203,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第93对（B11/B16）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B09QRKLC7P",
+        "right_id": "B09S9VSKXW",
+        "left_sha256": "1da2260448048558ca770a98aec6fc69bbde1941062c829b8383a0b4fe038e7a",
+        "right_sha256": "c080018bed7c2c941f5540480239a8d952bcbd513cccc849af86ad4686810b35",
+        "shape": 0.46552868091237354,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第94对（B27/B28）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B0987HQSKY",
+        "right_id": "B09LQCBN17",
+        "left_sha256": "45d3316d0f5b8545283ea9289fe09596b8dac6bd281f71b5b288f0ef72a4e9ae",
+        "right_sha256": "0f9cd5cadd228e7052cf0e05ce2deb1bbbbe17be33f2aee496601310a9775bcc",
+        "shape": 0.33922298131967393,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第95对（B11/B17）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B09L17NKYD",
+        "right_id": "B09MPH64JN",
+        "left_sha256": "9901e9e739243fd5a18adcbe5d96f5bcd1653070eb7ca3b06f803de7eed3607f",
+        "right_sha256": "5f29da4371cee243ae31c2143e410299e33d32d5840480aaff7aa540be1d223d",
+        "shape": 0.36618882431477845,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第96对（B16/B22）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B09M9Z8T8V",
+        "right_id": "B09QRKLC7P",
+        "left_sha256": "2f0246225864a4757886b3e1f2b4ab59b8933c4db2d25a9a1b70101ea06fe5fc",
+        "right_sha256": "1da2260448048558ca770a98aec6fc69bbde1941062c829b8383a0b4fe038e7a",
+        "shape": 0.17739248932414395,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第97对（B18/B27）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B09LQCBN17",
+        "right_id": "B09MPH64JN",
+        "left_sha256": "0f9cd5cadd228e7052cf0e05ce2deb1bbbbe17be33f2aee496601310a9775bcc",
+        "right_sha256": "5f29da4371cee243ae31c2143e410299e33d32d5840480aaff7aa540be1d223d",
+        "shape": 0.45831773859031066,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第98对（B17/B22）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B0842Z8WP5",
+        "right_id": "B09SKWPGK6",
+        "left_sha256": "67cfeadea6fad15f30491b01a0febee6a7b763ff66d6034f479fe242477f3985",
+        "right_sha256": "3ba23d1a37ccbfb4b117d460f3223c1215d1b9b2a6e556f869cf1376a0760b58",
+        "shape": 0.2930766529194835,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第99对（B05/B29）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      },
+      {
+        "left_id": "B0987HQSKY",
+        "right_id": "B09MLZJNJX",
+        "left_sha256": "45d3316d0f5b8545283ea9289fe09596b8dac6bd281f71b5b288f0ef72a4e9ae",
+        "right_sha256": "b7bef3401a706099e0fdf1b90ee0e4da804b9d19b515f76539efe7bdb05880ea",
+        "shape": 0.548418361833364,
+        "label": 0,
+        "review_note": "已实际查看灰度逐对表第100对（B11/B20）：牙刷主体一侧为U形大刷头、另一侧为长杆小刷头，主要头部及握柄布局不同"
+      }
+    ],
+    "fit": {
+      "threshold": 0.5960951412738369,
+      "error_count": 23,
+      "error_rate": 0.23,
+      "positive_count": 50,
+      "negative_count": 50,
+      "tie_rule": "smallest_threshold",
+      "candidate_thresholds": [
+        -1.0,
+        0.2011941246402487,
+        0.2331428230476064,
+        0.24539098840841306,
+        0.26126631397271566,
+        0.2736380919427347,
+        0.27834098276540464,
+        0.287761485916144,
+        0.3046013512390219,
+        0.321653635358167,
+        0.33201976283340806,
+        0.3380406429143582,
+        0.33953030076369206,
+        0.3416654318038341,
+        0.35020747749076314,
+        0.3583916907365814,
+        0.3601475818005323,
+        0.3633111590121243,
+        0.3696750734629803,
+        0.37612430940087305,
+        0.3841589280746406,
+        0.39188800505416166,
+        0.3977374802645448,
+        0.40388911690214735,
+        0.4128047055636437,
+        0.4197954722311425,
+        0.42227942351115844,
+        0.4249981714323255,
+        0.4290068949337926,
+        0.43430833219007225,
+        0.4390998559149839,
+        0.44145201716217725,
+        0.44510539375868974,
+        0.4534767882493005,
+        0.45908244584193447,
+        0.46006887528326607,
+        0.4629096391926737,
+        0.4721529565795438,
+        0.48145264357252926,
+        0.48997640551202704,
+        0.49714408627427675,
+        0.499552383932624,
+        0.5020122105627609,
+        0.5036562175666649,
+        0.5050564640995046,
+        0.5075621364783228,
+        0.5089644890052591,
+        0.5095226205452176,
+        0.51327718069737,
+        0.5173362956778325,
+        0.5185044735211579,
+        0.5288237763733958,
+        0.5409847433578964,
+        0.5449620962872358,
+        0.5475934383226044,
+        0.549654889889358,
+        0.5533625887939349,
+        0.5560096762897964,
+        0.5647930653813082,
+        0.5753114110925972,
+        0.5790649953042427,
+        0.5820041188830404,
+        0.5854743555982441,
+        0.5960951412738369,
+        0.6044227631865862,
+        0.6096974986258811,
+        0.6152727124452799,
+        0.629040032333716,
+        0.6534610211032236,
+        0.6687290157818424,
+        0.6730450588593689,
+        0.6731754441982328,
+        0.6744822655790005,
+        0.6817130636620001,
+        0.6919983639480662,
+        0.7061167691460521,
+        0.7164082681235622,
+        0.7201054890417261,
+        0.724318666092358,
+        0.7285099978623037,
+        0.7328719526525642,
+        0.7367428559777239,
+        0.744103571875746,
+        0.7518182718671675,
+        0.7594842246579363,
+        0.7654438576838081,
+        0.7673966953167958,
+        0.771293760949713,
+        0.7822674435942136,
+        0.7913810626314501,
+        0.7959049735607725,
+        0.7992253390917525,
+        0.8072536658937834,
+        0.815337776243827,
+        0.8196044368995987,
+        0.8302884236242061,
+        0.841447784627341,
+        0.8527803329295733,
+        0.8714355779769389,
+        0.884660705987724,
+        1.0000000000000002
+      ]
+    },
+    "development_image_sha256": [
+      "0d1a2a02427d789bb4152c6efa7506dd7789dd14c5c39ebc1618d685eae5631c",
+      "0f8aaaa0c385d32b116ec504e0ae6679550f2e10e47c4f2447f4a0ca3d2d77df",
+      "0f9cd5cadd228e7052cf0e05ce2deb1bbbbe17be33f2aee496601310a9775bcc",
+      "121edc7202877d0455573d6ae196a3afda269a8f221eef67be3649be4a5ca8f9",
+      "139fe68bfcbd6ec1c41262cf00a2305152f4afe9d879abfffaf01a4d59102b4d",
+      "1c5a3cf60af01f4d7e66dd07ec25a750c9a9f0678d142e5adb1a357ca9a5bf23",
+      "1da2260448048558ca770a98aec6fc69bbde1941062c829b8383a0b4fe038e7a",
+      "2364b025c549faa69d4e405816060835437c42070495414c4289cc3f1b923870",
+      "265af875340e0d1b6b60141dac2fb82281fc2799b85c531e70b6af7032c017ab",
+      "2f0246225864a4757886b3e1f2b4ab59b8933c4db2d25a9a1b70101ea06fe5fc",
+      "320685bedabe982b0e5b483aa9aeb0426d5234008fdf3d7e37c9d7d1ee63e662",
+      "33b8965c224b5a8e805a25ccc75ee149631661f512ed816c81b1100ac07f0c1e",
+      "37a0008186b0b1bde9793d7436131119f97dd99d7c828912c550aa83b67383c8",
+      "37baef6dd63a92f082cb9d0ada1aacb8cf9068f76f2cb3438be5fe4b13d279b0",
+      "3ba23d1a37ccbfb4b117d460f3223c1215d1b9b2a6e556f869cf1376a0760b58",
+      "3ce5461585cf1207c2b237e86c941dfbf6eda436643861b52267461fcd2cdead",
+      "3e0126cb03bb98cabbcfa0ab9b5957a449920e49d0a15a4b12803168d71de3a0",
+      "45d3316d0f5b8545283ea9289fe09596b8dac6bd281f71b5b288f0ef72a4e9ae",
+      "46e6e7d95da743a3c0502a3432608ae7be6d0185891edd31190c2bbfb78cec21",
+      "53eaceea205f718aaf3ce8d462d3db783c997e645a462d2d41d922370dd504fa",
+      "5b17e14f1a02a0605b137ebbbf3e22cc696abec74128c09fe1aaf407d9798609",
+      "5f29da4371cee243ae31c2143e410299e33d32d5840480aaff7aa540be1d223d",
+      "5f407d61d8b6657a2b60860bff879c4450261a09419eca63842e6285aa3482bf",
+      "5f807ae07c7b470911d878d8442a0055db7ee22fa0d0107b683e39bcadab623f",
+      "639b91278e0667b5120194c5383a5731d562d83626325fdea1c14d5c0c3e5f63",
+      "6424511865623dd1a01555344a0154940462587f871f475053073da7d635b8d9",
+      "67cfeadea6fad15f30491b01a0febee6a7b763ff66d6034f479fe242477f3985",
+      "6b702138809bf2004bacdad2a01710c700e0ce84b5a08ac49629bbbcc41a47e6",
+      "71cc27ffec63ff0f3803ace9644940334abeb9de0e07d4e2054b460afd76677d",
+      "72fcf082942506f9113a11b81444b0b3886534802dcfb9494c0ddeea9cfa0b51",
+      "75d00c038411d7f1eb6f68913f654bb6755839886eb3c9a024cef9db30f9070f",
+      "7666f32e4d919ddce90498b4618dec4c180a9966fffb35cc00c5fa999f4db61b",
+      "7c4cc4bcc54f27bab06f569518d2c64357c4234242729f5a142ce54613f5713c",
+      "7d71c289424a2240b810fa4a3c7d909bcb5e9affed3347a72740d4606eb63d33",
+      "88bbc793ede9aef79861a1d0e9edde43b5a761359c908fc11a3637d2e681c032",
+      "8a2d457397e840aea0d36b53f37d5bb932230e49cdd19e6eb61bf8c79d52da67",
+      "8e12e902578dedbce197a9f5583cebfbc41cefc424eed8a7c348991d2df1b2a1",
+      "98a9b9b0facda6ebc789b631ac97e6db7b15fae76bf8fedb54ac56649336900e",
+      "9901e9e739243fd5a18adcbe5d96f5bcd1653070eb7ca3b06f803de7eed3607f",
+      "a6110ad4ae4d6b1efb770e53bcbde7ca72314f1432530672a82e3c138d3af8e2",
+      "b4212d7aae025f3583993c5903d7884795b423cd7e58959115654c4f3ea00ef3",
+      "b7bef3401a706099e0fdf1b90ee0e4da804b9d19b515f76539efe7bdb05880ea",
+      "b7cb146204fff0b415a672725d426d179cec35ff700686a81fd469014cebe77b",
+      "bd450f70f612db9c53a47a834b310c4aba601697d0ec48234a74884dd2c5fe89",
+      "c080018bed7c2c941f5540480239a8d952bcbd513cccc849af86ad4686810b35",
+      "c6c2b0a3497bf0a4c26efcc6b86db802e4a8d856cb7654318410adb9c8c13b35",
+      "cb076a4613ffc709f3e91a94bd6b5b41f25b098ee07eb824447b1eced7e28704",
+      "cbea74a21f759a64a2354b61de868a12fd262ef8bce0c783a4c84145a2f79d84",
+      "cc5e91c1a37e85afae27a1964300552d23813e1420f8839a16a47e56a7751647",
+      "dac775ae410563d91dcc7dc30d4c1770f87ce038c3d2e7ee144f28b6ca81502f",
+      "e106d77c5d015d2c099cd9f88cd879a06a58badfaefca2ef77e1d27bda17f75b",
+      "e1a824fc4d4f4811bb8ff0c8c0cd00959367211a184f836094a45fa6a388e278",
+      "e1bbec9d10caf558b5cb847cdc3678aa63314b4292bba52b8009acb93344a61d",
+      "eae2ac8da624015d551d8dea22dd352434e57a5f515fbc89f470c3c903da0ea6",
+      "f1927c244f07f2d44932d656bac3e6e42562b3721cd39b68d45c496c19b93e8e",
+      "f51358915737f1937665e2c4e8d12df022a9e2df2f8b5ec4642bead30b7751b5",
+      "f95ac5eb77512fded97e3bebf946452a298cd194fae031359d2fb2ae5079bf6f"
+    ],
+    "models": {
+      "dino": {
+        "path": "/content/AmbiLAGE/models/selection",
+        "files": {
+          ".cache/huggingface/trees/ed25f3a31f01632728cabb09d1542f84ab7b0056.json": "43b91a1712bb19c89be35fde712cd9926de1d490bf9fe575bf8969bc695fd032",
+          "config.json": "1809f83e3bdb1609a501a610ad4a742f4fd8ae44d72ca4aa0df52d1f2ac8628d",
+          "model.safetensors": "ae1e99fcefd534ed978cdeb8326f08030c96e28b7a81ffcbc98a857c84d14be1",
+          "preprocessor_config.json": "14e780d86fa1861f8751f868d7f45425b5feb55c38ca26f152ca5097ab30f828"
+        }
+      },
+      "preprocessing": {
+        "policy": "foreground_crop_gray_letterbox224_global_cls_v1",
+        "size": 224,
+        "grayscale": "Pillow_L_then_three_channels",
+        "resize": "bicubic_preserve_aspect",
+        "padding": 127,
+        "foreground_segmentation": true,
+        "text_detection": false,
+        "pilot_edit": false
+      },
+      "precision": "float32",
+      "libraries": {
+        "transformers": "5.23.0",
+        "torch": "2.14.1+cu126",
+        "pillow": "12.3.0",
+        "numpy": "2.4.6"
+      },
+      "implementation_sha256": "61702eee34bba3ed6b272ad181d9ab30f3bec9f6d5daf56d5741f76d4a2286ba"
+    },
+    "models_sha256": "eb3cf5f5341fb9d81d6446151ae05f0b3cf34646902189666e1dd41d8007d390",
+    "victim_memory_used": false,
+    "formal_queries_used": false,
+    "certificate_sha256": "b62eec12aa1bf3b35b2db05e6f54e58c2462ccc52314c2520eb70d476fad5a9c"
+  },
+  "models": {
+    "dino": {
+      "path": "/content/AmbiLAGE/models/selection",
+      "files": {
+        ".cache/huggingface/trees/ed25f3a31f01632728cabb09d1542f84ab7b0056.json": "43b91a1712bb19c89be35fde712cd9926de1d490bf9fe575bf8969bc695fd032",
+        "config.json": "1809f83e3bdb1609a501a610ad4a742f4fd8ae44d72ca4aa0df52d1f2ac8628d",
+        "model.safetensors": "ae1e99fcefd534ed978cdeb8326f08030c96e28b7a81ffcbc98a857c84d14be1",
+        "preprocessor_config.json": "14e780d86fa1861f8751f868d7f45425b5feb55c38ca26f152ca5097ab30f828"
+      }
+    },
+    "preprocessing": {
+      "policy": "foreground_crop_gray_letterbox224_global_cls_v1",
+      "size": 224,
+      "grayscale": "Pillow_L_then_three_channels",
+      "resize": "bicubic_preserve_aspect",
+      "padding": 127,
+      "foreground_segmentation": true,
+      "text_detection": false,
+      "pilot_edit": false
+    },
+    "precision": "float32",
+    "libraries": {
+      "transformers": "5.23.0",
+      "torch": "2.14.1+cu126",
+      "pillow": "12.3.0",
+      "numpy": "2.4.6"
+    },
+    "implementation_sha256": "61702eee34bba3ed6b272ad181d9ab30f3bec9f6d5daf56d5741f76d4a2286ba"
+  },
+  "type_rules_sha256": "f99a95baab735fd1374168b10a2e5a5bae4ed3169d85af9ab465f3f23e0bf3bd",
+  "excluded_source_ids": [
+    "B00BDJODWI",
+    "B00HHP71JY",
+    "B01460C2I2",
+    "B01590FHS0",
+    "B01LML1VXU",
+    "B01N47U1VI",
+    "B071ZFHTZN",
+    "B07BBLWTLM",
+    "B07BC7JMPL",
+    "B07FRKQNFV",
+    "B07GDZQ68V",
+    "B07Z7MQSM1",
+    "B086PW7TWX",
+    "B08GCSRXKS",
+    "B08V134QWR",
+    "B08Z8MHWVS",
+    "B09B63YYCW",
+    "B09CYFD5BX",
+    "B09HH96NJY",
+    "B09J81RMLD",
+    "B09J89KXRJ",
+    "B09KRPJJC4",
+    "B09PHLS2QD",
+    "B09PNNXYJ4"
+  ],
+  "victim_memory_used": false,
+  "victim_queries_used": false,
+  "target_system_probed": false,
+  "passes_calibrated_threshold": true,
+  "shape_threshold_fallback_used": false,
+  "subtype_filter": {
+    "policy": "shampoo_human_hair_golden_band_v2",
+    "include": "\\bshampoos?\\b|洗发",
+    "exclude": "\\b(?:carpet|rug|upholstery|auto|car|pet|dog|cat|puppy|horse|equine|floor|machine|extracter|extractor|empty|wig|doll|cape|basin|station)\\b|\\bshampoo\\s+(?:brush|bowl|sink|mat|tray|cap|dispenser|bottles?\\s+set)s?\\b|\\brefillable\\b.*\\bbottles?\\b",
+    "source_exclude": "\\b(?:scalp\\s+benefits?|balancing\\s+shampoo|aveda|purple|blonde|silver|toning|violet)\\b"
+  },
+  "public_rank_band": {
+    "enabled": true,
+    "peer_count": 20,
+    "rank_min": 5,
+    "rank_max": 12,
+    "scorer": "clip_b32",
+    "allow_shape_threshold_fallback": true
+  },
+  "target": {
+    "id": "B00BDJODWI",
+    "title": "Aveda Scalp Benefits Balancing Shampoo 33.8 OZ",
+    "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/dd0abf8d2d52aa289346aa2e7219187cec901c901d4f3cce1ef3379691467256.jpg",
+    "source_url": "https://www.amazon.com/dp/B00BDJODWI",
+    "boxes": [
+      [
+        2,
+        6,
+        157,
+        493
+      ]
+    ],
+    "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B00BDJODWI/foreground.png",
+    "text_regions": [
+      [
+        0.275,
+        0.314,
+        0.68125,
+        0.356
+      ],
+      [
+        0.20625,
+        0.352,
+        0.675,
+        0.38
+      ],
+      [
+        0.21875,
+        0.344,
+        0.70625,
+        0.37
+      ],
+      [
+        0.1375,
+        0.454,
+        0.8375,
+        0.502
+      ],
+      [
+        0.2,
+        0.528,
+        0.78125,
+        0.562
+      ],
+      [
+        0.1375,
+        0.554,
+        0.84375,
+        0.588
+      ],
+      [
+        0.20625,
+        0.818,
+        0.75,
+        0.852
+      ],
+      [
+        0.24375,
+        0.856,
+        0.7,
+        0.882
+      ],
+      [
+        0.25,
+        0.842,
+        0.7,
+        0.87
+      ],
+      [
+        0.2,
+        0.9,
+        0.75625,
+        0.94
+      ]
+    ],
+    "text_regions_reviewed": true,
+    "image_sha256": "dd0abf8d2d52aa289346aa2e7219187cec901c901d4f3cce1ef3379691467256",
+    "foreground_mask_sha256": "72082ddea1dffd49982550183087cc16359849de9d953c49ac011f32e20cea69",
+    "brand": "Aveda",
+    "attributes": [
+      "plant-based haircare ingredients",
+      "a balancing formula",
+      "plant and flower essences",
+      "scalp care",
+      "plant based"
+    ],
+    "feature_text": "I want to buy shampoo with plant-based haircare ingredients and a balancing formula.",
+    "training_queries": [
+      "I want to buy shampoo with plant-based haircare ingredients and a balancing formula.",
+      "I would like to purchase shampoo featuring plant-based haircare ingredients and plant and flower essences.",
+      "I am looking for shampoo with a balancing formula and scalp care."
+    ]
+  },
+  "binding": {
+    "public_catalog_sha256": "ad931418eb5fd595b9ab3eb971f75b19b5e12444b3868a024cbd6e642c432bf0",
+    "models_configuration": {
+      "batch_size": 16
+    },
+    "calibration_sha256": "532d45c336b41343556a2a45a0d3f4feeca3d9f604cd63f0cd856ed71b4717e8",
+    "public_plan_sha256": "dac51c2f75a1f178b4cc86c2b3f9d3ebb482a22f700e12e157e6fa2e315ac4be"
+  },
+  "download_failures": {},
+  "source": {
+    "id": "B08WJB1XDD",
+    "title": "Pantene Gold Series Shampoo & Conditioner Moisture Boost with Argan Oil, for Natural, Coily, and Curly Hair, 29.2 Oz Each",
+    "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/db3943d881d90ad1c02d8f68a9d84e10ec5dad9a1121bff7b689c995823840d7.jpg",
+    "source_url": "https://www.amazon.com/dp/B08WJB1XDD",
+    "boxes": [
+      [
+        38,
+        13,
+        462,
+        485
+      ]
+    ],
+    "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B08WJB1XDD/foreground.png",
+    "text_regions": [
+      [
+        0.178,
+        0.334,
+        0.394,
+        0.378
+      ],
+      [
+        0.61,
+        0.334,
+        0.83,
+        0.378
+      ],
+      [
+        0.236,
+        0.37,
+        0.33,
+        0.408
+      ],
+      [
+        0.672,
+        0.37,
+        0.766,
+        0.408
+      ],
+      [
+        0.198,
+        0.408,
+        0.368,
+        0.45
+      ],
+      [
+        0.634,
+        0.408,
+        0.804,
+        0.45
+      ],
+      [
+        0.224,
+        0.432,
+        0.342,
+        0.466
+      ],
+      [
+        0.642,
+        0.432,
+        0.796,
+        0.466
+      ],
+      [
+        0.194,
+        0.47,
+        0.372,
+        0.504
+      ],
+      [
+        0.204,
+        0.488,
+        0.364,
+        0.518
+      ],
+      [
+        0.63,
+        0.47,
+        0.808,
+        0.504
+      ],
+      [
+        0.204,
+        0.498,
+        0.364,
+        0.532
+      ],
+      [
+        0.646,
+        0.5,
+        0.79,
+        0.53
+      ],
+      [
+        0.22,
+        0.518,
+        0.348,
+        0.55
+      ],
+      [
+        0.216,
+        0.818,
+        0.354,
+        0.858
+      ],
+      [
+        0.654,
+        0.82,
+        0.788,
+        0.856
+      ]
+    ],
+    "text_regions_reviewed": true,
+    "owned": true,
+    "source_note": "固定散列规则预先登记的实验模拟可控商品；不声明真实商家所有权",
+    "image_sha256": "db3943d881d90ad1c02d8f68a9d84e10ec5dad9a1121bff7b689c995823840d7",
+    "foreground_mask_sha256": "66d5b0927b7256971be11c535af8ec4d947a5f67e371dc2fbc713c1db9240f15"
+  },
+  "annotation_binding": {
+    "drawn_pair_sha256": "3ed881385c9a16d982363065ead54ecc9e1ca9e095bbee0fd67a8194e36313a8",
+    "annotations_sha256": "a3bf14ef1a9ca5086e43158b7f0f094c2e5bce4c3913a6f6c56f9bb9184b328d",
+    "reviews_sha256": "7eb0ae7cfe346347ecc0c939cf739b097735486430c94acbad903bbe10c3eb85"
+  },
+  "target_feature_text": "I want to buy shampoo with plant-based haircare ingredients and a balancing formula."
+}

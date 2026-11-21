@@ -1,0 +1,91 @@
+{
+  "id": "B09KRPJJC4",
+  "identity": {
+    "image_sha256": "ccea9d71487707336857f62b4b1ad78285aa6fc4150aa7d5cebf33a142541b87",
+    "annotation_models": {
+      "policy": "public_ocr_sam_positive_seed_background_connectivity_v2",
+      "ocr_version": "1.4.4",
+      "ocr_weights": {
+        "ch_PP-OCRv4_det_infer.onnx": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+        "ch_PP-OCRv4_rec_infer.onnx": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+        "ch_ppocr_mobile_v2.0_cls_infer.onnx": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+      },
+      "segmentation_weights_sha256": "dc407dce21301fd94abb395c5099b4f2c455fdc8a8f261ac3d0ea6d4cd197230",
+      "segmentation_model_manifest_sha256": "7ae50b6ffb136ddc1c903f1a247ef537297cf71578163237e99b0c30c7bb3ff1",
+      "code_sha256": "60c0b585136018ca85c579cc2bb0340a051f1e249fdac465e8d002faa5d6444e",
+      "device": "cuda",
+      "model_loaded_once": true
+    }
+  },
+  "image": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/images/ccea9d71487707336857f62b4b1ad78285aa6fc4150aa7d5cebf33a142541b87.jpg",
+  "title": "Sheer Curtains 2 Panels Sheer Window Covering Rod Pocket, Golden Retriever Voile Window Treatment Drapes for Bedroom Living Room Kitchen Christmas Barn Red Truck 52x96 inch,",
+  "foreground_mask": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09KRPJJC4/foreground.png",
+  "foreground_mask_sha256": "d228886fc8a038148e5713bb0d187897dbc502a2050abaa60c3c816032958ed2",
+  "boxes": [
+    [
+      55,
+      14,
+      436,
+      482
+    ]
+  ],
+  "text_regions": [
+    [
+      0.314,
+      0.66,
+      0.682,
+      0.742
+    ]
+  ],
+  "ocr": [
+    {
+      "text": "MERRYORISTMAS",
+      "confidence": 0.9618366131415734,
+      "polygon": [
+        [
+          161.0,
+          333.0
+        ],
+        [
+          338.0,
+          334.0
+        ],
+        [
+          337.0,
+          368.0
+        ],
+        [
+          160.0,
+          367.0
+        ]
+      ]
+    }
+  ],
+  "segmentation_candidates": [
+    {
+      "index": 0,
+      "iou": 0.7520935535430908,
+      "foreground_ratio": 0.09774,
+      "rough_coverage": 0.1593844897206358,
+      "accepted": false
+    },
+    {
+      "index": 1,
+      "iou": 0.8260695934295654,
+      "foreground_ratio": 0.406932,
+      "rough_coverage": 0.6587949331067328,
+      "accepted": true
+    },
+    {
+      "index": 2,
+      "iou": 0.7790965437889099,
+      "foreground_ratio": 0.266588,
+      "rough_coverage": 0.43333399205580697,
+      "accepted": true
+    }
+  ],
+  "selected_mask_index": 1,
+  "text_regions_reviewed": false,
+  "review_overlay": "/content/AmbiLAGE/output/public_pair_selection/groups9_golden_band_set2/data/selected_annotations/annotations/B09KRPJJC4/review_overlay.png",
+  "observed_seconds": 0.5870742879997124
+}

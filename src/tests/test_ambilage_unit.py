@@ -995,3 +995,73 @@ def test_extract_ink_core_mask_releases_colored_bottle_substrate():
     assert int(substrate.sum()) > int(rect_roi.sum() * 0.5)
     assert bool(substrate[54, 44])
     assert not bool(ink_core[54, 44])
+
+
+def test_stage3_and_stage4_enforce_fg_chroma_tv_against_source(tmp_path: Path):
+    """验证 Stage 3 与 Stage 4 均以原图 source 为基准约束前景 OKLab 色度 TV，防止自然锚点越界后在终检门禁失败。"""
+    from PIL import Image
+    from src.visual._ambilage.backends import ProductionStages
+    from src.visual._ambilage.config import AmbiLAGEConfig
+    from src.visual._ambilage.illumination_harmonization import harmonize_illumination
+    from src.visual._ambilage.latent_refinement import AmbiLAGEVae, refine_ambient_coop_latent
+    from src.visual._ambilage.segmentation import compute_spatial_envelopes
+    from src.visual._ambilage.smoke import TinyAutoencoder
+
+    # 1. 高对比度冷暖交替前景条纹：若不回溯将突破 fg_chroma_tv 上限，Stage 3 应回溯至 <= 0.60 * ceiling 并通过终检门禁
+    h, w = 96, 96
+    src = np.full((h, w, 3), 255, dtype=np.uint8)
+    fg = np.zeros((h, w), dtype=bool)
+    fg[12:84, 12:84] = True
+    yy, xx = np.indices((h, w))
+    stripe = ((yy + xx) % 2) == 0
+    src[fg & stripe] = [245, 195, 70]
+    src[fg & (~stripe)] = [18, 18, 22]
+
+    cfg = AmbiLAGEConfig(harmonization_selected_color_mix=0.30)
+    anchor_rgb, rec = harmonize_illumination(
+        source_image=src,
+        target_color_rgb=[35, 95, 230],
+        foreground=fg,
+        regions=[],
+        config=cfg,
+    )
+    assert rec["fg_chroma_tv_levels"] <= 0.60 * cfg.fg_chroma_tv_ceiling + 1e-6
+    assert rec["chosen_fraction"] < 1.0
+
+    src_path = tmp_path / "striped_src.png"
+    Image.fromarray(src).save(src_path)
+    stages = ProductionStages.__new__(ProductionStages)
+    stages.config = cfg
+    stages.device = torch.device("cpu")
+    stages.planner = stages.processor = stages.sam = stages.sam_processor = stages.editor = None
+    gate_res = stages.gate(src_path, anchor_rgb, category="hair extensions", roi_mask=None, fg_mask=fg)
+    assert gate_res["passed"] is True
+    assert gate_res["metrics"]["fg_chroma_tv_levels"] <= cfg.fg_chroma_tv_ceiling
+
+    # 2. 若外部传入与原图前景 OKLab 色度 TV 超限的坏锚点，Stage 4 evaluate_quality 必须相对 original_tensor 立即在 step 0 拦截
+    h4, w4 = 32, 32
+    fg4 = np.zeros((h4, w4), dtype=bool)
+    fg4[4:28, 4:28] = True
+    roi4 = np.zeros((h4, w4), dtype=bool)
+    cfg4 = AmbiLAGEConfig(
+        steps=2, check_every=1, log_every=10, anneal_min_steps=2, anneal_early_stop_patience=0,
+        source_ssim_floor=0.2, source_mae_ceiling=50.0, fg_chroma_tv_ceiling=2.5, smoke_test=True,
+    )
+    env4 = compute_spatial_envelopes(fg4, roi4, cfg4)
+    orig4 = torch.full((1, 3, h4, w4), 0.5, dtype=torch.float32)
+    anchor4 = orig4.clone()
+    y4, x4 = torch.meshgrid(torch.arange(h4), torch.arange(w4), indexing="ij")
+    checker4 = ((y4 + x4) % 2 == 0) & torch.from_numpy(fg4)
+    anti4 = ((y4 + x4) % 2 == 1) & torch.from_numpy(fg4)
+    anchor4[0, 0, checker4] += 0.04
+    anchor4[0, 1, checker4] -= 0.04
+    anchor4[0, 0, anti4] -= 0.04
+    anchor4[0, 1, anti4] += 0.04
+
+    class _DummyObjective:
+        def evaluate(self, img: torch.Tensor, step: int = 0):
+            return img.mean(), img.mean().reshape(1, 1)
+
+    vae = AmbiLAGEVae("cpu", model=TinyAutoencoder(), test_fixture=True)
+    with pytest.raises(RuntimeError, match="自然锚点未通过结构/误差门禁"):
+        refine_ambient_coop_latent(anchor4, orig4, env4, _DummyObjective(), None, vae, cfg4)

@@ -272,3 +272,16 @@ def test_custom_blend_pipeline_and_legacy_frozen_evidence_validation(tmp_path):
     if legacy_dir.is_dir():
         legacy_meta = validate_ready(legacy_dir, require_production=True)
         assert legacy_meta['method'] == 'visual_inception'
+
+
+def test_visual_inception_defaults_to_pure_bank_weight_10_00():
+    from src.paths import PROJECT
+
+    default_cfg = VisualInceptionConfig().validate()
+    assert BANK_LOSS_BLEND == 1.0
+    assert HARD_MARGIN_LOSS_BLEND == 0.0
+    assert default_cfg.bank_loss_blend == 1.0
+    assert default_cfg.hard_margin_loss_blend == 0.0
+    example = json.loads((PROJECT / 'src/visual/config/visual_inception.example.json').read_text(encoding='utf-8'))
+    assert example['bank_loss_blend'] == 1.0
+    assert example['hard_margin_loss_blend'] == 0.0

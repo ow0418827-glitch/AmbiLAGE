@@ -1,0 +1,208 @@
+
+=== [ENCODER 01_clip_l14] panels=['vi_paper_minimal_set2_training_oracle_v4', 'vi_paper_minimal_set2_overlap_30_v4', 'vi_paper_minimal_set2_zero_overlap_v4'] unique_images=198 unique_texts=360 batch_size=16 text_batch_size=64 verify=in_process ===
+[PRECOMPUTED UPDATE 01_clip_l14] Encoding only delta assets: missing_images=9, missing_texts=0
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+none clean: 前三 1/20；前五 7/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 14/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 5/20；前五 7/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 4/20；前五 10/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 4/20；前五 7/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 6/20
+none modified: 前三 20/20；前五 20/20
+[EVAL DONE] vi_paper_minimal_set2_training_oracle_v4/01_clip_l14
+none clean: 前三 2/20；前五 3/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 3/20；前五 15/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 6/20；前五 8/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 6/20；前五 13/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 7/20；前五 9/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 4/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 18/20；前五 20/20
+[EVAL DONE] vi_paper_minimal_set2_overlap_30_v4/01_clip_l14
+none clean: 前三 1/20；前五 2/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 3/20；前五 14/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 5/20；前五 10/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 7/20；前五 13/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 7/20；前五 9/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 1/20；前五 1/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 0/20；前五 3/20
+none modified: 前三 18/20；前五 20/20
+[EVAL DONE] vi_paper_minimal_set2_zero_overlap_v4/01_clip_l14
+[VERIFY 01_clip_l14] prewarmed 198 unique images (batch=16), 360 unique texts (text_batch=64)
+[VERIFIED] vi_paper_minimal_set2_training_oracle_v4/01_clip_l14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] vi_paper_minimal_set2_overlap_30_v4/01_clip_l14: rankings=360 scores=68040 max_error=0.00e+00
+[VERIFIED] vi_paper_minimal_set2_zero_overlap_v4/01_clip_l14: rankings=360 scores=68040 max_error=0.00e+00
+{
+  "vi_paper_minimal_set2_training_oracle_v4": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 11.922222222222222,
+      "mean_rank_modified": 1.0333333333333334,
+      "mean_rank_gain": 10.88888888888889,
+      "top1": {
+        "clean_hits": 3,
+        "modified_hits": 177,
+        "clean_rate": 0.016666666666666666,
+        "modified_rate": 0.9833333333333333,
+        "gain": 0.9666666666666667,
+        "new_hits": 174,
+        "lost_hits": 0,
+        "clean_miss_count": 177,
+        "clean_miss_conversion_rate": 0.9830508474576272,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9830508474576272
+      },
+      "top3": {
+        "clean_hits": 16,
+        "modified_hits": 179,
+        "clean_rate": 0.08888888888888889,
+        "modified_rate": 0.9944444444444445,
+        "gain": 0.9055555555555556,
+        "new_hits": 163,
+        "lost_hits": 0,
+        "clean_miss_count": 164,
+        "clean_miss_conversion_rate": 0.9939024390243902,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9939024390243902
+      },
+      "top5": {
+        "clean_hits": 56,
+        "modified_hits": 180,
+        "clean_rate": 0.3111111111111111,
+        "modified_rate": 1.0,
+        "gain": 0.6888888888888889,
+        "new_hits": 124,
+        "lost_hits": 0,
+        "clean_miss_count": 124,
+        "clean_miss_conversion_rate": 1.0,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 1.0
+      }
+    }
+  },
+  "vi_paper_minimal_set2_overlap_30_v4": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 11.322222222222223,
+      "mean_rank_modified": 1.1055555555555556,
+      "mean_rank_gain": 10.216666666666667,
+      "top1": {
+        "clean_hits": 4,
+        "modified_hits": 170,
+        "clean_rate": 0.022222222222222223,
+        "modified_rate": 0.9444444444444444,
+        "gain": 0.9222222222222223,
+        "new_hits": 166,
+        "lost_hits": 0,
+        "clean_miss_count": 176,
+        "clean_miss_conversion_rate": 0.9431818181818182,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9431818181818182
+      },
+      "top3": {
+        "clean_hits": 25,
+        "modified_hits": 176,
+        "clean_rate": 0.1388888888888889,
+        "modified_rate": 0.9777777777777777,
+        "gain": 0.8388888888888889,
+        "new_hits": 151,
+        "lost_hits": 0,
+        "clean_miss_count": 155,
+        "clean_miss_conversion_rate": 0.9741935483870968,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9741935483870968
+      },
+      "top5": {
+        "clean_hits": 56,
+        "modified_hits": 180,
+        "clean_rate": 0.3111111111111111,
+        "modified_rate": 1.0,
+        "gain": 0.6888888888888889,
+        "new_hits": 124,
+        "lost_hits": 0,
+        "clean_miss_count": 124,
+        "clean_miss_conversion_rate": 1.0,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 1.0
+      }
+    }
+  },
+  "vi_paper_minimal_set2_zero_overlap_v4": {
+    "01_clip_l14": {
+      "query_count": 180,
+      "mean_rank_clean": 11.377777777777778,
+      "mean_rank_modified": 1.1055555555555556,
+      "mean_rank_gain": 10.272222222222222,
+      "top1": {
+        "clean_hits": 5,
+        "modified_hits": 170,
+        "clean_rate": 0.027777777777777776,
+        "modified_rate": 0.9444444444444444,
+        "gain": 0.9166666666666666,
+        "new_hits": 165,
+        "lost_hits": 0,
+        "clean_miss_count": 175,
+        "clean_miss_conversion_rate": 0.9428571428571428,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9428571428571428
+      },
+      "top3": {
+        "clean_hits": 24,
+        "modified_hits": 176,
+        "clean_rate": 0.13333333333333333,
+        "modified_rate": 0.9777777777777777,
+        "gain": 0.8444444444444444,
+        "new_hits": 152,
+        "lost_hits": 0,
+        "clean_miss_count": 156,
+        "clean_miss_conversion_rate": 0.9743589743589743,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9743589743589743
+      },
+      "top5": {
+        "clean_hits": 52,
+        "modified_hits": 180,
+        "clean_rate": 0.28888888888888886,
+        "modified_rate": 1.0,
+        "gain": 0.7111111111111111,
+        "new_hits": 128,
+        "lost_hits": 0,
+        "clean_miss_count": 128,
+        "clean_miss_conversion_rate": 1.0,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 1.0
+      }
+    }
+  }
+}

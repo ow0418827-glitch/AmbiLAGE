@@ -1,0 +1,541 @@
+[STAGE A START] 2026-11-21T11:44:32+00:00 Generating 4 Set 2 groups (01_camera,02_chair,06_jeans,07_shampoo) with ms_v2_geom...
+[STAGE A SHARDS DONE] 2026-11-21T12:12:00+00:00 w1=0 w2=0
+[STAGE A VERIFY] 2026-11-21T12:12:00+00:00 Verifying all 4 ms_v2_geom FROZEN_IMAGE.json...
+[VERIFIED MS-V2 FROZEN] 01_camera: eot_paths=['identity', 'multiscale_grid_breaking_geom_v2_resize_pad_flip_shift'] ssim=0.9662 tv=0.8199
+[VERIFIED MS-V2 FROZEN] 02_chair: eot_paths=['identity', 'multiscale_grid_breaking_geom_v2_resize_pad_flip_shift'] ssim=0.9756 tv=0.9138
+[VERIFIED MS-V2 FROZEN] 06_jeans: eot_paths=['identity', 'multiscale_grid_breaking_geom_v2_resize_pad_flip_shift'] ssim=0.9761 tv=1.2863
+[VERIFIED MS-V2 FROZEN] 07_shampoo: eot_paths=['identity', 'multiscale_grid_breaking_geom_v2_resize_pad_flip_shift'] ssim=0.9437 tv=0.6811
+[DRIVE_SYNC:after_ms_v2_gen] 2026-11-21T12:12:03+00:00 starting rsync to /content/drive/MyDrive/AmbiLAGE_backup ...
+[DRIVE_SYNC:after_ms_v2_gen] 2026-11-21T12:12:05+00:00 completed.
+[STAGE B START] 2026-11-21T12:12:05+00:00 Evaluating ms_v2_geom on Set 2 4 groups (--replacement-groups selected)...
+
+=== [ENCODER 01_clip_l14] panels=['ambilage_ms_v2_geom_set2_4g_training_oracle_v4', 'ambilage_ms_v2_geom_set2_4g_overlap_30_v4', 'ambilage_ms_v2_geom_set2_4g_zero_overlap_v4'] unique_images=193 unique_texts=160 batch_size=16 text_batch_size=64 verify=in_process ===
+[PRECOMPUTED UPDATE 01_clip_l14] Encoding only delta assets: missing_images=4, missing_texts=0
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+none clean: 前三 1/20；前五 7/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 14/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 4/20；前五 10/20
+none modified: 前三 18/20；前五 20/20
+none clean: 前三 4/20；前五 7/20
+none modified: 前三 20/20；前五 20/20
+[EVAL DONE] ambilage_ms_v2_geom_set2_4g_training_oracle_v4/01_clip_l14
+none clean: 前三 2/20；前五 3/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 3/20；前五 15/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 6/20；前五 13/20
+none modified: 前三 18/20；前五 19/20
+none clean: 前三 7/20；前五 9/20
+none modified: 前三 20/20；前五 20/20
+[EVAL DONE] ambilage_ms_v2_geom_set2_4g_overlap_30_v4/01_clip_l14
+none clean: 前三 1/20；前五 2/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 3/20；前五 14/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 7/20；前五 13/20
+none modified: 前三 19/20；前五 19/20
+none clean: 前三 7/20；前五 9/20
+none modified: 前三 20/20；前五 20/20
+[EVAL DONE] ambilage_ms_v2_geom_set2_4g_zero_overlap_v4/01_clip_l14
+[VERIFY 01_clip_l14] prewarmed 193 unique images (batch=16), 160 unique texts (text_batch=64)
+[VERIFIED] ambilage_ms_v2_geom_set2_4g_training_oracle_v4/01_clip_l14: rankings=160 scores=30240 max_error=0.00e+00
+[VERIFIED] ambilage_ms_v2_geom_set2_4g_overlap_30_v4/01_clip_l14: rankings=160 scores=30240 max_error=0.00e+00
+[VERIFIED] ambilage_ms_v2_geom_set2_4g_zero_overlap_v4/01_clip_l14: rankings=160 scores=30240 max_error=0.00e+00
+
+=== [ENCODER 02_openclip_bigG14] panels=['ambilage_ms_v2_geom_set2_4g_training_oracle_v4', 'ambilage_ms_v2_geom_set2_4g_overlap_30_v4', 'ambilage_ms_v2_geom_set2_4g_zero_overlap_v4'] unique_images=193 unique_texts=160 batch_size=16 text_batch_size=64 verify=in_process ===
+[PRECOMPUTED UPDATE 02_openclip_bigG14] Encoding only delta assets: missing_images=4, missing_texts=0
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+none clean: 前三 2/20；前五 7/20
+none modified: 前三 5/20；前五 14/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 0/20；前五 14/20
+none clean: 前三 8/20；前五 12/20
+none modified: 前三 12/20；前五 15/20
+none clean: 前三 3/20；前五 6/20
+none modified: 前三 6/20；前五 10/20
+[EVAL DONE] ambilage_ms_v2_geom_set2_4g_training_oracle_v4/02_openclip_bigG14
+none clean: 前三 3/20；前五 5/20
+none modified: 前三 7/20；前五 13/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 13/20
+none clean: 前三 9/20；前五 15/20
+none modified: 前三 12/20；前五 17/20
+none clean: 前三 7/20；前五 9/20
+none modified: 前三 7/20；前五 11/20
+[EVAL DONE] ambilage_ms_v2_geom_set2_4g_overlap_30_v4/02_openclip_bigG14
+none clean: 前三 3/20；前五 5/20
+none modified: 前三 8/20；前五 12/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 0/20；前五 12/20
+none clean: 前三 10/20；前五 16/20
+none modified: 前三 12/20；前五 17/20
+none clean: 前三 7/20；前五 10/20
+none modified: 前三 8/20；前五 12/20
+[EVAL DONE] ambilage_ms_v2_geom_set2_4g_zero_overlap_v4/02_openclip_bigG14
+[VERIFY 02_openclip_bigG14] prewarmed 193 unique images (batch=16), 160 unique texts (text_batch=64)
+[VERIFIED] ambilage_ms_v2_geom_set2_4g_training_oracle_v4/02_openclip_bigG14: rankings=160 scores=30240 max_error=0.00e+00
+[VERIFIED] ambilage_ms_v2_geom_set2_4g_overlap_30_v4/02_openclip_bigG14: rankings=160 scores=30240 max_error=0.00e+00
+[VERIFIED] ambilage_ms_v2_geom_set2_4g_zero_overlap_v4/02_openclip_bigG14: rankings=160 scores=30240 max_error=0.00e+00
+
+=== [ENCODER 03_siglip_so400m] panels=['ambilage_ms_v2_geom_set2_4g_training_oracle_v4', 'ambilage_ms_v2_geom_set2_4g_overlap_30_v4', 'ambilage_ms_v2_geom_set2_4g_zero_overlap_v4'] unique_images=193 unique_texts=160 batch_size=16 text_batch_size=64 verify=in_process ===
+[PRECOMPUTED UPDATE 03_siglip_so400m] Encoding only delta assets: missing_images=4, missing_texts=0
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+none clean: 前三 7/20；前五 8/20
+none modified: 前三 8/20；前五 9/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 2/20；前五 19/20
+none clean: 前三 13/20；前五 16/20
+none modified: 前三 14/20；前五 15/20
+none clean: 前三 1/20；前五 3/20
+none modified: 前三 4/20；前五 8/20
+[EVAL DONE] ambilage_ms_v2_geom_set2_4g_training_oracle_v4/03_siglip_so400m
+none clean: 前三 8/20；前五 9/20
+none modified: 前三 9/20；前五 13/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 1/20；前五 20/20
+none clean: 前三 13/20；前五 15/20
+none modified: 前三 11/20；前五 14/20
+none clean: 前三 2/20；前五 2/20
+none modified: 前三 4/20；前五 7/20
+[EVAL DONE] ambilage_ms_v2_geom_set2_4g_overlap_30_v4/03_siglip_so400m
+none clean: 前三 7/20；前五 10/20
+none modified: 前三 9/20；前五 13/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 1/20；前五 20/20
+none clean: 前三 13/20；前五 16/20
+none modified: 前三 12/20；前五 16/20
+none clean: 前三 2/20；前五 2/20
+none modified: 前三 6/20；前五 9/20
+[EVAL DONE] ambilage_ms_v2_geom_set2_4g_zero_overlap_v4/03_siglip_so400m
+[VERIFY 03_siglip_so400m] prewarmed 193 unique images (batch=16), 160 unique texts (text_batch=64)
+[VERIFIED] ambilage_ms_v2_geom_set2_4g_training_oracle_v4/03_siglip_so400m: rankings=160 scores=30240 max_error=0.00e+00
+[VERIFIED] ambilage_ms_v2_geom_set2_4g_overlap_30_v4/03_siglip_so400m: rankings=160 scores=30240 max_error=0.00e+00
+[VERIFIED] ambilage_ms_v2_geom_set2_4g_zero_overlap_v4/03_siglip_so400m: rankings=160 scores=30240 max_error=0.00e+00
+{
+  "ambilage_ms_v2_geom_set2_4g_training_oracle_v4": {
+    "01_clip_l14": {
+      "query_count": 80,
+      "mean_rank_clean": 7.5875,
+      "mean_rank_modified": 1.2,
+      "mean_rank_gain": 6.3875,
+      "top1": {
+        "clean_hits": 1,
+        "modified_hits": 72,
+        "clean_rate": 0.0125,
+        "modified_rate": 0.9,
+        "gain": 0.8875,
+        "new_hits": 71,
+        "lost_hits": 0,
+        "clean_miss_count": 79,
+        "clean_miss_conversion_rate": 0.8987341772151899,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.8987341772151899
+      },
+      "top3": {
+        "clean_hits": 9,
+        "modified_hits": 78,
+        "clean_rate": 0.1125,
+        "modified_rate": 0.975,
+        "gain": 0.8625,
+        "new_hits": 69,
+        "lost_hits": 0,
+        "clean_miss_count": 71,
+        "clean_miss_conversion_rate": 0.971830985915493,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.971830985915493
+      },
+      "top5": {
+        "clean_hits": 38,
+        "modified_hits": 80,
+        "clean_rate": 0.475,
+        "modified_rate": 1.0,
+        "gain": 0.525,
+        "new_hits": 42,
+        "lost_hits": 0,
+        "clean_miss_count": 42,
+        "clean_miss_conversion_rate": 1.0,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 1.0
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 80,
+      "mean_rank_clean": 8.875,
+      "mean_rank_modified": 5.45,
+      "mean_rank_gain": 3.425,
+      "top1": {
+        "clean_hits": 3,
+        "modified_hits": 9,
+        "clean_rate": 0.0375,
+        "modified_rate": 0.1125,
+        "gain": 0.075,
+        "new_hits": 6,
+        "lost_hits": 0,
+        "clean_miss_count": 77,
+        "clean_miss_conversion_rate": 0.07792207792207792,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.07792207792207792
+      },
+      "top3": {
+        "clean_hits": 13,
+        "modified_hits": 23,
+        "clean_rate": 0.1625,
+        "modified_rate": 0.2875,
+        "gain": 0.125,
+        "new_hits": 10,
+        "lost_hits": 0,
+        "clean_miss_count": 67,
+        "clean_miss_conversion_rate": 0.14925373134328357,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.14925373134328357
+      },
+      "top5": {
+        "clean_hits": 26,
+        "modified_hits": 53,
+        "clean_rate": 0.325,
+        "modified_rate": 0.6625,
+        "gain": 0.3375,
+        "new_hits": 27,
+        "lost_hits": 0,
+        "clean_miss_count": 54,
+        "clean_miss_conversion_rate": 0.5,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.5
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 80,
+      "mean_rank_clean": 9.5125,
+      "mean_rank_modified": 6.0875,
+      "mean_rank_gain": 3.425,
+      "top1": {
+        "clean_hits": 6,
+        "modified_hits": 9,
+        "clean_rate": 0.075,
+        "modified_rate": 0.1125,
+        "gain": 0.0375,
+        "new_hits": 4,
+        "lost_hits": 1,
+        "clean_miss_count": 74,
+        "clean_miss_conversion_rate": 0.05405405405405406,
+        "clean_hit_retention_rate": 0.8333333333333334,
+        "net_headroom_capture": 0.04054054054054054
+      },
+      "top3": {
+        "clean_hits": 21,
+        "modified_hits": 28,
+        "clean_rate": 0.2625,
+        "modified_rate": 0.35,
+        "gain": 0.0875,
+        "new_hits": 8,
+        "lost_hits": 1,
+        "clean_miss_count": 59,
+        "clean_miss_conversion_rate": 0.13559322033898305,
+        "clean_hit_retention_rate": 0.9523809523809523,
+        "net_headroom_capture": 0.11864406779661017
+      },
+      "top5": {
+        "clean_hits": 28,
+        "modified_hits": 51,
+        "clean_rate": 0.35,
+        "modified_rate": 0.6375,
+        "gain": 0.2875,
+        "new_hits": 26,
+        "lost_hits": 3,
+        "clean_miss_count": 52,
+        "clean_miss_conversion_rate": 0.5,
+        "clean_hit_retention_rate": 0.8928571428571429,
+        "net_headroom_capture": 0.4423076923076923
+      }
+    }
+  },
+  "ambilage_ms_v2_geom_set2_4g_overlap_30_v4": {
+    "01_clip_l14": {
+      "query_count": 80,
+      "mean_rank_clean": 6.425,
+      "mean_rank_modified": 1.225,
+      "mean_rank_gain": 5.2,
+      "top1": {
+        "clean_hits": 3,
+        "modified_hits": 72,
+        "clean_rate": 0.0375,
+        "modified_rate": 0.9,
+        "gain": 0.8625,
+        "new_hits": 69,
+        "lost_hits": 0,
+        "clean_miss_count": 77,
+        "clean_miss_conversion_rate": 0.8961038961038961,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.8961038961038961
+      },
+      "top3": {
+        "clean_hits": 18,
+        "modified_hits": 78,
+        "clean_rate": 0.225,
+        "modified_rate": 0.975,
+        "gain": 0.75,
+        "new_hits": 60,
+        "lost_hits": 0,
+        "clean_miss_count": 62,
+        "clean_miss_conversion_rate": 0.967741935483871,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.967741935483871
+      },
+      "top5": {
+        "clean_hits": 40,
+        "modified_hits": 79,
+        "clean_rate": 0.5,
+        "modified_rate": 0.9875,
+        "gain": 0.4875,
+        "new_hits": 39,
+        "lost_hits": 0,
+        "clean_miss_count": 40,
+        "clean_miss_conversion_rate": 0.975,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.975
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 80,
+      "mean_rank_clean": 9.575,
+      "mean_rank_modified": 6.0375,
+      "mean_rank_gain": 3.5375,
+      "top1": {
+        "clean_hits": 4,
+        "modified_hits": 10,
+        "clean_rate": 0.05,
+        "modified_rate": 0.125,
+        "gain": 0.075,
+        "new_hits": 6,
+        "lost_hits": 0,
+        "clean_miss_count": 76,
+        "clean_miss_conversion_rate": 0.07894736842105263,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.07894736842105263
+      },
+      "top3": {
+        "clean_hits": 19,
+        "modified_hits": 26,
+        "clean_rate": 0.2375,
+        "modified_rate": 0.325,
+        "gain": 0.0875,
+        "new_hits": 8,
+        "lost_hits": 1,
+        "clean_miss_count": 61,
+        "clean_miss_conversion_rate": 0.13114754098360656,
+        "clean_hit_retention_rate": 0.9473684210526315,
+        "net_headroom_capture": 0.11475409836065574
+      },
+      "top5": {
+        "clean_hits": 29,
+        "modified_hits": 54,
+        "clean_rate": 0.3625,
+        "modified_rate": 0.675,
+        "gain": 0.3125,
+        "new_hits": 26,
+        "lost_hits": 1,
+        "clean_miss_count": 51,
+        "clean_miss_conversion_rate": 0.5098039215686274,
+        "clean_hit_retention_rate": 0.9655172413793104,
+        "net_headroom_capture": 0.49019607843137253
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 80,
+      "mean_rank_clean": 8.8625,
+      "mean_rank_modified": 5.875,
+      "mean_rank_gain": 2.9875,
+      "top1": {
+        "clean_hits": 4,
+        "modified_hits": 4,
+        "clean_rate": 0.05,
+        "modified_rate": 0.05,
+        "gain": 0.0,
+        "new_hits": 2,
+        "lost_hits": 2,
+        "clean_miss_count": 76,
+        "clean_miss_conversion_rate": 0.02631578947368421,
+        "clean_hit_retention_rate": 0.5,
+        "net_headroom_capture": 0.0
+      },
+      "top3": {
+        "clean_hits": 23,
+        "modified_hits": 25,
+        "clean_rate": 0.2875,
+        "modified_rate": 0.3125,
+        "gain": 0.025,
+        "new_hits": 5,
+        "lost_hits": 3,
+        "clean_miss_count": 57,
+        "clean_miss_conversion_rate": 0.08771929824561403,
+        "clean_hit_retention_rate": 0.8695652173913043,
+        "net_headroom_capture": 0.03508771929824561
+      },
+      "top5": {
+        "clean_hits": 26,
+        "modified_hits": 54,
+        "clean_rate": 0.325,
+        "modified_rate": 0.675,
+        "gain": 0.35,
+        "new_hits": 29,
+        "lost_hits": 1,
+        "clean_miss_count": 54,
+        "clean_miss_conversion_rate": 0.5370370370370371,
+        "clean_hit_retention_rate": 0.9615384615384616,
+        "net_headroom_capture": 0.5185185185185185
+      }
+    }
+  },
+  "ambilage_ms_v2_geom_set2_4g_zero_overlap_v4": {
+    "01_clip_l14": {
+      "query_count": 80,
+      "mean_rank_clean": 6.225,
+      "mean_rank_modified": 1.15,
+      "mean_rank_gain": 5.075,
+      "top1": {
+        "clean_hits": 4,
+        "modified_hits": 74,
+        "clean_rate": 0.05,
+        "modified_rate": 0.925,
+        "gain": 0.875,
+        "new_hits": 70,
+        "lost_hits": 0,
+        "clean_miss_count": 76,
+        "clean_miss_conversion_rate": 0.9210526315789473,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9210526315789473
+      },
+      "top3": {
+        "clean_hits": 18,
+        "modified_hits": 79,
+        "clean_rate": 0.225,
+        "modified_rate": 0.9875,
+        "gain": 0.7625,
+        "new_hits": 61,
+        "lost_hits": 0,
+        "clean_miss_count": 62,
+        "clean_miss_conversion_rate": 0.9838709677419355,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9838709677419355
+      },
+      "top5": {
+        "clean_hits": 38,
+        "modified_hits": 79,
+        "clean_rate": 0.475,
+        "modified_rate": 0.9875,
+        "gain": 0.5125,
+        "new_hits": 41,
+        "lost_hits": 0,
+        "clean_miss_count": 42,
+        "clean_miss_conversion_rate": 0.9761904761904762,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9761904761904762
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 80,
+      "mean_rank_clean": 9.3625,
+      "mean_rank_modified": 6.075,
+      "mean_rank_gain": 3.2875,
+      "top1": {
+        "clean_hits": 5,
+        "modified_hits": 9,
+        "clean_rate": 0.0625,
+        "modified_rate": 0.1125,
+        "gain": 0.05,
+        "new_hits": 4,
+        "lost_hits": 0,
+        "clean_miss_count": 75,
+        "clean_miss_conversion_rate": 0.05333333333333334,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.05333333333333334
+      },
+      "top3": {
+        "clean_hits": 20,
+        "modified_hits": 28,
+        "clean_rate": 0.25,
+        "modified_rate": 0.35,
+        "gain": 0.1,
+        "new_hits": 10,
+        "lost_hits": 2,
+        "clean_miss_count": 60,
+        "clean_miss_conversion_rate": 0.16666666666666666,
+        "clean_hit_retention_rate": 0.9,
+        "net_headroom_capture": 0.13333333333333333
+      },
+      "top5": {
+        "clean_hits": 31,
+        "modified_hits": 53,
+        "clean_rate": 0.3875,
+        "modified_rate": 0.6625,
+        "gain": 0.275,
+        "new_hits": 23,
+        "lost_hits": 1,
+        "clean_miss_count": 49,
+        "clean_miss_conversion_rate": 0.46938775510204084,
+        "clean_hit_retention_rate": 0.967741935483871,
+        "net_headroom_capture": 0.4489795918367347
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 80,
+      "mean_rank_clean": 8.3,
+      "mean_rank_modified": 5.175,
+      "mean_rank_gain": 3.125,
+      "top1": {
+        "clean_hits": 4,
+        "modified_hits": 3,
+        "clean_rate": 0.05,
+        "modified_rate": 0.0375,
+        "gain": -0.0125,
+        "new_hits": 1,
+        "lost_hits": 2,
+        "clean_miss_count": 76,
+        "clean_miss_conversion_rate": 0.013157894736842105,
+        "clean_hit_retention_rate": 0.5,
+        "net_headroom_capture": -0.013157894736842105
+      },
+      "top3": {
+        "clean_hits": 22,
+        "modified_hits": 28,
+        "clean_rate": 0.275,
+        "modified_rate": 0.35,
+        "gain": 0.075,
+        "new_hits": 8,
+        "lost_hits": 2,
+        "clean_miss_count": 58,
+        "clean_miss_conversion_rate": 0.13793103448275862,
+        "clean_hit_retention_rate": 0.9090909090909091,
+        "net_headroom_capture": 0.10344827586206896
+      },
+      "top5": {
+        "clean_hits": 28,
+        "modified_hits": 58,
+        "clean_rate": 0.35,
+        "modified_rate": 0.725,
+        "gain": 0.375,
+        "new_hits": 30,
+        "lost_hits": 0,
+        "clean_miss_count": 52,
+        "clean_miss_conversion_rate": 0.5769230769230769,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.5769230769230769
+      }
+    }
+  }
+}
+[STAGE C VERIFY] 2026-11-21T12:14:28+00:00 Checking all 9 independent verification files <= 1e-7...
+[VERIFIED 1/9] ambilage_ms_v2_geom_set2_4g_training_oracle_v4/01_clip_l14: max_score_error=0.0
+[VERIFIED 2/9] ambilage_ms_v2_geom_set2_4g_training_oracle_v4/02_openclip_bigG14: max_score_error=0.0
+[VERIFIED 3/9] ambilage_ms_v2_geom_set2_4g_training_oracle_v4/03_siglip_so400m: max_score_error=0.0
+[VERIFIED 4/9] ambilage_ms_v2_geom_set2_4g_overlap_30_v4/01_clip_l14: max_score_error=0.0
+[VERIFIED 5/9] ambilage_ms_v2_geom_set2_4g_overlap_30_v4/02_openclip_bigG14: max_score_error=0.0
+[VERIFIED 6/9] ambilage_ms_v2_geom_set2_4g_overlap_30_v4/03_siglip_so400m: max_score_error=0.0
+[VERIFIED 7/9] ambilage_ms_v2_geom_set2_4g_zero_overlap_v4/01_clip_l14: max_score_error=0.0
+[VERIFIED 8/9] ambilage_ms_v2_geom_set2_4g_zero_overlap_v4/02_openclip_bigG14: max_score_error=0.0
+[VERIFIED 9/9] ambilage_ms_v2_geom_set2_4g_zero_overlap_v4/03_siglip_so400m: max_score_error=0.0
+[MS_V2_GEOM 4G TEST COMPLETED SUCCESSFULLY] 2026-11-21T12:14:28+00:00
+[DRIVE_SYNC:final_on_exit] 2026-11-21T12:14:28+00:00 starting rsync to /content/drive/MyDrive/AmbiLAGE_backup ...
+[DRIVE_SYNC:final_on_exit] 2026-11-21T12:14:33+00:00 completed.

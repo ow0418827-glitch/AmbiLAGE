@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "protocol": "visual_inception_overlap_30_v4_exact",
+  "query_suite": "overlap_30_v4",
+  "method": "visual_inception",
+  "query_mode": "text",
+  "key_mode": "image",
+  "key_image_weight": 1.0,
+  "defense_mode": "none",
+  "selected_conditions": [
+    {
+      "label": "none",
+      "kind": "none",
+      "size": 512
+    }
+  ],
+  "base_path": "/content/AmbiLAGE/resources/evaluation_base_golden_band",
+  "base_manifest_sha256": "00bc13faa0ce4a9b92a2177576b68fb2b212cab9f9b5ad6969cd7171a59fde8a",
+  "query_root": "/content/AmbiLAGE/resources/visual_inception_evaluation/exact_overlap_v4/overlap_30_v4",
+  "query_root_manifest_sha256": "6b21a8e99f9e8505b13fd4d06059c506f35ad171519f68bf93d2c8d4570580f7",
+  "query_validation_sha256": "2b89e5b4ee2314844ecb709a40b92484b2d71c730f12370ce471875f94b49fa0",
+  "pool_path": "/content/AmbiLAGE/resources/evaluation_base_golden_band/shared_memory/shared_memory.json",
+  "pool_sha256": "8c39c7b688006b49e572634980176beaee8824101dc15296ccb7b023edc56145",
+  "pool_count": 189,
+  "encoder_config": "/content/AmbiLAGE/src/visual/config/evaluator.siglip_so400m.heldout.json",
+  "encoder_config_sha256": "fb09a5d61fdabbea3b0b3cce9d3aed6ee356b63cf44e760a37920379a1aabb2a",
+  "groups": [
+    "01_camera",
+    "02_chair",
+    "03_cookies",
+    "04_curtain",
+    "05_hair_extension",
+    "06_jeans",
+    "07_shampoo",
+    "08_speaker",
+    "09_toothbrush"
+  ],
+  "simultaneous_replacement_count": 9,
+  "shared_pool_scope": "all_entries_simultaneous_nine_group_replacement",
+  "shopping_allowed": false,
+  "recommendation_executed": false,
+  "frozen_images": {
+    "01_camera": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_vi_paper_minimal_margin_golden_band_9groups/01_camera/visual_inception/frozen.png",
+      "image_sha256": "3d71d71d66a827bde77c207d8bcdd8ac3ddd8e0259b81f5118bb1625c5cc0b5e",
+      "source_memory_id": "groups9_reference_01_camera_B01LML1VXU",
+      "source_id": "B01LML1VXU",
+      "target_id": "B08V134QWR",
+      "requested_steps": 100,
+      "objective_kind": "visual_inception_retrieval_semantic_perceptual_paper_minimal_margin_v4"
+    },
+    "02_chair": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_vi_paper_minimal_margin_golden_band_9groups/02_chair/visual_inception/frozen.png",
+      "image_sha256": "8861803244f2004a4517be7d1e361df6b3c8401570a892f3d974f644dbf0b2d7",
+      "source_memory_id": "groups9_reference_02_chair_B07GDZQ68V",
+      "source_id": "B07GDZQ68V",
+      "target_id": "B09CYFD5BX",
+      "requested_steps": 100,
+      "objective_kind": "visual_inception_retrieval_semantic_perceptual_paper_minimal_margin_v4"
+    },
+    "03_cookies": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_vi_paper_minimal_margin_golden_band_9groups/03_cookies/visual_inception/frozen.png",
+      "image_sha256": "6ec36614ba69bc410d93a006102cbe0bea4d752c9686a9f4ab8c1b8679257cd6",
+      "source_memory_id": "groups9_reference_03_cookies_B00HHP71JY",
+      "source_id": "B00HHP71JY",
+      "target_id": "B08Z8MHWVS",
+      "requested_steps": 100,
+      "objective_kind": "visual_inception_retrieval_semantic_perceptual_paper_minimal_margin_v4"
+    },
+    "04_curtain": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_vi_paper_minimal_margin_golden_band_9groups/04_curtain/visual_inception/frozen.png",
+      "image_sha256": "7acff0941d07dae95736b340468db8ad82ee97bc03a571e083af65377f2dfc68",
+      "source_memory_id": "groups9_reference_04_curtain_B09KRPJJC4",
+      "source_id": "B09KRPJJC4",
+      "target_id": "B086PW7TWX",
+      "requested_steps": 100,
+      "objective_kind": "visual_inception_retrieval_semantic_perceptual_paper_minimal_margin_v4"
+    },
+    "05_hair_extension": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_vi_paper_minimal_margin_golden_band_9groups/05_hair_extension/visual_inception/frozen.png",
+      "image_sha256": "7fedb0cc256ec1ecacbf7a067936b04122894fe16d71b82c29158c6f65c114bc",
+      "source_memory_id": "groups9_reference_05_hair_extension_B07BC7JMPL",
+      "source_id": "B07BC7JMPL",
+      "target_id": "B01460C2I2",
+      "requested_steps": 100,
+      "objective_kind": "visual_inception_retrieval_semantic_perceptual_paper_minimal_margin_v4"
+    },
+    "06_jeans": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_vi_paper_minimal_margin_golden_band_9groups/06_jeans/visual_inception/frozen.png",
+      "image_sha256": "22486ea37761a93152722f9b26185c195d40f5e369fb28bcf67481da08ed19b6",
+      "source_memory_id": "groups9_reference_06_jeans_B09J89KXRJ",
+      "source_id": "B09J89KXRJ",
+      "target_id": "B09HH96NJY",
+      "requested_steps": 100,
+      "objective_kind": "visual_inception_retrieval_semantic_perceptual_paper_minimal_margin_v4"
+    },
+    "07_shampoo": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_vi_paper_minimal_margin_golden_band_9groups/07_shampoo/visual_inception/frozen.png",
+      "image_sha256": "a96232d39f4dc572dfc56b2168abaefeab48b1261bd5f33782d85042975f9027",
+      "source_memory_id": "groups9_reference_07_shampoo_B08WJB1XDD",
+      "source_id": "B08WJB1XDD",
+      "target_id": "B00BDJODWI",
+      "requested_steps": 100,
+      "objective_kind": "visual_inception_retrieval_semantic_perceptual_paper_minimal_margin_v4"
+    },
+    "08_speaker": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_vi_paper_minimal_margin_golden_band_9groups/08_speaker/visual_inception/frozen.png",
+      "image_sha256": "36e51d97d5e922d709666679279bc352eddf5751da9b7b438af944f0caacfed2",
+      "source_memory_id": "groups9_reference_08_speaker_B09P3RR62H",
+      "source_id": "B09P3RR62H",
+      "target_id": "B01N47U1VI",
+      "requested_steps": 100,
+      "objective_kind": "visual_inception_retrieval_semantic_perceptual_paper_minimal_margin_v4"
+    },
+    "09_toothbrush": {
+      "image": "/content/AmbiLAGE/output/exp_20261121_vi_paper_minimal_margin_golden_band_9groups/09_toothbrush/visual_inception/frozen.png",
+      "image_sha256": "bebb1598204b39f760d59b84b337b2b8133b8655b6f144c37b6520eafca60c9e",
+      "source_memory_id": "groups9_reference_09_toothbrush_B09MD5SZCX",
+      "source_id": "B09MD5SZCX",
+      "target_id": "B09J81RMLD",
+      "requested_steps": 100,
+      "objective_kind": "visual_inception_retrieval_semantic_perceptual_paper_minimal_margin_v4"
+    }
+  }
+}

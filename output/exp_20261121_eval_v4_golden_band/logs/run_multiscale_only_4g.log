@@ -1,0 +1,543 @@
+[STAGE A START] 2026-11-21T10:42:30+00:00 Generating 4 Set 2 groups (01_camera,02_chair,06_jeans,07_shampoo) with multiscale-only (NO defense EoT)...
+[STAGE A SHARDS DONE] 2026-11-21T11:06:14+00:00 w1=0 w2=0
+[STAGE A VERIFY] 2026-11-21T11:06:14+00:00 Verifying all 4 multiscale-only FROZEN_IMAGE.json...
+[VERIFIED MS-ONLY FROZEN] 01_camera: eot_paths=['identity', 'multiscale_grid_breaking_crop_zoom'] ssim=0.9656 tv=0.8277
+[VERIFIED MS-ONLY FROZEN] 02_chair: eot_paths=['identity', 'multiscale_grid_breaking_crop_zoom'] ssim=0.9716 tv=1.0037
+[VERIFIED MS-ONLY FROZEN] 06_jeans: eot_paths=['identity', 'multiscale_grid_breaking_crop_zoom'] ssim=0.9743 tv=1.3482
+[VERIFIED MS-ONLY FROZEN] 07_shampoo: eot_paths=['identity', 'multiscale_grid_breaking_crop_zoom'] ssim=0.9405 tv=0.7060
+[DRIVE_SYNC:after_ms_gen] 2026-11-21T11:06:16+00:00 starting rsync to /content/drive/MyDrive/AmbiLAGE_backup ...
+[DRIVE_SYNC:after_ms_gen] 2026-11-21T11:06:18+00:00 completed.
+[STAGE B START] 2026-11-21T11:06:18+00:00 Evaluating multiscale-only on Set 2 4 groups (--replacement-groups selected)...
+
+=== [ENCODER 01_clip_l14] panels=['ambilage_multiscale_only_set2_4g_training_oracle_v4', 'ambilage_multiscale_only_set2_4g_overlap_30_v4', 'ambilage_multiscale_only_set2_4g_zero_overlap_v4'] unique_images=193 unique_texts=160 batch_size=16 text_batch_size=64 verify=in_process ===
+[PRECOMPUTED UPDATE 01_clip_l14] Encoding only delta assets: missing_images=4, missing_texts=0
+WARNING:root:No pretrained weights loaded for model 'ViT-L-14'. Model initialized randomly.
+none clean: 前三 1/20；前五 7/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 0/20；前五 14/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 4/20；前五 10/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 4/20；前五 7/20
+none modified: 前三 20/20；前五 20/20
+[EVAL DONE] ambilage_multiscale_only_set2_4g_training_oracle_v4/01_clip_l14
+none clean: 前三 2/20；前五 3/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 3/20；前五 15/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 6/20；前五 13/20
+none modified: 前三 18/20；前五 20/20
+none clean: 前三 7/20；前五 9/20
+none modified: 前三 20/20；前五 20/20
+[EVAL DONE] ambilage_multiscale_only_set2_4g_overlap_30_v4/01_clip_l14
+none clean: 前三 1/20；前五 2/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 3/20；前五 14/20
+none modified: 前三 20/20；前五 20/20
+none clean: 前三 7/20；前五 13/20
+none modified: 前三 19/20；前五 20/20
+none clean: 前三 7/20；前五 9/20
+none modified: 前三 20/20；前五 20/20
+[EVAL DONE] ambilage_multiscale_only_set2_4g_zero_overlap_v4/01_clip_l14
+[VERIFY 01_clip_l14] prewarmed 193 unique images (batch=16), 160 unique texts (text_batch=64)
+[VERIFIED] ambilage_multiscale_only_set2_4g_training_oracle_v4/01_clip_l14: rankings=160 scores=30240 max_error=0.00e+00
+[VERIFIED] ambilage_multiscale_only_set2_4g_overlap_30_v4/01_clip_l14: rankings=160 scores=30240 max_error=0.00e+00
+[VERIFIED] ambilage_multiscale_only_set2_4g_zero_overlap_v4/01_clip_l14: rankings=160 scores=30240 max_error=0.00e+00
+
+=== [ENCODER 02_openclip_bigG14] panels=['ambilage_multiscale_only_set2_4g_training_oracle_v4', 'ambilage_multiscale_only_set2_4g_overlap_30_v4', 'ambilage_multiscale_only_set2_4g_zero_overlap_v4'] unique_images=193 unique_texts=160 batch_size=16 text_batch_size=64 verify=in_process ===
+[PRECOMPUTED UPDATE 02_openclip_bigG14] Encoding only delta assets: missing_images=4, missing_texts=0
+WARNING:root:No pretrained weights loaded for model 'ViT-bigG-14'. Model initialized randomly.
+none clean: 前三 2/20；前五 7/20
+none modified: 前三 6/20；前五 12/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 0/20；前五 17/20
+none clean: 前三 8/20；前五 12/20
+none modified: 前三 11/20；前五 14/20
+none clean: 前三 3/20；前五 6/20
+none modified: 前三 8/20；前五 13/20
+[EVAL DONE] ambilage_multiscale_only_set2_4g_training_oracle_v4/02_openclip_bigG14
+none clean: 前三 3/20；前五 5/20
+none modified: 前三 8/20；前五 11/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 2/20；前五 15/20
+none clean: 前三 9/20；前五 15/20
+none modified: 前三 10/20；前五 15/20
+none clean: 前三 7/20；前五 9/20
+none modified: 前三 7/20；前五 10/20
+[EVAL DONE] ambilage_multiscale_only_set2_4g_overlap_30_v4/02_openclip_bigG14
+none clean: 前三 3/20；前五 5/20
+none modified: 前三 8/20；前五 11/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 2/20；前五 13/20
+none clean: 前三 10/20；前五 16/20
+none modified: 前三 9/20；前五 15/20
+none clean: 前三 7/20；前五 10/20
+none modified: 前三 8/20；前五 10/20
+[EVAL DONE] ambilage_multiscale_only_set2_4g_zero_overlap_v4/02_openclip_bigG14
+[VERIFY 02_openclip_bigG14] prewarmed 193 unique images (batch=16), 160 unique texts (text_batch=64)
+[VERIFIED] ambilage_multiscale_only_set2_4g_training_oracle_v4/02_openclip_bigG14: rankings=160 scores=30240 max_error=0.00e+00
+[VERIFIED] ambilage_multiscale_only_set2_4g_overlap_30_v4/02_openclip_bigG14: rankings=160 scores=30240 max_error=0.00e+00
+[VERIFIED] ambilage_multiscale_only_set2_4g_zero_overlap_v4/02_openclip_bigG14: rankings=160 scores=30240 max_error=0.00e+00
+
+=== [ENCODER 03_siglip_so400m] panels=['ambilage_multiscale_only_set2_4g_training_oracle_v4', 'ambilage_multiscale_only_set2_4g_overlap_30_v4', 'ambilage_multiscale_only_set2_4g_zero_overlap_v4'] unique_images=193 unique_texts=160 batch_size=16 text_batch_size=64 verify=in_process ===
+[PRECOMPUTED UPDATE 03_siglip_so400m] Encoding only delta assets: missing_images=4, missing_texts=0
+WARNING:root:No pretrained weights loaded for model 'ViT-SO400M-14-SigLIP-384'. Model initialized randomly.
+none clean: 前三 7/20；前五 8/20
+none modified: 前三 7/20；前五 8/20
+none clean: 前三 0/20；前五 1/20
+none modified: 前三 3/20；前五 20/20
+none clean: 前三 13/20；前五 16/20
+none modified: 前三 13/20；前五 15/20
+none clean: 前三 1/20；前五 3/20
+none modified: 前三 4/20；前五 8/20
+[EVAL DONE] ambilage_multiscale_only_set2_4g_training_oracle_v4/03_siglip_so400m
+none clean: 前三 8/20；前五 9/20
+none modified: 前三 9/20；前五 10/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 3/20；前五 20/20
+none clean: 前三 13/20；前五 15/20
+none modified: 前三 11/20；前五 14/20
+none clean: 前三 2/20；前五 2/20
+none modified: 前三 4/20；前五 8/20
+[EVAL DONE] ambilage_multiscale_only_set2_4g_overlap_30_v4/03_siglip_so400m
+none clean: 前三 7/20；前五 10/20
+none modified: 前三 8/20；前五 11/20
+none clean: 前三 0/20；前五 0/20
+none modified: 前三 4/20；前五 20/20
+none clean: 前三 13/20；前五 16/20
+none modified: 前三 12/20；前五 16/20
+none clean: 前三 2/20；前五 2/20
+none modified: 前三 6/20；前五 10/20
+[EVAL DONE] ambilage_multiscale_only_set2_4g_zero_overlap_v4/03_siglip_so400m
+[VERIFY 03_siglip_so400m] prewarmed 193 unique images (batch=16), 160 unique texts (text_batch=64)
+[VERIFIED] ambilage_multiscale_only_set2_4g_training_oracle_v4/03_siglip_so400m: rankings=160 scores=30240 max_error=0.00e+00
+[VERIFIED] ambilage_multiscale_only_set2_4g_overlap_30_v4/03_siglip_so400m: rankings=160 scores=30240 max_error=0.00e+00
+[VERIFIED] ambilage_multiscale_only_set2_4g_zero_overlap_v4/03_siglip_so400m: rankings=160 scores=30240 max_error=0.00e+00
+{
+  "ambilage_multiscale_only_set2_4g_training_oracle_v4": {
+    "01_clip_l14": {
+      "query_count": 80,
+      "mean_rank_clean": 7.5875,
+      "mean_rank_modified": 1.0875,
+      "mean_rank_gain": 6.5,
+      "top1": {
+        "clean_hits": 1,
+        "modified_hits": 77,
+        "clean_rate": 0.0125,
+        "modified_rate": 0.9625,
+        "gain": 0.95,
+        "new_hits": 76,
+        "lost_hits": 0,
+        "clean_miss_count": 79,
+        "clean_miss_conversion_rate": 0.9620253164556962,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9620253164556962
+      },
+      "top3": {
+        "clean_hits": 9,
+        "modified_hits": 79,
+        "clean_rate": 0.1125,
+        "modified_rate": 0.9875,
+        "gain": 0.875,
+        "new_hits": 70,
+        "lost_hits": 0,
+        "clean_miss_count": 71,
+        "clean_miss_conversion_rate": 0.9859154929577465,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9859154929577465
+      },
+      "top5": {
+        "clean_hits": 38,
+        "modified_hits": 80,
+        "clean_rate": 0.475,
+        "modified_rate": 1.0,
+        "gain": 0.525,
+        "new_hits": 42,
+        "lost_hits": 0,
+        "clean_miss_count": 42,
+        "clean_miss_conversion_rate": 1.0,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 1.0
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 80,
+      "mean_rank_clean": 8.875,
+      "mean_rank_modified": 5.3875,
+      "mean_rank_gain": 3.4875,
+      "top1": {
+        "clean_hits": 3,
+        "modified_hits": 9,
+        "clean_rate": 0.0375,
+        "modified_rate": 0.1125,
+        "gain": 0.075,
+        "new_hits": 6,
+        "lost_hits": 0,
+        "clean_miss_count": 77,
+        "clean_miss_conversion_rate": 0.07792207792207792,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.07792207792207792
+      },
+      "top3": {
+        "clean_hits": 13,
+        "modified_hits": 25,
+        "clean_rate": 0.1625,
+        "modified_rate": 0.3125,
+        "gain": 0.15,
+        "new_hits": 13,
+        "lost_hits": 1,
+        "clean_miss_count": 67,
+        "clean_miss_conversion_rate": 0.19402985074626866,
+        "clean_hit_retention_rate": 0.9230769230769231,
+        "net_headroom_capture": 0.1791044776119403
+      },
+      "top5": {
+        "clean_hits": 26,
+        "modified_hits": 56,
+        "clean_rate": 0.325,
+        "modified_rate": 0.7,
+        "gain": 0.375,
+        "new_hits": 30,
+        "lost_hits": 0,
+        "clean_miss_count": 54,
+        "clean_miss_conversion_rate": 0.5555555555555556,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.5555555555555556
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 80,
+      "mean_rank_clean": 9.5125,
+      "mean_rank_modified": 6.175,
+      "mean_rank_gain": 3.3375,
+      "top1": {
+        "clean_hits": 6,
+        "modified_hits": 11,
+        "clean_rate": 0.075,
+        "modified_rate": 0.1375,
+        "gain": 0.0625,
+        "new_hits": 6,
+        "lost_hits": 1,
+        "clean_miss_count": 74,
+        "clean_miss_conversion_rate": 0.08108108108108109,
+        "clean_hit_retention_rate": 0.8333333333333334,
+        "net_headroom_capture": 0.06756756756756757
+      },
+      "top3": {
+        "clean_hits": 21,
+        "modified_hits": 27,
+        "clean_rate": 0.2625,
+        "modified_rate": 0.3375,
+        "gain": 0.075,
+        "new_hits": 7,
+        "lost_hits": 1,
+        "clean_miss_count": 59,
+        "clean_miss_conversion_rate": 0.11864406779661017,
+        "clean_hit_retention_rate": 0.9523809523809523,
+        "net_headroom_capture": 0.1016949152542373
+      },
+      "top5": {
+        "clean_hits": 28,
+        "modified_hits": 51,
+        "clean_rate": 0.35,
+        "modified_rate": 0.6375,
+        "gain": 0.2875,
+        "new_hits": 26,
+        "lost_hits": 3,
+        "clean_miss_count": 52,
+        "clean_miss_conversion_rate": 0.5,
+        "clean_hit_retention_rate": 0.8928571428571429,
+        "net_headroom_capture": 0.4423076923076923
+      }
+    }
+  },
+  "ambilage_multiscale_only_set2_4g_overlap_30_v4": {
+    "01_clip_l14": {
+      "query_count": 80,
+      "mean_rank_clean": 6.425,
+      "mean_rank_modified": 1.1,
+      "mean_rank_gain": 5.325,
+      "top1": {
+        "clean_hits": 3,
+        "modified_hits": 78,
+        "clean_rate": 0.0375,
+        "modified_rate": 0.975,
+        "gain": 0.9375,
+        "new_hits": 75,
+        "lost_hits": 0,
+        "clean_miss_count": 77,
+        "clean_miss_conversion_rate": 0.974025974025974,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.974025974025974
+      },
+      "top3": {
+        "clean_hits": 18,
+        "modified_hits": 78,
+        "clean_rate": 0.225,
+        "modified_rate": 0.975,
+        "gain": 0.75,
+        "new_hits": 60,
+        "lost_hits": 0,
+        "clean_miss_count": 62,
+        "clean_miss_conversion_rate": 0.967741935483871,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.967741935483871
+      },
+      "top5": {
+        "clean_hits": 40,
+        "modified_hits": 80,
+        "clean_rate": 0.5,
+        "modified_rate": 1.0,
+        "gain": 0.5,
+        "new_hits": 40,
+        "lost_hits": 0,
+        "clean_miss_count": 40,
+        "clean_miss_conversion_rate": 1.0,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 1.0
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 80,
+      "mean_rank_clean": 9.575,
+      "mean_rank_modified": 5.8375,
+      "mean_rank_gain": 3.7375,
+      "top1": {
+        "clean_hits": 4,
+        "modified_hits": 10,
+        "clean_rate": 0.05,
+        "modified_rate": 0.125,
+        "gain": 0.075,
+        "new_hits": 6,
+        "lost_hits": 0,
+        "clean_miss_count": 76,
+        "clean_miss_conversion_rate": 0.07894736842105263,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.07894736842105263
+      },
+      "top3": {
+        "clean_hits": 19,
+        "modified_hits": 27,
+        "clean_rate": 0.2375,
+        "modified_rate": 0.3375,
+        "gain": 0.1,
+        "new_hits": 10,
+        "lost_hits": 2,
+        "clean_miss_count": 61,
+        "clean_miss_conversion_rate": 0.16393442622950818,
+        "clean_hit_retention_rate": 0.8947368421052632,
+        "net_headroom_capture": 0.13114754098360656
+      },
+      "top5": {
+        "clean_hits": 29,
+        "modified_hits": 51,
+        "clean_rate": 0.3625,
+        "modified_rate": 0.6375,
+        "gain": 0.275,
+        "new_hits": 24,
+        "lost_hits": 2,
+        "clean_miss_count": 51,
+        "clean_miss_conversion_rate": 0.47058823529411764,
+        "clean_hit_retention_rate": 0.9310344827586207,
+        "net_headroom_capture": 0.43137254901960786
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 80,
+      "mean_rank_clean": 8.8625,
+      "mean_rank_modified": 5.975,
+      "mean_rank_gain": 2.8875,
+      "top1": {
+        "clean_hits": 4,
+        "modified_hits": 6,
+        "clean_rate": 0.05,
+        "modified_rate": 0.075,
+        "gain": 0.025,
+        "new_hits": 3,
+        "lost_hits": 1,
+        "clean_miss_count": 76,
+        "clean_miss_conversion_rate": 0.039473684210526314,
+        "clean_hit_retention_rate": 0.75,
+        "net_headroom_capture": 0.02631578947368421
+      },
+      "top3": {
+        "clean_hits": 23,
+        "modified_hits": 27,
+        "clean_rate": 0.2875,
+        "modified_rate": 0.3375,
+        "gain": 0.05,
+        "new_hits": 7,
+        "lost_hits": 3,
+        "clean_miss_count": 57,
+        "clean_miss_conversion_rate": 0.12280701754385964,
+        "clean_hit_retention_rate": 0.8695652173913043,
+        "net_headroom_capture": 0.07017543859649122
+      },
+      "top5": {
+        "clean_hits": 26,
+        "modified_hits": 52,
+        "clean_rate": 0.325,
+        "modified_rate": 0.65,
+        "gain": 0.325,
+        "new_hits": 28,
+        "lost_hits": 2,
+        "clean_miss_count": 54,
+        "clean_miss_conversion_rate": 0.5185185185185185,
+        "clean_hit_retention_rate": 0.9230769230769231,
+        "net_headroom_capture": 0.48148148148148145
+      }
+    }
+  },
+  "ambilage_multiscale_only_set2_4g_zero_overlap_v4": {
+    "01_clip_l14": {
+      "query_count": 80,
+      "mean_rank_clean": 6.225,
+      "mean_rank_modified": 1.05,
+      "mean_rank_gain": 5.175,
+      "top1": {
+        "clean_hits": 4,
+        "modified_hits": 79,
+        "clean_rate": 0.05,
+        "modified_rate": 0.9875,
+        "gain": 0.9375,
+        "new_hits": 75,
+        "lost_hits": 0,
+        "clean_miss_count": 76,
+        "clean_miss_conversion_rate": 0.9868421052631579,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9868421052631579
+      },
+      "top3": {
+        "clean_hits": 18,
+        "modified_hits": 79,
+        "clean_rate": 0.225,
+        "modified_rate": 0.9875,
+        "gain": 0.7625,
+        "new_hits": 61,
+        "lost_hits": 0,
+        "clean_miss_count": 62,
+        "clean_miss_conversion_rate": 0.9838709677419355,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.9838709677419355
+      },
+      "top5": {
+        "clean_hits": 38,
+        "modified_hits": 80,
+        "clean_rate": 0.475,
+        "modified_rate": 1.0,
+        "gain": 0.525,
+        "new_hits": 42,
+        "lost_hits": 0,
+        "clean_miss_count": 42,
+        "clean_miss_conversion_rate": 1.0,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 1.0
+      }
+    },
+    "02_openclip_bigG14": {
+      "query_count": 80,
+      "mean_rank_clean": 9.3625,
+      "mean_rank_modified": 5.8375,
+      "mean_rank_gain": 3.525,
+      "top1": {
+        "clean_hits": 5,
+        "modified_hits": 10,
+        "clean_rate": 0.0625,
+        "modified_rate": 0.125,
+        "gain": 0.0625,
+        "new_hits": 5,
+        "lost_hits": 0,
+        "clean_miss_count": 75,
+        "clean_miss_conversion_rate": 0.06666666666666667,
+        "clean_hit_retention_rate": 1.0,
+        "net_headroom_capture": 0.06666666666666667
+      },
+      "top3": {
+        "clean_hits": 20,
+        "modified_hits": 27,
+        "clean_rate": 0.25,
+        "modified_rate": 0.3375,
+        "gain": 0.0875,
+        "new_hits": 11,
+        "lost_hits": 4,
+        "clean_miss_count": 60,
+        "clean_miss_conversion_rate": 0.18333333333333332,
+        "clean_hit_retention_rate": 0.8,
+        "net_headroom_capture": 0.11666666666666667
+      },
+      "top5": {
+        "clean_hits": 31,
+        "modified_hits": 49,
+        "clean_rate": 0.3875,
+        "modified_rate": 0.6125,
+        "gain": 0.225,
+        "new_hits": 21,
+        "lost_hits": 3,
+        "clean_miss_count": 49,
+        "clean_miss_conversion_rate": 0.42857142857142855,
+        "clean_hit_retention_rate": 0.9032258064516129,
+        "net_headroom_capture": 0.3673469387755102
+      }
+    },
+    "03_siglip_so400m": {
+      "query_count": 80,
+      "mean_rank_clean": 8.3,
+      "mean_rank_modified": 5.2875,
+      "mean_rank_gain": 3.0125,
+      "top1": {
+        "clean_hits": 4,
+        "modified_hits": 3,
+        "clean_rate": 0.05,
+        "modified_rate": 0.0375,
+        "gain": -0.0125,
+        "new_hits": 1,
+        "lost_hits": 2,
+        "clean_miss_count": 76,
+        "clean_miss_conversion_rate": 0.013157894736842105,
+        "clean_hit_retention_rate": 0.5,
+        "net_headroom_capture": -0.013157894736842105
+      },
+      "top3": {
+        "clean_hits": 22,
+        "modified_hits": 30,
+        "clean_rate": 0.275,
+        "modified_rate": 0.375,
+        "gain": 0.1,
+        "new_hits": 10,
+        "lost_hits": 2,
+        "clean_miss_count": 58,
+        "clean_miss_conversion_rate": 0.1724137931034483,
+        "clean_hit_retention_rate": 0.9090909090909091,
+        "net_headroom_capture": 0.13793103448275862
+      },
+      "top5": {
+        "clean_hits": 28,
+        "modified_hits": 57,
+        "clean_rate": 0.35,
+        "modified_rate": 0.7125,
+        "gain": 0.3625,
+        "new_hits": 30,
+        "lost_hits": 1,
+        "clean_miss_count": 52,
+        "clean_miss_conversion_rate": 0.5769230769230769,
+        "clean_hit_retention_rate": 0.9642857142857143,
+        "net_headroom_capture": 0.5576923076923077
+      }
+    }
+  }
+}
+[STAGE C VERIFY] 2026-11-21T11:08:42+00:00 Checking all 9 independent verification files <= 1e-7...
+[VERIFIED 1/9] ambilage_multiscale_only_set2_4g_training_oracle_v4/01_clip_l14: max_score_error=0.0
+[VERIFIED 2/9] ambilage_multiscale_only_set2_4g_training_oracle_v4/02_openclip_bigG14: max_score_error=0.0
+[VERIFIED 3/9] ambilage_multiscale_only_set2_4g_training_oracle_v4/03_siglip_so400m: max_score_error=0.0
+[VERIFIED 4/9] ambilage_multiscale_only_set2_4g_overlap_30_v4/01_clip_l14: max_score_error=0.0
+[VERIFIED 5/9] ambilage_multiscale_only_set2_4g_overlap_30_v4/02_openclip_bigG14: max_score_error=0.0
+[VERIFIED 6/9] ambilage_multiscale_only_set2_4g_overlap_30_v4/03_siglip_so400m: max_score_error=0.0
+[VERIFIED 7/9] ambilage_multiscale_only_set2_4g_zero_overlap_v4/01_clip_l14: max_score_error=0.0
+[VERIFIED 8/9] ambilage_multiscale_only_set2_4g_zero_overlap_v4/02_openclip_bigG14: max_score_error=0.0
+[VERIFIED 9/9] ambilage_multiscale_only_set2_4g_zero_overlap_v4/03_siglip_so400m: max_score_error=0.0
+[SUMMARIZE START] 2026-11-21T11:08:42+00:00 Updating EOT_ABLATION_4G_SUMMARY.md & .json...
+[SUMMARY WRITTEN] /content/AmbiLAGE/output/exp_20261121_eval_v4_golden_band/EOT_ABLATION_4G_SUMMARY.md (has_multiscale_only=True)
+[MULTISCALE-ONLY 4G TEST COMPLETED SUCCESSFULLY] 2026-11-21T11:08:42+00:00
+[DRIVE_SYNC:final_on_exit] 2026-11-21T11:08:42+00:00 starting rsync to /content/drive/MyDrive/AmbiLAGE_backup ...
+[DRIVE_SYNC:final_on_exit] 2026-11-21T11:08:47+00:00 completed.

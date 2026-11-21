@@ -1,4 +1,4 @@
-# 第二阶段第四版纯文字评测集（单调校准版）
+# 第二阶段第四版纯文字评测集
 
 每组二十个配对位置。三档均包含十条公开商品原文、六条改写和四条短搜索词。训练原题逐字对应冻结训练包。三成档固定复用三条原描述、两条原改写和一条原搜索词。其余位置使用零重合档的对应记录。
 
@@ -10,13 +10,11 @@
 
 [配对及来源清单](../resources/visual_inception_evaluation/exact_overlap_v4/pairs.json)绑定训练原文标识、留出商品原字段或公开搜索记录，以及改写所用的输入字段。规范化统一字符形式、大小写和空白。留出选择也排除标点变化、重排序和长文本近重复。曲奇面团补充材料来自旧商品的未用字段片段，均核对其正文未作为字段或字段片段进入训练。
 
-## 筛选与单调性校准规则
+## 纯规则筛选与去重协议
 
-1. **双池同标去噪过滤（`acceptable`）**：对训练查询池（`training_bundle.json`）与 7.1 GB 公开商品总库（`catalog.sqlite`）统一执行 `BOILERPLATE`（售后/退换货/质保/网页标签）与 `CATEGORY_TEXT_EXCLUSIONS`（非核心主体的跨品类附件说明）过滤，剔除训练池中残留的售后模板句与跨子类脏描述。
-2. **三编码器名次校准与配对（`recalibrate`）**：
-   - `100%`（`training`）：从各组 `training_bundle.json` 经 `acceptable` 过滤后的干净训练池中，按三编码器记忆召回与干净原图惩罚得分（`tr_score`）分层选取 10 条描述、6 条改写和 4 条短搜索词；
-   - `0%`（`heldout`）：从 `catalog.sqlite` 的 `catalog_pool` 留出未见商品池（非曲奇组严格一商品一文本，且与全部 892 条训练文本及目标概念词零重合、零重排序、零长片段复用）按零重合目标分布得分（`ho_cd_target_score`）选取 10 条商品原文，配合 6 条未见商品改写和 4 条公开短搜索词；
-   - `30%`（`reuse_at_30_percent`）：在同分布配对的 20 个位置中，按训练原题与留出新题的跨编码器名次增益（`pair_gain`）分层选取 `3 + 2 + 1 = 6` 个复用位置，确保 `Clean`、`AmbiLAGE`、`VI-Enhanced (0.8/0.2)` 在全部三套编码器与全部指标上严格满足 `100% >= 30% >= 0%` 单调递减。
+1. **双池同标去噪过滤（`acceptable`）**：对训练查询池（`training_bundle.json`）与 7.1 GB 公开商品总库（`catalog.sqlite`）统一执行 `BOILERPLATE`（售后/退换货/质保/网页标签）与 `CATEGORY_TEXT_EXCLUSIONS`（非核心主体的跨品类附件说明）过滤，剔除售后模板句与跨子类脏描述。
+2. **商品与视觉资产严格去重**：留出池按商品编号（ASIN）、去除颜色/尺寸变体词后的规范化标题键（`title_key`）及亚马逊主图资产编号（`images`）与训练使用商品严格隔离；结合 `DuplicateIndex` 校验零字面重合、零词序重排、零长片段复用（`03_cookies` 允许使用旧商品未进入训练的独立字段并核验零片段包含）。
+3. **固定种子无泄露抽样与严格嵌套（`SEED = 20261120`）**：完全基于纯文本/ID 规则与固定随机种子抽样配对，不使用任何被测方法或评估编码器测试名次挑选题目；`overlap_30_v4` 严格嵌套为 6 条 `training_oracle_v4`（3+2+1）+ 14 条 `zero_overlap_v4`（7+4+3）。
 
 **理发椅组的四条留出短搜索是临时生成补位**，标为 `synthetic_search_fallback`。其余八组共三十二条留出搜索都有公开原始记录。三档实际含临时补位分别为零、三、四条，校验结果单列数量。九组均纳入评测。
 
@@ -30,7 +28,8 @@ done
 
 服务器类别评估及三编码器高速评估通过 `--query-suite` 或 `tools/fast_evaluate_panel.py eval-suites --suites training_oracle_v4 overlap_30_v4 zero_overlap_v4` 选择档位，每档使用独立输出目录。
 
-## 重建与校准
+## 重建
 
-1. 本地公开商品库和上游搜索快照就绪后，可运行 `tools/build_visual_inception_eval_v4_suites.py prepare` 與 `freeze` 生成初始候选池。
-2. 运行 `tools/build_visual_inception_eval_v4_suites.py recalibrate --ranks-cache output/exp_20261120_eval_v4/logs/candidate_ranks_cache.json` 执行三编码器单调性筛选与配对，自动发布并校验 `pairs.json` 及三档评测集。
+1. 本地公开商品库和上游搜索快照就绪后，运行 `tools/build_visual_inception_eval_v4_suites.py prepare`。准备过程需要 PyArrow（列式数据读取库）。
+2. 将改写写成按组组织的对象，每组数组包含 `input_row_id` 和 `text`。外部模型接口由同一工具的 `generate` 子命令调用；已有冻结改写与补位文件可直接复用。
+3. 运行 `tools/build_visual_inception_eval_v4_suites.py freeze --rewrites <改写文件> --search-fallbacks <补位文件>` 自动冻结并校验 `pairs.json` 及三档评测集。

@@ -159,8 +159,10 @@ def collect_orcas_queries(snapshot, *, groups):
     if snapshot.stat().st_size != ORCAS_BYTES or sha256_file(snapshot) != ORCAS_SHA256:
         raise ValueError('独立公开搜索语料摘要不符')
     pools = {group: {} for group in groups}
-    patterns = {group: (re.compile(RULES[group][0], re.I), re.compile(RULES[group][1], re.I))
+    patterns = {group: (re.compile(RULES[group][0], re.I), re.compile(RULES[group][1], re.I),
+                        re.compile(_intent_exclude(group), re.I))
                 for group in groups}
+    any_include = re.compile('|'.join(f'(?:{RULES[group][0]})' for group in groups), re.I)
     rows_seen = 0
     with gzip.open(snapshot, 'rt', encoding='utf-8') as handle:
         for line_number, line in enumerate(handle, 1):
@@ -169,11 +171,11 @@ def collect_orcas_queries(snapshot, *, groups):
             if len(fields) != 2:
                 raise ValueError('官方公开查询快照出现意外列数')
             query_id, text = fields
-            normalized = _normalize(text)
-            if re.search(PRODUCT_INTENT_EXCLUDE, normalized, re.I):
+            if not any_include.search(text):
                 continue
-            for group, (include, exclude) in patterns.items():
-                if not include.search(normalized) or exclude.search(normalized) or re.search(_intent_exclude(group), normalized, re.I):
+            normalized = _normalize(text)
+            for group, (include, exclude, intent_exclude) in patterns.items():
+                if not include.search(normalized) or exclude.search(normalized) or intent_exclude.search(normalized):
                     continue
                 pools[group].setdefault(normalized, dict(text=text,
                     source_dataset='orcas', original_split='orcas-doctrain',

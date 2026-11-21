@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "query_suite": "zero_overlap_v4",
+  "protocol": "visual_inception_zero_overlap_v4_exact",
+  "training_overlap_mode": "zero_overlap_v4",
+  "query_root": "/content/AmbiLAGE/resources/visual_inception_evaluation/exact_overlap_v4/zero_overlap_v4",
+  "manifest_sha256": "c185216acd946d1e526a487f02362b79b7256aa80b0be6df004323906d86b55b",
+  "base_path": "/content/AmbiLAGE/resources/evaluation_base",
+  "base_manifest_sha256": "ad8370e3e32ab4fa85a079adc1980586c5e0e4b664ea652a166d5b54472283a1",
+  "group_count": 9,
+  "queries_per_group": 20,
+  "total_queries": 180,
+  "query_families": [
+    "category_description",
+    "model_paraphrase",
+    "heldout_search_query"
+  ],
+  "query_family_labels_zh": {
+    "category_description": "同类商品原文",
+    "model_paraphrase": "改写查询",
+    "heldout_search_query": "短搜索查询"
+  },
+  "queries_per_family": {
+    "category_description": 10,
+    "model_paraphrase": 6,
+    "heldout_search_query": 4
+  },
+  "training_overlap_checked": true,
+  "training_snapshot_count": 9,
+  "unique_training_text_count": 891,
+  "training_normalized_exact_overlap_count": 0,
+  "synthetic_search_count": 4,
+  "groups": {
+    "01_camera": {
+      "target_public_id": "B08V134QWR",
+      "category": "camera",
+      "query_manifest": "/content/AmbiLAGE/resources/visual_inception_evaluation/exact_overlap_v4/zero_overlap_v4/01_camera/queries.json",
+      "query_manifest_sha256": "f38e29e66bfed8392ef900148aefb178805ffd36ea57c1ecbfb695a57262a0b5",
+      "instructions_sha256": "e0e27983004372204d0f02e3ae2c81870c69bba92edd6332613b6ae351679df1",
+      "query_count": 20,
+      "query_family_counts": {
+        "category_description": 10,
+        "model_paraphrase": 6,
+        "heldout_search_query": 4
+      },
+      "training_normalized_exact_overlap_count": 0,
+      "synthetic_search_count": 0
+    },
+    "02_chair": {
+      "target_public_id": "B09CYFD5BX",
+      "category": "seating",
+      "query_manifest": "/content/AmbiLAGE/resources/visual_inception_evaluation/exact_overlap_v4/zero_overlap_v4/02_chair/queries.json",
+      "query_manifest_sha256": "60c72c561bf13d85407268864b157604b8b7b7bf87b79eca47360df562f2b658",
+      "instructions_sha256": "db573af1f3346500bdbe5655b8cc110aa97ebbfb70812e12dae9077ea4da55e2",
+      "query_count": 20,
+      "query_family_counts": {
+        "category_description": 10,
+        "model_paraphrase": 6,
+        "heldout_search_query": 4
+      },
+      "training_normalized_exact_overlap_count": 0,
+      "synthetic_search_count": 4
+    },
+    "03_cookies": {
+      "target_public_id": "B08Z8MHWVS",
+      "category": "cookies",
+      "query_manifest": "/content/AmbiLAGE/resources/visual_inception_evaluation/exact_overlap_v4/zero_overlap_v4/03_cookies/queries.json",
+      "query_manifest_sha256": "68794025cb51dd883ddf441de40802beb1e580169a9f2d910531b3859998b4da",
+      "instructions_sha256": "590a23db5b3b2f8e3e527274f4ce7b65199daee6110c68d946691f5b9db9e4e8",
+      "query_count": 20,
+      "query_family_counts": {
+        "category_description": 10,
+        "model_paraphrase": 6,
+        "heldout_search_query": 4
+      },
+      "training_normalized_exact_overlap_count": 0,
+      "synthetic_search_count": 0
+    },
+    "04_curtain": {
+      "target_public_id": "B086PW7TWX",
+      "category": "curtains",
+      "query_manifest": "/content/AmbiLAGE/resources/visual_inception_evaluation/exact_overlap_v4/zero_overlap_v4/04_curtain/queries.json",
+      "query_manifest_sha256": "5f194b88f62bb112ab4690bd57e28ecbf556a16e31f9f3ed84ae902bee95abbd",
+      "instructions_sha256": "fe1c6ceea6b31e8b16c276b145f61d1091cd5e27e0c7817bebdf21b7f20ae8e7",
+      "query_count": 20,
+      "query_family_counts": {
+        "category_description": 10,
+        "model_paraphrase": 6,
+        "heldout_search_query": 4
+      },
+      "training_normalized_exact_overlap_count": 0,
+      "synthetic_search_count": 0
+    },
+    "05_hair_extension": {
+      "target_public_id": "B01460C2I2",
+      "category": "hair_extensions",
+      "query_manifest": "/content/AmbiLAGE/resources/visual_inception_evaluation/exact_overlap_v4/zero_overlap_v4/05_hair_extension/queries.json",
+      "query_manifest_sha256": "4f3ec44c09a42560c847907ab0d221dbd6ecd7bf61fd5d6cb436117257583b07",
+      "instructions_sha256": "5a70a425124a9d7f7b4ba7673674f7e73c89b189da4cadc55c9b32fbb2af1343",
+      "query_count": 20,
+      "query_family_counts": {
+        "category_description": 10,
+        "model_paraphrase": 6,
+        "heldout_search_query": 4
+      },
+      "training_normalized_exact_overlap_count": 0,
+      "synthetic_search_count": 0
+    },
+    "06_jeans": {
+      "target_public_id": "B09HH96NJY",
+      "category": "apparel",
+      "query_manifest": "/content/AmbiLAGE/resources/visual_inception_evaluation/exact_overlap_v4/zero_overlap_v4/06_jeans/queries.json",
+      "query_manifest_sha256": "daebc45960732f5b3c9a3ab1afc54c3dc3ff93f9a217afcbce40136cfc22faf1",
+      "instructions_sha256": "d1e5907a23f88a2d36cdfec106f32d877ea06f4a19407c9d1ea8834d40e4712f",
+      "query_count": 20,
+      "query_family_counts": {
+        "category_description": 10,
+        "model_paraphrase": 6,
+        "heldout_search_query": 4
+      },
+      "training_normalized_exact_overlap_count": 0,
+      "synthetic_search_count": 0
+    },
+    "07_shampoo": {
+      "target_public_id": "B00BDJODWI",
+      "category": "personal_care",
+      "query_manifest": "/content/AmbiLAGE/resources/visual_inception_evaluation/exact_overlap_v4/zero_overlap_v4/07_shampoo/queries.json",
+      "query_manifest_sha256": "eba8f516397f5409d20ee222699659a5fb466f8d2b5a0e99d5c752f1ba7bd599",
+      "instructions_sha256": "6553c0b60ada9a08f877a96cd582dbf0184ce8896e57be4b7d027fedb91d82ab",
+      "query_count": 20,
+      "query_family_counts": {
+        "category_description": 10,
+        "model_paraphrase": 6,
+        "heldout_search_query": 4
+      },
+      "training_normalized_exact_overlap_count": 0,
+      "synthetic_search_count": 0
+    },
+    "08_speaker": {
+      "target_public_id": "B01N47U1VI",
+      "category": "audio",
+      "query_manifest": "/content/AmbiLAGE/resources/visual_inception_evaluation/exact_overlap_v4/zero_overlap_v4/08_speaker/queries.json",
+      "query_manifest_sha256": "6db9ac64c4a965a0a3dc5a3e9ce27bd8b7a38cfa6fb80e9a44453b6d0032eb5f",
+      "instructions_sha256": "b5288e20a2e4554a0c1bd83a6c4c6cb432160ca786e19150be5edae529501207",
+      "query_count": 20,
+      "query_family_counts": {
+        "category_description": 10,
+        "model_paraphrase": 6,
+        "heldout_search_query": 4
+      },
+      "training_normalized_exact_overlap_count": 0,
+      "synthetic_search_count": 0
+    },
+    "09_toothbrush": {
+      "target_public_id": "B09J81RMLD",
+      "category": "oral_care",
+      "query_manifest": "/content/AmbiLAGE/resources/visual_inception_evaluation/exact_overlap_v4/zero_overlap_v4/09_toothbrush/queries.json",
+      "query_manifest_sha256": "93a3245823410b53662a8dc267f5cca5bd4c26238d53f08b0c4353330262ee6f",
+      "instructions_sha256": "9bc8a38fe3c4b67362ad3c7c274b9e0225250edb2297031b027558500d8d05df",
+      "query_count": 20,
+      "query_family_counts": {
+        "category_description": 10,
+        "model_paraphrase": 6,
+        "heldout_search_query": 4
+      },
+      "training_normalized_exact_overlap_count": 0,
+      "synthetic_search_count": 0
+    }
+  }
+}
